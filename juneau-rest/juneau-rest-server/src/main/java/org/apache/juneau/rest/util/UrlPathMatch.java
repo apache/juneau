@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * For example, given the pattern <js>"/foo/{bar}/*"</js> and the path <js>"/foo/123/baz/qux"</js>, this match gives
  * you a map containing <js>"{bar:123}"</js> and a remainder string containing <js>"baz/qux"</js>.
  */
-public class UrlPathPatternMatch {
+public class UrlPathMatch {
 
 	private final int matchedParts;
 	private final String path;
@@ -41,7 +41,7 @@ public class UrlPathPatternMatch {
 	 * @param keys The variable keys.  Can be <jk>null</jk>.
 	 * @param values The variable values.  Can be <jk>null</jk>.
 	 */
-	protected UrlPathPatternMatch(String path, int matchedParts, String[] keys, String[] values) {
+	protected UrlPathMatch(String path, int matchedParts, String[] keys, String[] values) {
 		this.path = path;
 		this.matchedParts = matchedParts;
 		this.vars = keys == null ? Collections.emptyMap() : new SimpleMap<>(keys, values);

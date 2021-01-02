@@ -407,6 +407,37 @@ public final class ClassInfo {
 		return null;
 	}
 
+	public MethodInfo getPublicMethod2(String name, Class<?> returnType, Class<?>...args) {
+		for (MethodInfo mi : _getPublicMethods())
+			if (mi.hasName(name) && mi.hasMatchingParamTypes(args) && mi.hasReturnTypeParent(returnType))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns the public method with the specified method name and fuzzy argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The fuzzy argument types.
+	 * @return
+	 *  The public method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getPublicMethodFuzzy(String name, Object...args) {
+		Class<?>[] ac = ClassUtils.getClasses(args);
+		for (MethodInfo mi : _getPublicMethods())
+			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
+				return mi;
+		return null;
+	}
+
+	public MethodInfo getPublicMethodFuzzy2(String name, Class<?> returnType, Object...args) {
+		Class<?>[] ac = ClassUtils.getClasses(args);
+		for (MethodInfo mi : _getPublicMethods())
+			if (mi.hasName(name) && mi.argsOnlyOfType(ac) && mi.hasReturnTypeParent(returnType))
+				return mi;
+		return null;
+	}
+
 	/**
 	 * Returns the method with the specified method name and argument types.
 	 *
@@ -418,6 +449,22 @@ public final class ClassInfo {
 	public MethodInfo getMethod(String name, Class<?>...args) {
 		for (MethodInfo mi : _getAllMethods())
 			if (mi.hasName(name) && mi.hasParamTypes(args))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns the method with the specified method name and fuzzy argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The exact argument types.
+	 * @return
+	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getMethodFuzzy(String name, Object...args) {
+		Class<?>[] ac = ClassUtils.getClasses(args);
+		for (MethodInfo mi : _getAllMethods())
+			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
 				return mi;
 		return null;
 	}
@@ -2436,5 +2483,4 @@ public final class ClassInfo {
 	public boolean equals(Object o) {
 		return (o instanceof ClassInfo) && eq(this, (ClassInfo)o, (x,y)->eq(x.t, y.t));
 	}
-
 }

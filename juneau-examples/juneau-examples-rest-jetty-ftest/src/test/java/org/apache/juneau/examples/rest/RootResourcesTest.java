@@ -42,7 +42,7 @@ public class RootResourcesTest extends RestTestcase {
 		assertEquals("helloWorld", x[0].getName());
 		assertEquals("Hello World", x[0].getDescription());
 
-		OMap x2 = jsonClient.options("").run().getBody().as(OMap.class);
+		OMap x2 = jsonClient.get("api").run().getBody().as(OMap.class);
 		String s = x2.getMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("Example of a router resource page"));
@@ -59,7 +59,7 @@ public class RootResourcesTest extends RestTestcase {
 			assertEquals("helloWorld", x[0].getName());
 			assertEquals("Hello World", x[0].getDescription());
 
-			OMap x2 = jsonClient.options("").run().getBody().as(OMap.class);
+			OMap x2 = jsonClient.get("api").run().getBody().as(OMap.class);
 			String s = x2.getMap("info").getString("description");
 			if (debug) System.err.println(s);
 			assertTrue(s, s.startsWith("Example of a router resource page"));
@@ -77,7 +77,7 @@ public class RootResourcesTest extends RestTestcase {
 			assertEquals("helloWorld", x[0].getName());
 			assertEquals("Hello World", x[0].getDescription());
 
-			OMap x2 = jsonClient.options("").run().getBody().as(OMap.class);
+			OMap x2 = jsonClient.get("api").run().getBody().as(OMap.class);
 			String s = x2.getMap("info").getString("description");
 			if (debug) System.err.println(s);
 			assertTrue(s, s.startsWith("Example of a router resource page"));
@@ -101,7 +101,7 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOptionsPage() throws Exception {
-		Swagger o = jsonClient.options("").run().getBody().as(Swagger.class);
+		Swagger o = jsonClient.get("api").run().getBody().as(Swagger.class);
 		if (debug) System.err.println(o);
 		assertEquals("Example of a router resource page.", o.getInfo().getDescription());
 	}

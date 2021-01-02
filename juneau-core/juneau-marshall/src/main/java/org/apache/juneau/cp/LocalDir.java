@@ -110,11 +110,18 @@ public class LocalDir {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return eq(this, (LocalDir)o, (x,y)->eq(x.clazz, y.clazz) && eq(x.clazzPath, y.clazzPath) && eq(x.path, y.path));
+		return o instanceof LocalDir && eq(this, (LocalDir)o, (x,y)->eq(x.clazz, y.clazz) && eq(x.clazzPath, y.clazzPath) && eq(x.path, y.path));
 	}
 
 	@Override /* Object */
 	public int hashCode() {
 		return hashCode;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		if (clazz == null)
+			return path.toString();
+		return clazz.getName() + ":" + clazzPath;
 	}
 }

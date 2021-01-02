@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.vars.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
@@ -193,40 +195,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<?>[] children() default {};
-
-	/**
-	 * Classpath resource finder.
-	 *
-	 * <p>
-	 * Used to retrieve localized files from the classpath.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default resource finder if not specified is {@link BasicResourceFinder}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link ResourceFinder} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ResourceFinder} interface with the same
-	 * 		functionality as {@link BasicResourceFinder} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding this method.
-	 * 	<li>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
-	 * </ul>
-	 */
-	Class<? extends ResourceFinder> classpathResourceFinder() default ResourceFinder.Null.class;
 
 	/**
 	 * Client version header.
@@ -571,6 +539,28 @@ public @interface Rest {
 	Class<? extends Encoder>[] encoders() default {};
 
 	/**
+	 * File finder.
+	 *
+	 * <p>
+	 * Used to retrieve localized files from the classpath for a variety of purposes including:
+	 * <ul>
+	 * 	<li>Resolution of {@link FileVar $F} variable contents.
+	 * </ul>
+	 *
+	 * <p>
+	 * The file finder can be accessed through the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getFileFinder()}
+	 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link RestContext#REST_fileFinder}
+	 * </ul>
+	 */
+	Class<? extends FileFinder> fileFinder() default FileFinder.Null.class;
+
+	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
 	 *
 	 * <ul class='notes'>
@@ -674,24 +664,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String messages() default "";
-
-	/**
-	 * Configuration property:  MIME types.
-	 *
-	 * <p>
-	 * Defines MIME-type file type mappings.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
-	 * </ul>
-	 */
-	String[] mimeTypes() default {};
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.
@@ -1192,163 +1164,28 @@ public @interface Rest {
 	String siteName() default "";
 
 	/**
-	 * Static file response headers.
+	 * Static files.
 	 *
 	 * <p>
-	 * Used to customize the headers on responses returned for statically-served files.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFileResponseHeaders={
-	 * 			<js>"Cache-Control: $C{REST/cacheControl,nocache}"</js>,
-	 * 			<js>"My-Header: $C{REST/myHeaderValue}"</js>
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder
-	 * 				.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
-	 * 				.staticFileResponseHeaders(<js>"My-Header: foo"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder
-	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"Cache-Control"</js>, <js>"nocache"</js>);
-	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
+	 * Used to retrieve localized files to be served up as static files through the REST API via the following
+	 * predefined methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
+	 * </ul>
 	 *
 	 * <p>
-	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() Rest(staticFiles)} annotation.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * The static file finder can be accessed through the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
+	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
+	 * 	<li class='jm'>{@link RestContext#REST_staticFiles}
 	 * </ul>
 	 */
-	String[] staticFileResponseHeaders() default {};
-
-	/**
-	 * Static file mappings.
-	 *
-	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents
-	 * from the classpath or file system.
-	 *
-	 * <p>
-	 * The format of the value is one of the following:
-	 * <ol class='spaced-list'>
-	 * 	<li><js>"path:location"</js>
-	 * 	<li><js>"path:location:headers"</js>
-	 * </ol>
-	 *
-	 * <p>
-	 * An example where this class is used is in the {@link Rest#staticFiles} annotation:
-	 * <p class='bcode w800'>
-	 * 	<jk>package</jk> com.foo.mypackage;
-	 *
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/myresource"</js>,
-	 * 		staticFiles={
-	 * 			<js>"htdocs:docs"</js>,
-	 * 			<js>"styles:styles"</js>
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
-	 * </p>
-	 *
-	 * <p>
-	 * In the example above, given a GET request to the following URL...
-	 * <p class='bcode w800'>
-	 *  	/myresource/htdocs/foobar.html
-	 * </p>
-	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
-	 * <ol class='spaced-list'>
-	 * 	<li><c>com.foo.mypackage.docs</c> package.
-	 * </ol>
-	 *
-	 * <p>
-	 * The location is interpreted as an absolute path if it starts with <js>'/'</js>.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<js>"htdocs:/docs"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 * <p>
-	 * In the example above, given a GET request to the following URL...
-	 * <p class='bcode w800'>
-	 *  	/myresource/htdocs/foobar.html
-	 * </p>
-	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
-	 * <ol class='spaced-list'>
-	 * 	<li><c>docs</c> package (typically under <c>src/main/resources/docs</c> in your workspace).
-	 * 	<li><c>[working-dir]/docs</c> directory at runtime.
-	 * </ol>
-	 *
-	 * <p>
-	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimplifiedJson} object.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * The same path can map to multiple locations.  Files are searched in the order
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<jc>// Search in absolute location '/htdocs/folder' before location 'htdocs.package' relative to servlet package.</jc>
-	 * 			<js>"htdocs:/htdocs/folder,htdocs:htdocs.package"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Mappings are cumulative from super classes.
-	 * 	<li>
-	 * 		Child resources can override mappings made on parent class resources.
-	 * 		<br>When both parent and child resources map against the same path, files will be search in the child location
-	 * 		and then the parent location.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 */
-	String[] staticFiles() default {};
+	Class<? extends StaticFiles> staticFiles() default StaticFiles.Null.class;
 
 	/**
 	 * Provides swagger-specific metadata on this resource.
@@ -1478,23 +1315,4 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String uriResolution() default "";
-
-	/**
-	 * Configuration property:  Disable classpath resource caching.
-	 *
-	 * <p>
-	 * When enabled, resources retrieved via {@link RestRequest#getClasspathHttpResource(String, boolean)} (and related
-	 * methods) will be cached in memory to speed subsequent lookups.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_disableClasspathResourceCaching}
-	 * </ul>
-	 */
-	String disableClasspathResourceCaching() default "";
 }

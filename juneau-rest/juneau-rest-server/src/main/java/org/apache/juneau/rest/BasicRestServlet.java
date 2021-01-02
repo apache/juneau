@@ -12,9 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.util.*;
+
+import javax.inject.*;
+
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
@@ -132,7 +140,7 @@ import org.apache.juneau.xml.*;
  * {@link Rest#parsers() @Rest(parsers)} annotations on subclasses.
  *
  * <p>
- * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a
+ * This subclass also provides a default OPTIONS page by implementing a {@link #getApi(RestRequest)} that returns a
  * POJO consisting of beans describing the class.
  *
  * <p>
@@ -142,11 +150,6 @@ import org.apache.juneau.xml.*;
  * 	<li>
  * 		Provides a default HTML stylesheet by setting {@link HtmlDocConfig#stylesheet() HtmlDocConfig(stylesheet)}
  * 		to <js>"styles/juneau.css"</js>.
- * 	<li>
- * 		Provides a default classpath entry "htdocs" by setting
- * 		{@link Rest#staticFiles() @Rest(staticFiles)} to <code>{<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}</code>.
- * 		This allows files inside the <c>[servletPackage].htdocs</c> package to be served up under the URL
- * 		<c>/servletPath/htdocs</c>.
  * </ul>
  *
  * <ul class='seealso'>
@@ -168,54 +171,76 @@ import org.apache.juneau.xml.*;
 public abstract class BasicRestServlet extends RestServlet implements BasicUniversalRest, BasicRestMethods {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * [OPTIONS /*] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
+	@Inject Optional<FileFinder> fileFinder;
+	@Inject Optional<StaticFiles> staticFiles;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicRestConfig methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* BasicRestConfig */
-	public Swagger getOptions(RestRequest req) {
-		// Localized Swagger for this resource is available through the RestRequest object.
-		return req.getSwagger();
+	public Swagger getApi(RestRequest req) {
+		try {
+			return getSwagger(req);
+		} catch (Exception e) {
+			throw new InternalServerError(e);
+		}
 	}
 
-	/**
-	 * [GET /options] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
 	@Override /* BasicRestConfig */
-	public Swagger getOptions2(RestRequest req) {
-		// Localized Swagger for this resource is available through the RestRequest object.
-		return req.getSwagger();
+	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
+		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
-	/**
-	 * [* /error] - Error occurred.
-	 *
-	 * <p>
-	 * Servlet chains will often automatically redirect to <js>"/error"</js> when any sort of error condition occurs
-	 * (such as failed authentication) and will set appropriate response parameters (such as an <c>WWW-Authenticate</c>
-	 * response header).
-	 *
-	 * <p>
-	 * These responses should be left as-is without any additional processing.
-	 */
+	@Override /* BasicRestConfig */
+	public HttpResource getFavIcon() {
+		String favIcon = getContext().getConfig().getString("REST/favicon", "images/juneau.png");
+		return getHtdoc(favIcon, null);
+	}
+
 	@Override /* BasicRestConfig */
 	public void error() {}
 
-	/**
-	 * [GET /stats] - Timing statistics.
-	 *
-	 * <p>
-	 * Timing statistics for method invocations on this resource.
-	 *
-	 * @return A collection of timing statistics for each annotated method on this resource.
-	 */
 	@Override /* BasicRestConfig */
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Context methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Instantiates the file finder to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation looks for an injected bean of type {@link FileFinder} or else returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
+	 * </ul>
+	 *
+	 * @return The file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public FileFinder createFileFinder() {
+		return fileFinder == null ? null : fileFinder.orElse(null);
+	}
+
+	/**
+	 * Instantiates the static file finder to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation looks for an injected bean of type {@link StaticFiles} or else returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
+	 * </ul>
+	 *
+	 * @return The static file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public StaticFiles createStaticFiles() {
+		return staticFiles == null ? null : staticFiles.orElse(null);
 	}
 }

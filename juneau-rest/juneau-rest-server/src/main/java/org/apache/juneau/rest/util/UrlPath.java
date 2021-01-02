@@ -14,6 +14,8 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshall.*;
@@ -21,19 +23,29 @@ import org.apache.juneau.marshall.*;
 /**
  * Represents a parsed URL path-info string.
  */
-public class UrlPathInfo {
+public class UrlPath {
 
 	final String[] parts;
 	final String path;
+
+	/**
+	 * Creates a new parsed {@link UrlPath} object from the specified string.
+	 *
+	 * @param path The path to create.  Must be <jk>null</jk> or or start with '/' per HttpServletRequest.getPathInfo().
+	 * @return A new {@link UrlPath} object.
+	 */
+	public static UrlPath of(String path) {
+		if (path != null && ! path.startsWith("/"))
+			throw new RuntimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+		return new UrlPath(path);
+	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param path The path.
 	 */
-	public UrlPathInfo(String path) {
-		if (path != null && ! path.startsWith("/"))
-			throw new RuntimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+	UrlPath(String path) {
 		this.path = path;
 		parts = path == null ? new String[0] : split(path.substring(1), '/');
 		for (int i = 0; i < parts.length; i++)
@@ -47,6 +59,24 @@ public class UrlPathInfo {
 	 */
 	public String[] getParts() {
 		return parts;
+	}
+
+
+	/**
+	 * Returns the filename portion of the path if there is one.
+	 *
+	 * <p>
+	 * For example, given the path <js>"/foo/bar.txt"</js>, this returns <js>"bar.txt"</js>.
+	 *
+	 * @return The filename portion of the path, or <jk>null<jk> if the path doesn't match a file name.
+	 */
+	public Optional<String> getFileName() {
+		if (parts.length == 0)
+			return Optional.empty();
+		String p = parts[parts.length-1];
+		if (p.indexOf('.') == -1)
+			return Optional.empty();
+		return Optional.of(p);
 	}
 
 	/**
@@ -64,7 +94,7 @@ public class UrlPathInfo {
 	 * @return <jk>true</jk> if this path ends with a slash.
 	 */
 	public boolean isTrailingSlash() {
-		return path.endsWith("/");
+		return path != null && path.endsWith("/");
 	}
 
 	/**

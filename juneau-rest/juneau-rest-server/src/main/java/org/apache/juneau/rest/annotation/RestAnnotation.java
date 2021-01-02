@@ -29,7 +29,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
@@ -87,7 +86,8 @@ public class RestAnnotation {
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Null.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Null.class;
-		Class<? extends ResourceFinder> classpathResourceFinder = ResourceFinder.Null.class;
+		Class<? extends FileFinder> fileFinder = FileFinder.Null.class;
+		Class<? extends StaticFiles> staticFiles = StaticFiles.Null.class;
 		Class<? extends ResponseHandler>[] responseHandlers = new Class[0];
 		Class<? extends RestCallLogger> callLogger = RestCallLogger.Null.class;
 		Class<? extends RestContext> context = RestContext.Null.class;
@@ -100,8 +100,8 @@ public class RestAnnotation {
 		Logging logging = LoggingAnnotation.DEFAULT;
 		Property[] properties = {};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
-		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="", disableClasspathResourceCaching="";
-		String[] consumes={}, description={}, flags={}, mimeTypes={}, produces={}, reqAttrs={}, reqHeaders={}, resHeaders={}, staticFileResponseHeaders={}, staticFiles={}, title={};
+		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
+		String[] consumes={}, description={}, flags={}, produces={}, reqAttrs={}, reqHeaders={}, resHeaders={}, title={};
 
 		/**
 		 * Constructor.
@@ -182,17 +182,6 @@ public class RestAnnotation {
 		 */
 		public Builder children(Class<?>...value) {
 			this.children = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#classpathResourceFinder()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder classpathResourceFinder(Class<? extends ResourceFinder> value) {
-			this.classpathResourceFinder = value;
 			return this;
 		}
 
@@ -329,6 +318,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#fileFinder()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder fileFinder(Class<? extends FileFinder> value) {
+			this.fileFinder = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#flags()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -391,17 +391,6 @@ public class RestAnnotation {
 		 */
 		public Builder messages(String value) {
 			this.messages = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#mimeTypes()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mimeTypes(String...value) {
-			this.mimeTypes = value;
 			return this;
 		}
 
@@ -593,23 +582,12 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#staticFileResponseHeaders()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder staticFileResponseHeaders(String...value) {
-			this.staticFileResponseHeaders = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#staticFiles()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder staticFiles(String...value) {
+		public Builder staticFiles(Class<? extends StaticFiles> value) {
 			this.staticFiles = value;
 			return this;
 		}
@@ -680,17 +658,6 @@ public class RestAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Rest#disableClasspathResourceCaching()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder disableClasspathResourceCaching(String value) {
-			this.disableClasspathResourceCaching = value;
-			return this;
-		}
-
 		// <FluentSetters>
 
 		@Override /* GENERATED - TargetedAnnotationBuilder */
@@ -719,7 +686,8 @@ public class RestAnnotation {
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;
 		private final Class<? extends HttpPartSerializer> partSerializer;
-		private final Class<? extends ResourceFinder> classpathResourceFinder;
+		private final Class<? extends FileFinder> fileFinder;
+		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseHandler>[] responseHandlers;
 		private final Class<? extends RestCallLogger> callLogger;
 		private final Class<? extends RestContext> context;
@@ -732,8 +700,8 @@ public class RestAnnotation {
 		private final Logging logging;
 		private final Property[] properties;
 		private final ResourceSwagger swagger;
-		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution, disableClasspathResourceCaching;
-		private final String[] consumes, description, flags, mimeTypes, produces, reqAttrs, reqHeaders, resHeaders, staticFileResponseHeaders, staticFiles, title;
+		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
+		private final String[] consumes, description, flags, produces, reqAttrs, reqHeaders, resHeaders, title;
 
 		Impl(Builder b) {
 			super(b);
@@ -743,7 +711,6 @@ public class RestAnnotation {
 			this.allowedMethodParams = b.allowedMethodParams;
 			this.callLogger = b.callLogger;
 			this.children = copyOf(b.children);
-			this.classpathResourceFinder = b.classpathResourceFinder;
 			this.clientVersionHeader = b.clientVersionHeader;
 			this.config = b.config;
 			this.consumes = copyOf(b.consumes);
@@ -756,13 +723,13 @@ public class RestAnnotation {
 			this.defaultContentType = b.defaultContentType;
 			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
+			this.fileFinder = b.fileFinder;
 			this.flags = copyOf(b.flags);
 			this.guards = copyOf(b.guards);
 			this.infoProvider = b.infoProvider;
 			this.logging = b.logging;
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
-			this.mimeTypes = copyOf(b.mimeTypes);
 			this.paramResolvers = copyOf(b.paramResolvers);
 			this.parsers = copyOf(b.parsers);
 			this.partParser = b.partParser;
@@ -780,15 +747,13 @@ public class RestAnnotation {
 			this.rolesDeclared = b.rolesDeclared;
 			this.serializers = copyOf(b.serializers);
 			this.siteName = b.siteName;
-			this.staticFileResponseHeaders = copyOf(b.staticFileResponseHeaders);
-			this.staticFiles = copyOf(b.staticFiles);
+			this.staticFiles = b.staticFiles;
 			this.swagger = b.swagger;
 			this.title = copyOf(b.title);
 			this.uriAuthority = b.uriAuthority;
 			this.uriContext = b.uriContext;
 			this.uriRelativity = b.uriRelativity;
 			this.uriResolution = b.uriResolution;
-			this.disableClasspathResourceCaching = b.disableClasspathResourceCaching;
 			postConstruct();
 		}
 
@@ -820,11 +785,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public Class<?>[] children() {
 			return children;
-		}
-
-		@Override /* Rest */
-		public Class<? extends ResourceFinder> classpathResourceFinder() {
-			return classpathResourceFinder;
 		}
 
 		@Override /* Rest */
@@ -888,6 +848,11 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
+		public Class<? extends FileFinder> fileFinder() {
+			return fileFinder;
+		}
+
+		@Override /* Rest */
 		public String[] flags() {
 			return flags;
 		}
@@ -915,11 +880,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String messages() {
 			return messages;
-		}
-
-		@Override /* Rest */
-		public String[] mimeTypes() {
-			return mimeTypes;
 		}
 
 		@Override /* Rest */
@@ -1008,12 +968,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public String[] staticFileResponseHeaders() {
-			return staticFileResponseHeaders;
-		}
-
-		@Override /* Rest */
-		public String[] staticFiles() {
+		public Class<? extends StaticFiles> staticFiles() {
 			return staticFiles;
 		}
 
@@ -1045,11 +1000,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String uriResolution() {
 			return uriResolution;
-		}
-
-		@Override /* Rest */
-		public String disableClasspathResourceCaching() {
-			return disableClasspathResourceCaching;
 		}
 	}
 
@@ -1169,30 +1119,13 @@ public class RestAnnotation {
 			if (isNotEmpty(s))
 				psb.set(REST_uriResolution, s);
 
-			for (String mapping : a.staticFiles()) {
-				try {
-					for (StaticFileMapping sfm : StaticFileMapping.parse(c.inner(), string(mapping)).riterable())
-						psb.prependTo(REST_staticFiles, sfm);
-				} catch (ParseException e) {
-					throw new ConfigException(e, "Invalid @Resource(staticFiles) value on class ''{0}''", c);
-				}
-			}
-
 			psb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
 
-			for (String header : strings(a.staticFileResponseHeaders())) {
-				String[] h = RestUtils.parseHeader(header);
-				if (h == null)
-					throw new BasicRuntimeException("Invalid static file response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-				if (isNotEmpty(h[1]))
-					psb.putTo(REST_staticFileResponseHeaders, h[0], h[1]);
-			}
+			if (a.fileFinder() != FileFinder.Null.class)
+				psb.set(REST_fileFinder, a.fileFinder());
 
-			if (! a.disableClasspathResourceCaching().isEmpty())
-				psb.set(REST_disableClasspathResourceCaching, bool(a.disableClasspathResourceCaching()));
-
-			if (a.classpathResourceFinder() != ResourceFinder.Null.class)
-				psb.set(REST_classpathResourceFinder, a.classpathResourceFinder());
+			if (a.staticFiles() != StaticFiles.Null.class)
+				psb.set(REST_staticFiles, a.staticFiles());
 
 			if (! a.path().isEmpty())
 				psb.set(REST_path, trimLeadingSlash(string(a.path())));
@@ -1288,8 +1221,6 @@ public class RestAnnotation {
 
 			if (! a.debugOn().isEmpty())
 				psb.set(REST_debugOn, string(a.debugOn()));
-
-			psb.addTo(REST_mimeTypes, strings(a.mimeTypes()));
 
 			if (! a.rolesDeclared().isEmpty())
 				psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));

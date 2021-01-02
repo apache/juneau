@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -22,9 +23,10 @@ import java.util.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.jsonschema.annotation.Tag;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.cp.Messages;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -53,7 +55,6 @@ import org.apache.juneau.svl.*;
  */
 final class SwaggerGenerator {
 
-//	private final RestRequest req;
 	private final VarResolverSession vr;
 	private final Locale locale;
 	private final RestContext context;
@@ -62,15 +63,17 @@ final class SwaggerGenerator {
 	private final Class<?> c;
 	private final Object resource;
 	private final Messages mb;
+	private final FileFinder fileFinder;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param context The REST class context.
+	 * @param fileFinder The file finder to use for finding localized Swagger JSON files.
 	 * @param vr The variable resolver.
 	 * @param locale The locale.
 	 */
-	public SwaggerGenerator(RestContext context, VarResolverSession vr, Locale locale) {
+	public SwaggerGenerator(RestContext context, FileFinder fileFinder, VarResolverSession vr, Locale locale) {
 		this.vr = vr;
 		this.locale = locale;
 		this.context = context;
@@ -78,6 +81,7 @@ final class SwaggerGenerator {
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
 		this.mb = context.getMessages().forLocale(locale);
+		this.fileFinder = fileFinder == null ? context.getFileFinder() : fileFinder;
 	}
 
 	/**
@@ -97,10 +101,12 @@ final class SwaggerGenerator {
 
 		rci.getSimpleName();
 
+		FileFinder ff = fileFinder;
+
+		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
+
 		// Load swagger JSON from classpath.
-		OMap omSwagger = context.getClasspathResource(OMap.class, MediaType.JSON, rci.getSimpleName() + ".json", locale);
-		if (omSwagger == null)
-			omSwagger = context.getClasspathResource(OMap.class, MediaType.JSON, rci.getSimpleName() + ".json", locale);
+		OMap omSwagger = SimpleJson.DEFAULT.read(is, OMap.class);
 		if (omSwagger == null)
 			omSwagger = new OMap();
 

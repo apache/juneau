@@ -534,7 +534,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final String httpMethod;
-	private final UrlPathPattern[] pathPatterns;
+	private final UrlPathMatcher[] pathMatchers;
 	final RestMethodParam[] methodParams;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
@@ -631,22 +631,22 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.responseMeta = ResponseBeanMeta.create(mi, ps);
 
 		boolean dotAll = b.dotAll;
-		List<UrlPathPattern> pathPatterns = new ArrayList<>();
+		List<UrlPathMatcher> pathMatchers = new ArrayList<>();
 		for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
-			pathPatterns.add(new UrlPathPattern(p));
+			pathMatchers.add(UrlPathMatcher.of(p));
 		}
-		if (pathPatterns.isEmpty()) {
+		if (pathMatchers.isEmpty()) {
 			String p = HttpUtils.detectHttpPath(method, true);
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
-			pathPatterns.add(new UrlPathPattern(p));
+			pathMatchers.add(UrlPathMatcher.of(p));
 		}
 
-		this.pathPatterns = pathPatterns.toArray(new UrlPathPattern[pathPatterns.size()]);
+		this.pathMatchers = pathMatchers.toArray(new UrlPathMatcher[pathMatchers.size()]);
 
-		this.methodParams = context.findParams(mi, false, this.pathPatterns[this.pathPatterns.length-1]);
+		this.methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
 
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
@@ -837,7 +837,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Returns the path pattern for this method.
 	 */
 	String getPathPattern() {
-		return pathPatterns[0].toString();
+		return pathMatchers[0].toString();
 	}
 
 	/**
@@ -852,9 +852,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		return true;
 	}
 
-	boolean matches(UrlPathInfo pathInfo) {
-		for (UrlPathPattern p : pathPatterns)
-			if (p.match(pathInfo) != null)
+	boolean matches(UrlPath urlPath) {
+		for (UrlPathMatcher p : pathMatchers)
+			if (p.match(urlPath) != null)
 				return true;
 		return false;
 	}
@@ -880,13 +880,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected int match(RestCall call) {
 
-		UrlPathPatternMatch pm = matchPattern(call);
+		UrlPathMatch pm = matchPattern(call);
 
 		if (pm == null)
 			return 0;
 
 		if (requiredMatchers.length == 0 && optionalMatchers.length == 0) {
-			call.urlPathPatternMatch(pm);  // Cache so we don't have to recalculate.
+			call.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
 		}
 
@@ -909,18 +909,18 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 					return 1;
 			}
 
-			call.urlPathPatternMatch(pm);  // Cache so we don't have to recalculate.
+			call.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
 		}
 	}
 
-	private UrlPathPatternMatch matchPattern(RestCall call) {
-		UrlPathPatternMatch pm = null;
-		for (UrlPathPattern pp : pathPatterns)
+	private UrlPathMatch matchPattern(RestCall call) {
+		UrlPathMatch pm = null;
+		for (UrlPathMatcher pp : pathMatchers)
 			if (pm == null)
-				pm = pp.match(call.getUrlPathInfo());
+				pm = pp.match(call.getUrlPath());
 		return pm;
 	}
 
@@ -932,7 +932,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	void invoke(RestCall call) throws Throwable {
 
-		UrlPathPatternMatch pm = call.getUrlPathPatternMatch();
+		UrlPathMatch pm = call.getUrlPathMatch();
 		if (pm == null)
 			pm = matchPattern(call);
 
@@ -1035,26 +1035,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			throw e.getTargetException();
 		}
 	}
-//
-//	protected void addStatusCode(int code) {
-//		AtomicInteger ai = statusCodes.get(code);
-//		if (ai == null) {
-//			synchronized(statusCodes) {
-//				ai = new AtomicInteger();
-//				statusCodes.putIfAbsent(code, ai);
-//				ai = statusCodes.get(code);
-//			}
-//		}
-//		ai.incrementAndGet();
-//	}
-//
-//	protected Map<Integer,Integer> getStatusCodes() {
-//		Map<Integer,Integer> m = new TreeMap<>();
-//		for (Map.Entry<Integer,AtomicInteger> e : statusCodes.entrySet())
-//			m.put(e.getKey(), e.getValue().get());
-//		return m;
-//	}
-//
+
 	/*
 	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.
@@ -1067,8 +1048,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (c != 0)
 			return c;
 
-		for (int i = 0; i < Math.min(pathPatterns.length, o.pathPatterns.length); i++) {
-			c = pathPatterns[i].compareTo(o.pathPatterns[i]);
+		for (int i = 0; i < Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
+			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
 			if (c != 0)
 				return c;
 		}

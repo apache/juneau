@@ -42,7 +42,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.rest.util.UrlPathPattern;
+import org.apache.juneau.rest.util.UrlPathMatcher;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -191,19 +191,19 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected PathObject(ParamInfo mpi, PropertyStore ps, UrlPathPattern pathPattern) {
-			super(PATH, mpi, getName(mpi, pathPattern));
+		protected PathObject(ParamInfo mpi, PropertyStore ps, UrlPathMatcher pathMatcher) {
+			super(PATH, mpi, getName(mpi, pathMatcher));
 			this.schema = HttpPartSchema.create(Path.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
 		}
 
-		private static String getName(ParamInfo mpi, UrlPathPattern pathPattern) {
+		private static String getName(ParamInfo mpi, UrlPathMatcher pathMatcher) {
 			String p = null;
 			for (Path h : mpi.getAnnotations(Path.class))
 				p = firstNonEmpty(h.name(), h.n(), h.value(), p);
 			if (p != null)
 				return p;
-			if (pathPattern != null) {
+			if (pathMatcher != null) {
 				int idx = 0;
 				int i = mpi.getIndex();
 				MethodInfo mi = mpi.getMethod();
@@ -212,9 +212,9 @@ class RestParamDefaults {
 					if (mi.getParam(i).getLastAnnotation(Path.class) != null)
 						idx++;
 
-				String[] vars = pathPattern.getVars();
+				String[] vars = pathMatcher.getVars();
 				if (vars.length <= idx)
-					throw new InternalServerError("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", mi.getShortName());
+					throw new InternalServerError("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", mi.getFullName());
 
 				// Check for {#} variables.
 				String idxs = String.valueOf(idx);
@@ -222,7 +222,7 @@ class RestParamDefaults {
 					if (StringUtils.isNumeric(vars[j]) && vars[j].equals(idxs))
 						return vars[j];
 
-				return pathPattern.getVars()[idx];
+				return pathMatcher.getVars()[idx];
 			}
 			throw new InternalServerError("@Path used without name or value on method parameter ''{0}''.", mpi);
 		}

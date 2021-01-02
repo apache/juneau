@@ -36,11 +36,17 @@ public class Assertions_Test {
 		assertCollection(AList.of()).isEmpty();
 		assertList(AList.of()).isEmpty();
 		assertStream(new ByteArrayInputStream("foo".getBytes())).string().is("foo");
-		assertStream(null).string().doesNotExist();
+		assertStream((InputStream)null).string().doesNotExist();
+		assertStream(Optional.of(new ByteArrayInputStream("foo".getBytes()))).string().is("foo");
+		assertStream(Optional.empty()).string().doesNotExist();
 		assertBytes("foo".getBytes()).string().is("foo");
-		assertBytes(null).string().doesNotExist();
+		assertBytes((byte[])null).string().doesNotExist();
+		assertBytes(Optional.of("foo".getBytes())).string().is("foo");
+		assertBytes(Optional.empty()).string().doesNotExist();
 		assertReader(new StringReader("foo")).is("foo");
-		assertReader(null).doesNotExist();
+		assertReader((Reader)null).doesNotExist();
+		assertReader(Optional.of(new StringReader("foo"))).is("foo");
+		assertReader(Optional.empty()).doesNotExist();
 		assertThrown(()->{throw new RuntimeException("foo");}).is("foo");
 		assertThrown(()->{}).doesNotExist();
 

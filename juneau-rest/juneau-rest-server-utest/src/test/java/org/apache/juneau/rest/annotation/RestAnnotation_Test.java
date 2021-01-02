@@ -42,7 +42,6 @@ public class RestAnnotation_Test {
 		.allowedMethodParams("allowedMethodParams")
 		.callLogger(BasicRestCallLogger.class)
 		.children(RestAnnotation_Test.class)
-		.classpathResourceFinder(BasicResourceFinder.class)
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
 		.consumes("consumes")
@@ -55,13 +54,13 @@ public class RestAnnotation_Test {
 		.defaultContentType("defaultContentType")
 		.description("description")
 		.encoders(Encoder.class)
+		.fileFinder(FileFinder.class)
 		.flags("flags")
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
 		.logging(LoggingAnnotation.DEFAULT)
 		.maxInput("maxInput")
 		.messages("messages")
-		.mimeTypes("mimeTypes")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
 		.paramResolvers(RestMethodParam.class)
@@ -81,15 +80,13 @@ public class RestAnnotation_Test {
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
 		.siteName("siteName")
-		.staticFileResponseHeaders("staticFileResponseHeaders")
-		.staticFiles("staticFiles")
+		.staticFiles(StaticFiles.class)
 		.swagger(ResourceSwaggerAnnotation.DEFAULT)
 		.title("title")
 		.uriAuthority("uriAuthority")
 		.uriContext("uriContext")
 		.uriRelativity("uriRelativity")
 		.uriResolution("uriResolution")
-		.disableClasspathResourceCaching("disableClasspathResourceCaching")
 		.build();
 
 	Rest a2 = RestAnnotation.create()
@@ -99,7 +96,6 @@ public class RestAnnotation_Test {
 		.allowedMethodParams("allowedMethodParams")
 		.callLogger(BasicRestCallLogger.class)
 		.children(RestAnnotation_Test.class)
-		.classpathResourceFinder(BasicResourceFinder.class)
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
 		.consumes("consumes")
@@ -112,13 +108,13 @@ public class RestAnnotation_Test {
 		.defaultContentType("defaultContentType")
 		.description("description")
 		.encoders(Encoder.class)
+		.fileFinder(FileFinder.class)
 		.flags("flags")
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
 		.logging(LoggingAnnotation.DEFAULT)
 		.maxInput("maxInput")
 		.messages("messages")
-		.mimeTypes("mimeTypes")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
 		.paramResolvers(RestMethodParam.class)
@@ -138,15 +134,13 @@ public class RestAnnotation_Test {
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
 		.siteName("siteName")
-		.staticFileResponseHeaders("staticFileResponseHeaders")
-		.staticFiles("staticFiles")
+		.staticFiles(StaticFiles.class)
 		.swagger(ResourceSwaggerAnnotation.DEFAULT)
 		.title("title")
 		.uriAuthority("uriAuthority")
 		.uriContext("uriContext")
 		.uriRelativity("uriRelativity")
 		.uriResolution("uriResolution")
-		.disableClasspathResourceCaching("disableClasspathResourceCaching")
 		.build();
 
 	@Test
@@ -158,7 +152,6 @@ public class RestAnnotation_Test {
 				+ "allowedMethodParams:'allowedMethodParams',"
 				+ "callLogger:'org.apache.juneau.rest.BasicRestCallLogger',"
 				+ "children:['"+CNAME+"'],"
-				+ "classpathResourceFinder:'org.apache.juneau.cp.BasicResourceFinder',"
 				+ "clientVersionHeader:'clientVersionHeader',"
 				+ "config:'config',"
 				+ "consumes:['consumes'],"
@@ -171,15 +164,14 @@ public class RestAnnotation_Test {
 				+ "defaultContentType:'defaultContentType',"
 				+ "description:['description'],"
 				+ "disableAllowBodyParam:'disableAllowBodyParam',"
-				+ "disableClasspathResourceCaching:'disableClasspathResourceCaching',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
+				+ "fileFinder:'org.apache.juneau.cp.FileFinder',"
 				+ "flags:['flags'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
 				+ "infoProvider:'org.apache.juneau.rest.BasicRestInfoProvider',"
 				+ "logging:{disabled:'',level:'',rules:[],stackTraceHashingTimeout:'',useStackTraceHashing:''},"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
-				+ "mimeTypes:['mimeTypes'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"'],"
 				+ "paramResolvers:['org.apache.juneau.rest.RestMethodParam'],"
@@ -199,8 +191,7 @@ public class RestAnnotation_Test {
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
 				+ "siteName:'siteName',"
-				+ "staticFileResponseHeaders:['staticFileResponseHeaders'],"
-				+ "staticFiles:['staticFiles'],"
+				+ "staticFiles:'org.apache.juneau.rest.StaticFiles',"
 				+ "swagger:{contact:{email:'',name:'',url:'',value:[]},description:[],externalDocs:{description:[],url:'',value:[]},license:{name:'',url:'',value:[]},tags:[],termsOfService:[],title:[],value:[],version:''},"
 				+ "title:['title'],"
 				+ "uriAuthority:'uriAuthority',"
@@ -261,7 +252,6 @@ public class RestAnnotation_Test {
 		allowedMethodParams="allowedMethodParams",
 		callLogger=BasicRestCallLogger.class,
 		children=RestAnnotation_Test.class,
-		classpathResourceFinder=BasicResourceFinder.class,
 		clientVersionHeader="clientVersionHeader",
 		config="config",
 		consumes="consumes",
@@ -274,13 +264,13 @@ public class RestAnnotation_Test {
 		defaultContentType="defaultContentType",
 		description="description",
 		encoders=Encoder.class,
+		fileFinder=FileFinder.class,
 		flags="flags",
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
 		logging=@Logging,
 		maxInput="maxInput",
 		messages="messages",
-		mimeTypes="mimeTypes",
 		on="on",
 		onClass=RestAnnotation_Test.class,
 		paramResolvers=RestMethodParam.class,
@@ -300,15 +290,13 @@ public class RestAnnotation_Test {
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
 		siteName="siteName",
-		staticFileResponseHeaders="staticFileResponseHeaders",
-		staticFiles="staticFiles",
+		staticFiles=StaticFiles.class,
 		swagger=@ResourceSwagger,
 		title="title",
 		uriAuthority="uriAuthority",
 		uriContext="uriContext",
 		uriRelativity="uriRelativity",
-		uriResolution="uriResolution",
-		disableClasspathResourceCaching="disableClasspathResourceCaching"
+		uriResolution="uriResolution"
 	)
 	public static class D1 {}
 	Rest d1 = D1.class.getAnnotationsByType(Rest.class)[0];
@@ -320,7 +308,6 @@ public class RestAnnotation_Test {
 		allowedMethodParams="allowedMethodParams",
 		callLogger=BasicRestCallLogger.class,
 		children=RestAnnotation_Test.class,
-		classpathResourceFinder=BasicResourceFinder.class,
 		clientVersionHeader="clientVersionHeader",
 		config="config",
 		consumes="consumes",
@@ -333,13 +320,13 @@ public class RestAnnotation_Test {
 		defaultContentType="defaultContentType",
 		description="description",
 		encoders=Encoder.class,
+		fileFinder=FileFinder.class,
 		flags="flags",
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
 		logging=@Logging,
 		maxInput="maxInput",
 		messages="messages",
-		mimeTypes="mimeTypes",
 		on="on",
 		onClass=RestAnnotation_Test.class,
 		paramResolvers=RestMethodParam.class,
@@ -359,15 +346,13 @@ public class RestAnnotation_Test {
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
 		siteName="siteName",
-		staticFileResponseHeaders="staticFileResponseHeaders",
-		staticFiles="staticFiles",
+		staticFiles=StaticFiles.class,
 		swagger=@ResourceSwagger,
 		title="title",
 		uriAuthority="uriAuthority",
 		uriContext="uriContext",
 		uriRelativity="uriRelativity",
-		uriResolution="uriResolution",
-		disableClasspathResourceCaching="disableClasspathResourceCaching"
+		uriResolution="uriResolution"
 	)
 	public static class D2 {}
 	Rest d2 = D2.class.getAnnotationsByType(Rest.class)[0];

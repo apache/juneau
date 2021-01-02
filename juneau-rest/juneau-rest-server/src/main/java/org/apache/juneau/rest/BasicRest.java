@@ -14,23 +14,24 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
-import java.io.*;
 import java.lang.reflect.Method;
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
 
+import javax.inject.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.cp.ResourceFinder;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
 
 /**
@@ -56,61 +57,43 @@ import org.apache.juneau.http.exception.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
+public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestInfoProvider, RestCallLogger {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
-	private ResourceFinder resourceFinder;
-	private RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 
-	/**
-	 * [OPTIONS /*] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
+	@Inject Optional<FileFinder> fileFinder;
+	@Inject Optional<StaticFiles> staticFiles;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicRestConfig methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* BasicRestConfig */
-	public Swagger getOptions(RestRequest req) {
-		// Localized Swagger for this resource is available through the RestRequest object.
-		return req.getSwagger();
+	public Swagger getApi(RestRequest req) {
+		try {
+			return getSwagger(req);
+		} catch (Exception e) {
+			throw new InternalServerError(e);
+		}
 	}
 
-	/**
-	 * [GET /options] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
 	@Override /* BasicRestConfig */
-	public Swagger getOptions2(RestRequest req) {
-		// Localized Swagger for this resource is available through the RestRequest object.
-		return req.getSwagger();
+	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
+		return context.getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
-	/**
-	 * [* /error] - Error occurred.
-	 *
-	 * <p>
-	 * Servlet chains will often automatically redirect to <js>"/error"</js> when any sort of error condition occurs
-	 * (such as failed authentication) and will set appropriate response parameters (such as an <c>WWW-Authenticate</c>
-	 * response header).
-	 *
-	 * <p>
-	 * These responses should be left as-is without any additional processing.
-	 */
+	@Override /* BasicRestConfig */
+	public HttpResource getFavIcon() {
+		String favIcon = getContext().getConfig().getString("REST/favicon", "images/juneau.png");
+		return getHtdoc(favIcon, null);
+	}
+
 	@Override /* BasicRestConfig */
 	public void error() {}
 
-	/**
-	 * [GET /stats] - Timing statistics.
-	 *
-	 * <p>
-	 * Timing statistics for method invocations on this resource.
-	 *
-	 * @return A collection of timing statistics for each annotated method on this resource.
-	 */
 	@Override /* BasicRestConfig */
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
@@ -129,6 +112,40 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 		if (context == null)
 			throw new InternalServerError("RestContext object not set on resource.");
 		return context;
+	}
+
+	/**
+	 * Instantiates the file finder to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation looks for an injected bean of type {@link FileFinder} or else returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
+	 * </ul>
+	 *
+	 * @return The file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public FileFinder createFileFinder() {
+		return fileFinder == null ? null : fileFinder.orElse(null);
+	}
+
+	/**
+	 * Instantiates the static file finder to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation looks for an injected bean of type {@link StaticFiles} or else returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
+	 * </ul>
+	 *
+	 * @return The static file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public StaticFiles createStaticFiles() {
+		return staticFiles == null ? null : staticFiles.orElse(null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -281,7 +298,6 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 		this.context = context;
 		this.infoProvider = new BasicRestInfoProvider(context);
 		this.callLogger = new BasicRestCallLogger(context);
-		this.resourceFinder = new BasicResourceFinder();
 	}
 
 	/**
@@ -547,28 +563,5 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 	@Override /* RestCallLogger */
 	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
 		callLogger.log(config, req, res);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// ClasspathResourceFinder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ClasspathResourceFinder */
-	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		return resourceFinder.findResource(baseClass, name, locale);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestResourceResolver
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, Object... args) {
-		return resourceResolver.resolve(parent, c, args);
-	}
-
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object... args) throws Exception {
-		return resourceResolver.resolve(parent, c, builder, args);
 	}
 }

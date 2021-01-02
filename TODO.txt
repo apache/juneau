@@ -1,0 +1,8 @@
+RestCall.exception(...) should accumulate exceptions, not just one.
+Replace RestInfoProvider with Swagger.
+Rework RestCallLogger.
+x @Rest(path) should allow you to match against file name (e.g. "favicon.ico")
+Replace @Rest(paths) with just @Rest(path)
+Auto-injection into REST interfaces.
+ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
+Re-add @PathRemainder annotation.

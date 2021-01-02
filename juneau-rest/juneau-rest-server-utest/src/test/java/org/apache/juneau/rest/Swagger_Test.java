@@ -43,7 +43,7 @@ public class Swagger_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private Swagger getSwaggerWithFile(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource).classpathResourceFinder(TestClasspathResourceFinder.class).build();
+		RestContext rc = RestContext.create(resource).fileFinder(TestClasspathFileFinder.class).build();
 		RestRequest req = rc.createRequest(new RestCall(rc, new MockServletRequest(), null));
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
@@ -56,12 +56,17 @@ public class Swagger_Test {
 		return ip.getSwagger(req);
 	}
 
-	public static class TestClasspathResourceFinder extends BasicResourceFinder {
+	public static class TestClasspathFileFinder extends FileFinder {
+
+		public TestClasspathFileFinder() {
+			super(FileFinder.create().cp(Swagger_Test.class, null, false));
+		}
+
 		@Override
-		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
+		public Optional<InputStream> find(String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))
-				return BasicRestInfoProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json");
-			return super.findResource(baseClass, name, locale);
+				return Optional.of(BasicRestInfoProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
+			return super.find(name, locale);
 		}
 	}
 
@@ -2336,7 +2341,7 @@ public class Swagger_Test {
 	@Test
 	public void t01_bodyWithReadOnlyProperty() throws Exception {
 		MockRestClient p = MockRestClient.build(T1.class);
-		Swagger s = JsonParser.DEFAULT.parse(p.options("/").accept("application/json").run().getBody().asString(), Swagger.class);
+		Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getBody().asString(), Swagger.class);
 		Operation o = s.getOperation("/", "get");
 		ParameterInfo pi = o.getParameter("body", null);
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", pi.getExamples().get("application/json+simple"));

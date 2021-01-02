@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 
@@ -40,10 +41,12 @@ public class ObjectAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		assertObject(null).doesNotExist();
+		assertObject((Object)null).doesNotExist();
+		assertObject(empty()).doesNotExist();
 		assertObject(1).exists();
+		assertObject(of(1)).exists();
 
-		assertThrown(()->assertObject(null).isType(null)).is("Value was null.");
+		assertThrown(()->assertObject(empty()).isType(null)).is("Value was null.");
 		assertThrown(()->assertObject("foo").isType(null)).is("Parameter 'parent' cannot be null.");
 		assertObject("foo").isType(String.class);
 		assertObject("foo").isType(CharSequence.class);
@@ -51,34 +54,34 @@ public class ObjectAssertion_Test {
 		assertThrown(()->assertObject(1).isType(String.class)).is("Unexpected class.\n\tExpect=[java.lang.String]\n\tActual=[java.lang.Integer]");
 
 		assertObject("foo").serialized(JsonSerializer.DEFAULT).is("\"foo\"");
-		assertObject(null).serialized(JsonSerializer.DEFAULT).is("null");
+		assertObject(empty()).serialized(JsonSerializer.DEFAULT).is("null");
 
 		assertThrown(()->assertObject(new A1()).json()).contains("Could not call getValue() on property 'foo'");
 
 		assertObject("foo").json().is("'foo'");
-		assertObject(null).serialized(JsonSerializer.DEFAULT).is("null");
+		assertObject(empty()).serialized(JsonSerializer.DEFAULT).is("null");
 
 		assertObject(new A2()).jsonSorted().is("{bar:2,foo:1}");
 
 		int[] x1 = {1,2}, x2 = {2,1};
 		assertObject(x2).jsonSorted().is("[1,2]");
 		assertThrown(()->assertObject(x2).jsonSorted().is("[2,1]")).stderr().is("Unexpected value.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
-		assertObject(null).jsonSorted().is("null");
+		assertObject(empty()).jsonSorted().is("null");
 
 		assertObject(x1).sameAs(x1);
 		assertThrown(()->assertObject(x1).sameAs(x2)).stderr().is("Unexpected comparison.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
-		assertObject(null).sameAs(null);
+		assertObject(empty()).sameAs(null);
 		assertThrown(()->assertObject(new A1()).sameAs(null)).contains("Could not call getValue() on property 'foo'");
 
 		assertObject(x1).sameAsSorted(x1);
 		assertObject(x1).sameAsSorted(x2);
 		assertThrown(()->assertObject(x1).sameAs(null)).stderr().is("Unexpected comparison.\n\tExpect=[null]\n\tActual=[[1,2]]");
-		assertObject(null).sameAsSorted(null);
+		assertObject(empty()).sameAsSorted(null);
 
 		assertObject(x1).doesNotEqual(null);
-		assertObject(null).doesNotEqual(x1);
+		assertObject(empty()).doesNotEqual(x1);
 		assertObject(x1).doesNotEqual(x2);
-		assertThrown(()->assertObject(null).doesNotEqual(null)).is("Unexpected value.\n\tExpected not=[null]\n\tActual=[null]");
+		assertThrown(()->assertObject(empty()).doesNotEqual(null)).is("Unexpected value.\n\tExpected not=[null]\n\tActual=[null]");
 		assertThrown(()->assertObject(x1).doesNotEqual(x1)).is("Unexpected value.\n\tExpected not=[[1,2]]\n\tActual=[[1,2]]");
 
 		assertObject(x1).passes(x->x != null);

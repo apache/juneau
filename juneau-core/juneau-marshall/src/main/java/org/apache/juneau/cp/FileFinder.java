@@ -14,6 +14,9 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static java.util.Arrays.*;
+import static java.util.stream.Collectors.*;
 
 import java.io.*;
 import java.util.*;
@@ -21,20 +24,19 @@ import java.util.ResourceBundle.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Utility class for finding localized files on the classpath and file system.
+ * Utility class for finding regular or localized files on the classpath and file system.
  *
- * <p>
- * Typical example:
- *
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Constructor a file source that looks for files in the "files" working directory, then in the
  * 	// package "foo.bar", then in the package "foo.bar.files", then in the package "files".</jc>
  * 	FileFinder <jv>finder</jv> = FileFinder
  * 		.<jsm>create</jsm>()
- * 		.dir("files")
+ * 		.dir(<js>"files"</js>)
  * 		.cp(foo.bar.MyClass.<jk>class</jk>,<jk>null</jk>,<jk>true</jk>)
  * 		.cp(foo.bar.MyClass.<jk>class</jk>,<js>"files"</js>,<jk>true</jk>)
  * 		.cp(foo.bar.MyClass.<jk>class</jk>,<js>"/files"</js>,<jk>true</jk>)
@@ -43,10 +45,10 @@ import org.apache.juneau.internal.*;
  * 		.build();
  *
  * 	<jc>// Find a normal file.</jc>
- * 	InputStream <jv>is1</jv> = <jv>finder</jv>.getFile(<js>"text.txt"</js>);
+ * 	InputStream <jv>is1</jv> = <jv>finder</jv>.getStream(<js>"text.txt"</js>);
  *
  * 	<jc>// Find a localized file called "text_ja_JP.txt".</jc>
- * 	InputStream <jv>is2</jv> = <jv>finder</jv>.getFile(<js>"text.txt"</js>, Locale.<jsf>JAPAN</jsf>);
+ * 	InputStream <jv>is2</jv> = <jv>finder</jv>.getStream(<js>"text.txt"</js>, Locale.<jsf>JAPAN</jsf>);
  * </p>
  *
  * <p>
@@ -60,9 +62,53 @@ import org.apache.juneau.internal.*;
  * </ol>
  *
  * <p>
- * This class (and the builder class) can be subclassed by extension and using the {@link FileFinderBuilder#build(Class)} method.
+ * This class can be subclassed to provide specific preconfigured instances using no-arg constructors.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> FileFinder {
+ * 		<jk>public</jk> MyFileFinder() {
+ * 			<jk>super</jk>(
+ * 				<jk>new</jk> FileFinderBuilder()
+ * 					.dir(<js>"/files"</js>)
+ *			);
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * Specialized behavior can be implemented by overridding the {@link #find(String, Locale)} method.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> FileFinder {
+ * 		<ja>@Override</ja>
+ * 		<jk>protected</jk> Optional&lt;InputStream&gt; find(String <jv>name</jv>, Locale <jv>locale</jv>) <jk>throws</jk> IOException {
+ * 			<jc>// Do special handling or just call super.find().</jc>
+ * 			<jk>return super</jk>.find(<jv>name</jv>, <jv>locale</jv>);
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * The {@link FileFinderBuilder#build(Class)} method is provided for instantiated subclasses of {@link FileFinder}.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> FileFinder {
+ * 		<jk>public</jk> MyFileFinder(FileFinderBuilder <jv>builder</jv>) {
+ * 			<jk>super</jk>(builder);
+ * 		}
+ * 	}
+ *
+ * 	<jc>// Instantiate subclass.</jc>
+ * 	MyFileFinder <jv>finder</jv> = FileFinder.<jsm>create</jsm>().build(MyFileFinder.<jk>class</jk>);
+ * </p>
  */
 public class FileFinder {
+
+	/** Represents no file finder */
+	public static class Null extends FileFinder {}
 
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 
@@ -71,8 +117,8 @@ public class FileFinder {
 
 	private final LocalDir[] roots;
 	private final long cachingLimit;
-	private final Pattern ignorePattern;
-
+	private final Pattern[] include, exclude;
+	private final int hashCode;
 
 	/**
 	 * Instantiate a new builder.
@@ -84,18 +130,37 @@ public class FileFinder {
 	}
 
 	/**
-	 * Constructor.
+	 * Builder-based constructor.
 	 *
 	 * @param builder The builder object.
 	 */
 	public FileFinder(FileFinderBuilder builder) {
-		this.roots = builder.getRoots();
-		this.cachingLimit = builder.getCachingLimit();
-		this.ignorePattern = builder.getIgnorePattern();
+		this.roots = builder.roots.toArray(new LocalDir[builder.roots.size()]);
+		this.cachingLimit = builder.cachingLimit;
+		this.include = builder.include.toArray(new Pattern[builder.include.size()]);
+		this.exclude = builder.exclude.toArray(new Pattern[builder.exclude.size()]);
+		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, getIncludePatterns(), getExcludePatterns());
 	}
 
 	/**
-	 * Returns the contents of the resource with the specified name.
+	 * Default constructor.
+	 *
+	 * <p>
+	 * Can be used when providing a subclass that overrides the {@link #find(String, Locale)} method.
+	 */
+	public FileFinder() {
+		this.roots = new LocalDir[0];
+		this.cachingLimit = -1;
+		this.include = new Pattern[0];
+		this.exclude = new Pattern[0];
+		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, getIncludePatterns(), getExcludePatterns());
+	}
+
+	/**
+	 * The main implementation method for finding files.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own handling.
 	 *
 	 * @param name The resource name.
 	 * 	See {@link Class#getResource(String)} for format.
@@ -105,12 +170,11 @@ public class FileFinder {
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public InputStream getFile(String name, Locale locale) throws IOException {
-
+	protected Optional<InputStream> find(String name, Locale locale) throws IOException {
 		name = StringUtils.trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
-			return null;
+			return Optional.empty();
 
 		if (locale != null)
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
@@ -129,10 +193,10 @@ public class FileFinder {
 				}
 			}
 
-			if (lf != null  && ignorePattern != null && ignorePattern.matcher(lf.getName()).matches())
+			if (lf != null && isIgnoredFile(lf.getName()))
 				lf = null;
 
-			if (lf != null && (ignorePattern == null || ! ignorePattern.matcher(lf.getName()).matches())) {
+			if (lf != null) {
 				fileCache.put(name, lf);
 
 				if (cachingLimit >= 0) {
@@ -144,9 +208,24 @@ public class FileFinder {
 		}
 
 		if (lf == null)
-			return null;
+			return Optional.empty();
 
-		return lf.read();
+		return Optional.of(lf.read());
+	}
+
+	/**
+	 * Returns the contents of the resource with the specified name.
+	 *
+	 * @param name The resource name.
+	 * 	See {@link Class#getResource(String)} for format.
+	 * @param locale
+	 * 	The locale of the resource to retrieve.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
+	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public final Optional<InputStream> getStream(String name, Locale locale) throws IOException {
+		return find(name, locale);
 	}
 
 	/**
@@ -156,8 +235,33 @@ public class FileFinder {
 	 * @return An input stream to the file if it exists, or <jk>null</jk> if it does not.
 	 * @throws IOException If file could not be read.
 	 */
-	public InputStream getFile(String name) throws IOException {
-		return getFile(name, null);
+	public final Optional<InputStream> getStream(String name) throws IOException {
+		return find(name, null);
+	}
+
+	/**
+	 * Returns the file with the specified name as a string.
+	 *
+	 * @param name The file name.
+	 * @return The contents of the file as a string.  Assumes UTF-8 encoding.
+	 * @throws IOException If file could not be read.
+	 */
+	public final Optional<String> getString(String name) throws IOException {
+		return Optional.ofNullable(IOUtils.read(find(name, null).orElse(null), IOUtils.UTF8));
+	}
+
+	/**
+	 * Returns the file with the specified name as a string.
+	 *
+	 * @param name The file name.
+	 * @param locale
+	 * 	The locale of the resource to retrieve.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
+	 * @return The contents of the file as a string.  Assumes UTF-8 encoding.
+	 * @throws IOException If file could not be read.
+	 */
+	public Optional<String> getString(String name, Locale locale) throws IOException {
+		return Optional.ofNullable(IOUtils.read(find(name, locale).orElse(null), IOUtils.UTF8));
 	}
 
 	/**
@@ -237,5 +341,61 @@ public class FileFinder {
 	 */
 	protected boolean isInvalidPath(String path) {
 		return isEmpty(path) || path.contains("..") || path.contains("%");
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the file should be ignored based on file name.
+	 *
+	 * @param name The name to check.
+	 * @return <jk>true</jk> if the file should be ignored.
+	 */
+	protected boolean isIgnoredFile(String name) {
+		for (Pattern p : exclude)
+			if (p.matcher(name).matches())
+				return true;
+		for (Pattern p : include)
+			if (p.matcher(name).matches())
+				return false;
+		return true;
+	}
+
+	private List<String> getIncludePatterns() {
+		return asList(include).stream().map(x->x.pattern()).collect(toList());
+	}
+
+	private List<String> getExcludePatterns() {
+		return asList(include).stream().map(x->x.pattern()).collect(toList());
+	}
+
+	/**
+	 * Returns the settings in this finder as a serializable map for debugging purposes.
+	 *
+	 * @return The settings in this finder as a serializable map
+	 */
+	public OMap toMap() {
+		return OMap
+			.of()
+			.a("class", getClass().getSimpleName())
+			.a("roots", roots)
+			.a("cachingLimit", cachingLimit)
+			.a("include", getIncludePatterns())
+			.a("exclude", getExcludePatterns())
+			.a("hashCode", hashCode)
+		;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		return o instanceof FileFinder && eq(this, (FileFinder)o, (x,y)->eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots) && eq(x.cachingLimit, y.cachingLimit) && eq(x.getIncludePatterns(), y.getIncludePatterns()) && eq(x.getExcludePatterns(), y.getExcludePatterns()));
+	}
+
+	@Override
+	public String toString() {
+		return toMap().toString();
 	}
 }

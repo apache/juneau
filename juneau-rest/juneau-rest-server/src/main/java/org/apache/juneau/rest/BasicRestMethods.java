@@ -14,10 +14,14 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethod.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -29,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
 	// Basic page navigation links.
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
+		"options: servlet:/api",
 		"stats: servlet:/stats"
 	}
 
@@ -55,35 +59,14 @@ import org.apache.juneau.rest.annotation.*;
 public interface BasicRestMethods {
 
 	/**
-	 * [OPTIONS /*] - Show resource options.
+	 * [GET /api] - Show resource options.
 	 *
 	 * @param req The HTTP request.
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
-	@RestMethod(method=OPTIONS, path="/*",
-		summary="Swagger documentation",
-		description="Swagger documentation for this resource."
-	)
-	@HtmlDocConfig(
-		// Should override config annotations defined on class.
-		rank=10,
-		// Override the nav links for the swagger page.
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
-		},
-		// Never show aside contents of page inherited from class.
-		aside="NONE"
-	)
-	public Swagger getOptions(RestRequest req);
-
-	/**
-	 * [GET /options] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
-	@RestMethod(method=OPTIONS, path="/*",
+	@RestMethod(
+		method=GET,
+		path="/api/*",
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource."
 	)
@@ -98,7 +81,35 @@ public interface BasicRestMethods {
 		// Never show aside contents of page inherited from class.
 		aside="NONE"
 	)
-	public Swagger getOptions2(RestRequest req);
+	public Swagger getApi(RestRequest req);
+
+	/**
+	 * [GET /htdocs/*] - Retrieve static file.
+	 *
+	 * @param path The path to retrieve.
+	 * @param locale The locale of the HTTP request.
+	 * @return An HTTP resource representing the static file.
+	 */
+	@RestMethod(
+		method=GET,
+		path="/htdocs/*",
+		summary="Static files",
+		description="Static file retrieval."
+	)
+	public HttpResource getHtdoc(@Path String path, Locale locale);
+
+	/**
+	 * [GET favicon.ico] - Retrieve favorites icon image.
+	 *
+	 * @return A bean containing the contents for the OPTIONS page.
+	 */
+	@RestMethod(
+		method=GET,
+		path="favicon.ico",
+		summary="Favorites icon.",
+		description="Favorites icon."
+	)
+	public HttpResource getFavIcon();
 
 	/**
 	 * [* /error] - Error occurred.
@@ -111,7 +122,9 @@ public interface BasicRestMethods {
 	 * <p>
 	 * These responses should be left as-is without any additional processing.
 	 */
-	@RestMethod(method=ANY, path="/error",
+	@RestMethod(
+		method=ANY,
+		path="/error",
 		summary="Error occurred",
 		description="An error occurred during handling of the request."
 	)
@@ -126,7 +139,9 @@ public interface BasicRestMethods {
 	 * @param req The HTTP request.
 	 * @return A collection of timing statistics for each annotated method on this resource.
 	 */
-	@RestMethod(method=GET, path="/stats",
+	@RestMethod(
+		method=GET,
+		path="/stats",
 		summary="Timing statistics",
 		description="Timing statistics for method invocations on this resource."
 	)

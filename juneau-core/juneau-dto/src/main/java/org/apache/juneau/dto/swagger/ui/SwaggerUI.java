@@ -69,8 +69,12 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 */
 	public static final String SWAGGERUI_resolveRefsMaxDepth = PREFIX + "resolveRefsMaxDepth.i";
 
-
-	static final ResourceManager RESOURCES = new ResourceManager(SwaggerUI.class, BasicResourceFinder.INSTANCE, ! Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b"));
+	static final FileFinder RESOURCES = FileFinder
+		.create()
+		.cp(SwaggerUI.class, null, true)
+		.dir(",")
+		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)
+		.build();
 
 	private static final Set<String> STANDARD_METHODS = ASet.of("get", "put", "post", "delete", "options");
 
@@ -97,13 +101,13 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 		Session s = new Session(beanSession, swagger);
 
-		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css");
+		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css").orElse(null);
 		if (css == null)
-			css = RESOURCES.getString("SwaggerUI.css");
+			css = RESOURCES.getString("SwaggerUI.css").orElse(null);
 
 		Div outer = div(
 			style(css),
-			script("text/javascript", new String[]{RESOURCES.getString("SwaggerUI.js")}),
+			script("text/javascript", new String[]{RESOURCES.getString("SwaggerUI.js").orElse(null)}),
 			header(s)
 		)._class("swagger-ui");
 

@@ -37,13 +37,13 @@ public class RestCall {
 	private RestResponse rres;
 	private RestContext context;
 	private RestMethodContext rmethod;
-	private UrlPathInfo urlPathInfo;
+	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
 	private RestCallLogger logger;
 	private RestCallLoggerConfig loggerConfig;
 
-	private UrlPathPatternMatch urlPathPatternMatch;
+	private UrlPathMatch urlPathMatch;
 
 	/**
 	 * Constructor.
@@ -68,7 +68,7 @@ public class RestCall {
 	 */
 	public RestCall request(HttpServletRequest req) {
 		this.req = req;
-		this.urlPathInfo = null;
+		this.urlPath = null;
 		this.pathInfoUndecoded = null;
 		return this;
 	}
@@ -308,11 +308,11 @@ public class RestCall {
 	/**
 	 * Sets the URL path pattern match on this call.
 	 *
-	 * @param urlPathPatternMatch The match pattern.
+	 * @param urlPathMatch The match pattern.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall urlPathPatternMatch(UrlPathPatternMatch urlPathPatternMatch) {
-		this.urlPathPatternMatch = urlPathPatternMatch;
+	public RestCall urlPathMatch(UrlPathMatch urlPathMatch) {
+		this.urlPathMatch = urlPathMatch;
 		return this;
 	}
 
@@ -321,10 +321,18 @@ public class RestCall {
 	 *
 	 * @return The URL path pattern match on this call.
 	 */
-	public UrlPathPatternMatch getUrlPathPatternMatch() {
-		return urlPathPatternMatch;
+	public UrlPathMatch getUrlPathMatch() {
+		return urlPathMatch;
 	}
 
+	/**
+	 * Returns the exception that occurred during this call.
+	 *
+	 * @return The exception that occurred during this call.
+	 */
+	public Throwable getException() {
+		return (Throwable)req.getAttribute("Exception");
+	}
 	//------------------------------------------------------------------------------------------------------------------
 	// Lifecycle methods.
 	//------------------------------------------------------------------------------------------------------------------
@@ -363,14 +371,14 @@ public class RestCall {
 	}
 
 	/**
-	 * Returns the request path info as a {@link UrlPathInfo} bean.
+	 * Returns the request path info as a {@link UrlPath} bean.
 	 *
-	 * @return The request path info as a {@link UrlPathInfo} bean.
+	 * @return The request path info as a {@link UrlPath} bean.
 	 */
-	public UrlPathInfo getUrlPathInfo() {
-		if (urlPathInfo == null)
-			urlPathInfo = new UrlPathInfo(getPathInfoUndecoded());
-		return urlPathInfo;
+	public UrlPath getUrlPath() {
+		if (urlPath == null)
+			urlPath = UrlPath.of(getPathInfoUndecoded());
+		return urlPath;
 	}
 
 	/**

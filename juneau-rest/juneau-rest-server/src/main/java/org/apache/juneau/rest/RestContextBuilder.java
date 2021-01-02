@@ -119,7 +119,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		// Default values.
 		partSerializer(OpenApiSerializer.class);
 		partParser(OpenApiParser.class);
-		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
 		encoders(IdentityEncoder.INSTANCE);
 		responseHandlers(
 			ReaderHandler.class,
@@ -133,7 +132,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				.defaultVars()
 				.vars(ConfigVar.class)
 				.vars(FileVar.class)
-				.contextObject("crm", new ResourceManager(resourceClass));
+				.contextObject("crm", FileFinder.create().cp(resourceClass,null,true).build());
 
 			VarResolver vr = varResolverBuilder.build();
 
@@ -627,46 +626,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Classpath resource finder.
-	 *
-	 * <p>
-	 * Used to retrieve localized files from the classpath.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicResourceFinder}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder classpathResourceFinder(Class<? extends ResourceFinder> value) {
-		return set(REST_classpathResourceFinder, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Classpath resource finder.
-	 *
-	 * <p>
-	 * Same as {@link #classpathResourceFinder(ResourceFinder)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicResourceFinder}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder classpathResourceFinder(ResourceFinder value) {
-		return set(REST_classpathResourceFinder, value);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Client version header.
 	 *
 	 * <p>
@@ -916,6 +875,52 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  File finder.
+	 *
+	 * <p>
+	 * Used to retrieve localized files from the classpath for a variety of purposes including:
+	 * <ul>
+	 * 	<li>Resolution of {@link FileVar $F} variable contents.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_fileFinder}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicFileFinder}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder fileFinder(Class<? extends FileFinder> value) {
+		return set(REST_fileFinder, value);
+	}
+
+	/**
+	 * Configuration property:  File finder.
+	 *
+	 * <p>
+	 * Used to retrieve localized files from the classpath for a variety of purposes including:
+	 * <ul>
+	 * 	<li>Resolution of {@link FileVar $F} variable contents.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_fileFinder}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicFileFinder}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder fileFinder(FileFinder value) {
+		return set(REST_fileFinder, value);
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level guards.
 	 *
 	 * <p>
@@ -1047,24 +1052,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder messages(String bundlePath) {
 		return prependTo(REST_messages, Tuple2.of(null, bundlePath));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  MIME types.
-	 *
-	 * <p>
-	 * Defines MIME-type file type mappings.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder mimeTypes(String...values) {
-		return addTo(REST_mimeTypes, values);
 	}
 
 	/**
@@ -1717,217 +1704,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
-	 *
-	 * <p>
-	 * Used to customize the headers on responses returned for statically-served files.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
-	 * </ul>
-	 *
-	 * @param headers
-	 * 	The headers to add to this list.
-	 * 	<br>The default is <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFileResponseHeaders(Map<String,String> headers) {
-		return putAllTo(REST_staticFileResponseHeaders, headers);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
-	 *
-	 * <p>
-	 * Same as {@link #staticFileResponseHeaders(Map)} but replaces any previous values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
-	 * </ul>
-	 *
-	 * @param headers
-	 * 	The headers to set on this list.
-	 * 	<br>The default is <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFileResponseHeadersReplace(Map<String,String> headers) {
-		return set(REST_staticFileResponseHeaders, headers);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
-	 *
-	 * <p>
-	 * Same as {@link #staticFileResponseHeaders(Map)} with append=<jk>true</jk> except headers are strings
-	 * composed of key/value pairs.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
-	 * </ul>
-	 *
-	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFileResponseHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid static file response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			staticFileResponseHeader(h[0], h[1]);
-		}
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
-	 *
-	 * <p>
-	 * Same as {@link #staticFileResponseHeaders(String...)} except header is broken into name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFileResponseHeader(String name, String value) {
-		return putTo(REST_staticFileResponseHeaders, name, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
-	 *
-	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param values The values to append to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(StaticFileMapping...values) {
-		return prependTo(REST_staticFiles, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
-	 *
-	 * <p>
-	 * Same as {@link #staticFiles(StaticFileMapping...)} except input is in the form of a mapping string.
-	 *
-	 * <p>
-	 * Mapping string must be one of these formats:
-	 * <ul>
-	 * 	<li><js>"path:location"</js> (e.g. <js>"foodocs:docs/foo"</js>)
-	 * 	<li><js>"path:location:headers-json"</js> (e.g. <js>"foodocs:docs/foo:{'Cache-Control':'max-age=86400, public'}"</js>)
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param mappingString The static file mapping string.
-	 * @throws ParseException If mapping string is malformed.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(String mappingString) throws ParseException{
-		for (StaticFileMapping sfm : StaticFileMapping.parse(resourceClass, mappingString).riterable())
-			staticFiles(sfm);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
-	 *
-	 * <p>
-	 * Same as {@link #staticFiles(String)} except overrides the base class for retrieving the resource.
-	 *
-	 * <p>
-	 * Mapping string must be one of these formats:
-	 * <ul>
-	 * 	<li><js>"path:location"</js> (e.g. <js>"foodocs:docs/foo"</js>)
-	 * 	<li><js>"path:location:headers-json"</js> (e.g. <js>"foodocs:docs/foo:{'Cache-Control':'max-age=86400, public'}"</js>)
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the REST resource class.
-	 * @param mappingString The static file mapping string.
-	 * @return This object (for method chaining).
-	 * @throws ParseException If mapping string is malformed.
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) throws ParseException {
-		for (StaticFileMapping sfm : StaticFileMapping.parse(baseClass, mappingString).riterable())
-			staticFiles(sfm);
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
-	 *
-	 * <p>
-	 * Same as {@link #staticFiles(String)} except path and location are already split values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param path
-	 * 	The mapped URI path.
-	 * 	<br>Leading and trailing slashes are trimmed.
-	 * @param location
-	 * 	The location relative to the resource class.
-	 * 	<br>Leading and trailing slashes are trimmed.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(String path, String location) {
-		return staticFiles(new StaticFileMapping(resourceClass, path, location, null));
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
-	 *
-	 * <p>
-	 * Same as {@link #staticFiles(String,String)} except overrides the base class for retrieving the resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the REST resource class.
-	 * @param path
-	 * 	The mapped URI path.
-	 * 	<br>Leading and trailing slashes are trimmed.
-	 * @param location
-	 * 	The location relative to the resource class.
-	 * 	<br>Leading and trailing slashes are trimmed.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder staticFiles(Class<?> baseClass, String path, String location) {
-		return staticFiles(new StaticFileMapping(baseClass, path, location, null));
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
 	 *
 	 * <p>
@@ -2121,6 +1897,52 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Static files finder.
+	 *
+	 * <p>
+	 * Used to retrieve localized files to be served up as static files through the REST API via the following
+	 * predefined methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder staticFiles(Class<? extends StaticFiles> value) {
+		return set(REST_staticFiles, value);
+	}
+
+	/**
+	 * Configuration property:  Static files finder.
+	 *
+	 * <p>
+	 * Used to retrieve localized files to be served up as static files through the REST API via the following
+	 * predefined methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder staticFiles(StaticFiles value) {
+		return set(REST_staticFiles, value);
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource authority path.
 	 *
 	 * <p>
@@ -2211,24 +2033,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (! value.isEmpty())
 			set(REST_uriResolution, value);
 		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Use classpath resource caching.
-	 *
-	 * <p>
-	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related
-	 * methods) will be cached in memory to speed subsequent lookups.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_disableClasspathResourceCaching}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder disableClasspathResourceCaching() {
-		return set(REST_disableClasspathResourceCaching);
 	}
 
 	@Override /* ContextBuilder */

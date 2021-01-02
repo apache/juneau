@@ -33,7 +33,7 @@ public class QueryMenuItem extends MenuItemWidget {
 	public String getStyle(RestRequest req, RestResponse res) throws Exception {
 		return super.getStyle(req, res)
 			+ "\n"
-			+ loadStyle("QueryMenuItem.css");
+			+ loadStyle(req, "styles/QueryMenuItem.css");
 	}
 
 	@Override /* MenuItemWidget */
@@ -43,6 +43,6 @@ public class QueryMenuItem extends MenuItemWidget {
 
 	@Override /* MenuItemWidget */
 	public String getContent(RestRequest req, RestResponse res) throws Exception {
-		return loadHtml("QueryMenuItem.html");
+		return loadHtml(req, "QueryMenuItem.html");
 	}
 }

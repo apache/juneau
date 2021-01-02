@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -195,5 +196,19 @@ public class FileUtils {
 		if (name == null || ext == null)
 			return false;
 		return ext.equals(getExtension(name));
+	}
+
+	/**
+	 * Given an arbitrary path, returns the file name portion of that path.
+	 *
+	 * @param path The path to check.
+	 * @return The file name.
+	 */
+	public static String getFileName(String path) {
+		if (isEmpty(path))
+			return null;
+		path = trimTrailingSlashes(path);
+		int i = path.lastIndexOf('/');
+		return i == -1 ? path : path.substring(i+1);
 	}
 }

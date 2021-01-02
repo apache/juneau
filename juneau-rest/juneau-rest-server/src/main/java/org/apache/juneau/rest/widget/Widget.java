@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.widget;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -38,8 +37,6 @@ import org.apache.juneau.html.*;
  * </ul>
  */
 public abstract class Widget implements HtmlWidget {
-
-	private final ResourceManager rm = new ResourceManager(getClass(), RecursiveResourceFinder.INSTANCE, false);
 
 	private static final String SESSION_req = "req";
 	private static final String SESSION_res = "res";
@@ -132,66 +129,35 @@ public abstract class Widget implements HtmlWidget {
 	}
 
 	/**
-	 * Retrieves the specified classpath resource and returns the contents as a string.
+	 * Returns the file finder to use for finding files on the file system.
 	 *
-	 * <p>
-	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, searches
-	 * up the parent hierarchy chain.
-	 *
-	 * <p>
-	 * If the resource cannot be found in the classpath, then an attempt is made to look relative to the JVM working directory.
-	 * <br>Path traversals outside the working directory are not allowed for security reasons.
-	 *
-	 * @param name Name of the desired resource.
-	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
+	 * @param req The HTTP request object.
+	 * @return The file finder to used for finding files on the file system.
 	 */
-	protected String getClasspathResourceAsString(String name) throws IOException {
-		return rm.getString(name);
+	protected FileFinder getFileFinder(RestRequest req) {
+		return req.getFileFinder();
 	}
 
 	/**
-	 * Same as {@link #getClasspathResourceAsString(String)} except also looks for localized-versions of the file.
-	 *
-	 * <p>
-	 * If the <c>locale</c> is specified, then we look for resources whose name matches that locale.
-	 * <br>For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
-	 * files in the following order:
-	 * <ol>
-	 * 	<li><js>"MyResource_ja_JP.txt"</js>
-	 * 	<li><js>"MyResource_ja.txt"</js>
-	 * 	<li><js>"MyResource.txt"</js>
-	 * </ol>
-	 *
-	 * @param name Name of the desired resource.
-	 * @param locale The locale.  Can be <jk>null</jk>.
-	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	protected String getClasspathResourceAsString(String name, Locale locale) throws IOException {
-		return rm.getString(name, locale);
-	}
-
-	/**
-	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips Javascript comments from
-	 * the file.
+	 * Loads the specified javascript file and strips any Javascript comments from the file.
 	 *
 	 * <p>
 	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
 	 *
+	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected String loadScript(String name) throws IOException {
-		String s = getClasspathResourceAsString(name);
+	protected String loadScript(RestRequest req, String name) throws IOException {
+		String s = getFileFinder(req).getString(name).orElse(null);
 		if (s != null)
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
 	}
 
 	/**
-	 * Same as {@link #loadScript(String)} but replaces request-time SVL variables.
+	 * Same as {@link #loadScript(RestRequest,String)} but replaces request-time SVL variables.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
@@ -205,29 +171,29 @@ public abstract class Widget implements HtmlWidget {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadScriptWithVars(RestRequest req, RestResponse res, String name) throws IOException {
-		return req.getVarResolverSession().resolve(loadScript(name));
+		return req.getVarResolverSession().resolve(loadScript(req, name));
 	}
 
 	/**
-	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips CSS comments from
-	 * the file.
+	 * Loads the specified CSS file and strips CSS comments from the file.
 	 *
 	 * <p>
 	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
 	 *
+	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected String loadStyle(String name) throws IOException {
-		String s = getClasspathResourceAsString(name);
+	protected String loadStyle(RestRequest req, String name) throws IOException {
+		String s = getFileFinder(req).getString(name).orElse(null);
 		if (s != null)
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
 	}
 
 	/**
-	 * Same as {@link #loadStyle(String)} but replaces request-time SVL variables.
+	 * Same as {@link #loadStyle(RestRequest,String)} but replaces request-time SVL variables.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
@@ -241,29 +207,29 @@ public abstract class Widget implements HtmlWidget {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadStyleWithVars(RestRequest req, RestResponse res, String name) throws IOException {
-		return req.getVarResolverSession().resolve(loadStyle(name));
+		return req.getVarResolverSession().resolve(loadStyle(req, name));
 	}
 
 	/**
-	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips HTML comments from the
-	 * file.
+	 * Loads the specified HTML file and strips HTML comments from the file.
 	 *
 	 * <p>
 	 * Comment are assumed to be <js>"<!-- -->"</js> code blocks.
 	 *
+	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected String loadHtml(String name) throws IOException {
-		String s = getClasspathResourceAsString(name);
+	protected String loadHtml(RestRequest req, String name) throws IOException {
+		String s = getFileFinder(req).getString(name).orElse(null);
 		if (s != null)
 			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 		return s;
 	}
 
 	/**
-	 * Same as {@link #loadHtml(String)} but replaces request-time SVL variables.
+	 * Same as {@link #loadHtml(RestRequest,String)} but replaces request-time SVL variables.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
@@ -277,6 +243,6 @@ public abstract class Widget implements HtmlWidget {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadHtmlWithVars(RestRequest req, RestResponse res, String name) throws IOException {
-		return req.getVarResolverSession().resolve(loadHtml(name));
+		return req.getVarResolverSession().resolve(loadHtml(req, name));
 	}
 }

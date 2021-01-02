@@ -146,14 +146,14 @@ class MockPathResolver {
 		}
 
 		if (! contextPath.isEmpty()) {
-			UrlPathPattern p = new UrlPathPattern(contextPath);
-			if (p.match(this.contextPath) == null)
+			UrlPathMatcher p = UrlPathMatcher.of(contextPath);
+			if (p.match(UrlPath.of(this.contextPath)) == null)
 				throw new RuntimeException("Context path ["+contextPath+"] not found in URI:  " + uri);
 		}
 
 		if (! servletPath.isEmpty()) {
-			UrlPathPattern p = new UrlPathPattern(servletPath);
-			if (p.match(this.servletPath) == null)
+			UrlPathMatcher p = UrlPathMatcher.of(servletPath);
+			if (p.match(UrlPath.of(this.servletPath)) == null)
 				throw new RuntimeException("Servlet path ["+servletPath+"] not found in URI:  " + uri);
 		}
 	}

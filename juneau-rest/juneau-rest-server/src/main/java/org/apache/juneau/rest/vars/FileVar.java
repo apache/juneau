@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -24,17 +23,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$F{path[,defaultValue]}"</js>.
  *
  * <p>
- * File variables resolve to the contents of resource files located on the classpath or local JVM directory.
- * They use the {@link RestRequest#getClasspathResourceAsString(String)} method to retrieve the contents of the file.
- * That in turn uses the {@link ResourceFinder} associated with the servlet class to find the file.
- *
- * <p>
- * The {@link ResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
- * resource on this class, it searches up the parent hierarchy chain.
- *
- * <p>
- * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
- * <br>Path traversals outside the working directory are not allowed for security reasons.
+ * Contents of files are retrieved from the request using {@link RestRequest#getFileFinder()}.
 
  * <p>
  * Localized resources (based on the locale of the HTTP request) are supported.
@@ -65,7 +54,6 @@ import org.apache.juneau.svl.*;
 public class FileVar extends DefaultingVar {
 
 	private static final String SESSION_req = "req";
-	private static final String SESSION_crm = "crm";
 
 	/**
 	 * The name of this variable.
@@ -84,7 +72,8 @@ public class FileVar extends DefaultingVar {
 
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, false);
 		if (req != null) {
-			String s = req.getClasspathResourceAsString(key);
+
+			String s = req.getFileFinder().getString(key).orElse(null);
 			if (s == null)
 				return null;
 			String subType = FileUtils.getExtension(key);
@@ -95,15 +84,11 @@ public class FileVar extends DefaultingVar {
 			return s;
 		}
 
-		ResourceManager crm = session.getSessionObject(ResourceManager.class, SESSION_crm, false);
-		if (crm != null)
-			return crm.getString(key);
-
 		return null;
 	}
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req) || session.hasSessionObject(SESSION_crm);
+		return session.hasSessionObject(SESSION_req);
 	}
 }

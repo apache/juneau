@@ -31,7 +31,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
 
-import javax.activation.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -40,7 +39,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.cp.Messages;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
@@ -664,115 +662,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_children = PREFIX + ".children.lo";
 
 	/**
-	 * Configuration property:  Classpath resource finder.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
-	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.ResourceFinder}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.cp.BasicResourceFinder}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#classpathResourceFinder()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(ResourceFinder)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used to retrieve localized files from the classpath.
-	 *
-	 * <p>
-	 * Used by the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jc'>{@link RestContext}
-	 * 	<ul>
-	 * 		<li class='jm'>{@link #getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
-	 * 		<li class='jm'>{@link #getClasspathResource(Class,MediaType,String,Locale) getClasspathResource(Class,MediaType,String,Locale)}
-	 * 		<li class='jm'>{@link #getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
-	 * 		<li class='jm'>{@link #getStaticFile(String) resolveStaticFile(String)}
-	 * 	</ul>
-	 * 	<li class='jc'>{@link RestRequest}
-	 * 	<ul>
-	 * 		<li class='jm'>{@link RestRequest#getClasspathHttpResource(String) getClasspathHttpResource(String)}
-	 * 		<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean) getClasspathHttpResource(String,boolean)}
-	 * 		<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean,MediaType,boolean) getClasspathHttpResource(String,boolean,MediaType,boolean)}
-	 * 	</ul>
-	 * </ul>
-	 *
-	 * <p>
-	 * It also affects the behavior of the {@link #REST_staticFiles} property.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our customized classpath resource finder.</jc>
-	 * 	<jk>public class</jk> MyClasspathResourceFinder <jk>extends</jk> ClasspathResourceFinderBasic {
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> InputStream findResource(Class&lt;?&gt; baseClass, String name, Locale locale) <jk>throws</jk> IOException {
-	 * 			<jc>// Do your own resolution.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(classpathResourceFinder=MyClasspathResourceFinder.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.classpathResourceFinder(MyClasspathResourceFinder.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_classpathResourceFinder</jsf>, MyClasspathResourceFinder.<jk>class</jk>));
-	 *
-	 * 			<jc>// Use a pre-instantiated object instead.</jc>
-	 * 			builder.classpathResourceFinder(<jk>new</jk> MyClasspathResourceFinder());
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.classpathResourceFinder(MyClasspathResourceFinder.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default value is {@link BasicResourceFinder} which provides basic support for finding localized
-	 * 		resources on the classpath and JVM working directory.
-	 * 		<br>The {@link RecursiveResourceFinder} is another option that also recursively searches for resources
-	 * 		up the class-hierarchy.
-	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link ResourceFinder} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ResourceFinder} interface with the same
-	 * 		functionality as {@link BasicResourceFinder} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 */
-	public static final String REST_classpathResourceFinder = PREFIX + ".classpathResourceFinder.o";
-
-	/**
 	 * Configuration property:  Client version header.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1143,6 +1032,117 @@ public class RestContext extends BeanContext {
 	public static final String REST_encoders = PREFIX + ".encoders.lo";
 
 	/**
+	 * Configuration property:  File finder.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_fileFinder REST_fileFinder}
+	 * 	<li><b>Name:</b>  <js>"RestContext.fileFinder.o"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.FileFinder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicFileFinder}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#fileFinder()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(FileFinder)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createFileFinder()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createFileFinder()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestServlet#createFileFinder()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Used to retrieve localized files from the classpath for a variety of purposes including:
+	 * <ul>
+	 * 	<li>Resolution of {@link FileVar $F} variable contents.
+	 * </ul>
+	 *
+	 * <p>
+	 * The file finder can be accessed through the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getFileFinder()}
+	 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The file finder is instantiated via the {@link RestContext#createFileFinder()} method which in turn instantiates
+	 * based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
+	 * 	<li>Looks for {@link #REST_fileFinder} setting.
+	 * 	<li>Looks for a public <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 		<br>Note that the {@link BasicRest#createFileFinder()} and {@link BasicRestServlet#createFileFinder()} methods are implemented
+	 * 		to automatically look for injected beans of type {@link FileFinder} allowing preconfigured file finders to be
+	 * 		defined in a Spring configuration class.
+	 * 	<li>Instantiates a {@link BasicFileFinder} which provides basic support for finding localized
+	 * 		resources on the classpath and JVM working directory.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a file finder that looks for files in the /files working subdirectory, but overrides the find()
+	 * 	// method for special handling of special cases.</jc>
+	 * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> FileFinder {
+	 *
+	 * 		<jk>public</jk> MyFileFinder() {
+	 * 			<jk>super</jk>(
+	 * 				<jk>new</jk> FileFinderBuilder()
+	 * 					.dir(<js>"/files"</js>)
+	 *			);
+	 * 		}
+	 *
+	 *		<ja>@Override</ja> <jc>// FileFinder</jc>
+	 * 		<jk>protected</jk> Optional&lt;InputStream&gt; find(String <jv>name</jv>, Locale <jv>locale</jv>) <jk>throws</jk> IOException {
+	 * 			<jc>// Do special handling or just call super.find().</jc>
+	 * 			<jk>return super</jk>.find(<jv>name</jv>, <jv>locale</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(fileFinder=MyFileFinder.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Created via createFileFinder() method.</jc>
+	 * 		<jk>public</jk> FileFinder createFileFinder(RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MyFileFinder();
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			<jv>builder</jv>.set(<jsf>REST_fileFinder</jsf>, MyFileFinder.<jk>class</jk>));
+	 *
+	 * 			<jc>// Use a pre-instantiated object instead.</jc>
+	 * 			<jv>builder</jv>.fileFinder(<jk>new</jk> MyFileFinder());
+	 * 		}
+	 *
+	 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Create a REST method that uses the file finder.</jc>
+	 * 		<ja>@RestMethod</ja>
+	 * 		<jk>public</jk> InputStream getFoo(RestRequest <jv>req</jv>) {
+	 * 			<jk>return</jk> <jv>req</jv>.getFileFinder().getStream(<js>"foo.json"</js>).orElseThrow(NotFound::<jk>new</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_fileFinder = PREFIX + ".fileFinder.o";
+
+	/**
 	 * Configuration property:  Class-level guards.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1498,76 +1498,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_messages = PREFIX + ".messages.lo";
-
-	/**
-	 * Configuration property:  MIME types.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_mimeTypes REST_mimeTypes}
-	 * 	<li><b>Name:</b>  <js>"RestContext.mimeTypes.ss"</js>
-	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.mimeTypes</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_MIMETYPES</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#mimeTypes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#mimeTypes(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines MIME-type file type mappings.
-	 *
-	 * <p>
-	 * Used for specifying the content type on file resources retrieved through the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getStaticFile(String) RestContext.resolveStaticFile(String)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean,MediaType,boolean)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String)}
-	 * </ul>
-	 *
-	 * <p>
-	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(mimeTypes={<js>"text/plain txt text TXT"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.mimeTypes(<js>"text/plain txt text TXT"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.addTo(<jsf>REST_mimeTypes</jsf>, <js>"text/plain txt text TXT"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.mimeTypes(<js>"text/plain txt text TXT"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Values are .mime.types formatted entry string.
-	 * 		<br>Example: <js>"image/svg+xml svg"</js>
-	 * </ul>
-	 */
-	public static final String REST_mimeTypes = PREFIX + ".mimeTypes.ss";
 
 	/**
 	 * Configuration property:  Java method parameter resolvers.
@@ -2665,92 +2595,14 @@ public class RestContext extends BeanContext {
 	public static final String REST_serializers = PREFIX + ".serializers.lo";
 
 	/**
-	 * Configuration property:  Static file response headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
-	 * 	<li><b>Name:</b>  <js>"RestContext.staticFileResponseHeaders.omo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.staticFileResponseHeaders</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_STATICFILERESPONSEHEADERS</c>
-	 * 	<li><b>Default:</b>  <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#staticFileResponseHeaders()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeaders(Map)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeaders(String...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeader(String,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeadersReplace(Map)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used to customize the headers on responses returned for statically-served files.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFileResponseHeaders={
-	 * 			<js>"Cache-Control: $C{REST/cacheControl,nocache}"</js>,
-	 * 			<js>"My-Header: $C{REST/myHeaderValue}"</js>
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder
-	 * 				.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
-	 * 				.staticFileResponseHeaders(<js>"My-Header: foo"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder
-	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"Cache-Control"</js>, <js>"nocache"</js>);
-	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() @Rest(staticFiles)} annotation.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_staticFiles} for information about statically-served files.
-	 * </ul>
-	 */
-	public static final String REST_staticFileResponseHeaders = PREFIX + ".staticFileResponseHeaders.omo";
-
-	/**
-	 * Configuration property:  Static file mappings.
+	 * Configuration property:  Static file finder.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}
-	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.StaticFileMapping}&gt;</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.o"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.StaticFiles}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicStaticFiles}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -2758,110 +2610,112 @@ public class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(String)},
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(String,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class,String,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(StaticFileMapping...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(StaticFiles)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createStaticFiles()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createStaticFiles()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestServlet#createStaticFiles()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents
-	 * from the classpath or file system.
-	 *
-	 * <p>
-	 * The format of the value is one of the following:
-	 * <ol class='spaced-list'>
-	 * 	<li><js>"path:location"</js>
-	 * 	<li><js>"path:location:headers"</js>
-	 * </ol>
-	 *
-	 * <p>
-	 * An example where this class is used is in the {@link Rest#staticFiles} annotation:
-	 * <p class='bcode w800'>
-	 * 	<jk>package</jk> com.foo.mypackage;
-	 *
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/myresource"</js>,
-	 * 		staticFiles={
-	 * 			<js>"htdocs:docs"</js>,
-	 * 			<js>"styles:styles"</js>
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
-	 * </p>
-	 *
-	 * <p>
-	 * In the example above, given a GET request to the following URL...
-	 * <p class='bcode w800'>
-	 *  	/myresource/htdocs/foobar.html
-	 * </p>
-	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
-	 * <ol class='spaced-list'>
-	 * 	<li><c>com.foo.mypackage.docs</c> package.
-	 * </ol>
-	 *
-	 * <p>
-	 * The location is interpreted as an absolute path if it starts with <js>'/'</js>.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<js>"htdocs:/docs"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 * <p>
-	 * In the example above, given a GET request to the following URL...
-	 * <p class='bcode w800'>
-	 *  	/myresource/htdocs/foobar.html
-	 * </p>
-	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
-	 * <ol class='spaced-list'>
-	 * 	<li><c>docs</c> package (typically under <c>src/main/resources/docs</c> in your workspace).
-	 * 	<li><c>[working-dir]/docs</c> directory at runtime.
-	 * </ol>
-	 *
-	 * <p>
-	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimplifiedJson} object.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * The same path can map to multiple locations.  Files are searched in the order
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		staticFiles={
-	 * 			<jc>// Search in absolute location '/htdocs/folder' before location 'htdocs.package' relative to servlet package.</jc>
-	 * 			<js>"htdocs:/htdocs/folder,htdocs:htdocs.package"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder} for configuring how classpath resources are located and retrieved.
-	 * 	<li class='jf'>{@link #REST_mimeTypes} for configuring the media types based on file extension.
-	 * 	<li class='jf'>{@link #REST_staticFileResponseHeaders} for configuring response headers on statically served files.
-	 * 	<li class='jf'>{@link #REST_disableClasspathResourceCaching} for configuring static file caching.
-	 * 	<li class='jm'>{@link RestContext#getClasspathResource(String,Locale)} for retrieving static files.
+	 * Used to retrieve localized files to be served up as static files through the REST API via the following
+	 * predefined methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Mappings are cumulative from super classes.
-	 * 	<li>
-	 * 		Child resources can override mappings made on parent class resources.
-	 * 		<br>When both parent and child resources map against the same path, files will be search in the child location
-	 * 		and then the parent location.
+	 * <p>
+	 * The static file finder can be accessed through the following methods:
+	 * <ul class='javatree'>
+	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
+	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
 	 * </ul>
+	 *
+	 * <p>
+	 * The static file finder is instantiated via the {@link RestContext#createStaticFiles()} method which in turn instantiates
+	 * based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
+	 * 	<li>Looks in {@link #REST_staticFiles} setting.
+	 * 	<li>Looks for a public <c>createStaticFiles()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 		<br>Note that the {@link BasicRest#createStaticFiles()} and {@link BasicRestServlet#createStaticFiles()} methhods are implemented
+	 * 		to automatically look for injected beans of type {@link StaticFiles} allowing preconfigured static file finders to be
+	 * 		defined in a Spring configuration class.
+	 * 	<li>Instantiates a {@link BasicStaticFiles} which provides basic support for finding localized
+	 * 		resources on the classpath and JVM working directory..
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a static file finder that looks for files in the /files working subdirectory, but overrides the find()
+	 * 	// and resolve methods for special handling of special cases and adds a Foo header to all requests.</jc>
+	 * 	<jk>public class</jk> MyStaticFiles <jk>extends</jk> StaticFiles {
+	 *
+	 * 		<jk>public</jk> MyStaticFiles() {
+	 * 			<jk>super</jk>(
+	 * 				<jk>new</jk> StaticFilesBuilder()
+	 * 					.dir(<js>"/files"</js>)
+	 * 					.headers(BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 			);
+	 * 		}
+	 *
+	 *		<ja>@Override</ja> <jc>// FileFinder</jc>
+	 * 		<jk>protected</jk> Optional&lt;InputStream&gt; find(String <jv>name</jv>, Locale <jv>locale</jv>) <jk>throws</jk> IOException {
+	 * 			<jc>// Do special handling or just call super.find().</jc>
+	 * 			<jk>return super</jk>.find(<jv>name</jv>, <jv>locale</jv>);
+	 * 		}
+	 *
+	 *		<ja>@Override</ja> <jc>// staticFiles</jc>
+	 * 		<jk>public</jk> Optional&lt;BasicHttpResource&gt; resolve(String <jv>path</jv>, Locale <jv>locale</jv>) {
+	 * 			<jc>// Do special handling or just call super.resolve().</jc>
+	 * 			<jk>return super</jk>.resolve(<jv>path</jv>, <jv>locale</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(staticFiles=MyStaticFiles.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Created via createStaticFiles() method.</jc>
+	 * 		<jk>public</jk> StaticFiles createStaticFiles(RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MyStaticFiles();
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.staticFiles(MyStaticFiles.<jk>class</jk>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			<jv>builder</jv>.set(<jsf>REST_staticFiles</jsf>, MyStaticFiles.<jk>class</jk>));
+	 *
+	 * 			<jc>// Use a pre-instantiated object instead.</jc>
+	 * 			<jv>builder</jv>.staticFiles(<jk>new</jk> MyStaticFiles());
+	 * 		}
+	 *
+	 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.staticFiles(MyStaticFiles.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Create a REST method that uses the static files finder.</jc>
+	 * 		<ja>@RestMethod<ja>(
+	 * 			method=<jsf>GET</jsf>,
+	 * 			path=<js>"/htdocs/*"</js>
+	 * 		)
+	 * 		<jk>public</jk> HttpResource getHtdoc(RestRequest <jv>req</jv>, <ja>@Path</ja>("/*") String <jv>path</jv>, Locale <jv>locale</jv>) <jk>throws</jk> NotFound {
+	 * 			<jk>return</jk> <jv>req</jv>.getStaticFiles().resolve(<jv>path</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
-	public static final String REST_staticFiles = PREFIX + ".staticFiles.lo";
+	public static final String REST_staticFiles = PREFIX + ".staticFiles.o";
 
 	/**
 	 * Configuration property:  Supported accept media types.
@@ -3102,63 +2956,6 @@ public class RestContext extends BeanContext {
 	 * </p>
 	 */
 	public static final String REST_context = PREFIX + ".context.c";
-
-	/**
-	 * Configuration property:  Use classpath resource caching.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_disableClasspathResourceCaching REST_disableClasspathResourceCaching}
-	 * 	<li><b>Name:</b>  <js>"RestContext.disableClasspathResourceCaching.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestContext.disableClasspathResourceCaching</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DISABLECLASSPATHRESOURCECACHING</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#disableClasspathResourceCaching()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#disableClasspathResourceCaching()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related
-	 * methods) will be cached in memory to speed subsequent lookups.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(disableClasspathResourceCaching=<js>"$C{REST/disableClasspathResourceCaching,false}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.disableClasspathResourceCaching()
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_disableClasspathResourceCaching</jsf>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.disableClasspathResourceCaching()
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_staticFiles} for information about static files.
-	 * </ul>
-	 */
-	public static final String REST_disableClasspathResourceCaching = PREFIX + ".disableClasspathResourceCaching.b";
 
 	/**
 	 * Configuration property:  Resource URI authority path.
@@ -3443,35 +3240,6 @@ public class RestContext extends BeanContext {
 		return Collections.unmodifiableMap(REGISTRY);
 	}
 
-//	public static final Set<MethodExecStats> getGlobalExecStats() {
-//		Set<MethodExecStats> s = new TreeSet<>();
-//		for (RestContext rc : REGISTRY.values())
-//			s.addAll(rc.getMethodExecStats());
-//		return s;
-//	}
-//
-////	public static final Set<ExceptionStats> getGlobalExceptions() {
-////		Set<ExceptionStats> s = new TreeSet<>();
-////		for (RestContext rc : REGISTRY.values())
-////			s.addAll(rc.getStackTraceDb().getClonedStackTraceInfos());
-////		return s;
-////	}
-//
-//	public static final Set<StatusStats> getGlobalStatusStats() {
-//		Set<StatusStats> s = new TreeSet<>();
-//		for (RestContext rc : REGISTRY.values()) {
-//			StatusStats ss = StatusStats.create(rc.getResource().getClass());
-//			s.add(ss);
-//			for (RestMethodContext rmc : rc.getCallMethods().values()) {
-//				StatusStats.Method ssm = ss.getMethod(rmc.method);
-//				for (Map.Entry<Integer,Integer> e : rmc.getStatusCodes().entrySet()) {
-//					ssm.status(e.getKey(), e.getValue());
-//				}
-//			}
-//		}
-//		return s;
-//	}
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -3480,15 +3248,14 @@ public class RestContext extends BeanContext {
 	final RestContextBuilder builder;
 	private final boolean
 		allowBodyParam,
-		renderResponseStackTraces,
-		useClasspathResourceCaching;
+		renderResponseStackTraces;
 	private final Enablement debug;
 	private final String
 		clientVersionHeader,
 		uriAuthority,
 		uriContext;
 	final String fullPath;
-	final UrlPathPattern pathPattern;
+	final UrlPathMatcher pathMatcher;
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
@@ -3504,13 +3271,9 @@ public class RestContext extends BeanContext {
 		produces;
 	private final Map<String,Object>
 		reqHeaders,
-		resHeaders,
-		staticFileResponseHeaders;
+		resHeaders;
 	private final OMap reqAttrs;
 	private final ResponseHandler[] responseHandlers;
-	private final MimetypesFileTypeMap mimetypesFileTypeMap;
-	private final StaticFiles[] staticFiles;
-	private final String[] staticFilesPaths;
 	private final Messages msgs;
 	private final Config config;
 	private final VarResolver varResolver;
@@ -3549,10 +3312,8 @@ public class RestContext extends BeanContext {
 		endCallMethodParams,
 		destroyMethodParams;
 
-	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
-	private final Map<String,StaticFile> staticFilesCache = new ConcurrentHashMap<>();
-
-	private final ResourceManager staticResourceManager;
+	private final FileFinder fileFinder;
+	private final StaticFiles staticFiles;
 
 	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
 
@@ -3686,7 +3447,6 @@ public class RestContext extends BeanContext {
 
 			reqAttrs = new OMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
 			resHeaders = getMapProperty(REST_resHeaders, Object.class);
-			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
 			Object clc = getProperty(REST_callLoggerConfig);
 			if (this.debug == TRUE)
@@ -3722,28 +3482,11 @@ public class RestContext extends BeanContext {
 				.apply(ps)
 				.build();
 
-			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
-			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
-				mimetypesFileTypeMap.addMimeTypes(mimeType);
-
-			Object defaultResourceFinder = resource instanceof ResourceFinder ? resource : BasicResourceFinder.class;
-			ResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ResourceFinder.class, defaultResourceFinder, resourceResolver, this);
-
-			useClasspathResourceCaching = ! getBooleanProperty(REST_disableClasspathResourceCaching, false);
-			staticResourceManager = new ResourceManager(rci.inner(), rf, useClasspathResourceCaching);
+			this.fileFinder = createFileFinder();
+			this.staticFiles = createStaticFiles();
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
-
-			StaticFileMapping[] staticFileMappings = getArrayProperty(REST_staticFiles, StaticFileMapping.class, new StaticFileMapping[0]);
-			staticFiles = new StaticFiles[staticFileMappings.length];
-			for (int i = 0; i < staticFiles.length; i++)
-				staticFiles[i] = new StaticFiles(staticFileMappings[i], staticResourceManager, mimetypesFileTypeMap, staticFileResponseHeaders);
-
-			Set<String> s = new TreeSet<>();
-			for (StaticFiles sf : staticFiles)
-				s.add(sf.getPath());
-			staticFilesPaths = s.toArray(new String[s.size()]);
 
 			Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class);
 			Messages msgs = null;
@@ -3756,7 +3499,7 @@ public class RestContext extends BeanContext {
 			String p = builder.getPath();
 			if (! p.endsWith("/*"))
 				p += "/*";
-			this.pathPattern = new UrlPathPattern(p);
+			this.pathMatcher = UrlPathMatcher.of(p);
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
@@ -3832,7 +3575,7 @@ public class RestContext extends BeanContext {
 										return;
 
 									} else if ("POST".equals(call.getMethod())) {
-										String pip = call.getUrlPathInfo().getPath();
+										String pip = call.getUrlPath().getPath();
 										if (pip.indexOf('/') != -1)
 											pip = pip.substring(pip.lastIndexOf('/')+1);
 										pip = urlDecode(pip);
@@ -4018,6 +3761,71 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Instantiates the file finder for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link FileFinder}.
+	 * 	<li>Looks for value in {@link #REST_fileFinder} setting.
+	 * 	<li>Looks for a <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 	<li>Instantiates a {@link BasicFileFinder}.
+	 * </ul>
+	 *
+	 * @return The file finder for this REST resource.
+	 * @throws Exception If file finder could not be instantiated.
+	 * @seealso #REST_fileFinder
+	 */
+	protected FileFinder createFileFinder() throws Exception {
+		FileFinder x = null;
+		if (resource instanceof FileFinder)
+			x = (FileFinder)resource;
+		if (x == null)
+			x = getInstanceProperty(REST_fileFinder, FileFinder.class, null, resourceResolver, this);
+		if (x == null) {
+			MethodInfo mi = ClassInfo.of(resource).getPublicMethodFuzzy2("createFileFinder", FileFinder.class, this);
+			if (mi != null)
+				x = (FileFinder)mi.invokeFuzzy(resource, this, resourceResolver);
+		}
+		if (x == null)
+			x = new BasicFileFinder(this);
+		return x;
+	}
+
+	/**
+	 * Instantiates the static files finder for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of FileFinder.
+	 * 	<li>Looks for value in {@link #REST_fileFinder} setting.
+	 * 	<li>Looks for a <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 	<li>Instantiates a {@link BasicFileFinder}.
+	 * </ul>
+	 *
+	 * @return The file finder for this REST resource.
+	 * @throws Exception If file finder could not be instantiated.
+	 * @seealso #REST_staticFiles
+	 */
+	protected StaticFiles createStaticFiles() throws Exception {
+		StaticFiles x = null;
+		if (resource instanceof StaticFiles)
+			x = (StaticFiles)resource;
+		if (x == null)
+			x = getInstanceProperty(REST_staticFiles, StaticFiles.class, null, resourceResolver, this);
+		if (x == null) {
+			MethodInfo mi = ClassInfo.of(resource).getPublicMethodFuzzy2("createStaticFiles", StaticFiles.class, this);
+			if (mi != null)
+				x = (StaticFiles)mi.invokeFuzzy(resource, this, resourceResolver);
+		}
+		if (x == null)
+			x = new BasicStaticFiles(this);
+		return x;
+	}
+
+
+	/**
 	 * Returns the resource resolver associated with this context.
 	 *
 	 * <p>
@@ -4126,179 +3934,6 @@ public class RestContext extends BeanContext {
 		return config;
 	}
 
-	/**
-	 * Resolve a static resource file.
-	 *
-	 * <p>
-	 * The location of static resources are defined via:
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles RestContext.REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param pathInfo The unencoded path info.
-	 * @return The wrapped resource, never <jk>null</jk>.
-	 * @throws NotFound Invalid path.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	protected StaticFile getStaticFile(String pathInfo) throws NotFound, IOException {
-		if (! staticFilesCache.containsKey(pathInfo)) {
-			String p = urlDecode(trimSlashes(pathInfo));
-			if (p.indexOf("..") != -1)
-				throw new NotFound("Invalid path");
-			StaticFile sf = null;
-			for (StaticFiles sfs : staticFiles) {
-				sf = sfs.resolve(p);
-				if (sf != null)
-					break;
-			}
-			if (sf == null)
-				sf = new StaticFile(null,null,null);
-			if (useClasspathResourceCaching) {
-				if (staticFilesCache.size() > 100)
-					staticFilesCache.clear();
-				staticFilesCache.put(pathInfo, sf);
-			}
-			return sf;
-		}
-		return staticFilesCache.get(pathInfo);
-	}
-
-	/**
-	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, searches
-	 * up the parent hierarchy chain.
-	 *
-	 * <p>
-	 * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
-	 *
-	 * <p>
-	 * If the <c>locale</c> is specified, then we look for resources whose name matches that locale.
-	 * <br>For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
-	 * files in the following order:
-	 * <ol>
-	 * 	<li><js>"MyResource_ja_JP.txt"</js>
-	 * 	<li><js>"MyResource_ja.txt"</js>
-	 * 	<li><js>"MyResource.txt"</js>
-	 * </ol>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath.</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
-	 * 	<jk>public</jk> Object myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> getContext().getClasspathResource(file, req.getLocale());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param name The resource name.
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return An input stream of the resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public InputStream getClasspathResource(String name, Locale locale) throws IOException {
-		return staticResourceManager.getStream(name, locale);
-	}
-
-	/**
-	 * Reads the input stream from {@link #getClasspathResource(String, Locale)} into a String.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath.</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
-	 * 	<jk>public</jk> String myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> getContext().getClasspathResourceAsString(file, req.getLocale());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param name The resource name.
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The contents of the stream as a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException If resource could not be found.
-	 */
-	public String getClasspathResourceAsString(String name, Locale locale) throws IOException {
-		return staticResourceManager.getString(name, locale);
-	}
-
-
-	/**
-	 * Reads the input stream from {@link #getClasspathResource(String, Locale)} and parses it into a POJO using the parser
-	 * matched by the specified media type.
-	 *
-	 * <p>
-	 * Useful if you want to load predefined POJOs from JSON files in your classpath.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath parsed as an array of beans.</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
-	 * 	<jk>public</jk> MyBean[] myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> getContext().getClasspathResource(MyBean[].<jk>class</jk>, <jsf>JSON</jsf>, file, req.getLocale());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param c The class type of the POJO to create.
-	 * @param mediaType The media type of the data in the stream (e.g. <js>"text/json"</js>)
-	 * @param name The resource name (e.g. "htdocs/styles.css").
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 * @throws ServletException If the media type was unknown or the input could not be parsed into a POJO.
-	 */
-	public <T> T getClasspathResource(Class<T> c, MediaType mediaType, String name, Locale locale) throws IOException, ServletException {
-		InputStream is = getClasspathResource(name, locale);
-		if (is == null)
-			return null;
-		try {
-			Parser p = parsers.getParser(mediaType);
-			if (p == null) {
-				if (mediaType == MediaType.JSON)
-					p = JsonParser.DEFAULT;
-				if (mediaType == MediaType.XML)
-					p = XmlParser.DEFAULT;
-				if (mediaType == MediaType.HTML)
-					p = HtmlParser.DEFAULT;
-				if (mediaType == MediaType.UON)
-					p = UonParser.DEFAULT;
-				if (mediaType == MediaType.URLENCODING)
-					p = UrlEncodingParser.DEFAULT;
-				if (mediaType == MediaType.MSGPACK)
-					p = MsgPackParser.DEFAULT;
-			}
-			if (p != null) {
-				try {
-					try (Closeable in = p.isReaderParser() ? new InputStreamReader(is, UTF8) : is) {
-						return p.parse(in, c);
-					}
-				} catch (ParseException e) {
-					throw new ServletException("Could not parse resource '"+name+" as media type '"+mediaType+"'.", e);
-				}
-			}
-			throw new ServletException("Unknown media type '"+mediaType+"'");
-		} catch (Exception e) {
-			throw new ServletException("Could not parse resource with name '"+name+"'", e);
-		}
-	}
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -4565,6 +4200,36 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Returns the file finder associated with this context.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_fileFinder}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The file finder for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public FileFinder getFileFinder() {
+		return fileFinder;
+	}
+
+	/**
+	 * Returns the static files associated with this context.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The static files for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public StaticFiles getStaticFiles() {
+		return staticFiles;
+	}
+
+	/**
 	 * Returns the HTTP-part parser associated with this resource.
 	 *
 	 * <ul class='seealso'>
@@ -4766,37 +4431,6 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the media type for the specified file name.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
-	 * </ul>
-	 *
-	 * @param name The file name.
-	 * @return The MIME-type, or <jk>null</jk> if it could not be determined.
-	 */
-	public String getMediaTypeForName(String name) {
-		return mimetypesFileTypeMap.getContentType(name);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified path refers to a static file.
-	 *
-	 * <p>
-	 * Static files are files pulled from the classpath and served up directly to the browser.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
-	 * </ul>
-	 *
-	 * @param p The URL path remainder after the servlet match.
-	 * @return <jk>true</jk> if the specified path refers to a static file.
-	 */
-	public boolean isStaticFile(String p) {
-		return pathStartsWith(p, staticFilesPaths);
-	}
-
-	/**
 	 * Returns the REST Java methods defined in this resource.
 	 *
 	 * <p>
@@ -4860,11 +4494,11 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param mi The Java method being called.
 	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
-	 * @param pathPattern The path pattern to match against.
+	 * @param urlPathMatcher The path pattern to match against.
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
+	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathMatcher urlPathMatcher) throws ServletException {
 
 		List<ClassInfo> pt = mi.getParamTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.size()];
@@ -4891,7 +4525,7 @@ public class RestContext extends BeanContext {
 			} else if (mpi.hasAnnotation(FormData.class)) {
 				rp[i] = new RestParamDefaults.FormDataObject(mpi, ps);
 			} else if (mpi.hasAnnotation(Path.class)) {
-				rp[i] = new RestParamDefaults.PathObject(mpi, ps, pathPattern);
+				rp[i] = new RestParamDefaults.PathObject(mpi, ps, urlPathMatcher);
 			} else if (mpi.hasAnnotation(Body.class)) {
 				rp[i] = new RestParamDefaults.BodyObject(mpi, ps);
 			} else if (mpi.hasAnnotation(Request.class)) {
@@ -4989,11 +4623,11 @@ public class RestContext extends BeanContext {
 			// those variables and push the servletPath to include the resolved variables.  The new pathInfo will be
 			// the remainder after the new servletPath.
 			// Only do this for the top-level resource because the logic for child resources are processed next.
-			if (pathPattern.hasVars() && getParentContext() == null) {
+			if (pathMatcher.hasVars() && getParentContext() == null) {
 				String sp = call.getServletPath();
 				String pi = call.getPathInfoUndecoded();
-				UrlPathInfo upi2 = new UrlPathInfo(pi == null ? sp : sp + pi);
-				UrlPathPatternMatch uppm = pathPattern.match(upi2);
+				UrlPath upi2 = UrlPath.of(pi == null ? sp : sp + pi);
+				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
 					call.addPathVars(uppm.getVars());
 					call.request(
@@ -5011,8 +4645,8 @@ public class RestContext extends BeanContext {
 			String pi = call.getPathInfoUndecoded();
 			if ((! childResources.isEmpty()) && pi != null && ! pi.equals("/")) {
 				for (RestContext rc : getChildResources().values()) {
-					UrlPathPattern upp = rc.pathPattern;
-					UrlPathPatternMatch uppm = upp.match(call.getUrlPathInfo());
+					UrlPathMatcher upp = rc.pathMatcher;
+					UrlPathMatch uppm = upp.match(call.getUrlPath());
 					if (uppm != null) {
 						if (! uppm.hasEmptyVars()) {
 							call.addPathVars(uppm.getVars());
@@ -5036,33 +4670,14 @@ public class RestContext extends BeanContext {
 			createRequest(call);
 			createResponse(call);
 
-			StaticFile r = null;
-			if (call.getPathInfoUndecoded() != null) {
-				String p = call.getPathInfoUndecoded().substring(1);
-				if (isStaticFile(p)) {
-					r = getStaticFile(p);
-					if (! r.exists()) {
-						call.output(null);
-						r = null;
-					}
-				} else if (p.equals("favicon.ico")) {
-					call.output(null);
-				}
-			}
-
-			if (r != null) {
-				call.status(SC_OK);
-				call.output(r);
-			} else {
-
-				// If the specified method has been defined in a subclass, invoke it.
-				try {
-					findMethod(call).invoke(call);
-				} catch (NotFound e) {
-					if (call.getStatus() == 0)
-						call.status(404);
-					handleNotFound(call);
-				}
+			// If the specified method has been defined in a subclass, invoke it.
+			try {
+				findMethod(call).invoke(call);
+			} catch (NotFound e) {
+				if (call.getStatus() == 0)
+					call.status(404);
+				call.exception(e);
+				handleNotFound(call);
 			}
 
 			if (call.hasOutput()) {
@@ -5119,7 +4734,7 @@ public class RestContext extends BeanContext {
 		if (rc == 1)
 			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, call.getPathInfo());
 
-		throw new NotFound();
+		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), resource.getClass().getName());
 	}
 
 	private boolean isDebug(RestCall call) {
@@ -5236,7 +4851,7 @@ public class RestContext extends BeanContext {
 		else if (rc == SC_METHOD_NOT_ALLOWED)
 			throw new MethodNotAllowed("Method ''{0}'' not found on resource{1}.", methodUC, onPath);
 		else
-			throw new ServletException("Invalid method response: " + rc);
+			throw new ServletException("Invalid method response: " + rc, call.getException());
 	}
 
 	/**
@@ -5538,6 +5153,7 @@ public class RestContext extends BeanContext {
 				.a("allowedHeaderParams", allowedHeaderParams)
 				.a("clientVersionHeader", clientVersionHeader)
 				.a("consumes", consumes)
+				.a("fileFinder", fileFinder)
 				.a("infoProvider", infoProvider)
 				.a("paramResolvers", paramResolvers)
 				.a("parsers", parsers)
@@ -5551,13 +5167,11 @@ public class RestContext extends BeanContext {
 				.a("resourceResolver", resourceResolver)
 				.a("responseHandlers", responseHandlers)
 				.a("serializers", serializers)
-				.a("staticFileResponseHeaders", staticFileResponseHeaders)
 				.a("staticFiles", staticFiles)
 				.a("uriAuthority", uriAuthority)
 				.a("uriContext", uriContext)
 				.a("uriRelativity", uriRelativity)
 				.a("uriResolution", uriResolution)
-				.a("useClasspathResourceCaching", useClasspathResourceCaching)
 			);
 	}
 

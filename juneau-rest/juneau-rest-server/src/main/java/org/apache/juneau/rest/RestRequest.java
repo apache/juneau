@@ -60,6 +60,7 @@ import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -1343,98 +1344,35 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns an instance of a {@link BasicHttpResource} that represents the contents of a resource text file from the
-	 * classpath.
+	 * Returns the file finder registered on the REST resource context object.
 	 *
 	 * <p>
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath and resolves any SVL variables embedded in it.</jc>
-	 * 	<ja>@RestMethod</ja>(...)
-	 * 	<jk>public</jk> String myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> req.getClasspathResourceAsString(file, <jk>true</jk>);
-	 * 	}
-	 * </p>
+	 * Used to retrieve localized files from the classpath for a variety of purposes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathHttpResource(String, boolean)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathHttpResource(String)}
+	 * 	<li class='jf'>{@link RestContext#REST_fileFinder}
 	 * </ul>
 	 *
-	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param resolveVars
-	 * 	If <jk>true</jk>, any SVL variables will be
-	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
-	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
-	 * @param cached If <jk>true</jk>, the resource will be read into a byte array for fast serialization.
-	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
+	 * @return The file finder associated with the REST resource object.
 	 */
-	public BasicHttpResource getClasspathHttpResource(String name, boolean resolveVars, MediaType mediaType, boolean cached) throws IOException {
-		String s = context.getClasspathResourceAsString(name, getLocale());
-		if (s == null)
-			return null;
-		BasicHttpResource b = BasicHttpResource.of(()->resolveVars ? getVarResolverSession().resolve(s) : s)
-			.contentType(mediaType == null ? null : ContentType.of(mediaType.toString()));
-		if (cached)
-			b.cache();
-		return b;
+	public FileFinder getFileFinder() {
+		return context.getFileFinder();
 	}
 
 	/**
-	 * Returns a classpath resource as a string,
+	 * Returns the static files registered on the REST resource context object.
 	 *
-	 * @param name The resource name.
-	 * @return The resource contents, or <jk>null</jk> if they could not be found.
-	 * @throws IOException If a problem occurred reading the resource.
-	 */
-	public String getClasspathResourceAsString(String name) throws IOException {
-		return getClasspathResourceAsString(name, false);
-	}
-
-	/**
-	 * Returns a classpath resource as a string,
+	 * <p>
+	 * Used to retrieve localized files to be served up as static files through the REST API.
 	 *
-	 * @param name The resource name.
-	 * @param resolveVars Resolve any SVL variables in the string.
-	 * @return The resource contents, or <jk>null</jk> if they could not be found.
-	 * @throws IOException If a problem occurred reading the resource.
-	 */
-	public String getClasspathResourceAsString(String name, boolean resolveVars) throws IOException {
-		String s = context.getClasspathResourceAsString(name, getLocale());
-		if (resolveVars)
-			return varSession.resolve(s);
-		return s;
-	}
-
-	/**
-	 * Same as {@link #getClasspathHttpResource(String, boolean, MediaType, boolean)} except uses the resource mime-type map
-	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
 	 *
-	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param resolveVars
-	 * 	If <jk>true</jk>, any SVL variables will be
-	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
-	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
+	 * @return This object (for method chaining).
 	 */
-	public BasicHttpResource getClasspathHttpResource(String name, boolean resolveVars) throws IOException {
-		return getClasspathHttpResource(name, resolveVars, MediaType.of(context.getMediaTypeForName(name)), false);
-	}
-
-	/**
-	 * Same as {@link #getClasspathHttpResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
-	 *
-	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public BasicHttpResource getClasspathHttpResource(String name) throws IOException {
-		return getClasspathHttpResource(name, false, MediaType.of(context.getMediaTypeForName(name)), false);
+	public StaticFiles getStaticFiles() {
+		return context.getStaticFiles();
 	}
 
 	/**

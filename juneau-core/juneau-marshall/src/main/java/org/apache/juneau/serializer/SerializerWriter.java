@@ -162,6 +162,9 @@ public class SerializerWriter extends Writer {
 	 */
 	private SerializerWriter append(int indent, boolean newline, String text) throws IOException {
 
+		if (text == null)
+			return this;
+
 		// If text contains newlines, we break it up into lines and indent them separately.
 		if (text.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
 			for (StringTokenizer st = new StringTokenizer(text, "\n"); st.hasMoreTokens();) {

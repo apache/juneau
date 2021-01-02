@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.text.*;
-import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -31,7 +30,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.exception.*;
 
@@ -42,7 +40,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
+public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestCallLogger, RestResourceResolver {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +52,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
-	private ResourceFinder resourceFinder;
 
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
@@ -99,7 +96,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 		isInitialized = true;
 		infoProvider = new BasicRestInfoProvider(context);
 		callLogger = new BasicRestCallLogger(context);
-		resourceFinder = new RecursiveResourceFinder();
 		context.postInit();
 	}
 
@@ -636,15 +632,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	@Override /* RestCallLogger */
 	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
 		callLogger.log(config, req, res);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// ClasspathResourceFinder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* ClasspathResourceFinder */
-	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		return resourceFinder.findResource(baseClass, name, locale);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

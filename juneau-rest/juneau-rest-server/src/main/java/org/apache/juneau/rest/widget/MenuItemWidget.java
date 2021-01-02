@@ -35,7 +35,7 @@ public abstract class MenuItemWidget extends Widget {
 	 */
 	@Override /* Widget */
 	public String getScript(RestRequest req, RestResponse res) throws Exception {
-		return loadScript("MenuItemWidget.js");
+		return loadScript(req, "scripts/MenuItemWidget.js");
 	}
 
 	/**
@@ -70,7 +70,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * </p>
 	 *
 	 * <p>
-	 * Note that it's often easier (and cleaner) to use the {@link #loadScript(String)} method and read the Javascript from
+	 * Note that it's often easier (and cleaner) to use the {@link #loadScript(RestRequest,String)} method and read the Javascript from
 	 * your classpath:
 	 *
 	 * <p class='bcode w800'>
@@ -110,7 +110,7 @@ public abstract class MenuItemWidget extends Widget {
 	 */
 	@Override /* Widget */
 	public String getStyle(RestRequest req, RestResponse res) throws Exception {
-		return loadStyle("MenuItemWidget.css");
+		return loadStyle(req, "styles/MenuItemWidget.css");
 	}
 
 	@Override /* Widget */

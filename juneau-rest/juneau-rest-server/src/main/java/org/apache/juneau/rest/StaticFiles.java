@@ -12,51 +12,112 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.FileUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.io.*;
 import java.util.*;
 
 import javax.activation.*;
 
+import org.apache.http.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
- * The static file resource resolver for a single {@link StaticFileMapping}.
+ * API for retrieving localized static files from either the classpath or file system.
+ *
+ * <p>
+ * Provides the same functionality as {@link FileFinder} but adds support for returning files as {@link BasicHttpResource}
+ * objects with arbitrary headers.
  */
-class StaticFiles {
-	private final String path, location;
-	private final Map<String,Object> responseHeaders;
+public class StaticFiles extends FileFinder {
 
-	private final ResourceManager staticResourceManager;
-	private final MimetypesFileTypeMap mimetypesFileTypeMap;
+	/** Represents no static files */
+	public static final class Null extends StaticFiles {}
 
-	StaticFiles(StaticFileMapping sfm, ResourceManager staticResourceManager, MimetypesFileTypeMap mimetypesFileTypeMap, Map<String,Object> staticFileResponseHeaders) {
-		this.path = sfm.path;
-		this.location = sfm.location;
-		this.responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
-		this.staticResourceManager = staticResourceManager;
-		this.mimetypesFileTypeMap = mimetypesFileTypeMap;
+	private final Header[] headers;
+	private final MimetypesFileTypeMap mimeTypes;
+	private final int hashCode;
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static StaticFilesBuilder create() {
+		return new StaticFilesBuilder();
 	}
 
-	String getPath() {
-		return path;
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder object.
+	 */
+	public StaticFiles(StaticFilesBuilder builder) {
+		super(builder);
+		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
+		this.mimeTypes = builder.mimeTypes;
+		this.hashCode = HashCode.of(hashCode(), headers);
 	}
 
-	StaticFile resolve(String p) throws IOException {
-		if (p.startsWith(path)) {
-			String remainder = (p.equals(path) ? "" : p.substring(path.length()));
-			if (remainder.isEmpty() || remainder.startsWith("/")) {
-				String p2 = location + remainder;
-				try (InputStream is = staticResourceManager.getStream(p2, null)) {
-					if (is != null) {
-						int i = p2.lastIndexOf('/');
-						String name = (i == -1 ? p2 : p2.substring(i+1));
-						String mediaType = mimetypesFileTypeMap.getContentType(name);
-						return new StaticFile(IOUtils.readBytes(is), mediaType, responseHeaders);
-					}
-				}
-			}
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Can be used when subclassing and overriding the {@link #resolve(String, Locale)} method.
+	 */
+	public StaticFiles() {
+		super();
+		this.headers = new Header[0];
+		this.mimeTypes = null;
+		this.hashCode = HashCode.of(hashCode(), headers);
+	}
+
+	/**
+	 * Resolve the specified path.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide specialized handling.
+	 *
+	 * @param path The path to resolve to a static file.
+	 * @param locale Optional locale.
+	 * @return The resource, or <jk>null</jk> if not found.
+	 */
+	public Optional<BasicHttpResource> resolve(String path, Locale locale) {
+		try {
+			Optional<InputStream> is = getStream(path);
+			if (! is.isPresent())
+				return Optional.empty();
+			return Optional.of(
+				BasicHttpResource
+					.of(is.get())
+					.header(ContentType.of(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
+					.headers(headers)
+			);
+		} catch (IOException e) {
+			throw new InternalServerError(e);
 		}
-		return null;
+	}
+
+	@Override /* FileFinder */
+	public OMap toMap() {
+		return super.toMap()
+			.a("headers", headers)
+		;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		return super.equals(o) && o instanceof StaticFiles && eq(this, (StaticFiles)o, (x,y)->eq(x.headers, y.headers));
 	}
 }

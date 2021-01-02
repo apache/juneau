@@ -17,8 +17,11 @@ import static org.apache.juneau.assertions.Assertions.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -26,9 +29,9 @@ import org.apache.juneau.reflect.*;
  */
 public class FileFinderBuilder {
 
-	private final Set<LocalDir> roots = new LinkedHashSet<>();
-	private long cachingLimit = -1;
-	private Pattern ignorePattern = Pattern.compile("(?i).*\\.(class|properties)");
+	final Set<LocalDir> roots = new LinkedHashSet<>();
+	long cachingLimit = -1;
+	List<Pattern> include = AList.of(Pattern.compile(".*")), exclude = AList.of();
 
 	/**
 	 * Create a new {@link FileFinder} using this builder.
@@ -63,6 +66,7 @@ public class FileFinderBuilder {
 	 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public FileFinderBuilder cp(Class<?> c, String path, boolean recursive) {
 		assertArgNotNull("c", c);
 		while (c != null) {
@@ -78,6 +82,7 @@ public class FileFinderBuilder {
 	 * @param path The path relative to the working directory.  Must not be <jk>null</jk>
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public FileFinderBuilder dir(String path) {
 		assertArgNotNull("path", path);
 		return path(Paths.get(".").resolve(path));
@@ -89,6 +94,7 @@ public class FileFinderBuilder {
 	 * @param path The directory path.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public FileFinderBuilder path(Path path) {
 		roots.add(new LocalDir(path));
 		return this;
@@ -100,47 +106,40 @@ public class FileFinderBuilder {
 	 * @param cachingLimit The maximum file size in bytes.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public FileFinderBuilder caching(long cachingLimit) {
 		this.cachingLimit = cachingLimit;
 		return this;
 	}
 
 	/**
-	 * Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.
+	 * Specifies the regular expression file name patterns to use to include files being retrieved from the file source.
 	 *
-	 * @param ignorePattern The ignore pattern.  The default is <js>"(?i).*\\.(class|properties)"</js>. Can be <jk>null</jk>
-	 * 	to disable pattern ignores.
+	 * @param patterns
+	 * 	The regular expression include patterns.
+	 * 	<br>The default is <js>".*"</js>.
 	 * @return This object (for method chaining).
 	 */
-	public FileFinderBuilder ignorePattern(Pattern ignorePattern) {
-		this.ignorePattern = ignorePattern;
+	@FluentSetter
+	public FileFinderBuilder include(String...patterns) {
+		this.include = Arrays.asList(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
 		return this;
 	}
 
 	/**
-	 * Returns the list of root directories in this builder.
+	 * Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.
 	 *
-	 * @return The list of root directories in this builder.
+	 * @param patterns
+	 * 	The regular expression exclude patterns.
+	 * 	<br>If none are specified, no files will be excluded.
+	 * @return This object (for method chaining).
 	 */
-	protected LocalDir[] getRoots() {
-		return roots.toArray(new LocalDir[roots.size()]);
+	@FluentSetter
+	public FileFinderBuilder exclude(String...patterns) {
+		this.exclude = Arrays.asList(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
+		return this;
 	}
 
-	/**
-	 * Returns the file size caching limit in this builder.
-	 *
-	 * @return The file size caching limit in this builder.
-	 */
-	protected long getCachingLimit() {
-		return cachingLimit;
-	}
-
-	/**
-	 * Returns the ignore pattern in this builder.
-	 *
-	 * @return The ignore pattern in this builder.
-	 */
-	protected Pattern getIgnorePattern() {
-		return ignorePattern;
-	}
+	// <FluentSetters>
+	// </FluentSetters>
 }
