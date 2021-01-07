@@ -120,9 +120,9 @@ public final class ClassUtils {
 			try {
 				ClassInfo c3 = ClassInfo.of((Class<?>)c2);
 
-				MethodInfo mi = c3.getStaticCreator(args);
+				MethodInfo mi = fuzzyArgs ? c3.getStaticCreatorFuzzy(args) : c3.getStaticCreator(args);
 				if (mi != null)
-					return mi.invoke(null, args);
+					return fuzzyArgs ? (T)mi.invokeFuzzy(null, args) : mi.invoke(null, args);
 
 				if (c3.isInterface() || c3.isAbstract())
 					return null;

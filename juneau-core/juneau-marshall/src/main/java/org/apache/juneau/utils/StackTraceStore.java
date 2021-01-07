@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.utils.StackTraceUtils.*;
+import static org.apache.juneau.SystemProperties.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -24,7 +25,19 @@ import java.util.stream.*;
  * <p>
  * Used for preventing duplication of stack traces in log files and replacing them with small hashes.
  */
-public class StackTraceDatabase {
+public class StackTraceStore {
+
+	/** Default global stack trace store. */
+	public static final StackTraceStore GLOBAL = new StackTraceStore();
+
+	/**
+	 * System property name for the default stack trace timeout value.
+	 * <p>
+	 * Can also use a <c>JUNEAU_STACKTRACECACHETIMEOUT</c> environment variable.
+	 * <p>
+	 * If not specified, the default is <js>"86400000"</js> (1 day).
+	 */
+	public static final String SP_stackTraceCacheTimeout = "juneau.stackTraceCacheTimeout";
 
 	private final ConcurrentHashMap<Integer,StackTraceInfo> db = new ConcurrentHashMap<>();
 	private final String stopClass;
@@ -33,8 +46,8 @@ public class StackTraceDatabase {
 	/**
 	 * Constructor.
 	 */
-	public StackTraceDatabase() {
-		this(-1, null);
+	public StackTraceStore() {
+		this(getProperty(Integer.class, SP_stackTraceCacheTimeout, 24*60*60*1000), null);
 	}
 
 	/**
@@ -47,7 +60,7 @@ public class StackTraceDatabase {
 	 * 	When this class is encountered in a stack trace, stop calculating the hash.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public StackTraceDatabase(long cacheTimeout, Class<?> stopClass) {
+	public StackTraceStore(long cacheTimeout, Class<?> stopClass) {
 		this.stopClass = stopClass == null ? "" : stopClass.getName();
 		this.cacheTimeout = cacheTimeout;
 	}
@@ -58,7 +71,7 @@ public class StackTraceDatabase {
 	 * @param e The exception to add.
 	 * @return This object (for method chaining).
 	 */
-	public StackTraceDatabase add(Throwable e) {
+	public StackTraceStore add(Throwable e) {
 		find(e).increment();
 		return this;
 	}

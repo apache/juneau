@@ -25,6 +25,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.vars.*;
 
 /**
@@ -157,13 +158,13 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
+	 * 		The default call logger if not specified is {@link BasicRestLogger}.
 	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
+	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallLogger} interface with the same
-	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestLogger} interface with the same
+	 * 		functionality as {@link BasicRestLogger} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding this method.
 	 * 	<li>
 	 * 		The implementation must have one of the following constructors:
@@ -182,7 +183,7 @@ public @interface Rest {
 	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
-	Class<? extends RestCallLogger> callLogger() default RestCallLogger.Null.class;
+	Class<? extends RestLogger> callLogger() default RestLogger.Null.class;
 
 	/**
 	 * REST children.
@@ -309,7 +310,7 @@ public @interface Rest {
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
 	 * 	<li>
-	 * 		HTTP requests/responses are logged to the registered {@link RestCallLogger}.
+	 * 		HTTP requests/responses are logged to the registered {@link RestLogger}.
 	 * </ul>
 	 *
 	 * <p>
@@ -317,7 +318,7 @@ public @interface Rest {
 	 * <ul>
 	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
 	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
-	 * 	<li><js>"per-request"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
+	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -344,7 +345,7 @@ public @interface Rest {
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes on matching classes and methods.
 	 * 	<li>
-	 * 		HTTP requests/responses are logged to the registered {@link RestCallLogger}.
+	 * 		HTTP requests/responses are logged to the registered {@link RestLogger}.
 	 * </ul>
 	 *
 	 * <p>
@@ -618,16 +619,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.Null.class;
-
-	/**
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * </ul>
-	 */
-	Logging logging() default @Logging;
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.

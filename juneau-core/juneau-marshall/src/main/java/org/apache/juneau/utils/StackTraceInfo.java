@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Represents an entry in {@link StackTraceDatabase}.
+ * Represents an entry in {@link StackTraceStore}.
  */
 @Bean(properties="exception,hash,count")
 public class StackTraceInfo implements Comparable<StackTraceInfo> {

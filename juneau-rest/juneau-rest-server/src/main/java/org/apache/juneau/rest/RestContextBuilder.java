@@ -38,6 +38,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.vars.*;
@@ -166,6 +167,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					String initParam = servletConfig.getInitParameter(p);
 					set(vr.resolve(p), vr.resolve(initParam));
 				}
+			}
+
+			if (parentContext != null) {
+				set(REST_callLoggerDefault, parentContext.getProperty(REST_callLoggerDefault));
+				set(REST_debugDefault, parentContext.getProperty(REST_debugDefault));
+				set(REST_staticFilesDefault, parentContext.getProperty(REST_staticFilesDefault));
+				set(REST_fileFinderDefault, parentContext.getProperty(REST_fileFinderDefault));
 			}
 
 			applyAnnotations(rci.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vr.createSession());
@@ -513,11 +521,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestCallLogger}.
+	 * 	<br>The default is {@link BasicRestLogger}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder callLogger(Class<? extends RestCallLogger> value) {
+	public RestContextBuilder callLogger(Class<? extends RestLogger> value) {
 		return set(REST_callLogger, value);
 	}
 
@@ -534,33 +542,44 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestCallLogger}.
+	 * 	<br>The default is {@link BasicRestLogger}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder callLogger(RestCallLogger value) {
+	public RestContextBuilder callLogger(RestLogger value) {
 		return set(REST_callLogger, value);
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logging rules.
+	 * Configuration property:  Default REST call logger.
 	 *
 	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
-	 * </ul>
+	 * The default logger to use if one is not specified.
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestCallLoggerConfig#DEFAULT_NOOP}.
+	 * 	<br>The default is {@link BasicRestLogger}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder callLoggerConfig(RestCallLoggerConfig value) {
-		return set(REST_callLoggerConfig, value);
+	public RestContextBuilder callLoggerDefault(Class<? extends RestLogger> value) {
+		return set(REST_callLoggerDefault, value);
+	}
+
+	/**
+	 * Configuration property:  Default REST call logger.
+	 *
+	 * <p>
+	 * The default logger to use if one is not specified.
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicRestLogger}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder callLoggerDefault(RestLogger value) {
+		return set(REST_callLoggerDefault, value);
 	}
 
 	/**
@@ -746,6 +765,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Default debug mode.
+	 *
+	 * <p>
+	 * The default value for the {@link #REST_debug} setting.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugDefault(Enablement value) {
+		return set(REST_debugDefault, value);
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug mode on specified classes/methods.
 	 *
 	 * Enables the following:
@@ -918,6 +951,44 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder fileFinder(FileFinder value) {
 		return set(REST_fileFinder, value);
+	}
+
+	/**
+	 * Configuration property:  File finder default.
+	 *
+	 * <p>
+	 * The default file finder.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_fileFinderDefault}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder fileFinderDefault(Class<? extends FileFinder> value) {
+		return set(REST_fileFinderDefault, value);
+	}
+
+	/**
+	 * Configuration property:  File finder default.
+	 *
+	 * <p>
+	 * The default file finder.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_fileFinderDefault}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder fileFinderDefault(FileFinder value) {
+		return set(REST_fileFinderDefault, value);
 	}
 
 	/**
@@ -1940,6 +2011,36 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder staticFiles(StaticFiles value) {
 		return set(REST_staticFiles, value);
+	}
+
+	/**
+	 * Configuration property:  Static files finder default.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFilesDefault}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder staticFilesDefault(Class<? extends StaticFiles> value) {
+		return set(REST_staticFilesDefault, value);
+	}
+
+	/**
+	 * Configuration property:  Static files finder default.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFilesDefault}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder staticFilesDefault(StaticFiles value) {
+		return set(REST_staticFilesDefault, value);
 	}
 
 	/**

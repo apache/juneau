@@ -35,15 +35,7 @@ import org.apache.juneau.serializer.annotation.*;
 	// Optional external configuration file.
 	config="$S{juneau.configFile,SYSTEM_DEFAULT}",
 
-	defaultAccept="text/json+simple",
-
-	logging=@Logging(
-		level="INFO",
-		useStackTraceHashing="true",
-		rules={
-			@LoggingRule(codes="500-", level="WARNING")
-		}
-	)
+	defaultAccept="text/json+simple"
 )
 @SerializerConfig(
 	// Enable automatic resolution of URI objects to root-relative values.

@@ -483,7 +483,7 @@ public class RestClient_Test {
 	}
 
 	private static RestClientBuilder client(Class<?> c) {
-		return MockRestClient.create(c).simpleJson();
+		return MockRestClient.create(c).noLog().simpleJson();
 	}
 
 	private static Header header(String name, Object val) {

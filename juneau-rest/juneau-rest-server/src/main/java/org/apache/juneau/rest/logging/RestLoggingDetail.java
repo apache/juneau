@@ -10,35 +10,49 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.logging;
 
-import javax.servlet.http.*;
+import org.apache.juneau.internal.*;
 
 /**
- * Interface class used for logging HTTP requests to the log file.
- *
- * <ul class='seealso'>
- * 	<li class='jf'>{@link RestContext#REST_callLogger}
- * 	<li class='link'>{@doc RestLoggingAndDebugging}
- * </ul>
+ * Represents the amount of detail to include in a log entry for HTTP requests and responses.
  */
-public interface RestCallLogger {
+public enum RestLoggingDetail {
 
 	/**
-	 * Represents no RestLogger.
-	 *
-	 * <p>
-	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link BasicRestCallLogger} if not specified at any level.
+	 * Lowest detail - Log only the request and response status lines.
 	 */
-	public interface Null extends RestCallLogger {}
+	STATUS_LINE,
 
 	/**
-	 * Called at the end of a servlet request to log the request.
-	 *
-	 * @param config The logging configuration.
-	 * @param req The servlet request.
-	 * @param res The servlet response.
+	 * Medium detail - Log status lines and also headers.
 	 */
-	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res);
+	HEADER,
+
+	/**
+	 * Highest detail - Log status lines, headers, and bodies if available.
+	 */
+	ENTITY;
+
+	boolean isOneOf(RestLoggingDetail...values) {
+		for (RestLoggingDetail v : values)
+			if (v == this)
+				return true;
+		return false;
+	}
+
+	/**
+	 * Retrieves this enum using case-insensitive matching.
+	 *
+	 * @param s The enum name to resolve.
+	 * @return The resolved value.
+	 */
+	public static RestLoggingDetail fromString(String s) {
+		if (! StringUtils.isEmpty(s)) {
+			try {
+				return valueOf(s.toUpperCase());
+			} catch (IllegalArgumentException  e) {}
+		}
+		return null;
+	}
 }

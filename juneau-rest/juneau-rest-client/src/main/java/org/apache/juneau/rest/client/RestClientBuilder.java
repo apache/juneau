@@ -1647,18 +1647,23 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * When called, <c>No-Trace: true</c> is added to requests.
+	 * When called, <c>X-No-Log: true</c> is added to requests.
 	 *
 	 * <p>
 	 * This gives the opportunity for the servlet to not log errors on invalid requests.
 	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
 	 * results of testing.
 	 *
+	 * <p>
+	 * It's up to the server to decide whether to allow for this.
+	 * The <c>BasicTestRestLogger</c> class watches for this header and prevents logging of status 400+ responses to
+	 * prevent needless logging of test scenarios.
+	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder noTrace() {
-		return header("No-Trace", true);
+	public RestClientBuilder noLog() {
+		return header("X-No-Log", true);
 	}
 
 	/**

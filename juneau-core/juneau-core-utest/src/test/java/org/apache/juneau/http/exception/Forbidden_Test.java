@@ -55,7 +55,7 @@ public class Forbidden_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		RestClient c = MockRestClient.create(A.class).ignoreErrors().build();
+		RestClient c = MockRestClient.create(A.class).ignoreErrors().noLog().build();
 
 		c.get("/f1").run()
 			.assertStatus().code().is(CODE)

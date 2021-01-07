@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.Enablement.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
+import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -49,6 +49,7 @@ import org.apache.juneau.rest.annotation.Method;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.guards.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -153,10 +154,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_debug RESTMETHOD_debug}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.Enablement}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
 	 * 	<li><b>System property:</b>  <c>RestMethodContext.debug</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.Enablement#FALSE}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Enablement#NEVER}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -308,32 +309,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_httpMethod = PREFIX + ".httpMethod.s";
-
-	/**
-	 * Configuration property:  Logging rules.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_callLoggerConfig RESTMETHOD_callLoggerConfig}
-	 * 	<li><b>Name:</b>  <js>"RestContext.logRules.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.rest.RestCallLoggerConfig}</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#logging()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * </ul>
-	 */
-	public static final String RESTMETHOD_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
 
 	/**
 	 * Configuration property:  Method-level matchers.
@@ -561,7 +536,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
-	final RestCallLoggerConfig callLoggerConfig;
+	final RestLogger callLogger;
 
 	final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
@@ -744,14 +719,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 
 		this.debug = context.getDebug(method);
-
-		Object clc = getProperty(RESTMETHOD_callLoggerConfig);
-		if (clc instanceof RestCallLoggerConfig)
-			this.callLoggerConfig = (RestCallLoggerConfig)clc;
-		else if (clc instanceof OMap)
-			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((OMap)clc).build();
-		else
-			this.callLoggerConfig = context.getCallLoggerConfig();
+		this.callLogger = context.getCallLogger();
 	}
 
 	private String joinnlFirstNonEmptyArray(String[]...s) {
@@ -953,22 +921,18 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		context.preCall(call);
 
-		call.loggerConfig(callLoggerConfig);
+		call.logger(callLogger);
 
-		if (debug == TRUE) {
+		if (debug == ALWAYS) {
 			call.debug(true);
-			call.loggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
-		} else if (debug == FALSE) {
+		} else if (debug == NEVER) {
 			call.debug(false);
-			call.loggerConfig(RestCallLoggerConfig.DEFAULT_NOOP);
-		} else if (debug == PER_REQUEST) {
+		} else if (debug == CONDITIONAL) {
 			boolean b = "true".equalsIgnoreCase(req.getHeader("X-Debug"));
 			if (b) {
 				call.debug(true);
-				call.loggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
 			} else {
 				call.debug(false);
-				call.loggerConfig(RestCallLoggerConfig.DEFAULT_NOOP);
 			}
 		}
 
@@ -995,10 +959,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				Boolean debug = ObjectUtils.castOrNull(req.getAttribute("Debug"), Boolean.class);
 				if (debug == Boolean.TRUE) {
 					call.debug(true);
-					call.loggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
 				} else if (debug == Boolean.FALSE) {
 					call.debug(false);
-					call.loggerConfig(RestCallLoggerConfig.DEFAULT_NOOP);
 				}
 
 				if (res.getStatus() == 0)
@@ -1134,13 +1096,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	public JsonSchemaGenerator getJsonSchemaGenerator() {
 		return jsonSchemaGenerator;
-	}
-
-	/**
-	 * @return The REST call logger config for this method.
-	 */
-	protected RestCallLoggerConfig getCallLoggerConfig() {
-		return callLoggerConfig;
 	}
 
 	Enablement getDebug() {

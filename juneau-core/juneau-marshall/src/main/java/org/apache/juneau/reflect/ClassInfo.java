@@ -635,7 +635,7 @@ public final class ClassInfo {
 		if (c != null) {
 			Class<?>[] argTypes = ClassUtils.getClasses(args);
 			for (MethodInfo m : getPublicMethods()) {
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals("create") && m.hasMatchingParamTypes(argTypes))
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && (m.getSimpleName().equals("create") || m.getSimpleName().equals("getInstance")) && m.hasMatchingParamTypes(argTypes))
 					return m;
 			}
 		}
@@ -664,7 +664,8 @@ public final class ClassInfo {
 		if (c != null) {
 			Class<?>[] argTypes = ClassUtils.getClasses(args);
 			for (MethodInfo m : getPublicMethods()) {
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals("create")) {
+				String sn = m.getSimpleName();
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && (sn.equals("create") || sn.equals("getInstance"))) {
 					int mn = m.fuzzyArgsMatch(argTypes);
 					if (mn > bestCount) {
 						bestCount = mn;
@@ -815,6 +816,10 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructorFuzzy(Object...args) {
 		return _getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
+	}
+
+	public Optional<ConstructorInfo> getOptionalPublicConstructorFuzzy(Object...args) {
+		return Optional.ofNullable(_getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args)));
 	}
 
 	/**

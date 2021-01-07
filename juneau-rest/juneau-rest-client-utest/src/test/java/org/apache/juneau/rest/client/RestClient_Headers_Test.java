@@ -232,7 +232,7 @@ public class RestClient_Headers_Test {
 		checkClient("If-Range").ifRange("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("If-Unmodified-Since").ifUnmodifiedSince("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Max-Forwards").maxForwards("10").build().get("/headers").run().assertBody().is("['10']");
-		checkClient("No-Trace").noTrace().build().get("/headers").run().assertBody().is("['true']");
+		checkClient("X-No-Log").noLog().build().get("/headers").run().assertBody().is("['true']");
 		checkClient("Origin").origin("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Pragma").pragma("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Proxy-Authorization").proxyAuthorization("foo").build().get("/headers").run().assertBody().is("['foo']");
@@ -360,6 +360,6 @@ public class RestClient_Headers_Test {
 	}
 
 	private static RestClientBuilder checkClient(String headerToCheck) {
-		return MockRestClient.create(A.class).simpleJson().header("Check",headerToCheck);
+		return MockRestClient.create(A.class).simpleJson().header("Check",headerToCheck).noLog();
 	}
 }

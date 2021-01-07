@@ -78,6 +78,6 @@ public class RestCallException_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static RestClientBuilder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).simpleJson().noLog();
 	}
 }

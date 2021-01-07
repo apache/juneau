@@ -21,7 +21,7 @@ import org.junit.*;
 
 @SuppressWarnings("serial")
 @FixMethodOrder(NAME_ASCENDING)
-public class StackTraceDatabaseTest {
+public class StackTraceStoreTest {
 
 	@Test
 	public void testBasic() {
@@ -30,7 +30,7 @@ public class StackTraceDatabaseTest {
 		Throwable t2 = new Throwable();
 		t2.fillInStackTrace();
 
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 		db.add(t1);
 		StackTraceInfo t1a = db.getStackTraceInfo(t1);
 		db.add(t1);
@@ -53,7 +53,7 @@ public class StackTraceDatabaseTest {
 		Throwable t2 = new Throwable();
 		t2.fillInStackTrace();
 
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 		db.add(t1);
 		db.add(t1);
 		db.add(t2);
@@ -71,7 +71,7 @@ public class StackTraceDatabaseTest {
 		Throwable t2 = new Throwable();
 		t2.fillInStackTrace();
 
-		StackTraceDatabase db = new StackTraceDatabase(-2, null);
+		StackTraceStore db = new StackTraceStore(-2, null);
 		db.add(t1);
 		StackTraceInfo t1a = db.getStackTraceInfo(t1);
 		db.add(t1);
@@ -92,7 +92,7 @@ public class StackTraceDatabaseTest {
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 		db.add(t1);
 		StackTraceInfo t1a = db.getStackTraceInfo(t1);
 		assertEquals(1, t1a.getCount());
@@ -104,7 +104,7 @@ public class StackTraceDatabaseTest {
 
 	@Test
 	public void testNullException() {
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 		db.add(null).add(null);
 		StackTraceInfo t1a = db.getStackTraceInfo(null);
 		assertEquals(2, t1a.getCount());
@@ -112,7 +112,7 @@ public class StackTraceDatabaseTest {
 
 	@Test
 	public void testSameStackTraces() {
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -143,7 +143,7 @@ public class StackTraceDatabaseTest {
 
 	@Test
 	public void testSlightlyDifferentStackTraces() {
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -174,7 +174,7 @@ public class StackTraceDatabaseTest {
 
 	@Test
 	public void testStopClass() {
-		StackTraceDatabase db = new StackTraceDatabase(-1, StopClass.class);
+		StackTraceStore db = new StackTraceStore(-1, StopClass.class);
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -207,7 +207,7 @@ public class StackTraceDatabaseTest {
 
 	@Test
 	public void testProxyElements() {
-		StackTraceDatabase db = new StackTraceDatabase();
+		StackTraceStore db = new StackTraceStore();
 
 		Throwable t1 = new Throwable() {
 			@Override

@@ -47,7 +47,6 @@ public class RestMethodAnnotation_Test {
 		.encoders(Encoder.class)
 		.flags("flags")
 		.guards(RestGuard.class)
-		.logging(LoggingAnnotation.DEFAULT)
 		.matchers(RestMatcher.class)
 		.maxInput("maxInput")
 		.method("method")
@@ -82,7 +81,6 @@ public class RestMethodAnnotation_Test {
 		.encoders(Encoder.class)
 		.flags("flags")
 		.guards(RestGuard.class)
-		.logging(LoggingAnnotation.DEFAULT)
 		.matchers(RestMatcher.class)
 		.maxInput("maxInput")
 		.method("method")
@@ -120,7 +118,6 @@ public class RestMethodAnnotation_Test {
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "flags:['flags'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
-				+ "logging:{disabled:'',level:'',rules:[],stackTraceHashingTimeout:'',useStackTraceHashing:''},"
 				+ "matchers:['org.apache.juneau.rest.RestMatcher'],"
 				+ "maxInput:'maxInput',"
 				+ "method:'method',"
@@ -198,7 +195,6 @@ public class RestMethodAnnotation_Test {
 		encoders=Encoder.class,
 		flags="flags",
 		guards=RestGuard.class,
-		logging=@Logging,
 		matchers=RestMatcher.class,
 		maxInput="maxInput",
 		method="method",
@@ -235,7 +231,6 @@ public class RestMethodAnnotation_Test {
 		encoders=Encoder.class,
 		flags="flags",
 		guards=RestGuard.class,
-		logging=@Logging,
 		matchers=RestMatcher.class,
 		maxInput="maxInput",
 		method="method",

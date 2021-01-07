@@ -23,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
@@ -697,7 +696,6 @@ public class OpenApiTest {
 		F04 in = new F04("a");
 		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
-		SimpleJson.DEFAULT.println(in);
 		assertEquals("a", s);
 		F04 r = parse(ps, s, F04.class);
 		assertObject(in.toStringArray()).sameAs(r.toStringArray());

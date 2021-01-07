@@ -30,6 +30,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
@@ -565,7 +566,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
 	 *
 	 * <p>
-	 * This exception is used by {@link BasicRestCallLogger} for logging purposes.
+	 * This exception is used by {@link BasicRestLogger} for logging purposes.
 	 *
 	 * @param t The attribute value.
 	 * @return This object (for method chaining).
@@ -576,33 +577,33 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
+	 * Sets the <js>"NoLog"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link BasicRestCallLogger} and tells it not to log the current request.
+	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
 	 *
 	 * @param b The attribute value.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setNoTrace(Boolean b) {
-		request.setNoTrace(b);
+	public RestResponse setNoLog(Boolean b) {
+		request.setNoLog(b);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
+	 * Shortcut for calling <c>setNoLog(<jk>true</jk>)</c>.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setNoTrace() {
-		return setNoTrace(true);
+	public RestResponse setNoLog() {
+		return setNoLog(true);
 	}
 
 	/**
 	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link BasicRestCallLogger} to help determine how a request should be logged.
+	 * This flag is used by {@link BasicRestLogger} to help determine how a request should be logged.
 	 *
 	 * @param b The attribute value.
 	 * @return This object (for method chaining).
@@ -673,7 +674,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The wrapped servlet request.
 	 */
-	protected HttpServletResponse getInner() {
+	public HttpServletResponse getInner() {
 		return inner;
 	}
 

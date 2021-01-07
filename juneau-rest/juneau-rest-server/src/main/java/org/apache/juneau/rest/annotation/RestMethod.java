@@ -146,7 +146,7 @@ public @interface RestMethod {
 	 * <ul>
 	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
 	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
-	 * 	<li><js>"per-request"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
+	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
 	 * 	<li><js>""</js> (or anything else) - Debug mode is inherited from class.
 	 * </ul>
 	 *
@@ -325,15 +325,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
-
-	/**
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * </ul>
-	 */
-	Logging logging() default @Logging;
 
 	/**
 	 * Method matchers.

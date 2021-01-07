@@ -30,6 +30,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.annotation.*;
@@ -228,11 +229,7 @@ public class RrpcInterfaceTest {
 		}
 	}
 
-	@Rest(
-		logging=@Logging(
-			disabled="true"
-		)
-	)
+	@Rest(callLogger=BasicDisabledRestLogger.class)
 	@SerializerConfig(addRootType="true",addBeanTypes="true")
 	public static class InterfaceProxyResource extends BasicRestServletJena {
 		private static final long serialVersionUID = 1L;
@@ -928,7 +925,7 @@ public class RrpcInterfaceTest {
 	public RrpcInterfaceTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
-			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).build().getRrpcInterface(InterfaceProxy.class,"/proxy");
+			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).noLog().build().getRrpcInterface(InterfaceProxy.class,"/proxy");
 			cache.put(label,proxy);
 		}
 	}

@@ -28,6 +28,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -173,6 +174,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicUnive
 
 	@Inject Optional<FileFinder> fileFinder;
 	@Inject Optional<StaticFiles> staticFiles;
+	@Inject Optional<RestLogger> callLogger;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicRestConfig methods
@@ -242,5 +244,22 @@ public abstract class BasicRestServlet extends RestServlet implements BasicUnive
 	 */
 	public StaticFiles createStaticFiles() {
 		return staticFiles == null ? null : staticFiles.orElse(null);
+	}
+
+	/**
+	 * Instantiates the call logger to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation looks for an injected bean of type {@link RestLogger} or else returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_callLogger}.
+	 * </ul>
+	 *
+	 * @return The call logger to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public RestLogger createCallLogger() {
+		return callLogger == null ? null : callLogger.orElse(null);
 	}
 }

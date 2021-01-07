@@ -22,6 +22,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
@@ -40,7 +41,7 @@ public class RestAnnotation_Test {
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
-		.callLogger(BasicRestCallLogger.class)
+		.callLogger(BasicRestLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
@@ -58,7 +59,6 @@ public class RestAnnotation_Test {
 		.flags("flags")
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
-		.logging(LoggingAnnotation.DEFAULT)
 		.maxInput("maxInput")
 		.messages("messages")
 		.on("on")
@@ -94,7 +94,7 @@ public class RestAnnotation_Test {
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
-		.callLogger(BasicRestCallLogger.class)
+		.callLogger(BasicRestLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
@@ -112,7 +112,6 @@ public class RestAnnotation_Test {
 		.flags("flags")
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
-		.logging(LoggingAnnotation.DEFAULT)
 		.maxInput("maxInput")
 		.messages("messages")
 		.on("on")
@@ -150,7 +149,7 @@ public class RestAnnotation_Test {
 				+ "allowedHeaderParams:'allowedHeaderParams',"
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"
 				+ "allowedMethodParams:'allowedMethodParams',"
-				+ "callLogger:'org.apache.juneau.rest.BasicRestCallLogger',"
+				+ "callLogger:'org.apache.juneau.rest.logging.BasicRestLogger',"
 				+ "children:['"+CNAME+"'],"
 				+ "clientVersionHeader:'clientVersionHeader',"
 				+ "config:'config',"
@@ -169,7 +168,6 @@ public class RestAnnotation_Test {
 				+ "flags:['flags'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
 				+ "infoProvider:'org.apache.juneau.rest.BasicRestInfoProvider',"
-				+ "logging:{disabled:'',level:'',rules:[],stackTraceHashingTimeout:'',useStackTraceHashing:''},"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
 				+ "on:['on'],"
@@ -250,7 +248,7 @@ public class RestAnnotation_Test {
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
-		callLogger=BasicRestCallLogger.class,
+		callLogger=BasicRestLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="clientVersionHeader",
 		config="config",
@@ -268,7 +266,6 @@ public class RestAnnotation_Test {
 		flags="flags",
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
-		logging=@Logging,
 		maxInput="maxInput",
 		messages="messages",
 		on="on",
@@ -306,7 +303,7 @@ public class RestAnnotation_Test {
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
-		callLogger=BasicRestCallLogger.class,
+		callLogger=BasicRestLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="clientVersionHeader",
 		config="config",
@@ -324,7 +321,6 @@ public class RestAnnotation_Test {
 		flags="flags",
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
-		logging=@Logging,
 		maxInput="maxInput",
 		messages="messages",
 		on="on",

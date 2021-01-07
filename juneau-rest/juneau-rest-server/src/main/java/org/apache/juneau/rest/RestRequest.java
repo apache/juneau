@@ -14,11 +14,11 @@ package org.apache.juneau.rest;
 
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
-import static org.apache.juneau.rest.Enablement.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.io.*;
@@ -59,6 +59,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
@@ -1242,7 +1243,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
 	 *
 	 * <p>
-	 * This exception is used by {@link BasicRestCallLogger} for logging purposes.
+	 * This exception is used by {@link BasicRestLogger} for logging purposes.
 	 *
 	 * @param t The attribute value.
 	 * @return This object (for method chaining).
@@ -1253,33 +1254,33 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
+	 * Sets the <js>"NoLog"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link BasicRestCallLogger} and tells it not to log the current request.
+	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
 	 *
 	 * @param b The attribute value.
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest setNoTrace(Boolean b) {
-		setAttribute("NoTrace", b);
+	public RestRequest setNoLog(Boolean b) {
+		setAttribute("NoLog", b);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
+	 * Shortcut for calling <c>setNoLog(<jk>true</jk>)</c>.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest setNoTrace() {
-		return setNoTrace(true);
+	public RestRequest setNoLog() {
+		return setNoLog(true);
 	}
 
 	/**
 	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link BasicRestCallLogger} to help determine how a request should be logged.
+	 * This flag is used by {@link BasicRestLogger} to help determine how a request should be logged.
 	 *
 	 * @param b The attribute value.
 	 * @return This object (for method chaining).
@@ -1573,17 +1574,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return parserSessionArgs;
 	}
 
-	/**
-	 * Returns the logging configuration defined on the Java method that this request is executing against.
-	 *
-	 * @return The logging configuration defined on the Java method that this request is executing against.
-	 */
-	public RestCallLoggerConfig getCallLoggerConfig() {
-		if (restJavaMethod != null)
-			return restJavaMethod.getCallLoggerConfig();
-		return RestCallLoggerConfig.DEFAULT_NOOP;
-	}
-
 	void close() {
 		if (cf != null) {
 			try {
@@ -1638,7 +1628,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The wrapped servlet request.
 	 */
-	protected HttpServletRequest getInner() {
+	public HttpServletRequest getInner() {
 		return inner;
 	}
 

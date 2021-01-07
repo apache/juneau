@@ -12,78 +12,44 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.logging.*;
-
-import javax.servlet.http.*;
-
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Rest_Debug_Test {
 
-	public static final CaptureCallLogger LOGGER = new CaptureCallLogger();
+	public static final CaptureLogger LOGGER = new CaptureLogger();
 
-	public static class CaptureCallLogger extends BasicRestCallLogger {
-
-		private volatile String msg;
-
-		public static CaptureCallLogger create() {
+	public static class CaptureLogger extends BasicTestCaptureRestLogger {
+		public static CaptureLogger getInstance() {
 			return LOGGER;
 		}
-
-		private CaptureCallLogger() {
-			super(null);
-		}
-
-		@Override
-		protected synchronized void log(Level level, String msg, Throwable e) {
-			this.msg = StringUtils.emptyIfNull(msg);
-		}
-
-		synchronized CaptureCallLogger reset() {
-			this.msg = null;
-			return this;
-		}
-
-		synchronized String getMessage() {
-			return msg;
-		}
-
-		public synchronized CaptureCallLogger assertMessageContains(String s) {
-			assertNotNull(msg);
-			if (! msg.contains(s))
-				assertEquals("Substring not found.", s, msg);
-			return this;
-		}
 	}
 
-	private static void assertLogged(boolean b) {
-		assertEquals(b, LOGGER.getMessage() != null);
-		LOGGER.reset();
+	private static void assertLogged() {
+		LOGGER.assertMessageAndReset().exists();
 	}
 
-	private static void assertLoggedContains(String s) {
-		String msg = LOGGER.getMessage();
-		assertLogged(true);
-		if (! msg.contains(s))
-			assertEquals("Substring not found.", s, msg);
-		LOGGER.reset();
+	private static void assertNotLogged() {
+		LOGGER.assertMessageAndReset().doesNotExist();
+	}
+
+	private static void assertLogged(String msg) {
+		LOGGER.assertMessageAndReset().contains(msg);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(debug=""), various @RestMethod(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(callLogger=CaptureCallLogger.class)
+	@Rest(callLogger=CaptureLogger.class)
 	public static class A1 implements BasicUniversalRest {
 		@RestMethod
 		public boolean a(RestRequest req) {
@@ -97,7 +63,7 @@ public class Rest_Debug_Test {
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
@@ -123,42 +89,42 @@ public class Rest_Debug_Test {
 		RestClient a1d = MockRestClient.create(A1.class).simpleJson().header("X-Debug", true).build();
 
 		a1.get("/a").run().assertBody().is("false");
-		assertLogged(false);
-		a1d.get("/a").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		a1d.get("/a").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /a");
 
 		a1.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a1d.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a1.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 		a1d.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 
 		a1.get("/d").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a1d.get("/d").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d");
+		assertLogged("[200] HTTP GET /d");
 
 		a1.get("/e").run().assertBody().is("false");
-		assertLogged(false);
-		a1d.get("/e").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		a1d.get("/e").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e");
 
 		a1.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged("[200] HTTP GET /f");
 		a1d.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged("[200] HTTP GET /f");
 
 		a1.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a1d.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 	}
 
-	@Rest(callLogger=CaptureCallLogger.class)
+	@Rest(callLogger=CaptureLogger.class)
 	public static class A1a extends BasicRest {
 		@RestMethod
 		public boolean a(RestRequest req) {
@@ -172,7 +138,7 @@ public class Rest_Debug_Test {
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
@@ -198,46 +164,46 @@ public class Rest_Debug_Test {
 		RestClient a1ad = MockRestClient.create(A1a.class).simpleJson().header("X-Debug", true).build();
 
 		a1a.get("/a").run().assertBody().is("false");
-		assertLogged(false);
-		a1ad.get("/a").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		a1ad.get("/a").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /a");
 
 		a1a.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a1ad.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a1a.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 		a1ad.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 
 		a1a.get("/d").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a1ad.get("/d").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d");
+		assertLogged("[200] HTTP GET /d");
 
 		a1a.get("/e").run().assertBody().is("false");
-		assertLogged(false);
-		a1ad.get("/e").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		a1ad.get("/e").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e");
 
 		a1a.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a1ad.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a1a.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a1ad.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(debug="true"), various @RestMethod(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(callLogger=CaptureCallLogger.class, debug="true")
+	@Rest(callLogger=CaptureLogger.class, debug="true")
 	public static class A2 implements BasicUniversalRest {
 		@RestMethod
 		public boolean a(RestRequest req) {
@@ -251,7 +217,7 @@ public class Rest_Debug_Test {
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
@@ -277,46 +243,46 @@ public class Rest_Debug_Test {
 		RestClient a2d = MockRestClient.create(A2.class).simpleJson().header("X-Debug", true).build();
 
 		a2.get("/a").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a2d.get("/a").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a2.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a2d.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a2.get("/c").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a2d.get("/c").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a2.get("/d").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a2d.get("/d").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a2.get("/e").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a2d.get("/e").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a2.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a2d.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a2.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a2d.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(debug="false"), various @RestMethod(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(callLogger=CaptureCallLogger.class,debug="false")
+	@Rest(callLogger=CaptureLogger.class,debug="false")
 	public static class A3 implements BasicUniversalRest {
 		@RestMethod
 		public boolean a(RestRequest req) {
@@ -330,7 +296,7 @@ public class Rest_Debug_Test {
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
@@ -356,46 +322,46 @@ public class Rest_Debug_Test {
 		RestClient a3d = MockRestClient.create(A3.class).simpleJson().header("X-Debug", true).build();
 
 		a3.get("/a").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a3d.get("/a").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a3.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a3d.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a3.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 		a3d.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 
 		a3.get("/d").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a3d.get("/d").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d");
+		assertLogged("[200] HTTP GET /d");
 
 		a3.get("/e").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a3d.get("/e").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a3.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a3d.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a3.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a3d.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debug="per-request"), various @RestMethod(debug)
+	// @Rest(debug="conditional"), various @RestMethod(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(callLogger=CaptureCallLogger.class,debug="per-request")
+	@Rest(callLogger=CaptureLogger.class,debug="conditional")
 	public static class A4 implements BasicUniversalRest {
 		@RestMethod
 		public boolean a(RestRequest req) {
@@ -409,7 +375,7 @@ public class Rest_Debug_Test {
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
@@ -435,95 +401,39 @@ public class Rest_Debug_Test {
 		RestClient a4d = MockRestClient.create(A4.class).simpleJson().header("X-Debug", true).build();
 
 		a4.get("/a").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a4d.get("/a").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a4.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a4d.get("/b").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		a4.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 		a4d.get("/c").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c");
+		assertLogged("[200] HTTP GET /c");
 
 		a4.get("/d").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a4d.get("/d").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d");
+		assertLogged("[200] HTTP GET /d");
 
 		a4.get("/e").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a4d.get("/e").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a4.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		a4d.get("/f").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		a4.get("/g").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		a4d.get("/g").run().assertBody().is("false");
-		assertLogged(false);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Implement RestCallLogger directly.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	public static class B1 implements BasicUniversalRest, RestCallLogger {
-		@RestMethod
-		public boolean a(RestRequest req) {
-			return req.isDebug();
-		}
-		@RestMethod(debug="true")
-		public boolean b(RestRequest req) {
-			return req.isDebug();
-		}
-		@Override
-		public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
-			LOGGER.log(config, req, res);
-		}
-	}
-
-	@Test
-	public void b01_debugDefault() throws Exception {
-		RestClient b1 = MockRestClient.buildSimpleJson(B1.class);
-
-		b1.get("/a").run().assertBody().is("false");
-		assertLogged(false);
-		b1.get("/b").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /b");
-	}
-
-	@Rest
-	public static class B2 extends BasicRest {
-		@RestMethod
-		public boolean a(RestRequest req) {
-			return req.isDebug();
-		}
-		@RestMethod(debug="true")
-		public boolean b(RestRequest req) {
-			return req.isDebug();
-		}
-		@Override
-		public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
-			LOGGER.log(config, req, res);
-		}
-	}
-
-	@Test
-	public void b02_debugDefault() throws Exception {
-		RestClient b2 = MockRestClient.buildSimpleJson(B2.class);
-
-		b2.get("/a").run().assertBody().is("false");
-		assertLogged(false);
-		b2.get("/b").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /b");
+		assertNotLogged();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -531,11 +441,11 @@ public class Rest_Debug_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		callLogger=CaptureCallLogger.class,
+		callLogger=CaptureLogger.class,
 		debugOn=""
 			+ "C1.b1=false,C1.b2=false,C1.b3=FALSE,C1.b4=FALSE,C1.b5=FALSE,C1.b6=FALSE,"
 			+ " C1.c1 , C1.c2 = true , C1.c3 = TRUE , C1.c4 = TRUE , C1.c5 = TRUE , C1.c6 = TRUE , "
-			+ "C1.d1=per-request,C1.d2=per-request,C1.d3=PER-REQUEST,C1.d4=PER-REQUEST,C1.d5=PER-REQUEST,C1.d6=PER-REQUEST,"
+			+ "C1.d1=conditional,C1.d2=conditional,C1.d3=CONDITIONAL,C1.d4=CONDITIONAL,C1.d5=CONDITIONAL,C1.d6=CONDITIONAL,"
 			+ "C1.e1=foo,C1.e2=,C1.e3=foo,C1.e4=foo,C1.e5=foo,C1.e6=foo,"
 	)
 	public static class C1 implements BasicUniversalRest {
@@ -552,7 +462,7 @@ public class Rest_Debug_Test {
 		public boolean a3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean a4(RestRequest req) {
 			return req.isDebug();
 		}
@@ -578,7 +488,7 @@ public class Rest_Debug_Test {
 		public boolean b5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean b6(RestRequest req) {
 			return req.isDebug();
 		}
@@ -604,12 +514,12 @@ public class Rest_Debug_Test {
 		public boolean c5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean c6(RestRequest req) {
 			return req.isDebug();
 		}
 
-		// debug=per-request
+		// debug=conditional
 		@RestMethod
 		public boolean d1(RestRequest req) {
 			return req.isDebug();
@@ -630,7 +540,7 @@ public class Rest_Debug_Test {
 		public boolean d5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d6(RestRequest req) {
 			return req.isDebug();
 		}
@@ -656,7 +566,7 @@ public class Rest_Debug_Test {
 		public boolean e5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean e6(RestRequest req) {
 			return req.isDebug();
 		}
@@ -676,7 +586,7 @@ public class Rest_Debug_Test {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean f4(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
@@ -697,7 +607,7 @@ public class Rest_Debug_Test {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean g4(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -710,166 +620,166 @@ public class Rest_Debug_Test {
 		RestClient c1d = MockRestClient.create(C1.class).simpleJson().header("X-Debug", true).build();
 
 		c1.get("/a1").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/a1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/a1").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /a1");
 		c1.get("/a2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/a2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/a3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1d.get("/a3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1.get("/a4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/a4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		c1.get("/b1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/b1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/b2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/b2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/b3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/b3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/b4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/b4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/b5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/b5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/b6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/b6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		c1.get("/c1").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c1");
+		assertLogged("[200] HTTP GET /c1");
 		c1d.get("/c1").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c1");
+		assertLogged("[200] HTTP GET /c1");
 		c1.get("/c2").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c2");
+		assertLogged("[200] HTTP GET /c2");
 		c1d.get("/c2").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c2");
+		assertLogged("[200] HTTP GET /c2");
 		c1.get("/c3").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c3");
+		assertLogged("[200] HTTP GET /c3");
 		c1d.get("/c3").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c3");
+		assertLogged("[200] HTTP GET /c3");
 		c1.get("/c4").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c4");
+		assertLogged("[200] HTTP GET /c4");
 		c1d.get("/c4").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c4");
+		assertLogged("[200] HTTP GET /c4");
 		c1.get("/c5").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c5");
+		assertLogged("[200] HTTP GET /c5");
 		c1d.get("/c5").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c5");
+		assertLogged("[200] HTTP GET /c5");
 		c1.get("/c6").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c6");
+		assertLogged("[200] HTTP GET /c6");
 		c1d.get("/c6").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c6");
+		assertLogged("[200] HTTP GET /c6");
 
 		c1.get("/d1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/d1").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d1");
+		assertLogged("[200] HTTP GET /d1");
 		c1.get("/d2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/d2").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d2");
+		assertLogged("[200] HTTP GET /d2");
 		c1.get("/d3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/d3").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d3");
+		assertLogged("[200] HTTP GET /d3");
 		c1.get("/d4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/d4").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d4");
+		assertLogged("[200] HTTP GET /d4");
 		c1.get("/d5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/d5").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d5");
+		assertLogged("[200] HTTP GET /d5");
 		c1.get("/d6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/d6").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d6");
+		assertLogged("[200] HTTP GET /d6");
 
 		c1.get("/e1").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/e1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/e1").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e1");
 		c1.get("/e2").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/e2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/e2").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e2");
 		c1.get("/e3").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/e3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/e3").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e3");
 		c1.get("/e4").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/e4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/e4").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e4");
 		c1.get("/e5").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/e5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/e5").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e5");
 		c1.get("/e6").run().assertBody().is("false");
-		assertLogged(false);
-		c1d.get("/e6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
+		c1d.get("/e6").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e6");
 
 		c1.get("/f1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1d.get("/f1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1.get("/f2").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1d.get("/f2").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1.get("/f3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1d.get("/f3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1.get("/f4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c1d.get("/f4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		c1.get("/g1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/g1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/g2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/g2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/g3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/g3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1.get("/g4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c1d.get("/g4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 	}
 
 	static {
 		System.setProperty("C2DebugEnabled", "C2=true");
 	}
 	@Rest(
-		callLogger=CaptureCallLogger.class,
+		callLogger=CaptureLogger.class,
 		debugOn="$S{C2DebugEnabled},"
 			+ "C2.b1=false,C2.b2=false,C2.b3=FALSE,C2.b4=FALSE,C2.b5=FALSE,C2.b6=FALSE,"
 			+ " C2.c1 , C2.c2 = true , C2.c3 = TRUE , C2.c4 = TRUE , C2.c5 = TRUE , C2.c6 = TRUE , "
-			+ "C2.d1=per-request,C2.d2=per-request,C2.d3=PER-REQUEST,C2.d4=PER-REQUEST,C2.d5=PER-REQUEST,C2.d6=PER-REQUEST,"
+			+ "C2.d1=conditional,C2.d2=conditional,C2.d3=CONDITIONAL,C2.d4=CONDITIONAL,C2.d5=CONDITIONAL,C2.d6=CONDITIONAL,"
 			+ "C2.e1=foo,C2.e2=,C2.e3=foo,C2.e4=foo,C2.e5=foo,C2.e6=foo,"
 	)
 	public static class C2 implements BasicUniversalRest {
@@ -886,7 +796,7 @@ public class Rest_Debug_Test {
 		public boolean a3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean a4(RestRequest req) {
 			return req.isDebug();
 		}
@@ -912,7 +822,7 @@ public class Rest_Debug_Test {
 		public boolean b5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean b6(RestRequest req) {
 			return req.isDebug();
 		}
@@ -938,12 +848,12 @@ public class Rest_Debug_Test {
 		public boolean c5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean c6(RestRequest req) {
 			return req.isDebug();
 		}
 
-		// debug=per-request
+		// debug=conditional
 		@RestMethod
 		public boolean d1(RestRequest req) {
 			return req.isDebug();
@@ -964,7 +874,7 @@ public class Rest_Debug_Test {
 		public boolean d5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean d6(RestRequest req) {
 			return req.isDebug();
 		}
@@ -990,7 +900,7 @@ public class Rest_Debug_Test {
 		public boolean e5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean e6(RestRequest req) {
 			return req.isDebug();
 		}
@@ -1010,7 +920,7 @@ public class Rest_Debug_Test {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean f4(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
@@ -1031,7 +941,7 @@ public class Rest_Debug_Test {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="per-request")
+		@RestMethod(debug="conditional")
 		public boolean g4(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -1044,155 +954,155 @@ public class Rest_Debug_Test {
 		RestClient c2d = MockRestClient.create(C2.class).simpleJson().header("X-Debug", true).build();
 
 		c2.get("/a1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/a1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/a2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/a2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/a3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/a3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/a4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/a4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		c2.get("/b1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/b1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/b2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/b2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/b3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/b3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/b4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/b4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/b5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/b5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/b6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/b6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 
 		c2.get("/c1").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c1");
+		assertLogged("[200] HTTP GET /c1");
 		c2d.get("/c1").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c1");
+		assertLogged("[200] HTTP GET /c1");
 		c2.get("/c2").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c2");
+		assertLogged("[200] HTTP GET /c2");
 		c2d.get("/c2").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c2");
+		assertLogged("[200] HTTP GET /c2");
 		c2.get("/c3").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c3");
+		assertLogged("[200] HTTP GET /c3");
 		c2d.get("/c3").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c3");
+		assertLogged("[200] HTTP GET /c3");
 		c2.get("/c4").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c4");
+		assertLogged("[200] HTTP GET /c4");
 		c2d.get("/c4").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c4");
+		assertLogged("[200] HTTP GET /c4");
 		c2.get("/c5").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c5");
+		assertLogged("[200] HTTP GET /c5");
 		c2d.get("/c5").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c5");
+		assertLogged("[200] HTTP GET /c5");
 		c2.get("/c6").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c6");
+		assertLogged("[200] HTTP GET /c6");
 		c2d.get("/c6").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /c6");
+		assertLogged("[200] HTTP GET /c6");
 
 		c2.get("/d1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/d1").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d1");
+		assertLogged("[200] HTTP GET /d1");
 		c2.get("/d2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/d2").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d2");
+		assertLogged("[200] HTTP GET /d2");
 		c2.get("/d3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/d3").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d3");
+		assertLogged("[200] HTTP GET /d3");
 		c2.get("/d4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/d4").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d4");
+		assertLogged("[200] HTTP GET /d4");
 		c2.get("/d5").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/d5").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d5");
+		assertLogged("[200] HTTP GET /d5");
 		c2.get("/d6").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/d6").run().assertBody().is("true");
-		assertLoggedContains("[200] HTTP GET /d6");
+		assertLogged("[200] HTTP GET /d6");
 
 		c2.get("/e1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/d1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/e2").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/e2").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/e3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/e3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/e4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/e4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/e5").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/e5").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/e6").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/e6").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		c2.get("/f1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/f1").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/f2").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/f2").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/f3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/f3").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2.get("/f4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 		c2d.get("/f4").run().assertBody().is("true");
-		assertLogged(true);
+		assertLogged();
 
 		c2.get("/g1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/g1").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/g2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/g2").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/g3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/g3").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2.get("/g4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 		c2d.get("/g4").run().assertBody().is("false");
-		assertLogged(false);
+		assertNotLogged();
 	}
 
 }

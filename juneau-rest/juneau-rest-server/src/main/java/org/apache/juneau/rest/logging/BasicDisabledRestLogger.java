@@ -10,49 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.logging;
 
-import org.apache.juneau.internal.*;
+import java.util.function.*;
+
+import org.apache.juneau.rest.*;
 
 /**
- * Represents the amount of detail to include in a log entry for HTTP requests and responses.
+ * Default implementation of a {@link RestLogger} that never logs REST calls.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc RestLoggingAndDebugging}
+ * </ul>
  */
-public enum RestCallLoggingDetail {
+public class BasicDisabledRestLogger extends RestLogger {
 
 	/**
-	 * Log only the request and response status lines.
+	 * Returns a builder with the settings used by this logger.
 	 */
-	SHORT,
+	public static final Supplier<RestLoggerBuilder> SETTINGS = ()->create().disabled();
 
 	/**
-	 * Log status lines and also headers.
-	 */
-	MEDIUM,
-
-	/**
-	 * Log status lines, headers, and bodies if available.
-	 */
-	LONG;
-
-	boolean isOneOf(RestCallLoggingDetail...values) {
-		for (RestCallLoggingDetail v : values)
-			if (v == this)
-				return true;
-		return false;
-	}
-
-	/**
-	 * Retrieves this enum using case-insensitive matching.
+	 * Constructor.
 	 *
-	 * @param s The enum name to resolve.
-	 * @return The resolved value.
+	 * @param context The context of the resource object.
 	 */
-	public static RestCallLoggingDetail fromString(String s) {
-		if (! StringUtils.isEmpty(s)) {
-			try {
-				return valueOf(s.toUpperCase());
-			} catch (IllegalArgumentException  e) {}
-		}
-		return null;
+	public BasicDisabledRestLogger(RestContext context) {
+		super(create().disabled());
 	}
 }

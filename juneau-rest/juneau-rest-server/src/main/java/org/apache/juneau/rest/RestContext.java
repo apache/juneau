@@ -18,9 +18,9 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.rest.Enablement.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.BasicIllegalArgumentException.*;
+import static org.apache.juneau.Enablement.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -29,6 +29,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 import java.util.stream.*;
 
 import javax.servlet.*;
@@ -64,6 +65,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.reshandlers.*;
@@ -390,10 +392,10 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.callLogger.o"</js>
 	 * 	<li><b>Data type:</b>
 	 * 		<ul>
-	 * 			<li>{@link org.apache.juneau.rest.RestCallLogger}
-	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.RestCallLogger}&gt;</c>
+	 * 			<li>{@link org.apache.juneau.rest.logging.RestLogger}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.logging.RestLogger}&gt;</c>
 	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicRestCallLogger}
+	 * 	<li><b>Default:</b>  {@link #REST_callLoggerDefault}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -402,7 +404,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLogger(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLogger(RestCallLogger)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLogger(RestLogger)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -445,12 +447,12 @@ public class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
+	 * 		The default call logger if not specified is {@link BasicRestLogger} unless overwritten by {@link #REST_callLoggerDefault}.
 	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
+	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallLogger} interface with the same
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestLogger} interface with the same
 	 * 		that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
@@ -472,81 +474,37 @@ public class RestContext extends BeanContext {
 	public static final String REST_callLogger = PREFIX + ".callLogger.o";
 
 	/**
-	 * Configuration property:  REST call logging rules.
+	 * Configuration property:  Default REST call logger.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLoggerConfig REST_callLoggerConfig}
-	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerConfig.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig#DEFAULT_NOOP}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLoggerDefault REST_callLoggerDefault}
+	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerDefault.o"</js>
+	 * 	<li><b>Data type:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#logging()}
+	 * 			<li>{@link org.apache.juneau.rest.logging.RestLogger}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.logging.RestLogger}&gt;</c>
 	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.logging.BasicRestLogger}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLoggerConfig(RestCallLoggerConfig)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLoggerDefault(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLoggerDefault(RestLogger)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		logging=<ja>@Logging</ja>(
-	 * 			level=<js>"INFO"</js>,
-	 * 			rules={
-	 * 				<ja>@LoggingRule</ja>(codes=<js>"400-499"</js>, level=<js>"WARNING"</js>, req=<js>"SHORT"</js>, res=<js>"MEDIUM"</js>),
-	 * 				<ja>@LoggingRule</ja>(codes=<js>">=500"</js>, level=<js>"SEVERE"</js>, req=<js>"LONG"</js>, res=<js>"LONG"</js>)
-	 * 			}
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.callLoggerConfig(
-	 * 				RestCallLoggerConfig
-	 * 					.<jsm>create</jsm>()
-	 * 					.level(Level.<jsf>INFO</jsf>)
-	 * 					.rules(
-	 * 						RestCallLoggingRule
-	 * 							.<jsm>create</jsm>()
-	 * 							.codes(<js>"400-499"</js>)
-	 * 							.level(<jsf>WARNING</jsf>)
-	 * 							.req(<jsf>SHORT</jsf>)
-	 * 							.res(<jsf>MEDIUM</jsf>)
-	 * 							.build(),
-	 * 						RestCallLoggingRule
-	 * 							.<jsm>create</jsm>()
-	 * 							.codes(<js>">=500"</js>)
-	 * 							.level(<jsf>SEVERE</jsf>)
-	 * 							.req(<jsf>LONG</jsf>)
-	 * 							.res(<jsf>LONG</jsf>)
-	 * 							.build()
-	 * 					)
-	 * 					.build()
-	 * 			);
-	 *
-	 * 			<jc>// Same, but using property with JSON value.</jc>
-	 * 			builder.set(<jsf>REST_callLoggerConfig</jsf>, <js>"{level:'INFO',rules:[{codes:'400-499',level:'WARNING',...},...]}"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
+	 * The default logger to use if one is not specified.
+	 * <p>
+	 * This setting is inherited from the parent context.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
-	public static final String REST_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
+	public static final String REST_callLoggerDefault = PREFIX + ".callLoggerDefault.o";
 
 	/**
 	 * Configuration property:  Children.
@@ -839,10 +797,10 @@ public class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debug REST_debug}
 	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.Enablement}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
 	 * 	<li><b>System property:</b>  <c>RestContext.debug</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.Enablement#FALSE}
+	 * 	<li><b>Default:</b>  {@link #REST_debugDefault}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -862,9 +820,37 @@ public class RestContext extends BeanContext {
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
 	 * 	<li>
 	 * 		Request/response messages are automatically logged always or per request.
+	 * 	<li>
+	 * 		The default can be overwritten by {@link #REST_debugDefault}.
 	 * </ul>
 	 */
 	public static final String REST_debug = PREFIX + ".debug.s";
+
+	/**
+	 * Configuration property:  Default debug mode.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debugDefault REST_debugDefault}
+	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
+	 * 	<li><b>System property:</b>  <c>RestContext.debugDefault</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUGDEFAULT</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Enablement#NEVER}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugDefault(Enablement)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The default value for the {@link #REST_debug} setting.
+	 * <p>
+	 * This setting is inherited from parent contexts.
+	 */
+	public static final String REST_debugDefault = PREFIX + ".debugDefault.s";
 
 	/**
 	 * Configuration property:  Debug mode on specified classes/methods.
@@ -1039,7 +1025,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_fileFinder REST_fileFinder}
 	 * 	<li><b>Name:</b>  <js>"RestContext.fileFinder.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.FileFinder}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicFileFinder}
+	 * 	<li><b>Default:</b>  {@link #REST_fileFinderDefault}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -1079,6 +1065,7 @@ public class RestContext extends BeanContext {
 	 * 		<br>Note that the {@link BasicRest#createFileFinder()} and {@link BasicRestServlet#createFileFinder()} methods are implemented
 	 * 		to automatically look for injected beans of type {@link FileFinder} allowing preconfigured file finders to be
 	 * 		defined in a Spring configuration class.
+	 * 	<li>Instantiates the default file finder as specified via {@link #REST_fileFinderDefault}.
 	 * 	<li>Instantiates a {@link BasicFileFinder} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory.
 	 * </ul>
@@ -1141,6 +1128,31 @@ public class RestContext extends BeanContext {
 	 * </p>
 	 */
 	public static final String REST_fileFinder = PREFIX + ".fileFinder.o";
+
+	/**
+	 * Configuration property:  Default file finder.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_fileFinderDefault REST_fileFinderDefault}
+	 * 	<li><b>Name:</b>  <js>"RestContext.fileFinderDefault.o"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.FileFinder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicFileFinder}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinderDefault(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinderDefault(FileFinder)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The default file finder to use if not specified.
+	 * <p>
+	 * This setting is inherited from the parent context.
+	 */
+	public static final String REST_fileFinderDefault = PREFIX + ".fileFinderDefault.o";
 
 	/**
 	 * Configuration property:  Class-level guards.
@@ -2602,7 +2614,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.StaticFiles}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicStaticFiles}
+	 * 	<li><b>Default:</b>  {@link #REST_staticFilesDefault}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -2716,6 +2728,31 @@ public class RestContext extends BeanContext {
 	 * </p>
 	 */
 	public static final String REST_staticFiles = PREFIX + ".staticFiles.o";
+
+	/**
+	 * Configuration property:  Static file finder default.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFilesDefault REST_staticFilesDefault}
+	 * 	<li><b>Name:</b>  <js>"RestContext.staticFilesDefault.o"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.StaticFiles}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicStaticFiles}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFilesDefault(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFilesDefault(StaticFiles)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The default static file finder.
+	 * <p>
+	 * This setting is inherited from the parent context.
+	 */
+	public static final String REST_staticFilesDefault = PREFIX + ".staticFilesDefault.o";
 
 	/**
 	 * Configuration property:  Supported accept media types.
@@ -3224,7 +3261,6 @@ public class RestContext extends BeanContext {
 	 */
 	public static final String REST_uriResolution = PREFIX + ".uriResolution.s";
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
@@ -3280,9 +3316,8 @@ public class RestContext extends BeanContext {
 	private final Map<String,List<RestMethodContext>> methodMap;
 	private final List<RestMethodContext> methods;
 	private final Map<String,RestContext> childResources;
-	private final RestCallLogger callLogger;
-	private final RestCallLoggerConfig callLoggerConfig;
-	private final StackTraceDatabase stackTraceDb;
+	private final StackTraceStore stackTraceDatabase;
+	private final Logger logger;
 	private final RestInfoProvider infoProvider;
 	private final HttpException initException;
 	private final RestContext parentContext;
@@ -3314,6 +3349,7 @@ public class RestContext extends BeanContext {
 
 	private final FileFinder fileFinder;
 	private final StaticFiles staticFiles;
+	private final RestLogger callLogger;
 
 	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
 
@@ -3364,6 +3400,8 @@ public class RestContext extends BeanContext {
 			this.resource = builder.resource;
 			this.builder = builder;
 			this.parentContext = builder.parentContext;
+			this.logger = createLogger();
+			this.stackTraceDatabase = createStackTraceDatabase();
 
 			Object defaultResourceResolver = parentContext == null ? (resource instanceof RestResourceResolver ? resource : BasicRestResourceResolver.class) : parentContext.resourceResolver;
 			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, defaultResourceResolver, ResourceResolver.FUZZY, this);
@@ -3414,15 +3452,17 @@ public class RestContext extends BeanContext {
 				if (! s.isEmpty()) {
 					int i = s.indexOf('=');
 					if (i == -1)
-						deb.append(s.trim(), Enablement.TRUE);
+						deb.append(s.trim(), Enablement.ALWAYS);
 					else
 						deb.append(s.substring(0, i).trim(), Enablement.fromString(s.substring(i+1).trim()));
 				}
 			}
 
-			boolean debug = isDebug();
+			Enablement defaultDebug = getInstanceProperty(REST_debugDefault, Enablement.class, null);
+			if (defaultDebug == null)
+				defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
 
-			Enablement de = getInstanceProperty(REST_debug, Enablement.class, debug ? Enablement.TRUE : Enablement.FALSE);
+			Enablement de = getInstanceProperty(REST_debug, Enablement.class, defaultDebug);
 			if (de != null)
 				deb.append(rci.getFullName(), de);
 			for (MethodInfo mi : rci.getPublicMethods())
@@ -3432,7 +3472,7 @@ public class RestContext extends BeanContext {
 
 			this.debugEnablement = deb.build();
 
-			this.debug = debugEnablement.find(rci.inner(), Enablement.class).orElse(Enablement.FALSE);
+			this.debug = debugEnablement.find(rci.inner(), Enablement.class).orElse(Enablement.NEVER);
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
 
@@ -3448,20 +3488,7 @@ public class RestContext extends BeanContext {
 			reqAttrs = new OMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
 			resHeaders = getMapProperty(REST_resHeaders, Object.class);
 
-			Object clc = getProperty(REST_callLoggerConfig);
-			if (this.debug == TRUE)
-				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
-			else if (clc instanceof RestCallLoggerConfig)
-				this.callLoggerConfig = (RestCallLoggerConfig)clc;
-			else if (clc instanceof OMap)
-				this.callLoggerConfig = RestCallLoggerConfig.create().apply((OMap)clc).build();
-			else
-				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_NOOP;
-
-			this.stackTraceDb = new StackTraceDatabase(callLoggerConfig.getStackTraceHashingTimeout(), RestMethodContext.class);
-
-			Object defaultRestCallLogger = resource instanceof RestCallLogger ? resource : BasicRestCallLogger.class;
-			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, defaultRestCallLogger, resourceResolver, this);
+			callLogger = createCallLogger();
 
 			properties = builder.properties;
 			serializers =
@@ -3769,6 +3796,7 @@ public class RestContext extends BeanContext {
 	 * 	<li>Returns the resource class itself is an instance of {@link FileFinder}.
 	 * 	<li>Looks for value in {@link #REST_fileFinder} setting.
 	 * 	<li>Looks for a <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 	<li>Looks for value in {@link #REST_fileFinderDefault} setting.
 	 * 	<li>Instantiates a {@link BasicFileFinder}.
 	 * </ul>
 	 *
@@ -3788,6 +3816,8 @@ public class RestContext extends BeanContext {
 				x = (FileFinder)mi.invokeFuzzy(resource, this, resourceResolver);
 		}
 		if (x == null)
+			x = getInstanceProperty(REST_fileFinderDefault, FileFinder.class, null, resourceResolver, this);
+		if (x == null)
 			x = new BasicFileFinder(this);
 		return x;
 	}
@@ -3799,9 +3829,10 @@ public class RestContext extends BeanContext {
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of FileFinder.
-	 * 	<li>Looks for value in {@link #REST_fileFinder} setting.
-	 * 	<li>Looks for a <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
-	 * 	<li>Instantiates a {@link BasicFileFinder}.
+	 * 	<li>Looks for value in {@link #REST_staticFiles} setting.
+	 * 	<li>Looks for a <c>createStaticFiles()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 	<li>Looks for value in {@link #REST_staticFilesDefault} setting.
+	 * 	<li>Instantiates a {@link BasicStaticFiles}.
 	 * </ul>
 	 *
 	 * @return The file finder for this REST resource.
@@ -3820,10 +3851,64 @@ public class RestContext extends BeanContext {
 				x = (StaticFiles)mi.invokeFuzzy(resource, this, resourceResolver);
 		}
 		if (x == null)
+			x = getInstanceProperty(REST_staticFilesDefault, StaticFiles.class, null, resourceResolver, this);
+		if (x == null)
 			x = new BasicStaticFiles(this);
 		return x;
 	}
 
+	/**
+	 * Instantiates the call logger this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of RestLogger.
+	 * 	<li>Looks for value in {@link #REST_callLogger} setting.
+	 * 	<li>Looks for a <c>createCallLogger()</> method on the resource class with an optional {@link RestContext} argument.
+	 * 	<li>Looks for value in {@link #REST_callLoggerDefault} setting.
+	 * 	<li>Instantiates a {@link BasicFileFinder}.
+	 * </ul>
+	 *
+	 * @return The file finder for this REST resource.
+	 * @throws Exception If file finder could not be instantiated.
+	 * @seealso #REST_callLogger
+	 */
+	protected RestLogger createCallLogger() throws Exception {
+		RestLogger x = null;
+		if (resource instanceof RestLogger)
+			x = (RestLogger)resource;
+		if (x == null)
+			x = getInstanceProperty(REST_callLogger, RestLogger.class, null, resourceResolver, this);
+		if (x == null) {
+			MethodInfo mi = ClassInfo.of(resource).getPublicMethodFuzzy2("createCallLogger", RestLogger.class, this);
+			if (mi != null)
+				x = (RestLogger)mi.invokeFuzzy(resource, this, resourceResolver);
+		}
+		if (x == null)
+			x = getInstanceProperty(REST_callLoggerDefault, RestLogger.class, null, resourceResolver, this);
+		if (x == null)
+			x = new BasicRestLogger(this);
+		return x;
+	}
+
+	/**
+	 * Instantiates the Java logger to use for this REST context.
+	 *
+	 * @return The Java logger to use for this REST context.
+	 */
+	protected Logger createLogger() {
+		return Logger.getLogger(resource.getClass().getName());
+	}
+
+	/**
+	 * Instantiates the stack trace database to use for this REST context.
+	 *
+	 * @return The stack trace database to use for this REST context.
+	 */
+	protected StackTraceStore createStackTraceDatabase() {
+		return StackTraceStore.GLOBAL;
+	}
 
 	/**
 	 * Returns the resource resolver associated with this context.
@@ -3963,23 +4048,8 @@ public class RestContext extends BeanContext {
 	 * 	The call logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RestCallLogger getCallLogger() {
+	public RestLogger getCallLogger() {
 		return callLogger;
-	}
-
-	/**
-	 * Returns the call logger config to use for this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_callLoggerConfig}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The call logger config to use for this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public RestCallLoggerConfig getCallLoggerConfig() {
-		return callLoggerConfig;
 	}
 
 	/**
@@ -4230,6 +4300,28 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Returns the logger associated with this context.
+	 *
+	 * @return
+	 * 	The logger for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+
+	/**
+	 * Returns the stack trace database associated with this context.
+	 *
+	 * @return
+	 * 	The stack trace database for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public StackTraceStore getStackTraceStore() {
+		return stackTraceDatabase;
+	}
+
+	/**
 	 * Returns the HTTP-part parser associated with this resource.
 	 *
 	 * <ul class='seealso'>
@@ -4444,15 +4536,6 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Gives access to the internal stack trace database.
-	 *
-	 * @return The stack trace database.
-	 */
-	public StackTraceDatabase getStackTraceDb() {
-		return stackTraceDb;
-	}
-
-	/**
 	 * Returns timing information on all method executions on this class.
 	 *
 	 * <p>
@@ -4567,7 +4650,7 @@ public class RestContext extends BeanContext {
 	 * @return The wrapped request/response pair.
 	 */
 	protected RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
-		return new RestCall(this, req, res).logger(getCallLogger()).loggerConfig(getCallLoggerConfig());
+		return new RestCall(this, req, res).logger(getCallLogger());
 	}
 
 	/**
@@ -4744,11 +4827,11 @@ public class RestContext extends BeanContext {
 			e = mc.getDebug();
 		if (e == null)
 			e = getDebug();
-		if (e == TRUE)
+		if (e == ALWAYS)
 			return true;
-		if (e == FALSE)
+		if (e == NEVER)
 			return false;
-		if (e == PER_REQUEST)
+		if (e == CONDITIONAL)
 			return "true".equalsIgnoreCase(call.getRequest().getHeader("X-Debug"));
 		return false;
 	}

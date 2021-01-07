@@ -40,7 +40,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestCallLogger, RestResourceResolver {
+public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestResourceResolver {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +51,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	private volatile RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private RestInfoProvider infoProvider;
-	private RestCallLogger callLogger;
 
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
@@ -95,7 +94,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 		this.context = context;
 		isInitialized = true;
 		infoProvider = new BasicRestInfoProvider(context);
-		callLogger = new BasicRestCallLogger(context);
 		context.postInit();
 	}
 
@@ -623,15 +621,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	@Override /* RestInfoProvider */
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		return infoProvider.getMethodDescription(method, req);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestCallLogger
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestCallLogger */
-	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
-		callLogger.log(config, req, res);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.Enablement.*;
 
 import java.io.*;
 import java.net.*;
@@ -35,6 +36,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
+import org.apache.juneau.rest.logging.*;
 
 /**
  * Mocked {@link RestClient}.
@@ -277,11 +279,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (! contexts.containsKey(c)) {
 				boolean isClass = restBean instanceof Class;
 				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
-				RestContextBuilder rcb = RestContext.create(o);
-				if (isDebug) {
-					rcb.debug(Enablement.TRUE);
-					rcb.callLoggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
-				}
+				RestContextBuilder rcb = RestContext.create(o).callLoggerDefault(BasicTestRestLogger.class).debugDefault(CONDITIONAL);
 				RestContext rc = rcb.build();
 				if (o instanceof RestServlet) {
 					RestServlet rs = (RestServlet)o;
@@ -334,7 +332,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClientBuilder createLax(Object impl) {
-		return new MockRestClientBuilder().restBean(impl).ignoreErrors();
+		return new MockRestClientBuilder().restBean(impl).ignoreErrors().noLog();
 	}
 
 	/**
@@ -364,7 +362,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).ignoreErrors().build();
+	 * 	MockRestClient.create(impl).ignoreErrors().noLog().build();
 	 * </p>
 	 *
 	 * @param impl
@@ -373,7 +371,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildLax(Object impl) {
-		return create(impl).ignoreErrors().build();
+		return create(impl).ignoreErrors().noLog().build();
 	}
 
 	/**
@@ -412,7 +410,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildJsonLax(Object impl) {
-		return create(impl).json().ignoreErrors().build();
+		return create(impl).json().ignoreErrors().noLog().build();
 	}
 
 	/**
@@ -451,7 +449,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildSimpleJsonLax(Object impl) {
-		return create(impl).simpleJson().ignoreErrors().build();
+		return create(impl).simpleJson().ignoreErrors().noLog().build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

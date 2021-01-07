@@ -264,16 +264,7 @@ public final class PropertyStore {
 		String s = null;
 		String k1 = key, k2 = key.indexOf('.') == -1 ? key : key.substring(0, key.lastIndexOf('.'));
 
-		s = System.getProperty(k1);
-		if (s == null)
-			s = System.getProperty(k2);
-
-		try {
-			if (s == null)
-				s = System.getenv(k1.replace('.', '_').replace('-', '_').toUpperCase());
-			if (s == null)
-				s = System.getenv(k2.replace('.', '_').replace('-', '_').toUpperCase());
-		} catch (SecurityException e) {}
+		s = SystemProperties.getProperty(k1, SystemProperties.getProperty(k2));
 
 		return s == null ? null : PropertyStoreBuilder.MutableProperty.create(k, s).build();
 	}

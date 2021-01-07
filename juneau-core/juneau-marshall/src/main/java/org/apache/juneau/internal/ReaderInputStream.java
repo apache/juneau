@@ -119,6 +119,7 @@ public class ReaderInputStream extends InputStream {
         this.encoderIn = CharBuffer.allocate(bufferSize);
         ((Buffer)this.encoderIn).flip(); // Fixes Java 11 issue.
         this.encoderOut = ByteBuffer.allocate(128);
+		((Buffer)this.encoderOut).flip(); // Fixes Java 11 issue.
         this.encoderOut.flip();
     }
 

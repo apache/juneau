@@ -20,17 +20,16 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
-import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -89,7 +88,7 @@ public class RestAnnotation {
 		Class<? extends FileFinder> fileFinder = FileFinder.Null.class;
 		Class<? extends StaticFiles> staticFiles = StaticFiles.Null.class;
 		Class<? extends ResponseHandler>[] responseHandlers = new Class[0];
-		Class<? extends RestCallLogger> callLogger = RestCallLogger.Null.class;
+		Class<? extends RestLogger> callLogger = RestLogger.Null.class;
 		Class<? extends RestContext> context = RestContext.Null.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
@@ -97,7 +96,6 @@ public class RestAnnotation {
 		Class<? extends RestMethodParam>[] paramResolvers = new Class[0];
 		Class<? extends RestResourceResolver> resourceResolver=RestResourceResolver.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
-		Logging logging = LoggingAnnotation.DEFAULT;
 		Property[] properties = {};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
 		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
@@ -169,7 +167,7 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder callLogger(Class<? extends RestCallLogger> value) {
+		public Builder callLogger(Class<? extends RestLogger> value) {
 			this.callLogger = value;
 			return this;
 		}
@@ -358,17 +356,6 @@ public class RestAnnotation {
 		 */
 		public Builder infoProvider(Class<? extends RestInfoProvider> value) {
 			this.infoProvider = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#logging()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder logging(Logging value) {
-			this.logging = value;
 			return this;
 		}
 
@@ -689,7 +676,7 @@ public class RestAnnotation {
 		private final Class<? extends FileFinder> fileFinder;
 		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseHandler>[] responseHandlers;
-		private final Class<? extends RestCallLogger> callLogger;
+		private final Class<? extends RestLogger> callLogger;
 		private final Class<? extends RestContext> context;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
@@ -697,7 +684,6 @@ public class RestAnnotation {
 		private final Class<? extends RestMethodParam>[] paramResolvers;
 		private final Class<? extends RestResourceResolver> resourceResolver;
 		private final Class<?>[] children, parsers, serializers;
-		private final Logging logging;
 		private final Property[] properties;
 		private final ResourceSwagger swagger;
 		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
@@ -727,7 +713,6 @@ public class RestAnnotation {
 			this.flags = copyOf(b.flags);
 			this.guards = copyOf(b.guards);
 			this.infoProvider = b.infoProvider;
-			this.logging = b.logging;
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
 			this.paramResolvers = copyOf(b.paramResolvers);
@@ -778,7 +763,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestCallLogger> callLogger() {
+		public Class<? extends RestLogger> callLogger() {
 			return callLogger;
 		}
 
@@ -865,11 +850,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public Class<? extends RestInfoProvider> infoProvider() {
 			return infoProvider;
-		}
-
-		@Override /* Rest */
-		public Logging logging() {
-			return logging;
 		}
 
 		@Override /* Rest */
@@ -1136,61 +1116,8 @@ public class RestAnnotation {
 			if (a.resourceResolver() != RestResourceResolver.Null.class)
 				psb.set(REST_resourceResolver, a.resourceResolver());
 
-			if (a.callLogger() != RestCallLogger.Null.class)
+			if (a.callLogger() != RestLogger.Null.class)
 				psb.set(REST_callLogger, a.callLogger());
-
-			if (! LoggingAnnotation.empty(a.logging())) {
-				Logging al = a.logging();
-				OMap m = new OMap(psb.peek(OMap.class, REST_callLoggerConfig));
-
-				if (! al.useStackTraceHashing().isEmpty())
-					m.append("useStackTraceHashing", bool(al.useStackTraceHashing()));
-
-				if (! al.stackTraceHashingTimeout().isEmpty())
-					m.append("stackTraceHashingTimeout", integer(al.stackTraceHashingTimeout(), "@Logging(stackTraceHashingTimeout)"));
-
-				if (! al.disabled().isEmpty())
-					m.append("disabled", enablement(al.disabled()));
-
-				if (! al.level().isEmpty())
-					m.append("level", level(al.level(), "@Logging(level)"));
-
-				if (al.rules().length > 0) {
-					OList ol = new OList();
-					for (LoggingRule a2 : al.rules()) {
-						OMap m2 = new OMap();
-
-						if (! a2.codes().isEmpty())
-							m2.append("codes", string(a2.codes()));
-
-						if (! a2.exceptions().isEmpty())
-							m2.append("exceptions", string(a2.exceptions()));
-
-						if (! a2.debugOnly().isEmpty())
-							 m2.append("debugOnly", bool(a2.debugOnly()));
-
-						if (! a2.level().isEmpty())
-							m2.append("level", level(a2.level(), "@LoggingRule(level)"));
-
-						if (! a2.req().isEmpty())
-							m2.append("req", string(a2.req()));
-
-						if (! a2.res().isEmpty())
-							m2.append("res", string(a2.res()));
-
-						if (! a2.verbose().isEmpty())
-							m2.append("verbose", bool(a2.verbose()));
-
-						if (! a2.disabled().isEmpty())
-							m2.append("disabled", bool(a2.disabled()));
-
-						ol.add(m2);
-					}
-					m.put("rules", ol.appendAll(m.getList("rules")));
-				}
-
-				psb.set(REST_callLoggerConfig, m);
-			}
 
 			if (a.infoProvider() != RestInfoProvider.Null.class)
 				psb.set(REST_infoProvider, a.infoProvider());
@@ -1233,18 +1160,6 @@ public class RestAnnotation {
 			if (startsWith(value, '/'))
 				return value.substring(1);
 			return value;
-		}
-
-		private Enablement enablement(String in) {
-			return Enablement.fromString(string(in));
-		}
-
-		private Level level(String in, String loc) {
-			try {
-				return Level.parse(string(in).toUpperCase());
-			} catch (Exception e) {
-				throw new ConfigException("Invalid syntax for level on annotation @Rest({0}): {1}", loc, in);
-			}
 		}
 	}
 

@@ -30,6 +30,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
@@ -57,15 +58,15 @@ import org.apache.juneau.http.exception.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestInfoProvider, RestCallLogger {
+public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestInfoProvider {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
 	private RestInfoProvider infoProvider;
-	private RestCallLogger callLogger;
 
 	@Inject Optional<FileFinder> fileFinder;
 	@Inject Optional<StaticFiles> staticFiles;
+	@Inject Optional<RestLogger> callLogger;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicRestConfig methods
@@ -146,6 +147,23 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 	 */
 	public StaticFiles createStaticFiles() {
 		return staticFiles == null ? null : staticFiles.orElse(null);
+	}
+
+	/**
+	 * Instantiates the call logger to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation looks for an injected bean of type {@link RestLogger} or else returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_callLogger}.
+	 * </ul>
+	 *
+	 * @return The call logger to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public RestLogger createCallLogger() {
+		return callLogger == null ? null : callLogger.orElse(null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -297,7 +315,6 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 	public void onPostInit(RestContext context) throws Exception {
 		this.context = context;
 		this.infoProvider = new BasicRestInfoProvider(context);
-		this.callLogger = new BasicRestCallLogger(context);
 	}
 
 	/**
@@ -554,14 +571,5 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 	@Override /* RestInfoProvider */
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		return infoProvider.getMethodDescription(method, req);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestCallLogger
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestCallLogger */
-	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
-		callLogger.log(config, req, res);
 	}
 }

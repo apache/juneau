@@ -19,6 +19,7 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 
 /**
@@ -40,8 +41,7 @@ public class RestCall {
 	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
-	private RestCallLogger logger;
-	private RestCallLoggerConfig loggerConfig;
+	private RestLogger logger;
 
 	private UrlPathMatch urlPathMatch;
 
@@ -225,19 +225,8 @@ public class RestCall {
 	 * @param logger The logger to use when logging this call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall logger(RestCallLogger logger) {
+	public RestCall logger(RestLogger logger) {
 		this.logger = logger;
-		return this;
-	}
-
-	/**
-	 * Sets the logging configuration to use when logging this call.
-	 *
-	 * @param config The logging configuration to use when logging this call.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall loggerConfig(RestCallLoggerConfig config) {
-		this.loggerConfig = config;
 		return this;
 	}
 
@@ -352,7 +341,7 @@ public class RestCall {
 			exception(e);
 		}
 		if (logger != null)
-			logger.log(loggerConfig, req, res);
+			logger.log(req, res);
 		return this;
 	}
 

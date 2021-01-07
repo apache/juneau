@@ -21,11 +21,9 @@ import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
-import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -65,7 +63,6 @@ public class RestMethodAnnotation {
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
 		int priority = 0;
-		Logging logging = LoggingAnnotation.DEFAULT;
 		MethodSwagger swagger = MethodSwaggerAnnotation.DEFAULT;
 		Property[] properties = new Property[0];
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", path="", rolesDeclared="", roleGuard="", summary="", value="";
@@ -227,17 +224,6 @@ public class RestMethodAnnotation {
 		 */
 		public Builder guards(Class<? extends RestGuard>...value) {
 			this.guards = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestMethod#logging()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder logging(Logging value) {
-			this.logging = value;
 			return this;
 		}
 
@@ -452,7 +438,6 @@ public class RestMethodAnnotation {
 		private final Class<? extends RestMatcher>[] matchers;
 		private final Class<?>[] encoders, parsers, serializers;
 		private final int priority;
-		private final Logging logging;
 		private final MethodSwagger swagger;
 		private final Property[] properties;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, path, rolesDeclared, roleGuard, summary, value;
@@ -473,7 +458,6 @@ public class RestMethodAnnotation {
 			this.encoders = copyOf(b.encoders);
 			this.flags = copyOf(b.flags);
 			this.guards = copyOf(b.guards);
-			this.logging = b.logging;
 			this.matchers = copyOf(b.matchers);
 			this.maxInput = b.maxInput;
 			this.method = b.method;
@@ -557,11 +541,6 @@ public class RestMethodAnnotation {
 		@Override /* RestMethod */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
-		}
-
-		@Override /* RestMethod */
-		public Logging logging() {
-			return logging;
 		}
 
 		@Override /* RestMethod */
@@ -803,71 +782,6 @@ public class RestMethodAnnotation {
 
 			if (! a.debug().isEmpty())
 				psb.set(RESTMETHOD_debug, string(a.debug()));
-
-			if (! LoggingAnnotation.empty(a.logging())) {
-				Logging al = a.logging();
-				OMap m = new OMap(psb.peek(OMap.class, RESTMETHOD_callLoggerConfig));
-
-				if (! al.useStackTraceHashing().isEmpty())
-					m.append("useStackTraceHashing", bool(al.useStackTraceHashing()));
-
-				if (! al.stackTraceHashingTimeout().isEmpty())
-					m.append("stackTraceHashingTimeout", integer(al.stackTraceHashingTimeout(), "@Logging(stackTraceHashingTimeout)"));
-
-				if (! al.disabled().isEmpty())
-					m.append("disabled", enablement(al.disabled()));
-
-				if (! al.level().isEmpty())
-					m.append("level", level(al.level(), "@Logging(level)"));
-
-				if (al.rules().length > 0) {
-					OList ol = new OList();
-					for (LoggingRule a2 : al.rules()) {
-						OMap m2 = new OMap();
-
-						if (! a2.codes().isEmpty())
-							m2.append("codes", string(a2.codes()));
-
-						if (! a2.exceptions().isEmpty())
-							m2.append("exceptions", string(a2.exceptions()));
-
-						if (! a2.debugOnly().isEmpty())
-							 m2.append("debugOnly", bool(a2.debugOnly()));
-
-						if (! a2.level().isEmpty())
-							m2.append("level", level(a2.level(), "@LoggingRule(level)"));
-
-						if (! a2.req().isEmpty())
-							m2.append("req", string(a2.req()));
-
-						if (! a2.res().isEmpty())
-							m2.append("res", string(a2.res()));
-
-						if (! a2.verbose().isEmpty())
-							m2.append("verbose", bool(a2.verbose()));
-
-						if (! a2.disabled().isEmpty())
-							m2.append("disabled", bool(a2.disabled()));
-
-						ol.add(m2);
-					}
-					m.put("rules", ol.appendAll(m.getList("rules")));
-				}
-
-				psb.set(RESTMETHOD_callLoggerConfig, m);
-			}
-		}
-
-		private Enablement enablement(String in) {
-			return Enablement.fromString(string(in));
-		}
-
-		private Level level(String in, String loc) {
-			try {
-				return Level.parse(string(in));
-			} catch (Exception e) {
-				throw new ConfigException("Invalid syntax for level on annotation @RestMethod({1}): {2}", loc, in);
-			}
 		}
 	}
 
