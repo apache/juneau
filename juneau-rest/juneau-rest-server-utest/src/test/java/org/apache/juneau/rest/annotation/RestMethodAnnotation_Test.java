@@ -45,7 +45,6 @@ public class RestMethodAnnotation_Test {
 		.defaultQuery("defaultQuery")
 		.description("description")
 		.encoders(Encoder.class)
-		.flags("flags")
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
 		.maxInput("maxInput")
@@ -56,7 +55,6 @@ public class RestMethodAnnotation_Test {
 		.paths("paths")
 		.priority(1)
 		.produces("produces")
-		.properties()
 		.reqAttrs("reqAttrs")
 		.reqHeaders("reqHeaders")
 		.roleGuard("roleGuard")
@@ -79,7 +77,6 @@ public class RestMethodAnnotation_Test {
 		.defaultQuery("defaultQuery")
 		.description("description")
 		.encoders(Encoder.class)
-		.flags("flags")
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
 		.maxInput("maxInput")
@@ -90,7 +87,6 @@ public class RestMethodAnnotation_Test {
 		.paths("paths")
 		.priority(1)
 		.produces("produces")
-		.properties()
 		.reqAttrs("reqAttrs")
 		.reqHeaders("reqHeaders")
 		.roleGuard("roleGuard")
@@ -116,7 +112,6 @@ public class RestMethodAnnotation_Test {
 				+ "defaultQuery:['defaultQuery'],"
 				+ "description:['description'],"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "flags:['flags'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
 				+ "matchers:['org.apache.juneau.rest.RestMatcher'],"
 				+ "maxInput:'maxInput',"
@@ -127,7 +122,6 @@ public class RestMethodAnnotation_Test {
 				+ "paths:['paths'],"
 				+ "priority:1,"
 				+ "produces:['produces'],"
-				+ "properties:[],"
 				+ "reqAttrs:['reqAttrs'],"
 				+ "reqHeaders:['reqHeaders'],"
 				+ "roleGuard:'roleGuard',"
@@ -193,7 +187,6 @@ public class RestMethodAnnotation_Test {
 		defaultQuery="defaultQuery",
 		description="description",
 		encoders=Encoder.class,
-		flags="flags",
 		guards=RestGuard.class,
 		matchers=RestMatcher.class,
 		maxInput="maxInput",
@@ -204,7 +197,6 @@ public class RestMethodAnnotation_Test {
 		paths="paths",
 		priority=1,
 		produces="produces",
-		properties={},
 		reqAttrs="reqAttrs",
 		reqHeaders="reqHeaders",
 		roleGuard="roleGuard",
@@ -229,7 +221,6 @@ public class RestMethodAnnotation_Test {
 		defaultQuery="defaultQuery",
 		description="description",
 		encoders=Encoder.class,
-		flags="flags",
 		guards=RestGuard.class,
 		matchers=RestMatcher.class,
 		maxInput="maxInput",
@@ -240,7 +231,6 @@ public class RestMethodAnnotation_Test {
 		paths="paths",
 		priority=1,
 		produces="produces",
-		properties={},
 		reqAttrs="reqAttrs",
 		reqHeaders="reqHeaders",
 		roleGuard="roleGuard",

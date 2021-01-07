@@ -1757,7 +1757,7 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
 		for (int i = 0; i < hex.length(); i+=2)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		buff.rewind();
+		((Buffer)buff).rewind();  // Fixes Java 11 issue.
 		Charset cs = Charset.forName("UTF-8");
 		return cs.decode(buff).toString();
 	}
@@ -1772,7 +1772,7 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
 		for (int i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		buff.rewind();
+		((Buffer)buff).rewind();  // Fixes Java 11 issue.
 		Charset cs = Charset.forName("UTF-8");
 		return cs.decode(buff).toString();
 	}
@@ -1835,7 +1835,7 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
 		for (int i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		buff.rewind();
+		((Buffer)buff).rewind();  // Fixes Java 11 issue.
 		return buff.array();
 	}
 

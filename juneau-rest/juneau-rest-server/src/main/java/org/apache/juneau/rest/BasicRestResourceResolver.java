@@ -40,6 +40,6 @@ public class BasicRestResourceResolver extends FuzzyResourceResolver implements 
 
 	@Override /* RestResourceResolver */
 	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) {
-		return resolve(parent, c, ArrayUtils.append(args, builder));
+		return resolve(parent, c, ArrayUtils.append(args, builder, builder.getConfig()));
 	}
 }

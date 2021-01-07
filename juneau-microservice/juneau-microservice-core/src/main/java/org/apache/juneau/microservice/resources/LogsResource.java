@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -21,6 +20,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Path;
@@ -40,13 +40,6 @@ import org.apache.juneau.rest.helper.*;
 	path="/logs",
 	title="Log files",
 	description="Log files from this service",
-	properties={
-		@Property(name=LogsResource.LOGS_RESOURCE_logDir, value="$C{Logging/logDir}"),
-		@Property(name=LogsResource.LOGS_RESOURCE_allowDeletes, value="$C{Logging/allowDeletes,true}"),
-		@Property(name=LogsResource.LOGS_RESOURCE_logFormat, value="$C{Logging/format}"),
-		@Property(name=LogsResource.LOGS_RESOURCE_dateFormat, value="$C{Logging/dateFormat}"),
-		@Property(name=LogsResource.LOGS_RESOURCE_useStackTraceHashes, value="$C{Logging/useStackTraceHashes}")
-	},
 	allowedMethodParams="*"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
@@ -89,20 +82,17 @@ public class LogsResource extends BasicRestServlet {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private File logDir;
-	private LogEntryFormatter leFormatter;
-	boolean allowDeletes;
+	private final File logDir;
+	private final LogEntryFormatter leFormatter;
+	final boolean allowDeletes;
 
-
-	@RestHook(INIT)
-	public void init(RestContextBuilder b) throws Exception {
-		RestContextProperties p = b.getProperties();
-		logDir = new File(p.getString(LOGS_RESOURCE_logDir));
-		allowDeletes = p.getBoolean(LOGS_RESOURCE_allowDeletes);
+	public LogsResource(Config c) {
+		logDir = new File(c.getString(LOGS_RESOURCE_logDir, "logDir"));
+		allowDeletes = c.getBoolean(LOGS_RESOURCE_allowDeletes, true);
 		leFormatter = new LogEntryFormatter(
-			p.getString(LOGS_RESOURCE_logFormat, "[{date} {level}] {msg}%n"),
-			p.getString(LOGS_RESOURCE_dateFormat, "yyyy.MM.dd hh:mm:ss"),
-			p.getBoolean(LOGS_RESOURCE_useStackTraceHashes, true)
+			c.getString(LOGS_RESOURCE_logFormat, "[{date} {level}] {msg}%n"),
+			c.getString(LOGS_RESOURCE_dateFormat, "yyyy.MM.dd hh:mm:ss"),
+			c.getBoolean(LOGS_RESOURCE_useStackTraceHashes, true)
 		);
 	}
 

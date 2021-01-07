@@ -18,7 +18,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -40,17 +39,6 @@ import org.apache.juneau.transform.*;
 public @interface JuneauProvider {
 
 	/**
-	 * Provider-level properties.
-	 *
-	 * <p>
-	 * Property values will be converted to the appropriate type.
-	 *
-	 * <p>
-	 * These properties can be augmented/overridden through the {@link RestMethod#properties() @RestMethod(properties)} annotation on the REST method.
-	 */
-	Property[] properties() default {};
-
-	/**
 	 * Provider-level POJO swaps.
 	 *
 	 * <p>
@@ -61,14 +49,6 @@ public @interface JuneauProvider {
 	 * Any other classes are wrapped in a {@link SurrogateSwap}.
 	 */
 	Class<?>[] swaps() default {};
-
-	/**
-	 * Shortcut for setting {@link #properties()} of boolean types.
-	 *
-	 * <p>
-	 * Setting a flag is the equivalent to setting the same property to <js>"true"</js>.
-	 */
-	String[] flags() default {};
 
 	/**
 	 * Specifies a list of {@link Serializer} classes to add to the list of serializers available for this provider.

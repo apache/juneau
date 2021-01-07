@@ -96,10 +96,9 @@ public class RestAnnotation {
 		Class<? extends RestMethodParam>[] paramResolvers = new Class[0];
 		Class<? extends RestResourceResolver> resourceResolver=RestResourceResolver.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
-		Property[] properties = {};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
 		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
-		String[] consumes={}, description={}, flags={}, produces={}, reqAttrs={}, reqHeaders={}, resHeaders={}, title={};
+		String[] consumes={}, description={}, produces={}, reqAttrs={}, reqHeaders={}, resHeaders={}, title={};
 
 		/**
 		 * Constructor.
@@ -327,17 +326,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#flags()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder flags(String...value) {
-			this.flags = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#guards()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -444,17 +432,6 @@ public class RestAnnotation {
 		 */
 		public Builder produces(String...value) {
 			this.produces = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#properties()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder properties(Property...value) {
-			this.properties = value;
 			return this;
 		}
 
@@ -684,10 +661,9 @@ public class RestAnnotation {
 		private final Class<? extends RestMethodParam>[] paramResolvers;
 		private final Class<? extends RestResourceResolver> resourceResolver;
 		private final Class<?>[] children, parsers, serializers;
-		private final Property[] properties;
 		private final ResourceSwagger swagger;
 		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
-		private final String[] consumes, description, flags, produces, reqAttrs, reqHeaders, resHeaders, title;
+		private final String[] consumes, description, produces, reqAttrs, reqHeaders, resHeaders, title;
 
 		Impl(Builder b) {
 			super(b);
@@ -710,7 +686,6 @@ public class RestAnnotation {
 			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
 			this.fileFinder = b.fileFinder;
-			this.flags = copyOf(b.flags);
 			this.guards = copyOf(b.guards);
 			this.infoProvider = b.infoProvider;
 			this.maxInput = b.maxInput;
@@ -721,7 +696,6 @@ public class RestAnnotation {
 			this.partSerializer = b.partSerializer;
 			this.path = b.path;
 			this.produces = copyOf(b.produces);
-			this.properties = copyOf(b.properties);
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
 			this.reqAttrs = copyOf(b.reqAttrs);
 			this.reqHeaders = copyOf(b.reqHeaders);
@@ -838,11 +812,6 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public String[] flags() {
-			return flags;
-		}
-
-		@Override /* Rest */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
@@ -890,11 +859,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String[] produces() {
 			return produces;
-		}
-
-		@Override /* Rest */
-		public Property[] properties() {
-			return properties;
 		}
 
 		@Override /* Rest */
@@ -1003,14 +967,6 @@ public class RestAnnotation {
 			Rest a = ai.getAnnotation();
 			String s = null;
 			ClassInfo c = ai.getClassOn();
-
-			for (Property p1 : a.properties()) {
-				psb.putTo(REST_properties, string(p1.name()), string(p1.value()));
-			}
-
-			for (String p1 : a.flags()) {
-				psb.putTo(REST_properties, string(p1), true);
-			}
 
 			if (a.serializers().length > 0)
 				psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));

@@ -319,8 +319,8 @@ public class ConfigFileStore extends ConfigStore {
 							ByteBuffer buf = ByteBuffer.allocate(1024);
 							StringBuilder sb = new StringBuilder();
 							while (fc.read(buf) != -1) {
-								sb.append(charset.decode((ByteBuffer)(buf.flip())));
-								buf.clear();
+								sb.append(charset.decode((ByteBuffer)((Buffer)buf).flip()));
+								((Buffer)buf).clear();
 							}
 							currentContents = sb.toString();
 						}

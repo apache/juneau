@@ -64,9 +64,8 @@ public class RestMethodAnnotation {
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
 		int priority = 0;
 		MethodSwagger swagger = MethodSwaggerAnnotation.DEFAULT;
-		Property[] properties = new Property[0];
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", path="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultFormData={}, defaultQuery={}, description={}, flags={}, paths={}, produces={}, reqAttrs={}, reqHeaders={};
+		String[] consumes={}, defaultFormData={}, defaultQuery={}, description={}, paths={}, produces={}, reqAttrs={}, reqHeaders={};
 
 		/**
 		 * Constructor.
@@ -206,17 +205,6 @@ public class RestMethodAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestMethod#flags()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder flags(String...value) {
-			this.flags = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestMethod#guards()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -312,17 +300,6 @@ public class RestMethodAnnotation {
 		 */
 		public Builder produces(String...value) {
 			this.produces = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestMethod#properties()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder properties(Property...value) {
-			this.properties = value;
 			return this;
 		}
 
@@ -439,9 +416,8 @@ public class RestMethodAnnotation {
 		private final Class<?>[] encoders, parsers, serializers;
 		private final int priority;
 		private final MethodSwagger swagger;
-		private final Property[] properties;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, path, rolesDeclared, roleGuard, summary, value;
-		private final String[] consumes, defaultFormData, defaultQuery, description, flags, paths, produces, reqAttrs, reqHeaders;
+		private final String[] consumes, defaultFormData, defaultQuery, description, paths, produces, reqAttrs, reqHeaders;
 
 		Impl(Builder b) {
 			super(b);
@@ -456,7 +432,6 @@ public class RestMethodAnnotation {
 			this.defaultQuery = copyOf(b.defaultQuery);
 			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
-			this.flags = copyOf(b.flags);
 			this.guards = copyOf(b.guards);
 			this.matchers = copyOf(b.matchers);
 			this.maxInput = b.maxInput;
@@ -466,7 +441,6 @@ public class RestMethodAnnotation {
 			this.paths = copyOf(b.paths);
 			this.priority = b.priority;
 			this.produces = copyOf(b.produces);
-			this.properties = copyOf(b.properties);
 			this.reqAttrs = copyOf(b.reqAttrs);
 			this.reqHeaders = copyOf(b.reqHeaders);
 			this.roleGuard = b.roleGuard;
@@ -534,11 +508,6 @@ public class RestMethodAnnotation {
 		}
 
 		@Override /* RestMethod */
-		public String[] flags() {
-			return flags;
-		}
-
-		@Override /* RestMethod */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
@@ -581,11 +550,6 @@ public class RestMethodAnnotation {
 		@Override /* RestMethod */
 		public String[] produces() {
 			return produces;
-		}
-
-		@Override /* RestMethod */
-		public Property[] properties() {
-			return properties;
 		}
 
 		@Override /* RestMethod */
@@ -650,16 +614,6 @@ public class RestMethodAnnotation {
 			MethodInfo mi = ai.getMethodOn();
 			String sig = mi == null ? "Unknown" : mi.getSignature();
 			String s = null;
-
-			for (Property p1 : a.properties()) {
-				psb.set(p1.name(), string(p1.value()));  // >>> DEPRECATED - Remove in 9.0 <<<
-				psb.putTo(REST_properties, string(p1.name()), string(p1.value()));
-			}
-
-			for (String p1 : a.flags()) {
-				psb.set(p1, true);  // >>> DEPRECATED - Remove in 9.0 <<<
-				psb.putTo(REST_properties, string(p1), true);
-			}
 
 			if (a.serializers().length > 0)
 				psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));

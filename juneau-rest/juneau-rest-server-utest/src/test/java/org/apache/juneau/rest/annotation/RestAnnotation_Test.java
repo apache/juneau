@@ -56,7 +56,6 @@ public class RestAnnotation_Test {
 		.description("description")
 		.encoders(Encoder.class)
 		.fileFinder(FileFinder.class)
-		.flags("flags")
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
 		.maxInput("maxInput")
@@ -69,7 +68,6 @@ public class RestAnnotation_Test {
 		.partSerializer(HttpPartSerializer.class)
 		.path("path")
 		.produces("produces")
-		.properties()
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.reqAttrs("reqAttrs")
 		.reqHeaders("reqHeaders")
@@ -109,7 +107,6 @@ public class RestAnnotation_Test {
 		.description("description")
 		.encoders(Encoder.class)
 		.fileFinder(FileFinder.class)
-		.flags("flags")
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
 		.maxInput("maxInput")
@@ -122,7 +119,6 @@ public class RestAnnotation_Test {
 		.partSerializer(HttpPartSerializer.class)
 		.path("path")
 		.produces("produces")
-		.properties()
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.reqAttrs("reqAttrs")
 		.reqHeaders("reqHeaders")
@@ -165,7 +161,6 @@ public class RestAnnotation_Test {
 				+ "disableAllowBodyParam:'disableAllowBodyParam',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "fileFinder:'org.apache.juneau.cp.FileFinder',"
-				+ "flags:['flags'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
 				+ "infoProvider:'org.apache.juneau.rest.BasicRestInfoProvider',"
 				+ "maxInput:'maxInput',"
@@ -178,7 +173,6 @@ public class RestAnnotation_Test {
 				+ "partSerializer:'org.apache.juneau.httppart.HttpPartSerializer',"
 				+ "path:'path',"
 				+ "produces:['produces'],"
-				+ "properties:[],"
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
 				+ "reqAttrs:['reqAttrs'],"
 				+ "reqHeaders:['reqHeaders'],"
@@ -263,7 +257,6 @@ public class RestAnnotation_Test {
 		description="description",
 		encoders=Encoder.class,
 		fileFinder=FileFinder.class,
-		flags="flags",
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
 		maxInput="maxInput",
@@ -276,7 +269,6 @@ public class RestAnnotation_Test {
 		partSerializer=HttpPartSerializer.class,
 		path="path",
 		produces="produces",
-		properties={},
 		renderResponseStackTraces="renderResponseStackTraces",
 		reqAttrs="reqAttrs",
 		reqHeaders="reqHeaders",
@@ -318,7 +310,6 @@ public class RestAnnotation_Test {
 		description="description",
 		encoders=Encoder.class,
 		fileFinder=FileFinder.class,
-		flags="flags",
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
 		maxInput="maxInput",
@@ -331,7 +322,6 @@ public class RestAnnotation_Test {
 		partSerializer=HttpPartSerializer.class,
 		path="path",
 		produces="produces",
-		properties={},
 		renderResponseStackTraces="renderResponseStackTraces",
 		reqAttrs="reqAttrs",
 		reqHeaders="reqHeaders",

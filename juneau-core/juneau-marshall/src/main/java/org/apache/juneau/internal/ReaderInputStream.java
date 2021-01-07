@@ -120,7 +120,6 @@ public class ReaderInputStream extends InputStream {
         ((Buffer)this.encoderIn).flip(); // Fixes Java 11 issue.
         this.encoderOut = ByteBuffer.allocate(128);
 		((Buffer)this.encoderOut).flip(); // Fixes Java 11 issue.
-        this.encoderOut.flip();
     }
 
     /**
@@ -180,7 +179,7 @@ public class ReaderInputStream extends InputStream {
     private void fillBuffer() throws IOException {
         if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
             encoderIn.compact();
-            final int position = encoderIn.position();
+            final int position = ((Buffer)encoderIn).position();
             // We don't use Reader#read(CharBuffer) here because it is more efficient
             // to write directly to the underlying char array (the default implementation
             // copies data to a temporary char array).
@@ -188,13 +187,13 @@ public class ReaderInputStream extends InputStream {
             if (c == -1) {
                 endOfInput = true;
             } else {
-                encoderIn.position(position+c);
+                ((Buffer)encoderIn).position(position+c);
             }
-            encoderIn.flip();
+            ((Buffer)encoderIn).flip();
         }
         encoderOut.compact();
         lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);
-        encoderOut.flip();
+        ((Buffer)encoderOut).flip();
     }
 
     /**

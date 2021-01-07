@@ -14,12 +14,12 @@ package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Body;
@@ -102,18 +102,16 @@ public class DirectoryResource extends BasicRestServlet {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private File rootDir;     // The root directory
+	private final File rootDir;     // The root directory
 
 	// Settings enabled through servlet init parameters
-	boolean allowDeletes, allowUploads, allowViews;
+	final boolean allowDeletes, allowUploads, allowViews;
 
-	@RestHook(INIT)
-	public void init(RestContextBuilder b) throws Exception {
-		RestContextProperties p = b.getProperties();
-		rootDir = new File(p.getString(DIRECTORY_RESOURCE_rootDir));
-		allowViews = p.getBoolean(DIRECTORY_RESOURCE_allowViews, false);
-		allowDeletes = p.getBoolean(DIRECTORY_RESOURCE_allowDeletes, false);
-		allowUploads = p.getBoolean(DIRECTORY_RESOURCE_allowUploads, false);
+	public DirectoryResource(Config c) throws Exception {
+		rootDir = new File(c.getString(DIRECTORY_RESOURCE_rootDir, "."));
+		allowViews = c.getBoolean(DIRECTORY_RESOURCE_allowViews, false);
+		allowDeletes = c.getBoolean(DIRECTORY_RESOURCE_allowDeletes, false);
+		allowUploads = c.getBoolean(DIRECTORY_RESOURCE_allowUploads, false);
 	}
 
 	@RestMethod(

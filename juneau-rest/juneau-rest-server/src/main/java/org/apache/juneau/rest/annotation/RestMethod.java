@@ -307,14 +307,6 @@ public @interface RestMethod {
 	Class<?>[] encoders() default {};
 
 	/**
-	 * Shortcut for setting {@link #properties()} of simple boolean types.
-	 *
-	 * <p>
-	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
-	 */
-	String[] flags() default {};
-
-	/**
 	 * Method-level guards.
 	 *
 	 * <p>
@@ -574,15 +566,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String[] produces() default {};
-
-	/**
-	 * Same as {@link Rest#properties() @Rest(properties)}, except defines property values by default when this method is called.
-	 *
-	 * <p>
-	 * This is equivalent to simply calling <c>res.addProperties()</c> in the Java method, but is provided for
-	 * convenience.
-	 */
-	Property[] properties() default {};
 
 	/**
 	 * Default request attributes.

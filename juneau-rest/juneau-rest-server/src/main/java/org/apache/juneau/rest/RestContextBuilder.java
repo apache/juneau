@@ -57,7 +57,6 @@ import org.apache.juneau.utils.*;
  * Provides access to the following initialized resources:
  * <ul>
  * 	<li>{@link #getConfig()} - The external configuration for this resource.
- * 	<li>{@link #getProperties()} - The modifiable configuration properties for this resource.
  * 	<li>{@link #getVarResolverBuilder()} - The variable resolver for this resource.
  * </ul>
  *
@@ -105,7 +104,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	// Read-only snapshots of these will be made in RestServletContext.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	RestContextProperties properties;
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 
@@ -113,7 +111,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
-		this.properties = new RestContextProperties();
 
 		ClassInfo rci = ClassInfo.of(resourceClass);
 
@@ -177,16 +174,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 
 			applyAnnotations(rci.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vr.createSession());
-
-			// Load stuff from parent-to-child order.
-			// This allows child settings to overwrite parent settings.
-			for (AnnotationInfo<Rest> e : restAnnotationsParentFirst) {
-				Rest r = e.getAnnotation();
-				for (Property p : r.properties())
-					set(vr.resolve(p.name()), vr.resolve(p.value()));
-				for (String p : r.flags())
-					set(p);
-			}
 
 		} catch (Exception e) {
 			throw new ServletException(e);
@@ -317,7 +304,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return A new property store.
 	 */
 	protected PropertyStoreBuilder createPropertyStore() {
-		return PropertyStore.create().add(properties);
+		return PropertyStore.create();
 	}
 
 
@@ -345,28 +332,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public Config getConfig() {
 		return config;
-	}
-
-	/**
-	 * Returns the configuration properties for this resource.
-	 *
-	 * <p>
-	 * The configuration properties are determined via the {@link Rest#properties() @Rest(properties)} annotation on the resource.
-	 *
-	 * <p>
-	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
-	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> RestContextProperties createProperties(ServletConfig servletConfig) <jk>throws</jk> ServletException;
-	 * </p>
-	 *
-	 * <p>
-	 * These properties can be modified during servlet initialization.
-	 * However, any modifications made after {@link RestServlet#init(ServletConfig)} has been called will have no effect.
-	 *
-	 * @return The configuration properties for this resource.  Never <jk>null</jk>.
-	 */
-	public RestContextProperties getProperties() {
-		return properties;
 	}
 
 	/**
@@ -1919,55 +1884,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Properties.
-	 *
-	 * <p>
-	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
-	 *
-	 * <p>
-	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 *
-	 * <p>
-	 * Property values will be converted to the appropriate type.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext#REST_properties}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder restProperties(Map<String,Object> values) {
-		return putAllTo(REST_properties, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Properties.
-	 *
-	 * <p>
-	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
-	 *
-	 * <p>
-	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 *
-	 * <p>
-	 * Property values will be converted to the appropriate type.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext#REST_properties}
-	 * </ul>
-	 *
-	 * @param name The key to add to the properties.
-	 * @param value The value to add to the properties.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder property(String name, Object value) {
-		return putTo(REST_properties, name, value);
-	}
-
-	/**
 	 * Configuration property:  Static files finder.
 	 *
 	 * <p>
@@ -2139,25 +2055,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
-		this.properties.put(name, value);
-		putTo(REST_properties, name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(String name) {
 		super.set(name);
-		this.properties.put(name, true);
-		putTo(REST_properties, name, true);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
-		this.properties.clear();
-		this.properties.putAll(properties);
-		putAllTo(REST_properties, properties);
 		return this;
 	}
 

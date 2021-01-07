@@ -2821,55 +2821,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_produces = PREFIX + ".produces.ls";
 
 	/**
-	 * Configuration property:  Properties.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_properties REST_properties}
-	 * 	<li><b>Name:</b>  <js>"RestContext.properties.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestContext.properties</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_PROPERTIES</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#properties()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#flags()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#property(String,Object)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanProperties(Map)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
-	 *
-	 * <p>
-	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 *
-	 * <p>
-	 * Property values will be converted to the appropriate type.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
-	 * 	<li class='jm'>{@link RestContextBuilder#set(java.util.Map)}
-	 * </ul>
-	 */
-	public static final String REST_properties = PREFIX + ".properties.sms";
-
-	/**
 	 * Configuration property:  Supported content media types.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3295,7 +3246,6 @@ public class RestContext extends BeanContext {
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
-	private final RestContextProperties properties;
 	private final Map<Class<?>,RestMethodParam> paramResolvers;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
@@ -3490,7 +3440,6 @@ public class RestContext extends BeanContext {
 
 			callLogger = createCallLogger();
 
-			properties = builder.properties;
 			serializers =
 				SerializerGroup
 				.create()
@@ -4129,29 +4078,6 @@ public class RestContext extends BeanContext {
 	 */
 	public RestContext getParentContext() {
 		return parentContext;
-	}
-
-	/**
-	 * Returns the class-level properties associated with this servlet.
-	 *
-	 * <p>
-	 * Properties at the class level are defined via the following:
-	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link Rest#properties()}
-	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
-	 * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The returned {@code Map} is mutable.
-	 * 		<br>Therefore, subclasses are free to override or set additional initialization parameters in their {@code init()} method.
-	 * </ul>
-	 *
-	 * @return The resource properties as a {@link RestContextProperties}.
-	 */
-	public RestContextProperties getProperties() {
-		return properties;
 	}
 
 	/**
@@ -5243,7 +5169,6 @@ public class RestContext extends BeanContext {
 				.a("partParser", partParser)
 				.a("partSerializer", partSerializer)
 				.a("produces", produces)
-				.a("properties", properties)
 				.a("renderResponseStackTraces", renderResponseStackTraces)
 				.a("reqHeaders", reqHeaders)
 				.a("resHeaders", resHeaders)

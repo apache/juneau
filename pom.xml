@@ -247,25 +247,25 @@
 						<taglets>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.PropertyTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.FragmentTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.SourceTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 							</taglet>
 							
 							<!--org.apache.juneau.doc.internal.DocTag</taglet-->
 							<!-- taglet>org.apache.juneau.doc.internal.PropertyTag</taglet-->
 						</taglets>
-						<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
+						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>
 					<executions>
 						<execution>

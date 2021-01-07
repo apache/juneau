@@ -562,19 +562,6 @@ public @interface Rest {
 	Class<? extends FileFinder> fileFinder() default FileFinder.Null.class;
 
 	/**
-	 * Shortcut for setting {@link #properties()} of simple boolean types.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Setting a flag is equivalent to setting the same property to <js>"true"</js>.
-	 * </ul>
-	 */
-	String[] flags() default {};
-
-	/**
 	 * Class-level guards.
 	 *
 	 * <p>
@@ -882,31 +869,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String[] produces() default {};
-
-	/**
-	 * Class-level properties.
-	 *
-	 * <p>
-	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
-	 *
-	 * <p>
-	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 *
-	 * <p>
-	 * Property values will be converted to the appropriate type.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
-	 * 	<li class='jm'>{@link RestContextBuilder#set(java.util.Map)}
-	 * </ul>
-	 */
-	Property[] properties() default {};
 
 	/**
 	 * Render response stack traces in responses.

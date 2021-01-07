@@ -169,17 +169,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 		return context;
 	}
 
-	/**
-	 * Convenience method for calling <c>getContext().getProperties();</c>
-	 *
-	 * @return The resource properties as an {@link RestContextProperties}.
-	 * @see RestContext#getProperties()
-	 */
-	public RestContextProperties getProperties() {
-		return getContext().getProperties();
-	}
-
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience logger methods
 	//-----------------------------------------------------------------------------------------------------------------

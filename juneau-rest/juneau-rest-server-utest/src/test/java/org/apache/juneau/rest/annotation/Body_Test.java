@@ -32,6 +32,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.*;
 
@@ -811,12 +812,8 @@ public class Body_Test {
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class H {
-		@RestMethod(method=POST,path="/",
-			properties={
-				@Property(name=UrlEncodingSerializer.URLENC_expandedParams, value="true"),
-				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
-			}
-		)
+		@RestMethod(method=POST,path="/")
+		@UrlEncodingConfig(expandedParams="true")
 		public XBeans.XB a(@Body XBeans.XB content) throws Exception {
 			return content;
 		}
@@ -855,12 +852,8 @@ public class Body_Test {
 	@Bean(on="A,B,C",sort=true)
 	@UrlEncoding(on="C",expandedParams=true)
 	public static class H2 {
-		@RestMethod(method=POST,path="/",
-			properties={
-				@Property(name=UrlEncodingSerializer.URLENC_expandedParams, value="true"),
-				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
-			}
-		)
+		@RestMethod(method=POST,path="/")
+		@UrlEncodingConfig(expandedParams="true")
 		public XBeans.XE a(@Body XBeans.XE content) throws Exception {
 			return content;
 		}

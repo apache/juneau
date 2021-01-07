@@ -24,7 +24,7 @@ public class FuzzyResourceResolver implements ResourceResolver {
 		try {
 			return castOrCreateFromOuter(parent, c, c, true, args);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, c, "Could not instantiate resource class ''{0}''");
+			throw new BeanRuntimeException(e, c, "Could not instantiate resource class");
 		}
 	}
 }
