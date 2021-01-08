@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.PropertyStoreBuilder.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
@@ -518,7 +519,7 @@ public final class PropertyStore {
 	 * @return A new property instance.
 	 */
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
-		return getInstanceProperty(key, type, def, ResourceResolver.BASIC);
+		return getInstanceProperty(key, type, def, new BeanFactory());
 	}
 
 	/**
@@ -536,6 +537,7 @@ public final class PropertyStore {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
 		return getInstanceProperty(key, null, type, def, resolver, args);
 	}
@@ -556,6 +558,7 @@ public final class PropertyStore {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
 		Assertions.assertArgNotNull("type", type);
 		Property p = findProperty(key);
@@ -571,6 +574,36 @@ public final class PropertyStore {
 	}
 
 	/**
+	 * Returns an instance of the specified class, string, or object property.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def
+	 * 	The default value if the property doesn't exist.
+	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
+	 * @param beanFactory The bean factory to use for instantiating the bean.
+	 * @return A new property instance.
+	 */
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def, BeanFactory beanFactory) {
+		Assertions.assertArgNotNull("type", type);
+		Property p = findProperty(key);
+		if (p != null)
+			return p.asInstance(type, beanFactory);
+		if (def == null)
+			return null;
+		if (def instanceof Class) {
+			try {
+				return beanFactory.createBean((Class<T>)def);
+			} catch (ExecutableException e) {
+				throw new ConfigException(e, "Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
+			}
+		}
+		if (type.isInstance(def))
+			return (T)def;
+		throw new ConfigException("Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
+	}
+
+	/**
 	 * Returns the specified property as an array of instantiated objects.
 	 *
 	 * @param key The property name.
@@ -579,7 +612,7 @@ public final class PropertyStore {
 	 * @return A new property instance.
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
-		return getInstanceArrayProperty(key, type, def, ResourceResolver.BASIC);
+		return getInstanceArrayProperty(key, type, def, new BeanFactory());
 	}
 
 	/**
@@ -595,6 +628,7 @@ public final class PropertyStore {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
 		return getInstanceArrayProperty(key, null, type, def, resolver, args);
 	}
@@ -613,9 +647,24 @@ public final class PropertyStore {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
 		Property p = findProperty(key);
 		return p == null ? def : p.asInstanceArray(outer, type, resolver, args);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def The default object to return if the property doesn't exist.
+	 * @param beanFactory The bean factory to use for instantiating beans.
+	 * @return A new property instance.
+	 */
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, BeanFactory beanFactory) {
+		Property p = findProperty(key);
+		return p == null ? def : p.asInstanceArray(type, beanFactory);
 	}
 
 	/**
@@ -948,6 +997,7 @@ public final class PropertyStore {
 		 * @return The instantiated object.
 		 * @throws ConfigException If value could not be instantiated.
 		 */
+		@Deprecated
 		public <T> T asInstance(Object outer, Class<T> iType, ResourceResolver resolver, Object...args) {
 			if (value == null)
 				return null;
@@ -955,6 +1005,28 @@ public final class PropertyStore {
 				return fromString(iType, value.toString());
 			else if (type == OBJECT || type == CLASS) {
 				T t = instantiate(resolver, outer, iType, value, args);
+				if (t != null)
+					return t;
+			}
+			throw new ConfigException("Invalid property instantiation ''{0}'' to ''{1}'' on property ''{2}''", type, iType, name);
+		}
+
+		/**
+		 * Converts this property to the specified instance type.
+		 *
+		 * @param iType The type to instantiate.
+		 * @param beanFactory The bean factory to use for instantiating beans.
+		 * @param <T> The type to instantiate.
+		 * @return The instantiated object.
+		 * @throws ConfigException If value could not be instantiated.
+		 */
+		public <T> T asInstance(Class<T> iType, BeanFactory beanFactory) {
+			if (value == null)
+				return null;
+			if (type == STRING)
+				return fromString(iType, value.toString());
+			else if (type == OBJECT || type == CLASS) {
+				T t = instantiate(beanFactory, iType, value);
 				if (t != null)
 					return t;
 			}
@@ -972,6 +1044,7 @@ public final class PropertyStore {
 		 * @return The instantiated object.
 		 * @throws ConfigException If value could not be instantiated.
 		 */
+		@Deprecated
 		public <T> T[] asInstanceArray(Object outer, Class<T> eType, ResourceResolver resolver, Object...args) {
 			if (value instanceof Collection) {
 				Collection<?> l = (Collection<?>)value;
@@ -985,6 +1058,37 @@ public final class PropertyStore {
 						o2 = fromString(eType, o.toString());
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
 						o2 = instantiate(resolver, outer, eType, o, args);
+					if (o2 == null)
+						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
+					Array.set(t, i++, o2);
+				}
+				return (T[])t;
+			}
+			throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
+		}
+
+		/**
+		 * Converts this property to an array of specified instance type.
+		 *
+		 * @param eType The entry type to instantiate.
+		 * @param beanFactory The bean factory to use to instantiate beans.
+		 * @param <T> The type to instantiate.
+		 * @return The instantiated object.
+		 * @throws ConfigException If value could not be instantiated.
+		 */
+		public <T> T[] asInstanceArray(Class<T> eType, BeanFactory beanFactory) {
+			if (value instanceof Collection) {
+				Collection<?> l = (Collection<?>)value;
+				Object t = Array.newInstance(eType, l.size());
+				int i = 0;
+				for (Object o : l) {
+					Object o2 = null;
+					if (eType.isInstance(o))
+						o2 = o;
+					else if (type == SET_STRING || type == LIST_STRING)
+						o2 = fromString(eType, o.toString());
+					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
+						o2 = instantiate(beanFactory, eType, o);
 					if (o2 == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
 					Array.set(t, i++, o2);
@@ -1018,11 +1122,24 @@ public final class PropertyStore {
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@Deprecated
 	static <T> T instantiate(ResourceResolver resolver, Object outer, Class<T> c, Object value, Object...args) {
 		if (ClassInfo.of(c).isParentOf(value.getClass()))
 			return (T)value;
 		if (ClassInfo.of(value.getClass()).isChildOf(Class.class))
 			return resolver.resolve(outer, (Class<T>)value, args);
+		return null;
+	}
+
+	static <T> T instantiate(BeanFactory beanFactory, Class<T> c, Object value) {
+		if (ClassInfo.of(c).isParentOf(value.getClass()))
+			return (T)value;
+		try {
+			if (ClassInfo.of(value.getClass()).isChildOf(Class.class))
+				return beanFactory.createBean((Class<T>)value);
+		} catch (ExecutableException e) {
+			throw new ConfigException(e, "Could not create bean of type ''{0}''.", value);
+		}
 		return null;
 	}
 

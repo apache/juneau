@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 /**
  * Basic implementation of a resource resolver.
  */
+@Deprecated
 public class BasicResourceResolver implements ResourceResolver {
 
 	@Override /* ResourceResolver */

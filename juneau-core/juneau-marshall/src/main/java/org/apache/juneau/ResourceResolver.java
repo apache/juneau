@@ -15,6 +15,7 @@ package org.apache.juneau;
 /**
  * Class used to resolve {@link Class} objects to instances.
  */
+@Deprecated
 public interface ResourceResolver {
 
 	/**

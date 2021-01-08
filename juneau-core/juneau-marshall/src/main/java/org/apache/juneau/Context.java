@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -722,6 +723,7 @@ public abstract class Context {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
 		return propertyStore.getInstanceProperty(key, type, def, resolver, args);
 	}
@@ -742,8 +744,24 @@ public abstract class Context {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
 		return propertyStore.getInstanceProperty(key, outer, type, def, resolver, args);
+	}
+
+	/**
+	 * Returns an instance of the specified class, string, or object property.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def
+	 * 	The default value if the property doesn't exist.
+	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
+	 * @param beanFactory The bean factory to use to instantiate beans.
+	 * @return A new property instance.
+	 */
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def, BeanFactory beanFactory) {
+		return propertyStore.getInstanceProperty(key, type, def, beanFactory);
 	}
 
 	/**
@@ -783,6 +801,7 @@ public abstract class Context {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
 		return propertyStore.getInstanceArrayProperty(key, type, def, resolver, args);
 	}
@@ -801,8 +820,22 @@ public abstract class Context {
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
+	@Deprecated
 	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
 		return propertyStore.getInstanceArrayProperty(key, outer, type, def, resolver, args);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def The default object to return if the property doesn't exist.
+	 * @param beanFactory The bean factory to use for instantiating beans.
+	 * @return A new property instance.
+	 */
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, BeanFactory beanFactory) {
+		return propertyStore.getInstanceArrayProperty(key, type, def, beanFactory);
 	}
 
 	/**

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 /**
  * Basic implementation of a resource resolver.
  */
+@Deprecated
 public class FuzzyResourceResolver implements ResourceResolver {
 
 	@Override /* ResourceResolver */
