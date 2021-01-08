@@ -518,7 +518,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class F extends BasicRest {
+	public static class F extends BasicRestObject {
 		@RestMethod
 		public String[] getHeaders(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().get(req.getHeader("Check"));
@@ -566,7 +566,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class G extends BasicRest {}
+	public static class G extends BasicRestObject {}
 
 	@Remote
 	public static interface G1 {

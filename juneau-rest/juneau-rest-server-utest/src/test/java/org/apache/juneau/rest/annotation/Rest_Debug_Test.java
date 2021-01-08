@@ -125,7 +125,7 @@ public class Rest_Debug_Test {
 	}
 
 	@Rest(callLogger=CaptureLogger.class)
-	public static class A1a extends BasicRest {
+	public static class A1a extends BasicRestObject {
 		@RestMethod
 		public boolean a(RestRequest req) {
 			return req.isDebug();

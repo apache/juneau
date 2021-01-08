@@ -52,7 +52,7 @@ public class RestClient_BasicCalls_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod(path="/bean")
 		public ABean getBean() {
 			return bean;

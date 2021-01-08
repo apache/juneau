@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.springboot;
 
 import java.util.*;
 
@@ -23,6 +23,7 @@ import org.apache.juneau.http.exception.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.soap.*;
@@ -31,7 +32,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Subclass of {@link RestServlet} with default serializers and parsers defined.
+ * Subclass of {@link SpringRestServlet} with default serializers and parsers defined.
  *
  * <p>
  * Supports the following request <c>Accept</c> header values with the resulting response <c>Content-Type</c>:
@@ -165,7 +166,7 @@ import org.apache.juneau.xml.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRestServlet extends RestServlet implements BasicUniversalRest, BasicRestMethods {
+public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalRest, BasicRestMethods {
 	private static final long serialVersionUID = 1L;
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -199,5 +200,4 @@ public abstract class BasicRestServlet extends RestServlet implements BasicUnive
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}
-
 }

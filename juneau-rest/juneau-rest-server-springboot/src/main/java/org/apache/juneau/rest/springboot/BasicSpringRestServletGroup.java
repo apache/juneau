@@ -1,3 +1,4 @@
+package org.apache.juneau.rest.springboot;
 // ***************************************************************************************************************************
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
@@ -10,43 +11,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest;
+
 
 import static org.apache.juneau.http.HttpMethod.*;
 
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.helper.*;
 
 /**
- * Sample REST resource that prints out a simple "Hello world!" message.
+ * Specialized subclass of {@link BasicSpringRestServlet} for showing "group" pages.
+ *
+ * <p>
+ * Group pages consist of simple lists of child resource URLs and their labels.
+ * They're meant to be used as jumping-off points for child resources.
+ *
+ * <p>
+ * Child resources are specified using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc BasicRestServletGroup}
  * </ul>
  */
-@Rest(
-	title="Hello World",
-	description="An example of the simplest-possible resource",
-	path="/helloWorld"
-)
-@HtmlDocConfig(
-	aside={
-		"<div style='max-width:400px' class='text'>",
-		"	<p>This page shows a resource that simply response with a 'Hello world!' message</p>",
-		"	<p>The POJO serialized is a simple String.</p>",
-		"</div>"
-	}
-)
-public class HelloWorldResource extends BasicRestObject {
+@Rest
+public abstract class BasicSpringRestServletGroup extends BasicSpringRestServlet {
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * GET request handler.
+	 * [GET /] - Get child resources.
 	 *
-	 * @return A simple Hello-World message.
+	 * @param req The HTTP request.
+	 * @return The bean containing links to the child resources.
 	 */
-	@RestMethod(method=GET, path="/*", summary="Responds with \"Hello world!\"")
-	public String sayHello() {
-		return "Hello world!";
+	@RestMethod(method=GET, path="/", summary="Navigation page")
+	public ChildResourceDescriptions getChildren(RestRequest req) {
+		return new ChildResourceDescriptions(req);
 	}
 }
+

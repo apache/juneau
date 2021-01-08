@@ -33,7 +33,7 @@ import org.junit.*;
 public class RestClient_Response_Headers_Test {
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod
 		public String getEcho(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String c = req.getHeader("Check");

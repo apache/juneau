@@ -30,6 +30,8 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.exception.*;
 
@@ -53,7 +55,7 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	private RestInfoProvider infoProvider;
 
 	@Override /* Servlet */
-	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
+	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			if (context != null)
 				return;
@@ -73,6 +75,15 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 			initException = toHttpException(e, InternalServerError.class);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
 		}
+	}
+
+	/**
+	 * Instantiates the bean factory to use for creating beans for this servlet.
+	 *
+	 * @return A new bean factory.
+	 */
+	protected BeanFactory createBeanFactory() {
+		return new BeanFactory();
 	}
 
 	/*
@@ -167,6 +178,57 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 		if (context == null)
 			throw new InternalServerError("RestContext object not set on resource.");
 		return context;
+	}
+
+	/**
+	 * Instantiates the file finder to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
+	 * </ul>
+	 *
+	 * @return The file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public FileFinder createFileFinder() {
+		return null;
+	}
+
+	/**
+	 * Instantiates the static file finder to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
+	 * </ul>
+	 *
+	 * @return The static file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public StaticFiles createStaticFiles() {
+		return null;
+	}
+
+	/**
+	 * Instantiates the call logger to use for this REST resource.
+	 *
+	 * <p>
+	 * Default implementation returns <jk>null</jk>
+	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@link RestContext#REST_callLogger}.
+	 * </ul>
+	 *
+	 * @return The call logger to use for this REST resource, or <jk>null</jk> if default logic should be used.
+	 */
+	public RestLogger createCallLogger() {
+		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

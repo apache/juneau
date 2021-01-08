@@ -10,42 +10,26 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client;
+package org.apache.juneau.rest.springboot;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import javax.inject.*;
 
-import java.io.*;
-import java.net.*;
-
-import org.apache.http.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.springframework.context.*;
 
-public class BasicHttpRequestRetryHandler_Test {
+/**
+ * Subclass of a {@link RestServlet} meant for use as deployed top-level REST beans.
+ */
+public abstract class SpringRestServlet extends RestServlet {
 
-	@Rest
-	public static class A extends BasicRestObject {
-		@RestMethod
-		public Ok get() {
-			return Ok.OK;
-		}
-	}
+	private static final long serialVersionUID = 1L;
 
-	public static class A1 extends HttpRequestExecutor {
-		@Override
-		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, HttpException {
-			throw new UnknownHostException("foo");
-		}
-	}
+	@Inject
+	private ApplicationContext appContext;
 
-	@Test
-	public void a01_basic() throws Exception {
-		RestClient x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
-		assertThrown(()->x.get().run()).contains("foo");
+	@Override
+	protected BeanFactory createBeanFactory() {
+		return new SpringBeanFactory(appContext);
 	}
 }

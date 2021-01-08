@@ -55,7 +55,7 @@ public class RestClient_Headers_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod
 		public String[] getHeaders(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().get(req.getHeader("Check"));

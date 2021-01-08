@@ -49,7 +49,7 @@ public class RestClient_Marshalls_Test {
 	public static Bean bean = Bean.create();
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod
 		public Bean postA01(@Body Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
 			assertEquals("Accept doesn't match",nn(xaccept),nn(accept));

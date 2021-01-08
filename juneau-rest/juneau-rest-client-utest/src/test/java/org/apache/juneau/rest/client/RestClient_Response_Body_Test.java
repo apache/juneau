@@ -53,7 +53,7 @@ public class RestClient_Response_Body_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod
 		public InputStream postEcho(InputStream is) {
 			return is;

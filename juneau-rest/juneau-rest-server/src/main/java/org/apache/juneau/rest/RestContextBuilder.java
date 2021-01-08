@@ -1890,7 +1890,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Used to retrieve localized files to be served up as static files through the REST API via the following
 	 * predefined methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
 	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
 	 * </ul>
 	 *
@@ -1913,7 +1913,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Used to retrieve localized files to be served up as static files through the REST API via the following
 	 * predefined methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
 	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
 	 * </ul>
 	 *

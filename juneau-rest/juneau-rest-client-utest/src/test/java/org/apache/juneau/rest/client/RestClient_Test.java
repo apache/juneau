@@ -59,7 +59,7 @@ public class RestClient_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod(path="/bean")
 		public ABean getBean() {
 			return bean;
@@ -331,7 +331,7 @@ public class RestClient_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class D extends BasicRest {
+	public static class D extends BasicRestObject {
 		@RestMethod
 		public String getEcho(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
 			if (auth == null) {

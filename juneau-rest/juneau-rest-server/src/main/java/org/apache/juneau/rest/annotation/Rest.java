@@ -163,10 +163,6 @@ public @interface Rest {
 	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestLogger} interface with the same
-	 * 		functionality as {@link BasicRestLogger} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding this method.
-	 * 	<li>
 	 * 		The implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -586,10 +582,6 @@ public @interface Rest {
 	 * 		The resource class itself will be used if it implements the {@link RestInfoProvider} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestInfoProvider} interface with the same
-	 * 		functionality as {@link BasicRestInfoProvider} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
 	 * 		The implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -955,10 +947,6 @@ public @interface Rest {
 	 * 		The resource class itself will be used if it implements the {@link RestResourceResolver} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestResourceResolver} interface with the same
-	 * 		functionality as {@link BasicRestResourceResolver} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
 	 * 		The implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -1123,7 +1111,7 @@ public @interface Rest {
 	 * Used to retrieve localized files to be served up as static files through the REST API via the following
 	 * predefined methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
 	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
 	 * </ul>
 	 *

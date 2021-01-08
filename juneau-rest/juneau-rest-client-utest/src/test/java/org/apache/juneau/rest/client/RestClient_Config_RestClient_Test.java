@@ -62,7 +62,7 @@ public class RestClient_Config_RestClient_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod(path="/bean")
 		public ABean getBean() {
 			return bean;
@@ -441,7 +441,7 @@ public class RestClient_Config_RestClient_Test {
 	}
 
 	@Rest(partSerializer=A12a.class,partParser=A12b.class)
-	public static class A12 extends BasicRest {
+	public static class A12 extends BasicRestObject {
 		@RestMethod(path="/")
 		public Ok get(@Header(name="Foo",multi=true) ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);

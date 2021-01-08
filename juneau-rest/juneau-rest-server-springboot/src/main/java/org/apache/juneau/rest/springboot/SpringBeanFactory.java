@@ -10,42 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client;
+package org.apache.juneau.rest.springboot;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import java.util.*;
 
-import java.io.*;
-import java.net.*;
+import org.apache.juneau.cp.BeanFactory;
+import org.springframework.context.*;
 
-import org.apache.http.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.*;
-import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+/**
+ * A bean factory that uses Spring bean resolution to find beans if they're not already in this factory.
+ */
+public class SpringBeanFactory extends BeanFactory {
 
-public class BasicHttpRequestRetryHandler_Test {
+	private final ApplicationContext appContext;
 
-	@Rest
-	public static class A extends BasicRestObject {
-		@RestMethod
-		public Ok get() {
-			return Ok.OK;
-		}
+	/**
+	 * Constructor.
+	 *
+	 * @param appContext The Spring application context used to resolve beans.
+	 */
+	public SpringBeanFactory(ApplicationContext appContext) {
+		this.appContext = appContext;
 	}
 
-	public static class A1 extends HttpRequestExecutor {
-		@Override
-		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, HttpException {
-			throw new UnknownHostException("foo");
+	@Override
+	public <T> Optional<T> getBean(Class<T> c) {
+		Optional<T> o = super.getBean(c);
+		if (o.isPresent())
+			return o;
+		try {
+			T t = appContext.getBean(c);
+			return Optional.of(t);
+		} catch (Exception e) {
+			return Optional.empty();
 		}
-	}
-
-	@Test
-	public void a01_basic() throws Exception {
-		RestClient x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
-		assertThrown(()->x.get().run()).contains("foo");
 	}
 }

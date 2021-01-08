@@ -452,10 +452,6 @@ public class RestContext extends BeanContext {
 	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestLogger} interface with the same
-	 * 		that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -1036,7 +1032,7 @@ public class RestContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(FileFinder)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createFileFinder()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createFileFinder()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestObject#createFileFinder()}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestServlet#createFileFinder()}
 	 * 		</ul>
 	 * </ul>
@@ -1062,7 +1058,7 @@ public class RestContext extends BeanContext {
 	 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
 	 * 	<li>Looks for {@link #REST_fileFinder} setting.
 	 * 	<li>Looks for a public <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
-	 * 		<br>Note that the {@link BasicRest#createFileFinder()} and {@link BasicRestServlet#createFileFinder()} methods are implemented
+	 * 		<br>Note that the {@link RestObject#createFileFinder()} and {@link RestServlet#createFileFinder()} methods are implemented
 	 * 		to automatically look for injected beans of type {@link FileFinder} allowing preconfigured file finders to be
 	 * 		defined in a Spring configuration class.
 	 * 	<li>Instantiates the default file finder as specified via {@link #REST_fileFinderDefault}.
@@ -1326,10 +1322,6 @@ public class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		The resource class itself will be used if it implements the {@link RestInfoProvider} interface and not
 	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The{@link RestServlet} and {@link BasicRest} classes implement the {@link RestInfoProvider} interface with the same
-	 * 		functionality as {@link BasicRestInfoProvider} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -2267,10 +2259,6 @@ public class RestContext extends BeanContext {
 	 * 		The resource class itself will be used if it implements the {@link RestResourceResolver} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestResourceResolver} interface with the same
-	 * 		functionality as {@link BasicRestResourceResolver} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -2625,7 +2613,7 @@ public class RestContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(StaticFiles)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createStaticFiles()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createStaticFiles()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestObject#createStaticFiles()}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestServlet#createStaticFiles()}
 	 * 		</ul>
 	 * </ul>
@@ -2635,7 +2623,7 @@ public class RestContext extends BeanContext {
 	 * Used to retrieve localized files to be served up as static files through the REST API via the following
 	 * predefined methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRest#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
 	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
 	 * </ul>
 	 *
@@ -2653,7 +2641,7 @@ public class RestContext extends BeanContext {
 	 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
 	 * 	<li>Looks in {@link #REST_staticFiles} setting.
 	 * 	<li>Looks for a public <c>createStaticFiles()</> method on the resource class with an optional {@link RestContext} argument.
-	 * 		<br>Note that the {@link BasicRest#createStaticFiles()} and {@link BasicRestServlet#createStaticFiles()} methhods are implemented
+	 * 		<br>Note that the {@link RestObject#createStaticFiles()} and {@link RestServlet#createStaticFiles()} methhods are implemented
 	 * 		to automatically look for injected beans of type {@link StaticFiles} allowing preconfigured static file finders to be
 	 * 		defined in a Spring configuration class.
 	 * 	<li>Instantiates a {@link BasicStaticFiles} which provides basic support for finding localized

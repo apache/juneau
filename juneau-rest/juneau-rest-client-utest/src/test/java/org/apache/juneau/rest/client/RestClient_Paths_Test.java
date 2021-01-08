@@ -28,7 +28,7 @@ import org.junit.*;
 public class RestClient_Paths_Test {
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod(path="/echo/*")
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();

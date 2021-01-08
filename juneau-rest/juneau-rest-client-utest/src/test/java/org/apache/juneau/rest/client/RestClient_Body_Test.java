@@ -33,7 +33,7 @@ import org.junit.*;
 public class RestClient_Body_Test {
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod
 		public Reader post(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws IOException {
 			for (Map.Entry<String,String[]> e : req.getHeaders().entrySet()) {

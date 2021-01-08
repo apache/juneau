@@ -77,7 +77,7 @@ import org.apache.juneau.transforms.*;
 @Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class)
 @Bean(on="HttpSession",interfaceClass=HttpSession.class)
 @Bean(on="ServletContext",interfaceClass=ServletContext.class)
-public class RequestEchoResource extends BasicRest {
+public class RequestEchoResource extends BasicRestObject {
 
 	/**
 	 * GET request handler.

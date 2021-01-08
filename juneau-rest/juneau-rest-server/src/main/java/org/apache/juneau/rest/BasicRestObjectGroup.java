@@ -27,7 +27,7 @@ import org.apache.juneau.rest.helper.*;
  * </ul>
  */
 @Rest
-public abstract class BasicRestGroup extends BasicRest {
+public abstract class BasicRestObjectGroup extends BasicRestObject {
 
 	/**
 	 * [GET /] - Get child resources.

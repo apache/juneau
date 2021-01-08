@@ -38,7 +38,7 @@ import org.junit.*;
 public class SerializedHttpEntity_Test {
 
 	@Rest
-	public static class A extends BasicRest {
+	public static class A extends BasicRestObject {
 		@RestMethod
 		public String[] postCheckHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().get(req.getHeader("Check"));
