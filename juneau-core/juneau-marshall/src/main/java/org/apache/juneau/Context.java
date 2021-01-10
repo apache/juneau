@@ -716,47 +716,6 @@ public abstract class Context {
 	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
-		return propertyStore.getInstanceProperty(key, type, def, resolver, args);
-	}
-
-	/**
-	 * Returns an instance of the specified class, string, or object property.
-	 *
-	 * @param key The property name.
-	 * @param outer The outer object if the class we're instantiating is an inner class.
-	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
-		return propertyStore.getInstanceProperty(key, outer, type, def, resolver, args);
-	}
-
-	/**
-	 * Returns an instance of the specified class, string, or object property.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
 	 * @param beanFactory The bean factory to use to instantiate beans.
 	 * @return A new property instance.
 	 */
@@ -786,43 +745,6 @@ public abstract class Context {
 	@SuppressWarnings("unchecked")
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type) {
 		return propertyStore.getInstanceArrayProperty(key, type, (T[])Array.newInstance(type, 0));
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
-		return propertyStore.getInstanceArrayProperty(key, type, def, resolver, args);
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param outer The outer object if the class we're instantiating is an inner class.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
-		return propertyStore.getInstanceArrayProperty(key, outer, type, def, resolver, args);
 	}
 
 	/**

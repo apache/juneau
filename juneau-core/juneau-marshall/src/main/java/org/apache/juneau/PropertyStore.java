@@ -530,57 +530,6 @@ public final class PropertyStore {
 	 * @param def
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
-		return getInstanceProperty(key, null, type, def, resolver, args);
-	}
-
-	/**
-	 * Returns an instance of the specified class, string, or object property.
-	 *
-	 * @param key The property name.
-	 * @param outer The outer object if the class we're instantiating is an inner class.
-	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
-		Assertions.assertArgNotNull("type", type);
-		Property p = findProperty(key);
-		if (p != null)
-			return p.asInstance(outer, type, resolver, args);
-		if (def == null)
-			return null;
-		if (def instanceof Class)
-			return resolver.resolve(outer, (Class<T>)def, args);
-		if (type.isInstance(def))
-			return (T)def;
-		throw new ConfigException("Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
-	}
-
-	/**
-	 * Returns an instance of the specified class, string, or object property.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
 	 * @param beanFactory The bean factory to use for instantiating the bean.
 	 * @return A new property instance.
 	 */
@@ -613,44 +562,6 @@ public final class PropertyStore {
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
 		return getInstanceArrayProperty(key, type, def, new BeanFactory());
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
-		return getInstanceArrayProperty(key, null, type, def, resolver, args);
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param outer The outer object if the class we're instantiating is an inner class.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @param resolver
-	 * 	The resolver to use for instantiating objects.
-	 * @param args
-	 * 	Arguments to pass to the constructor.
-	 * 	Constructors matching the arguments are always used before no-arg constructors.
-	 * @return A new property instance.
-	 */
-	@Deprecated
-	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, ResourceResolver resolver, Object...args) {
-		Property p = findProperty(key);
-		return p == null ? def : p.asInstanceArray(outer, type, resolver, args);
 	}
 
 	/**
@@ -989,31 +900,6 @@ public final class PropertyStore {
 		/**
 		 * Converts this property to the specified instance type.
 		 *
-		 * @param outer The outer class if this is a member type.
-		 * @param iType The type to instantiate.
-		 * @param resolver The resource resolver.
-		 * @param args The arguments to pass to the constructor.
-		 * @param <T> The type to instantiate.
-		 * @return The instantiated object.
-		 * @throws ConfigException If value could not be instantiated.
-		 */
-		@Deprecated
-		public <T> T asInstance(Object outer, Class<T> iType, ResourceResolver resolver, Object...args) {
-			if (value == null)
-				return null;
-			if (type == STRING)
-				return fromString(iType, value.toString());
-			else if (type == OBJECT || type == CLASS) {
-				T t = instantiate(resolver, outer, iType, value, args);
-				if (t != null)
-					return t;
-			}
-			throw new ConfigException("Invalid property instantiation ''{0}'' to ''{1}'' on property ''{2}''", type, iType, name);
-		}
-
-		/**
-		 * Converts this property to the specified instance type.
-		 *
 		 * @param iType The type to instantiate.
 		 * @param beanFactory The bean factory to use for instantiating beans.
 		 * @param <T> The type to instantiate.
@@ -1031,40 +917,6 @@ public final class PropertyStore {
 					return t;
 			}
 			throw new ConfigException("Invalid property instantiation ''{0}'' to ''{1}'' on property ''{2}''", type, iType, name);
-		}
-
-		/**
-		 * Converts this property to an array of specified instance type.
-		 *
-		 * @param outer The outer class if this is a member type.
-		 * @param eType The entry type to instantiate.
-		 * @param resolver The resource resolver.
-		 * @param args The arguments to pass to the constructor.
-		 * @param <T> The type to instantiate.
-		 * @return The instantiated object.
-		 * @throws ConfigException If value could not be instantiated.
-		 */
-		@Deprecated
-		public <T> T[] asInstanceArray(Object outer, Class<T> eType, ResourceResolver resolver, Object...args) {
-			if (value instanceof Collection) {
-				Collection<?> l = (Collection<?>)value;
-				Object t = Array.newInstance(eType, l.size());
-				int i = 0;
-				for (Object o : l) {
-					Object o2 = null;
-					if (eType.isInstance(o))
-						o2 = o;
-					else if (type == SET_STRING || type == LIST_STRING)
-						o2 = fromString(eType, o.toString());
-					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
-						o2 = instantiate(resolver, outer, eType, o, args);
-					if (o2 == null)
-						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
-					Array.set(t, i++, o2);
-				}
-				return (T[])t;
-			}
-			throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
 		}
 
 		/**
@@ -1121,15 +973,6 @@ public final class PropertyStore {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
-
-	@Deprecated
-	static <T> T instantiate(ResourceResolver resolver, Object outer, Class<T> c, Object value, Object...args) {
-		if (ClassInfo.of(c).isParentOf(value.getClass()))
-			return (T)value;
-		if (ClassInfo.of(value.getClass()).isChildOf(Class.class))
-			return resolver.resolve(outer, (Class<T>)value, args);
-		return null;
-	}
 
 	static <T> T instantiate(BeanFactory beanFactory, Class<T> c, Object value) {
 		if (ClassInfo.of(c).isParentOf(value.getClass()))
