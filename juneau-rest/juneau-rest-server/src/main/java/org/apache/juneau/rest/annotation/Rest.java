@@ -182,6 +182,26 @@ public @interface Rest {
 	Class<? extends RestLogger> callLogger() default RestLogger.Null.class;
 
 	/**
+	 * The resolver used for resolving instances of child resources and various other beans including:
+	 * <ul>
+	 * 	<li>{@link RestLogger}
+	 * 	<li>{@link RestInfoProvider}
+	 * 	<li>{@link FileFinder}
+	 * 	<li>{@link StaticFiles}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanFactory</c> class to allow for any
+	 * Spring beans to be injected into your REST resources.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_beanFactory}
+	 * 	<li class='link'>{@doc RestInjection}
+	 * </ul>
+	 */
+	Class<? extends BeanFactory> beanFactory() default BeanFactory.Null.class;
+
+	/**
 	 * REST children.
 	 *
 	 * <p>
@@ -933,36 +953,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String[] resHeaders() default {};
-
-	/**
-	 * REST resource resolver.
-	 *
-	 * <p>
-	 * The resolver used for resolving child resources.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Unless overridden, resource resolvers are inherited from ascendant resources.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestResourceResolver} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
-	 * </ul>
-	 */
-	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.Null.class;
 
 	/**
 	 * Response handlers.

@@ -200,7 +200,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ObjectAssertion assertObject(Optional<Object> value) {
+	public static ObjectAssertion assertObject(Optional<?> value) {
 		assertArgNotNull("value", value);
 		return assertObject(value.orElse(null));
 	}

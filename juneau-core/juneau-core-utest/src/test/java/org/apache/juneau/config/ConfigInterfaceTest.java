@@ -315,7 +315,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testSwappedPojo3dMap() throws Exception {
 		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
-		assertObject(proxy.getSwappedPojo3dMap()).stderr().json().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertObject(proxy.getSwappedPojo3dMap()).json().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/swappedPojo3dMap"));
 		assertObject(proxy.getSwappedPojo3dMap().keySet().iterator().next()).isType(SwappedPojo.class);
 		assertObject(proxy.getSwappedPojo3dMap().values().iterator().next()[0][0][0]).isType(SwappedPojo.class);

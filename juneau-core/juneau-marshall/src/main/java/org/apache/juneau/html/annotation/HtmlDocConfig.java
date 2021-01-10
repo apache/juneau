@@ -333,7 +333,7 @@ public @interface HtmlDocConfig {
 	 * <p class='bcode w800'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={
-	 * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 			<js>"api: servlet:/api"</js>,
 	 * 			<js>"stats: servlet:/stats"</js>,
 	 * 			<js>"doc: doc"</js>
 	 * 		}

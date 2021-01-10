@@ -29,7 +29,7 @@ public abstract class SpringRestServlet extends RestServlet {
 	private ApplicationContext appContext;
 
 	@Override
-	protected BeanFactory createBeanFactory() {
-		return new SpringBeanFactory(appContext);
+	protected BeanFactory createBeanFactory(BeanFactory parent) {
+		return new SpringBeanFactory(appContext, parent, this);
 	}
 }

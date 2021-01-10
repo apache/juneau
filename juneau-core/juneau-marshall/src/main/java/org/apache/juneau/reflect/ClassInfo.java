@@ -407,13 +407,6 @@ public final class ClassInfo {
 		return null;
 	}
 
-	public MethodInfo getPublicMethod2(String name, Class<?> returnType, Class<?>...args) {
-		for (MethodInfo mi : _getPublicMethods())
-			if (mi.hasName(name) && mi.hasMatchingParamTypes(args) && mi.hasReturnTypeParent(returnType))
-				return mi;
-		return null;
-	}
-
 	/**
 	 * Returns the public method with the specified method name and fuzzy argument types.
 	 *
@@ -426,14 +419,6 @@ public final class ClassInfo {
 		Class<?>[] ac = ClassUtils.getClasses(args);
 		for (MethodInfo mi : _getPublicMethods())
 			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
-				return mi;
-		return null;
-	}
-
-	public MethodInfo getPublicMethodFuzzy2(String name, Class<?> returnType, Object...args) {
-		Class<?>[] ac = ClassUtils.getClasses(args);
-		for (MethodInfo mi : _getPublicMethods())
-			if (mi.hasName(name) && mi.argsOnlyOfType(ac) && mi.hasReturnTypeParent(returnType))
 				return mi;
 		return null;
 	}
@@ -818,6 +803,13 @@ public final class ClassInfo {
 		return _getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
 	}
 
+	/**
+	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
+	 *
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, never <jk>null</jk>.
+	 */
 	public Optional<ConstructorInfo> getOptionalPublicConstructorFuzzy(Object...args) {
 		return Optional.ofNullable(_getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args)));
 	}
@@ -2183,6 +2175,18 @@ public final class ClassInfo {
 		if (this.c != null)
 			return this.c.equals(c.inner());
 		return t.equals(c.t);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified value is an instance of this class.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the specified value is an instance of this class.
+	 */
+	public boolean isInstance(Object value) {
+		if (this.c != null)
+			return c.isInstance(value);
+		return false;
 	}
 
 	/**

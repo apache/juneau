@@ -30,10 +30,11 @@ import javax.servlet.Servlet;
 /**
  * Processes the {@link JuneauRestRoot} annotation on the Spring application class and <ja>@Bean</ja> methods.
  */
+@Deprecated
 public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
 	private final Class<?> appClass;
-	private final RestResourceResolver restResourceResolver;
+//	private final RestResourceResolver restResourceResolver;
 	private BeanDefinitionRegistry registry;
 
 	/**
@@ -44,7 +45,7 @@ public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProces
 	 */
 	public JuneauRestPostProcessor(ConfigurableApplicationContext ctx, Class<?> appClass) {
 		this.appClass = appClass;
-		this.restResourceResolver = new SpringRestResourceResolver(ctx);
+//		this.restResourceResolver = new SpringRestResourceResolver(ctx);
 	}
 
 	@Override /* BeanDefinitionRegistryPostProcessor */
@@ -81,7 +82,7 @@ public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProces
 			}
 
 			for (RestServlet rs : m.values()) {
-				rs.setRestResourceResolver(restResourceResolver);
+				//rs.setRestResourceResolver(restResourceResolver);
 				ServletRegistrationBean<Servlet> reg = new ServletRegistrationBean<>(rs, '/' + rs.getPath());
 				registry.registerBeanDefinition(reg.getServletName(), new RootBeanDefinition(ServletRegistrationBean.class, () -> reg));
 			}

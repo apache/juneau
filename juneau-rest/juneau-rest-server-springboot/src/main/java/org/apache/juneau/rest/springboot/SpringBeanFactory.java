@@ -28,8 +28,11 @@ public class SpringBeanFactory extends BeanFactory {
 	 * Constructor.
 	 *
 	 * @param appContext The Spring application context used to resolve beans.
+	 * @param parent The parent REST object bean factory.  Can be <jk>null</jk>.
+	 * @param resource The REST object.  Can be <jk>null</jk>.
 	 */
-	public SpringBeanFactory(ApplicationContext appContext) {
+	public SpringBeanFactory(ApplicationContext appContext, BeanFactory parent, Object resource) {
+		super(parent, resource);
 		this.appContext = appContext;
 	}
 

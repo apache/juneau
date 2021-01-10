@@ -34,6 +34,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -508,6 +509,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	private final Object resource;
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
 	final RestMethodParam[] methodParams;
@@ -517,6 +519,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final RestConverter[] converters;
 	private final Integer priority;
 	private final RestContext context;
+	private final BeanFactory beanFactory;
 	final java.lang.reflect.Method method;
 	final MethodInvoker methodInvoker;
 	final MethodInfo mi;
@@ -551,175 +554,184 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
 		super(b.getPropertyStore());
 
-		this.context = b.context;
-		this.method = b.method;
-		this.methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
-		this.mi = MethodInfo.of(method);
+		try {
+			this.context = b.context;
+			this.method = b.method;
+			this.methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
+			this.mi = MethodInfo.of(method);
 
-		// Need this to access methods in anonymous inner classes.
-		mi.setAccessible();
+			// Need this to access methods in anonymous inner classes.
+			mi.setAccessible();
 
-		int hd = 0;
-		Class<?> sc = b.method.getDeclaringClass().getSuperclass();
-		while (sc != null) {
-			hd++;
-			sc = sc.getSuperclass();
-		}
-		hierarchyDepth = hd;
-
-		PropertyStore ps = getPropertyStore();
-		ResourceResolver rr = context.getResourceResolver();
-		Object r = context.getResource();
-
-		String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
-		if (_httpMethod == null)
-			_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
-		if ("METHOD".equals(_httpMethod))
-			_httpMethod = "*";
-		this.httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
-
-		this.defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
-
-		this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
-
-		this.serializers = SerializerGroup
-			.create()
-			.append(getArrayProperty(REST_serializers, Object.class))
-			.apply(ps)
-			.build();
-
-		this.parsers = ParserGroup
-			.create()
-			.append(getArrayProperty(REST_parsers, Object.class))
-			.apply(ps)
-			.build();
-
-		HttpPartParser hpp = context.getPartParser();
-		if (hpp instanceof Parser) {
-			Parser pp = (Parser)hpp;
-			hpp = (HttpPartParser)pp.builder().apply(ps).build();
-		}
-		this.partParser = hpp;
-
-		this.partSerializer = context.getPartSerializer();
-
-		this.responseMeta = ResponseBeanMeta.create(mi, ps);
-
-		boolean dotAll = b.dotAll;
-		List<UrlPathMatcher> pathMatchers = new ArrayList<>();
-		for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
-			if (dotAll && ! p.endsWith("/*"))
-				p += "/*";
-			pathMatchers.add(UrlPathMatcher.of(p));
-		}
-		if (pathMatchers.isEmpty()) {
-			String p = HttpUtils.detectHttpPath(method, true);
-			if (dotAll && ! p.endsWith("/*"))
-				p += "/*";
-			pathMatchers.add(UrlPathMatcher.of(p));
-		}
-
-		this.pathMatchers = pathMatchers.toArray(new UrlPathMatcher[pathMatchers.size()]);
-
-		this.methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
-
-		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
-
-		AList<RestGuard> _guards = AList.of();
-		_guards.a(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this));
-		Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
-		Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
-
-		for (String rg : roleGuard) {
-			try {
-				_guards.add(new RoleBasedRestGuard(rolesDeclared, rg));
-			} catch (java.text.ParseException e1) {
-				throw new ServletException(e1);
+			int hd = 0;
+			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
+			while (sc != null) {
+				hd++;
+				sc = sc.getSuperclass();
 			}
-		}
-		this.guards = _guards.toArray(new RestGuard[_guards.size()]);
+			hierarchyDepth = hd;
 
-		List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
-		for (RestMatcher matcher : getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, new RestMatcher[0], rr, r, this)) {
-			if (matcher.mustMatch())
-				requiredMatchers.add(matcher);
-			else
-				optionalMatchers.add(matcher);
-		}
-		String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
-		if (clientVersion != null)
-			requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
+			PropertyStore ps = getPropertyStore();
+			Object r = context.getResource();
+			this.resource = context.getResource();
+			this.beanFactory = new BeanFactory(context.getBeanFactory(), r)
+				.addBean(RestMethodContext.class, this)
+				.addBean(java.lang.reflect.Method.class, method);
 
-		this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
-		this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
+			String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
+			if (_httpMethod == null)
+				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
+			if ("METHOD".equals(_httpMethod))
+				_httpMethod = "*";
+			this.httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-		this.encoders = EncoderGroup
-			.create()
-			.append(IdentityEncoder.INSTANCE)
-			.append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], rr, r, this))
-			.build();
+			this.defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 
-		this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
+			this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
 
-		Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		_reqHeaders.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
+			this.serializers = SerializerGroup
+				.create()
+				.append(getArrayProperty(REST_serializers, Object.class))
+				.apply(ps)
+				.build();
 
-		OMap _reqAttrs = new OMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
+			this.parsers = ParserGroup
+				.create()
+				.append(getArrayProperty(REST_parsers, Object.class))
+				.apply(ps)
+				.build();
 
-		Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
+			HttpPartParser hpp = context.getPartParser();
+			if (hpp instanceof Parser) {
+				Parser pp = (Parser)hpp;
+				hpp = (HttpPartParser)pp.builder().apply(ps).build();
+			}
+			this.partParser = hpp;
 
-		Map<String,Object> _defaultFormData = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
+			this.partSerializer = context.getPartSerializer();
 
-		Type[] pt = method.getGenericParameterTypes();
-		Annotation[][] pa = method.getParameterAnnotations();
-		for (int i = 0; i < pt.length; i++) {
-			for (Annotation a : pa[i]) {
-				if (a instanceof Header) {
-					Header h = (Header)a;
-					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
-					if (def != null) {
-						try {
-							_reqHeaders.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @Header annotation");
+			this.responseMeta = ResponseBeanMeta.create(mi, ps);
+
+			boolean dotAll = b.dotAll;
+			List<UrlPathMatcher> pathMatchers = new ArrayList<>();
+			for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
+				if (dotAll && ! p.endsWith("/*"))
+					p += "/*";
+				pathMatchers.add(UrlPathMatcher.of(p));
+			}
+			if (pathMatchers.isEmpty()) {
+				String p = HttpUtils.detectHttpPath(method, true);
+				if (dotAll && ! p.endsWith("/*"))
+					p += "/*";
+				pathMatchers.add(UrlPathMatcher.of(p));
+			}
+
+			this.pathMatchers = pathMatchers.toArray(new UrlPathMatcher[pathMatchers.size()]);
+
+			this.methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
+
+			this.converters = createConverters();
+
+			AList<RestGuard> _guards = AList.of();
+			_guards.a(createGuards());
+			Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
+			Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
+
+			for (String rg : roleGuard) {
+				try {
+					_guards.add(new RoleBasedRestGuard(rolesDeclared, rg));
+				} catch (java.text.ParseException e1) {
+					throw new ServletException(e1);
+				}
+			}
+			this.guards = _guards.toArray(new RestGuard[_guards.size()]);
+
+			List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
+			for (RestMatcher matcher : createMatchers()) {
+				if (matcher.mustMatch())
+					requiredMatchers.add(matcher);
+				else
+					optionalMatchers.add(matcher);
+			}
+			String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
+			if (clientVersion != null)
+				requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
+
+			this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
+			this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
+
+			this.encoders = EncoderGroup
+				.create()
+				.append(IdentityEncoder.INSTANCE)
+				.append(createEncoders())
+				.build();
+
+			this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
+
+			Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+			_reqHeaders.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
+
+			OMap _reqAttrs = new OMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
+
+			Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
+
+			Map<String,Object> _defaultFormData = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
+
+			Type[] pt = method.getGenericParameterTypes();
+			Annotation[][] pa = method.getParameterAnnotations();
+			for (int i = 0; i < pt.length; i++) {
+				for (Annotation a : pa[i]) {
+					if (a instanceof Header) {
+						Header h = (Header)a;
+						String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+						if (def != null) {
+							try {
+								_reqHeaders.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							} catch (ParseException e) {
+								throw new ConfigException(e, "Malformed @Header annotation");
+							}
 						}
-					}
-				} else if (a instanceof Query) {
-					Query q = (Query)a;
-					String def = joinnlFirstNonEmptyArray(q._default(), q.df());
-					if (def != null) {
-						try {
-							_defaultQuery.put(firstNonEmpty(q.name(), q.n(), q.value()), parseAnything(def));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @Query annotation");
+					} else if (a instanceof Query) {
+						Query q = (Query)a;
+						String def = joinnlFirstNonEmptyArray(q._default(), q.df());
+						if (def != null) {
+							try {
+								_defaultQuery.put(firstNonEmpty(q.name(), q.n(), q.value()), parseAnything(def));
+							} catch (ParseException e) {
+								throw new ConfigException(e, "Malformed @Query annotation");
+							}
 						}
-					}
-				} else if (a instanceof FormData) {
-					FormData f = (FormData)a;
-					String def = joinnlFirstNonEmptyArray(f._default(), f.df());
-					if (def != null) {
-						try {
-							_defaultFormData.put(firstNonEmpty(f.name(), f.value(), f.n()), parseAnything(def));
-						} catch (ParseException e) {
-							throw new ConfigException(e, "Malformed @FormData annotation");
+					} else if (a instanceof FormData) {
+						FormData f = (FormData)a;
+						String def = joinnlFirstNonEmptyArray(f._default(), f.df());
+						if (def != null) {
+							try {
+								_defaultFormData.put(firstNonEmpty(f.name(), f.value(), f.n()), parseAnything(def));
+							} catch (ParseException e) {
+								throw new ConfigException(e, "Malformed @FormData annotation");
+							}
 						}
 					}
 				}
 			}
+
+			this.reqHeaders = Collections.unmodifiableMap(_reqHeaders);
+			this.reqAttrs = _reqAttrs.unmodifiable();
+			this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
+			this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
+
+			this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
+
+			this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
+			this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
+
+			this.debug = context.getDebug(method);
+			this.callLogger = context.getCallLogger();
+		} catch (ServletException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServletException(e);
 		}
-
-		this.reqHeaders = Collections.unmodifiableMap(_reqHeaders);
-		this.reqAttrs = _reqAttrs.unmodifiable();
-		this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
-		this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
-
-		this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
-
-		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
-		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
-
-		this.debug = context.getDebug(method);
-		this.callLogger = context.getCallLogger();
 	}
 
 	private String joinnlFirstNonEmptyArray(String[]...s) {
@@ -743,6 +755,160 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (rbm == ResponseBeanMeta.NULL)
 			return null;
 		return rbm;
+	}
+
+	/**
+	 * Instantiates the result converters for this REST resource method.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for {@link #REST_converters} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#converters(Class...)}/{@link RestContextBuilder#converters(RestConverter...)}
+	 * 			<li>{@link RestMethod#converters()}.
+	 * 			<li>{@link Rest#converters()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createConverters()</> method that returns <c>{@link RestConverter}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a <c>RestConverter[0]</c>.
+	 * </ul>
+	 *
+	 * @return The result converters for this REST resource method.
+	 * @throws Exception If result converters could not be instantiated.
+	 * @seealso #REST_converters
+	 */
+	protected RestConverter[] createConverters() throws Exception {
+		RestConverter[] x = getInstanceArrayProperty(REST_converters, RestConverter.class, null, beanFactory);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(RestConverter[].class, resource, "createConverters");
+		if (x == null)
+			x = beanFactory.getBean(RestConverter[].class).orElse(null);
+		if (x == null)
+			x = new RestConverter[0];
+		return x;
+	}
+
+	/**
+	 * Instantiates the guards for this REST resource method.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for {@link #REST_guards} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#guards(Class...)}/{@link RestContextBuilder#guards(RestGuard...)}
+	 * 			<li>{@link RestMethod#guards()}.
+	 * 			<li>{@link Rest#guards()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createGuards()</> method that returns <c>{@link RestGuard}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a <c>RestGuard[0]</c>.
+	 * </ul>
+	 *
+	 * @return The guards for this REST resource method.
+	 * @throws Exception If guards could not be instantiated.
+	 * @seealso #REST_guards
+	 */
+	protected RestGuard[] createGuards() throws Exception {
+		RestGuard[] x = getInstanceArrayProperty(REST_guards, RestGuard.class, null, beanFactory);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(RestGuard[].class, resource, "createGuards");
+		if (x == null)
+			x = beanFactory.getBean(RestGuard[].class).orElse(null);
+		if (x == null)
+			x = new RestGuard[0];
+		return x;
+	}
+
+	/**
+	 * Instantiates the method matchers for this REST resource method.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for {@link #RESTMETHOD_matchers} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestMethod#matchers()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createMatchers()</> method that returns <c>{@link RestMatcher}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
+	 * </ul>
+	 *
+	 * @return The method matchers for this REST resource method.
+	 * @throws Exception If method matchers could not be instantiated.
+	 * @seealso #RESTMETHOD_matchers
+	 */
+	protected RestMatcher[] createMatchers() throws Exception {
+		RestMatcher[] x = getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, null, beanFactory);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers");
+		if (x == null)
+			x = beanFactory.getBean(RestMatcher[].class).orElse(null);
+		if (x == null)
+			x = new RestMatcher[0];
+		return x;
+	}
+
+	/**
+	 * Instantiates the encoders for this REST resource method.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for {@link #REST_encoders} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}/{@link RestContextBuilder#encoders(Encoder...)}
+	 * 			<li>{@link RestMethod#encoders()}.
+	 * 			<li>{@link Rest#encoders()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createEncoders()</> method that returns <c>{@link Encoder}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a <c>Encoder[0]</c>.
+	 * </ul>
+	 *
+	 * @return The encoders for this REST resource method.
+	 * @throws Exception If encoders could not be instantiated.
+	 * @seealso #REST_encoders
+	 */
+	protected Encoder[] createEncoders() throws Exception {
+		Encoder[] x = getInstanceArrayProperty(REST_encoders, Encoder.class, null, beanFactory);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Encoder[].class, resource, "createEncoders");
+		if (x == null)
+			x = beanFactory.getBean(Encoder[].class).orElse(null);
+		if (x == null)
+			x = new Encoder[0];
+		return x;
 	}
 
 	ResponsePartMeta getResponseHeaderMeta(Object o) {

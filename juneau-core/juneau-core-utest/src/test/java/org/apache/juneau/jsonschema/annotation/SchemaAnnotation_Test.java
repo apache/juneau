@@ -156,7 +156,7 @@ public class SchemaAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).stderr().json().is(""
+		assertObject(a1).json().is(""
 			+ "{"
 				+ "'$ref':'$ref',"
 				+ "_default:['default'],"
@@ -398,7 +398,7 @@ public class SchemaAnnotation_Test {
 
 	@Test
 	public void d01_comparisonWithDeclarativeAnnotations() {
-		assertObject(d1).stderr().is(d2).is(a1);
+		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}
 }

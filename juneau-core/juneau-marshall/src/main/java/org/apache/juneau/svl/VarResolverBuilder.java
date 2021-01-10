@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.svl.vars.*;
 
 /**
@@ -27,7 +28,7 @@ import org.apache.juneau.svl.vars.*;
  */
 public class VarResolverBuilder {
 
-	private final List<Class<? extends Var>> vars = new ArrayList<>();
+	private final List<Var> vars = AList.of();
 	private final Map<String,Object> contextObjects = new HashMap<>();
 
 	/**
@@ -36,7 +37,7 @@ public class VarResolverBuilder {
 	 * @return A new var resolver.
 	 */
 	public VarResolver build() {
-		return new VarResolver(vars.toArray(new Class[vars.size()]), contextObjects);
+		return new VarResolver(vars.toArray(new Var[vars.size()]), contextObjects);
 	}
 
 	/**
@@ -47,12 +48,36 @@ public class VarResolverBuilder {
 	 * 	These classes must subclass from {@link Var} and have no-arg constructors.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("unchecked")
 	public VarResolverBuilder vars(Class<?>...vars) {
-		for (Class<?> v : vars) {
-			castOrCreate(Var.class, v);
-			this.vars.add((Class<? extends Var>)v);
-		}
+		for (Class<?> v : vars)
+			this.vars.add(castOrCreate(Var.class, v));
+		return this;
+	}
+
+	/**
+	 * Register new variables with this resolver.
+	 *
+	 * @param vars
+	 * 	The variable resolver classes.
+	 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+	 * @return This object (for method chaining).
+	 */
+	public VarResolverBuilder vars(Var...vars) {
+		this.vars.addAll(Arrays.asList(vars));
+		return this;
+	}
+
+	/**
+	 * Register new variables with this resolver.
+	 *
+	 * @param vars
+	 * 	The variable resolver classes.
+	 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+	 * @return This object (for method chaining).
+	 */
+	public VarResolverBuilder vars(VarList vars) {
+		for (Object o : vars)
+			this.vars.add(castOrCreate(Var.class, o));
 		return this;
 	}
 

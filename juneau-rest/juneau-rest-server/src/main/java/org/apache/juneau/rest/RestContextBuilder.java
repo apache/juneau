@@ -474,6 +474,68 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Bean factory.
+	 *
+	 * <p>
+	 * The resolver used for resolving instances of child resources and various other beans including:
+	 * <ul>
+	 * 	<li>{@link RestLogger}
+	 * 	<li>{@link RestInfoProvider}
+	 * 	<li>{@link FileFinder}
+	 * 	<li>{@link StaticFiles}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanFactory</c> class to allow for any
+	 * Spring beans to be injected into your REST resources.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_beanFactory}
+	 * 	<li class='link'>{@doc RestInjection}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicRestLogger}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder beanFactory(Class<? extends BeanFactory> value) {
+		return set(REST_beanFactory, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Bean factory.
+	 *
+	 * <p>
+	 * The resolver used for resolving instances of child resources and various other beans including:
+	 * <ul>
+	 * 	<li>{@link RestLogger}
+	 * 	<li>{@link RestInfoProvider}
+	 * 	<li>{@link FileFinder}
+	 * 	<li>{@link StaticFiles}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the <c>Spr÷ingRestServlet</c> classes uses the <c>SpringBeanFactory</c> class to allow for any
+	 * Spring beans to be injected into your REST resources.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_beanFactory}
+	 * 	<li class='link'>{@doc RestInjection}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicRestLogger}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder beanFactory(BeanFactory value) {
+		return set(REST_beanFactory, value);
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
 	 *
 	 * <p>
@@ -1479,49 +1541,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder resHeader(String name, Object value) {
 		return putTo(REST_resHeaders, name, value);
-	}
-
-	/**
-	 * REST resource resolver.
-	 *
-	 * <p>
-	 * The resolver used for resolving child resources.
-	 *
-	 * <p>
-	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestResourceResolver}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder resourceResolver(Class<? extends RestResourceResolver> value) {
-		return set(REST_resourceResolver, value);
-	}
-
-	/**
-	 * REST resource resolver.
-	 *
-	 * <p>
-	 * Same as {@link #resourceResolver(Class)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestResourceResolver}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder resourceResolver(RestResourceResolver value) {
-		return set(REST_resourceResolver, value);
 	}
 
 	/**

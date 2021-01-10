@@ -62,18 +62,15 @@ public class ManifestFileVar extends DefaultingVar {
 		MANIFEST_FILE = manifestFile;
 	}
 
-	private final ManifestFile manifestFile;
-
 	/**
 	 * Constructor.
 	 */
 	public ManifestFileVar() {
 		super(NAME);
-		this.manifestFile = MANIFEST_FILE;
 	}
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return manifestFile == null ? "" : manifestFile.getString(key);
+		return MANIFEST_FILE == null ? "" : MANIFEST_FILE.getString(key);
 	}
 }

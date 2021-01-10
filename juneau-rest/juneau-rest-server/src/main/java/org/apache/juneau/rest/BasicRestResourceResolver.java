@@ -36,6 +36,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc RestResourceResolvers}
  * </ul>
  */
+@Deprecated
 public class BasicRestResourceResolver extends FuzzyResourceResolver implements RestResourceResolver {
 
 	@Override /* RestResourceResolver */

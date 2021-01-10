@@ -10,13 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest;
+package org.apache.juneau.examples.rest.springboot;
 
+import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
 
@@ -69,7 +70,7 @@ import org.apache.juneau.serializer.annotation.*;
 	// You can apply any of the Serializer/Parser/BeanContext settings this way.
 	quoteChar="'"
 )
-public class RootResources extends BasicRestServletJenaGroup {
+public class RootResources extends BasicSpringRestServletGroup {
 	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
 	// It allows you to remove the Jena prerequisite.
 

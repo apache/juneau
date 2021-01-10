@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
@@ -31,7 +29,7 @@ import org.apache.juneau.reflect.*;
  */
 public class VarResolverContext {
 
-	private final Class<?>[] vars;
+	private final Var[] vars;
 	private final Map<String,Var> varMap;
 	private final Map<String,Object> contextObjects;
 
@@ -41,18 +39,13 @@ public class VarResolverContext {
 	 * @param vars The Var classes used for resolving string variables.
 	 * @param contextObjects Read-only context objects.
 	 */
-	public VarResolverContext(Class<? extends Var>[] vars, Map<String,Object> contextObjects) {
+	public VarResolverContext(Var[] vars, Map<String,Object> contextObjects) {
 
-		this.vars = Arrays.copyOf(vars, vars.length);
+		this.vars = vars;
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
-		for (Class<?> c : vars) {
-			ClassInfo ci = ClassInfo.of(c);
-			if (! ci.isChildOf(Var.class))
-				throw new VarResolverException("Invalid variable class ''{0}''.  Must extend from Var.", ci);
-			Var v = castOrCreate(Var.class, c);
+		for (Var v : vars)
 			m.put(v.getName(), v);
-		}
 
 		this.varMap = AMap.unmodifiable(m);
 		this.contextObjects = AMap.unmodifiable(contextObjects);
@@ -72,7 +65,7 @@ public class VarResolverContext {
 	 *
 	 * @return A new array containing the variables in this context.
 	 */
-	protected Class<?>[] getVars() {
+	protected Var[] getVars() {
 		return Arrays.copyOf(vars, vars.length);
 	}
 

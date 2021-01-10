@@ -59,7 +59,7 @@ public class MethodSwaggerAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).stderr().json().is(""
+		assertObject(a1).json().is(""
 			+ "{"
 				+ "consumes:['consumes'],"
 				+ "deprecated:'deprecated',"

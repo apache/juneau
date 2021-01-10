@@ -49,6 +49,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
@@ -2081,9 +2082,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 		this.parsers = pgb.build();
 
+		BeanFactory beanFactory = new BeanFactory()
+			.addBean(PropertyStore.class, ps)
+			.addBean(RestClient.class, this);
+
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
-		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, ResourceResolver.FUZZY, ps);
-		this.partParser = getInstanceProperty(RESTCLIENT_partParser, HttpPartParser.class, OpenApiParser.class, ResourceResolver.FUZZY, ps);
+		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, beanFactory);
+		this.partParser = getInstanceProperty(RESTCLIENT_partParser, HttpPartParser.class, OpenApiParser.class, beanFactory);
 		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
@@ -2115,7 +2120,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				formData.add(BasicNameValuePair.cast(o));
 		}
 
-		this.callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, BasicRestCallHandler.class, ResourceResolver.FUZZY, ps, this);
+		this.callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, BasicRestCallHandler.class, beanFactory);
 
 		this.interceptors = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class);
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import org.apache.juneau.cp.*;
+
 /**
  * Represents a simple child REST resource / path mapping.
  *
@@ -46,7 +48,7 @@ public class RestChild {
 	 * @param path The child resource path relative to the parent resource URI.
 	 * @param resource
 	 * 	The child resource.
-	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link RestResourceResolver})
+	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link BeanFactory})
 	 * 	or an already-instantiated object.
 	 */
 	public RestChild(/*UrlPathPattern path, */ String path, Object resource) {

@@ -17,14 +17,23 @@ import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 
 /**
  * Factory for creating beans.
  */
 public class BeanFactory {
+
+	/**
+	 * Non-existent bean factory.
+	 */
+	public static final class Null extends BeanFactory {}
 
 	private final Map<Class<?>,Object> beanMap = new ConcurrentHashMap<>();
 	private final BeanFactory parent;
@@ -64,7 +73,6 @@ public class BeanFactory {
 		return Optional.ofNullable(t);
 	}
 
-
 	/**
 	 * Adds a bean of the specified type to this factory.
 	 *
@@ -74,7 +82,10 @@ public class BeanFactory {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanFactory addBean(Class<T> c, T t) {
-		beanMap.put(c, t);
+		if (t == null)
+			beanMap.remove(c);
+		else
+			beanMap.put(c, t);
 		return this;
 	}
 
@@ -99,45 +110,105 @@ public class BeanFactory {
 	 */
 	public <T> T createBean(Class<T> c) throws ExecutableException {
 
+		Optional<T> o = getBean(c);
+		if (o.isPresent())
+			return o.get();
+
 		ClassInfo ci = ClassInfo.of(c);
 
+		Supplier<String> msg = null;
+
 		for (MethodInfo m : ci.getPublicMethods()) {
-			if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(c) && hasAllParamTypes(m.getParamTypes())) {
+			if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(c) && (!m.hasAnnotation(BeanIgnore.class))) {
 				String n = m.getSimpleName();
-				if (isOneOf(n, "create","getInstance"))
-					return m.invoke(null, getParams(m.getParamTypes()));
+				if (isOneOf(n, "create","getInstance")) {
+					List<ClassInfo> missing = getMissingParamTypes(m.getParamTypes());
+					if (missing.isEmpty())
+						return m.invoke(null, getParams(m.getParamTypes()));
+					msg = ()-> "Static creator found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+				}
 			}
 		}
 
 		if (ci.isInterface())
-			throw new ExecutableException("Could not instantiate class {0} because it is an interface.", c.getName());
+			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is an interface");
 		if (ci.isAbstract())
-			throw new ExecutableException("Could not instantiate class {0} because it is abstract.", c.getName());
+			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is abstract");
 
-		for (ConstructorInfo cc : ci.getPublicConstructors())
-			if (hasAllParamTypes(cc.getParamTypes()))
+		for (ConstructorInfo cc : ci.getPublicConstructors()) {
+			List<ClassInfo> missing = getMissingParamTypes(cc.getParamTypes());
+			if (missing.isEmpty())
 				return cc.invoke(getParams(cc.getParamTypes()));
+			msg = ()-> "Public constructor found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+		}
 
-		throw new ExecutableException("Could not instantiate class {0}.  Constructor or creator not found.", c.getName());
+		if (msg == null)
+			msg = () -> "Public constructor or creator not found";
+
+		throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg.get());
 	}
 
-	private boolean hasAllParamTypes(List<ClassInfo> paramTypes) {
-		for (ClassInfo ci : paramTypes)
-			if (! hasBean(ci.inner()))
-				if (outer == null || ! ci.inner().isInstance(outer))
-					return false;
-		return true;
+
+	/**
+	 * Creates a bean via a static or non-static method defined on the specified class.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param c The bean type to create.
+	 * @param resource The object where the method is defined.
+	 * @param methodName The method name on the object to call.
+	 * @return A newly-created bean or <jk>null</jk> if method not found or it returns <jk>null</jk>.
+	 * @throws ExecutableException If bean could not be created.
+	 */
+	public <T> T createBeanViaMethod(Class<T> c, Object resource, String methodName) throws ExecutableException {
+		ClassInfo ci = ClassInfo.of(resource);
+		for (MethodInfo m : ci.getPublicMethods()) {
+			if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
+				List<ClassInfo> missing = getMissingParamTypes(m.getParamTypes());
+				if (missing.isEmpty())
+					return m.invoke(resource, getParams(m.getParamTypes()));
+			}
+		}
+		return null;
+	}
+
+	private List<ClassInfo> getMissingParamTypes(List<ClassInfo> paramTypes) {
+		List<ClassInfo> l = AList.of();
+		for (int i = 0; i < paramTypes.size(); i++) {
+			ClassInfo pt = paramTypes.get(i);
+			if (i == 0 && pt.isInstance(outer))
+				continue;
+			if (! hasBean(pt.inner()))
+				l.add(pt);
+		}
+		return l;
 	}
 
 	private Object[] getParams(List<ClassInfo> paramTypes) {
 		Object[] o = new Object[paramTypes.size()];
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
-			if (i == 0 && pt.inner().isInstance(outer))
+			if (i == 0 && pt.isInstance(outer))
 				o[i] = outer;
 			else
-				o[i] = getBean(paramTypes.get(i).inner());
+				o[i] = getBean(pt.inner()).get();
 		}
 		return o;
+	}
+
+	/**
+	 * Returns the contents of this bean factory as a readable map of values.
+	 *
+	 * @return The contents of this bean factory as a readable map of values.
+	 */
+	public OMap toMap() {
+		return OMap.of()
+			.a("beanMap", beanMap.keySet().stream().map(x -> x.getSimpleName()).collect(Collectors.toList()))
+			.a("outer", outer == null ? null : outer.getClass().getSimpleName())
+			.a("parent", parent);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return toMap().toString();
 	}
 }

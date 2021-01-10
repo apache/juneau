@@ -41,7 +41,7 @@ import org.apache.juneau.http.exception.*;
 @HtmlDocConfig(
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
+		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"edit: servlet:/edit"
 	}

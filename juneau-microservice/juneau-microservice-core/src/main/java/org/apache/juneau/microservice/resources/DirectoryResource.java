@@ -63,7 +63,7 @@ import org.apache.juneau.utils.*;
 @HtmlDocConfig(
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/?method=OPTIONS"
+		"api: servlet:/api"
 	}
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")

@@ -23,6 +23,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * <p>
  * Looks for the {@link JuneauRestRoot} annotation on the Spring application class to automatically register Juneau REST resources.
  */
+@Deprecated
 public class JuneauRestInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
 	private final Class<?> appClass;

@@ -15,8 +15,8 @@ package org.apache.juneau.microservice.springboot.template;
 import org.apache.juneau.html.annotation.HtmlDocConfig;
 import org.apache.juneau.microservice.resources.ConfigResource;
 import org.apache.juneau.microservice.resources.LogsResource;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.widget.ContentTypeMenuItem;
 import org.apache.juneau.rest.widget.ThemeMenuItem;
 
@@ -39,10 +39,10 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 		ThemeMenuItem.class
 	},
 	navlinks={
-		"options: servlet:/?method=OPTIONS",
+		"api: servlet:/api",
 		"stats: servlet:/stats"
 	}
 )
-public class RootResources extends BasicRestServletGroup {
+public class RootResources extends BasicSpringRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

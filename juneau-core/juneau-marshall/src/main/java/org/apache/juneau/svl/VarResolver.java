@@ -101,7 +101,7 @@ public class VarResolver {
 	 * @param vars The var classes
 	 * @param contextObjects
 	 */
-	VarResolver(Class<? extends Var>[] vars, Map<String,Object> contextObjects) {
+	VarResolver(Var[] vars, Map<String,Object> contextObjects) {
 		this.ctx = new VarResolverContext(vars, contextObjects);
 	}
 

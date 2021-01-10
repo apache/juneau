@@ -56,7 +56,7 @@ import org.apache.juneau.serializer.annotation.*;
 	},
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
+		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",

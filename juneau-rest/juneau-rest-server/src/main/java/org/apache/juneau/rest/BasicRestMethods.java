@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
 	// Basic page navigation links.
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/api",
+		"api: servlet:/api",
 		"stats: servlet:/stats"
 	}
 

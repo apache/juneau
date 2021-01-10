@@ -40,6 +40,8 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'>{@doc RestResourceResolvers}
  * </ul>
  */
+@SuppressWarnings("javadoc")
+@Deprecated
 public interface RestResourceResolver extends ResourceResolver {
 
 	/**

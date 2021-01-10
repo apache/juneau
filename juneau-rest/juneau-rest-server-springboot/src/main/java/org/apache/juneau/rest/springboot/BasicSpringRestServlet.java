@@ -154,18 +154,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc BasicRestServlet}
  * </ul>
  */
-@Rest(
-	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
-	allowedMethodParams="OPTIONS"
-)
-@HtmlDocConfig(
-	// Basic page navigation links.
-	navlinks={
-		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
-		"stats: servlet:/stats"
-	}
-)
+@Rest
 public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalRest, BasicRestMethods {
 	private static final long serialVersionUID = 1L;
 

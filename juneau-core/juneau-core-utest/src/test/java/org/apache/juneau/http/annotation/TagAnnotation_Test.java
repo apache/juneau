@@ -43,7 +43,7 @@ public class TagAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).stderr().json().is(""
+		assertObject(a1).json().is(""
 			+ "{"
 				+ "description:['description'],"
 				+ "externalDocs:{description:[],url:'',value:[]},"

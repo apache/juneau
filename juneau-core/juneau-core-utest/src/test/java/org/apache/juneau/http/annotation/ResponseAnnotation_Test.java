@@ -70,7 +70,7 @@ public class ResponseAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).stderr().json().is(""
+		assertObject(a1).json().is(""
 			+ "{"
 				+ "api:['api'],"
 				+ "code:[1],"

@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.template;
 
-import org.apache.juneau.rest.springboot.*;
-import org.apache.juneau.rest.springboot.annotation.*;
+import javax.servlet.*;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.*;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -35,19 +35,16 @@ public class App {
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(App.class)
-			.initializers(new JuneauRestInitializer(App.class))
-			.run(args);
+		new SpringApplicationBuilder(App.class).run(args);
 	}
 
 	/**
 	 * @return Our root resource.
 	 */
-	@Bean @JuneauRestRoot
-	public RootResources getRootResources() {
-		return new RootResources();
+	@Bean
+	public ServletRegistrationBean<Servlet> getRootResources() {
+		return new ServletRegistrationBean<>(new RootResources(), "/*");
 	}
-
 
 	/**
 	 * If you want to parse URL-encoded form posts directly into beans, this call will disable the HiddenHttpMethodFilter
@@ -58,8 +55,8 @@ public class App {
 	 */
 	@Bean
 	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
-	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
-	    registration.setEnabled(false);
-	    return registration;
+		FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
+		registration.setEnabled(false);
+		return registration;
 	}
 }

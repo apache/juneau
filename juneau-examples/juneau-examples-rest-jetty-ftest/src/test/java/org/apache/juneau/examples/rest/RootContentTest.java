@@ -46,7 +46,7 @@ public class RootContentTest extends ContentComboTestBase {
 			{ 	/* 3 */
 				new ComboInput("HTML-nav", "/", MediaType.HTML,
 					"<nav>",
-					"<a href='/?method=OPTIONS'>options</a>",
+					"<a href='/api'>api</a>",
 					"<a onclick='menuClick(this);'>content-type</a>",
 					"<a onclick='menuClick(this);'>themes</a>",
 					"<a href='https://github.com/apache/juneau/blob/master/juneau-examples/juneau-examples-rest/src/main/java/org/apache/juneau/examples/rest/RootResources.java'>source</a>"

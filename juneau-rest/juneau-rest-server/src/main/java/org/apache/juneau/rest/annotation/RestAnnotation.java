@@ -94,7 +94,7 @@ public class RestAnnotation {
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestInfoProvider> infoProvider=RestInfoProvider.Null.class;
 		Class<? extends RestMethodParam>[] paramResolvers = new Class[0];
-		Class<? extends RestResourceResolver> resourceResolver=RestResourceResolver.Null.class;
+		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
 		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
@@ -157,6 +157,17 @@ public class RestAnnotation {
 		 */
 		public Builder allowedMethodParams(String value) {
 			this.allowedMethodParams = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#beanFactory()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder beanFactory(Class<? extends BeanFactory> value) {
+			this.beanFactory = value;
 			return this;
 		}
 
@@ -480,17 +491,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#resourceResolver()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder resourceResolver(Class<? extends RestResourceResolver> value) {
-			this.resourceResolver = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#responseHandlers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -659,7 +659,7 @@ public class RestAnnotation {
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestInfoProvider> infoProvider;
 		private final Class<? extends RestMethodParam>[] paramResolvers;
-		private final Class<? extends RestResourceResolver> resourceResolver;
+		private final Class<? extends BeanFactory> beanFactory;
 		private final Class<?>[] children, parsers, serializers;
 		private final ResourceSwagger swagger;
 		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
@@ -671,6 +671,7 @@ public class RestAnnotation {
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
 			this.allowedMethodParams = b.allowedMethodParams;
+			this.beanFactory = b.beanFactory;
 			this.callLogger = b.callLogger;
 			this.children = copyOf(b.children);
 			this.clientVersionHeader = b.clientVersionHeader;
@@ -700,7 +701,6 @@ public class RestAnnotation {
 			this.reqAttrs = copyOf(b.reqAttrs);
 			this.reqHeaders = copyOf(b.reqHeaders);
 			this.resHeaders = copyOf(b.resHeaders);
-			this.resourceResolver = b.resourceResolver;
 			this.responseHandlers = copyOf(b.responseHandlers);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
@@ -734,6 +734,11 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String allowedMethodParams() {
 			return allowedMethodParams;
+		}
+
+		@Override /* Rest */
+		public Class<? extends BeanFactory> beanFactory() {
+			return beanFactory;
 		}
 
 		@Override /* Rest */
@@ -879,11 +884,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String[] resHeaders() {
 			return resHeaders;
-		}
-
-		@Override /* Rest */
-		public Class<? extends RestResourceResolver> resourceResolver() {
-			return resourceResolver;
 		}
 
 		@Override /* Rest */
@@ -1069,8 +1069,8 @@ public class RestAnnotation {
 			if (! a.clientVersionHeader().isEmpty())
 				psb.set(REST_clientVersionHeader, string(a.clientVersionHeader()));
 
-			if (a.resourceResolver() != RestResourceResolver.Null.class)
-				psb.set(REST_resourceResolver, a.resourceResolver());
+			if (a.beanFactory() != BeanFactory.Null.class)
+				psb.set(REST_beanFactory, a.beanFactory());
 
 			if (a.callLogger() != RestLogger.Null.class)
 				psb.set(REST_callLogger, a.callLogger());

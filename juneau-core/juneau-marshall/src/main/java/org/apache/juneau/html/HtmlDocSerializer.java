@@ -36,24 +36,9 @@ import org.apache.juneau.svl.*;
  * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
  *
  * <p>
- * Configurable properties are typically specified via <ja>@Rest(properties)</ja> and <ja>@RestMethod(properties)</ja>
- * annotations, although they can also be set programmatically via the <c>RestResponse.setProperty()</c> method.
+ * Configurable properties are typically specified via <ja>@HtmlDocConfig</ja>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@Rest</ja>(
- * 		messages=<js>"nls/AddressBookResource"</js>,
- * 		properties={
- * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
- * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),
- * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'servlet:/?method=OPTIONS',doc:'doc'}"</js>)
- * 		}
- * 	)
- * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
- * </p>
- *
- * <p>
- * Note that shortcut annotations are also provided for these particular settings:
  * <p class='bcode w800'>
  * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
@@ -62,10 +47,11 @@ import org.apache.juneau.svl.*;
  * 	)
  * 	<ja>@HtmlDocConfig</ja>(
  * 		navlinks={
- * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+ * 			<js>"api: servlet:/api"</js>,
  * 			<js>"doc: doc"</js>
  * 		}
  * 	)
+ * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
  * </p>
  *
  * <p>
@@ -387,24 +373,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <js>"servlet:/..."</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p>
-	 * The <c>AddressBookResource</c> sample class uses this property...
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>,
-	 * 				value=<js>"['options: servlet:/?method=OPTIONS', 'doc: doc']"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
-	 * </p>
-	 *
-	 * <p>
-	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
 	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={
-	 * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 			<js>"api: servlet:/api"</js>,
 	 * 			<js>"doc: doc"</js>
 	 * 		}
 	 * 	)

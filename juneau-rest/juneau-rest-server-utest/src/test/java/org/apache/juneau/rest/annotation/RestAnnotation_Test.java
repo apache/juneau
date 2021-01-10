@@ -41,6 +41,7 @@ public class RestAnnotation_Test {
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
+		.beanFactory(BeanFactory.class)
 		.callLogger(BasicRestLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("clientVersionHeader")
@@ -72,7 +73,6 @@ public class RestAnnotation_Test {
 		.reqAttrs("reqAttrs")
 		.reqHeaders("reqHeaders")
 		.resHeaders("resHeaders")
-		.resourceResolver(RestResourceResolver.class)
 		.responseHandlers(ResponseHandler.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -92,6 +92,7 @@ public class RestAnnotation_Test {
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
+		.beanFactory(BeanFactory.class)
 		.callLogger(BasicRestLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("clientVersionHeader")
@@ -123,7 +124,6 @@ public class RestAnnotation_Test {
 		.reqAttrs("reqAttrs")
 		.reqHeaders("reqHeaders")
 		.resHeaders("resHeaders")
-		.resourceResolver(RestResourceResolver.class)
 		.responseHandlers(ResponseHandler.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -140,11 +140,12 @@ public class RestAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).stderr().json().is(""
+		assertObject(a1).json().is(""
 			+ "{"
 				+ "allowedHeaderParams:'allowedHeaderParams',"
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"
 				+ "allowedMethodParams:'allowedMethodParams',"
+				+ "beanFactory:'org.apache.juneau.cp.BeanFactory',"
 				+ "callLogger:'org.apache.juneau.rest.logging.BasicRestLogger',"
 				+ "children:['"+CNAME+"'],"
 				+ "clientVersionHeader:'clientVersionHeader',"
@@ -177,7 +178,6 @@ public class RestAnnotation_Test {
 				+ "reqAttrs:['reqAttrs'],"
 				+ "reqHeaders:['reqHeaders'],"
 				+ "resHeaders:['resHeaders'],"
-				+ "resourceResolver:'org.apache.juneau.rest.RestResourceResolver',"
 				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -242,6 +242,7 @@ public class RestAnnotation_Test {
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
+		beanFactory=BeanFactory.class,
 		callLogger=BasicRestLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="clientVersionHeader",
@@ -273,7 +274,6 @@ public class RestAnnotation_Test {
 		reqAttrs="reqAttrs",
 		reqHeaders="reqHeaders",
 		resHeaders="resHeaders",
-		resourceResolver=RestResourceResolver.class,
 		responseHandlers=ResponseHandler.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
@@ -295,6 +295,7 @@ public class RestAnnotation_Test {
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
+		beanFactory=BeanFactory.class,
 		callLogger=BasicRestLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="clientVersionHeader",
@@ -326,7 +327,6 @@ public class RestAnnotation_Test {
 		reqAttrs="reqAttrs",
 		reqHeaders="reqHeaders",
 		resHeaders="resHeaders",
-		resourceResolver=RestResourceResolver.class,
 		responseHandlers=ResponseHandler.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",

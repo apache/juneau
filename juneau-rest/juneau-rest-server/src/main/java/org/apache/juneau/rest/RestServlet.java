@@ -42,7 +42,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestResourceResolver {
+public abstract class RestServlet extends HttpServlet implements RestInfoProvider {
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	private volatile RestContext context;
 	private volatile Exception initException;
 	private boolean isInitialized = false;  // Should not be volatile.
-	private volatile RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private RestInfoProvider infoProvider;
 
@@ -60,8 +59,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 			if (context != null)
 				return;
 			builder = RestContext.create(servletConfig, this.getClass(), null);
-			if (resourceResolver != null)
-				builder.resourceResolver(resourceResolver);
 			builder.init(this);
 			super.init(servletConfig);
 			builder.servletContext(this.getServletContext());
@@ -80,10 +77,11 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	/**
 	 * Instantiates the bean factory to use for creating beans for this servlet.
 	 *
+	 * @param parent The parent bean factory.
 	 * @return A new bean factory.
 	 */
-	protected BeanFactory createBeanFactory() {
-		return new BeanFactory();
+	protected BeanFactory createBeanFactory(BeanFactory parent) {
+		return new BeanFactory(parent, this);
 	}
 
 	/*
@@ -115,20 +113,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 */
 	public synchronized boolean isInitialized() {
 		return isInitialized;
-	}
-
-	/**
-	 * Sets the resource resolver to use for this servlet and all child servlets.
-	 * <p>
-	 * This method can be called immediately following object construction, but must be called before {@link #init(ServletConfig)} is called.
-	 * Otherwise calling this method will have no effect.
-	 *
-	 * @param resourceResolver The resolver instance.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public synchronized RestServlet setRestResourceResolver(RestResourceResolver resourceResolver) {
-		this.resourceResolver = resourceResolver;
-		return this;
 	}
 
 	/**
@@ -185,7 +169,7 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 *
 	 * <p>
 	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder()}.
+	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder(BeanFactory)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
@@ -202,7 +186,7 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 *
 	 * <p>
 	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles()}.
+	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles(BeanFactory)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
@@ -219,7 +203,7 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 *
 	 * <p>
 	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger()}.
+	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger(BeanFactory)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@link RestContext#REST_callLogger}.
@@ -672,19 +656,5 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	@Override /* RestInfoProvider */
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		return infoProvider.getMethodDescription(method, req);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestResourceResolver
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, Object... args) {
-		return resourceResolver.resolve(parent, c, args);
-	}
-
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object... args) throws Exception {
-		return resourceResolver.resolve(parent, c, builder, args);
 	}
 }

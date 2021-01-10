@@ -48,6 +48,7 @@ import org.springframework.context.ApplicationContext;
  * 		}
  * </p>
  */
+@Deprecated
 public class SpringRestResourceResolver extends BasicRestResourceResolver {
 
 	private ApplicationContext ctx;

@@ -17,7 +17,6 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.*;
@@ -35,18 +34,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc BasicRest}
  * </ul>
  */
-@Rest(
-	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
-	allowedMethodParams="OPTIONS"
-)
-@HtmlDocConfig(
-	// Basic page navigation links.
-	navlinks={
-		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
-		"stats: servlet:/stats"
-	}
-)
+@Rest
 public abstract class BasicRestObject extends RestObject implements BasicUniversalRest, BasicRestMethods {
 
 	//-----------------------------------------------------------------------------------------------------------------

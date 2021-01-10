@@ -66,7 +66,7 @@ public abstract class RestObject implements RestInfoProvider {
 	 *
 	 * <p>
 	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder()}.
+	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder(BeanFactory)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
@@ -83,7 +83,7 @@ public abstract class RestObject implements RestInfoProvider {
 	 *
 	 * <p>
 	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles()}.
+	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles(BeanFactory)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
@@ -100,7 +100,7 @@ public abstract class RestObject implements RestInfoProvider {
 	 *
 	 * <p>
 	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger()}.
+	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger(BeanFactory)}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@link RestContext#REST_callLogger}.

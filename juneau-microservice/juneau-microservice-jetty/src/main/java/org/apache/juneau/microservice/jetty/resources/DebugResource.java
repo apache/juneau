@@ -36,7 +36,7 @@ import org.apache.juneau.rest.helper.*;
 	navlinks={
 		"up: request:/..",
 		"jetty-thread-dump: servlet:/jetty/dump?method=POST",
-		"options: servlet:/?method=OPTIONS",
+		"api: servlet:/api",
 		"stats: servlet:/stats"
 	}
 )

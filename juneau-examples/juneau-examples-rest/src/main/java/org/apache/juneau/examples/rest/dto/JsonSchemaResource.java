@@ -49,7 +49,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
+		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",

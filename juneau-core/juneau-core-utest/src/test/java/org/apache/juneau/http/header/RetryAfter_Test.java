@@ -69,7 +69,7 @@ public class RetryAfter_Test {
 
 	@Test
 	public void a02_asZonedDateTime() throws Exception {
-		assertObject(of(CALENDAR_VALUE).asZonedDateTime().toString()).stderr().is("2000-12-31T12:34:56Z[GMT]");
+		assertObject(of(CALENDAR_VALUE).asZonedDateTime().toString()).is("2000-12-31T12:34:56Z[GMT]");
 	}
 
 	@Test

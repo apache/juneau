@@ -41,7 +41,7 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 		ThemeMenuItem.class
 	},
 	navlinks={
-		"options: servlet:/?method=OPTIONS",
+		"api: servlet:/api",
 		"stats: servlet:/stats"
 	}
 )

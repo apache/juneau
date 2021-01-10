@@ -10,56 +10,58 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.svl;
 
-import javax.servlet.*;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.*;
-import org.springframework.boot.web.servlet.*;
-import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.filter.*;
+import java.util.*;
 
 /**
- * Entry point for Examples REST application when deployed as a Spring Boot application.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
+ * Simple list of variables that can consist of either variable classes or instances.
  */
-@SpringBootApplication
-@Controller
-public class App {
+public class VarList extends ArrayList<Object> {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Entry point method.
-	 * @param args Command-line arguments.
-	 */
-	@SuppressWarnings("resource")
-	public static void main(String[] args) {
-		new SpringApplicationBuilder(App.class).run(args);
-	}
-
-	/**
-	 * @return Our root resource.
-	 */
-	@Bean
-	public ServletRegistrationBean<Servlet> getRootResources() {
-		return new ServletRegistrationBean<>(new RootResources(), "/*");
-	}
-
-	/**
-	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
-	 * body to be consumed.  So disable it.
+	 * Creates a new list of variables.
 	 *
-	 * @param filter The filter.
-	 * @return Filter registration bean.
+	 * @param vars The variables to create.
+	 * @return A new list of variables.
 	 */
-	@Bean
-	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
-		FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
-		registration.setEnabled(false);
-		return registration;
+	public static VarList of(Var...vars) {
+		return new VarList().append(vars);
+	}
+
+	/**
+	 * Creates a new list of variables.
+	 *
+	 * @param vars The variables to create.
+	 * @return A new list of variables.
+	 */
+	@SuppressWarnings("unchecked")
+	public static VarList of(Class<? extends Var>...vars) {
+		return new VarList().append(vars);
+	}
+
+	/**
+	 * Appends a list of variables to this list.
+	 *
+	 * @param vars The variables to append to this list.
+	 * @return This object (for method chaining).
+	 */
+	private VarList append(Var...vars) {
+		addAll(Arrays.asList(vars));
+		return this;
+	}
+
+	/**
+	 * Appends a list of variables to this list.
+	 *
+	 * @param vars The variables to append to this list.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	private VarList append(Class<? extends Var>...vars) {
+		addAll(Arrays.asList(vars));
+		return this;
 	}
 }
