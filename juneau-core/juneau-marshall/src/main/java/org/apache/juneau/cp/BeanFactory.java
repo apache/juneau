@@ -82,6 +82,8 @@ public class BeanFactory {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanFactory addBean(Class<T> c, T t) {
+		if (t != null && ! c.isInstance(t))
+			throw new BasicRuntimeException("Object not of type {0}: {1}", c.getName(), t.getClass().getName());
 		if (t == null)
 			beanMap.remove(c);
 		else
@@ -171,7 +173,13 @@ public class BeanFactory {
 		return null;
 	}
 
-	private List<ClassInfo> getMissingParamTypes(List<ClassInfo> paramTypes) {
+	/**
+	 * Given the list of param types, returns a list of types that are missing from this factory.
+	 *
+	 * @param paramTypes The param types to chec.
+	 * @return A list of types that are missing from this factory.
+	 */
+	public List<ClassInfo> getMissingParamTypes(List<ClassInfo> paramTypes) {
 		List<ClassInfo> l = AList.of();
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
@@ -183,7 +191,13 @@ public class BeanFactory {
 		return l;
 	}
 
-	private Object[] getParams(List<ClassInfo> paramTypes) {
+	/**
+	 * Returns the corresponding beans in this factory for the specified param types.
+	 *
+	 * @param paramTypes The param types to get from this factory.
+	 * @return The corresponding beans in this factory for the specified param types.
+	 */
+	public Object[] getParams(List<ClassInfo> paramTypes) {
 		Object[] o = new Object[paramTypes.size()];
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);

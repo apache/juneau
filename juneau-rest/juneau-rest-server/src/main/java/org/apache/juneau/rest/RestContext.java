@@ -3208,7 +3208,8 @@ public class RestContext extends BeanContext {
 	private final RestInfoProvider infoProvider;
 	private final HttpException initException;
 	private final RestContext parentContext;
-	private final BeanFactory rootBeanFactory, beanFactory;
+	final BeanFactory rootBeanFactory;
+	private final BeanFactory beanFactory;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
 	private final ConcurrentHashMap<String,MethodExecStats> methodExecStats = new ConcurrentHashMap<>();
@@ -3250,7 +3251,7 @@ public class RestContext extends BeanContext {
 	 * @throws ServletException Something bad happened.
 	 */
 	public static RestContextBuilder create(Object resource) throws ServletException {
-		return new RestContextBuilder(null, resource.getClass(), null).init(resource);
+		return new RestContextBuilder(resource.getClass(), Optional.empty(), Optional.empty(), Optional.of(resource)).init(resource);
 	}
 
 	/**
@@ -3263,7 +3264,7 @@ public class RestContext extends BeanContext {
 	 * @throws ServletException Something bad happened.
 	 */
 	static RestContextBuilder create(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
-		return new RestContextBuilder(servletConfig, resourceClass, parentContext);
+		return new RestContextBuilder(resourceClass, Optional.ofNullable(servletConfig), Optional.ofNullable(parentContext), Optional.empty());
 	}
 
 	/**
@@ -5047,6 +5048,8 @@ public class RestContext extends BeanContext {
 				rp[i] = new RestParamDefaults.HasQueryObject(mpi);
 			} else if (mpi.hasAnnotation(org.apache.juneau.rest.annotation.Method.class)) {
 				rp[i] = new RestParamDefaults.MethodObject(mi, t, mpi);
+			} else if (beanFactory.hasBean(t.inner())) {
+				rp[i] = new RestParamDefaults.BeanFactoryObject(mi, t, mpi, beanFactory);
 			}
 
 			if (rp[i] == null && ! isPreOrPost)

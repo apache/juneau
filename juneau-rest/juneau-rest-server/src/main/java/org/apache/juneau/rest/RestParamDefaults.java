@@ -25,7 +25,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.Messages;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
@@ -426,6 +426,23 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getMethod();
+		}
+	}
+
+	static final class BeanFactoryObject extends RestMethodParam {
+
+		private final BeanFactory beanFactory;
+		private final ClassInfo type;
+
+		protected BeanFactoryObject(MethodInfo m, ClassInfo t, ParamInfo mpi, BeanFactory beanFactory) {
+			super(OTHER, mpi);
+			this.beanFactory = beanFactory;
+			this.type = t;
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return beanFactory.getBean(type.inner()).orElseThrow(()->new ServletException("Could not resolve bean type :" + type.inner().getName()));
 		}
 	}
 

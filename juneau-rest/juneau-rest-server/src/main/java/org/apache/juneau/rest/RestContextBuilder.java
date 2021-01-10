@@ -22,6 +22,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.stream.*;
 
 import javax.servlet.*;
 
@@ -92,11 +93,9 @@ import org.apache.juneau.utils.*;
 public class RestContextBuilder extends BeanContextBuilder implements ServletConfig {
 
 	final ServletConfig inner;
-
-	Class<?> resourceClass;
-	Object resource;
-	ServletContext servletContext;
-	RestContext parentContext;
+	final Class<?> resourceClass;
+	final RestContext parentContext;
+	final BeanFactory beanFactory;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
@@ -104,27 +103,43 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	// Read-only snapshots of these will be made in RestServletContext.
 	//-----------------------------------------------------------------------------------------------------------------
 
+	Object resource;
+	ServletContext servletContext;
+
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 
-	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
-		this.inner = servletConfig;
-		this.resourceClass = resourceClass;
-		this.parentContext = parentContext;
-
-		ClassInfo rci = ClassInfo.of(resourceClass);
-
-		// Default values.
-		partSerializer(OpenApiSerializer.class);
-		partParser(OpenApiParser.class);
-		encoders(IdentityEncoder.INSTANCE);
-		responseHandlers(
-			ReaderHandler.class,
-			InputStreamHandler.class,
-			DefaultHandler.class
-		);
-
+	RestContextBuilder(Class<?> resourceClass, Optional<ServletConfig> servletConfig, Optional<RestContext> parentContext, Optional<Object> resource) throws ServletException {
 		try {
+
+			this.resourceClass = resourceClass;
+			this.inner = servletConfig.orElse(null);
+			this.parentContext = parentContext.orElse(null);
+
+			ClassInfo rci = ClassInfo.of(resourceClass);
+
+			// Default values.
+			partSerializer(OpenApiSerializer.class);
+			partParser(OpenApiParser.class);
+			encoders(IdentityEncoder.INSTANCE);
+			responseHandlers(
+				ReaderHandler.class,
+				InputStreamHandler.class,
+				DefaultHandler.class
+			);
+
+			// Pass-through default values.
+			if (parentContext.isPresent()) {
+				RestContext pc = parentContext.get();
+				set(REST_callLoggerDefault, pc.getProperty(REST_callLoggerDefault));
+				set(REST_debugDefault, pc.getProperty(REST_debugDefault));
+				set(REST_staticFilesDefault, pc.getProperty(REST_staticFilesDefault));
+				set(REST_fileFinderDefault, pc.getProperty(REST_fileFinderDefault));
+			}
+
+			beanFactory = createBeanFactory(parentContext, resource);
+			beanFactory.addBean(RestContextBuilder.class, this);
+			beanFactory.addBean(ServletConfig.class, servletConfig.orElse(this));
 
 			varResolverBuilder = new VarResolverBuilder()
 				.defaultVars()
@@ -133,44 +148,25 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				.contextObject("crm", FileFinder.create().cp(resourceClass,null,true).build());
 
 			VarResolver vr = varResolverBuilder.build();
-
-			List<AnnotationInfo<Rest>> restAnnotationsParentFirst = rci.getAnnotationInfos(Rest.class);
+			beanFactory.addBean(VarResolver.class, vr);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-			String configPath = "";
-			for (AnnotationInfo<Rest> r : restAnnotationsParentFirst)
-				if (! r.getAnnotation().config().isEmpty())
-					configPath = r.getAnnotation().config();
-			String cf = vr.resolve(configPath);
-
-			if ("SYSTEM_DEFAULT".equals(cf))
-				this.config = Config.getSystemDefault();
-
-			if (this.config == null) {
-				ConfigBuilder cb = Config.create().varResolver(vr);
-				if (! cf.isEmpty())
-					cb.name(cf);
-				this.config = cb.build();
-			}
+			config = createConfig(resourceClass, beanFactory);
+			beanFactory.addBean(Config.class, config);
 
 			// Add our config file to the variable resolver.
 			varResolverBuilder.contextObject(ConfigVar.SESSION_config, config);
 			vr = varResolverBuilder.build();
+			beanFactory.addBean(VarResolver.class, vr);
 
 			// Add the servlet init parameters to our properties.
-			if (servletConfig != null) {
-				for (Enumeration<String> ep = servletConfig.getInitParameterNames(); ep.hasMoreElements();) {
+			if (servletConfig.isPresent()) {
+				ServletConfig sc = servletConfig.get();
+				for (Enumeration<String> ep = sc.getInitParameterNames(); ep.hasMoreElements();) {
 					String p = ep.nextElement();
-					String initParam = servletConfig.getInitParameter(p);
+					String initParam = sc.getInitParameter(p);
 					set(vr.resolve(p), vr.resolve(initParam));
 				}
-			}
-
-			if (parentContext != null) {
-				set(REST_callLoggerDefault, parentContext.getProperty(REST_callLoggerDefault));
-				set(REST_debugDefault, parentContext.getProperty(REST_debugDefault));
-				set(REST_staticFilesDefault, parentContext.getProperty(REST_staticFilesDefault));
-				set(REST_fileFinderDefault, parentContext.getProperty(REST_fileFinderDefault));
 			}
 
 			applyAnnotations(rci.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vr.createSession());
@@ -194,11 +190,68 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 	}
 
+	/**
+	 * Creates the bean factory for this builder.
+	 *
+	 * @param parentContext The parent context if there is one.
+	 * @param resource The resource object if it's instantiated at this time.
+	 * @return A new bean factory.
+	 * @throws Exception If bean factory could not be instantiated.
+	 */
+	protected BeanFactory createBeanFactory(Optional<RestContext> parentContext, Optional<Object> resource) throws Exception {
+		BeanFactory x = null;
+		if (resource.isPresent()) {
+			BeanFactory bf = new BeanFactory(parentContext.isPresent() ? parentContext.get().rootBeanFactory : null, resource);
+			x = bf.createBeanViaMethod(BeanFactory.class, resource, "createBeanFactory");
+		}
+		if (x == null && parentContext.isPresent()) {
+			x = parentContext.get().rootBeanFactory;
+		}
+		return new BeanFactory(x, resource.orElse(null));
+	}
+
+	/**
+	 * Creates the config for this builder.
+	 *
+	 * @param resourceClass The resource class.
+	 * @param beanFactory The bean factory to use for creating the config.
+	 * @return A new bean factory.
+	 * @throws Exception If bean factory could not be instantiated.
+	 */
+	protected Config createConfig(Class<?> resourceClass, BeanFactory beanFactory) throws Exception {
+		ClassInfo rci = ClassInfo.of(resourceClass);
+		Config x = null;
+		if (resource instanceof Config)
+			x = (Config)resource;
+		if (x == null)
+			x = beanFactory.getBean(Config.class).orElse(null);
+
+		// Find our config file.  It's the last non-empty @RestResource(config).
+		String configPath = "";
+		for (AnnotationInfo<Rest> r : rci.getAnnotationInfos(Rest.class))
+			if (! r.getAnnotation().config().isEmpty())
+				configPath = r.getAnnotation().config();
+		VarResolver vr = beanFactory.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
+		String cf = vr.resolve(configPath);
+
+		if ("SYSTEM_DEFAULT".equals(cf))
+			x = Config.getSystemDefault();
+
+		if (x == null) {
+			ConfigBuilder cb = Config.create().varResolver(vr);
+			if (! cf.isEmpty())
+				cb.name(cf);
+			x = cb.build();
+		}
+		return x;
+	}
+
 	/*
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
+
 		ClassInfo rci = ClassInfo.of(resource).resolved();
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
@@ -211,31 +264,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 		}
 		for (MethodInfo m : map.values()) {
-			assertArgsOnlyOfType(m, RestContextBuilder.class, ServletConfig.class);
-			Class<?>[] pt = (Class<?>[])m.getRawParamTypes().toArray();
-			Object[] args = new Object[pt.length];
-			for (int i = 0; i < args.length; i++) {
-				if (pt[i] == RestContextBuilder.class)
-					args[i] = this;
-				else
-					args[i] = this.inner;
-			}
+			List<ClassInfo> paramTypes = m.getParamTypes();
+
+			List<ClassInfo> missing = beanFactory.getMissingParamTypes(paramTypes);
+			if (!missing.isEmpty())
+				throw new RestServletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
+
 			try {
-				m.invoke(resource, args);
+				m.invoke(resource, beanFactory.getParams(paramTypes));
 			} catch (Exception e) {
-				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{0}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
+				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}
 		}
 		return this;
 	}
 
-	private static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
-		if (! m.argsOnlyOfType(args))
-			throw new BasicIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
-	}
-
 	RestContextBuilder servletContext(ServletContext servletContext) {
 		this.servletContext = servletContext;
+		beanFactory.addBean(ServletContext.class, servletContext);
 		return this;
 	}
 
