@@ -128,11 +128,6 @@ public abstract class RestServlet extends HttpServlet {
 		return "";
 	}
 
-	@Override /* GenericServlet */
-	public synchronized RestContextBuilder getServletConfig() {
-		return builder;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Lifecycle methods
 	//-----------------------------------------------------------------------------------------------------------------

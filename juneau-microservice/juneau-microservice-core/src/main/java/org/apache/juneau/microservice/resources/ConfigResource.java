@@ -62,7 +62,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap getConfig() {
-		return getServletConfig().getConfig().toMap();
+		return getContext().getConfig().toMap();
 	}
 
 	@RestMethod(
@@ -79,7 +79,7 @@ public class ConfigResource extends BasicRestServlet {
 					tr(th().child("Contents")),
 					tr(th().child(
 						textarea().name("contents").rows(40).cols(120).style("white-space:pre;word-wrap:normal;overflow-x:scroll;font-family:monospace;")
-							.text(getServletConfig().getConfig().toString()))
+							.text(getContext().getConfig().toString()))
 					)
 				)
 			)
@@ -156,7 +156,7 @@ public class ConfigResource extends BasicRestServlet {
 			@Body(d="New contents in INI file format.") Reader contents
 		) throws Exception {
 
-		return getServletConfig().getConfig().load(contents, true).toMap();
+		return getContext().getConfig().load(contents, true).toMap();
 	}
 
 	@RestMethod(
@@ -178,7 +178,7 @@ public class ConfigResource extends BasicRestServlet {
 			) Map<String,Object> contents
 		) throws Exception {
 
-		getServletConfig().getConfig().setSection(section, null, contents);
+		getContext().getConfig().setSection(section, null, contents);
 		return getSection(section);
 	}
 
@@ -199,7 +199,7 @@ public class ConfigResource extends BasicRestServlet {
 			@Body(d="New value for entry.", ex="servlet:/htdocs/themes/dark.css") String value
 		) throws SectionNotFound, BadConfig {
 
-		getServletConfig().getConfig().set(section + '/' + key, value);
+		getContext().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
 
@@ -232,7 +232,7 @@ public class ConfigResource extends BasicRestServlet {
 	private OMap getSection(String name) throws SectionNotFound, BadConfig {
 		OMap m;
 		try {
-			m = getServletConfig().getConfig().getSectionAsMap(name);
+			m = getContext().getConfig().getSectionAsMap(name);
 		} catch (ParseException e) {
 			throw new BadConfig(e);
 		}
