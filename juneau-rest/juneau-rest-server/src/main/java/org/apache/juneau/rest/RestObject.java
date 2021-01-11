@@ -39,7 +39,6 @@ import org.apache.juneau.rest.annotation.*;
  */
 public abstract class RestObject {
 
-	private Logger logger = Logger.getLogger(getClass().getName());
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -139,6 +138,10 @@ public abstract class RestObject {
 	 * @param msg The message to log.
 	 */
 	protected void doLog(Level level, Throwable cause, Supplier<String> msg) {
+		RestContext c = context.get();
+		Logger logger = c == null ? null : c.getLogger();
+		if (logger == null)
+			logger = Logger.getLogger(getClass().getName());
 		logger.log(level, cause, msg);
 	}
 
