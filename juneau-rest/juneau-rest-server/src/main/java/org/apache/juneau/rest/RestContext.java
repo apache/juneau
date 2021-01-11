@@ -3605,39 +3605,36 @@ public class RestContext extends BeanContext {
 			// Initialize our child resources.
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
 				String path = null;
-				Object r = null;
+
 				if (o instanceof RestChild) {
 					RestChild rc = (RestChild)o;
 					path = rc.path;
-					r = rc.resource;
-				} else if (o instanceof Class<?>) {
-					Class<?> c = (Class<?>)o;
-					// Don't allow specifying yourself as a child.  Causes an infinite loop.
-					if (c == builder.resourceClass)
-						continue;
-					r = c;
-				} else {
-					r = o;
+					o = rc.resource;
 				}
 
-				RestContextBuilder childBuilder = null;
+				RestContextBuilder cb = null;
 
 				if (o instanceof Class) {
 					Class<?> oc = (Class<?>)o;
-					childBuilder = RestContext.create(this, builder.inner, oc, null);
-					r = new BeanFactory(beanFactory, resource).addBean(RestContextBuilder.class, childBuilder).createBean(oc);
+					// Don't allow specifying yourself as a child.  Causes an infinite loop.
+					if (oc == builder.resourceClass)
+						continue;
+					cb = RestContext.create(this, builder.inner, oc, null);
+					o = new BeanFactory(beanFactory, resource).addBean(RestContextBuilder.class, cb).createBean(oc);
 				} else {
-					r = o;
-					childBuilder = RestContext.create(this, builder.inner, o.getClass(), o);
+					cb = RestContext.create(this, builder.inner, o.getClass(), o);
 				}
 
-				childBuilder.init(r);
-				RestContext rc2 = childBuilder.build();
-				MethodInfo mi = ClassInfo.of(r).getMethod("setContext", RestContext.class);
+				if (path != null)
+					cb.path(path);
+
+				RestContext cc = cb.init(o).build();
+
+				MethodInfo mi = ClassInfo.of(o).getMethod("setContext", RestContext.class);
 				if (mi != null)
-					mi.accessible().invoke(r, rc2);
-				path = childBuilder.getPath();
-				childResources.put(path, rc2);
+					mi.accessible().invoke(o, cc);
+
+				childResources.put(cb.getPath(), cc);
 			}
 
 			infoProvider = createInfoProvider(beanFactory);
