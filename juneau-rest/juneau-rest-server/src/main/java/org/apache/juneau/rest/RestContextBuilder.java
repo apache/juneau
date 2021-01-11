@@ -2564,7 +2564,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	@Override /* ServletConfig */
 	public ServletContext getServletContext() {
-		return inner == null ? null : inner.getServletContext();
+		return inner != null ? inner.getServletContext() : parentContext != null ? parentContext.builder.getServletContext() : null;
 	}
 
 	@Override /* ServletConfig */
