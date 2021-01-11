@@ -3246,7 +3246,7 @@ public class RestContext extends BeanContext {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param parentContext The parent context, or <jk>null</jk> if there is no parent context.
 	 * @param servletConfig The servlet config passed into the servlet by the servlet container.
 	 * @param resourceClass The class annotated with <ja>@Rest</ja>.
@@ -3273,8 +3273,6 @@ public class RestContext extends BeanContext {
 		HttpException _initException = null;
 
 		try {
-			ServletContext servletContext = builder.servletContext;
-
 			this.builder = builder;
 			resource = builder.resource;
 			parentContext = builder.parentContext;
@@ -3636,7 +3634,6 @@ public class RestContext extends BeanContext {
 				childBuilder.init(r);
 				if (r instanceof RestServlet)
 					((RestServlet)r).innerInit(childBuilder);
-				childBuilder.servletContext(servletContext);
 				RestContext rc2 = childBuilder.build();
 				if (r instanceof RestServlet)
 					((RestServlet)r).setContext(rc2);

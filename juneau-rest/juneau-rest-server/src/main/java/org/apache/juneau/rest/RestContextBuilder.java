@@ -140,6 +140,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			beanFactory = createBeanFactory(parentContext, resource);
 			beanFactory.addBean(RestContextBuilder.class, this);
 			beanFactory.addBean(ServletConfig.class, servletConfig.orElse(this));
+			beanFactory.addBean(ServletContext.class, servletConfig.orElse(this).getServletContext());
 
 			varResolverBuilder = new VarResolverBuilder()
 				.defaultVars()
@@ -276,12 +277,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}
 		}
-		return this;
-	}
-
-	RestContextBuilder servletContext(ServletContext servletContext) {
-		this.servletContext = servletContext;
-		beanFactory.addBean(ServletContext.class, servletContext);
 		return this;
 	}
 
@@ -2559,21 +2554,21 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	@Override /* ServletConfig */
 	public String getInitParameter(String name) {
-		return inner.getInitParameter(name);
+		return inner == null ? null : inner.getInitParameter(name);
 	}
 
 	@Override /* ServletConfig */
 	public Enumeration<String> getInitParameterNames() {
-		return inner.getInitParameterNames();
+		return inner == null ? new Vector<String>().elements() : inner.getInitParameterNames();
 	}
 
 	@Override /* ServletConfig */
 	public ServletContext getServletContext() {
-		return inner.getServletContext();
+		return inner == null ? null : inner.getServletContext();
 	}
 
 	@Override /* ServletConfig */
 	public String getServletName() {
-		return inner.getServletName();
+		return inner == null ? null : inner.getServletName();
 	}
 }
