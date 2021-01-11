@@ -35,7 +35,7 @@ public class BeanFactory {
 	 */
 	public static final class Null extends BeanFactory {}
 
-	private final Map<Class<?>,Object> beanMap = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Supplier<?>> beanMap = new ConcurrentHashMap<>();
 	private final BeanFactory parent;
 	private final Object outer;
 
@@ -67,9 +67,10 @@ public class BeanFactory {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> c) {
-		T t = (T)beanMap.get(c);
-		if (t == null && parent != null)
+		Supplier<?> o = beanMap.get(c);
+		if (o == null && parent != null)
 			return parent.getBean(c);
+		T t = (T)(o == null ? null : o.get());
 		return Optional.ofNullable(t);
 	}
 
@@ -82,8 +83,22 @@ public class BeanFactory {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanFactory addBean(Class<T> c, T t) {
-		if (t != null && ! c.isInstance(t))
-			throw new BasicRuntimeException("Object not of type {0}: {1}", c.getName(), t.getClass().getName());
+		if (t == null)
+			beanMap.remove(c);
+		else
+			beanMap.put(c, ()->t);
+		return this;
+	}
+
+	/**
+	 * Adds a bean supplier of the specified type to this factory.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param c The class to associate this bean with.
+	 * @param t The bean supplier.
+	 * @return This object (for method chaining).
+	 */
+	public <T> BeanFactory addBean(Class<T> c, Supplier<T> t) {
 		if (t == null)
 			beanMap.remove(c);
 		else

@@ -29,6 +29,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 import java.util.logging.*;
 import java.util.stream.*;
 
@@ -3158,7 +3159,8 @@ public class RestContext extends BeanContext {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final Object resource;
+	private final Supplier<?> resource;
+
 	final RestContextBuilder builder;
 	private final boolean
 		allowBodyParam,
@@ -3274,7 +3276,10 @@ public class RestContext extends BeanContext {
 
 		try {
 			this.builder = builder;
-			resource = builder.resource;
+
+			this.resource = builder.resource instanceof Supplier ? (Supplier<?>)builder.resource : ()->builder.resource;
+			Object resource = getResource();
+
 			parentContext = builder.parentContext;
 			ClassInfo rci = ClassInfo.of(resource).resolved();
 
@@ -3681,6 +3686,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected FileFinder createFileFinder(BeanFactory beanFactory) throws Exception {
 		FileFinder x = null;
+		Object resource = getResource();
 		if (resource instanceof FileFinder)
 			x = (FileFinder)resource;
 		if (x == null)
@@ -3726,6 +3732,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected RestInfoProvider createInfoProvider(BeanFactory beanFactory) throws Exception {
 		RestInfoProvider x = null;
+		Object resource = getResource();
 		if (resource instanceof RestInfoProvider)
 			x = (RestInfoProvider)resource;
 		if (x == null)
@@ -3771,6 +3778,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected StaticFiles createStaticFiles(BeanFactory beanFactory) throws Exception {
 		StaticFiles x = null;
+		Object resource = getResource();
 		if (resource instanceof StaticFiles)
 			x = (StaticFiles)resource;
 		if (x == null)
@@ -3818,6 +3826,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected RestLogger createCallLogger(BeanFactory beanFactory) throws Exception {
 		RestLogger x = null;
+		Object resource = getResource();
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
 		if (x == null)
@@ -3862,6 +3871,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected BeanFactory createBeanFactory() throws Exception {
 		BeanFactory x = null;
+		Object resource = getResource();
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
 		BeanFactory bf = createRootBeanFactory()
@@ -3910,6 +3920,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected BeanFactory createRootBeanFactory() throws Exception {
 		BeanFactory x = null;
+		Object resource = getResource();
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
 		BeanFactory bf = new BeanFactory(parentContext == null ? null : parentContext.rootBeanFactory, resource);
@@ -3950,6 +3961,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_responseHandlers
 	 */
 	protected ResponseHandler[] createResponseHandlers(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		ResponseHandler[] x = getInstanceArrayProperty(REST_responseHandlers, ResponseHandler.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(ResponseHandler[].class, resource, "createResponseHandlers");
@@ -3988,6 +4000,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_serializers
 	 */
 	protected Serializer[] createSerializers(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		Serializer[] x = getInstanceArrayProperty(REST_serializers, Serializer.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers");
@@ -4026,6 +4039,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_parsers
 	 */
 	protected Parser[] createParsers(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		Parser[] x = getInstanceArrayProperty(REST_parsers, Parser.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers");
@@ -4065,6 +4079,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_partSerializer
 	 */
 	protected HttpPartSerializer createPartSerializer(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		HttpPartSerializer x = null;
 		if (resource instanceof HttpPartSerializer)
 			x = (HttpPartSerializer)resource;
@@ -4108,6 +4123,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_partParser
 	 */
 	protected HttpPartParser createPartParser(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		HttpPartParser x = null;
 		if (resource instanceof HttpPartParser)
 			x = (HttpPartParser)resource;
@@ -4150,6 +4166,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_paramResolvers
 	 */
 	protected RestMethodParam[] createParamResolvers(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		RestMethodParam[] x = getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(RestMethodParam[].class, resource, "createParamResolvers");
@@ -4182,6 +4199,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If logger could not be instantiated.
 	 */
 	protected Logger createLogger(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		Logger x = beanFactory.createBeanViaMethod(Logger.class, resource, "createLogger");
 		if (x == null)
 			x = beanFactory.getBean(Logger.class).orElse(null);
@@ -4212,6 +4230,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If JSON schema generator could not be instantiated.
 	 */
 	protected JsonSchemaGenerator createJsonSchemaGenerator(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		JsonSchemaGenerator x = beanFactory.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator");
 		if (x == null)
 			x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
@@ -4245,12 +4264,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If variable resolver could not be instantiated.
 	 */
 	protected VarResolver createVarResolver(BeanFactory beanFactory) throws Exception {
-//		try {
-//			System.err.println(beanFactory);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Object resource = getResource();
 		VarResolver x = beanFactory.createBeanViaMethod(VarResolver.class, resource, "createVarResolver");
 		if (x == null)
 			x = beanFactory.getBean(VarResolver.class).orElse(null);
@@ -4285,6 +4299,7 @@ public class RestContext extends BeanContext {
 	 */
 	@SuppressWarnings("unchecked")
 	protected VarList createVars(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		VarList x = beanFactory.createBeanViaMethod(VarList.class, resource, "createVars");
 		if (x == null)
 			x = beanFactory.getBean(VarList.class).orElse(null);
@@ -4331,6 +4346,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
 	protected StackTraceStore createStackTraceStore(BeanFactory beanFactory) throws Exception {
+		Object resource = getResource();
 		StackTraceStore x = beanFactory.createBeanViaMethod(StackTraceStore.class, resource, "createStackTraceStore");
 		if (x == null)
 			x = beanFactory.getBean(StackTraceStore.class).orElse(null);
@@ -4523,36 +4539,11 @@ public class RestContext extends BeanContext {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Object getResource() {
-		return resource;
-	}
-
-	/**
-	 * Returns the resource object as a {@link RestServlet}.
-	 *
-	 * @return
-	 * 	The resource object cast to {@link RestServlet}, or <jk>null</jk> if the resource doesn't subclass from
-	 * 	{@link RestServlet}.
-	 */
-	public RestServlet getRestServlet() {
-		return resource instanceof RestServlet ? (RestServlet)resource : null;
-	}
-
-	/**
-	 * Throws a {@link HttpException} if an exception occurred in the constructor of this object.
-	 *
-	 * @throws HttpException The initialization exception wrapped in a {@link HttpException}.
-	 */
-	protected void checkForInitException() throws HttpException {
-		if (initException != null)
-			throw initException;
+		return resource.get();
 	}
 
 	/**
 	 * Returns the parent resource context (if this resource was initialized from a parent).
-	 *
-	 * <p>
-	 * From this object, you can get access to the parent resource class itself using {@link #getResource()} or
-	 * {@link #getRestServlet()}
 	 *
 	 * @return The parent resource context, or <jk>null</jk> if there is no parent context.
 	 */
@@ -5108,7 +5099,9 @@ public class RestContext extends BeanContext {
 		this.call.set(call);
 
 		try {
-			checkForInitException();
+
+			if (initException != null)
+				throw initException;
 
 			// If the resource path contains variables (e.g. @Rest(path="/f/{a}/{b}"), then we want to resolve
 			// those variables and push the servletPath to include the resolved variables.  The new pathInfo will be
@@ -5225,7 +5218,7 @@ public class RestContext extends BeanContext {
 		if (rc == 1)
 			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, call.getPathInfo());
 
-		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), resource.getClass().getName());
+		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), getResource().getClass().getName());
 	}
 
 	private boolean isDebug(RestCall call) {
@@ -5435,7 +5428,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected void startCall(RestCall call) {
 		for (int i = 0; i < startCallMethods.length; i++)
-			startOrFinish(resource, startCallMethods[i], startCallMethodParams[i], call.getRequest(), call.getResponse());
+			startOrFinish(getResource(), startCallMethods[i], startCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
 
 	/**
@@ -5446,7 +5439,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected void preCall(RestCall call) throws HttpException {
 		for (int i = 0; i < preCallMethods.length; i++)
-			preOrPost(resource, preCallMethods[i], preCallMethodParams[i], call);
+			preOrPost(getResource(), preCallMethods[i], preCallMethodParams[i], call);
 	}
 
 	/**
@@ -5457,7 +5450,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected void postCall(RestCall call) throws HttpException {
 		for (int i = 0; i < postCallMethods.length; i++)
-			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], call);
+			preOrPost(getResource(), postCallMethods[i], postCallMethodParams[i], call);
 	}
 
 	private static void preOrPost(Object resource, MethodInvoker m, RestMethodParam[] mp, RestCall call) throws HttpException {
@@ -5488,7 +5481,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected void finishCall(RestCall call) {
 		for (int i = 0; i < endCallMethods.length; i++)
-			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
+			startOrFinish(getResource(), endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
 
 	private static void startOrFinish(Object resource, MethodInvoker m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws HttpException, InternalServerError {
@@ -5516,7 +5509,7 @@ public class RestContext extends BeanContext {
 	 */
 	public synchronized RestContext postInit() throws ServletException {
 		for (int i = 0; i < postInitMethods.length; i++)
-			postInitOrDestroy(resource, postInitMethods[i], postInitMethodParams[i]);
+			postInitOrDestroy(getResource(), postInitMethods[i], postInitMethodParams[i]);
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInit();
 		return this;
@@ -5532,7 +5525,7 @@ public class RestContext extends BeanContext {
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInitChildFirst();
 		for (int i = 0; i < postInitChildFirstMethods.length; i++)
-			postInitOrDestroy(resource, postInitChildFirstMethods[i], postInitChildFirstMethodParams[i]);
+			postInitOrDestroy(getResource(), postInitChildFirstMethods[i], postInitChildFirstMethodParams[i]);
 		return this;
 	}
 
@@ -5563,7 +5556,7 @@ public class RestContext extends BeanContext {
 	protected void destroy() {
 		for (int i = 0; i < destroyMethods.length; i++) {
 			try {
-				postInitOrDestroy(resource, destroyMethods[i], destroyMethodParams[i]);
+				postInitOrDestroy(getResource(), destroyMethods[i], destroyMethodParams[i]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -5571,8 +5564,8 @@ public class RestContext extends BeanContext {
 
 		for (RestContext r : childResources.values()) {
 			r.destroy();
-			if (r.resource instanceof Servlet)
-				((Servlet)r.resource).destroy();
+			if (r.getResource() instanceof Servlet)
+				((Servlet)r.getResource()).destroy();
 		}
 	}
 
