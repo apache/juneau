@@ -164,7 +164,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicUnive
 	@Override /* BasicRestConfig */
 	public Swagger getApi(RestRequest req) {
 		try {
-			return getSwagger(req);
+			return req.getSwagger();
 		} catch (Exception e) {
 			throw new InternalServerError(e);
 		}

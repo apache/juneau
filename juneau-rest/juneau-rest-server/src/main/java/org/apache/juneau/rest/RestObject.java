@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
-import java.lang.reflect.Method;
 import java.text.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -22,12 +21,9 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.logging.*;
 
 /**
  * Identical to {@link RestServlet} but doesn't extend from {@link HttpServlet}.
@@ -40,11 +36,10 @@ import org.apache.juneau.rest.logging.*;
  * 	<li class='link'>{@doc BasicRest}
  * </ul>
  */
-public abstract class RestObject implements RestInfoProvider {
+public abstract class RestObject {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
-	private RestInfoProvider infoProvider;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Context methods.
@@ -59,57 +54,6 @@ public abstract class RestObject implements RestInfoProvider {
 		if (context == null)
 			throw new InternalServerError("RestContext object not set on resource.");
 		return context;
-	}
-
-	/**
-	 * Instantiates the file finder to use for this REST resource.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder(BeanFactory)}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
-	 * </ul>
-	 *
-	 * @return The file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
-	 */
-	public FileFinder createFileFinder() {
-		return null;
-	}
-
-	/**
-	 * Instantiates the static file finder to use for this REST resource.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles(BeanFactory)}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
-	 * </ul>
-	 *
-	 * @return The static file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
-	 */
-	public StaticFiles createStaticFiles() {
-		return null;
-	}
-
-	/**
-	 * Instantiates the call logger to use for this REST resource.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger(BeanFactory)}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@link RestContext#REST_callLogger}.
-	 * </ul>
-	 *
-	 * @return The call logger to use for this REST resource, or <jk>null</jk> if default logic should be used.
-	 */
-	public RestLogger createCallLogger() {
-		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -260,7 +204,6 @@ public abstract class RestObject implements RestInfoProvider {
 	@RestHook(POST_INIT)
 	public void onPostInit(RestContext context) throws Exception {
 		this.context = context;
-		this.infoProvider = new BasicRestInfoProvider(context);
 	}
 
 	/**
@@ -483,39 +426,5 @@ public abstract class RestObject implements RestInfoProvider {
 	 */
 	public synchronized RestResponse getResponse() {
 		return getContext().getResponse();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestInfoProvider
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestInfoProvider */
-	public Swagger getSwagger(RestRequest req) throws Exception {
-		return infoProvider.getSwagger(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getSiteName(RestRequest req) throws Exception {
-		return infoProvider.getSiteName(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getTitle(RestRequest req) throws Exception {
-		return infoProvider.getTitle(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getDescription(RestRequest req) throws Exception {
-		return infoProvider.getDescription(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getMethodSummary(Method method, RestRequest req) throws Exception {
-		return infoProvider.getMethodSummary(method, req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getMethodDescription(Method method, RestRequest req) throws Exception {
-		return infoProvider.getMethodDescription(method, req);
 	}
 }

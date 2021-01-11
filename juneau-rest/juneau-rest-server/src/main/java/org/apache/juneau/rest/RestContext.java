@@ -1077,8 +1077,6 @@ public class RestContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(FileFinder)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createFileFinder(BeanFactory)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestObject#createFileFinder()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestServlet#createFileFinder()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1103,9 +1101,6 @@ public class RestContext extends BeanContext {
 	 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
 	 * 	<li>Looks for {@link #REST_fileFinder} setting.
 	 * 	<li>Looks for a public <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
-	 * 		<br>Note that the {@link RestObject#createFileFinder()} and {@link RestServlet#createFileFinder()} methods are implemented
-	 * 		to automatically look for injected beans of type {@link FileFinder} allowing preconfigured file finders to be
-	 * 		defined in a Spring configuration class.
 	 * 	<li>Instantiates the default file finder as specified via {@link #REST_fileFinderDefault}.
 	 * 	<li>Instantiates a {@link BasicFileFinder} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory.
@@ -2562,8 +2557,6 @@ public class RestContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(StaticFiles)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createStaticFiles(BeanFactory)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestObject#createStaticFiles()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.BasicRestServlet#createStaticFiles()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2590,9 +2583,6 @@ public class RestContext extends BeanContext {
 	 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
 	 * 	<li>Looks in {@link #REST_staticFiles} setting.
 	 * 	<li>Looks for a public <c>createStaticFiles()</> method on the resource class with an optional {@link RestContext} argument.
-	 * 		<br>Note that the {@link RestObject#createStaticFiles()} and {@link RestServlet#createStaticFiles()} methhods are implemented
-	 * 		to automatically look for injected beans of type {@link StaticFiles} allowing preconfigured static file finders to be
-	 * 		defined in a Spring configuration class.
 	 * 	<li>Instantiates a {@link BasicStaticFiles} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory..
 	 * </ul>

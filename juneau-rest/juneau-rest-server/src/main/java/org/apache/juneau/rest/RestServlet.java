@@ -19,7 +19,6 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
-import java.lang.reflect.Method;
 import java.text.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -30,9 +29,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.exception.*;
 
 /**
@@ -42,7 +39,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestInfoProvider {
+public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +48,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	private volatile Exception initException;
 	private boolean isInitialized = false;  // Should not be volatile.
 	private Logger logger = Logger.getLogger(getClass().getName());
-	private RestInfoProvider infoProvider;
 
 	@Override /* Servlet */
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
@@ -102,7 +98,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 		this.builder = context.builder;
 		this.context = context;
 		isInitialized = true;
-		infoProvider = new BasicRestInfoProvider(context);
 		context.postInit();
 	}
 
@@ -139,6 +134,42 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Lifecycle methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * The main service method.
+	 *
+	 * <p>
+	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
+	 */
+	@Override /* Servlet */
+	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
+		try {
+			// To avoid checking the volatile field context on every call, use the non-volatile isInitialized field as a first-check check.
+			if (! isInitialized) {
+				if (initException != null)
+					throw initException;
+				if (context == null)
+					throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
+				isInitialized = true;
+			}
+
+			context.execute(r1, r2);
+
+		} catch (Throwable e) {
+			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
+		}
+	}
+
+	@Override /* GenericServlet */
+	public synchronized void destroy() {
+		if (context != null)
+			context.destroy();
+		super.destroy();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Context methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -162,57 +193,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 		if (context == null)
 			throw new InternalServerError("RestContext object not set on resource.");
 		return context;
-	}
-
-	/**
-	 * Instantiates the file finder to use for this REST resource.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createFileFinder(BeanFactory)}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@link RestContext#REST_fileFinder}.
-	 * </ul>
-	 *
-	 * @return The file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
-	 */
-	public FileFinder createFileFinder() {
-		return null;
-	}
-
-	/**
-	 * Instantiates the static file finder to use for this REST resource.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createStaticFiles(BeanFactory)}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@link RestContext#REST_staticFiles}.
-	 * </ul>
-	 *
-	 * @return The static file finder to use for this REST resource, or <jk>null</jk> if default logic should be used.
-	 */
-	public StaticFiles createStaticFiles() {
-		return null;
-	}
-
-	/**
-	 * Instantiates the call logger to use for this REST resource.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>null</jk>
-	 * which results in the default lookup logic as defined in {@link RestContext#createCallLogger(BeanFactory)}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@link RestContext#REST_callLogger}.
-	 * </ul>
-	 *
-	 * @return The call logger to use for this REST resource, or <jk>null</jk> if default logic should be used.
-	 */
-	public RestLogger createCallLogger() {
-		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -290,42 +270,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 */
 	protected void doLog(Level level, Throwable cause, Supplier<String> msg) {
 		logger.log(level, cause, msg);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Lifecycle methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * The main service method.
-	 *
-	 * <p>
-	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
-	 */
-	@Override /* Servlet */
-	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
-		try {
-			// To avoid checking the volatile field context on every call, use the non-volatile isInitialized field as a first-check check.
-			if (! isInitialized) {
-				if (initException != null)
-					throw initException;
-				if (context == null)
-					throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
-				isInitialized = true;
-			}
-
-			context.execute(r1, r2);
-
-		} catch (Throwable e) {
-			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
-		}
-	}
-
-	@Override /* GenericServlet */
-	public synchronized void destroy() {
-		if (context != null)
-			context.destroy();
-		super.destroy();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -621,40 +565,5 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 */
 	public synchronized RestResponse getResponse() {
 		return getContext().getResponse();
-	}
-
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestInfoProvider
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestInfoProvider */
-	public Swagger getSwagger(RestRequest req) throws Exception {
-		return infoProvider.getSwagger(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getSiteName(RestRequest req) throws Exception {
-		return infoProvider.getSiteName(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getTitle(RestRequest req) throws Exception {
-		return infoProvider.getTitle(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getDescription(RestRequest req) throws Exception {
-		return infoProvider.getDescription(req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getMethodSummary(Method method, RestRequest req) throws Exception {
-		return infoProvider.getMethodSummary(method, req);
-	}
-
-	@Override /* RestInfoProvider */
-	public String getMethodDescription(Method method, RestRequest req) throws Exception {
-		return infoProvider.getMethodDescription(method, req);
 	}
 }

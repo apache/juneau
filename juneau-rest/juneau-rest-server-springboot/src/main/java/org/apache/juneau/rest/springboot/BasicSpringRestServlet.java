@@ -165,7 +165,7 @@ public abstract class BasicSpringRestServlet extends SpringRestServlet implement
 	@Override /* BasicRestConfig */
 	public Swagger getApi(RestRequest req) {
 		try {
-			return getSwagger(req);
+			return req.getSwagger();
 		} catch (Exception e) {
 			throw new InternalServerError(e);
 		}
