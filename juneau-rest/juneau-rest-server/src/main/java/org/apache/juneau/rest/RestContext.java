@@ -3632,11 +3632,10 @@ public class RestContext extends BeanContext {
 				}
 
 				childBuilder.init(r);
-				if (r instanceof RestServlet)
-					((RestServlet)r).innerInit(childBuilder);
 				RestContext rc2 = childBuilder.build();
-				if (r instanceof RestServlet)
-					((RestServlet)r).setContext(rc2);
+				MethodInfo mi = ClassInfo.of(r).getMethod("setContext", RestContext.class);
+				if (mi != null)
+					mi.accessible().invoke(r, rc2);
 				path = childBuilder.getPath();
 				childResources.put(path, rc2);
 			}

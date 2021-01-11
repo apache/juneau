@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.text.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -39,21 +40,31 @@ import org.apache.juneau.rest.annotation.*;
 public abstract class RestObject {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
-	private volatile RestContext context;
+	private AtomicReference<RestContext> context = new AtomicReference<>();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Context methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Sets the context object for this servlet.
+	 *
+	 * @param context Sets the context object on this servlet.
+	 * @throws ServletException If error occurred during post-initialiation.
+	 */
+	protected void setContext(RestContext context) throws ServletException {
+		this.context.set(context);
+	}
+
+	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
 	 *
 	 * @return The context information on this servlet.
 	 */
-	protected synchronized RestContext getContext() {
-		if (context == null)
+	protected RestContext getContext() {
+		if (context.get() == null)
 			throw new InternalServerError("RestContext object not set on resource.");
-		return context;
+		return context.get();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -202,9 +213,7 @@ public abstract class RestObject {
 	 * @throws Exception Any exception thrown will cause servlet to fail startup.
 	 */
 	@RestHook(POST_INIT)
-	public void onPostInit(RestContext context) throws Exception {
-		this.context = context;
-	}
+	public void onPostInit(RestContext context) throws Exception {}
 
 	/**
 	 * Identical to {@link #onPostInit(RestContext)} except the order of execution is child-resources first.

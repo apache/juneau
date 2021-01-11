@@ -77,21 +77,15 @@ public abstract class RestServlet extends HttpServlet {
 		return new BeanFactory(parent, this);
 	}
 
-	/*
-	 * Bypasses the init(ServletConfig) method and just calls the super.init(ServletConfig) method directly.
-	 * Used when subclasses of RestServlet are attached as child resources.
-	 */
-	synchronized void innerInit(ServletConfig servletConfig) throws ServletException {
-		super.init(servletConfig);
-	}
-
 	/**
 	 * Sets the context object for this servlet.
 	 *
 	 * @param context Sets the context object on this servlet.
 	 * @throws ServletException If error occurred during post-initialiation.
 	 */
-	public synchronized void setContext(RestContext context) throws ServletException {
+	protected void setContext(RestContext context) throws ServletException {
+		// This only gets called when not created as a top-level servlet.
+		super.init(context.builder);
 		this.context.set(context);
 	}
 
@@ -100,7 +94,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return <jk>true</jk> if this servlet has been initialized and {@link #getContext()} returns a value.
 	 */
-	public synchronized boolean isInitialized() {
+	public boolean isInitialized() {
 		return context.get() != null;
 	}
 
