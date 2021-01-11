@@ -44,7 +44,6 @@ public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private RestContextBuilder builder;
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 	private AtomicReference<Exception> initException = new AtomicReference<>();
 	private Logger logger = Logger.getLogger(getClass().getName());
@@ -54,7 +53,7 @@ public abstract class RestServlet extends HttpServlet {
 		try {
 			if (context.get() != null)
 				return;
-			builder = RestContext.create(servletConfig, this.getClass(), null);
+			RestContextBuilder builder = RestContext.create(servletConfig, this.getClass(), null);
 			builder.init(this);
 			super.init(servletConfig);
 			builder.servletContext(this.getServletContext());
@@ -95,7 +94,6 @@ public abstract class RestServlet extends HttpServlet {
 	 * @throws ServletException If error occurred during post-initialiation.
 	 */
 	public synchronized void setContext(RestContext context) throws ServletException {
-		this.builder = context.builder;
 		this.context.set(context);
 		context.postInit();
 	}
