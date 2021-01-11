@@ -20,6 +20,7 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
 import java.text.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -44,28 +45,27 @@ public abstract class RestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private RestContextBuilder builder;
-	private volatile RestContext context;
-	private volatile Exception initException;
-	private boolean isInitialized = false;  // Should not be volatile.
+	private AtomicReference<RestContext> context = new AtomicReference<>();
+	private AtomicReference<Exception> initException = new AtomicReference<>();
 	private Logger logger = Logger.getLogger(getClass().getName());
 
 	@Override /* Servlet */
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
-			if (context != null)
+			if (context.get() != null)
 				return;
 			builder = RestContext.create(servletConfig, this.getClass(), null);
 			builder.init(this);
 			super.init(servletConfig);
 			builder.servletContext(this.getServletContext());
 			setContext(builder.build());
-			context.postInitChildFirst();
+			context.get().postInitChildFirst();
 		} catch (ServletException e) {
-			initException = e;
+			initException.set(e);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
 			throw e;
 		} catch (Throwable e) {
-			initException = toHttpException(e, InternalServerError.class);
+			initException.set(toHttpException(e, InternalServerError.class));
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
 		}
 	}
@@ -96,8 +96,7 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	public synchronized void setContext(RestContext context) throws ServletException {
 		this.builder = context.builder;
-		this.context = context;
-		isInitialized = true;
+		this.context.set(context);
 		context.postInit();
 	}
 
@@ -107,7 +106,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return <jk>true</jk> if this servlet has been initialized and {@link #getContext()} returns a value.
 	 */
 	public synchronized boolean isInitialized() {
-		return isInitialized;
+		return context.get() != null;
 	}
 
 	/**
@@ -116,6 +115,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
 	public synchronized String getPath() {
+		RestContext context = this.context.get();
 		if (context != null)
 			return context.getPath();
 		ClassInfo ci = ClassInfo.of(getClass());
@@ -146,16 +146,11 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Servlet */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
 		try {
-			// To avoid checking the volatile field context on every call, use the non-volatile isInitialized field as a first-check check.
-			if (! isInitialized) {
-				if (initException != null)
-					throw initException;
-				if (context == null)
-					throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
-				isInitialized = true;
-			}
-
-			context.execute(r1, r2);
+			if (initException.get() != null)
+				throw initException.get();
+			if (context.get() == null)
+				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
+			getContext().execute(r1, r2);
 
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
@@ -164,8 +159,8 @@ public abstract class RestServlet extends HttpServlet {
 
 	@Override /* GenericServlet */
 	public synchronized void destroy() {
-		if (context != null)
-			context.destroy();
+		if (context.get() != null)
+			context.get().destroy();
 		super.destroy();
 	}
 
@@ -190,9 +185,10 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The context information on this servlet.
 	 */
 	public synchronized RestContext getContext() {
-		if (context == null)
+		RestContext rc = context.get();
+		if (rc == null)
 			throw new InternalServerError("RestContext object not set on resource.");
-		return context;
+		return rc;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
