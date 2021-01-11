@@ -283,8 +283,10 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				RestContext rc = rcb.build();
 				if (o instanceof RestServlet) {
 					RestServlet rs = (RestServlet)o;
-					if (! rs.isInitialized())
+					if (! rs.isInitialized()) {
 						rs.setContext(rc);
+						rc.postInit();
+					}
 					rc = rs.getContext();
 				} else {
 					rc.postInit();

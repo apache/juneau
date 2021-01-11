@@ -57,7 +57,8 @@ public abstract class RestServlet extends HttpServlet {
 			builder.init(this);
 			super.init(servletConfig);
 			builder.servletContext(this.getServletContext());
-			setContext(builder.build());
+			context.set(builder.build());
+			context.get().postInit();
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
 			initException.set(e);
@@ -95,7 +96,6 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	public synchronized void setContext(RestContext context) throws ServletException {
 		this.context.set(context);
-		context.postInit();
 	}
 
 	/**
