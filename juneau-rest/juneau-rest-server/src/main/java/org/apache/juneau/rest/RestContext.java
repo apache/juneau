@@ -3241,20 +3241,20 @@ public class RestContext extends BeanContext {
 	 * @throws ServletException Something bad happened.
 	 */
 	public static RestContextBuilder create(Object resource) throws ServletException {
-		return new RestContextBuilder(resource.getClass(), Optional.empty(), Optional.empty(), Optional.of(resource)).init(resource);
+		return new RestContextBuilder(Optional.empty(), Optional.empty(), resource.getClass(), Optional.of(resource)).init(resource);
 	}
 
 	/**
 	 * Constructor.
-	 *
+	 * 
+	 * @param parentContext The parent context, or <jk>null</jk> if there is no parent context.
 	 * @param servletConfig The servlet config passed into the servlet by the servlet container.
 	 * @param resourceClass The class annotated with <ja>@Rest</ja>.
-	 * @param parentContext The parent context, or <jk>null</jk> if there is no parent context.
 	 * @return A new builder object.
 	 * @throws ServletException Something bad happened.
 	 */
-	static RestContextBuilder create(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
-		return new RestContextBuilder(resourceClass, Optional.ofNullable(servletConfig), Optional.ofNullable(parentContext), Optional.empty());
+	static RestContextBuilder create(RestContext parentContext, ServletConfig servletConfig, Class<?> resourceClass, Object resource) throws ServletException {
+		return new RestContextBuilder(Optional.ofNullable(parentContext), Optional.ofNullable(servletConfig), resourceClass, Optional.ofNullable(resource));
 	}
 
 	/**
@@ -3626,11 +3626,11 @@ public class RestContext extends BeanContext {
 
 				if (o instanceof Class) {
 					Class<?> oc = (Class<?>)o;
-					childBuilder = RestContext.create(builder.inner, oc, this);
+					childBuilder = RestContext.create(this, builder.inner, oc, null);
 					r = new BeanFactory(beanFactory, resource).addBean(RestContextBuilder.class, childBuilder).createBean(oc);
 				} else {
 					r = o;
-					childBuilder = RestContext.create(builder.inner, o.getClass(), this);
+					childBuilder = RestContext.create(this, builder.inner, o.getClass(), o);
 				}
 
 				childBuilder.init(r);

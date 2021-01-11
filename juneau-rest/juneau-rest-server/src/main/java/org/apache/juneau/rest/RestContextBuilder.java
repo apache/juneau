@@ -109,7 +109,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 
-	RestContextBuilder(Class<?> resourceClass, Optional<ServletConfig> servletConfig, Optional<RestContext> parentContext, Optional<Object> resource) throws ServletException {
+	RestContextBuilder(Optional<RestContext> parentContext, Optional<ServletConfig> servletConfig, Class<?> resourceClass, Optional<Object> resource) throws ServletException {
 		try {
 
 			this.resourceClass = resourceClass;
