@@ -1077,7 +1077,7 @@ public class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#fileFinder(FileFinder)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createFileFinder(BeanFactory)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createFileFinder(Object,BeanFactory)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1096,7 +1096,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <p>
-	 * The file finder is instantiated via the {@link RestContext#createFileFinder(BeanFactory)} method which in turn instantiates
+	 * The file finder is instantiated via the {@link RestContext#createFileFinder(Object,BeanFactory)} method which in turn instantiates
 	 * based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
@@ -2557,7 +2557,7 @@ public class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(StaticFiles)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createStaticFiles(BeanFactory)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContext#createStaticFiles(Object,BeanFactory)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2578,7 +2578,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <p>
-	 * The static file finder is instantiated via the {@link RestContext#createStaticFiles(BeanFactory)} method which in turn instantiates
+	 * The static file finder is instantiated via the {@link RestContext#createStaticFiles(Object,BeanFactory)} method which in turn instantiates
 	 * based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link StaticFiles}.
@@ -3283,56 +3283,56 @@ public class RestContext extends BeanContext {
 			parentContext = builder.parentContext;
 			ClassInfo rci = ClassInfo.of(resource).resolved();
 
-			rootBeanFactory = createRootBeanFactory();
+			rootBeanFactory = createRootBeanFactory(resource);
 
-			beanFactory = createBeanFactory();
+			beanFactory = createBeanFactory(resource);
 			beanFactory.addBean(BeanFactory.class, beanFactory);
 
 			PropertyStore ps = getPropertyStore();
 			beanFactory.addBean(PropertyStore.class, ps);
 
-			logger = createLogger(beanFactory);
+			logger = createLogger(resource, beanFactory);
 			beanFactory.addBean(Logger.class, logger);
 
-			stackTraceStore = createStackTraceStore(beanFactory);
+			stackTraceStore = createStackTraceStore(resource, beanFactory);
 			beanFactory.addBean(StackTraceStore.class, stackTraceStore);
 
-			varResolver = createVarResolver(beanFactory);
+			varResolver = createVarResolver(resource, beanFactory);
 			beanFactory.addBean(VarResolver.class, varResolver);
 
 			config = builder.config.resolving(varResolver.createSession());
 			beanFactory.addBean(Config.class, config);
 
-			responseHandlers = createResponseHandlers(beanFactory);
+			responseHandlers = createResponseHandlers(resource, beanFactory);
 			beanFactory.addBean(ResponseHandler[].class, responseHandlers);
 
-			callLogger = createCallLogger(beanFactory);
+			callLogger = createCallLogger(resource, beanFactory);
 			beanFactory.addBean(RestLogger.class, callLogger);
 
-			Serializer[] _serializers = createSerializers(beanFactory);
+			Serializer[] _serializers = createSerializers(resource, beanFactory);
 			beanFactory.addBean(Serializer[].class, _serializers);
 			serializers = SerializerGroup.create().append(_serializers).build();
 
-			Parser[] _parsers = createParsers(beanFactory);
+			Parser[] _parsers = createParsers(resource, beanFactory);
 			beanFactory.addBean(Parser[].class, _parsers);
 			parsers = ParserGroup.create().append(_parsers).build();
 
-			partSerializer = createPartSerializer(beanFactory);
+			partSerializer = createPartSerializer(resource, beanFactory);
 			beanFactory.addBean(HttpPartSerializer.class, partSerializer);
 
-			partParser = createPartParser(beanFactory);
+			partParser = createPartParser(resource, beanFactory);
 			beanFactory.addBean(HttpPartParser.class, partParser);
 
-			jsonSchemaGenerator = createJsonSchemaGenerator(beanFactory);
+			jsonSchemaGenerator = createJsonSchemaGenerator(resource, beanFactory);
 			beanFactory.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
-			fileFinder = createFileFinder(beanFactory);
+			fileFinder = createFileFinder(resource, beanFactory);
 			beanFactory.addBean(FileFinder.class, fileFinder);
 
-			staticFiles = createStaticFiles(beanFactory);
+			staticFiles = createStaticFiles(resource, beanFactory);
 			beanFactory.addBean(StaticFiles.class, staticFiles);
 
-			RestMethodParam[] _paramResolvers = createParamResolvers(beanFactory);
+			RestMethodParam[] _paramResolvers = createParamResolvers(resource, beanFactory);
 			beanFactory.addBean(RestMethodParam[].class, _paramResolvers);
 			AMap<Class<?>,RestMethodParam> _paramResolvers2 = AMap.of();
 			for (RestMethodParam rp : _paramResolvers)
@@ -3642,7 +3642,7 @@ public class RestContext extends BeanContext {
 				childResources.put(cb.getPath(), cc);
 			}
 
-			infoProvider = createInfoProvider(beanFactory);
+			infoProvider = createInfoProvider(resource, beanFactory);
 
 		} catch (HttpException e) {
 			_initException = e;
@@ -3679,14 +3679,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicFileFinder}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
 	 * @seealso #REST_fileFinder
 	 */
-	protected FileFinder createFileFinder(BeanFactory beanFactory) throws Exception {
+	protected FileFinder createFileFinder(Object resource, BeanFactory beanFactory) throws Exception {
 		FileFinder x = null;
-		Object resource = getResource();
 		if (resource instanceof FileFinder)
 			x = (FileFinder)resource;
 		if (x == null)
@@ -3725,14 +3725,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicRestInfoProvider}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
 	 * @seealso #REST_infoProvider
 	 */
-	protected RestInfoProvider createInfoProvider(BeanFactory beanFactory) throws Exception {
+	protected RestInfoProvider createInfoProvider(Object resource, BeanFactory beanFactory) throws Exception {
 		RestInfoProvider x = null;
-		Object resource = getResource();
 		if (resource instanceof RestInfoProvider)
 			x = (RestInfoProvider)resource;
 		if (x == null)
@@ -3771,14 +3771,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicStaticFiles}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
 	 * @seealso #REST_staticFiles
 	 */
-	protected StaticFiles createStaticFiles(BeanFactory beanFactory) throws Exception {
+	protected StaticFiles createStaticFiles(Object resource, BeanFactory beanFactory) throws Exception {
 		StaticFiles x = null;
-		Object resource = getResource();
 		if (resource instanceof StaticFiles)
 			x = (StaticFiles)resource;
 		if (x == null)
@@ -3819,14 +3819,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicFileFinder}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
 	 * @seealso #REST_callLogger
 	 */
-	protected RestLogger createCallLogger(BeanFactory beanFactory) throws Exception {
+	protected RestLogger createCallLogger(Object resource, BeanFactory beanFactory) throws Exception {
 		RestLogger x = null;
-		Object resource = getResource();
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
 		if (x == null)
@@ -3865,16 +3865,16 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BeanFactory}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @return The bean factory for this REST resource.
 	 * @throws Exception If bean factory could not be instantiated.
 	 * @seealso #REST_beanFactory
 	 */
-	protected BeanFactory createBeanFactory() throws Exception {
+	protected BeanFactory createBeanFactory(Object resource) throws Exception {
 		BeanFactory x = null;
-		Object resource = getResource();
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
-		BeanFactory bf = createRootBeanFactory()
+		BeanFactory bf = createRootBeanFactory(resource)
 			.addBean(RestContext.class, this)
 			.addBean(BeanFactory.class, parentContext == null ? null : parentContext.rootBeanFactory)
 			.addBean(PropertyStore.class, getPropertyStore())
@@ -3914,13 +3914,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BeanFactory}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @return The bean factory for this REST resource.
 	 * @throws Exception If bean factory could not be instantiated.
 	 * @seealso #REST_beanFactory
 	 */
-	protected BeanFactory createRootBeanFactory() throws Exception {
+	protected BeanFactory createRootBeanFactory(Object resource) throws Exception {
 		BeanFactory x = null;
-		Object resource = getResource();
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
 		BeanFactory bf = new BeanFactory(parentContext == null ? null : parentContext.rootBeanFactory, resource);
@@ -3955,13 +3955,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>ResponseHandler[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The response handlers for this REST resource.
 	 * @throws Exception If response handlers could not be instantiated.
 	 * @seealso #REST_responseHandlers
 	 */
-	protected ResponseHandler[] createResponseHandlers(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected ResponseHandler[] createResponseHandlers(Object resource, BeanFactory beanFactory) throws Exception {
 		ResponseHandler[] x = getInstanceArrayProperty(REST_responseHandlers, ResponseHandler.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(ResponseHandler[].class, resource, "createResponseHandlers");
@@ -3994,13 +3994,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>Serializer[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
 	 * @seealso #REST_serializers
 	 */
-	protected Serializer[] createSerializers(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected Serializer[] createSerializers(Object resource, BeanFactory beanFactory) throws Exception {
 		Serializer[] x = getInstanceArrayProperty(REST_serializers, Serializer.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers");
@@ -4033,13 +4033,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>Parser[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
 	 * @seealso #REST_parsers
 	 */
-	protected Parser[] createParsers(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected Parser[] createParsers(Object resource, BeanFactory beanFactory) throws Exception {
 		Parser[] x = getInstanceArrayProperty(REST_parsers, Parser.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers");
@@ -4073,13 +4073,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates an {@link OpenApiSerializer}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
 	 * @seealso #REST_partSerializer
 	 */
-	protected HttpPartSerializer createPartSerializer(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory) throws Exception {
 		HttpPartSerializer x = null;
 		if (resource instanceof HttpPartSerializer)
 			x = (HttpPartSerializer)resource;
@@ -4117,13 +4117,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates an {@link OpenApiSerializer}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 * @seealso #REST_partParser
 	 */
-	protected HttpPartParser createPartParser(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory) throws Exception {
 		HttpPartParser x = null;
 		if (resource instanceof HttpPartParser)
 			x = (HttpPartParser)resource;
@@ -4160,13 +4160,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>RestMethodParam[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The REST method parameter resolvers for this REST resource.
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 * @seealso #REST_paramResolvers
 	 */
-	protected RestMethodParam[] createParamResolvers(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected RestMethodParam[] createParamResolvers(Object resource, BeanFactory beanFactory) throws Exception {
 		RestMethodParam[] x = getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(RestMethodParam[].class, resource, "createParamResolvers");
@@ -4194,12 +4194,12 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The logger for this REST resource.
 	 * @throws Exception If logger could not be instantiated.
 	 */
-	protected Logger createLogger(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected Logger createLogger(Object resource, BeanFactory beanFactory) throws Exception {
 		Logger x = beanFactory.createBeanViaMethod(Logger.class, resource, "createLogger");
 		if (x == null)
 			x = beanFactory.getBean(Logger.class).orElse(null);
@@ -4225,12 +4225,12 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a new {@link JsonSchemaGenerator} using the property store of this context..
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The JSON schema generator for this REST resource.
 	 * @throws Exception If JSON schema generator could not be instantiated.
 	 */
-	protected JsonSchemaGenerator createJsonSchemaGenerator(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory) throws Exception {
 		JsonSchemaGenerator x = beanFactory.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator");
 		if (x == null)
 			x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
@@ -4256,21 +4256,21 @@ public class RestContext extends BeanContext {
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean factory registered in this context.
-	 * 	<li>Instantiates a new {@link VarResolver} using the variables returned by {@link #createVars(BeanFactory)}.
+	 * 	<li>Instantiates a new {@link VarResolver} using the variables returned by {@link #createVars(Object,BeanFactory)}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The variable resolver for this REST resource.
 	 * @throws Exception If variable resolver could not be instantiated.
 	 */
-	protected VarResolver createVarResolver(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected VarResolver createVarResolver(Object resource, BeanFactory beanFactory) throws Exception {
 		VarResolver x = beanFactory.createBeanViaMethod(VarResolver.class, resource, "createVarResolver");
 		if (x == null)
 			x = beanFactory.getBean(VarResolver.class).orElse(null);
 		if (x == null)
 			x = builder.varResolverBuilder
-			.vars(createVars(beanFactory))
+			.vars(createVars(resource,beanFactory))
 			.build()
 		;
 		return x;
@@ -4293,13 +4293,13 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a new {@link VarList} using default variables.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The variable resolver variables for this REST resource.
 	 * @throws Exception If variable resolver variables could not be instantiated.
 	 */
 	@SuppressWarnings("unchecked")
-	protected VarList createVars(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected VarList createVars(Object resource, BeanFactory beanFactory) throws Exception {
 		VarList x = beanFactory.createBeanViaMethod(VarList.class, resource, "createVars");
 		if (x == null)
 			x = beanFactory.getBean(VarList.class).orElse(null);
@@ -4341,12 +4341,12 @@ public class RestContext extends BeanContext {
 	 * 	<li>Returns {@link StackTraceStore#GLOBAL}.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected StackTraceStore createStackTraceStore(BeanFactory beanFactory) throws Exception {
-		Object resource = getResource();
+	protected StackTraceStore createStackTraceStore(Object resource, BeanFactory beanFactory) throws Exception {
 		StackTraceStore x = beanFactory.createBeanViaMethod(StackTraceStore.class, resource, "createStackTraceStore");
 		if (x == null)
 			x = beanFactory.getBean(StackTraceStore.class).orElse(null);

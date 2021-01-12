@@ -509,7 +509,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final Object resource;
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
 	final RestMethodParam[] methodParams;
@@ -573,7 +572,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			PropertyStore ps = getPropertyStore();
 			Object r = context.getResource();
-			this.resource = context.getResource();
+
 			this.beanFactory = new BeanFactory(context.getBeanFactory(), r)
 				.addBean(RestMethodContext.class, this)
 				.addBean(java.lang.reflect.Method.class, method);
@@ -630,10 +629,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			this.methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
 
-			this.converters = createConverters();
+			this.converters = createConverters(r, beanFactory);
 
 			AList<RestGuard> _guards = AList.of();
-			_guards.a(createGuards());
+			_guards.a(createGuards(r, beanFactory));
 			Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
 			Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
 
@@ -647,7 +646,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			this.guards = _guards.toArray(new RestGuard[_guards.size()]);
 
 			List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
-			for (RestMatcher matcher : createMatchers()) {
+			for (RestMatcher matcher : createMatchers(r, beanFactory)) {
 				if (matcher.mustMatch())
 					requiredMatchers.add(matcher);
 				else
@@ -663,7 +662,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			this.encoders = EncoderGroup
 				.create()
 				.append(IdentityEncoder.INSTANCE)
-				.append(createEncoders())
+				.append(createEncoders(r, beanFactory))
 				.build();
 
 			this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
@@ -781,11 +780,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Instantiates a <c>RestConverter[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The result converters for this REST resource method.
 	 * @throws Exception If result converters could not be instantiated.
 	 * @seealso #REST_converters
 	 */
-	protected RestConverter[] createConverters() throws Exception {
+	protected RestConverter[] createConverters(Object resource, BeanFactory beanFactory) throws Exception {
 		RestConverter[] x = getInstanceArrayProperty(REST_converters, RestConverter.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(RestConverter[].class, resource, "createConverters");
@@ -820,11 +821,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Instantiates a <c>RestGuard[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The guards for this REST resource method.
 	 * @throws Exception If guards could not be instantiated.
 	 * @seealso #REST_guards
 	 */
-	protected RestGuard[] createGuards() throws Exception {
+	protected RestGuard[] createGuards(Object resource, BeanFactory beanFactory) throws Exception {
 		RestGuard[] x = getInstanceArrayProperty(REST_guards, RestGuard.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(RestGuard[].class, resource, "createGuards");
@@ -857,14 +860,16 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The method matchers for this REST resource method.
 	 * @throws Exception If method matchers could not be instantiated.
 	 * @seealso #RESTMETHOD_matchers
 	 */
-	protected RestMatcher[] createMatchers() throws Exception {
+	protected RestMatcher[] createMatchers(Object resource, BeanFactory beanFactory) throws Exception {
 		RestMatcher[] x = getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers");
+			x = beanFactory.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers", java.lang.reflect.Method.class);
 		if (x == null)
 			x = beanFactory.getBean(RestMatcher[].class).orElse(null);
 		if (x == null)
@@ -896,11 +901,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Instantiates a <c>Encoder[0]</c>.
 	 * </ul>
 	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The encoders for this REST resource method.
 	 * @throws Exception If encoders could not be instantiated.
 	 * @seealso #REST_encoders
 	 */
-	protected Encoder[] createEncoders() throws Exception {
+	protected Encoder[] createEncoders(Object resource, BeanFactory beanFactory) throws Exception {
 		Encoder[] x = getInstanceArrayProperty(REST_encoders, Encoder.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Encoder[].class, resource, "createEncoders");

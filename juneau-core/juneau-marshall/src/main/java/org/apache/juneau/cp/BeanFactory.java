@@ -173,15 +173,16 @@ public class BeanFactory {
 	 * @param c The bean type to create.
 	 * @param resource The object where the method is defined.
 	 * @param methodName The method name on the object to call.
+	 * @param requiredParams The parameter types that must be present on the method.
 	 * @return A newly-created bean or <jk>null</jk> if method not found or it returns <jk>null</jk>.
 	 * @throws ExecutableException If bean could not be created.
 	 */
-	public <T> T createBeanViaMethod(Class<T> c, Object resource, String methodName) throws ExecutableException {
+	public <T> T createBeanViaMethod(Class<T> c, Object resource, String methodName, Class<?>...requiredParams) throws ExecutableException {
 		ClassInfo ci = ClassInfo.of(resource);
 		for (MethodInfo m : ci.getPublicMethods()) {
 			if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
 				List<ClassInfo> missing = getMissingParamTypes(m.getParamTypes());
-				if (missing.isEmpty())
+				if (missing.isEmpty() && m.hasAllArgs(requiredParams))
 					return m.invoke(resource, getParams(m.getParamTypes()));
 			}
 		}
