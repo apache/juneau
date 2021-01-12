@@ -562,14 +562,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			PropertyStore ps = getPropertyStore();
 			Object r = context.getResource();
 
-			int _hierarchyDepth = 0;
-			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
-			while (sc != null) {
-				_hierarchyDepth++;
-				sc = sc.getSuperclass();
-			}
-			hierarchyDepth = _hierarchyDepth;
-
 			beanFactory = new BeanFactory(context.getBeanFactory(), r)
 				.addBean(RestMethodContext.class, this)
 				.addBean(Method.class, method);
@@ -587,6 +579,24 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			partParser = createPartParser(r, beanFactory, ps);
 			beanFactory.addBean(HttpPartParser.class, partParser);
 
+			converters = createConverters(r, beanFactory);
+			beanFactory.addBean(RestConverter[].class, converters);
+
+			guards = createGuards(r, beanFactory);
+			beanFactory.addBean(RestGuard[].class, guards);
+
+			List<RestMatcher> matchers = Arrays.asList(createMatchers(r, beanFactory));
+ 			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
+			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
+
+			int _hierarchyDepth = 0;
+			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
+			while (sc != null) {
+				_hierarchyDepth++;
+				sc = sc.getSuperclass();
+			}
+			hierarchyDepth = _hierarchyDepth;
+
 			String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
 			if (_httpMethod == null)
 				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
@@ -598,56 +608,24 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
 
-
-			this.responseMeta = ResponseBeanMeta.create(mi, ps);
+			responseMeta = ResponseBeanMeta.create(mi, ps);
 
 			boolean dotAll = b.dotAll;
-			List<UrlPathMatcher> pathMatchers = new ArrayList<>();
+			List<UrlPathMatcher> _pathMatchers = new ArrayList<>();
 			for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
 				if (dotAll && ! p.endsWith("/*"))
 					p += "/*";
-				pathMatchers.add(UrlPathMatcher.of(p));
+				_pathMatchers.add(UrlPathMatcher.of(p));
 			}
-			if (pathMatchers.isEmpty()) {
+			if (_pathMatchers.isEmpty()) {
 				String p = HttpUtils.detectHttpPath(method, true);
 				if (dotAll && ! p.endsWith("/*"))
 					p += "/*";
-				pathMatchers.add(UrlPathMatcher.of(p));
+				_pathMatchers.add(UrlPathMatcher.of(p));
 			}
+			pathMatchers = _pathMatchers.toArray(new UrlPathMatcher[_pathMatchers.size()]);
 
-			this.pathMatchers = pathMatchers.toArray(new UrlPathMatcher[pathMatchers.size()]);
-
-			this.methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
-
-			this.converters = createConverters(r, beanFactory);
-
-			AList<RestGuard> _guards = AList.of();
-			_guards.a(createGuards(r, beanFactory));
-			Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
-			Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
-
-			for (String rg : roleGuard) {
-				try {
-					_guards.add(new RoleBasedRestGuard(rolesDeclared, rg));
-				} catch (java.text.ParseException e1) {
-					throw new ServletException(e1);
-				}
-			}
-			this.guards = _guards.toArray(new RestGuard[_guards.size()]);
-
-			List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
-			for (RestMatcher matcher : createMatchers(r, beanFactory)) {
-				if (matcher.mustMatch())
-					requiredMatchers.add(matcher);
-				else
-					optionalMatchers.add(matcher);
-			}
-			String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
-			if (clientVersion != null)
-				requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
-
-			this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
-			this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
+			methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
 
 			this.encoders = EncoderGroup
 				.create()
@@ -825,7 +803,22 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			x = beanFactory.getBean(RestGuard[].class).orElse(null);
 		if (x == null)
 			x = new RestGuard[0];
-		return x;
+
+		AList<RestGuard> xl = AList.of();
+		xl.a(x);
+
+		Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
+		Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
+
+		for (String rg : roleGuard) {
+			try {
+				xl.add(new RoleBasedRestGuard(rolesDeclared, rg));
+			} catch (java.text.ParseException e1) {
+				throw new ServletException(e1);
+			}
+		}
+
+		return xl.toArray(new RestGuard[xl.size()]);
 	}
 
 	/**
@@ -864,6 +857,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			x = beanFactory.getBean(RestMatcher[].class).orElse(null);
 		if (x == null)
 			x = new RestMatcher[0];
+
+		String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
+		if (clientVersion != null)
+			x = ArrayUtils.append(x, new ClientVersionMatcher(context.getClientVersionHeader(), mi));
+
 		return x;
 	}
 

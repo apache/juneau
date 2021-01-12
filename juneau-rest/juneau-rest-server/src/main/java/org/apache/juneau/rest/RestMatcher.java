@@ -85,7 +85,7 @@ public abstract class RestMatcher {
 	 *
 	 * @return <jk>true</jk> if this matcher is required to match in order for the method to be invoked.
 	 */
-	public boolean mustMatch() {
+	public boolean required() {
 		return false;
 	}
 }

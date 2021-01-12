@@ -50,7 +50,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	}
 
 	@Override /* RestMatcher */
-	public boolean mustMatch() {
+	public boolean required() {
 		return true;
 	}
 }
