@@ -79,22 +79,17 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Sets the context object for this servlet.
 	 *
+	 * <p>
+	 * This method is effectively a no-op if {@link #init(ServletConfig)} has already been called.
+	 *
 	 * @param context Sets the context object on this servlet.
-	 * @throws ServletException If error occurred during post-initialiation.
+	 * @throws ServletException If error occurred during initialization.
 	 */
 	protected void setContext(RestContext context) throws ServletException {
-		// This only gets called when not created as a top-level servlet.
-		super.init(context.builder);
-		this.context.set(context);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this servlet has been initialized and {@link #getContext()} returns a value.
-	 *
-	 * @return <jk>true</jk> if this servlet has been initialized and {@link #getContext()} returns a value.
-	 */
-	public boolean isInitialized() {
-		return context.get() != null;
+		if (this.context.get() == null) {
+			super.init(context.builder);
+			this.context.set(context);
+		}
 	}
 
 	/**

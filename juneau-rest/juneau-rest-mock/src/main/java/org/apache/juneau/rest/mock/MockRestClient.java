@@ -32,7 +32,6 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -280,19 +279,13 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (! contexts.containsKey(c)) {
 				boolean isClass = restBean instanceof Class;
 				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
-				RestContextBuilder rcb = RestContext.create(o).callLoggerDefault(BasicTestRestLogger.class).debugDefault(CONDITIONAL);
-				RestContext rc = rcb.build();
-				MethodInfo mi = ClassInfo.of(o).getMethod("setContext", RestContext.class);
-				if (mi != null)
-					mi.accessible().invoke(o, rc);
-				if (o instanceof RestServlet) {
-					RestServlet rs = (RestServlet)o;
-					if (! rs.isInitialized())
-						rc.postInit();
-				} else {
-					rc.postInit();
-				}
-				rc.postInitChildFirst();
+				RestContext rc = RestContext
+					.create(o)
+					.callLoggerDefault(BasicTestRestLogger.class)
+					.debugDefault(CONDITIONAL)
+					.build()
+					.postInit()
+					.postInitChildFirst();
 				contexts.put(c, rc);
 			}
 			RestContext restBeanCtx = contexts.get(c);

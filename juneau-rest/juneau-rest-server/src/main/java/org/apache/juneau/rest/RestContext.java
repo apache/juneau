@@ -29,6 +29,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.stream.*;
@@ -3235,6 +3236,9 @@ public class RestContext extends BeanContext {
 
 	private final ReflectionMap<Enablement> debugEnablement;
 
+	// Gets set when postInitChildFirst() gets called.
+	private final AtomicBoolean initialized = new AtomicBoolean(false);
+
 	/**
 	 * Constructor.
 	 *
@@ -5540,6 +5544,17 @@ public class RestContext extends BeanContext {
 	 * @throws ServletException Error occurred.
 	 */
 	public synchronized RestContext postInit() throws ServletException {
+		if (initialized.get())
+			return this;
+		Object resource = getResource();
+		MethodInfo mi = ClassInfo.of(getResource()).getMethod("setContext", RestContext.class);
+		if (mi != null) {
+			try {
+				mi.accessible().invoke(resource, this);
+			} catch (ExecutableException e) {
+				throw new ServletException(e);
+			}
+		}
 		for (int i = 0; i < postInitMethods.length; i++)
 			postInitOrDestroy(getResource(), postInitMethods[i], postInitMethodParams[i]);
 		for (RestContext childContext : this.childResources.values())
@@ -5554,10 +5569,13 @@ public class RestContext extends BeanContext {
 	 * @throws ServletException Error occurred.
 	 */
 	public RestContext postInitChildFirst() throws ServletException {
+		if (initialized.get())
+			return this;
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInitChildFirst();
 		for (int i = 0; i < postInitChildFirstMethods.length; i++)
 			postInitOrDestroy(getResource(), postInitChildFirstMethods[i], postInitChildFirstMethodParams[i]);
+		initialized.set(true);
 		return this;
 	}
 
