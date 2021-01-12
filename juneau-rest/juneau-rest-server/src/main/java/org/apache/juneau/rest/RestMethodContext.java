@@ -581,6 +581,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			parsers = createParsers(r, beanFactory, ps);
 			beanFactory.addBean(ParserGroup.class, parsers);
 
+			partSerializer = createPartSerializer(r, beanFactory, ps);
+			beanFactory.addBean(HttpPartSerializer.class, partSerializer);
+
+			partParser = createPartParser(r, beanFactory, ps);
+			beanFactory.addBean(HttpPartParser.class, partParser);
+
 			String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
 			if (_httpMethod == null)
 				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
@@ -592,14 +598,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
 
-			HttpPartParser hpp = context.getPartParser();
-			if (hpp instanceof Parser) {
-				Parser pp = (Parser)hpp;
-				hpp = (HttpPartParser)pp.builder().apply(ps).build();
-			}
-			this.partParser = hpp;
-
-			this.partSerializer = context.getPartSerializer();
 
 			this.responseMeta = ResponseBeanMeta.create(mi, ps);
 
@@ -942,6 +940,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		Object x = getArrayProperty(REST_serializers, Object.class);
 		if (x == null)
+			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers", Method.class);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers", Method.class);
+		if (x == null) {
+			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", Method.class);
+			if (x != null)
+				return (SerializerGroup)x;
+		}
+		if (x == null)
 			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers");
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers");
@@ -998,6 +1005,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		Object x = getArrayProperty(REST_parsers, Object.class);
 		if (x == null)
+			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers", Method.class);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers", Method.class);
+		if (x == null) {
+			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers", Method.class);
+			if (x != null)
+				return (ParserGroup)x;
+		}
+		if (x == null)
 			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers");
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers");
@@ -1047,22 +1063,25 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store of this method.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
 	 * @seealso #REST_partSerializer
 	 */
-	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory) throws Exception {
+	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		HttpPartSerializer x = null;
 		if (resource instanceof HttpPartSerializer)
 			x = (HttpPartSerializer)resource;
 		if (x == null)
 			x = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
 		if (x == null)
+			x = beanFactory.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", Method.class);
+		if (x == null)
 			x = beanFactory.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer");
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
 		if (x == null)
-			x = new OpenApiSerializer(getPropertyStore());
+			x = new OpenApiSerializer(ps);
 		return x;
 	}
 
@@ -1091,22 +1110,25 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store of this method.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 * @seealso #REST_partParser
 	 */
-	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory) throws Exception {
+	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		HttpPartParser x = null;
 		if (resource instanceof HttpPartParser)
 			x = (HttpPartParser)resource;
 		if (x == null)
 			x = getInstanceProperty(REST_partParser, HttpPartParser.class, null, beanFactory);
 		if (x == null)
+			x = beanFactory.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", Method.class);
+		if (x == null)
 			x = beanFactory.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser");
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
 		if (x == null)
-			x = new OpenApiParser(getPropertyStore());
+			x = new OpenApiParser(ps);
 		return x;
 	}
 
