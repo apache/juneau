@@ -3278,61 +3278,59 @@ public class RestContext extends BeanContext {
 			this.builder = builder;
 
 			this.resource = builder.resource instanceof Supplier ? (Supplier<?>)builder.resource : ()->builder.resource;
-			Object resource = getResource();
+			Object r = getResource();
 
 			parentContext = builder.parentContext;
-			ClassInfo rci = ClassInfo.of(resource).resolved();
+			ClassInfo rci = ClassInfo.of(r).resolved();
 
-			rootBeanFactory = createRootBeanFactory(resource);
+			rootBeanFactory = createRootBeanFactory(r);
 
-			beanFactory = createBeanFactory(resource);
+			beanFactory = createBeanFactory(r);
 			beanFactory.addBean(BeanFactory.class, beanFactory);
 
 			PropertyStore ps = getPropertyStore();
 			beanFactory.addBean(PropertyStore.class, ps);
 
-			logger = createLogger(resource, beanFactory);
+			logger = createLogger(r, beanFactory);
 			beanFactory.addBean(Logger.class, logger);
 
-			stackTraceStore = createStackTraceStore(resource, beanFactory);
+			stackTraceStore = createStackTraceStore(r, beanFactory);
 			beanFactory.addBean(StackTraceStore.class, stackTraceStore);
 
-			varResolver = createVarResolver(resource, beanFactory);
+			varResolver = createVarResolver(r, beanFactory);
 			beanFactory.addBean(VarResolver.class, varResolver);
 
 			config = builder.config.resolving(varResolver.createSession());
 			beanFactory.addBean(Config.class, config);
 
-			responseHandlers = createResponseHandlers(resource, beanFactory);
+			responseHandlers = createResponseHandlers(r, beanFactory);
 			beanFactory.addBean(ResponseHandler[].class, responseHandlers);
 
-			callLogger = createCallLogger(resource, beanFactory);
+			callLogger = createCallLogger(r, beanFactory);
 			beanFactory.addBean(RestLogger.class, callLogger);
 
-			Serializer[] _serializers = createSerializers(resource, beanFactory);
-			beanFactory.addBean(Serializer[].class, _serializers);
-			serializers = SerializerGroup.create().append(_serializers).build();
+			serializers = createSerializers(r, beanFactory, ps);
+			beanFactory.addBean(SerializerGroup.class, serializers);
 
-			Parser[] _parsers = createParsers(resource, beanFactory);
-			beanFactory.addBean(Parser[].class, _parsers);
-			parsers = ParserGroup.create().append(_parsers).build();
+			parsers = createParsers(r, beanFactory, ps);
+			beanFactory.addBean(ParserGroup.class, parsers);
 
-			partSerializer = createPartSerializer(resource, beanFactory);
+			partSerializer = createPartSerializer(r, beanFactory);
 			beanFactory.addBean(HttpPartSerializer.class, partSerializer);
 
-			partParser = createPartParser(resource, beanFactory);
+			partParser = createPartParser(r, beanFactory);
 			beanFactory.addBean(HttpPartParser.class, partParser);
 
-			jsonSchemaGenerator = createJsonSchemaGenerator(resource, beanFactory);
+			jsonSchemaGenerator = createJsonSchemaGenerator(r, beanFactory);
 			beanFactory.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
-			fileFinder = createFileFinder(resource, beanFactory);
+			fileFinder = createFileFinder(r, beanFactory);
 			beanFactory.addBean(FileFinder.class, fileFinder);
 
-			staticFiles = createStaticFiles(resource, beanFactory);
+			staticFiles = createStaticFiles(r, beanFactory);
 			beanFactory.addBean(StaticFiles.class, staticFiles);
 
-			RestMethodParam[] _paramResolvers = createParamResolvers(resource, beanFactory);
+			RestMethodParam[] _paramResolvers = createParamResolvers(r, beanFactory);
 			beanFactory.addBean(RestMethodParam[].class, _paramResolvers);
 			AMap<Class<?>,RestMethodParam> _paramResolvers2 = AMap.of();
 			for (RestMethodParam rp : _paramResolvers)
@@ -3446,7 +3444,7 @@ public class RestContext extends BeanContext {
 						if (mi.isNotPublic())
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
-						RestMethodContextBuilder rmcb = new RestMethodContextBuilder(resource, mi.inner(), this);
+						RestMethodContextBuilder rmcb = new RestMethodContextBuilder(r, mi.inner(), this);
 						RestMethodContext sm = new RestMethodContext(rmcb);
 						String httpMethod = sm.getHttpMethod();
 
@@ -3460,7 +3458,7 @@ public class RestContext extends BeanContext {
 							if (rim.getMethodsByPath().isEmpty())
 								throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
-							RestMethodContextBuilder smb = new RestMethodContextBuilder(resource, mi.inner(), this);
+							RestMethodContextBuilder smb = new RestMethodContextBuilder(r, mi.inner(), this);
 							smb.dotAll();
 							sm = new RestMethodContext(smb) {
 
@@ -3625,7 +3623,7 @@ public class RestContext extends BeanContext {
 					if (oc == builder.resourceClass)
 						continue;
 					cb = RestContext.create(this, builder.inner, oc, null);
-					o = new BeanFactory(beanFactory, resource).addBean(RestContextBuilder.class, cb).createBean(oc);
+					o = new BeanFactory(beanFactory, r).addBean(RestContextBuilder.class, cb).createBean(oc);
 				} else {
 					cb = RestContext.create(this, builder.inner, o.getClass(), o);
 				}
@@ -3642,7 +3640,7 @@ public class RestContext extends BeanContext {
 				childResources.put(cb.getPath(), cc);
 			}
 
-			infoProvider = createInfoProvider(resource, beanFactory);
+			infoProvider = createInfoProvider(r, beanFactory);
 
 		} catch (HttpException e) {
 			_initException = e;
@@ -3996,19 +3994,36 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store to apply to all serialiers.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
 	 * @seealso #REST_serializers
 	 */
-	protected Serializer[] createSerializers(Object resource, BeanFactory beanFactory) throws Exception {
-		Serializer[] x = getInstanceArrayProperty(REST_serializers, Serializer.class, null, beanFactory);
+	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+		Object x = getArrayProperty(REST_serializers, Object.class);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers");
 		if (x == null)
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers");
+		if (x == null) {
+			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers");
+			if (x != null)
+				return (SerializerGroup)x;
+		}
+		if (x == null)
 			x = beanFactory.getBean(Serializer[].class).orElse(null);
+		if (x == null) {
+			x = beanFactory.getBean(SerializerGroup.class).orElse(null);
+			if (x != null)
+				return (SerializerGroup)x;
+		}
 		if (x == null)
 			x = new Serializer[0];
-		return x;
+		return SerializerGroup
+			.create()
+			.append((Object[])x)
+			.apply(ps)
+			.build();
 	}
 
 	/**
@@ -4035,19 +4050,36 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store to apply to all serialiers.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
 	 * @seealso #REST_parsers
 	 */
-	protected Parser[] createParsers(Object resource, BeanFactory beanFactory) throws Exception {
-		Parser[] x = getInstanceArrayProperty(REST_parsers, Parser.class, null, beanFactory);
+	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+		Object x = getArrayProperty(REST_parsers, Object.class);
 		if (x == null)
 			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers");
 		if (x == null)
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers");
+		if (x == null) {
+			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers");
+			if (x != null)
+				return (ParserGroup)x;
+		}
+		if (x == null)
 			x = beanFactory.getBean(Parser[].class).orElse(null);
+		if (x == null) {
+			x = beanFactory.getBean(ParserGroup.class).orElse(null);
+			if (x != null)
+				return (ParserGroup)x;
+		}
 		if (x == null)
 			x = new Parser[0];
-		return x;
+		return ParserGroup
+			.create()
+			.append((Object[])x)
+			.apply(ps)
+			.build();
 	}
 
 	/**
@@ -5601,7 +5633,7 @@ public class RestContext extends BeanContext {
 		Class<?> c = o.getClass();
 		ResponseBeanMeta rbm = responseBeanMetas.get(c);
 		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, serializers.getPropertyStore());
+			rbm = ResponseBeanMeta.create(c, getPropertyStore());
 			if (rbm == null)
 				rbm = ResponseBeanMeta.NULL;
 			responseBeanMetas.put(c, rbm);

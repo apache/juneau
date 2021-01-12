@@ -44,6 +44,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -554,51 +555,42 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		super(b.getPropertyStore());
 
 		try {
-			this.context = b.context;
-			this.method = b.method;
-			this.methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
-			this.mi = MethodInfo.of(method);
-
-			// Need this to access methods in anonymous inner classes.
-			mi.setAccessible();
-
-			int hd = 0;
-			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
-			while (sc != null) {
-				hd++;
-				sc = sc.getSuperclass();
-			}
-			hierarchyDepth = hd;
-
+			context = b.context;
+			method = b.method;
+			methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
+			mi = MethodInfo.of(method).accessible();
 			PropertyStore ps = getPropertyStore();
 			Object r = context.getResource();
 
-			this.beanFactory = new BeanFactory(context.getBeanFactory(), r)
+			int _hierarchyDepth = 0;
+			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
+			while (sc != null) {
+				_hierarchyDepth++;
+				sc = sc.getSuperclass();
+			}
+			hierarchyDepth = _hierarchyDepth;
+
+			beanFactory = new BeanFactory(context.getBeanFactory(), r)
 				.addBean(RestMethodContext.class, this)
 				.addBean(Method.class, method);
+			beanFactory.addBean(BeanFactory.class, beanFactory);
+
+			serializers = createSerializers(r, beanFactory, ps);
+			beanFactory.addBean(SerializerGroup.class, serializers);
+
+			parsers = createParsers(r, beanFactory, ps);
+			beanFactory.addBean(ParserGroup.class, parsers);
 
 			String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
 			if (_httpMethod == null)
 				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
 			if ("METHOD".equals(_httpMethod))
 				_httpMethod = "*";
-			this.httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
+			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			this.defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
+			defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 
-			this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
-
-			this.serializers = SerializerGroup
-				.create()
-				.append(getArrayProperty(REST_serializers, Object.class))
-				.apply(ps)
-				.build();
-
-			this.parsers = ParserGroup
-				.create()
-				.append(getArrayProperty(REST_parsers, Object.class))
-				.apply(ps)
-				.build();
+			maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
 
 			HttpPartParser hpp = context.getPartParser();
 			if (hpp instanceof Parser) {
@@ -915,6 +907,206 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			x = beanFactory.getBean(Encoder[].class).orElse(null);
 		if (x == null)
 			x = new Encoder[0];
+		return x;
+	}
+
+	/**
+	 * Instantiates the serializers for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for {@link #REST_serializers} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Serializer...)}
+	 * 			<li>{@link Rest#serializers()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createSerializers()</> method that returns <c>{@link Serializer}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a <c>Serializer[0]</c>.
+	 * </ul>
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store of this method.
+	 * @return The serializers for this REST resource.
+	 * @throws Exception If serializers could not be instantiated.
+	 * @seealso #REST_serializers
+	 */
+	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+		Object x = getArrayProperty(REST_serializers, Object.class);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers");
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers");
+		if (x == null) {
+			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers");
+			if (x != null)
+				return (SerializerGroup)x;
+		}
+		if (x == null)
+			x = beanFactory.getBean(Serializer[].class).orElse(null);
+		if (x == null) {
+			x = beanFactory.getBean(SerializerGroup.class).orElse(null);
+			if (x != null)
+				return (SerializerGroup)x;
+		}
+		if (x == null)
+			x = new Serializer[0];
+		return SerializerGroup
+			.create()
+			.append((Object[])x)
+			.apply(ps)
+			.build();
+	}
+
+	/**
+	 * Instantiates the parsers for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Looks for {@link #REST_parsers} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Parser...)}
+	 * 			<li>{@link Rest#parsers()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createParsers()</> method that returns <c>{@link Parser}[]</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a <c>Parser[0]</c>.
+	 * </ul>
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store of this method.
+	 * @return The parsers for this REST resource.
+	 * @throws Exception If parsers could not be instantiated.
+	 * @seealso #REST_parsers
+	 */
+	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+		Object x = getArrayProperty(REST_parsers, Object.class);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers");
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers");
+		if (x == null) {
+			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers");
+			if (x != null)
+				return (ParserGroup)x;
+		}
+		if (x == null)
+			x = beanFactory.getBean(Parser[].class).orElse(null);
+		if (x == null) {
+			x = beanFactory.getBean(ParserGroup.class).orElse(null);
+			if (x != null)
+				return (ParserGroup)x;
+		}
+		if (x == null)
+			x = new Parser[0];
+		return ParserGroup
+			.create()
+			.append((Object[])x)
+			.apply(ps)
+			.build();
+	}
+
+	/**
+	 * Instantiates the HTTP part serializer for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
+	 * 	<li>Looks for {@link #REST_partSerializer} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}/{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 			<li>{@link Rest#partSerializer()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates an {@link OpenApiSerializer}.
+	 * </ul>
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The HTTP part serializer for this REST resource.
+	 * @throws Exception If serializer could not be instantiated.
+	 * @seealso #REST_partSerializer
+	 */
+	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory) throws Exception {
+		HttpPartSerializer x = null;
+		if (resource instanceof HttpPartSerializer)
+			x = (HttpPartSerializer)resource;
+		if (x == null)
+			x = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer");
+		if (x == null)
+			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
+		if (x == null)
+			x = new OpenApiSerializer(getPropertyStore());
+		return x;
+	}
+
+	/**
+	 * Instantiates the HTTP part parser for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
+	 * 	<li>Looks for {@link #REST_partParser} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser(Class)}/{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 			<li>{@link Rest#partParser()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates an {@link OpenApiSerializer}.
+	 * </ul>
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The HTTP part parser for this REST resource.
+	 * @throws Exception If parser could not be instantiated.
+	 * @seealso #REST_partParser
+	 */
+	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory) throws Exception {
+		HttpPartParser x = null;
+		if (resource instanceof HttpPartParser)
+			x = (HttpPartParser)resource;
+		if (x == null)
+			x = getInstanceProperty(REST_partParser, HttpPartParser.class, null, beanFactory);
+		if (x == null)
+			x = beanFactory.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser");
+		if (x == null)
+			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
+		if (x == null)
+			x = new OpenApiParser(getPropertyStore());
 		return x;
 	}
 
