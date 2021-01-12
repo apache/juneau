@@ -27,6 +27,16 @@ import org.apache.juneau.reflect.*;
 public class Value<T> {
 
 	/**
+	 * Creator.
+	 *
+	 * @param object The object being wrapped.
+	 * @return A new {@link Value} object.
+	 */
+	public static <T> Value<T> of(T object) {
+		return new Value<>(object);
+	}
+
+	/**
 	 * Returns the generic parameter type of the Value parameter at the specified position.
 	 *
 	 * <h5 class='figure'>Example:</h5>

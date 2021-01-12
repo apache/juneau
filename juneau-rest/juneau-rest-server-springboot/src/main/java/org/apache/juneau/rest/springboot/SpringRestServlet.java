@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
+import java.util.*;
+
 import javax.inject.*;
 
 import org.apache.juneau.cp.*;
@@ -26,10 +28,10 @@ public abstract class SpringRestServlet extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private ApplicationContext appContext;
+	private Optional<ApplicationContext> appContext;
 
-	@Override
-	protected BeanFactory createBeanFactory(BeanFactory parent) {
+	@Override /* RestServlet */
+	public BeanFactory createBeanFactory(Optional<BeanFactory> parent) {
 		return new SpringBeanFactory(appContext, parent, this);
 	}
 }

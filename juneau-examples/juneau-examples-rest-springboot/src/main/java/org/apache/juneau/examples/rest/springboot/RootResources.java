@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
-import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.microservice.resources.*;
@@ -71,8 +70,5 @@ import org.apache.juneau.serializer.annotation.*;
 	quoteChar="'"
 )
 public class RootResources extends BasicSpringRestServletGroup {
-	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
-	// It allows you to remove the Jena prerequisite.
-
 	private static final long serialVersionUID = 1L;
 }

@@ -16,6 +16,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -312,5 +313,18 @@ public class ObjectUtils {
 				if (tt != null)
 					return tt;
 		return null;
+	}
+
+	/**
+	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
+	 * @param o The object to convert to a string.
+	 * @return An identity string.
+	 */
+	public static String identity(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Optional)
+			o = ((Optional<?>)o).get();
+		return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);
 	}
 }

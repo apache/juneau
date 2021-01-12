@@ -218,9 +218,40 @@ public final class ClassInfo {
 	 * @return The parameterized type, or this object if this class is not a parameterized {@link Value} type.
 	 */
 	public ClassInfo resolved() {
-		if (Value.isType(t))
-			return of(Value.getParameterType(t))._getProxiedClassInfo();
+		if (isValue(t) || isOptional(t)) {
+			Type t = getFirstParameterType(this.t);
+			if (t != null)
+				return of(t)._getProxiedClassInfo();
+		}
 		return _getProxiedClassInfo();
+	}
+
+	private static Type getFirstParameterType(Type t) {
+		if (t instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			Type[] ta = pt.getActualTypeArguments();
+			if (ta.length > 0)
+				return ta[0];
+		} else if (t instanceof Class) /* Class that extends Optional<T> */ {
+			Class<?> c = (Class<?>)t;
+			if (c != Value.class && Value.class.isAssignableFrom(c))
+				return ClassInfo.of(c).getParameterType(0, Value.class);
+			if (c != Optional.class && Optional.class.isAssignableFrom(c))
+				return ClassInfo.of(c).getParameterType(0, Optional.class);
+		}
+		return null;
+	}
+
+	private static boolean isOptional(Type t) {
+		return
+			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Optional.class)
+			|| (t instanceof Class && Optional.class.isAssignableFrom((Class<?>)t));
+	}
+
+	private static boolean isValue(Type t) {
+		return
+			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
+			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
 	}
 
 	private ClassInfo _getProxiedClassInfo() {

@@ -10,43 +10,29 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.springboot;
+package org.apache.juneau.examples.rest.springboot;
 
-import java.util.*;
-
-import org.apache.juneau.cp.BeanFactory;
-import org.springframework.context.*;
+import java.util.function.*;
 
 /**
- * A bean factory that uses Spring bean resolution to find beans if they're not already in this factory.
+ * An example of a Spring bean that can be used for injecting messages into {@link HelloWorldResource}.
  */
-public class SpringBeanFactory extends BeanFactory {
+public class HelloWorldMessageProvider implements Supplier<String> {
 
-	private final Optional<ApplicationContext> appContext;
+	private final String message;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param appContext The Spring application context used to resolve beans.
-	 * @param parent The parent REST object bean factory.  Can be <jk>null</jk>.
-	 * @param resource The REST object.  Can be <jk>null</jk>.
+	 * @param message The message to display.
 	 */
-	public SpringBeanFactory(Optional<ApplicationContext> appContext, Optional<BeanFactory> parent, Object resource) {
-		super(parent, Optional.of(resource));
-		this.appContext = appContext;
+	public HelloWorldMessageProvider(String message) {
+		this.message = message;
 	}
 
 	@Override
-	public <T> Optional<T> getBean(Class<T> c) {
-		try {
-			Optional<T> o = super.getBean(c);
-			if (o.isPresent())
-				return o;
-			if (appContext.isPresent())
-				return Optional.ofNullable(appContext.get().getBean(c));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Optional.empty();
+	public String get() {
+		return message;
 	}
+
 }

@@ -12,21 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.template;
 
-import org.apache.juneau.html.annotation.HtmlDocConfig;
-import org.apache.juneau.microservice.resources.ConfigResource;
-import org.apache.juneau.microservice.resources.LogsResource;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.springboot.*;
-import org.apache.juneau.rest.widget.ContentTypeMenuItem;
-import org.apache.juneau.rest.widget.ThemeMenuItem;
+import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.serializer.annotation.*;
 
 /**
- * Root microservice page.
+ * Sample REST resource showing how to implement a "router" resource page.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Rest(
 	path="/*",
-	title="My Microservice",
-	description="Top-level resources page",
+	title="Root resources",
+	description="Example of a router resource page.",
 	children={
 		HelloWorldResource.class,
 		ConfigResource.class,
@@ -40,8 +43,28 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 	},
 	navlinks={
 		"api: servlet:/api",
-		"stats: servlet:/stats"
-	}
+		"stats: servlet:/stats",
+		"$W{ContentTypeMenuItem}",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+	},
+	aside={
+		"<div class='text'>",
+		"	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>",
+		"	<p>Resources can be nested arbitrarily deep through router pages.</p>",
+		"	<p>Note the <span class='link'>options</span> link provided that lets you see the generated swagger doc for this page.</p>",
+		"	<p>Also note the <span class='link'>sources</span> link on these pages to view the source code for the page.</p>",
+		"	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>",
+		"	<p>Other features (such as this aside) are added through annotations.</p>",
+		"</div>"
+	},
+	asideFloat="RIGHT"
+)
+@SerializerConfig(
+	// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+	// String comparisons.
+	// You can apply any of the Serializer/Parser/BeanContext settings this way.
+	quoteChar="'"
 )
 public class RootResources extends BasicSpringRestServletGroup {
 	private static final long serialVersionUID = 1L;

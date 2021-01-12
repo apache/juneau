@@ -14,6 +14,8 @@ package org.apache.juneau.examples.rest.springboot;
 
 import javax.servlet.*;
 
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.springboot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.*;
 import org.springframework.boot.web.servlet.*;
@@ -42,11 +44,47 @@ public class App {
 	}
 
 	/**
-	 * @return Our root resource.
+	 * Our root REST bean.
+	 * <p>
+	 * Note that this must extend from {@link SpringRestServlet} so that child resources can be resolved as Spring
+	 * beans.
+	 * <p>
+	 * All REST objects are attached to this bean using the {@link Rest#children()} annotation.
+	 *
+	 * @return The root resources REST bean.
 	 */
 	@Bean
-	public ServletRegistrationBean<Servlet> getRootResources() {
-		return new ServletRegistrationBean<>(new RootResources(), "/*");
+	public RootResources getRootResources() {
+		return new RootResources();
+	}
+
+	/**
+	 * Optionally return the {@link HelloWorldResource} object as an injectable bean.
+	 *
+	 * @return The hello-world REST bean.
+	 */
+	@Bean
+	public HelloWorldResource getHelloWorldResource() {
+		return new HelloWorldResource("Hello Spring user!");
+	}
+
+	/**
+	 * Optionally return an injectable message provider for the {@link HelloWorldResource} class.
+	 *
+	 * @return The message provider for the hello-world REST bean.
+	 */
+	@Bean
+	public HelloWorldMessageProvider getHelloWorldMessageProvider() {
+		return new HelloWorldMessageProvider("Hello Spring injection user!");
+	}
+
+	/**
+	 * @param rootResources The root REST resource servlet
+	 * @return The servlet registration mapped to "/*".
+	 */
+	@Bean
+	public ServletRegistrationBean<Servlet> getRootServlet(RootResources rootResources) {
+		return new ServletRegistrationBean<>(rootResources, "/*");
 	}
 
 	/**

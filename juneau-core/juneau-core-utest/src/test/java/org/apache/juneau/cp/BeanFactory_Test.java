@@ -15,6 +15,8 @@ package org.apache.juneau.cp;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.junit.*;
 
@@ -279,7 +281,9 @@ public class BeanFactory_Test {
 	// Create bean via method.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	public static class E {}
+	public static class E {
+		public A a;
+	}
 
 	public static class E1 {
 
@@ -338,6 +342,12 @@ public class BeanFactory_Test {
 		public static E createC2(A a) {
 			return new E();
 		}
+
+		public static E createC3(Optional<A> a) {
+			E e = new E();
+			e.a = a.orElse(null);
+			return e;
+		}
 	}
 
 	@Test
@@ -365,8 +375,12 @@ public class BeanFactory_Test {
 
 		assertObject(bf.createBeanViaMethod(E.class, x, "createC1")).doesNotExist();
 		assertObject(bf.createBeanViaMethod(E.class, x, "createC2")).doesNotExist();
+		assertObject(bf.createBeanViaMethod(E.class, x, "createC3")).exists();
+		assertObject(bf.createBeanViaMethod(E.class, x, "createC3").a).doesNotExist();
 		bf.addBean(A.class, new A());
 		assertObject(bf.createBeanViaMethod(E.class, x, "createC1")).exists();
 		assertObject(bf.createBeanViaMethod(E.class, x, "createC2")).exists();
+		assertObject(bf.createBeanViaMethod(E.class, x, "createC3")).exists();
+		assertObject(bf.createBeanViaMethod(E.class, x, "createC3").a).exists();
 	}
 }

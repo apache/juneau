@@ -20,6 +20,7 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
 import java.text.*;
+import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -72,8 +73,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param parent The parent bean factory.
 	 * @return A new bean factory.
 	 */
-	protected BeanFactory createBeanFactory(BeanFactory parent) {
-		return new BeanFactory(parent, this);
+	public BeanFactory createBeanFactory(Optional<BeanFactory> parent) {
+		return new BeanFactory(parent.orElse(null), this);
 	}
 
 	/**

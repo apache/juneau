@@ -3291,6 +3291,8 @@ public class RestContext extends BeanContext {
 
 			beanFactory = createBeanFactory(r);
 			beanFactory.addBean(BeanFactory.class, beanFactory);
+			beanFactory.addBean(RestContext.class, this);
+			beanFactory.addBean(Object.class, r);
 
 			PropertyStore ps = getPropertyStore();
 			beanFactory.addBean(PropertyStore.class, ps);
@@ -3925,7 +3927,9 @@ public class RestContext extends BeanContext {
 		BeanFactory x = null;
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
-		BeanFactory bf = new BeanFactory(parentContext == null ? null : parentContext.rootBeanFactory, resource);
+		BeanFactory parent = parentContext == null ? null : parentContext.rootBeanFactory;
+		BeanFactory bf = new BeanFactory(parent, resource);
+		bf.addBean(BeanFactory.class, bf);
 		if (x == null)
 			x = getInstanceProperty(REST_beanFactory, BeanFactory.class, null, bf);
 		if (x == null)

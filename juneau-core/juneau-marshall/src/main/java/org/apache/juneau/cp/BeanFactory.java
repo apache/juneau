@@ -23,6 +23,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -36,15 +37,24 @@ public class BeanFactory {
 	public static final class Null extends BeanFactory {}
 
 	private final Map<Class<?>,Supplier<?>> beanMap = new ConcurrentHashMap<>();
-	private final BeanFactory parent;
-	private final Object outer;
+	private final Optional<BeanFactory> parent;
+	private final Optional<Object> outer;
 
 	/**
 	 * Default constructor.
 	 */
 	public BeanFactory() {
-		this.parent = null;
-		this.outer = null;
+		this(Optional.empty(), Optional.empty());
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
+	 * @param outer Outer bean context to use when instantiating local classes.  Can be <jk>null</jk>.
+	 */
+	public BeanFactory(BeanFactory parent, Object outer) {
+		this(Optional.ofNullable(parent), Optional.ofNullable(outer));
 	}
 
 	/**
@@ -53,7 +63,7 @@ public class BeanFactory {
 	 * @param parent - Optional parent bean factory.
 	 * @param outer Outer bean context to use when instantiating local classes.
 	 */
-	public BeanFactory(BeanFactory parent, Object outer) {
+	public BeanFactory(Optional<BeanFactory> parent, Optional<Object> outer) {
 		this.parent = parent;
 		this.outer = outer;
 	}
@@ -68,10 +78,20 @@ public class BeanFactory {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> c) {
 		Supplier<?> o = beanMap.get(c);
-		if (o == null && parent != null)
-			return parent.getBean(c);
+		if (o == null && parent.isPresent())
+			return parent.get().getBean(c);
 		T t = (T)(o == null ? null : o.get());
 		return Optional.ofNullable(t);
+	}
+
+	/**
+	 * Returns the bean of the specified type.
+	 *
+	 * @param c The type of bean to return.
+	 * @return The bean.
+	 */
+	public Optional<?> getBean(ClassInfo c) {
+		return getBean(c.inner());
 	}
 
 	/**
@@ -109,12 +129,21 @@ public class BeanFactory {
 	/**
 	 * Returns <jk>true</jk> if this factory contains the specified bean type instance.
 	 *
-	 * @param <T> The bean type to check.
 	 * @param c The bean type to check.
 	 * @return <jk>true</jk> if this factory contains the specified bean type instance.
 	 */
-	public <T> boolean hasBean(Class<T> c) {
+	public boolean hasBean(Class<?> c) {
 		return getBean(c).isPresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this factory contains the specified bean type instance.
+	 *
+	 * @param c The bean type to check.
+	 * @return <jk>true</jk> if this factory contains the specified bean type instance.
+	 */
+	public final boolean hasBean(ClassInfo c) {
+		return hasBean(c.inner());
 	}
 
 	/**
@@ -199,10 +228,12 @@ public class BeanFactory {
 		List<ClassInfo> l = AList.of();
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
-			if (i == 0 && pt.isInstance(outer))
+			ClassInfo ptr = pt.resolved();
+			if (i == 0 && ptr.isInstance(outer.orElse(null)))
 				continue;
-			if (! hasBean(pt.inner()))
-				l.add(pt);
+			if (! hasBean(ptr))
+				if (! pt.is(Optional.class))
+					l.add(pt);
 		}
 		return l;
 	}
@@ -217,10 +248,16 @@ public class BeanFactory {
 		Object[] o = new Object[paramTypes.size()];
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
-			if (i == 0 && pt.isInstance(outer))
-				o[i] = outer;
-			else
-				o[i] = getBean(pt.inner()).get();
+			ClassInfo ptr = pt.resolved();
+			if (i == 0 && ptr.isInstance(outer.orElse(null)))
+				o[i] = outer.get();
+			else {
+				if (pt.is(Optional.class)) {
+					o[i] = getBean(ptr);
+				} else {
+					o[i] = getBean(ptr).get();
+				}
+			}
 		}
 		return o;
 	}
@@ -233,8 +270,8 @@ public class BeanFactory {
 	public OMap toMap() {
 		return OMap.of()
 			.a("beanMap", beanMap.keySet().stream().map(x -> x.getSimpleName()).collect(Collectors.toList()))
-			.a("outer", outer == null ? null : outer.getClass().getSimpleName())
-			.a("parent", parent);
+			.a("outer", ObjectUtils.identity(outer))
+			.a("parent", ObjectUtils.identity(parent));
 	}
 
 	@Override /* Object */
