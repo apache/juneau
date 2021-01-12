@@ -757,11 +757,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected RestConverter[] createConverters(Object resource, BeanFactory beanFactory) throws Exception {
 		RestConverter[] x = getInstanceArrayProperty(REST_converters, RestConverter.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(RestConverter[].class, resource, "createConverters");
-		if (x == null)
 			x = beanFactory.getBean(RestConverter[].class).orElse(null);
 		if (x == null)
 			x = new RestConverter[0];
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(RestConverter[].class, x)
+			.createBeanViaMethod(RestConverter[].class, resource, "createConverters", x);
 		return x;
 	}
 
@@ -798,8 +799,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected RestGuard[] createGuards(Object resource, BeanFactory beanFactory) throws Exception {
 		RestGuard[] x = getInstanceArrayProperty(REST_guards, RestGuard.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(RestGuard[].class, resource, "createGuards");
-		if (x == null)
 			x = beanFactory.getBean(RestGuard[].class).orElse(null);
 		if (x == null)
 			x = new RestGuard[0];
@@ -818,7 +817,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			}
 		}
 
-		return xl.toArray(new RestGuard[xl.size()]);
+		x = xl.toArray(new RestGuard[xl.size()]);
+
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(RestGuard[].class, x)
+			.createBeanViaMethod(RestGuard[].class, resource, "createGuards", x);
+
+		return x;
 	}
 
 	/**
@@ -852,8 +857,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected RestMatcher[] createMatchers(Object resource, BeanFactory beanFactory) throws Exception {
 		RestMatcher[] x = getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers", Method.class);
-		if (x == null)
 			x = beanFactory.getBean(RestMatcher[].class).orElse(null);
 		if (x == null)
 			x = new RestMatcher[0];
@@ -861,6 +864,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
 		if (clientVersion != null)
 			x = ArrayUtils.append(x, new ClientVersionMatcher(context.getClientVersionHeader(), mi));
+
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(RestMatcher[].class, x)
+			.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers", x);
 
 		return x;
 	}
@@ -898,11 +905,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected Encoder[] createEncoders(Object resource, BeanFactory beanFactory) throws Exception {
 		Encoder[] x = getInstanceArrayProperty(REST_encoders, Encoder.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Encoder[].class, resource, "createEncoders");
-		if (x == null)
 			x = beanFactory.getBean(Encoder[].class).orElse(null);
 		if (x == null)
 			x = new Encoder[0];
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(Encoder[].class, x)
+			.createBeanViaMethod(Encoder[].class, resource, "createEncoders", x);
 		return x;
 	}
 
@@ -938,20 +946,20 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		Object x = getArrayProperty(REST_serializers, Object.class);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers", Method.class);
+			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers", null, Method.class);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers", Method.class);
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers", null, Method.class);
 		if (x == null) {
-			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", Method.class);
+			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", null, Method.class);
 			if (x != null)
 				return (SerializerGroup)x;
 		}
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers");
+			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers", null);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers");
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers", null);
 		if (x == null) {
-			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers");
+			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", null);
 			if (x != null)
 				return (SerializerGroup)x;
 		}
@@ -1003,20 +1011,20 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		Object x = getArrayProperty(REST_parsers, Object.class);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers", Method.class);
+			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers", null, Method.class);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers", Method.class);
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers", null, Method.class);
 		if (x == null) {
-			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers", Method.class);
+			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers", null, Method.class);
 			if (x != null)
 				return (ParserGroup)x;
 		}
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers");
+			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers", null);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers");
+			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers", null);
 		if (x == null) {
-			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers");
+			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers", null);
 			if (x != null)
 				return (ParserGroup)x;
 		}
@@ -1073,13 +1081,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (x == null)
 			x = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", Method.class);
-		if (x == null)
-			x = beanFactory.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer");
-		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
 		if (x == null)
 			x = new OpenApiSerializer(ps);
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(HttpPartSerializer.class, x)
+			.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", x, Method.class);
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(HttpPartSerializer.class, x)
+			.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", x);
 		return x;
 	}
 
@@ -1120,13 +1130,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (x == null)
 			x = getInstanceProperty(REST_partParser, HttpPartParser.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", Method.class);
-		if (x == null)
-			x = beanFactory.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser");
-		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
 		if (x == null)
 			x = new OpenApiParser(ps);
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(HttpPartParser.class, x)
+			.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", x, Method.class);
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(HttpPartParser.class, x)
+			.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", x);
 		return x;
 	}
 

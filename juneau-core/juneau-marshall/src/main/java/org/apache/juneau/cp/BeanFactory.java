@@ -41,6 +41,26 @@ public class BeanFactory {
 	private final Optional<Object> outer;
 
 	/**
+	 * Static creator.
+	 * 
+	 * @return A new {@link BeanFactory} object.
+	 */
+	public static BeanFactory of() {
+		return new BeanFactory();
+	}
+
+	/**
+	 * Static creator.
+	 * 
+	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
+	 * @param outer Outer bean context to use when instantiating local classes.  Can be <jk>null</jk>.
+	 * @return A new {@link BeanFactory} object.
+	 */
+	public static BeanFactory of(BeanFactory parent, Object outer) {
+		return new BeanFactory(parent, outer);
+	}
+
+	/**
 	 * Default constructor.
 	 */
 	public BeanFactory() {
@@ -202,11 +222,12 @@ public class BeanFactory {
 	 * @param c The bean type to create.
 	 * @param resource The object where the method is defined.
 	 * @param methodName The method name on the object to call.
+	 * @param def The default value to return if method doesn't exist.
 	 * @param requiredParams The parameter types that must be present on the method.
 	 * @return A newly-created bean or <jk>null</jk> if method not found or it returns <jk>null</jk>.
 	 * @throws ExecutableException If bean could not be created.
 	 */
-	public <T> T createBeanViaMethod(Class<T> c, Object resource, String methodName, Class<?>...requiredParams) throws ExecutableException {
+	public <T> T createBeanViaMethod(Class<T> c, Object resource, String methodName, T def, Class<?>...requiredParams) throws ExecutableException {
 		ClassInfo ci = ClassInfo.of(resource);
 		for (MethodInfo m : ci.getPublicMethods()) {
 			if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
@@ -215,7 +236,7 @@ public class BeanFactory {
 					return m.invoke(resource, getParams(m.getParamTypes()));
 			}
 		}
-		return null;
+		return def;
 	}
 
 	/**

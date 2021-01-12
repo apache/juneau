@@ -204,7 +204,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (resource.isPresent()) {
 			Object r = resource.get();
 			BeanFactory bf = new BeanFactory(parentContext.isPresent() ? parentContext.get().rootBeanFactory : null, r);
-			x = bf.createBeanViaMethod(BeanFactory.class, r, "createBeanFactory");
+			x = bf.createBeanViaMethod(BeanFactory.class, r, "createBeanFactory", null);
 		}
 		if (x == null && parentContext.isPresent()) {
 			x = parentContext.get().rootBeanFactory;
