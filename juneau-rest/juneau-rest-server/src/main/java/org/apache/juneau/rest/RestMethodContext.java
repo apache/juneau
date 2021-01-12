@@ -24,6 +24,7 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -46,7 +47,6 @@ import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Method;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.guards.*;
@@ -284,7 +284,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<js>"*"</js>
 	 * 		- Denotes any method.
 	 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
-	 * 		<br>The {@link Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
+	 * 		<br>The {@link org.apache.juneau.rest.annotation.Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
 	 * 		distinguish the actual HTTP method name.
 	 * 	<li>
 	 * 		<js>""</js>
@@ -519,7 +519,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final Integer priority;
 	private final RestContext context;
 	private final BeanFactory beanFactory;
-	final java.lang.reflect.Method method;
+	final Method method;
 	final MethodInvoker methodInvoker;
 	final MethodInfo mi;
 	final SerializerGroup serializers;
@@ -575,7 +575,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			this.beanFactory = new BeanFactory(context.getBeanFactory(), r)
 				.addBean(RestMethodContext.class, this)
-				.addBean(java.lang.reflect.Method.class, method);
+				.addBean(Method.class, method);
 
 			String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
 			if (_httpMethod == null)
@@ -771,7 +771,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Looks for a static or non-static <c>createConverters()</> method that returns <c>{@link RestConverter}[]</c> on the
 	 * 		resource class with any of the following arguments:
 	 * 		<ul>
-	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link Method} - The Java method this context belongs to.
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link BeanFactory}
 	 * 			<li>Any {@doc RestInjection injected beans}.
@@ -812,7 +812,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Looks for a static or non-static <c>createGuards()</> method that returns <c>{@link RestGuard}[]</c> on the
 	 * 		resource class with any of the following arguments:
 	 * 		<ul>
-	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link Method} - The Java method this context belongs to.
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link BeanFactory}
 	 * 			<li>Any {@doc RestInjection injected beans}.
@@ -869,7 +869,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected RestMatcher[] createMatchers(Object resource, BeanFactory beanFactory) throws Exception {
 		RestMatcher[] x = getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, null, beanFactory);
 		if (x == null)
-			x = beanFactory.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers", java.lang.reflect.Method.class);
+			x = beanFactory.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers", Method.class);
 		if (x == null)
 			x = beanFactory.getBean(RestMatcher[].class).orElse(null);
 		if (x == null)
@@ -892,7 +892,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>Looks for a static or non-static <c>createEncoders()</> method that returns <c>{@link Encoder}[]</c> on the
 	 * 		resource class with any of the following arguments:
 	 * 		<ul>
-	 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
+	 * 			<li>{@link Method} - The Java method this context belongs to.
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link BeanFactory}
 	 * 			<li>Any {@doc RestInjection injected beans}.
