@@ -228,10 +228,10 @@ public class BeanFactory {
 		List<ClassInfo> l = AList.of();
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
-			ClassInfo ptr = pt.resolved();
-			if (i == 0 && ptr.isInstance(outer.orElse(null)))
+			ClassInfo ptu = pt.unwrap(Optional.class);
+			if (i == 0 && ptu.isInstance(outer.orElse(null)))
 				continue;
-			if (! hasBean(ptr))
+			if (! hasBean(ptu))
 				if (! pt.is(Optional.class))
 					l.add(pt);
 		}
@@ -248,14 +248,14 @@ public class BeanFactory {
 		Object[] o = new Object[paramTypes.size()];
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
-			ClassInfo ptr = pt.resolved();
-			if (i == 0 && ptr.isInstance(outer.orElse(null)))
+			ClassInfo ptu = pt.unwrap(Optional.class);
+			if (i == 0 && ptu.isInstance(outer.orElse(null)))
 				o[i] = outer.get();
 			else {
 				if (pt.is(Optional.class)) {
-					o[i] = getBean(ptr);
+					o[i] = getBean(ptu);
 				} else {
-					o[i] = getBean(ptr).get();
+					o[i] = getBean(ptu).get();
 				}
 			}
 		}

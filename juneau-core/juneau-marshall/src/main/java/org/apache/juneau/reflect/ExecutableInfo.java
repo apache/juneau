@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
 public abstract class ExecutableInfo {
 
 	final ClassInfo declaringClass;
-	final Executable e, re;
+	final Executable e;
 	final boolean isConstructor;
 
 	private ParamInfo[] params;
@@ -41,12 +41,10 @@ public abstract class ExecutableInfo {
 	 *
 	 * @param declaringClass The class that declares this method or constructor.
 	 * @param e The constructor or method that this info represents.
-	 * @param re The "real" constructor if the constructor above is defined against a CGLIB proxy.
 	 */
-	protected ExecutableInfo(ClassInfo declaringClass, Executable e, Executable re) {
+	protected ExecutableInfo(ClassInfo declaringClass, Executable e) {
 		this.declaringClass = declaringClass;
 		this.e = e;
-		this.re = re == null ? e : re;
 		this.isConstructor = e instanceof Constructor;
 	}
 
@@ -263,13 +261,13 @@ public abstract class ExecutableInfo {
 
 	private Type[] _getRawGenericParamTypes() {
 		if (rawGenericParamTypes == null)
-			rawGenericParamTypes = re.getGenericParameterTypes();
+			rawGenericParamTypes = e.getGenericParameterTypes();
 		return rawGenericParamTypes;
 	}
 
 	private Parameter[] _getRawParameters() {
 		if (rawParameters == null)
-			rawParameters = re.getParameters();
+			rawParameters = e.getParameters();
 		return rawParameters;
 	}
 

@@ -59,7 +59,6 @@ public final class ClassInfo {
 
 	private final Type t;
 	final Class<?> c;
-	private ClassInfo proxyFor;
 	private final boolean isParameterizedType;
 	private Boolean isRepeatedAnnotation;
 	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
@@ -81,12 +80,10 @@ public final class ClassInfo {
 	 *
 	 * @param c The class type.
 	 * @param t The generic type (if parameterized type).
-	 * @param proxyFor If the class is a CGLIB proxy, this is the underlying wrapped class.
 	 */
-	protected ClassInfo(Class<?> c, Type t, Class<?> proxyFor) {
+	protected ClassInfo(Class<?> c, Type t) {
 		this.t = t;
 		this.c = c;
-		this.proxyFor = proxyFor == null ? null : ClassInfo.of(proxyFor);
 		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
 	}
 
@@ -99,7 +96,7 @@ public final class ClassInfo {
 	public static ClassInfo of(Type t) {
 		if (t == null)
 			return null;
-		return new ClassInfo(ClassUtils.toClass(t), t, null);
+		return new ClassInfo(ClassUtils.toClass(t), t);
 	}
 
 	/**
@@ -111,7 +108,7 @@ public final class ClassInfo {
 	public static ClassInfo of(Class<?> c) {
 		if (c == null)
 			return null;
-		return new ClassInfo(c, c, null);
+		return new ClassInfo(c, c);
 	}
 
 	/**
@@ -139,7 +136,7 @@ public final class ClassInfo {
 	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Class<?> c, Type t) {
-		return new ClassInfo(c, t, null);
+		return new ClassInfo(c, t);
 	}
 
 	/**
@@ -151,7 +148,20 @@ public final class ClassInfo {
 	public static ClassInfo of(Object o) {
 		if (o == null)
 			return null;
-		return new ClassInfo(o.getClass(), o.getClass(), getProxyFor(o));
+		return new ClassInfo(o.getClass(), o.getClass());
+	}
+
+	/**
+	 * Same as {@link #of(Object)} but attempts to deproxify the object if it's wrapped in a CGLIB proxy.
+	 *
+	 * @param o The class instance.
+	 * @return The constructed class info, or <jk>null</jk> if the object was <jk>null</jk>.
+	 */
+	public static ClassInfo ofProxy(Object o) {
+		if (o == null)
+			return null;
+		Class<?> c = getProxyFor(o);
+		return c == null ? ClassInfo.of(o) : ClassInfo.of(c);
 	}
 
 	/**
@@ -213,20 +223,29 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * If this class is a parameterized {@link Value} type, returns the parameterized type.
+	 * Unwrap this class if it's a parameterized type of the specified type such as {@link Value} or {@link Optional}.
 	 *
-	 * @return The parameterized type, or this object if this class is not a parameterized {@link Value} type.
+	 * @param wrapperTypes The parameterized types to unwrap if this class is one of those types.
+	 * @return The class info on the unwrapped type, or just this type if this isn't one of the specified types.
 	 */
-	public ClassInfo resolved() {
-		if (isValue(t) || isOptional(t)) {
-			Type t = getFirstParameterType(this.t);
-			if (t != null)
-				return of(t)._getProxiedClassInfo();
+	public ClassInfo unwrap(Class<?>...wrapperTypes) {
+		for (Class<?> wt : wrapperTypes) {
+			if (isParameterizedTypeOf(wt)) {
+				Type t = getFirstParameterType(wt);
+				if (t != null)
+					return of(t).unwrap(wrapperTypes); // Recursively do it again.
+			}
 		}
-		return _getProxiedClassInfo();
+		return this;
 	}
 
-	private static Type getFirstParameterType(Type t) {
+	private boolean isParameterizedTypeOf(Class<?> c) {
+		return
+			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == c)
+			|| (t instanceof Class && c.isAssignableFrom((Class<?>)t));
+	}
+
+	private Type getFirstParameterType(Class<?> parameterizedType) {
 		if (t instanceof ParameterizedType) {
 			ParameterizedType pt = (ParameterizedType)t;
 			Type[] ta = pt.getActualTypeArguments();
@@ -234,28 +253,10 @@ public final class ClassInfo {
 				return ta[0];
 		} else if (t instanceof Class) /* Class that extends Optional<T> */ {
 			Class<?> c = (Class<?>)t;
-			if (c != Value.class && Value.class.isAssignableFrom(c))
-				return ClassInfo.of(c).getParameterType(0, Value.class);
-			if (c != Optional.class && Optional.class.isAssignableFrom(c))
-				return ClassInfo.of(c).getParameterType(0, Optional.class);
+			if (c != parameterizedType && parameterizedType.isAssignableFrom(c))
+				return ClassInfo.of(c).getParameterType(0, parameterizedType);
 		}
 		return null;
-	}
-
-	private static boolean isOptional(Type t) {
-		return
-			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Optional.class)
-			|| (t instanceof Class && Optional.class.isAssignableFrom((Class<?>)t));
-	}
-
-	private static boolean isValue(Type t) {
-		return
-			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
-			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
-	}
-
-	private ClassInfo _getProxiedClassInfo() {
-		return proxyFor == null ? this : proxyFor;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -525,7 +526,7 @@ public final class ClassInfo {
 			List<MethodInfo> l = new ArrayList<>(mm.length);
 			for (Method m : mm)
 				if (m.getDeclaringClass() != Object.class)
-					l.add(MethodInfo.of(this, m, _getProxyTarget(m)));
+					l.add(MethodInfo.of(this, m));
 			l.sort(null);
 			publicMethods = l.toArray(new MethodInfo[l.size()]);
 		}
@@ -538,7 +539,7 @@ public final class ClassInfo {
 			List<MethodInfo> l = new ArrayList<>(mm.length);
 			for (Method m : mm)
 				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
-					l.add(MethodInfo.of(this, m, _getProxyTarget(m)));
+					l.add(MethodInfo.of(this, m));
 			l.sort(null);
 			declaredMethods = l.toArray(new MethodInfo[l.size()]);
 		}
@@ -568,24 +569,6 @@ public final class ClassInfo {
 	private List<MethodInfo> _appendDeclaredMethods(List<MethodInfo> l) {
 		l.addAll(getDeclaredMethods());
 		return l;
-	}
-
-	private Method _getProxyTarget(Method m) {
-		if (proxyFor != null) {
-			MethodInfo m2 = proxyFor.getMethod(m.getName(), m.getParameterTypes());
-			if (m2 != null)
-				return m2.inner();
-		}
-		return m;
-	}
-
-	private Constructor<?> _getProxyTarget(Constructor<?> c) {
-		if (proxyFor != null) {
-			ConstructorInfo c2 = proxyFor.getConstructor(Visibility.PRIVATE, c.getParameterTypes());
-			if (c2 != null)
-				return c2.inner();
-		}
-		return c;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -863,7 +846,7 @@ public final class ClassInfo {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
 			List<ConstructorInfo> l = new ArrayList<>(cc.length);
 			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc, _getProxyTarget(ccc)));
+				l.add(ConstructorInfo.of(this, ccc));
 			l.sort(null);
 			publicConstructors = l.toArray(new ConstructorInfo[l.size()]);
 		}
@@ -875,7 +858,7 @@ public final class ClassInfo {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
 			List<ConstructorInfo> l = new ArrayList<>(cc.length);
 			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc, _getProxyTarget(ccc)));
+				l.add(ConstructorInfo.of(this, ccc));
 			l.sort(null);
 			declaredConstructors = l.toArray(new ConstructorInfo[l.size()]);
 		}
@@ -2259,24 +2242,6 @@ public final class ClassInfo {
 	 */
 	public boolean hasPackage() {
 		return getPackage() != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a proxy for another class.
-	 *
-	 * @return <jk>true</jk> if this class is a proxy for another class.
-	 */
-	public boolean isProxy() {
-		return proxyFor != null;
-	}
-
-	/**
-	 * Returns the class info of the proxied class.
-	 *
-	 * @return The class info of the proxied class, or <jk>null</jk> if this class is not proxied.
-	 */
-	public ClassInfo getProxyFor() {
-		return proxyFor;
 	}
 
 	/**

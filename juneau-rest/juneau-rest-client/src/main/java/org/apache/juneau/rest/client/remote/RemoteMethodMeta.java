@@ -85,7 +85,7 @@ public class RemoteMethodMeta {
 
 			RemoteMethod rm = mi.getLastAnnotation(RemoteMethod.class);
 			if (rm == null)
-				rm = mi.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
+				rm = mi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(RemoteMethod.class);
 
 			httpMethod = rm == null ? "" : rm.method();
 			path = rm == null ? "" : rm.path();

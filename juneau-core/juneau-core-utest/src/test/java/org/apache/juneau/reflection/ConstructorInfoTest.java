@@ -69,7 +69,7 @@ public class ConstructorInfoTest {
 
 	@Test
 	public void of_withDeclaringClass() throws Exception {
-		check("A()", ConstructorInfo.of(ClassInfo.of(A.class), a.inner(), null));
+		check("A()", ConstructorInfo.of(ClassInfo.of(A.class), a.inner()));
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class ConstructorInfoTest {
 	@Test
 	public void of_null() throws Exception {
 		check(null, ConstructorInfo.of(null));
-		check(null, ConstructorInfo.of(null, null, null));
+		check(null, ConstructorInfo.of(null, null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

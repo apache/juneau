@@ -358,10 +358,6 @@ public final class ClassMeta<T> implements Type {
 
 			Class<T> c = innerClass;
 			ci = ClassInfo.of(c);
-			if (ci.isProxy()) {
-				ci = ci.getProxyFor();
-				innerClass = this.innerClass = ci.inner();
-			}
 
 			if (c.isPrimitive()) {
 				if (c == Boolean.TYPE)

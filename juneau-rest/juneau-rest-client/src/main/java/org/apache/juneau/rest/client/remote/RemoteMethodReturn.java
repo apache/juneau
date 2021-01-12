@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import java.lang.reflect.*;
+import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -41,7 +42,7 @@ public final class RemoteMethodReturn {
 
 		RemoteMethod rm = m.getLastAnnotation(RemoteMethod.class);
 		if (rm == null)
-			rm = m.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
+			rm = m.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(RemoteMethod.class);
 
 		RemoteReturn rv = null;
 

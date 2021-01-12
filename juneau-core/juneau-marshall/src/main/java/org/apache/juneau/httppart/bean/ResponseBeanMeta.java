@@ -47,7 +47,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, PropertyStore ps) {
-		ClassInfo ci = ClassInfo.of(t).resolved();
+		ClassInfo ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
 		if (! ci.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
@@ -67,10 +67,10 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(MethodInfo m, PropertyStore ps) {
-		if (! (m.hasAnnotation(Response.class) || m.getResolvedReturnType().hasAnnotation(Response.class)))
+		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)))
 			return null;
 		Builder b = new Builder(ps);
-		b.apply(m.getReturnType().resolved().innerType());
+		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
 		for (Response r : m.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();
@@ -89,7 +89,7 @@ public class ResponseBeanMeta {
 		if (! mpi.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		b.apply(mpi.getParameterType().resolved().innerType());
+		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
 		for (Response r : mpi.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();

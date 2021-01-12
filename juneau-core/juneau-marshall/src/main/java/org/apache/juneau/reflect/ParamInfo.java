@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -158,14 +159,14 @@ public final class ParamInfo {
 			for (Annotation a2 : eInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					return (T)a2;
-			return eInfo.getParamType(index).resolved().getLastAnnotation(a);
+			return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getLastAnnotation(a);
 		}
 		MethodInfo mi = (MethodInfo)eInfo;
 		for (Method m2 : mi.getMatching())
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		return eInfo.getParamType(index).resolved().getLastAnnotation(a);
+		return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getLastAnnotation(a);
 	}
 
 	/**
@@ -189,7 +190,7 @@ public final class ParamInfo {
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		if (eInfo.isConstructor) {
-			ClassInfo ci = eInfo.getParamType(index).resolved();
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
 			if (parentFirst) {
 				ci.appendAnnotations(l, a);
@@ -204,7 +205,7 @@ public final class ParamInfo {
 			}
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
-			ClassInfo ci = eInfo.getParamType(index).resolved();
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			if (parentFirst) {
 				ci.appendAnnotations(l, a);
 				for (Method m2 : mi.getMatchingParentFirst())

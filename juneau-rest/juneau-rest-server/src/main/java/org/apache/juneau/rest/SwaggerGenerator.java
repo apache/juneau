@@ -97,7 +97,7 @@ final class SwaggerGenerator {
 	 */
 	public Swagger getSwagger() throws Exception {
 
-		ClassInfo rci = ClassInfo.of(resource).resolved();
+		ClassInfo rci = ClassInfo.ofProxy(resource);
 
 		rci.getSimpleName();
 
@@ -395,7 +395,7 @@ final class SwaggerGenerator {
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
 						ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
 						if (a == null)
-							a = ecmi.getResolvedReturnType().getLastAnnotation(ResponseHeader.class);
+							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(ResponseHeader.class);
 						if (a != null && ! isMulti(a)) {
 							String ha = a.name();
 							for (Integer code : codes) {
@@ -408,7 +408,7 @@ final class SwaggerGenerator {
 				}
 			}
 
-			if (mi.hasAnnotation(Response.class) || mi.getResolvedReturnType().hasAnnotation(Response.class)) {
+			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)) {
 				List<Response> la = mi.getAnnotations(Response.class);
 				Set<Integer> codes = getCodes(la, 200);
 				for (Response a : la) {

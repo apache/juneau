@@ -254,7 +254,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
 
-		ClassInfo rci = ClassInfo.of(resource).resolved();
+		ClassInfo rci = ClassInfo.ofProxy(resource);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {

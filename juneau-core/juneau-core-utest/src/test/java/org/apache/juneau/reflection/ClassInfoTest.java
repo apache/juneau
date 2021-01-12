@@ -174,10 +174,28 @@ public class ClassInfoTest {
 
 	@Test
 	public void resolved() {
-		check("A1", of(A1.class).resolved());
-		check("A1", of(A2.class).resolved());
+		check("A1", of(A1.class).unwrap(Value.class));
+		check("A1", of(A2.class).unwrap(Value.class));
 	}
 
+	public static class A6 {
+		public Optional<A1> m1(Optional<A1> bar) {
+			return null;
+		}
+		public Value<A1> m2(Value<A1> bar) {
+			return null;
+		}
+	}
+
+	@Test
+	public void resolvedParams() {
+		MethodInfo mi = ClassInfo.of(A6.class).getPublicMethod("m1", Optional.class);
+		check("A1", mi.getParamType(0).unwrap(Optional.class));
+		check("A1", mi.getReturnType().unwrap(Optional.class));
+		mi = ClassInfo.of(A6.class).getPublicMethod("m2", Value.class);
+		check("A1", mi.getParamType(0).unwrap(Value.class));
+		check("A1", mi.getReturnType().unwrap(Value.class));
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Parent classes and interfaces.

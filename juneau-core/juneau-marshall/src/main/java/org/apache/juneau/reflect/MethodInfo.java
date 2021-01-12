@@ -43,10 +43,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param m The method being wrapped.
-	 * @param rm The "real" method if the method above is defined against a CGLIB proxy.
 	 */
-	protected MethodInfo(ClassInfo declaringClass, Method m, Method rm) {
-		super(declaringClass, m, rm);
+	protected MethodInfo(ClassInfo declaringClass, Method m) {
+		super(declaringClass, m);
 		this.m = m;
 	}
 
@@ -55,13 +54,12 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param m The method being wrapped.
-	 * @param rm The "real" method if the method above is defined against a CGLIB proxy.
 	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static MethodInfo of(ClassInfo declaringClass, Method m, Method rm) {
+	public static MethodInfo of(ClassInfo declaringClass, Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(declaringClass, m, rm);
+		return new MethodInfo(declaringClass, m);
 	}
 
 	/**
@@ -69,13 +67,12 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param m The method being wrapped.
-	 * @param rm The "real" method if the method above is defined against a CGLIB proxy.
 	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static MethodInfo of(Class<?> declaringClass, Method m, Method rm) {
+	public static MethodInfo of(Class<?> declaringClass, Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(ClassInfo.of(declaringClass), m, rm);
+		return new MethodInfo(ClassInfo.of(declaringClass), m);
 	}
 
 	/**
@@ -87,7 +84,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public static MethodInfo of(Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(ClassInfo.of(m.getDeclaringClass()), m, m);
+		return new MethodInfo(ClassInfo.of(m.getDeclaringClass()), m);
 	}
 
 	/**
@@ -240,7 +237,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			for (Annotation a2 :  m2.getDeclaredAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		getReturnType().resolved().appendAnnotations(l, a);
+		getReturnType().unwrap(Value.class,Optional.class).appendAnnotations(l, a);
 		return l;
 	}
 
@@ -381,20 +378,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		if (returnType == null)
 			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
 		return returnType;
-	}
-
-	/**
-	 * Returns the generic return type of this method as a {@link ClassInfo} object.
-	 *
-	 * <p>
-	 * Unwraps the type if it's a {@link Value}.
-	 *
-	 * @return The generic return type of this method.
-	 */
-	public ClassInfo getResolvedReturnType() {
-		if (returnType == null)
-			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
-		return returnType.resolved();
 	}
 
 	/**

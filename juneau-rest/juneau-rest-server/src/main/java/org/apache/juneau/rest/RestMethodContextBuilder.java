@@ -37,7 +37,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		this.method = method;
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
-		MethodInfo mi = MethodInfo.of(servlet.getClass(), method, method);
+		MethodInfo mi = MethodInfo.of(servlet.getClass(), method);
 
 		try {
 

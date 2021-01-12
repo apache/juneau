@@ -122,7 +122,7 @@ public class MethodInfoTest {
 	@Test
 	public void of_withDeclaringClass() {
 		check("A1.m()", a_m);
-		check("A1.m()", MethodInfo.of(ClassInfo.of(A1.class), a_m.inner(), null));
+		check("A1.m()", MethodInfo.of(ClassInfo.of(A1.class), a_m.inner()));
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class MethodInfoTest {
 	@Test
 	public void of_null() {
 		check(null, MethodInfo.of(null));
-		check(null, MethodInfo.of((ClassInfo)null, null, null));
+		check(null, MethodInfo.of((ClassInfo)null, null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

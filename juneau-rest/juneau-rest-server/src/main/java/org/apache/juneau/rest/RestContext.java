@@ -3285,7 +3285,7 @@ public class RestContext extends BeanContext {
 			Object r = getResource();
 
 			parentContext = builder.parentContext;
-			ClassInfo rci = ClassInfo.of(r).resolved();
+			ClassInfo rci = ClassInfo.ofProxy(r);
 
 			rootBeanFactory = createRootBeanFactory(r);
 
