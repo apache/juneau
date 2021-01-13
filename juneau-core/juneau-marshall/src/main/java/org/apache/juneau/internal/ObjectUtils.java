@@ -321,10 +321,10 @@ public class ObjectUtils {
 	 * @return An identity string.
 	 */
 	public static String identity(Object o) {
+		if (o instanceof Optional)
+			o = ((Optional<?>)o).orElse(null);
 		if (o == null)
 			return null;
-		if (o instanceof Optional)
-			o = ((Optional<?>)o).get();
 		return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);
 	}
 }

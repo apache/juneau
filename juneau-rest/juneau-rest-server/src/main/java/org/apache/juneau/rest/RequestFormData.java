@@ -21,6 +21,7 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -28,7 +29,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.http.exception.*;
 
 /**
@@ -86,6 +87,25 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
 					put(key, stringifyAll(value));
 			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds default entries to these form-data parameters.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestFormData addDefault(NameValuePair...pairs) {
+		for (NameValuePair p : pairs) {
+			String key = p.getName();
+			Object value = p.getValue();
+			String[] v = get(key);
+			if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
+				put(key, stringifyAll(value));
 		}
 		return this;
 	}
@@ -562,7 +582,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
-	
+
 	/**
 	 * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser.
 	 *

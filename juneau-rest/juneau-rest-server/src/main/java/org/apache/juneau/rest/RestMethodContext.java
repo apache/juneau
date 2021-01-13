@@ -32,6 +32,8 @@ import java.util.concurrent.atomic.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.http.*;
+import org.apache.http.ParseException;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -39,6 +41,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -529,10 +532,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
 	final JsonSchemaGenerator jsonSchemaGenerator;
-	final Map<String,Object>
-		reqHeaders,
-		defaultQuery,
-		defaultFormData;
+	final org.apache.http.Header[] defaultRequestHeaders;
+	final NameValuePair[] defaultRequestQuery;
+	final NameValuePair[] defaultRequestFormData;
 	final OMap reqAttrs;
 	final String defaultCharset;
 	final long maxInput;
@@ -624,57 +626,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			methodParams = context.findParams(mi, false, pathMatchers[this.pathMatchers.length-1]);
 
-			Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-			_reqHeaders.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
+			defaultRequestHeaders = createDefaultRequestHeaders(r, beanFactory, method);
+			defaultRequestQuery = createDefaultRequestQuery(r, beanFactory, method);
+			defaultRequestFormData = createDefaultRequestFormData(r, beanFactory, method);
 
 			OMap _reqAttrs = new OMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
 
-			Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
-
-			Map<String,Object> _defaultFormData = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
-
-			Type[] pt = method.getGenericParameterTypes();
-			Annotation[][] pa = method.getParameterAnnotations();
-			for (int i = 0; i < pt.length; i++) {
-				for (Annotation a : pa[i]) {
-					if (a instanceof Header) {
-						Header h = (Header)a;
-						String def = joinnlFirstNonEmptyArray(h._default(), h.df());
-						if (def != null) {
-							try {
-								_reqHeaders.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @Header annotation");
-							}
-						}
-					} else if (a instanceof Query) {
-						Query q = (Query)a;
-						String def = joinnlFirstNonEmptyArray(q._default(), q.df());
-						if (def != null) {
-							try {
-								_defaultQuery.put(firstNonEmpty(q.name(), q.n(), q.value()), parseAnything(def));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @Query annotation");
-							}
-						}
-					} else if (a instanceof FormData) {
-						FormData f = (FormData)a;
-						String def = joinnlFirstNonEmptyArray(f._default(), f.df());
-						if (def != null) {
-							try {
-								_defaultFormData.put(firstNonEmpty(f.name(), f.value(), f.n()), parseAnything(def));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @FormData annotation");
-							}
-						}
-					}
-				}
-			}
-
-			this.reqHeaders = Collections.unmodifiableMap(_reqHeaders);
 			this.reqAttrs = _reqAttrs.unmodifiable();
-			this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
-			this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
 
 			this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
@@ -742,13 +700,22 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected RestConverter[] createConverters(Object resource, BeanFactory beanFactory) throws Exception {
 		RestConverter[] x = getInstanceArrayProperty(REST_converters, RestConverter.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(RestConverter[].class).orElse(null);
+
 		if (x == null)
 			x = new RestConverter[0];
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(RestConverter[].class, x)
-			.createBeanViaMethod(RestConverter[].class, resource, "createConverters", x);
+			.beanCreateMethodFinder(RestConverter[].class, resource)
+			.find("createConverters", Method.class)
+			.thenFind("createConverters")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -784,8 +751,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected RestGuard[] createGuards(Object resource, BeanFactory beanFactory) throws Exception {
 		RestGuard[] x = getInstanceArrayProperty(REST_guards, RestGuard.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(RestGuard[].class).orElse(null);
+
 		if (x == null)
 			x = new RestGuard[0];
 
@@ -805,9 +774,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		x = xl.toArray(new RestGuard[xl.size()]);
 
-		x = BeanFactory.of(beanFactory, resource)
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(RestGuard[].class, x)
-			.createBeanViaMethod(RestGuard[].class, resource, "createGuards", x);
+			.beanCreateMethodFinder(RestGuard[].class, resource)
+			.find("createGuards", Method.class)
+			.thenFind("createGuards")
+			.withDefault(x)
+			.run();
 
 		return x;
 	}
@@ -842,8 +816,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected RestMatcher[] createMatchers(Object resource, BeanFactory beanFactory) throws Exception {
 		RestMatcher[] x = getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(RestMatcher[].class).orElse(null);
+
 		if (x == null)
 			x = new RestMatcher[0];
 
@@ -851,9 +827,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (clientVersion != null)
 			x = ArrayUtils.append(x, new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 
-		x = BeanFactory.of(beanFactory, resource)
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(RestMatcher[].class, x)
-			.createBeanViaMethod(RestMatcher[].class, resource, "createMatchers", x);
+			.beanCreateMethodFinder(RestMatcher[].class, resource)
+			.find("createMatchers", Method.class)
+			.withDefault(x)
+			.run();
 
 		return x;
 	}
@@ -890,8 +870,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected EncoderGroup createEncoders(Object resource, BeanFactory beanFactory) throws Exception {
 		Encoder[] x = getInstanceArrayProperty(REST_encoders, Encoder.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(Encoder[].class).orElse(null);
+
 		if (x == null)
 			x = new Encoder[0];
 
@@ -901,9 +883,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			.append(x)
 			.build();
 
-		g = BeanFactory.of(beanFactory, resource)
+		g = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(EncoderGroup.class, g)
-			.createBeanViaMethod(EncoderGroup.class, resource, "createEncoders", g);
+			.beanCreateMethodFinder(EncoderGroup.class, resource)
+			.find("createEncoders", Method.class)
+			.thenFind("createEncoders")
+			.withDefault(g)
+			.run();
 
 		return g;
 	}
@@ -942,10 +929,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		if (g == null) {
 			Object[] x = getArrayProperty(REST_serializers, Object.class);
+
 			if (x == null)
 				x = beanFactory.getBean(Serializer[].class).orElse(null);
+
 			if (x == null)
 				x = new Serializer[0];
+
 			g = SerializerGroup
 				.create()
 				.append(x)
@@ -953,12 +943,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				.build();
 		}
 
-		g = BeanFactory.of(beanFactory, resource)
+		g = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(SerializerGroup.class, g)
-			.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", g, Method.class);
-		g = BeanFactory.of(beanFactory, resource)
-			.addBean(SerializerGroup.class, g)
-			.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", g);
+			.beanCreateMethodFinder(SerializerGroup.class, resource)
+			.find("createSerializers", Method.class)
+			.thenFind("createSerializers")
+			.withDefault(g)
+			.run();
 
 		return g;
 	}
@@ -997,10 +989,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		if (g == null) {
 			Object[] x = getArrayProperty(REST_parsers, Object.class);
+
 			if (x == null)
 				x = beanFactory.getBean(Parser[].class).orElse(null);
+
 			if (x == null)
 				x = new Parser[0];
+
 			g = ParserGroup
 				.create()
 				.append(x)
@@ -1008,12 +1003,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				.build();
 		}
 
-		g = BeanFactory.of(beanFactory, resource)
+		g = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(ParserGroup.class, g)
-			.createBeanViaMethod(ParserGroup.class, resource, "createParsers", g, Method.class);
-		g = BeanFactory.of(beanFactory, resource)
-			.addBean(ParserGroup.class, g)
-			.createBeanViaMethod(ParserGroup.class, resource, "createParsers", g);
+			.beanCreateMethodFinder(ParserGroup.class, resource)
+			.find("createParsers", Method.class)
+			.thenFind("createParsers")
+			.withDefault(g)
+			.run();
 
 		return g;
 	}
@@ -1050,20 +1047,28 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		HttpPartSerializer x = null;
+
 		if (resource instanceof HttpPartSerializer)
 			x = (HttpPartSerializer)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
+
 		if (x == null)
 			x = new OpenApiSerializer(ps);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(HttpPartSerializer.class, x)
-			.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", x, Method.class);
-		x = BeanFactory.of(beanFactory, resource)
-			.addBean(HttpPartSerializer.class, x)
-			.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", x);
+			.beanCreateMethodFinder(HttpPartSerializer.class, resource)
+			.find("createPartSerializer", Method.class)
+			.thenFind("createPartSerializer")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -1099,20 +1104,28 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		HttpPartParser x = null;
+
 		if (resource instanceof HttpPartParser)
 			x = (HttpPartParser)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_partParser, HttpPartParser.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
+
 		if (x == null)
 			x = new OpenApiParser(ps);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(HttpPartParser.class, x)
-			.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", x, Method.class);
-		x = BeanFactory.of(beanFactory, resource)
-			.addBean(HttpPartParser.class, x)
-			.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", x);
+			.beanCreateMethodFinder(HttpPartParser.class, resource)
+			.find("createPartParser", Method.class)
+			.thenFind("createPartParser")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -1128,22 +1141,29 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected UrlPathMatcher[] createPathMatchers(Object resource, BeanFactory beanFactory, boolean dotAll) throws Exception {
 		List<UrlPathMatcher> x = AList.of();
+
 		for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
 			x.add(UrlPathMatcher.of(p));
 		}
+
 		if (x.isEmpty()) {
 			String p = HttpUtils.detectHttpPath(method, true);
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
 			x.add(UrlPathMatcher.of(p));
 		}
+
 		UrlPathMatcher[] x2 = x.toArray(new UrlPathMatcher[x.size()]);;
 
-		x2 = BeanFactory.of(beanFactory, resource)
+		x2 = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(UrlPathMatcher[].class, x2)
-			.createBeanViaMethod(UrlPathMatcher[].class, resource, "createPathMatchers", x2, Method.class);
+			.beanCreateMethodFinder(UrlPathMatcher[].class, resource)
+			.find("createPathMatchers", Method.class)
+			.withDefault(x2)
+			.run();
 
 		return x2;
 	}
@@ -1159,23 +1179,154 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 		JsonSchemaGenerator x = null;
+
 		if (resource instanceof JsonSchemaGenerator)
 			x = (JsonSchemaGenerator)resource;
+
 		if (x == null)
 			x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
+
 		if (x == null)
 			x = JsonSchemaGenerator.create().apply(ps).build();
 
-		x = BeanFactory.of(beanFactory, resource)
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(JsonSchemaGenerator.class, x)
-			.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator", x, Method.class);
-		x = BeanFactory.of(beanFactory, resource)
-			.addBean(JsonSchemaGenerator.class, x)
-			.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator", x);
+			.beanCreateMethodFinder(JsonSchemaGenerator.class, resource)
+			.find("createJsonSchemaGenerator", Method.class)
+			.thenFind("createJsonSchemaGenerator")
+			.withDefault(x)
+			.run();
 
 		return x;
 	}
 
+	/**
+	 * Instantiates the default request headers for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param method This Java method.
+	 * @return The default request headers for this method.
+	 * @throws Exception If default request headers could not be instantiated.
+	 */
+	protected org.apache.http.Header[] createDefaultRequestHeaders(Object resource, BeanFactory beanFactory, Method method) throws Exception {
+		Map<String,Object> x = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		x.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
+
+		for (Annotation[] aa : method.getParameterAnnotations()) {
+			for (Annotation a : aa) {
+				if (a instanceof Header) {
+					Header h = (Header)a;
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
+						try {
+							x.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Header annotation");
+						}
+					}
+				}
+			}
+		}
+
+		org.apache.http.Header[] x2 = x.entrySet().stream().map(e->BasicHeader.of(e.getKey(),e.getValue())).toArray(org.apache.http.Header[]::new);
+
+		x2 = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(org.apache.http.Header[].class, x2)
+			.beanCreateMethodFinder(org.apache.http.Header[].class, resource)
+			.find("createDefaultRequestHeaders", Method.class)
+			.thenFind("createDefaultRequestHeaders")
+			.withDefault(x2)
+			.run();
+
+		return x2;
+	}
+
+	/**
+	 * Instantiates the default query parameters for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param method This Java method.
+	 * @return The default request query parameters for this method.
+	 * @throws Exception If default request query parameters could not be instantiated.
+	 */
+	protected NameValuePair[] createDefaultRequestQuery(Object resource, BeanFactory beanFactory, Method method) throws Exception {
+		Map<String,Object> x = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
+
+		for (Annotation[] aa : method.getParameterAnnotations()) {
+			for (Annotation a : aa) {
+				if (a instanceof Query) {
+					Query h = (Query)a;
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
+						try {
+							x.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Query annotation");
+						}
+					}
+				}
+			}
+		}
+
+		NameValuePair[] x2 = x.entrySet().stream().map(e->BasicNameValuePair.of(e.getKey(),e.getValue())).toArray(NameValuePair[]::new);
+
+		x2 = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(NameValuePair[].class, x2)
+			.beanCreateMethodFinder(NameValuePair[].class, resource)
+			.find("createDefaultRequestQuery", Method.class)
+			.thenFind("createDefaultRequestQuery")
+			.withDefault(x2)
+			.run();
+
+		return x2;
+	}
+
+	/**
+	 * Instantiates the default form-data parameters for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param method This Java method.
+	 * @return The default request form-data parameters for this method.
+	 * @throws Exception If default request form-data parameters could not be instantiated.
+	 */
+	protected NameValuePair[] createDefaultRequestFormData(Object resource, BeanFactory beanFactory, Method method) throws Exception {
+		Map<String,Object> x = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
+
+		for (Annotation[] aa : method.getParameterAnnotations()) {
+			for (Annotation a : aa) {
+				if (a instanceof FormData) {
+					FormData h = (FormData)a;
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
+						try {
+							x.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @FormData annotation");
+						}
+					}
+				}
+			}
+		}
+
+		NameValuePair[] x2 = x.entrySet().stream().map(e->BasicNameValuePair.of(e.getKey(),e.getValue())).toArray(NameValuePair[]::new);
+
+		x2 = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(NameValuePair[].class, x2)
+			.beanCreateMethodFinder(NameValuePair[].class, resource)
+			.find("createDefaultRequestFormData", Method.class)
+			.thenFind("createDefaultRequestFormData")
+			.withDefault(x2)
+			.run();
+
+		return x2;
+	}
 
 	ResponsePartMeta getResponseHeaderMeta(Object o) {
 		if (o == null)
@@ -1568,9 +1719,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	public OMap toMap() {
 		return super.toMap()
 			.a("RestMethodContext", new DefaultFilteringOMap()
-				.a("defaultFormData", defaultFormData)
-				.a("defaultQuery", defaultQuery)
-				.a("reqHeaders", reqHeaders)
+				.a("defaultRequestFormData", defaultRequestFormData)
+				.a("defaultRequestHeaders", defaultRequestHeaders)
+				.a("defaultRequestQuery", defaultRequestQuery)
 				.a("httpMethod", httpMethod)
 				.a("priority", priority)
 			);

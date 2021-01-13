@@ -34,6 +34,7 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
@@ -202,10 +203,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.pathParams
 			.parser(partParserSession);
 		this.queryParams
-			.addDefault(rjm.defaultQuery)
+			.addDefault(rjm.defaultRequestQuery)
 			.parser(partParserSession);
 		this.headers
-			.addDefault(rjm.reqHeaders)
+			.addDefault(rjm.defaultRequestHeaders)
 			.addDefault(context.getReqHeaders())
 			.parser(partParserSession);
 		this.attrs = new RequestAttributes(this, rjm.reqAttrs);
@@ -605,7 +606,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			formData.addDefault(restJavaMethod == null ? null : restJavaMethod.defaultFormData);
+			if (restJavaMethod != null)
+				formData.addDefault(restJavaMethod.defaultRequestFormData);
 			return formData;
 		} catch (Exception e) {
 			throw new InternalServerError(e);

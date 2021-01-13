@@ -20,13 +20,14 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.utils.*;
 
@@ -87,6 +88,28 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
 					put(key, stringifyAll(value));
 			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds default entries to these query parameters.
+	 *
+	 * <p>
+	 * This includes the default queries defined at the resource and method levels.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQuery addDefault(NameValuePair...pairs) {
+		for (NameValuePair p : pairs) {
+			String key = p.getName();
+			Object value = p.getValue();
+			String[] v = get(key);
+			if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
+				put(key, stringifyAll(value));
 		}
 		return this;
 	}

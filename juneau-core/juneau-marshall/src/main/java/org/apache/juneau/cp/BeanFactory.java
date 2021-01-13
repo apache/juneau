@@ -42,16 +42,16 @@ public class BeanFactory {
 
 	/**
 	 * Static creator.
-	 * 
+	 *
 	 * @return A new {@link BeanFactory} object.
 	 */
-	public static BeanFactory of() {
+	public static BeanFactory create() {
 		return new BeanFactory();
 	}
 
 	/**
 	 * Static creator.
-	 * 
+	 *
 	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
 	 * @param outer Outer bean context to use when instantiating local classes.  Can be <jk>null</jk>.
 	 * @return A new {@link BeanFactory} object.
@@ -138,7 +138,7 @@ public class BeanFactory {
 	 * @param t The bean supplier.
 	 * @return This object (for method chaining).
 	 */
-	public <T> BeanFactory addBean(Class<T> c, Supplier<T> t) {
+	public <T> BeanFactory addBeanSupplier(Class<T> c, Supplier<T> t) {
 		if (t == null)
 			beanMap.remove(c);
 		else
@@ -214,29 +214,46 @@ public class BeanFactory {
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg.get());
 	}
 
-
 	/**
-	 * Creates a bean via a static or non-static method defined on the specified class.
+	 * Create a method finder for finding bean creation methods.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// The bean we want to create.</jc>
+	 * 	<jk>public class</jk> A {}
+	 *
+	 * 	<jc>// The bean that has a creator method for the bean above.</jc>
+	 * 	<jk>public class</jk> B {
+	 *
+	 * 		<jc>// Creator method.</jc>
+	 * 		<jc>// Bean factory must have a C bean and optionally a D bean.</jc>
+	 * 		<jk>public</jk> A createA(C <mv>c</mv>, Optional&lt;D&gt; <mv>d</mv>) {
+	 * 			<jk>return new</jk> A(<mv>c</mv>, <mv>d</mv>.orElse(<jk>null</jk>));
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Instantiate the bean with the creator method.</jc>
+	 * 	B <mv>b</mv> = <jk>new</jk> B();
+	 *
+	 *  <jc>// Create a bean factory with some mapped beans.</jc>
+	 * 	BeanFactory <mv>beanFactory</mv> = BeanFactory.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
+	 *
+	 * 	<jc>// Instantiate the bean using the creator method.</jc>
+	 * 	A <mv>a</mv> = <mv>beanFactory</mv>
+	 * 		.beanCreateMethodFinder(A.<jk>class</jk>, <mv>b</mv>)  <jc>// Looking for creator for A on b object.</jc>
+	 * 		.find(<js>"createA"</js>)                         <jc>// Look for method called "createA".</jc>
+	 * 		.thenFind(<js>"createA2"</js>)                    <jc>// Then look for method called "createA2".</jc>
+	 * 		.withDefault(()-&gt;<jk>new</jk> A())                        <jc>// Optionally supply a default value if method not found.</jc>
+	 * 		.run();                                  <jc>// Execute.</jc>
+	 * </p>
 	 *
 	 * @param <T> The bean type to create.
 	 * @param c The bean type to create.
-	 * @param resource The object where the method is defined.
-	 * @param methodName The method name on the object to call.
-	 * @param def The default value to return if method doesn't exist.
-	 * @param requiredParams The parameter types that must be present on the method.
-	 * @return A newly-created bean or <jk>null</jk> if method not found or it returns <jk>null</jk>.
-	 * @throws ExecutableException If bean could not be created.
+	 * @param resource The class containing the bean creator method.
+	 * @return The created bean or the default value if method could not be found.
 	 */
-	public <T> T createBeanViaMethod(Class<T> c, Object resource, String methodName, T def, Class<?>...requiredParams) throws ExecutableException {
-		ClassInfo ci = ClassInfo.of(resource);
-		for (MethodInfo m : ci.getPublicMethods()) {
-			if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
-				List<ClassInfo> missing = getMissingParamTypes(m.getParamTypes());
-				if (missing.isEmpty() && m.hasAllArgs(requiredParams))
-					return m.invoke(resource, getParams(m.getParamTypes()));
-			}
-		}
-		return def;
+	public <T> BeanCreateMethodFinder<T> beanCreateMethodFinder(Class<T> c, Object resource) {
+		return new BeanCreateMethodFinder<>(c, resource, this);
 	}
 
 	/**
@@ -291,8 +308,8 @@ public class BeanFactory {
 	public OMap toMap() {
 		return OMap.of()
 			.a("beanMap", beanMap.keySet().stream().map(x -> x.getSimpleName()).collect(Collectors.toList()))
-			.a("outer", ObjectUtils.identity(outer))
-			.a("parent", ObjectUtils.identity(parent));
+			.asn("outer", ObjectUtils.identity(outer))
+			.asn("parent", parent.orElse(null));
 	}
 
 	@Override /* Object */

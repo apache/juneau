@@ -18,13 +18,14 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
@@ -83,6 +84,28 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
 					put(key, stringifyAll(value));
 			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds default entries to these headers.
+	 *
+	 * <p>
+	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders addDefault(Header...pairs) {
+		for (Header p : pairs) {
+			String key = p.getName();
+			Object value = p.getValue();
+			String[] v = get(key);
+			if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
+				put(key, stringifyAll(value));
 		}
 		return this;
 	}

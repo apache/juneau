@@ -3689,19 +3689,30 @@ public class RestContext extends BeanContext {
 	 */
 	protected FileFinder createFileFinder(Object resource, BeanFactory beanFactory) throws Exception {
 		FileFinder x = null;
+
 		if (resource instanceof FileFinder)
 			x = (FileFinder)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_fileFinder, FileFinder.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(FileFinder.class).orElse(null);
+
 		if (x == null)
 			x = getInstanceProperty(REST_fileFinderDefault, FileFinder.class, null, beanFactory);
+
 		if (x == null)
 			x = new BasicFileFinder(this);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(FileFinder.class, x)
-			.createBeanViaMethod(FileFinder.class, resource, "createFileFinder", x);
+			.beanCreateMethodFinder(FileFinder.class, resource)
+			.find("createFileFinder")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -3736,17 +3747,27 @@ public class RestContext extends BeanContext {
 	 */
 	protected RestInfoProvider createInfoProvider(Object resource, BeanFactory beanFactory) throws Exception {
 		RestInfoProvider x = null;
+
 		if (resource instanceof RestInfoProvider)
 			x = (RestInfoProvider)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_infoProvider, RestInfoProvider.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(RestInfoProvider.class).orElse(null);
+
 		if (x == null)
 			x = new BasicRestInfoProvider(this);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(RestInfoProvider.class, x)
-			.createBeanViaMethod(RestInfoProvider.class, resource, "createInfoProvider", x);
+			.beanCreateMethodFinder(RestInfoProvider.class, resource)
+			.find("createInfoProvider")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -3783,19 +3804,30 @@ public class RestContext extends BeanContext {
 	 */
 	protected StaticFiles createStaticFiles(Object resource, BeanFactory beanFactory) throws Exception {
 		StaticFiles x = null;
+
 		if (resource instanceof StaticFiles)
 			x = (StaticFiles)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_staticFiles, StaticFiles.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(StaticFiles.class).orElse(null);
+
 		if (x == null)
 			x = getInstanceProperty(REST_staticFilesDefault, StaticFiles.class, null, beanFactory);
+
 		if (x == null)
 			x = new BasicStaticFiles(this);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(StaticFiles.class, x)
-			.createBeanViaMethod(StaticFiles.class, resource, "createStaticFiles", x);
+			.beanCreateMethodFinder(StaticFiles.class, resource)
+			.find("createStaticFiles")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -3832,19 +3864,30 @@ public class RestContext extends BeanContext {
 	 */
 	protected RestLogger createCallLogger(Object resource, BeanFactory beanFactory) throws Exception {
 		RestLogger x = null;
+
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_callLogger, RestLogger.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(RestLogger.class).orElse(null);
+
 		if (x == null)
 			x = getInstanceProperty(REST_callLoggerDefault, RestLogger.class, null, beanFactory);
+
 		if (x == null)
 			x = new BasicRestLogger(this);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(RestLogger.class, x)
-			.createBeanViaMethod(RestLogger.class, resource, "createCallLogger", x);
+			.beanCreateMethodFinder(RestLogger.class, resource)
+			.find("createCallLogger")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -3878,18 +3921,28 @@ public class RestContext extends BeanContext {
 	 */
 	protected BeanFactory createBeanFactory(Object resource) throws Exception {
 		BeanFactory x = null;
+
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
+
 		BeanFactory bf = createRootBeanFactory(resource)
 			.addBean(RestContext.class, this)
 			.addBean(BeanFactory.class, parentContext == null ? null : parentContext.rootBeanFactory)
 			.addBean(PropertyStore.class, getPropertyStore())
 			.addBean(Object.class, resource);
+
 		if (x == null)
 			x = getInstanceProperty(REST_beanFactory, BeanFactory.class, null, bf);
+
 		if (x == null)
 			x = bf;
-		x = bf.createBeanViaMethod(BeanFactory.class, resource, "createBeanFactory", x);
+
+		x = bf
+			.beanCreateMethodFinder(BeanFactory.class, resource)
+			.find("createBeanFactory")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -3926,16 +3979,26 @@ public class RestContext extends BeanContext {
 	 */
 	protected BeanFactory createRootBeanFactory(Object resource) throws Exception {
 		BeanFactory x = null;
+
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
+
 		BeanFactory parent = parentContext == null ? null : parentContext.rootBeanFactory;
 		BeanFactory bf = new BeanFactory(parent, resource);
 		bf.addBean(BeanFactory.class, bf);
+
 		if (x == null)
 			x = getInstanceProperty(REST_beanFactory, BeanFactory.class, null, bf);
+
 		if (x == null)
 			x = bf;
-		x = bf.createBeanViaMethod(BeanFactory.class, resource, "createBeanFactory", x);
+
+		x = bf
+			.beanCreateMethodFinder(BeanFactory.class, resource)
+			.find("createBeanFactory")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -3969,13 +4032,21 @@ public class RestContext extends BeanContext {
 	 */
 	protected ResponseHandler[] createResponseHandlers(Object resource, BeanFactory beanFactory) throws Exception {
 		ResponseHandler[] x = getInstanceArrayProperty(REST_responseHandlers, ResponseHandler.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(ResponseHandler[].class).orElse(null);
+
 		if (x == null)
 			x = new ResponseHandler[0];
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(ResponseHandler[].class, x)
-			.createBeanViaMethod(ResponseHandler[].class, resource, "createResponseHandlers", x);
+			.beanCreateMethodFinder(ResponseHandler[].class, resource)
+			.find("createResponseHandlers")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4013,10 +4084,13 @@ public class RestContext extends BeanContext {
 
 		if (g == null) {
 			Object[] x = getArrayProperty(REST_serializers, Object.class);
+
 			if (x == null)
 				x = beanFactory.getBean(Serializer[].class).orElse(null);
+
 			if (x == null)
 				x = new Serializer[0];
+
 			g = SerializerGroup
 				.create()
 				.append(x)
@@ -4024,9 +4098,13 @@ public class RestContext extends BeanContext {
 				.build();
 		}
 
-		g = BeanFactory.of(beanFactory, resource)
+		g = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(SerializerGroup.class, g)
-			.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", g);
+			.beanCreateMethodFinder(SerializerGroup.class, resource)
+			.find("createSerializers")
+			.withDefault(g)
+			.run();
 
 		return g;
 	}
@@ -4065,10 +4143,13 @@ public class RestContext extends BeanContext {
 
 		if (g == null) {
 			Object[] x = getArrayProperty(REST_parsers, Object.class);
+
 			if (x == null)
 				x = beanFactory.getBean(Parser[].class).orElse(null);
+
 			if (x == null)
 				x = new Parser[0];
+
 			g = ParserGroup
 				.create()
 				.append(x)
@@ -4076,9 +4157,13 @@ public class RestContext extends BeanContext {
 				.build();
 		}
 
-		g = BeanFactory.of(beanFactory, resource)
+		g = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(ParserGroup.class, g)
-			.createBeanViaMethod(ParserGroup.class, resource, "createParsers", g);
+			.beanCreateMethodFinder(ParserGroup.class, resource)
+			.find("createParsers")
+			.withDefault(g)
+			.run();
 
 		return g;
 	}
@@ -4114,17 +4199,27 @@ public class RestContext extends BeanContext {
 	 */
 	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory) throws Exception {
 		HttpPartSerializer x = null;
+
 		if (resource instanceof HttpPartSerializer)
 			x = (HttpPartSerializer)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
+
 		if (x == null)
 			x = new OpenApiSerializer(getPropertyStore());
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(HttpPartSerializer.class, x)
-			.createBeanViaMethod(HttpPartSerializer.class, resource, "createPartSerializer", x);
+			.beanCreateMethodFinder(HttpPartSerializer.class, resource)
+			.find("createPartSerializer")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4159,17 +4254,27 @@ public class RestContext extends BeanContext {
 	 */
 	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory) throws Exception {
 		HttpPartParser x = null;
+
 		if (resource instanceof HttpPartParser)
 			x = (HttpPartParser)resource;
+
 		if (x == null)
 			x = getInstanceProperty(REST_partParser, HttpPartParser.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
+
 		if (x == null)
 			x = new OpenApiParser(getPropertyStore());
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(HttpPartParser.class, x)
-			.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", x);
+			.beanCreateMethodFinder(HttpPartParser.class, resource)
+			.find("createPartParser")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4203,13 +4308,21 @@ public class RestContext extends BeanContext {
 	 */
 	protected RestMethodParam[] createParamResolvers(Object resource, BeanFactory beanFactory) throws Exception {
 		RestMethodParam[] x = getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, null, beanFactory);
+
 		if (x == null)
 			x = beanFactory.getBean(RestMethodParam[].class).orElse(null);
+
 		if (x == null)
 			x = new RestMethodParam[0];
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(RestMethodParam[].class, x)
-			.createBeanViaMethod(RestMethodParam[].class, resource, "createParamResolvers", x);
+			.beanCreateMethodFinder(RestMethodParam[].class, resource)
+			.find("createParamResolvers")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4237,11 +4350,18 @@ public class RestContext extends BeanContext {
 	 */
 	protected Logger createLogger(Object resource, BeanFactory beanFactory) throws Exception {
 		Logger x = beanFactory.getBean(Logger.class).orElse(null);
+
 		if (x == null)
 			x = Logger.getLogger(resource.getClass().getName());
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(Logger.class, x)
-			.createBeanViaMethod(Logger.class, resource, "createLogger", x);
+			.beanCreateMethodFinder(Logger.class, resource)
+			.find("createLogger")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4269,14 +4389,21 @@ public class RestContext extends BeanContext {
 	 */
 	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory) throws Exception {
 		JsonSchemaGenerator x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
+
 		if (x == null)
 			x = JsonSchemaGenerator
 				.create()
 				.apply(getPropertyStore())
 				.build();
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(JsonSchemaGenerator.class, x)
-			.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator", x);
+			.beanCreateMethodFinder(JsonSchemaGenerator.class, resource)
+			.find("createJsonSchemaGenerator")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4304,14 +4431,18 @@ public class RestContext extends BeanContext {
 	 */
 	protected VarResolver createVarResolver(Object resource, BeanFactory beanFactory) throws Exception {
 		VarResolver x = beanFactory.getBean(VarResolver.class).orElse(null);
+
 		if (x == null)
-			x = builder.varResolverBuilder
-			.vars(createVars(resource,beanFactory))
-			.build()
-		;
-		x = BeanFactory.of(beanFactory, resource)
+			x = builder.varResolverBuilder.vars(createVars(resource,beanFactory)).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(VarResolver.class, x)
-			.createBeanViaMethod(VarResolver.class, resource, "createVarResolver", x);
+			.beanCreateMethodFinder(VarResolver.class, resource)
+			.find("createVarResolver")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4340,6 +4471,7 @@ public class RestContext extends BeanContext {
 	@SuppressWarnings("unchecked")
 	protected VarList createVars(Object resource, BeanFactory beanFactory) throws Exception {
 		VarList x = beanFactory.getBean(VarList.class).orElse(null);
+
 		if (x == null)
 			x = VarList.of(
 				FileVar.class,
@@ -4358,9 +4490,15 @@ public class RestContext extends BeanContext {
 				UrlEncodeVar.class,
 				HtmlWidgetVar.class
 			);
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(VarList.class, x)
-			.createBeanViaMethod(VarList.class, resource, "createVars", x);
+			.beanCreateMethodFinder(VarList.class, resource)
+			.find("createVars")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4388,11 +4526,18 @@ public class RestContext extends BeanContext {
 	 */
 	protected StackTraceStore createStackTraceStore(Object resource, BeanFactory beanFactory) throws Exception {
 		StackTraceStore x = beanFactory.getBean(StackTraceStore.class).orElse(null);
+
 		if (x == null)
 			x = StackTraceStore.GLOBAL;
-		x = BeanFactory.of(beanFactory, resource)
+
+		x = BeanFactory
+			.of(beanFactory, resource)
 			.addBean(StackTraceStore.class, x)
-			.createBeanViaMethod(StackTraceStore.class, resource, "createStackTraceStore", x);
+			.beanCreateMethodFinder(StackTraceStore.class, resource)
+			.find("createStackTraceStore")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 

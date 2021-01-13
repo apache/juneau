@@ -351,36 +351,65 @@ public class BeanFactory_Test {
 	}
 
 	@Test
-	public void e01_createBeanViaMethod_noArgs() throws Exception {
-		BeanFactory bf = new BeanFactory();
+	public void e01_beanCreateMethodFinder() throws Exception {
+		BeanFactory bf = BeanFactory.create();
 		E1 x = new E1();
 
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA0", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA1", null)).exists();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA2", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA3", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA4", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA5", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createA6", null)).doesNotExist();
-		assertThrown(()->bf.createBeanViaMethod(E.class, x, "createA7", null)).contains("foo");
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA0").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA1").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA2").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA3").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA4").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA5").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA6").run()).doesNotExist();
+		assertThrown(()->bf.beanCreateMethodFinder(E.class, x).find("createA7").run()).contains("foo");
 
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB0", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB1", null)).exists();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB2", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB3", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB4", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB5", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createB6", null)).doesNotExist();
-		assertThrown(()->bf.createBeanViaMethod(E.class, x, "createB7", null)).contains("foo");
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB0").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB1").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB2").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB3").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB4").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB5").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createB6").run()).doesNotExist();
+		assertThrown(()->bf.beanCreateMethodFinder(E.class, x).find("createB7").run()).contains("foo");
 
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC1", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC2", null)).doesNotExist();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC3", null)).exists();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC3", null).a).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC1").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC2").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run().a).doesNotExist();
 		bf.addBean(A.class, new A());
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC1", null)).exists();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC2", null)).exists();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC3", null)).exists();
-		assertObject(bf.createBeanViaMethod(E.class, x, "createC3", null).a).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC1").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC2").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run().a).exists();
+		bf.addBean(A.class, null);
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC1").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC2").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run().a).doesNotExist();
+		bf.addBeanSupplier(A.class, ()->new A());
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC1").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC2").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run().a).exists();
+		bf.addBeanSupplier(A.class, null);
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC1").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC2").run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createC3").run().a).doesNotExist();
+
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createAx").thenFind("createA1").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA1").thenFind("createAx").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA1", A.class).thenFind("createA2", A.class).run()).doesNotExist();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA1", A.class).thenFind("createA1").run()).exists();
+		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA1", A.class).withDefault(new E()).run()).exists();
+
+		bf.addBeanSupplier(A.class, ()->new A());
+		assertObject(bf.createBean(A.class)).exists();
+
+		BeanFactory bf2 = BeanFactory.of(bf, null);
+		assertObject(bf2.beanCreateMethodFinder(E.class, x).find("createA1").run()).exists();
+
+		assertString(bf2.toString()).is("{beanMap:[],parent:{beanMap:['A']}}");
 	}
 }
