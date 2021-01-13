@@ -589,6 +589,18 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
  			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
+			pathMatchers = createPathMatchers(r, beanFactory, b.dotAll);
+			beanFactory.addBean(UrlPathMatcher[].class, pathMatchers);
+
+			encoders = createEncoders(r, beanFactory);
+			beanFactory.addBean(EncoderGroup.class, encoders);
+
+			jsonSchemaGenerator = createJsonSchemaGenerator(r, beanFactory, ps);
+			beanFactory.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
+
+			supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
+			supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
+
 			int _hierarchyDepth = 0;
 			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
 			while (sc != null) {
@@ -610,30 +622,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			responseMeta = ResponseBeanMeta.create(mi, ps);
 
-			boolean dotAll = b.dotAll;
-			List<UrlPathMatcher> _pathMatchers = new ArrayList<>();
-			for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
-				if (dotAll && ! p.endsWith("/*"))
-					p += "/*";
-				_pathMatchers.add(UrlPathMatcher.of(p));
-			}
-			if (_pathMatchers.isEmpty()) {
-				String p = HttpUtils.detectHttpPath(method, true);
-				if (dotAll && ! p.endsWith("/*"))
-					p += "/*";
-				_pathMatchers.add(UrlPathMatcher.of(p));
-			}
-			pathMatchers = _pathMatchers.toArray(new UrlPathMatcher[_pathMatchers.size()]);
-
-			methodParams = context.findParams(mi, false, this.pathMatchers[this.pathMatchers.length-1]);
-
-			this.encoders = EncoderGroup
-				.create()
-				.append(IdentityEncoder.INSTANCE)
-				.append(createEncoders(r, beanFactory))
-				.build();
-
-			this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
+			methodParams = context.findParams(mi, false, pathMatchers[this.pathMatchers.length-1]);
 
 			Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			_reqHeaders.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
@@ -688,9 +677,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
 
 			this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
-
-			this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
-			this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 
 			this.debug = context.getDebug(method);
 			this.callLogger = context.getCallLogger();
@@ -902,16 +888,24 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * @throws Exception If encoders could not be instantiated.
 	 * @seealso #REST_encoders
 	 */
-	protected Encoder[] createEncoders(Object resource, BeanFactory beanFactory) throws Exception {
+	protected EncoderGroup createEncoders(Object resource, BeanFactory beanFactory) throws Exception {
 		Encoder[] x = getInstanceArrayProperty(REST_encoders, Encoder.class, null, beanFactory);
 		if (x == null)
 			x = beanFactory.getBean(Encoder[].class).orElse(null);
 		if (x == null)
 			x = new Encoder[0];
-		x = BeanFactory.of(beanFactory, resource)
-			.addBean(Encoder[].class, x)
-			.createBeanViaMethod(Encoder[].class, resource, "createEncoders", x);
-		return x;
+
+		EncoderGroup g = EncoderGroup
+			.create()
+			.append(IdentityEncoder.INSTANCE)
+			.append(x)
+			.build();
+
+		g = BeanFactory.of(beanFactory, resource)
+			.addBean(EncoderGroup.class, g)
+			.createBeanViaMethod(EncoderGroup.class, resource, "createEncoders", g);
+
+		return g;
 	}
 
 	/**
@@ -1121,6 +1115,67 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			.createBeanViaMethod(HttpPartParser.class, resource, "createPartParser", x);
 		return x;
 	}
+
+	/**
+	 * Instantiates the path matchers for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param dotAll If {@link RestMethodContextBuilder#dotAll()} was specified.
+	 * @return The HTTP part parser for this REST resource.
+	 * @throws Exception If parser could not be instantiated.
+	 * @seealso #RESTMETHOD_paths
+	 */
+	protected UrlPathMatcher[] createPathMatchers(Object resource, BeanFactory beanFactory, boolean dotAll) throws Exception {
+		List<UrlPathMatcher> x = AList.of();
+		for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
+			if (dotAll && ! p.endsWith("/*"))
+				p += "/*";
+			x.add(UrlPathMatcher.of(p));
+		}
+		if (x.isEmpty()) {
+			String p = HttpUtils.detectHttpPath(method, true);
+			if (dotAll && ! p.endsWith("/*"))
+				p += "/*";
+			x.add(UrlPathMatcher.of(p));
+		}
+		UrlPathMatcher[] x2 = x.toArray(new UrlPathMatcher[x.size()]);;
+
+		x2 = BeanFactory.of(beanFactory, resource)
+			.addBean(UrlPathMatcher[].class, x2)
+			.createBeanViaMethod(UrlPathMatcher[].class, resource, "createPathMatchers", x2, Method.class);
+
+		return x2;
+	}
+
+	/**
+	 * Instantiates the JSON-schema generator for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param ps The property store of this method.
+	 * @return The JSON-schema generator for this method.
+	 * @throws Exception If schema generator could not be instantiated.
+	 */
+	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+		JsonSchemaGenerator x = null;
+		if (resource instanceof JsonSchemaGenerator)
+			x = (JsonSchemaGenerator)resource;
+		if (x == null)
+			x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
+		if (x == null)
+			x = JsonSchemaGenerator.create().apply(ps).build();
+
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(JsonSchemaGenerator.class, x)
+			.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator", x, Method.class);
+		x = BeanFactory.of(beanFactory, resource)
+			.addBean(JsonSchemaGenerator.class, x)
+			.createBeanViaMethod(JsonSchemaGenerator.class, resource, "createJsonSchemaGenerator", x);
+
+		return x;
+	}
+
 
 	ResponsePartMeta getResponseHeaderMeta(Object o) {
 		if (o == null)

@@ -2743,7 +2743,6 @@ public class RestContext extends BeanContext {
 	 * This affects the returned values from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
-	 * 	<li class='jm'>{@link RestRequest#getProduces()}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects produces field.
 	 * </ul>
 	 */
@@ -2809,7 +2808,6 @@ public class RestContext extends BeanContext {
 	 * This affects the returned values from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
-	 * 	<li class='jm'>{@link RestRequest#getConsumes()}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects consumes field.
 	 * </ul>
 	 */
