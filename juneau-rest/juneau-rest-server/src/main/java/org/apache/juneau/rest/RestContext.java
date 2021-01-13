@@ -4011,30 +4011,26 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_serializers
 	 */
 	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
-		Object x = getArrayProperty(REST_serializers, Object.class);
-		if (x == null)
-			x = beanFactory.createBeanViaMethod(Serializer[].class, resource, "createSerializers", null);
-		if (x == null)
-			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createSerializers", null);
-		if (x == null) {
-			x = beanFactory.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", null);
-			if (x != null)
-				return (SerializerGroup)x;
+		SerializerGroup g = beanFactory.getBean(SerializerGroup.class).orElse(null);
+
+		if (g == null) {
+			Object[] x = getArrayProperty(REST_serializers, Object.class);
+			if (x == null)
+				x = beanFactory.getBean(Serializer[].class).orElse(null);
+			if (x == null)
+				x = new Serializer[0];
+			g = SerializerGroup
+				.create()
+				.append(x)
+				.apply(ps)
+				.build();
 		}
-		if (x == null)
-			x = beanFactory.getBean(Serializer[].class).orElse(null);
-		if (x == null) {
-			x = beanFactory.getBean(SerializerGroup.class).orElse(null);
-			if (x != null)
-				return (SerializerGroup)x;
-		}
-		if (x == null)
-			x = new Serializer[0];
-		return SerializerGroup
-			.create()
-			.append((Object[])x)
-			.apply(ps)
-			.build();
+
+		g = BeanFactory.of(beanFactory, resource)
+			.addBean(SerializerGroup.class, g)
+			.createBeanViaMethod(SerializerGroup.class, resource, "createSerializers", g);
+
+		return g;
 	}
 
 	/**
@@ -4067,30 +4063,26 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_parsers
 	 */
 	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
-		Object x = getArrayProperty(REST_parsers, Object.class);
-		if (x == null)
-			x = beanFactory.createBeanViaMethod(Parser[].class, resource, "createParsers", null);
-		if (x == null)
-			x = beanFactory.createBeanViaMethod(Class[].class, resource, "createParsers", null);
-		if (x == null) {
-			x = beanFactory.createBeanViaMethod(ParserGroup.class, resource, "createParsers", null);
-			if (x != null)
-				return (ParserGroup)x;
+		ParserGroup g = beanFactory.getBean(ParserGroup.class).orElse(null);
+
+		if (g == null) {
+			Object[] x = getArrayProperty(REST_parsers, Object.class);
+			if (x == null)
+				x = beanFactory.getBean(Parser[].class).orElse(null);
+			if (x == null)
+				x = new Parser[0];
+			g = ParserGroup
+				.create()
+				.append(x)
+				.apply(ps)
+				.build();
 		}
-		if (x == null)
-			x = beanFactory.getBean(Parser[].class).orElse(null);
-		if (x == null) {
-			x = beanFactory.getBean(ParserGroup.class).orElse(null);
-			if (x != null)
-				return (ParserGroup)x;
-		}
-		if (x == null)
-			x = new Parser[0];
-		return ParserGroup
-			.create()
-			.append((Object[])x)
-			.apply(ps)
-			.build();
+
+		g = BeanFactory.of(beanFactory, resource)
+			.addBean(ParserGroup.class, g)
+			.createBeanViaMethod(ParserGroup.class, resource, "createParsers", g);
+
+		return g;
 	}
 
 	/**
