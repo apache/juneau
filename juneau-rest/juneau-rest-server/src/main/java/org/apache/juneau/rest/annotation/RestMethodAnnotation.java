@@ -15,7 +15,6 @@ package org.apache.juneau.rest.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -24,10 +23,11 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -64,8 +64,8 @@ public class RestMethodAnnotation {
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
 		int priority = 0;
 		MethodSwagger swagger = MethodSwaggerAnnotation.DEFAULT;
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", path="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultFormData={}, defaultQuery={}, description={}, paths={}, produces={}, reqAttrs={}, reqHeaders={};
+		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", rolesDeclared="", roleGuard="", summary="", value="";
+		String[] consumes={}, defaultFormData={}, defaultQuery={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
 
 		/**
 		 * Constructor.
@@ -183,6 +183,39 @@ public class RestMethodAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestMethod#defaultRequestAttributes()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder defaultRequestAttributes(String...value) {
+			this.defaultRequestAttributes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestMethod#defaultRequestHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder defaultRequestHeaders(String...value) {
+			this.defaultRequestHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestMethod#defaultResponseHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder defaultResponseHeaders(String...value) {
+			this.defaultResponseHeaders = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestMethod#description()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -265,19 +298,8 @@ public class RestMethodAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder path(String value) {
+		public Builder path(String...value) {
 			this.path = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestMethod#paths()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder paths(String...value) {
-			this.paths = value;
 			return this;
 		}
 
@@ -300,28 +322,6 @@ public class RestMethodAnnotation {
 		 */
 		public Builder produces(String...value) {
 			this.produces = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestMethod#reqAttrs()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder reqAttrs(String...value) {
-			this.reqAttrs = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestMethod#reqHeaders()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder reqHeaders(String...value) {
-			this.reqHeaders = value;
 			return this;
 		}
 
@@ -416,8 +416,8 @@ public class RestMethodAnnotation {
 		private final Class<?>[] encoders, parsers, serializers;
 		private final int priority;
 		private final MethodSwagger swagger;
-		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, path, rolesDeclared, roleGuard, summary, value;
-		private final String[] consumes, defaultFormData, defaultQuery, description, paths, produces, reqAttrs, reqHeaders;
+		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;
+		private final String[] consumes, defaultFormData, defaultQuery, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
 
 		Impl(Builder b) {
 			super(b);
@@ -430,6 +430,9 @@ public class RestMethodAnnotation {
 			this.defaultContentType = b.defaultContentType;
 			this.defaultFormData = copyOf(b.defaultFormData);
 			this.defaultQuery = copyOf(b.defaultQuery);
+			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
 			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
 			this.guards = copyOf(b.guards);
@@ -437,12 +440,9 @@ public class RestMethodAnnotation {
 			this.maxInput = b.maxInput;
 			this.method = b.method;
 			this.parsers = copyOf(b.parsers);
-			this.path = b.path;
-			this.paths = copyOf(b.paths);
+			this.path = copyOf(b.path);
 			this.priority = b.priority;
 			this.produces = copyOf(b.produces);
-			this.reqAttrs = copyOf(b.reqAttrs);
-			this.reqHeaders = copyOf(b.reqHeaders);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
 			this.serializers = copyOf(b.serializers);
@@ -498,6 +498,21 @@ public class RestMethodAnnotation {
 		}
 
 		@Override /* RestMethod */
+		public String[] defaultRequestAttributes() {
+			return defaultRequestAttributes;
+		}
+
+		@Override /* RestMethod */
+		public String[] defaultRequestHeaders() {
+			return defaultRequestHeaders;
+		}
+
+		@Override /* RestMethod */
+		public String[] defaultResponseHeaders() {
+			return defaultResponseHeaders;
+		}
+
+		@Override /* RestMethod */
 		public String[] description() {
 			return description;
 		}
@@ -533,13 +548,8 @@ public class RestMethodAnnotation {
 		}
 
 		@Override /* RestMethod */
-		public String path() {
+		public String[] path() {
 			return path;
-		}
-
-		@Override /* RestMethod */
-		public String[] paths() {
-			return paths;
 		}
 
 		@Override /* RestMethod */
@@ -550,16 +560,6 @@ public class RestMethodAnnotation {
 		@Override /* RestMethod */
 		public String[] produces() {
 			return produces;
-		}
-
-		@Override /* RestMethod */
-		public String[] reqAttrs() {
-			return reqAttrs;
-		}
-
-		@Override /* RestMethod */
-		public String[] reqHeaders() {
-			return reqHeaders;
 		}
 
 		@Override /* RestMethod */
@@ -611,9 +611,6 @@ public class RestMethodAnnotation {
 		@Override
 		public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			RestMethod a = ai.getAnnotation();
-			MethodInfo mi = ai.getMethodOn();
-			String sig = mi == null ? "Unknown" : mi.getSignature();
-			String s = null;
 
 			if (a.serializers().length > 0)
 				psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
@@ -624,31 +621,23 @@ public class RestMethodAnnotation {
 			if (a.encoders().length > 0)
 				psb.set(REST_encoders, merge(ConverterUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
 
-			if (a.produces().length > 0)
-				psb.set(REST_produces, strings(a.produces()));
+			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
 
-			if (a.consumes().length > 0)
-				psb.set(REST_consumes, strings(a.consumes()));
+			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 
-			for (String header : strings(a.reqHeaders())) {
-				String[] h = RestUtils.parseHeader(header);
-				if (h == null)
-					throw new ConfigException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''Header-Name: header-value''", sig, header);
-				if (isNotEmpty(h[1]))
-					psb.putTo(REST_reqHeaders, h[0], h[1]);
-			}
+			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultRequestHeaders, x));
 
-			if (a.defaultAccept().length() > 0) {
-				s = string(a.defaultAccept());
-				if (isNotEmpty(s))
-					psb.putTo(REST_reqHeaders, "Accept", s);
-			}
+			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultResponseHeaders, x));
 
-			if (a.defaultContentType().length() > 0) {
-				s = string(a.defaultContentType());
-				if (isNotEmpty(s))
-					psb.putTo(REST_reqHeaders, "Content-Type", s);
-			}
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultRequestAttributes, x));
+
+			stringStream(a.defaultQuery()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultQuery, x));
+
+			stringStream(a.defaultFormData()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultFormData, x));
+
+			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
+
+			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
 
 			psb.prependTo(REST_converters, a.converters());
 
@@ -656,69 +645,19 @@ public class RestMethodAnnotation {
 
 			psb.prependTo(RESTMETHOD_matchers, a.matchers());
 
-			if (! a.clientVersion().isEmpty())
-				psb.set(RESTMETHOD_clientVersion, a.clientVersion());
+			psb.setIfNotEmpty(RESTMETHOD_clientVersion, a.clientVersion());
 
-			if (! a.defaultCharset().isEmpty())
-				psb.set(REST_defaultCharset, string(a.defaultCharset()));
+			psb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 
-			if (! a.maxInput().isEmpty())
-				psb.set(REST_maxInput, string(a.maxInput()));
+			psb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
 
-			if (! a.maxInput().isEmpty())
-				psb.set(REST_maxInput, string(a.maxInput()));
+			stringStream(a.path()).forEach(x -> psb.prependTo(RESTMETHOD_path, x));
 
-			if (! a.path().isEmpty())
-				psb.prependTo(RESTMETHOD_paths, string(a.path()));
-			for (String p : a.paths())
-				psb.prependTo(RESTMETHOD_paths, string(p));
+			cdStream(a.rolesDeclared()).forEach(x -> psb.addTo(REST_rolesDeclared, x));
 
-			if (! a.rolesDeclared().isEmpty())
-				psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));
+			psb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 
-			if (! a.roleGuard().isEmpty())
-				psb.addTo(REST_roleGuard, string(a.roleGuard()));
-
-			for (String h : a.reqHeaders()) {
-				String[] h2 = RestUtils.parseKeyValuePair(string(h));
-				if (h2 == null)
-					throw new ConfigException(
-						"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				psb.putTo(RESTMETHOD_reqHeaders, h2[0], h2[1]);
-			}
-
-			for (String ra : a.reqAttrs()) {
-				String[] ra2 = RestUtils.parseKeyValuePair(string(ra));
-				if (ra2 == null)
-					throw new ConfigException(
-						"Invalid default request attribute specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				psb.putTo(RESTMETHOD_reqAttrs, ra2[0], ra2[1]);
-			}
-
-			if (! a.defaultAccept().isEmpty())
-				psb.putTo(RESTMETHOD_reqHeaders, "Accept", string(a.defaultAccept()));
-
-			if (! a.defaultContentType().isEmpty())
-				psb.putAllTo(RESTMETHOD_reqHeaders, string(a.defaultContentType()));
-
-			for (String h : a.defaultQuery()) {
-				String[] h2 = RestUtils.parseKeyValuePair(string(h));
-				if (h == null)
-					throw new ConfigException(
-						"Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				psb.putTo(RESTMETHOD_defaultQuery, h2[0], h2[1]);
-			}
-
-			for (String h : a.defaultFormData()) {
-				String[] h2 = RestUtils.parseKeyValuePair(string(h));
-				if (h == null)
-					throw new ConfigException(
-						"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				psb.putTo(RESTMETHOD_defaultFormData, h2[0], h2[1]);
-			}
-
-			if (! a.method().isEmpty())
-				psb.set(RESTMETHOD_httpMethod, string(a.method()));
+			psb.setIfNotEmpty(RESTMETHOD_httpMethod, string(a.method()));
 
 			if (! a.value().isEmpty()) {
 				String v = string(a.value()).trim();
@@ -727,15 +666,13 @@ public class RestMethodAnnotation {
 					psb.set(RESTMETHOD_httpMethod, v);
 				} else {
 					psb.set(RESTMETHOD_httpMethod, v.substring(0, i).trim());
-					psb.prependTo(RESTMETHOD_paths,  v.substring(i).trim());
+					psb.prependTo(RESTMETHOD_path,  v.substring(i).trim());
 				}
 			}
 
-			if (a.priority() != 0)
-				psb.set(RESTMETHOD_priority, a.priority());
+			psb.setIf(a.priority() != 0, RESTMETHOD_priority, a.priority());
 
-			if (! a.debug().isEmpty())
-				psb.set(RESTMETHOD_debug, string(a.debug()));
+			psb.setIfNotEmpty(RESTMETHOD_debug, string(a.debug()));
 		}
 	}
 

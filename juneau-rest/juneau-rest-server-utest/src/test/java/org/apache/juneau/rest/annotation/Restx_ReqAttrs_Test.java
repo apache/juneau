@@ -30,10 +30,10 @@ public class Restx_ReqAttrs_Test {
 	// Test properties inheritance.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(reqAttrs={"p1:v1","p2:v2"})
+	@Rest(defaultRequestAttributes={"p1:v1","p2:v2"})
 	public static class A {}
 
-	@Rest(reqAttrs={"p2:v2a","p3:v3","p4:v4"})
+	@Rest(defaultRequestAttributes={"p2:v2a","p3:v3","p4:v4"})
 	public static class A1 extends A {}
 
 	@Rest
@@ -43,7 +43,7 @@ public class Restx_ReqAttrs_Test {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
-		@RestMethod(reqAttrs={"p4:v4a","p5:v5"})
+		@RestMethod(defaultRequestAttributes={"p4:v4a","p5:v5"})
 		public OMap b(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.

@@ -65,6 +65,8 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 			return null;
 		int i = pair.indexOf(':');
 		if (i == -1)
+			i = pair.indexOf('=');
+		if (i == -1)
 			return of(pair, "");
 		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
 	}

@@ -398,7 +398,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (s != null) {
 			Map<String,OperationMap> sp = s.getPaths();
 			if (sp != null) {
-				Map<String,Operation> spp = sp.get(fixMethodPath(MethodInfo.of(method).getLastAnnotation(RestMethod.class).path()));
+				String[] p = MethodInfo.of(method).getLastAnnotation(RestMethod.class).path();
+				Map<String,Operation> spp = sp.get(fixMethodPath(p.length > 0 ? p[0] : ""));
 				if (spp != null)
 					return spp.get(req.getMethod());
 			}

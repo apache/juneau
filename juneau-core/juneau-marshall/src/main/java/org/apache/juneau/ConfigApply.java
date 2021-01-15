@@ -15,8 +15,8 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -71,11 +71,8 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @param in The string array containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
-	protected String[] strings(String[] in) {
-		String[] out = new String[in.length];
-		for (int i = 0; i < in.length; i++)
-			out[i] = vr.resolve(in[i]);
-		return out;
+	protected List<String> stringList(String[] in) {
+		return stringStream(in).collect(Collectors.toList());
 	}
 
 	/**
@@ -84,9 +81,28 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @param in The CDL string containing variables to resolve.
 	 * @return An array with resolved strings.
 	 */
-	protected String[] strings(String in) {
-		in = vr.resolve(in);
-		return StringUtils.split(in);
+	protected Stream<String> stringStream(String[] in) {
+		return Arrays.asList(in).stream().map(x -> vr.resolve(x)).filter(x -> !StringUtils.isEmpty(x));
+	}
+
+	/**
+	 * Resolves the specified string as a comma-delimited list of strings.
+	 *
+	 * @param in The CDL string containing variables to resolve.
+	 * @return An array with resolved strings.
+	 */
+	protected List<String> cdList(String in) {
+		return cdStream(in).collect(Collectors.toList());
+	}
+
+	/**
+	 * Resolves the specified string as a comma-delimited list of strings.
+	 *
+	 * @param in The CDL string containing variables to resolve.
+	 * @return An array with resolved strings.
+	 */
+	protected Stream<String> cdStream(String in) {
+		return Arrays.asList(StringUtils.split(vr.resolve(in))).stream().filter(x -> !StringUtils.isEmpty(x));
 	}
 
 	/**
@@ -98,7 +114,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 */
 	protected Map<String,String> stringsMap(String[] in, String loc) {
 		Map<String,String> m = new LinkedHashMap<>();
-		for (String s : strings(in)) {
+		for (String s : stringList(in)) {
 			for (String s2 : split(s, ';')) {
 				int i = s2.indexOf(':');
 				if (i == -1)
@@ -115,8 +131,11 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @param in The string containing variables to resolve.
 	 * @return The resolved boolean.
 	 */
-	public boolean bool(String in) {
-		return Boolean.parseBoolean(vr.resolve(in));
+	public Boolean bool(String in) {
+		in = vr.resolve(in);
+		if (isEmpty(in))
+			return null;
+		return Boolean.parseBoolean(in);
 	}
 
 	/**
@@ -157,7 +176,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return The resolved OMap.
 	 */
 	protected OMap omap(String[] in, String loc) {
-		return omap(joinnl(strings(in)), loc);
+		return omap(joinnl(stringList(in)), loc);
 	}
 
 	/**
@@ -184,7 +203,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return <jk>true</jk> if the specified array is empty.
 	 */
 	protected boolean isEmpty(Object value) {
-		return Array.getLength(value) == 0;
+		return ObjectUtils.isEmpty(value);
 	}
 
 	/**

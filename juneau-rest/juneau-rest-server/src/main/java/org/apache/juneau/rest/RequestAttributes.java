@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -37,11 +39,28 @@ public class RequestAttributes extends OMap {
 	final OMap defaultEntries;
 	final VarResolverSession vs;
 
-	RequestAttributes(RestRequest req, OMap defaultEntries) {
+	RequestAttributes(RestRequest req) {
 		super();
 		this.req = req;
-		this.defaultEntries = defaultEntries;
+		this.defaultEntries = new OMap();
 		this.vs = req.getVarResolverSession();
+	}
+
+	/**
+	 * Adds values to these attributes if they're not already set.
+	 * 
+	 * @param pairs The attributes to add.
+	 * @return This object (for method chaining).
+	 */
+	public RequestAttributes addDefault(NamedAttribute...pairs) {
+		for (NamedAttribute p : pairs) {
+			String key = p.getName();
+			Object value = p.getValue();
+			Object v = get(key);
+			if (v == null || StringUtils.isEmpty(v.toString()))
+				put(key, value);
+		}
+		return this;
 	}
 
 	@Override /* Map */

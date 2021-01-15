@@ -942,7 +942,7 @@ public final class PropertyStore {
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
 						o2 = instantiate(beanFactory, eType, o);
 					if (o2 == null)
-						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
+						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''.  Entry type: ''{3}''", type, eType, name, o == null ? null : o.getClass().getName());
 					Array.set(t, i++, o2);
 				}
 				return (T[])t;

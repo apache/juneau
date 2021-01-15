@@ -572,6 +572,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Joins tokens with newlines.
+	 *
+	 * @param tokens The tokens to concatenate.
+	 * @return A string with the specified tokens contatenated with newlines.
+	 */
+	public static String joinnl(List<?> tokens) {
+		return join(tokens, '\n');
+	}
+
+	/**
 	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.

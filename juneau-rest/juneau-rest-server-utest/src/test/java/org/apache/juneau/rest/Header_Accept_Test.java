@@ -57,7 +57,7 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		reqHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class A {
@@ -94,7 +94,7 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		reqHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class B {
@@ -124,7 +124,7 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		reqHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class C {
@@ -167,7 +167,7 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		reqHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class D {
@@ -204,11 +204,11 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		reqHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class E {
-		@RestMethod(reqHeaders={"Accept: text/s3"}, serializers=S3.class)
+		@RestMethod(defaultRequestHeaders={"Accept: text/s3"}, serializers=S3.class)
 		public String put(@Body String in) {
 			return in;
 		}
@@ -241,11 +241,11 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		reqHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class F {
-		@RestMethod(reqHeaders={"Accept: text/s3"}, serializers={Inherit.class, S3.class})
+		@RestMethod(defaultRequestHeaders={"Accept: text/s3"}, serializers={Inherit.class, S3.class})
 		public String put(@Body String in) {
 			return in;
 		}

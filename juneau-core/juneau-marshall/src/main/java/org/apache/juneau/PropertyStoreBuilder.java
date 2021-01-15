@@ -193,6 +193,31 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
+	 * Same as {@link #set(String, Object)} but ignores the command if the flag is <jk>false</jk>.
+	 *
+	 * @param flag The boolean value to check.
+	 * @param key The configuration property key.
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder setIf(boolean flag, String key, Object value) {
+		if (flag)
+			set(key, value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #set(String, Object)} but ignores the command if the value is <jk>null</jk> or empty.
+	 *
+	 * @param key The configuration property key (e.g <js>"BeanContext.foo.ss/add.1"</js>).
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder setIfNotEmpty(String key, Object value) {
+		return setIf(ObjectUtils.isNotEmpty(value), key, value);
+	}
+
+	/**
 	 * Shortcut for calling <c>set(key,<jk>true</jk>)</c>.
 	 *
 	 * <p>
@@ -344,6 +369,31 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
+	 * Same as {@link #addTo(String, Object)} but ignores the command if the flag is <jk>false</jk>.
+	 *
+	 * @param flag The boolean value to check.
+	 * @param key The configuration property key.
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder addToIf(boolean flag, String key, Object value) {
+		if (flag)
+			addTo(key, value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #addTo(String, Object)} but ignores the command if the value is <jk>null</jk> or empty.
+	 *
+	 * @param key The configuration property key.
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder addToIfNotEmpty(String key, Object value) {
+		return addToIf(ObjectUtils.isNotEmpty(value), key, value);
+	}
+
+	/**
 	 * Adds an entry to a MAP property.
 	 *
 	 * @param key The property key.
@@ -435,6 +485,31 @@ public class PropertyStoreBuilder {
 			groups.remove(g);
 
 		return this;
+	}
+
+	/**
+	 * Same as {@link #addTo(String, Object)} but ignores the command if the flag is <jk>false</jk>.
+	 *
+	 * @param flag The boolean value to check.
+	 * @param key The configuration property key.
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder appendToIf(boolean flag, String key, Object value) {
+		if (flag)
+			appendTo(key, value);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #addTo(String, Object)} but ignores the command if the value is null or empty.
+	 *
+	 * @param key The configuration property key.
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder appendToIfNotEmpty(String key, Object value) {
+		return appendToIf(ObjectUtils.isNotEmpty(value), key, value);
 	}
 
 	/**

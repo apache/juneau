@@ -43,6 +43,9 @@ public class RestMethodAnnotation_Test {
 		.defaultContentType("defaultContentType")
 		.defaultFormData("defaultFormData")
 		.defaultQuery("defaultQuery")
+		.defaultRequestAttributes("defaultRequestAttributes")
+		.defaultRequestHeaders("defaultRequestHeaders")
+		.defaultResponseHeaders("defaultResponseHeaders")
 		.description("description")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
@@ -52,11 +55,8 @@ public class RestMethodAnnotation_Test {
 		.on("on")
 		.parsers(Parser.class)
 		.path("path")
-		.paths("paths")
 		.priority(1)
 		.produces("produces")
-		.reqAttrs("reqAttrs")
-		.reqHeaders("reqHeaders")
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
@@ -75,6 +75,9 @@ public class RestMethodAnnotation_Test {
 		.defaultContentType("defaultContentType")
 		.defaultFormData("defaultFormData")
 		.defaultQuery("defaultQuery")
+		.defaultRequestAttributes("defaultRequestAttributes")
+		.defaultRequestHeaders("defaultRequestHeaders")
+		.defaultResponseHeaders("defaultResponseHeaders")
 		.description("description")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
@@ -84,11 +87,8 @@ public class RestMethodAnnotation_Test {
 		.on("on")
 		.parsers(Parser.class)
 		.path("path")
-		.paths("paths")
 		.priority(1)
 		.produces("produces")
-		.reqAttrs("reqAttrs")
-		.reqHeaders("reqHeaders")
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
@@ -110,6 +110,9 @@ public class RestMethodAnnotation_Test {
 				+ "defaultContentType:'defaultContentType',"
 				+ "defaultFormData:['defaultFormData'],"
 				+ "defaultQuery:['defaultQuery'],"
+				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
+				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
+				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
 				+ "description:['description'],"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
@@ -118,12 +121,9 @@ public class RestMethodAnnotation_Test {
 				+ "method:'method',"
 				+ "on:['on'],"
 				+ "parsers:['org.apache.juneau.parser.Parser'],"
-				+ "path:'path',"
-				+ "paths:['paths'],"
+				+ "path:['path'],"
 				+ "priority:1,"
 				+ "produces:['produces'],"
-				+ "reqAttrs:['reqAttrs'],"
-				+ "reqHeaders:['reqHeaders'],"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
@@ -185,6 +185,9 @@ public class RestMethodAnnotation_Test {
 		defaultContentType="defaultContentType",
 		defaultFormData="defaultFormData",
 		defaultQuery="defaultQuery",
+		defaultRequestAttributes="defaultRequestAttributes",
+		defaultRequestHeaders="defaultRequestHeaders",
+		defaultResponseHeaders="defaultResponseHeaders",
 		description="description",
 		encoders=Encoder.class,
 		guards=RestGuard.class,
@@ -194,11 +197,8 @@ public class RestMethodAnnotation_Test {
 		on="on",
 		parsers=Parser.class,
 		path="path",
-		paths="paths",
 		priority=1,
 		produces="produces",
-		reqAttrs="reqAttrs",
-		reqHeaders="reqHeaders",
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
@@ -219,6 +219,9 @@ public class RestMethodAnnotation_Test {
 		defaultContentType="defaultContentType",
 		defaultFormData="defaultFormData",
 		defaultQuery="defaultQuery",
+		defaultRequestAttributes="defaultRequestAttributes",
+		defaultRequestHeaders="defaultRequestHeaders",
+		defaultResponseHeaders="defaultResponseHeaders",
 		description="description",
 		encoders=Encoder.class,
 		guards=RestGuard.class,
@@ -228,11 +231,8 @@ public class RestMethodAnnotation_Test {
 		on="on",
 		parsers=Parser.class,
 		path="path",
-		paths="paths",
 		priority=1,
 		produces="produces",
-		reqAttrs="reqAttrs",
-		reqHeaders="reqHeaders",
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,

@@ -17,15 +17,18 @@ import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
+import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import javax.servlet.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
@@ -33,6 +36,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
@@ -41,7 +45,6 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.reshandlers.*;
-import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -924,7 +927,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder defaultAccept(String value) {
 		if (isNotEmpty(value))
-			reqHeader("Accept", value);
+			defaultRequestHeaders(Accept.of(value));
 		return this;
 	}
 
@@ -939,7 +942,178 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder defaultContentType(String value) {
 		if (isNotEmpty(value))
-			reqHeader("Content-Type", value);
+			defaultRequestHeaders(ContentType.of(value));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
+	 *
+	 * <p>
+	 * Adds a single default request attribute.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * </ul>
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestAttribute(String name, Object value) {
+		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
+	 *
+	 * <p>
+	 * Adds a single default request attribute.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * </ul>
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestAttribute(String name, Supplier<?> value) {
+		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 *
+	 * <p>
+	 * Adds multiple default request attributes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * </ul>
+	 *
+	 * @param values The attributes.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestAttributes(NamedAttribute...values) {
+		asList(values).stream().forEach(x -> appendTo(REST_defaultRequestAttributes, x));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
+	 *
+	 * <p>
+	 * Adds a single default request header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestHeader(String name, Object value) {
+		return defaultRequestHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
+	 *
+	 * <p>
+	 * Adds a single default request header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestHeader(String name, Supplier<?> value) {
+		return defaultRequestHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultRequestHeaders(Header...values) {
+		asList(values).stream().forEach(x -> appendTo(REST_defaultRequestHeaders, x));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
+	 *
+	 * <p>
+	 * Adds a single default response header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param name The response header name.
+	 * @param value The response header value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultResponseHeader(String name, Object value) {
+		return defaultResponseHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
+	 *
+	 * <p>
+	 * Adds a single default response header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param name The response header name.
+	 * @param value The response header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultResponseHeader(String name, Supplier<?> value) {
+		return defaultResponseHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder defaultResponseHeaders(Header...values) {
+		asList(values).stream().forEach(x -> appendTo(REST_defaultResponseHeaders, x));
 		return this;
 	}
 
@@ -1454,138 +1628,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder renderResponseStackTraces() {
 		return set(REST_renderResponseStackTraces);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
-	 *
-	 * <p>
-	 * Same as {@link #reqAttrs(String...)} but adds a single attribute name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder reqAttr(String name, Object value) {
-		return putTo(REST_reqAttrs, name, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
-	 * </ul>
-	 *
-	 * @param values The attributes in the format <js>"Name: value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
-	 */
-	@FluentSetter
-	public RestContextBuilder reqAttrs(String...values) throws RestServletException {
-		for (String v : values) {
-			String[] p = RestUtils.parseKeyValuePair(v);
-			if (p == null)
-				throw new RestServletException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", v);
-			reqHeader(p[0], p[1]);
-		}
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
-	 * Same as {@link #reqHeaders(String...)} but adds a single header name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder reqHeader(String name, Object value) {
-		return putTo(REST_reqHeaders, name, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
-	 * </ul>
-	 *
-	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
-	 */
-	@FluentSetter
-	public RestContextBuilder reqHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			reqHeader(h[0], h[1]);
-		}
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <p>
-	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
-	 * </ul>
-	 *
-	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
-	 */
-	@FluentSetter
-	public RestContextBuilder resHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			resHeader(h[0], h[1]);
-		}
-		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <p>
-	 * Same as {@link #resHeaders(String...)} but adds a single header name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder resHeader(String name, Object value) {
-		return putTo(REST_resHeaders, name, value);
 	}
 
 	/**

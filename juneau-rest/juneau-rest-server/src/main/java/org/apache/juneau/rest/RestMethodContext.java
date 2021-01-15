@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -88,9 +89,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#clientVersion()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#clientVersion(String)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * Specifies whether this method can be called based on the client version.
 	 *
 	 * <p>
@@ -162,11 +168,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
 	 * 	<li><b>System property:</b>  <c>RestMethodContext.debug</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Enablement#NEVER}
+	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#debug()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#debug(Enablement)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -177,6 +187,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
 	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_debug}
+	 * </ul>
 	 */
 	public static final String RESTMETHOD_debug = PREFIX + ".debug.s";
 
@@ -186,23 +200,27 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultFormData RESTMETHOD_defaultFormData}
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultFormData.omo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultFormData.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>{@link NameValuePair}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestMethodContext.defaultFormData</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEFAULTFORMDATA</c>
-	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultFormData()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultFormData(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultFormData(String,Supplier)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultFormData(NameValuePair...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
-	 * Specifies default values for form-data parameters.
-	 *
 	 * <p>
-	 * Strings are of the format <js>"name=value"</js>.
+	 * Specifies default values for form-data parameters.
 	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getFormData(String)} when the parameter is not present on the
@@ -214,7 +232,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 */
-	public static final String RESTMETHOD_defaultFormData = PREFIX + ".defaultFormData.omo";
+	public static final String RESTMETHOD_defaultFormData = PREFIX + ".defaultFormData.lo";
 
 	/**
 	 * Configuration property:  Default query parameters.
@@ -222,23 +240,27 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultQuery RESTMETHOD_defaultQuery}
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultQuery.omo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultQuery.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>{@link NameValuePair}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestMethodContext.defaultQuery</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEFAULTQUERY</c>
-	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultQuery()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultQuery(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultQuery(String,Supplier)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultQuery(NameValuePair...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
-	 * Specifies default values for query parameters.
-	 *
 	 * <p>
-	 * Strings are of the format <js>"name=value"</js>.
+	 * Specifies default values for query parameters.
 	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getQuery(String)} when the parameter is not present on the request.
@@ -249,7 +271,141 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 */
-	public static final String RESTMETHOD_defaultQuery = PREFIX + ".defaultQuery.omo";
+	public static final String RESTMETHOD_defaultQuery = PREFIX + ".defaultQuery.lo";
+
+	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultRequestAttributes RESTMETHOD_defaultRequestAttributes}
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqAttrs.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>{@link NamedAttribute}[]</c>
+	 * 	<li><b>System property:</b>  <c>RestMethodContext.defaultRequestAttributes</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEFAULTREQUESTATTRIBUTES</c>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestAttributes()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultRequestAttribute(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultRequestAttribute(String,Supplier)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultRequestAttributes(NamedAttribute...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they are not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_defaultRequestAttributes = PREFIX + ".defaultRequestAttributes.lo";
+
+	/**
+	 * Configuration property:  Default request headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultRequestHeaders RESTMETHOD_defaultRequestHeaders}
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestHeaders.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.Header}[]</c>
+	 * 	<li><b>System property:</b>  <c>RestMethodContext.defaultRequestHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEFAULTREQUESTHEADERS</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultAccept()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultContentType()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultRequestHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultRequestHeader(String,Supplier)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultRequestHeaders(org.apache.http.Header...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.lo";
+
+	/**
+	 * Configuration property:  Default response headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultResponseHeaders RESTMETHOD_defaultResponseHeaders}
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultResponseHeaders.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.Header}[]</c>
+	 * 	<li><b>System property:</b>  <c>RestMethodContext.defaultResponseHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEFAULTRESPONSEHEADERS</c>
+	 * 	<li><b>Default:</b>  empty list.
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultAccept()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultContentType()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultResponseHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultResponseHeader(String,Supplier)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#defaultResponseHeaders(org.apache.http.Header...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not overwritten during the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_defaultResponseHeaders = PREFIX + ".defaultResponseHeaders.lo";
 
 	/**
 	 * Configuration property:  HTTP method name.
@@ -267,9 +423,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#method()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#httpMethod(String)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * REST method name.
 	 *
 	 * <p>
@@ -329,6 +490,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#matchers()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#matchers(RestMatcher...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -363,17 +528,20 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_paths RESTMETHOD_paths}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_path RESTMETHOD_path}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.path.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>String[]</c>
-	 * 	<li><b>System property:</b>  <c>RestMethodContext.paths</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_PATHS</c>
+	 * 	<li><b>System property:</b>  <c>RestMethodContext.path</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_PATH</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#path()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#paths()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#path(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -390,7 +558,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
 	 * </ul>
 	 */
-	public static final String RESTMETHOD_paths = PREFIX + ".paths.ls";
+	public static final String RESTMETHOD_path = PREFIX + ".path.ls";
 
 	/**
 	 * Configuration property:  Priority.
@@ -408,9 +576,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#priority()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#priority(int)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * URL path pattern priority.
 	 *
 	 * <p>
@@ -420,94 +593,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * By default, it's <c>0</c>, which means it will use an internal heuristic to determine a best match.
 	 */
 	public static final String RESTMETHOD_priority = PREFIX + ".priority.i";
-
-	/**
-	 * Configuration property:  Default request attributes.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_reqAttrs RESTMETHOD_reqAttrs}
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqAttrs.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestMethodContext.reqAttrs</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_REQATTRS</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#reqAttrs()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they are not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
-	 * </ul>
-	 */
-	public static final String RESTMETHOD_reqAttrs = PREFIX + ".reqAttrs.smo";
-
-	/**
-	 * Configuration property:  Default request headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_reqHeaders RESTMETHOD_reqHeaders}
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqHeaders.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
-	 * 	<li><b>System property:</b>  <c>RestMethodContext.reqHeaders</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_REQHEADERS</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#reqHeaders()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultAccept()}
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultContentType()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
-	 * </ul>
-	 */
-	public static final String RESTMETHOD_reqHeaders = PREFIX + ".reqHeaders.smo";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -532,10 +617,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
 	final JsonSchemaGenerator jsonSchemaGenerator;
-	final org.apache.http.Header[] defaultRequestHeaders;
-	final NameValuePair[] defaultRequestQuery;
-	final NameValuePair[] defaultRequestFormData;
-	final OMap reqAttrs;
+	final org.apache.http.Header[] defaultRequestHeaders, defaultResponseHeaders;
+	final NameValuePair[] defaultRequestQuery, defaultRequestFormData;
+	final NamedAttribute[] defaultRequestAttributes;
 	final String defaultCharset;
 	final long maxInput;
 	final List<MediaType>
@@ -603,6 +687,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 			supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 
+			defaultRequestHeaders = createDefaultRequestHeaders(r, beanFactory, method, context);
+			defaultResponseHeaders = createDefaultResponseHeaders(r, beanFactory, method, context);
+			defaultRequestQuery = createDefaultRequestQuery(r, beanFactory, method);
+			defaultRequestFormData = createDefaultRequestFormData(r, beanFactory, method);
+			defaultRequestAttributes = createDefaultRequestAttributes(r, beanFactory, method, context);
+
 			int _hierarchyDepth = 0;
 			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
 			while (sc != null) {
@@ -625,14 +715,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			responseMeta = ResponseBeanMeta.create(mi, ps);
 
 			methodParams = context.findParams(mi, false, pathMatchers[this.pathMatchers.length-1]);
-
-			defaultRequestHeaders = createDefaultRequestHeaders(r, beanFactory, method);
-			defaultRequestQuery = createDefaultRequestQuery(r, beanFactory, method);
-			defaultRequestFormData = createDefaultRequestFormData(r, beanFactory, method);
-
-			OMap _reqAttrs = new OMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
-
-			this.reqAttrs = _reqAttrs.unmodifiable();
 
 			this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
@@ -1142,7 +1224,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	protected UrlPathMatcher[] createPathMatchers(Object resource, BeanFactory beanFactory, boolean dotAll) throws Exception {
 		List<UrlPathMatcher> x = AList.of();
 
-		for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
+		for (String p : getArrayProperty(RESTMETHOD_path, String.class)) {
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
 			x.add(UrlPathMatcher.of(p));
@@ -1207,12 +1289,18 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @param method This Java method.
+	 * @param context The REST class context.
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected org.apache.http.Header[] createDefaultRequestHeaders(Object resource, BeanFactory beanFactory, Method method) throws Exception {
-		Map<String,Object> x = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		x.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
+	protected org.apache.http.Header[] createDefaultRequestHeaders(Object resource, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
+		AMap<String,org.apache.http.Header> x = AMap.of();
+
+		for (org.apache.http.Header h : context.defaultRequestHeaders)
+			x.put(h.getName().toUpperCase(), h);
+
+		for (org.apache.http.Header h : getInstanceArrayProperty(RESTMETHOD_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory))
+			x.put(h.getName().toUpperCase(), h);
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1221,7 +1309,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							org.apache.http.Header h2 = BasicHeader.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							x.put(h2.getName().toUpperCase(), h2);
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Header annotation");
 						}
@@ -1230,14 +1319,77 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			}
 		}
 
-		org.apache.http.Header[] x2 = x.entrySet().stream().map(e->BasicHeader.of(e.getKey(),e.getValue())).toArray(org.apache.http.Header[]::new);
+		org.apache.http.Header[] x2 = x.values().toArray(new org.apache.http.Header[x.size()]);
 
 		x2 = BeanFactory
 			.of(beanFactory, resource)
 			.addBean(org.apache.http.Header[].class, x2)
 			.beanCreateMethodFinder(org.apache.http.Header[].class, resource)
 			.find("createDefaultRequestHeaders", Method.class)
-			.thenFind("createDefaultRequestHeaders")
+			.withDefault(x2)
+			.run();
+
+		return x2;
+	}
+
+	/**
+	 * Instantiates the default request headers for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param method This Java method.
+	 * @param context The REST class context.
+	 * @return The default request headers for this method.
+	 * @throws Exception If default request headers could not be instantiated.
+	 */
+	protected org.apache.http.Header[] createDefaultResponseHeaders(Object resource, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
+		AMap<String,org.apache.http.Header> x = AMap.of();
+
+		for (org.apache.http.Header h : context.defaultResponseHeaders)
+			x.put(h.getName().toUpperCase(), h);
+
+		for (org.apache.http.Header h : getInstanceArrayProperty(RESTMETHOD_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory))
+			x.put(h.getName().toUpperCase(), h);
+
+		org.apache.http.Header[] x2 = x.values().toArray(new org.apache.http.Header[x.size()]);
+
+		x2 = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(org.apache.http.Header[].class, x2)
+			.beanCreateMethodFinder(org.apache.http.Header[].class, resource)
+			.find("createDefaultResponseHeaders", Method.class)
+			.withDefault(x2)
+			.run();
+
+		return x2;
+	}
+
+	/**
+	 * Instantiates the default request attributes for this method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param method This Java method.
+	 * @param context The REST class context.
+	 * @return The default request attributes for this method.
+	 * @throws Exception If default request headers could not be instantiated.
+	 */
+	protected NamedAttribute[] createDefaultRequestAttributes(Object resource, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
+		AMap<String,NamedAttribute> x = AMap.of();
+
+		for (NamedAttribute a : context.defaultRequestAttributes)
+			x.put(a.getName(), a);
+
+		for (NamedAttribute a : getInstanceArrayProperty(RESTMETHOD_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory))
+			x.put(a.getName(), a);
+
+		NamedAttribute[] x2 = x.values().toArray(new NamedAttribute[x.size()]);
+
+		x2 = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(NamedAttribute[].class, x2)
+			.beanCreateMethodFinder(NamedAttribute[].class, resource)
+			.find("createDefaultRequestAttributes", Method.class)
 			.withDefault(x2)
 			.run();
 
@@ -1254,7 +1406,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
 	protected NameValuePair[] createDefaultRequestQuery(Object resource, BeanFactory beanFactory, Method method) throws Exception {
-		Map<String,Object> x = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
+		AMap<String,NameValuePair> x = AMap.of();
+
+		for (NameValuePair a : getInstanceArrayProperty(RESTMETHOD_defaultQuery, NameValuePair.class, new NameValuePair[0], beanFactory))
+			x.put(a.getName(), a);
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1263,7 +1418,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							NameValuePair p = BasicNameValuePair.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							x.put(p.getName(), p);
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Query annotation");
 						}
@@ -1272,7 +1428,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			}
 		}
 
-		NameValuePair[] x2 = x.entrySet().stream().map(e->BasicNameValuePair.of(e.getKey(),e.getValue())).toArray(NameValuePair[]::new);
+		NameValuePair[] x2 = x.values().toArray(new NameValuePair[x.size()]);
 
 		x2 = BeanFactory
 			.of(beanFactory, resource)
@@ -1296,7 +1452,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
 	protected NameValuePair[] createDefaultRequestFormData(Object resource, BeanFactory beanFactory, Method method) throws Exception {
-		Map<String,Object> x = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
+		AMap<String,NameValuePair> x = AMap.of();
+
+		for (NameValuePair a : getInstanceArrayProperty(RESTMETHOD_defaultFormData, NameValuePair.class, new NameValuePair[0], beanFactory))
+			x.put(a.getName(), a);
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1305,7 +1464,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							NameValuePair p = BasicNameValuePair.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
+							x.put(p.getName(), p);
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @FormData annotation");
 						}
@@ -1314,7 +1474,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			}
 		}
 
-		NameValuePair[] x2 = x.entrySet().stream().map(e->BasicNameValuePair.of(e.getKey(),e.getValue())).toArray(NameValuePair[]::new);
+		NameValuePair[] x2 = x.values().toArray(new NameValuePair[x.size()]);
 
 		x2 = BeanFactory
 			.of(beanFactory, resource)

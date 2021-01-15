@@ -193,7 +193,7 @@ public class Header_Test {
 
 	@Rest
 	public static class E {
-		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
 			return OMap.of()
 				.a("h1", h1)

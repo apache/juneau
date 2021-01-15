@@ -19,7 +19,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.remote.*;
 
 /**
@@ -169,7 +168,7 @@ public @interface RestMethod {
 	 * The default value for the <c>Accept</c> header if not specified on a request.
 	 *
 	 * <p>
-	 * This is a shortcut for using {@link #reqHeaders()} for just this specific header.
+	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 */
 	String defaultAccept() default "";
 
@@ -198,7 +197,7 @@ public @interface RestMethod {
 	 * The default value for the <c>Content-Type</c> header if not specified on a request.
 	 *
 	 * <p>
-	 * This is a shortcut for using {@link #reqHeaders()} for just this specific header.
+	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 */
 	String defaultContentType() default "";
 
@@ -256,6 +255,81 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String[] defaultQuery() default {};
+
+	/**
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo: bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestAttributes}
+	 * </ul>
+	 */
+	String[] defaultRequestAttributes() default {};
+
+	/**
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 */
+	String[] defaultRequestHeaders() default {};
+
+	/**
+	 * Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not overwritten during the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 */
+	String[] defaultResponseHeaders() default {};
 
 	/**
 	 * Optional description for the exposed API.
@@ -513,30 +587,7 @@ public @interface RestMethod {
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
 	 */
-	String path() default "";
-
-	/**
-	 * Same as {@link #path()} but allows you to specify multiple path patterns for the same method.
-	 *
-	 * <p>
-	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters.
-	 * <br>When variables are not defined on all paths, the {@link Path#required @Path(required)} annotation can be set
-	 * to <jk>false</jk> to make it optional.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		method=<jsf>GET</jsf>,
-	 * 		paths={<js>"/"</js>,<js>"/{foo}"</js>}
-	 * 	)
-	 * 	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-	 * </ul>
-	 */
-	String[] paths() default {};
+	String[] path() default {};
 
 	/**
 	 * URL path pattern priority.
@@ -566,56 +617,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String[] produces() default {};
-
-	/**
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
-	 * </ul>
-	 */
-	String[] reqAttrs() default {};
-
-	/**
-	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
-	 * </ul>
-	 */
-	String[] reqHeaders() default {};
 
 	/**
 	 * Role guard.

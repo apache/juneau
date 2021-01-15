@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.Constants.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
@@ -156,7 +157,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * @return A cached {@link AcceptCharset} object.
 	 */
 	public static Accept of(String value) {
-		if (value == null)
+		if (isEmpty(value))
 			return null;
 		Accept x = CACHE.get(value);
 		if (x == null)
@@ -177,7 +178,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * @return A new {@link Accept} object.
 	 */
 	public static Accept of(Object value) {
-		if (value == null)
+		if (isEmpty(value))
 			return null;
 		return new Accept(value);
 	}

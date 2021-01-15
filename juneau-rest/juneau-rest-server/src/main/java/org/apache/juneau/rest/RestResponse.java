@@ -80,9 +80,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		call.restResponse(this);
 		RestContext context = call.getContext();
 
-		for (Map.Entry<String,Object> e : context.getResHeaders().entrySet())
-			setHeaderSafe(e.getKey(), stringify(e.getValue()));
-
 		try {
 			String passThroughHeaders = request.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
@@ -120,6 +117,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 					break;
 			}
 		}
+
+		for (Header e : request.getContext().defaultResponseHeaders)
+			setHeaderSafe(e.getName(), stringify(e.getValue()));
+		for (Header e : rjm.defaultResponseHeaders)
+			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));

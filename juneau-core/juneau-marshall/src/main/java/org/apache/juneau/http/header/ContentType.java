@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.Constants.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
@@ -66,7 +67,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentType of(String value) {
-		if (value == null)
+		if (isEmpty(value))
 			return null;
 		ContentType ct = CACHE.get(value);
 		if (ct == null)
@@ -81,7 +82,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentType of(MediaType value) {
-		if (value == null)
+		if (isEmpty(value))
 			return null;
 		return of(value.toString());
 	}
@@ -100,6 +101,8 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return A new {@link AcceptEncoding} object.
 	 */
 	public static ContentType of(Object value) {
+		if (isEmpty(value))
+			return null;
 		return new ContentType(value);
 	}
 

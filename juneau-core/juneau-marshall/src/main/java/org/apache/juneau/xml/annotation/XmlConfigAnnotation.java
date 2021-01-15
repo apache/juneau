@@ -54,7 +54,7 @@ public class XmlConfigAnnotation {
 			if (! a.enableNamespaces().isEmpty())
 				psb.set(XML_enableNamespaces, bool(a.enableNamespaces()));
 			if (a.namespaces().length > 0)
-				psb.set(XML_namespaces, Namespace.createArray(strings(a.namespaces())));
+				psb.set(XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
 
 			if (a.eventAllocator() != XmlEventAllocator.Null.class)
 				psb.set(XML_eventAllocator, a.eventAllocator());

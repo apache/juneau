@@ -12,11 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static java.util.Arrays.*;
+import static org.apache.juneau.rest.RestMethodContext.*;
+
 import java.lang.annotation.*;
 import java.util.*;
+import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
@@ -75,6 +81,406 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	public RestMethodContextBuilder dotAll() {
 		this.dotAll = true;
 		return this;
+	}
+
+	//----------------------------------------------------------------------------------------------------
+	// Properties
+	//----------------------------------------------------------------------------------------------------
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Client version pattern matcher.
+	 *
+	 * <p>
+	 * Specifies whether this method can be called based on the client version.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_clientVersion}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder clientVersion(String value) {
+		return set(RESTMETHOD_clientVersion, value);
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Debug mode.
+	 *
+	 * <p>
+	 * Enables debugging on this method.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_clientVersion}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder debug(Enablement value) {
+		return set(RESTMETHOD_debug, value);
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default form data parameters.
+	 *
+	 * <p>
+	 * Adds a single default form data parameter.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultFormData}
+	 * </ul>
+	 *
+	 * @param name The form data parameter name.
+	 * @param value The form data parameter value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultFormData(String name, Object value) {
+		return defaultFormData(BasicNameValuePair.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default form data parameters.
+	 *
+	 * <p>
+	 * Adds a single default form data parameter.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultFormData}
+	 * </ul>
+	 *
+	 * @param name The form data parameter name.
+	 * @param value The form data parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultFormData(String name, Supplier<?> value) {
+		return defaultFormData(BasicNameValuePair.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default form data parameters.
+	 *
+	 * <p>
+	 * Specifies default values for form data parameters if they're not specified in the request body.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultFormData}
+	 * </ul>
+	 *
+	 * @param values The form data parameters to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultFormData(NameValuePair...values) {
+		asList(values).stream().forEach(x -> appendTo(RESTMETHOD_defaultFormData, x));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default query parameters.
+	 *
+	 * <p>
+	 * Adds a single default query parameter.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultQuery}
+	 * </ul>
+	 *
+	 * @param name The query parameter name.
+	 * @param value The query parameter value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultQuery(String name, Object value) {
+		return defaultQuery(BasicNameValuePair.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default query parameters.
+	 *
+	 * <p>
+	 * Adds a single default query parameter.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultQuery}
+	 * </ul>
+	 *
+	 * @param name The query parameter name.
+	 * @param value The query parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultQuery(String name, Supplier<?> value) {
+		return defaultQuery(BasicNameValuePair.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default query parameters.
+	 *
+	 * <p>
+	 * Specifies default values for query parameters if they're not specified on the request.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultQuery}
+	 * </ul>
+	 *
+	 * @param values The query parameters to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultQuery(NameValuePair...values) {
+		asList(values).stream().forEach(x -> appendTo(RESTMETHOD_defaultQuery, x));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 *
+	 * <p>
+	 * Adds a single default request attribute.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultRequestAttributes}
+	 * </ul>
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultRequestAttribute(String name, Object value) {
+		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 *
+	 * <p>
+	 * Adds a single default request attribute.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultRequestAttributes}
+	 * </ul>
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultRequestAttribute(String name, Supplier<?> value) {
+		return defaultRequestAttributes(BasicNamedAttribute.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default request attributes.
+	 *
+	 * <p>
+	 * Adds multiple default request attributes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultRequestAttributes}
+	 * </ul>
+	 *
+	 * @param values The request attributes to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultRequestAttributes(NamedAttribute...values) {
+		asList(values).stream().forEach(x -> appendTo(RESTMETHOD_defaultRequestAttributes, x));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default request headers.
+	 *
+	 * <p>
+	 * Adds a single default request header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param name The request header name.
+	 * @param value The request header value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultRequestHeader(String name, Object value) {
+		return defaultRequestHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default request headers.
+	 *
+	 * <p>
+	 * Adds a single default request header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param name The request header name.
+	 * @param value The request header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultRequestHeader(String name, Supplier<?> value) {
+		return defaultRequestHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultRequestHeaders(Header...values) {
+		asList(values).stream().forEach(x -> appendTo(RESTMETHOD_defaultRequestHeaders, x));
+		return this;
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default response headers.
+	 *
+	 * <p>
+	 * Adds a single default response header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param name The response header name.
+	 * @param value The response header value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultResponseHeader(String name, Object value) {
+		return defaultResponseHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default response headers.
+	 *
+	 * <p>
+	 * Adds a single default response header.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param name The response header name.
+	 * @param value The response header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultResponseHeader(String name, Supplier<?> value) {
+		return defaultResponseHeaders(BasicHeader.of(name, value));
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_defaultResponseHeaders}
+	 * </ul>
+	 *
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder defaultResponseHeaders(Header...values) {
+		asList(values).stream().forEach(x -> appendTo(RESTMETHOD_defaultResponseHeaders, x));
+		return this;
+	}
+
+	/**
+	 * Configuration property:  HTTP method name.
+	 *
+	 * <p>
+	 * REST method name.
+	 *
+	 * <p>
+	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_httpMethod}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder httpMethod(String value) {
+		return set(RESTMETHOD_httpMethod, value);
+	}
+
+	/**
+	 * Configuration property:  Method-level matchers.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_matchers}
+	 * </ul>
+	 *
+	 * @param values The new values for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder matchers(RestMatcher...values) {
+		return set(RESTMETHOD_matchers, values);
+	}
+
+	/**
+	 * Configuration property:  Resource method paths.
+	 *
+	 * <p>
+	 * Identifies the URL subpath relative to the servlet class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_path}
+	 * </ul>
+	 *
+	 * @param values The new values for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder path(String...values) {
+		return set(RESTMETHOD_path, values);
+	}
+
+	/**
+	 * Configuration property:  Priority.
+	 *
+	 * <p>
+	 * URL path pattern priority.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_priority}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder priority(int value) {
+		return set(RESTMETHOD_priority, value);
 	}
 
 	// <FluentSetters>

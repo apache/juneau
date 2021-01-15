@@ -97,9 +97,9 @@ public class BeanConfigAnnotation {
 			if (a.notBeanClasses_replace().length != 0)
 				psb.set(BEAN_notBeanClasses, a.notBeanClasses_replace());
 			if (a.notBeanPackages().length != 0)
-				psb.addTo(BEAN_notBeanPackages, strings(a.notBeanPackages()));
+				psb.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
 			if (a.notBeanPackages_replace().length != 0)
-				psb.set(BEAN_notBeanPackages, strings(a.notBeanPackages_replace()));
+				psb.set(BEAN_notBeanPackages, stringList(a.notBeanPackages_replace()));
 			if (a.propertyNamer() != PropertyNamer.Null.class)
 				psb.set(BEAN_propertyNamer, a.propertyNamer());
 			if (! a.sortProperties().isEmpty())

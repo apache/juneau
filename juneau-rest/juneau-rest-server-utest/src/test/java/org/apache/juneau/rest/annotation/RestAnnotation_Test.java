@@ -54,6 +54,9 @@ public class RestAnnotation_Test {
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
+		.defaultRequestAttributes("defaultRequestAttributes")
+		.defaultRequestHeaders("defaultRequestHeaders")
+		.defaultResponseHeaders("defaultResponseHeaders")
 		.description("description")
 		.encoders(Encoder.class)
 		.fileFinder(FileFinder.class)
@@ -70,9 +73,6 @@ public class RestAnnotation_Test {
 		.path("path")
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
-		.reqAttrs("reqAttrs")
-		.reqHeaders("reqHeaders")
-		.resHeaders("resHeaders")
 		.responseHandlers(ResponseHandler.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -105,6 +105,9 @@ public class RestAnnotation_Test {
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
 		.defaultContentType("defaultContentType")
+		.defaultRequestAttributes("defaultRequestAttributes")
+		.defaultRequestHeaders("defaultRequestHeaders")
+		.defaultResponseHeaders("defaultResponseHeaders")
 		.description("description")
 		.encoders(Encoder.class)
 		.fileFinder(FileFinder.class)
@@ -121,9 +124,6 @@ public class RestAnnotation_Test {
 		.path("path")
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
-		.reqAttrs("reqAttrs")
-		.reqHeaders("reqHeaders")
-		.resHeaders("resHeaders")
 		.responseHandlers(ResponseHandler.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -158,6 +158,9 @@ public class RestAnnotation_Test {
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
 				+ "defaultContentType:'defaultContentType',"
+				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
+				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
+				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
 				+ "description:['description'],"
 				+ "disableAllowBodyParam:'disableAllowBodyParam',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
@@ -175,9 +178,6 @@ public class RestAnnotation_Test {
 				+ "path:'path',"
 				+ "produces:['produces'],"
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
-				+ "reqAttrs:['reqAttrs'],"
-				+ "reqHeaders:['reqHeaders'],"
-				+ "resHeaders:['resHeaders'],"
 				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -255,6 +255,9 @@ public class RestAnnotation_Test {
 		defaultAccept="defaultAccept",
 		defaultCharset="defaultCharset",
 		defaultContentType="defaultContentType",
+		defaultRequestAttributes="defaultRequestAttributes",
+		defaultRequestHeaders="defaultRequestHeaders",
+		defaultResponseHeaders="defaultResponseHeaders",
 		description="description",
 		encoders=Encoder.class,
 		fileFinder=FileFinder.class,
@@ -271,9 +274,6 @@ public class RestAnnotation_Test {
 		path="path",
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
-		reqAttrs="reqAttrs",
-		reqHeaders="reqHeaders",
-		resHeaders="resHeaders",
 		responseHandlers=ResponseHandler.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
@@ -308,6 +308,9 @@ public class RestAnnotation_Test {
 		defaultAccept="defaultAccept",
 		defaultCharset="defaultCharset",
 		defaultContentType="defaultContentType",
+		defaultRequestAttributes="defaultRequestAttributes",
+		defaultRequestHeaders="defaultRequestHeaders",
+		defaultResponseHeaders="defaultResponseHeaders",
 		description="description",
 		encoders=Encoder.class,
 		fileFinder=FileFinder.class,
@@ -324,9 +327,6 @@ public class RestAnnotation_Test {
 		path="path",
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
-		reqAttrs="reqAttrs",
-		reqHeaders="reqHeaders",
-		resHeaders="resHeaders",
 		responseHandlers=ResponseHandler.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",

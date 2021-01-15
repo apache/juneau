@@ -839,11 +839,11 @@ public class Path_Test {
 
 	@Rest(path="/l2")
 	public static class L2 {
-		@RestMethod(paths={"/","/{foo}"})
+		@RestMethod(path={"/","/{foo}"})
 		public String a(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
 			return "1," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}
-		@RestMethod(paths={"/foo","/foo/{foo}"})
+		@RestMethod(path={"/foo","/foo/{foo}"})
 		public String b(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
 			return "2," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}

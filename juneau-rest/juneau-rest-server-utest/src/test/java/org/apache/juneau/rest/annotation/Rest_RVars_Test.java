@@ -34,7 +34,7 @@ public class Rest_RVars_Test {
 
 	@Rest(
 		path="/p1",
-		reqAttrs={
+		defaultRequestAttributes={
 			"A1: a1",
 			"A2: a2",
 			"foo: bar",
@@ -51,7 +51,7 @@ public class Rest_RVars_Test {
 	public static class A {
 
 		@RestMethod(method=GET, path="/p2",
-			reqAttrs={"B1: b1", "B2:b"},
+			defaultRequestAttributes={"B1: b1", "B2:b"},
 			serializers=A1.class
 		)
 		public void a(RestResponse res) {

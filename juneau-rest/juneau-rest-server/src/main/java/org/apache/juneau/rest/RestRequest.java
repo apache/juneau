@@ -207,9 +207,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.parser(partParserSession);
 		this.headers
 			.addDefault(rjm.defaultRequestHeaders)
-			.addDefault(context.getReqHeaders())
+			.addDefault(context.defaultRequestHeaders)
 			.parser(partParserSession);
-		this.attrs = new RequestAttributes(this, rjm.reqAttrs);
+		this.attrs = new RequestAttributes(this);
+		this.attrs
+			.addDefault(rjm.defaultRequestAttributes)
+			.addDefault(context.defaultRequestAttributes);
 		this.body
 			.encoders(rjm.encoders)
 			.parsers(rjm.parsers)
@@ -1520,10 +1523,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
 			String h = e.nextElement();
 			sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");
-		}
-		sb.append("---Default Servlet Headers---\n");
-		for (Map.Entry<String,Object> e : context.getReqHeaders().entrySet()) {
-			sb.append("\t").append(e.getKey()).append(": ").append(e.getValue()).append("\n");
 		}
 		if (javaMethod == null) {
 			sb.append("***init() not called yet!***\n");

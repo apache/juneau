@@ -25,12 +25,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logging.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -98,7 +99,7 @@ public class RestAnnotation {
 		Class<?>[] children={}, parsers={}, serializers={};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
 		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
-		String[] consumes={}, description={}, produces={}, reqAttrs={}, reqHeaders={}, resHeaders={}, title={};
+		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, produces={}, title={};
 
 		/**
 		 * Constructor.
@@ -304,6 +305,39 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#defaultRequestAttributes()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder defaultRequestAttributes(String...value) {
+			this.defaultRequestAttributes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#defaultRequestHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder defaultRequestHeaders(String...value) {
+			this.defaultRequestHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#defaultResponseHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder defaultResponseHeaders(String...value) {
+			this.defaultResponseHeaders = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#description()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -454,39 +488,6 @@ public class RestAnnotation {
 		 */
 		public Builder renderResponseStackTraces(String value) {
 			this.renderResponseStackTraces = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#reqAttrs()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder reqAttrs(String...value) {
-			this.reqAttrs = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#reqHeaders()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder reqHeaders(String...value) {
-			this.reqHeaders = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#resHeaders()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder resHeaders(String...value) {
-			this.resHeaders = value;
 			return this;
 		}
 
@@ -663,7 +664,7 @@ public class RestAnnotation {
 		private final Class<?>[] children, parsers, serializers;
 		private final ResourceSwagger swagger;
 		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
-		private final String[] consumes, description, produces, reqAttrs, reqHeaders, resHeaders, title;
+		private final String[] consumes, description, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
 
 		Impl(Builder b) {
 			super(b);
@@ -684,6 +685,9 @@ public class RestAnnotation {
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
 			this.defaultContentType = b.defaultContentType;
+			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			this.defaultResponserHeaders = copyOf(b.defaultResponseHeaders);
 			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
 			this.fileFinder = b.fileFinder;
@@ -698,9 +702,6 @@ public class RestAnnotation {
 			this.path = b.path;
 			this.produces = copyOf(b.produces);
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
-			this.reqAttrs = copyOf(b.reqAttrs);
-			this.reqHeaders = copyOf(b.reqHeaders);
-			this.resHeaders = copyOf(b.resHeaders);
 			this.responseHandlers = copyOf(b.responseHandlers);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
@@ -802,6 +803,21 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
+		public String[] defaultRequestAttributes() {
+			return defaultRequestAttributes;
+		}
+
+		@Override /* Rest */
+		public String[] defaultRequestHeaders() {
+			return defaultRequestHeaders;
+		}
+
+		@Override /* Rest */
+		public String[] defaultResponseHeaders() {
+			return defaultResponserHeaders;
+		}
+
+		@Override /* Rest */
 		public String[] description() {
 			return description;
 		}
@@ -869,21 +885,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String renderResponseStackTraces() {
 			return renderResponseStackTraces;
-		}
-
-		@Override /* Rest */
-		public String[] reqAttrs() {
-			return reqAttrs;
-		}
-
-		@Override /* Rest */
-		public String[] reqHeaders() {
-			return reqHeaders;
-		}
-
-		@Override /* Rest */
-		public String[] resHeaders() {
-			return resHeaders;
 		}
 
 		@Override /* Rest */
@@ -965,7 +966,6 @@ public class RestAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			Rest a = ai.getAnnotation();
-			String s = null;
 			ClassInfo c = ai.getClassOn();
 
 			if (a.serializers().length > 0)
@@ -974,56 +974,25 @@ public class RestAnnotation {
 			if (a.parsers().length > 0)
 				psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 
-			if (a.partSerializer() != HttpPartSerializer.Null.class)
-				psb.set(REST_partSerializer, a.partSerializer());
+			psb.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
 
-			if (a.partParser() != HttpPartParser.Null.class)
-				psb.set(REST_partParser, a.partParser());
+			psb.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
 
 			psb.prependTo(REST_encoders, a.encoders());
 
-			if (a.produces().length > 0)
-				psb.set(REST_produces, strings(a.produces()));
+			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
 
-			if (a.consumes().length > 0)
-				psb.set(REST_consumes, strings(a.consumes()));
+			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 
-			for (String ra : strings(a.reqAttrs())) {
-				String[] ra2 = RestUtils.parseKeyValuePair(ra);
-				if (ra2 == null)
-					throw new BasicRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
-				if (isNotEmpty(ra2[1]))
-					psb.putTo(REST_reqAttrs, ra2[0], ra2[1]);
-			}
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultRequestAttributes, x));
 
-			for (String header : strings(a.reqHeaders())) {
-				String[] h = RestUtils.parseHeader(header);
-				if (h == null)
-					throw new BasicRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-				if (isNotEmpty(h[1]))
-					psb.putTo(REST_reqHeaders, h[0], h[1]);
-			}
+			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultRequestHeaders, x));
 
-			if (a.defaultAccept().length() > 0) {
-				s = string(a.defaultAccept());
-				if (isNotEmpty(s))
-					psb.putTo(REST_reqHeaders, "Accept", s);
-			}
+			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultResponseHeaders, x));
 
-			if (a.defaultContentType().length() > 0) {
-				s = string(a.defaultContentType());
-				if (isNotEmpty(s))
-					psb.putTo(REST_reqHeaders, "Content-Type", s);
+			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
 
-			}
-
-			for (String header : strings(a.resHeaders())) {
-				String[] h = parseHeader(header);
-				if (h == null)
-					throw new BasicRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-				if (isNotEmpty(h[1]))
-					psb.putTo(REST_resHeaders, h[0], h[1]);
-			}
+			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
 
 			psb.prependTo(REST_responseHandlers, a.responseHandlers());
 
@@ -1035,81 +1004,53 @@ public class RestAnnotation {
 
 			psb.prependTo(REST_paramResolvers, a.paramResolvers());
 
-			Class<?> cc = a.context();
-			if (! cc.equals(RestContext.Null.class))
-				psb.set(REST_context, cc);
+			psb.setIf(a.context() != RestContext.Null.class, REST_context, a.context());
 
-			s = string(a.uriContext());
-			if (isNotEmpty(s))
-				psb.set(REST_uriContext, s);
+			psb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
 
-			s = string(a.uriAuthority());
-			if (isNotEmpty(s))
-				psb.set(REST_uriAuthority, s);
+			psb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
 
-			s = string(a.uriRelativity());
-			if (isNotEmpty(s))
-				psb.set(REST_uriRelativity, s);
+			psb.setIfNotEmpty(REST_uriRelativity, string(a.uriRelativity()));
 
-			s = string(a.uriResolution());
-			if (isNotEmpty(s))
-				psb.set(REST_uriResolution, s);
+			psb.setIfNotEmpty(REST_uriResolution, string(a.uriResolution()));
 
 			psb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
 
-			if (a.fileFinder() != FileFinder.Null.class)
-				psb.set(REST_fileFinder, a.fileFinder());
+			psb.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
 
-			if (a.staticFiles() != StaticFiles.Null.class)
-				psb.set(REST_staticFiles, a.staticFiles());
+			psb.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
 
-			if (! a.path().isEmpty())
-				psb.set(REST_path, trimLeadingSlash(string(a.path())));
+			psb.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
 
-			if (! a.clientVersionHeader().isEmpty())
-				psb.set(REST_clientVersionHeader, string(a.clientVersionHeader()));
+			psb.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
 
-			if (a.beanFactory() != BeanFactory.Null.class)
-				psb.set(REST_beanFactory, a.beanFactory());
+			psb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
 
-			if (a.callLogger() != RestLogger.Null.class)
-				psb.set(REST_callLogger, a.callLogger());
+			psb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
 
-			if (a.infoProvider() != RestInfoProvider.Null.class)
-				psb.set(REST_infoProvider, a.infoProvider());
+			psb.setIf(a.infoProvider() != RestInfoProvider.Null.class, REST_infoProvider, a.infoProvider());
 
-			if (! a.disableAllowBodyParam().isEmpty())
-				psb.set(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
+			psb.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
 
-			if (! a.allowedHeaderParams().isEmpty())
-				psb.set(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
+			psb.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
 
-			if (! a.allowedMethodHeaders().isEmpty())
-				psb.set(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
+			psb.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
 
-			if (! a.allowedMethodParams().isEmpty())
-				psb.set(REST_allowedMethodParams, string(a.allowedMethodParams()));
+			psb.setIfNotEmpty(REST_allowedMethodParams, string(a.allowedMethodParams()));
 
-			if (! a.renderResponseStackTraces().isEmpty())
-				psb.set(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
+			psb.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
 
-			if (! a.defaultCharset().isEmpty())
-				psb.set(REST_defaultCharset, string(a.defaultCharset()));
+			psb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
 
-			if (! a.maxInput().isEmpty())
-				psb.set(REST_maxInput, string(a.maxInput()));
+			psb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
 
-			if (! a.debug().isEmpty())
-				psb.set(REST_debug, string(a.debug()));
+			psb.setIfNotEmpty(REST_debug, string(a.debug()));
 
-			if (! a.debugOn().isEmpty())
-				psb.set(REST_debugOn, string(a.debugOn()));
+			psb.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
 
-			if (! a.rolesDeclared().isEmpty())
-				psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));
+			cdStream(a.rolesDeclared()).forEach(x -> psb.addTo(REST_rolesDeclared, x));
 
-			if (! a.roleGuard().isEmpty())
-				psb.addTo(REST_roleGuard, string(a.roleGuard()));
+			psb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 		}
 
 		private String trimLeadingSlash(String value) {

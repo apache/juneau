@@ -109,7 +109,7 @@ public class RdfConfigAnnotation {
 			if (! a.disableAutoDetectNamespaces().isEmpty())
 				psb.set(RDF_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
 			if (a.namespaces().length > 0)
-				psb.set(RDF_namespaces, strings(a.namespaces()));
+				psb.set(RDF_namespaces, stringList(a.namespaces()));
 
 			if (! a.trimWhitespace().isEmpty())
 				psb.set(RDF_trimWhitespace, bool(a.trimWhitespace()));
