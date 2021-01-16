@@ -58,7 +58,11 @@ public class RestCall {
 	 * @param res The incoming HTTP servlet response object.
 	 */
 	public RestCall(Object resource, RestContext context, HttpServletRequest req, HttpServletResponse res) {
-		resource(resource).context(context).request(req).response(res);
+		this.context = context;
+		this.resource = resource;
+		beanFactory = new BeanFactory(context.rootBeanFactory,  resource);
+		beanFactory.addBean(RestContext.class, context);
+		request(req).response(res);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -99,19 +103,6 @@ public class RestCall {
 	public RestCall response(HttpServletResponse value) {
 		res = value;
 		beanFactory.addBean(HttpServletResponse.class, value);
-		return this;
-	}
-
-	/**
-	 * Overrides the context object on this call.
-	 *
-	 * @param value The context that's creating this call.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall context(RestContext value) {
-		context = value;
-		beanFactory = new BeanFactory(value.rootBeanFactory, value.getResource());
-		beanFactory.addBean(RestContext.class, value);
 		return this;
 	}
 
@@ -294,18 +285,9 @@ public class RestCall {
 	 * @throws InternalServerError If the RestRequest object has not yet been created on this call.
 	 */
 	public RestRequest getRestRequest() {
-		return getRestRequestOptional().orElseThrow(()->new InternalServerError("RestRequest object has not yet been created."));
+		return Optional.ofNullable(rreq).orElseThrow(()->new InternalServerError("RestRequest object has not yet been created."));
 	}
 
-	/**
-	 * Returns the REST request of this REST call.
-	 *
-	 * @return the REST request of this REST call.
-	 * @throws InternalServerError If the RestRequest object has not yet been created on this call.
-	 */
-	public Optional<RestRequest> getRestRequestOptional() {
-		return Optional.ofNullable(rreq);
-	}
 
 	/**
 	 * Returns the REST response of this REST call.
@@ -313,16 +295,7 @@ public class RestCall {
 	 * @return the REST response of this REST call.
 	 */
 	public RestResponse getRestResponse() {
-		return getRestResponseOptional().orElseThrow(()->new InternalServerError("RestResponse object has not yet been created."));
-	}
-
-	/**
-	 * Returns the REST response of this REST call.
-	 *
-	 * @return the REST response of this REST call.
-	 */
-	public Optional<RestResponse> getRestResponseOptional() {
-		return Optional.ofNullable(rres);
+		return Optional.ofNullable(rres).orElseThrow(()->new InternalServerError("RestResponse object has not yet been created."));
 	}
 
 	/**
