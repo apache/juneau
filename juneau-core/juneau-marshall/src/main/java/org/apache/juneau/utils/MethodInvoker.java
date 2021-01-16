@@ -13,14 +13,19 @@
 package org.apache.juneau.utils;
 
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.stream.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.mstat.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A wrapper around a {@link Method#invoke(Object, Object...)} method that allows for basic instrumentation.
  */
 public class MethodInvoker {
-	private final Method m;
+	private final MethodInfo m;
 	private final MethodExecStats stats;
 
 	/**
@@ -30,7 +35,7 @@ public class MethodInvoker {
 	 * @param stats The instrumentor.
 	 */
 	public MethodInvoker(Method m, MethodExecStats stats) {
-		this.m = m;
+		this.m = MethodInfo.of(m);
 		this.stats = stats;
 	}
 
@@ -39,7 +44,7 @@ public class MethodInvoker {
 	 *
 	 * @return The inner method.
 	 */
-	public Method inner() {
+	public MethodInfo inner() {
 		return m;
 	}
 
@@ -49,24 +54,38 @@ public class MethodInvoker {
 	 * @param o  The object the underlying method is invoked from.
 	 * @param args  The arguments used for the method call.
 	 * @return  The result of dispatching the method represented by this object on {@code obj} with parameters {@code args}
-	 * @throws IllegalAccessException Thrown from underlying method.
-	 * @throws IllegalArgumentException Thrown from underlying method.
-	 * @throws InvocationTargetException Thrown from underlying method.
+	 * @throws ExecutableException If error occurred trying to invoke the method.
 	 */
-	public Object invoke(Object o, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Object invoke(Object o, Object...args) throws ExecutableException {
 		long startTime = System.nanoTime();
 		stats.started();
 		try {
-			return m.invoke(o, args);
+			return m.inner().invoke(o, args);
 		} catch (IllegalAccessException|IllegalArgumentException e) {
 			stats.error(e);
-			throw e;
+			throw new ExecutableException(e);
 		} catch (InvocationTargetException e) {
 			stats.error(e.getTargetException());
-			throw e;
+			throw new ExecutableException(e.getTargetException());
 		} finally {
 			stats.finished(System.nanoTime() - startTime);
 		}
+	}
+
+	/**
+	 * Invokes the wrapped method using parameters from the specified bean factory.
+	 *
+	 * @param beanFactory The bean factory to use to resolve parameters.
+	 * @param o The object to invoke the method on.
+	 * @return The result of invoking the method.
+	 * @throws ExecutableException If error occurred trying to invoke the method.
+	 */
+	public Object invokeUsingFactory(BeanFactory beanFactory, Object o) throws ExecutableException {
+		List<ClassInfo> missing;
+		missing = beanFactory.getMissingParamTypes(m.getParamTypes());
+		if (missing.isEmpty())
+			return invoke(o, beanFactory.getParams(m.getParamTypes()));
+		throw new ExecutableException("Could not find prerequisites to invoke method ''{0}'': {1}", m.getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 	}
 
 	/**
@@ -74,7 +93,7 @@ public class MethodInvoker {
 	 *
 	 * @return The declaring class of the method.
 	 */
-	public Class<?> getDeclaringClass() {
+	public ClassInfo getDeclaringClass() {
 		return m.getDeclaringClass();
 	}
 

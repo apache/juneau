@@ -23,7 +23,6 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
@@ -1712,8 +1711,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 					if (output != null || ! res.getOutputStreamCalled())
 						res.setOutput(output);
 				}
-			} catch (InvocationTargetException e) {
-				Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
+			} catch (ExecutableException e) {
+				Throwable e2 = e.unwrap();		// Get the throwable thrown from the doX() method.
 				res.setStatus(500);
 				ResponsePartMeta rpm = getResponseBodyMeta(e2);
 				ResponseBeanMeta rbm = getResponseBeanMeta(e2);
@@ -1736,8 +1735,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
 				mi.toString(), mi.getFullName()
 			);
-		} catch (InvocationTargetException e) {
-			throw e.getTargetException();
+		} catch (ExecutableException e) {
+			throw e.unwrap();
 		}
 	}
 

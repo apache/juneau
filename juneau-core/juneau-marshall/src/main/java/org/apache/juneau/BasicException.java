@@ -66,4 +66,14 @@ public class BasicException extends Exception {
 	public <T extends Throwable> T getCause(Class<T> c) {
 		return ThrowableUtils.getCause(c, this);
 	}
+
+	/**
+	 * Returns the caused-by exception if there is one.
+	 *
+	 * @return The caused-by exception if there is one, or this exception if there isn't.
+	 */
+	public Throwable unwrap() {
+		Throwable t = getCause();
+		return t == null ? this : t;
+	}
 }

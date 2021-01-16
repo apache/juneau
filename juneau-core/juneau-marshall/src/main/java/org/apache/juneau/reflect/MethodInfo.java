@@ -436,8 +436,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
 		try {
 			return (T)m.invoke(obj, args);
-		} catch (IllegalAccessException | InvocationTargetException e) {
+		} catch (IllegalAccessException e) {
 			throw new ExecutableException(e);
+		} catch (InvocationTargetException e) {
+			throw new ExecutableException(e.getTargetException());
 		}
 	}
 
@@ -567,6 +569,15 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public boolean isBridge() {
 		return m.isBridge();
+	}
+
+	/**
+	 * Returns the name of this method.
+	 *
+	 * @return The name of this method
+	 */
+	public String getName() {
+		return m.getName();
 	}
 
 	@Override

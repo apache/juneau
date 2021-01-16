@@ -48,7 +48,7 @@ import org.apache.juneau.rest.logging.*;
  * 	The class itself extends from {@link RestClient} providing it with the rich feature set of that API and combines
  * 	it with the Apache HttpClient {@link HttpClientConnection} interface for processing requests.
  *  The class converts {@link HttpRequest} objects to instances of {@link MockServletRequest} and {@link MockServletResponse} which are passed directly
- *  to the call handler on the resource class {@link RestContext#execute(HttpServletRequest,HttpServletResponse)}.
+ *  to the call handler on the resource class {@link RestContext#execute(Object,HttpServletRequest,HttpServletResponse)}.
  *  In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
  *  actually having to run in a servlet container.
  *  All aspects of the client and server side code are tested, yet no servlet container is required.  The actual
@@ -238,6 +238,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final RestContext restBeanCtx;
+	private final Object restObject;
 	private final String contextPath, servletPath;
 	private final Map<String,String> pathVars;
 
@@ -256,6 +257,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestClient(PropertyStore ps) {
 		super(preInit(ps));
 		this.restBeanCtx = getInstanceProperty(MOCKRESTCLIENT_restBeanCtx, RestContext.class);
+		this.restObject = restBeanCtx.getResource();
 		this.contextPath = getStringProperty(MOCKRESTCLIENT_contextPath, "");
 		this.servletPath = getStringProperty(MOCKRESTCLIENT_servletPath, "");
 		this.pathVars = getMapProperty(MOCKRESTCLIENT_pathVars, String.class);
@@ -753,7 +755,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
 			MockServletResponse res = MockServletResponse.create();
-			restBeanCtx.execute(sreq.get(), res);
+			restBeanCtx.execute(restObject, sreq.get(), res);
 
 			// If the status isn't set, something's broken.
 			if (res.getStatus() == 0)

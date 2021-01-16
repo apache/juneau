@@ -44,14 +44,14 @@ public class Swagger_Test {
 
 	private Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).fileFinder(TestClasspathFileFinder.class).build();
-		RestRequest req = rc.createRequest(new RestCall(rc, new MockServletRequest(), null));
+		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null));
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}
 
 	private static Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.createRequest(new RestCall(rc, new MockServletRequest(), null));
+		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null));
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}

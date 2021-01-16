@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
-import static org.apache.juneau.BasicIllegalArgumentException.*;
 import static org.apache.juneau.Enablement.*;
 import static java.util.Collections.*;
 import static java.util.Arrays.*;
@@ -3223,12 +3222,6 @@ public class RestContext extends BeanContext {
 	private final RestMethodParam[][]
 		preCallMethodParams,
 		postCallMethodParams;
-	private final Class<?>[][]
-		postInitMethodParams,
-		postInitChildFirstMethodParams,
-		startCallMethodParams,
-		endCallMethodParams,
-		destroyMethodParams;
 
 	private final FileFinder fileFinder;
 	private final StaticFiles staticFiles;
@@ -3407,6 +3400,12 @@ public class RestContext extends BeanContext {
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
+			this.startCallMethods = createStartCallMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
+			this.endCallMethods = createEndCallMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
+			this.postInitMethods = createPostInitMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
+			this.postInitChildFirstMethods = createPostInitChildFirstMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
+			this.destroyMethods = createDestroyMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
+
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
 			// Done after initializing fields above since we pass this object to the child resources.
@@ -3414,22 +3413,11 @@ public class RestContext extends BeanContext {
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
 			MethodMapBuilder methodMapBuilder = new MethodMapBuilder();
 			AMap<String,Method>
-				_startCallMethods = AMap.of(),
 				_preCallMethods = AMap.of(),
-				_postCallMethods = AMap.of(),
-				_endCallMethods = AMap.of(),
-				_postInitMethods = AMap.of(),
-				_postInitChildFirstMethods = AMap.of(),
-				_destroyMethods = AMap.of();
+				_postCallMethods = AMap.of();
 			AList<RestMethodParam[]>
 				_preCallMethodParams = AList.of(),
 				_postCallMethodParams = AList.of();
-			AList<Class<?>[]>
-				_startCallMethodParams = AList.of(),
-				_endCallMethodParams = AList.of(),
-				_postInitMethodParams = AList.of(),
-				_postInitChildFirstMethodParams = AList.of(),
-				_destroyMethodParams = AList.of();
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getLastAnnotation(RestMethod.class);
@@ -3542,51 +3530,6 @@ public class RestContext extends BeanContext {
 							}
 							break;
 						}
-						case START_CALL: {
-							if (! _startCallMethods.containsKey(sig)) {
-								m.setAccessible();
-								_startCallMethods.put(sig, m.inner());
-								_startCallMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
-								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
-							}
-							break;
-						}
-						case END_CALL: {
-							if (! _endCallMethods.containsKey(sig)) {
-								m.setAccessible();
-								_endCallMethods.put(sig, m.inner());
-								_endCallMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
-								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
-							}
-							break;
-						}
-						case POST_INIT: {
-							if (! _postInitMethods.containsKey(sig)) {
-								m.setAccessible();
-								_postInitMethods.put(sig, m.inner());
-								_postInitMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
-								assertArgsOnlyOfType(m, RestContext.class);
-							}
-							break;
-						}
-						case POST_INIT_CHILD_FIRST: {
-							if (! _postInitChildFirstMethods.containsKey(sig)) {
-								m.setAccessible();
-								_postInitChildFirstMethods.put(sig, m.inner());
-								_postInitChildFirstMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
-								assertArgsOnlyOfType(m, RestContext.class);
-							}
-							break;
-						}
-						case DESTROY: {
-							if (! _destroyMethods.containsKey(sig)) {
-								m.setAccessible();
-								_destroyMethods.put(sig, m.inner());
-								_destroyMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
-								assertArgsOnlyOfType(m, RestContext.class);
-							}
-							break;
-						}
 						default: // Ignore INIT
 					}
 				}
@@ -3594,18 +3537,8 @@ public class RestContext extends BeanContext {
 
 			this.preCallMethods = _preCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_preCallMethods.size()]);
 			this.postCallMethods = _postCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postCallMethods.size()]);
-			this.startCallMethods = _startCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_startCallMethods.size()]);
-			this.endCallMethods = _endCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_endCallMethods.size()]);
-			this.postInitMethods = _postInitMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postInitMethods.size()]);
-			this.postInitChildFirstMethods = _postInitChildFirstMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postInitChildFirstMethods.size()]);
-			this.destroyMethods = _destroyMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_destroyMethods.size()]);
 			this.preCallMethodParams = _preCallMethodParams.toArray(new RestMethodParam[_preCallMethodParams.size()][]);
 			this.postCallMethodParams = _postCallMethodParams.toArray(new RestMethodParam[_postCallMethodParams.size()][]);
-			this.startCallMethodParams = _startCallMethodParams.toArray(new Class[_startCallMethodParams.size()][]);
-			this.endCallMethodParams = _endCallMethodParams.toArray(new Class[_endCallMethodParams.size()][]);
-			this.postInitMethodParams = _postInitMethodParams.toArray(new Class[_postInitMethodParams.size()][]);
-			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
-			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
 			this.methodMap = methodMapBuilder.getMap();
 			this.methods = methodMapBuilder.getList();
@@ -4624,6 +4557,91 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Instantiates the list of {@link HookEvent#START_CALL} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createStartCallMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.START_CALL)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#END_CALL} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createEndCallMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.END_CALL)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#POST_INIT} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createPostInitMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.POST_INIT)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#POST_INIT_CHILD_FIRST} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createPostInitChildFirstMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.POST_INIT_CHILD_FIRST)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#DESTROY} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createDestroyMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.DESTROY)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
 	 * Returns the bean factory associated with this context.
 	 *
 	 * <p>
@@ -5310,14 +5328,15 @@ public class RestContext extends BeanContext {
 	 * Wraps an incoming servlet request/response pair into a single {@link RestCall} object.
 	 *
 	 * <p>
-	 * This is the first method called by {@link #execute(HttpServletRequest, HttpServletResponse)}.
+	 * This is the first method called by {@link #execute(Object, HttpServletRequest, HttpServletResponse)}.
 	 *
+	 * @param resource The REST object.
 	 * @param req The rest request.
 	 * @param res The rest response.
 	 * @return The wrapped request/response pair.
 	 */
-	protected RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
-		return new RestCall(this, req, res).logger(getCallLogger());
+	protected RestCall createCall(Object resource, HttpServletRequest req, HttpServletResponse res) {
+		return new RestCall(resource, this, req, res).logger(getCallLogger());
 	}
 
 	/**
@@ -5352,14 +5371,15 @@ public class RestContext extends BeanContext {
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 *
+	 * @param resource The REST object.
 	 * @param r1 The incoming HTTP servlet request object.
 	 * @param r2 The incoming HTTP servlet response object.
 	 * @throws ServletException General servlet exception.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public void execute(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
+	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
-		RestCall call = createCall(r1, r2);
+		RestCall call = createCall(resource, r1, r2);
 
 		// Must be careful not to bleed thread-locals.
 		if (this.call.get() != null)
@@ -5381,7 +5401,7 @@ public class RestContext extends BeanContext {
 				UrlPath upi2 = UrlPath.of(pi == null ? sp : sp + pi);
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
-					call.addPathVars(uppm.getVars());
+					call.pathVars(uppm.getVars());
 					call.request(
 						new OverrideableHttpServletRequest(call.getRequest())
 							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
@@ -5401,11 +5421,11 @@ public class RestContext extends BeanContext {
 					UrlPathMatch uppm = upp.match(call.getUrlPath());
 					if (uppm != null) {
 						if (! uppm.hasEmptyVars()) {
-							call.addPathVars(uppm.getVars());
+							call.pathVars(uppm.getVars());
 							HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
 								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 								.servletPath(call.getServletPath() + uppm.getPrefix());
-							rc.execute(childRequest, call.getResponse());
+							rc.execute(rc.getResource(), childRequest, call.getResponse());  // TODO - resource needs to be dynamically retrieved.
 						} else {
 							call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 						}
@@ -5693,10 +5713,19 @@ public class RestContext extends BeanContext {
 	 * Called at the start of a request to invoke all {@link HookEvent#START_CALL} methods.
 	 *
 	 * @param call The current request.
+	 * @throws HttpException If thrown from call methods.
 	 */
-	protected void startCall(RestCall call) {
-		for (int i = 0; i < startCallMethods.length; i++)
-			startOrFinish(getResource(), startCallMethods[i], startCallMethodParams[i], call.getRequest(), call.getResponse());
+	protected void startCall(RestCall call) throws HttpException {
+		for (MethodInvoker x : startCallMethods) {
+			try {
+				x.invokeUsingFactory(call.getBeanFactory(), call.getContext().getResource());
+			} catch (ExecutableException e) {
+				Throwable t = e.unwrap();
+				if (! (t instanceof HttpException))
+					t = new InternalServerError(e);
+				throw (HttpException)t;
+			}
+		}
 	}
 
 	/**
@@ -5743,28 +5772,16 @@ public class RestContext extends BeanContext {
 	 * Called at the end of a request to invoke all {@link HookEvent#END_CALL} methods.
 	 *
 	 * <p>
-	 * This is the very last method called in {@link #execute(HttpServletRequest, HttpServletResponse)}.
+	 * This is the very last method called in {@link #execute(Object, HttpServletRequest, HttpServletResponse)}.
 	 *
 	 * @param call The current request.
 	 */
 	protected void finishCall(RestCall call) {
-		for (int i = 0; i < endCallMethods.length; i++)
-			startOrFinish(getResource(), endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
-	}
-
-	private static void startOrFinish(Object resource, MethodInvoker m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws HttpException, InternalServerError {
-		if (m != null) {
-			Object[] args = new Object[p.length];
-			for (int i = 0; i < p.length; i++) {
-				if (p[i] == HttpServletRequest.class)
-					args[i] = req;
-				else if (p[i] == HttpServletResponse.class)
-					args[i] = res;
-			}
+		for (MethodInvoker x : endCallMethods) {
 			try {
-				m.invoke(resource, args);
-			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				x.invokeUsingFactory(call.getBeanFactory(), call.getResource());
+			} catch (ExecutableException e) {
+				logger.log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getName()));
 			}
 		}
 	}
@@ -5784,11 +5801,16 @@ public class RestContext extends BeanContext {
 			try {
 				mi.accessible().invoke(resource, this);
 			} catch (ExecutableException e) {
-				throw new ServletException(e);
+				throw new ServletException(e.unwrap());
 			}
 		}
-		for (int i = 0; i < postInitMethods.length; i++)
-			postInitOrDestroy(getResource(), postInitMethods[i], postInitMethodParams[i]);
+		for (MethodInvoker x : postInitMethods) {
+			try {
+				x.invokeUsingFactory(beanFactory, getResource());
+			} catch (ExecutableException e) {
+				throw new ServletException(e.unwrap());
+			}
+		}
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInit();
 		return this;
@@ -5805,42 +5827,26 @@ public class RestContext extends BeanContext {
 			return this;
 		for (RestContext childContext : this.childResources.values())
 			childContext.postInitChildFirst();
-		for (int i = 0; i < postInitChildFirstMethods.length; i++)
-			postInitOrDestroy(getResource(), postInitChildFirstMethods[i], postInitChildFirstMethodParams[i]);
-		initialized.set(true);
-		return this;
-	}
-
-	private void postInitOrDestroy(Object r, MethodInvoker m, Class<?>[] p) {
-		if (m != null) {
-			Object[] args = new Object[p.length];
-			for (int i = 0; i < p.length; i++) {
-				if (p[i] == RestContext.class)
-					args[i] = this;
-				else if (p[i] == RestContextBuilder.class)
-					args[i] = this.builder;
-				else if (p[i] == ServletConfig.class)
-					args[i] = this.builder.inner;
-			}
+		for (MethodInvoker x : postInitChildFirstMethods) {
 			try {
-				m.invoke(r, args);
-			} catch (Exception e) {
-				if (e instanceof RuntimeException && ClassInfo.of(e).hasAnnotation(Response.class))
-					throw (RuntimeException)e;
-				throw new InternalServerError(e);
+				x.invokeUsingFactory(beanFactory, getResource());
+			} catch (ExecutableException e) {
+				throw new ServletException(e.unwrap());
 			}
 		}
+		initialized.set(true);
+		return this;
 	}
 
 	/**
 	 * Called during servlet initialization to invoke all {@link HookEvent#DESTROY} methods.
 	 */
 	protected void destroy() {
-		for (int i = 0; i < destroyMethods.length; i++) {
+		for (MethodInvoker x : destroyMethods) {
 			try {
-				postInitOrDestroy(getResource(), destroyMethods[i], destroyMethodParams[i]);
-			} catch (Exception e) {
-				e.printStackTrace();
+				x.invokeUsingFactory(beanFactory, getResource());
+			} catch (ExecutableException e) {
+				getLogger().log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking servlet-destroy method ''{0}''.", x.getName()));
 			}
 		}
 

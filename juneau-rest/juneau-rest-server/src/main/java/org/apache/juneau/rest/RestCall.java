@@ -18,6 +18,7 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
@@ -32,6 +33,7 @@ public class RestCall {
 	 */
 	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
 
+	private Object resource;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
 	private RestRequest rreq;
@@ -42,56 +44,73 @@ public class RestCall {
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
 	private RestLogger logger;
+	private BeanFactory beanFactory;
 
 	private UrlPathMatch urlPathMatch;
 
 	/**
 	 * Constructor.
 	 *
+	 * @param resource The REST object.
 	 * @param context The REST context object.
 	 * @param req The incoming HTTP servlet request object.
 	 * @param res The incoming HTTP servlet response object.
 	 */
-	public RestCall(RestContext context, HttpServletRequest req, HttpServletResponse res) {
-		context(context).request(req).response(res);
+	public RestCall(Object resource, RestContext context, HttpServletRequest req, HttpServletResponse res) {
+		resource(resource).context(context).request(req).response(res);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Request/response objects.
+	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Overrides the request object on the REST call.
 	 *
-	 * @param req The new HTTP servlet request.
+	 * @param value The new HTTP servlet request.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall request(HttpServletRequest req) {
-		this.req = req;
-		this.urlPath = null;
-		this.pathInfoUndecoded = null;
+	public RestCall resource(Object value) {
+		resource = value;
+		return this;
+	}
+
+	/**
+	 * Overrides the request object on the REST call.
+	 *
+	 * @param value The new HTTP servlet request.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall request(HttpServletRequest value) {
+		req = value;
+		urlPath = null;
+		pathInfoUndecoded = null;
+		beanFactory.addBean(HttpServletRequest.class, value);
 		return this;
 	}
 
 	/**
 	 * Overrides the response object on the REST call.
 	 *
-	 * @param res The new HTTP servlet response.
+	 * @param value The new HTTP servlet response.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall response(HttpServletResponse res) {
-		this.res = res;
+	public RestCall response(HttpServletResponse value) {
+		res = value;
+		beanFactory.addBean(HttpServletResponse.class, value);
 		return this;
 	}
 
 	/**
 	 * Overrides the context object on this call.
 	 *
-	 * @param context The context that's creating this call.
+	 * @param value The context that's creating this call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall context(RestContext context) {
-		this.context = context;
+	public RestCall context(RestContext value) {
+		context = value;
+		beanFactory = new BeanFactory(value.rootBeanFactory, value.getResource());
+		beanFactory.addBean(RestContext.class, value);
 		return this;
 	}
 
@@ -104,34 +123,150 @@ public class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall restMethodContext(RestMethodContext value) {
-		this.rmethod = value;
+		rmethod = value;
+		beanFactory.addBean(RestMethodContext.class, value);
 		return this;
 	}
 
 	/**
 	 * Set the {@link RestRequest} object on this REST call.
 	 *
-	 * @param rreq The {@link RestRequest} object on this REST call.
+	 * @param value The {@link RestRequest} object on this REST call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall restRequest(RestRequest rreq) {
-		request(rreq);
-		this.rreq = rreq;
+	public RestCall restRequest(RestRequest value) {
+		request(value);
+		rreq = value;
+		beanFactory.addBean(RestRequest.class, value);
 		return this;
 	}
 
 	/**
 	 * Set the {@link RestResponse} object on this REST call.
 	 *
-	 * @param rres The {@link RestResponse} object on this REST call.
+	 * @param value The {@link RestResponse} object on this REST call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall restResponse(RestResponse rres) {
-		response(rres);
-		this.rres = rres;
-		this.rreq.setResponse(rres);
+	public RestCall restResponse(RestResponse value) {
+		response(value);
+		rres = value;
+		rreq.setResponse(value);
+		beanFactory.addBean(RestResponse.class, value);
 		return this;
 	}
+
+	/**
+	 * Sets the logger to use when logging this call.
+	 *
+	 * @param value The logger to use when logging this call.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall logger(RestLogger value) {
+		logger = value;
+		beanFactory.addBean(RestLogger.class, value);
+		return this;
+	}
+
+
+	/**
+	 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
+	 *
+	 * @param value The variables to add to this call.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestCall pathVars(Map<String,String> value) {
+		if (value != null && ! value.isEmpty()) {
+			Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+			if (m == null) {
+				m = new TreeMap<>();
+				req.setAttribute(REST_PATHVARS_ATTR, m);
+			}
+			m.putAll(value);
+		}
+		return this;
+	}
+
+	/**
+	 * Enables or disabled debug mode on this call.
+	 *
+	 * @param value The debug flag value.
+	 * @return This object (for method chaining).
+	 * @throws IOException Occurs if request body could not be cached into memory.
+	 */
+	public RestCall debug(boolean value) throws IOException {
+		if (value) {
+			req = CachingHttpServletRequest.wrap(req);
+			res = CachingHttpServletResponse.wrap(res);
+			req.setAttribute("Debug", true);
+		} else {
+			req.removeAttribute("Debug");
+		}
+		return this;
+	}
+
+	/**
+	 * Sets the HTTP status on this call.
+	 *
+	 * @param value The status code.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall status(int value) {
+		res.setStatus(value);
+		return this;
+	}
+
+	/**
+	 * Identifies that an exception occurred during this call.
+	 *
+	 * @param value The thrown exception.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall exception(Throwable value) {
+		req.setAttribute("Exception", value);
+		beanFactory.addBean(Throwable.class, value);
+		return this;
+	}
+
+	/**
+	 * Sets metadata about the response.
+	 *
+	 * @param value The metadata about the response.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall responseMeta(ResponseBeanMeta value) {
+		if (rres != null)
+			rres.setResponseMeta(value);
+		return this;
+	}
+
+	/**
+	 * Sets the output object to serialize as the response of this call.
+	 *
+	 * @param value The response output POJO.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall output(Object value) {
+		if (rres != null)
+			rres.setOutput(value);
+		return this;
+	}
+
+	/**
+	 * Sets the URL path pattern match on this call.
+	 *
+	 * @param value The match pattern.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall urlPathMatch(UrlPathMatch value) {
+		urlPathMatch = value;
+		beanFactory.addBean(UrlPathMatch.class, value);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Getters.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the HTTP servlet request of this REST call.
@@ -179,29 +314,21 @@ public class RestCall {
 	}
 
 	/**
+	 * Returns the bean factory of this call.
+	 *
+	 * @return The bean factory of this call.
+	 */
+	public BeanFactory getBeanFactory() {
+		return beanFactory;
+	}
+
+	/**
 	 * Returns the Java method of this call.
 	 *
 	 * @return The java method of this call, or <jk>null</jk> if it hasn't been determined yet.
 	 */
 	public Method getJavaMethod() {
 		return rmethod == null ? null : rmethod.method;
-	}
-
-	/**
-	 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
-	 *
-	 * @param vars The variables to add to this call.
-	 */
-	@SuppressWarnings("unchecked")
-	public void addPathVars(Map<String,String> vars) {
-		if (vars != null && ! vars.isEmpty()) {
-			Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-			if (m == null) {
-				m = new TreeMap<>();
-				req.setAttribute(REST_PATHVARS_ATTR, m);
-			}
-			m.putAll(vars);
-		}
 	}
 
 	/**
@@ -213,96 +340,6 @@ public class RestCall {
 	public Map<String,String> getPathVars() {
 		Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
 		return m == null ? Collections.emptyMap() : m;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Sets the logger to use when logging this call.
-	 *
-	 * @param logger The logger to use when logging this call.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall logger(RestLogger logger) {
-		this.logger = logger;
-		return this;
-	}
-
-	/**
-	 * Enables or disabled debug mode on this call.
-	 *
-	 * @param b The debug flag value.
-	 * @return This object (for method chaining).
-	 * @throws IOException Occurs if request body could not be cached into memory.
-	 */
-	public RestCall debug(boolean b) throws IOException {
-		if (b) {
-			req = CachingHttpServletRequest.wrap(req);
-			res = CachingHttpServletResponse.wrap(res);
-			req.setAttribute("Debug", true);
-		} else {
-			req.removeAttribute("Debug");
-		}
-		return this;
-	}
-
-	/**
-	 * Sets the HTTP status on this call.
-	 *
-	 * @param code The status code.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall status(int code) {
-		res.setStatus(code);
-		return this;
-	}
-
-	/**
-	 * Identifies that an exception occurred during this call.
-	 *
-	 * @param e The thrown exception.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall exception(Throwable e) {
-		req.setAttribute("Exception", e);
-		return this;
-	}
-
-	/**
-	 * Sets metadata about the response.
-	 *
-	 * @param meta The metadata about the response.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall responseMeta(ResponseBeanMeta meta) {
-		if (rres != null)
-			rres.setResponseMeta(meta);
-		return this;
-	}
-
-	/**
-	 * Sets the output object to serialize as the response of this call.
-	 *
-	 * @param output The response output POJO.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall output(Object output) {
-		if (rres != null)
-			rres.setOutput(output);
-		return this;
-	}
-
-	/**
-	 * Sets the URL path pattern match on this call.
-	 *
-	 * @param urlPathMatch The match pattern.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall urlPathMatch(UrlPathMatch urlPathMatch) {
-		this.urlPathMatch = urlPathMatch;
-		return this;
 	}
 
 	/**
@@ -322,6 +359,7 @@ public class RestCall {
 	public Throwable getException() {
 		return (Throwable)req.getAttribute("Exception");
 	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Lifecycle methods.
 	//------------------------------------------------------------------------------------------------------------------
@@ -450,5 +488,14 @@ public class RestCall {
 	 */
 	public RestContext getContext() {
 		return context;
+	}
+
+	/**
+	 * Returns the REST object.
+	 *
+	 * @return The rest object.
+	 */
+	public Object getResource() {
+		return resource;
 	}
 }
