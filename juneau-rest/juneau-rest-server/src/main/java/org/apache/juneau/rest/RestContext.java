@@ -3214,14 +3214,13 @@ public class RestContext extends BeanContext {
 	private final MethodInvoker[]
 		postInitMethods,
 		postInitChildFirstMethods,
-		preCallMethods,
-		postCallMethods,
 		startCallMethods,
 		endCallMethods,
 		destroyMethods;
-	private final RestMethodParam[][]
-		preCallMethodParams,
-		postCallMethodParams;
+
+	private final RestMethodInvoker[]
+		preCallMethods,
+		postCallMethods;
 
 	private final FileFinder fileFinder;
 	private final StaticFiles staticFiles;
@@ -3400,11 +3399,14 @@ public class RestContext extends BeanContext {
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
-			this.startCallMethods = createStartCallMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
-			this.endCallMethods = createEndCallMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
-			this.postInitMethods = createPostInitMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
-			this.postInitChildFirstMethods = createPostInitChildFirstMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
-			this.destroyMethods = createDestroyMethods(r).stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).toArray(MethodInvoker[]::new);
+			this.startCallMethods = createStartCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			this.endCallMethods = createEndCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			this.postInitMethods = createPostInitMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			this.postInitChildFirstMethods = createPostInitChildFirstMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			this.destroyMethods = createDestroyMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+
+			this.preCallMethods = createPreCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
+			this.postCallMethods = createPostCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -3412,12 +3414,6 @@ public class RestContext extends BeanContext {
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
 			MethodMapBuilder methodMapBuilder = new MethodMapBuilder();
-			AMap<String,Method>
-				_preCallMethods = AMap.of(),
-				_postCallMethods = AMap.of();
-			AList<RestMethodParam[]>
-				_preCallMethodParams = AList.of(),
-				_postCallMethodParams = AList.of();
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getLastAnnotation(RestMethod.class);
@@ -3509,37 +3505,6 @@ public class RestContext extends BeanContext {
 				}
 			}
 
-			for (MethodInfo m : rci.getAllMethodsParentFirst()) {
-				if (m.isPublic() && m.hasAnnotation(RestHook.class)) {
-					HookEvent he = m.getLastAnnotation(RestHook.class).value();
-					String sig = m.getSignature();
-					switch(he) {
-						case PRE_CALL: {
-							if (! _preCallMethods.containsKey(sig)) {
-								m.setAccessible();
-								_preCallMethods.put(sig, m.inner());
-								_preCallMethodParams.add(findParams(m, true, null));
-							}
-							break;
-						}
-						case POST_CALL: {
-							if (! _postCallMethods.containsKey(sig)) {
-								m.setAccessible();
-								_postCallMethods.put(sig, m.inner());
-								_postCallMethodParams.add(findParams(m, true, null));
-							}
-							break;
-						}
-						default: // Ignore INIT
-					}
-				}
-			}
-
-			this.preCallMethods = _preCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_preCallMethods.size()]);
-			this.postCallMethods = _postCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postCallMethods.size()]);
-			this.preCallMethodParams = _preCallMethodParams.toArray(new RestMethodParam[_preCallMethodParams.size()][]);
-			this.postCallMethodParams = _postCallMethodParams.toArray(new RestMethodParam[_postCallMethodParams.size()][]);
-
 			this.methodMap = methodMapBuilder.getMap();
 			this.methods = methodMapBuilder.getList();
 
@@ -3589,6 +3554,14 @@ public class RestContext extends BeanContext {
 		} finally {
 			initException = _initException;
 		}
+	}
+
+	private MethodInvoker toMethodInvoker(Method m) {
+		return new MethodInvoker(m, getMethodExecStats(m));
+	}
+
+	private MethodInvoker toRestMethodInvoker(Method m) {
+		return new RestMethodInvoker(m, findParams(m, true, null),  getMethodExecStats(m));
 	}
 
 	/**
@@ -4642,6 +4615,40 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Instantiates the list of {@link HookEvent#PRE_CALL} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createPreCallMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.PRE_CALL)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
+	 * Instantiates the list of {@link HookEvent#POST_CALL} methods.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected List<Method> createPostCallMethods(Object resource) {
+		Map<String,Method> x = AMap.of();
+
+		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
+			for (RestHook h : m.getAnnotations(RestHook.class))
+				if (h.value() == HookEvent.POST_CALL)
+					x.put(m.getSignature(), m.accessible().inner());
+
+		return AList.of(x.values());
+	}
+
+	/**
 	 * Returns the bean factory associated with this context.
 	 *
 	 * <p>
@@ -5258,14 +5265,14 @@ public class RestContext extends BeanContext {
 	/**
 	 * Finds the {@link RestMethodParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
-	 * @param mi The Java method being called.
+	 * @param m The Java method being called.
 	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
 	 * @param urlPathMatcher The path pattern to match against.
 	 * @return The array of resolvers.
-	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathMatcher urlPathMatcher) throws ServletException {
+	protected RestMethodParam[] findParams(Method m, boolean isPreOrPost, UrlPathMatcher urlPathMatcher) {
 
+		MethodInfo mi = MethodInfo.of(m);
 		List<ClassInfo> pt = mi.getParamTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.size()];
 		PropertyStore ps = getPropertyStore();
@@ -5308,12 +5315,9 @@ public class RestContext extends BeanContext {
 				rp[i] = new RestParamDefaults.HasQueryObject(mpi);
 			} else if (mpi.hasAnnotation(org.apache.juneau.rest.annotation.Method.class)) {
 				rp[i] = new RestParamDefaults.MethodObject(mi, t, mpi);
-			} else if (beanFactory.hasBean(t.inner())) {
-				rp[i] = new RestParamDefaults.BeanFactoryObject(mi, t, mpi, beanFactory);
+			} else if (rp[i] == null) {
+				rp[i] = new RestParamDefaults.BeanFactoryObject(mi, t, mpi);
 			}
-
-			if (rp[i] == null && ! isPreOrPost)
-				throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", mi.inner(), i);
 		}
 
 		return rp;
@@ -5720,10 +5724,7 @@ public class RestContext extends BeanContext {
 			try {
 				x.invokeUsingFactory(call.getBeanFactory(), call.getContext().getResource());
 			} catch (ExecutableException e) {
-				Throwable t = e.unwrap();
-				if (! (t instanceof HttpException))
-					t = new InternalServerError(e);
-				throw (HttpException)t;
+				throw toHttpException(e.unwrap(), InternalServerError.class);
 			}
 		}
 	}
@@ -5735,8 +5736,8 @@ public class RestContext extends BeanContext {
 	 * @throws HttpException If thrown from call methods.
 	 */
 	protected void preCall(RestCall call) throws HttpException {
-		for (int i = 0; i < preCallMethods.length; i++)
-			preOrPost(getResource(), preCallMethods[i], preCallMethodParams[i], call);
+		for (RestMethodInvoker m : preCallMethods)
+			m.invokeFromCall(call, getResource());
 	}
 
 	/**
@@ -5746,26 +5747,8 @@ public class RestContext extends BeanContext {
 	 * @throws HttpException If thrown from call methods.
 	 */
 	protected void postCall(RestCall call) throws HttpException {
-		for (int i = 0; i < postCallMethods.length; i++)
-			preOrPost(getResource(), postCallMethods[i], postCallMethodParams[i], call);
-	}
-
-	private static void preOrPost(Object resource, MethodInvoker m, RestMethodParam[] mp, RestCall call) throws HttpException {
-		if (m != null) {
-			Object[] args = new Object[mp.length];
-			for (int i = 0; i < mp.length; i++) {
-				try {
-					args[i] = mp[i].resolve(call.getRestRequest(), call.getRestResponse());
-				} catch (Exception e) {
-					throw toHttpException(e, BadRequest.class, "Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.", mp[i].getParamType().name(), mp[i].getName(), mp[i].getType(), m.getDeclaringClass().getName(), m.getName());
-				}
-			}
-			try {
-				m.invoke(resource, args);
-			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
-			}
-		}
+		for (RestMethodInvoker m : postCallMethods)
+			m.invokeFromCall(call, getResource());
 	}
 
 	/**
@@ -5864,7 +5847,7 @@ public class RestContext extends BeanContext {
 	 */
 	public RestRequest getRequest() {
 		RestCall rc = call.get();
-		return rc == null ? null : rc.getRestRequest();
+		return rc == null ? null : rc.getRestRequestOptional().orElse(null);
 	}
 
 	/**
@@ -5874,7 +5857,7 @@ public class RestContext extends BeanContext {
 	 */
 	public RestResponse getResponse() {
 		RestCall rc = call.get();
-		return rc == null ? null : rc.getRestResponse();
+		return rc == null ? null : rc.getRestResponseOptional().orElse(null);
 	}
 
 	/**

@@ -713,7 +713,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			responseMeta = ResponseBeanMeta.create(mi, ps);
 
-			methodParams = context.findParams(mi, false, pathMatchers[this.pathMatchers.length-1]);
+			methodParams = context.findParams(mi.inner(), false, pathMatchers[this.pathMatchers.length-1]);
 
 			this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
@@ -1681,7 +1681,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		Object[] args = new Object[methodParams.length];
 		for (int i = 0; i < methodParams.length; i++) {
 			try {
-				args[i] = methodParams[i].resolve(req, res);
+				args[i] = methodParams[i].resolve(call);
 			} catch (Exception e) {
 				throw toHttpException(e, BadRequest.class, "Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.", methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), mi.getDeclaringClass().getFullName(), mi.getSimpleName());
 			}

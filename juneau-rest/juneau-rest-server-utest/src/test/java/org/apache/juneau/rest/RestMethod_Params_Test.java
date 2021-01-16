@@ -381,8 +381,8 @@ public class RestMethod_Params_Test {
 			super(RestParamType.HEADER, "Custom", B2b.class);
 		}
 		@Override
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return new B2b(req.getHeader("Custom"));
+		public Object resolve(RestCall call) throws Exception {
+			return new B2b(call.getRestRequest().getHeader("Custom"));
 		}
 	}
 

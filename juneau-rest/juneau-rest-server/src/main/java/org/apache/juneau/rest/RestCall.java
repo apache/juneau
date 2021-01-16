@@ -19,6 +19,7 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.cp.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
@@ -290,9 +291,20 @@ public class RestCall {
 	 * Returns the REST request of this REST call.
 	 *
 	 * @return the REST request of this REST call.
+	 * @throws InternalServerError If the RestRequest object has not yet been created on this call.
 	 */
 	public RestRequest getRestRequest() {
-		return rreq;
+		return getRestRequestOptional().orElseThrow(()->new InternalServerError("RestRequest object has not yet been created."));
+	}
+
+	/**
+	 * Returns the REST request of this REST call.
+	 *
+	 * @return the REST request of this REST call.
+	 * @throws InternalServerError If the RestRequest object has not yet been created on this call.
+	 */
+	public Optional<RestRequest> getRestRequestOptional() {
+		return Optional.ofNullable(rreq);
 	}
 
 	/**
@@ -301,7 +313,16 @@ public class RestCall {
 	 * @return the REST response of this REST call.
 	 */
 	public RestResponse getRestResponse() {
-		return rres;
+		return getRestResponseOptional().orElseThrow(()->new InternalServerError("RestResponse object has not yet been created."));
+	}
+
+	/**
+	 * Returns the REST response of this REST call.
+	 *
+	 * @return the REST response of this REST call.
+	 */
+	public Optional<RestResponse> getRestResponseOptional() {
+		return Optional.ofNullable(rres);
 	}
 
 	/**

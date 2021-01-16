@@ -118,6 +118,15 @@ public abstract class RestMethodParam {
 	final Class<?> c;
 
 	/**
+	 * Resolves the parameter object.
+	 *
+	 * @param call The rest call.
+	 * @return The resolved object.
+	 * @throws Exception Generic error occurred.
+	 */
+	public abstract Object resolve(RestCall call) throws Exception;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param paramType The Swagger parameter type.
@@ -190,16 +199,6 @@ public abstract class RestMethodParam {
 	protected RestMethodParam(RestParamType paramType, String name, Type type) {
 		this(paramType, null, name, type);
 	}
-
-	/**
-	 * Resolves the parameter object.
-	 *
-	 * @param req The rest request.
-	 * @param res The rest response.
-	 * @return The resolved object.
-	 * @throws Exception Generic error occurred.
-	 */
-	public abstract Object resolve(RestRequest req, RestResponse res) throws Exception;
 
 	/**
 	 * Returns the parameter class type that this parameter resolver is meant for.

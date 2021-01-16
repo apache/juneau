@@ -126,8 +126,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) {
-			return req;
+		public Object resolve(RestCall call) {
+			return call.getRequest();
 		}
 	}
 
@@ -138,8 +138,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) {
-			return res;
+		public Object resolve(RestCall call) {
+			return call.getResponse();
 		}
 	}
 
@@ -150,8 +150,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) {
-			return req;
+		public Object resolve(RestCall call) {
+			return call.getRestRequest();
 		}
 	}
 
@@ -162,8 +162,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) {
-			return res;
+		public Object resolve(RestCall call) {
+			return call.getRestResponse();
 		}
 	}
 
@@ -178,8 +178,8 @@ class RestParamDefaults {
 		}
 
 		@Override
-		public TimeZone resolve(RestRequest req, RestResponse res) {
-			return req.getHeaders().getTimeZone();
+		public TimeZone resolve(RestCall call) {
+			return call.getRestRequest().getHeaders().getTimeZone();
 		}
 	}
 
@@ -228,9 +228,10 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public Object resolve(RestCall call) throws Exception {
+			RestRequest req = call.getRestRequest();
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
-			return req.getPathMatch().get(ps, schema, name, type);
+			return call.getRestRequest().getPathMatch().get(ps, schema, name, type);
 		}
 	}
 
@@ -243,8 +244,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody().schema(schema).asType(type);
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getBody().schema(schema).asType(type);
 		}
 	}
 
@@ -280,9 +281,10 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public Object resolve(RestCall call) throws Exception {
+			RestRequest req = call.getRestRequest();
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
-			RequestHeaders rh = req.getHeaders();
+			RequestHeaders rh = call.getRestRequest().getHeaders();
 			return multi ? rh.getAll(ps, schema, name, type) : rh.get(ps, schema, name, type);
 		}
 	}
@@ -303,8 +305,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getAttributes().get(name, type);
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getAttributes().get(name, type);
 		}
 	}
 
@@ -317,8 +319,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getRequest(meta);
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getRequest(meta);
 		}
 	}
 
@@ -345,12 +347,14 @@ class RestParamDefaults {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
-		public Object resolve(final RestRequest req, final RestResponse res) throws Exception {
+		public Object resolve(final RestCall call) throws Exception {
 			Value<Object> v = (Value<Object>)getTypeClass().newInstance();
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object o) {
 					try {
+						RestRequest req = call.getRestRequest();
+						RestResponse res = call.getRestResponse();
 						ResponsePartMeta rpm = req.getResponseHeaderMeta(o);
 						if (rpm == null)
 							rpm = ResponseHeaderObject.this.meta;
@@ -377,11 +381,13 @@ class RestParamDefaults {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
-		public Object resolve(final RestRequest req, final RestResponse res) throws Exception {
+		public Object resolve(final RestCall call) throws Exception {
 			Value<Object> v = (Value<Object>)c.newInstance();
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object o) {
+					RestRequest req = call.getRestRequest();
+					RestResponse res = call.getRestResponse();
 					ResponseBeanMeta meta = req.getResponseBeanMeta(o);
 					if (meta == null)
 						meta = ResponseObject.this.meta;
@@ -403,12 +409,12 @@ class RestParamDefaults {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
+		public Object resolve(final RestCall call) throws Exception {
 			Value<Object> v = (Value<Object>)c.newInstance();
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object o) {
-					res.setStatus(Integer.parseInt(o.toString()));
+					call.getRestResponse().setStatus(Integer.parseInt(o.toString()));
 				}
 			});
 			return v;
@@ -417,32 +423,28 @@ class RestParamDefaults {
 
 	static final class MethodObject extends RestMethodParam {
 
-		protected MethodObject(MethodInfo m, ClassInfo t, ParamInfo mpi) throws ServletException {
+		protected MethodObject(MethodInfo m, ClassInfo t, ParamInfo mpi) {
 			super(OTHER, mpi);
-			if (! t.is(String.class))
-				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", m.inner());
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getMethod();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getMethod();
 		}
 	}
 
 	static final class BeanFactoryObject extends RestMethodParam {
 
-		private final BeanFactory beanFactory;
 		private final ClassInfo type;
 
-		protected BeanFactoryObject(MethodInfo m, ClassInfo t, ParamInfo mpi, BeanFactory beanFactory) {
+		protected BeanFactoryObject(MethodInfo m, ClassInfo t, ParamInfo mpi) {
 			super(OTHER, mpi);
-			this.beanFactory = beanFactory;
 			this.type = t;
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return beanFactory.getBean(type.inner()).orElseThrow(()->new ServletException("Could not resolve bean type :" + type.inner().getName()));
+		public Object resolve(RestCall call) throws Exception {
+			return call.getBeanFactory().getBean(type.inner()).orElseThrow(()->new ServletException("Could not resolve bean type: " + type.inner().getName()));
 		}
 	}
 
@@ -478,7 +480,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public Object resolve(RestCall call) throws Exception {
+			RestRequest req = call.getRestRequest();
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
 			RequestFormData fd = req.getFormData();
 			return multi ? fd.getAll(ps, schema, name, type) : fd.get(ps, schema, name, type);
@@ -517,7 +520,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public Object resolve(RestCall call) throws Exception {
+			RestRequest req = call.getRestRequest();
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
 			RequestQuery rq = req.getQuery();
 			return multi ? rq.getAll(ps, schema, name, type) : rq.get(ps, schema, name, type);
@@ -526,10 +530,8 @@ class RestParamDefaults {
 
 	static final class HasFormDataObject extends RestMethodParam {
 
-		protected HasFormDataObject(ParamInfo mpi) throws ServletException {
+		protected HasFormDataObject(ParamInfo mpi) {
 			super(FORM_DATA, mpi, getName(mpi));
-			if (getType() != Boolean.class && getType() != boolean.class)
-				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", mpi.getMethod());
 		}
 
 		private static String getName(ParamInfo mpi) {
@@ -542,7 +544,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public Object resolve(RestCall call) throws Exception {
+			RestRequest req = call.getRestRequest();
 			BeanSession bs = req.getBeanSession();
 			return bs.convertToType(req.getFormData().containsKey(name), bs.getClassMeta(type));
 		}
@@ -550,10 +553,8 @@ class RestParamDefaults {
 
 	static final class HasQueryObject extends RestMethodParam {
 
-		protected HasQueryObject(ParamInfo mpi) throws ServletException {
+		protected HasQueryObject(ParamInfo mpi) {
 			super(QUERY, mpi, getName(mpi));
-			if (getType() != Boolean.class && getType() != boolean.class)
-				throw new RestServletException("Use of @HasQuery annotation on parameter that is not a boolean on method ''{0}''", mpi.getMethod());
 		}
 
 		private static String getName(ParamInfo mpi) {
@@ -566,7 +567,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+		public Object resolve(RestCall call) throws Exception {
+			RestRequest req = call.getRestRequest();
 			BeanSession bs = req.getBeanSession();
 			return bs.convertToType(req.getQuery().containsKey(name), bs.getClassMeta(type));
 		}
@@ -583,8 +585,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getMessages();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getMessages();
 		}
 	}
 
@@ -595,8 +597,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getMessages();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getMessages();
 		}
 	}
 
@@ -607,8 +609,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getInputStream();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getInputStream();
 		}
 	}
 
@@ -619,8 +621,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getInputStream();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getInputStream();
 		}
 	}
 
@@ -631,8 +633,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getReader();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getReader();
 		}
 	}
 
@@ -643,8 +645,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return res.getOutputStream();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestResponse().getOutputStream();
 		}
 	}
 
@@ -655,8 +657,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return res.getOutputStream();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestResponse().getOutputStream();
 		}
 	}
 
@@ -667,8 +669,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return res.getWriter();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestResponse().getWriter();
 		}
 	}
 
@@ -679,8 +681,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getHeaders();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getHeaders();
 		}
 	}
 
@@ -691,8 +693,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getAttributes();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getAttributes();
 		}
 	}
 
@@ -703,8 +705,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getQuery();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getQuery();
 		}
 	}
 
@@ -715,8 +717,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getFormData();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getFormData();
 		}
 	}
 
@@ -727,8 +729,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getContext();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getContext();
 		}
 	}
 
@@ -739,8 +741,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody().getParser();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getBody().getParser();
 		}
 	}
 
@@ -751,8 +753,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody().getReaderParser();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getBody().getReaderParser();
 		}
 	}
 
@@ -763,8 +765,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody().getInputStreamParser();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getBody().getInputStreamParser();
 		}
 	}
 
@@ -775,8 +777,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getLocale();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getLocale();
 		}
 	}
 
@@ -787,8 +789,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getSwagger();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getSwagger();
 		}
 	}
 
@@ -799,8 +801,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getPathMatch();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getPathMatch();
 		}
 	}
 
@@ -811,8 +813,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getBody();
 		}
 	}
 
@@ -823,8 +825,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getConfig();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getConfig();
 		}
 	}
 
@@ -835,8 +837,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getUriContext();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getUriContext();
 		}
 	}
 
@@ -847,8 +849,8 @@ class RestParamDefaults {
 		}
 
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getUriResolver();
+		public Object resolve(RestCall call) throws Exception {
+			return call.getRestRequest().getUriResolver();
 		}
 	}
 
