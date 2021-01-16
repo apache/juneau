@@ -968,88 +968,46 @@ public class RestAnnotation {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
-			if (a.serializers().length > 0)
-				psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
-
-			if (a.parsers().length > 0)
-				psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
-
+			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
+			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 			psb.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
-
 			psb.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
-
 			psb.prependTo(REST_encoders, a.encoders());
-
 			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
-
 			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
-
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultRequestAttributes, x));
-
 			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultRequestHeaders, x));
-
 			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultResponseHeaders, x));
-
 			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
-
 			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
-
 			psb.prependTo(REST_responseHandlers, a.responseHandlers());
-
 			psb.prependTo(REST_converters, a.converters());
-
 			psb.prependTo(REST_guards, reverse(a.guards()));
-
 			psb.prependTo(REST_children, a.children());
-
 			psb.prependTo(REST_paramResolvers, a.paramResolvers());
-
 			psb.setIf(a.context() != RestContext.Null.class, REST_context, a.context());
-
 			psb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
-
 			psb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
-
 			psb.setIfNotEmpty(REST_uriRelativity, string(a.uriRelativity()));
-
 			psb.setIfNotEmpty(REST_uriResolution, string(a.uriResolution()));
-
 			psb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
-
 			psb.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
-
 			psb.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
-
 			psb.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
-
 			psb.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
-
 			psb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
-
 			psb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
-
 			psb.setIf(a.infoProvider() != RestInfoProvider.Null.class, REST_infoProvider, a.infoProvider());
-
 			psb.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
-
 			psb.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
-
 			psb.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
-
 			psb.setIfNotEmpty(REST_allowedMethodParams, string(a.allowedMethodParams()));
-
 			psb.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
-
 			psb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-
 			psb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
-
 			psb.setIfNotEmpty(REST_debug, string(a.debug()));
-
 			psb.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
-
 			cdStream(a.rolesDeclared()).forEach(x -> psb.addTo(REST_rolesDeclared, x));
-
 			psb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 		}
 

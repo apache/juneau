@@ -612,55 +612,33 @@ public class RestMethodAnnotation {
 		public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			RestMethod a = ai.getAnnotation();
 
-			if (a.serializers().length > 0)
-				psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
-
-			if (a.parsers().length > 0)
-				psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
-
-			if (a.encoders().length > 0)
-				psb.set(REST_encoders, merge(ConverterUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
-
+			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
+			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
+			psb.set(REST_encoders, merge(ConverterUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
 			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
-
 			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
-
 			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultRequestHeaders, x));
-
 			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultResponseHeaders, x));
-
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultRequestAttributes, x));
-
 			stringStream(a.defaultQuery()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultQuery, x));
-
 			stringStream(a.defaultFormData()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultFormData, x));
-
 			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
-
 			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
-
 			psb.prependTo(REST_converters, a.converters());
-
 			psb.prependTo(REST_guards, reverse(a.guards()));
-
 			psb.prependTo(RESTMETHOD_matchers, a.matchers());
-
 			psb.setIfNotEmpty(RESTMETHOD_clientVersion, a.clientVersion());
-
 			psb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-
 			psb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
-
 			stringStream(a.path()).forEach(x -> psb.prependTo(RESTMETHOD_path, x));
-
 			cdStream(a.rolesDeclared()).forEach(x -> psb.addTo(REST_rolesDeclared, x));
-
 			psb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-
 			psb.setIfNotEmpty(RESTMETHOD_httpMethod, string(a.method()));
+			psb.setIf(a.priority() != 0, RESTMETHOD_priority, a.priority());
+			psb.setIfNotEmpty(RESTMETHOD_debug, string(a.debug()));
 
-			if (! a.value().isEmpty()) {
-				String v = string(a.value()).trim();
+			String v = StringUtils.trim(string(a.value()));
+			if (v != null) {
 				int i = v.indexOf(' ');
 				if (i == -1) {
 					psb.set(RESTMETHOD_httpMethod, v);
@@ -669,10 +647,6 @@ public class RestMethodAnnotation {
 					psb.prependTo(RESTMETHOD_path,  v.substring(i).trim());
 				}
 			}
-
-			psb.setIf(a.priority() != 0, RESTMETHOD_priority, a.priority());
-
-			psb.setIfNotEmpty(RESTMETHOD_debug, string(a.debug()));
 		}
 	}
 

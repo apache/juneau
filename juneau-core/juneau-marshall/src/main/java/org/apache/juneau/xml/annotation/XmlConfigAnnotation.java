@@ -43,29 +43,18 @@ public class XmlConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			XmlConfig a = ai.getAnnotation();
-			if (! a.addBeanTypes().isEmpty())
-				psb.set(XML_addBeanTypes, bool(a.addBeanTypes()));
-			if (! a.addNamespaceUrisToRoot().isEmpty())
-				psb.set(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
-			if (! a.disableAutoDetectNamespaces().isEmpty())
-				psb.set(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
-			if (! a.defaultNamespace().isEmpty())
-				psb.set(XML_defaultNamespace, string(a.defaultNamespace()));
-			if (! a.enableNamespaces().isEmpty())
-				psb.set(XML_enableNamespaces, bool(a.enableNamespaces()));
-			if (a.namespaces().length > 0)
-				psb.set(XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
 
-			if (a.eventAllocator() != XmlEventAllocator.Null.class)
-				psb.set(XML_eventAllocator, a.eventAllocator());
-			if (! a.preserveRootElement().isEmpty())
-				psb.set(XML_preserveRootElement, bool(a.preserveRootElement()));
-			if (a.reporter() != XmlReporter.Null.class)
-				psb.set(XML_reporter, a.reporter());
-			if (a.resolver() != XmlResolver.Null.class)
-				psb.set(XML_resolver, a.resolver());
-			if (! a.validating().isEmpty())
-				psb.set(XML_validating, bool(a.validating()));
+			psb.setIfNotEmpty(XML_addBeanTypes, bool(a.addBeanTypes()));
+			psb.setIfNotEmpty(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
+			psb.setIfNotEmpty(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
+			psb.setIfNotEmpty(XML_defaultNamespace, string(a.defaultNamespace()));
+			psb.setIfNotEmpty(XML_enableNamespaces, bool(a.enableNamespaces()));
+			psb.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
+			psb.setIf(a.eventAllocator() != XmlEventAllocator.Null.class, XML_eventAllocator, a.eventAllocator());
+			psb.setIfNotEmpty(XML_preserveRootElement, bool(a.preserveRootElement()));
+			psb.setIf(a.reporter() != XmlReporter.Null.class, XML_reporter, a.reporter());
+			psb.setIf(a.resolver() != XmlResolver.Null.class, XML_resolver, a.resolver());
+			psb.setIfNotEmpty(XML_validating, bool(a.validating()));
 		}
 	}
 }

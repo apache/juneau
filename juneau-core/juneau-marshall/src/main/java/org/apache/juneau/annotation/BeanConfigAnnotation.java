@@ -14,6 +14,7 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.BeanTraverseContext.*;
+import static java.util.Arrays.*;
 
 import java.util.*;
 
@@ -46,96 +47,60 @@ public class BeanConfigAnnotation {
 		public void apply(AnnotationInfo<BeanConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			BeanConfig a = ai.getAnnotation();
 
-			if (! a.beanClassVisibility().isEmpty())
-				psb.set(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
-			if (! a.beanConstructorVisibility().isEmpty())
-				psb.set(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
-			if (a.dictionary().length != 0)
-				psb.prependTo(BEAN_beanDictionary, a.dictionary());
-			if (a.dictionary_replace().length != 0)
-				psb.set(BEAN_beanDictionary, a.dictionary_replace());
-			if (! a.beanFieldVisibility().isEmpty())
-				psb.set(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
-			if (! a.beanMapPutReturnsOldValue().isEmpty())
-				psb.set(BEAN_beanMapPutReturnsOldValue, bool(a.beanMapPutReturnsOldValue()));
-			if (! a.beanMethodVisibility().isEmpty())
-				psb.set(BEAN_beanMethodVisibility, visibility(a.beanMethodVisibility(), "beanMethodVisibility"));
-			if (! a.beansRequireDefaultConstructor().isEmpty())
-				psb.set(BEAN_beansRequireDefaultConstructor, bool(a.beansRequireDefaultConstructor()));
-			if (! a.beansRequireSerializable().isEmpty())
-				psb.set(BEAN_beansRequireSerializable, bool(a.beansRequireSerializable()));
-			if (! a.beansRequireSettersForGetters().isEmpty())
-				psb.set(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));
-			if (! a.disableBeansRequireSomeProperties().isEmpty())
-				psb.set(BEAN_disableBeansRequireSomeProperties, bool(a.disableBeansRequireSomeProperties()));
-			if (! a.typePropertyName().isEmpty())
-				psb.set(BEAN_typePropertyName, string(a.typePropertyName()));
-			if (! a.debug().isEmpty())
-				psb.set(CONTEXT_debug, bool(a.debug()));
-			if (! a.findFluentSetters().isEmpty())
-				psb.set(BEAN_findFluentSetters, bool(a.findFluentSetters()));
-			if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
-				psb.set(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));
-			if (! a.ignoreInvocationExceptionsOnSetters().isEmpty())
-				psb.set(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
-			if (! a.disableIgnoreMissingSetters().isEmpty())
-				psb.set(BEAN_disableIgnoreMissingSetters, bool(a.disableIgnoreMissingSetters()));
-			if (! a.disableIgnoreTransientFields().isEmpty())
-				psb.set(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
-			if (! a.ignoreUnknownBeanProperties().isEmpty())
-				psb.set(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
-			if (! a.disableIgnoreUnknownNullBeanProperties().isEmpty())
-				psb.set(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
-			for (Class<?> c : a.interfaces())
-				psb.prependTo(BEAN_annotations, BeanAnnotation.create(c).interfaceClass(c).build());
-			if (! a.locale().isEmpty())
-				psb.set(CONTEXT_locale, locale(a.locale()));
-			if (! a.mediaType().isEmpty())
-				psb.set(CONTEXT_mediaType, mediaType(a.mediaType()));
-			if (a.notBeanClasses().length != 0)
-				psb.addTo(BEAN_notBeanClasses, a.notBeanClasses());
-			if (a.notBeanClasses_replace().length != 0)
-				psb.set(BEAN_notBeanClasses, a.notBeanClasses_replace());
-			if (a.notBeanPackages().length != 0)
-				psb.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
-			if (a.notBeanPackages_replace().length != 0)
-				psb.set(BEAN_notBeanPackages, stringList(a.notBeanPackages_replace()));
-			if (a.propertyNamer() != PropertyNamer.Null.class)
-				psb.set(BEAN_propertyNamer, a.propertyNamer());
-			if (! a.sortProperties().isEmpty())
-				psb.set(BEAN_sortProperties, bool(a.sortProperties()));
-			if (a.swaps().length != 0)
-				psb.prependTo(BEAN_swaps, a.swaps());
-			if (a.swaps_replace().length != 0)
-				psb.set(BEAN_swaps, a.swaps_replace());
-			if (! a.timeZone().isEmpty())
-				psb.set(CONTEXT_timeZone, timeZone(a.timeZone()));
-			if (! a.useEnumNames().isEmpty())
-				psb.set(BEAN_useEnumNames, bool(a.useEnumNames()));
-			if (! a.disableInterfaceProxies().isEmpty())
-				psb.set(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
-			if (! a.useJavaBeanIntrospector().isEmpty())
-				psb.set(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));
-			if (! a.detectRecursions().isEmpty())
-				psb.set(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
-			if (! a.ignoreRecursions().isEmpty())
-				psb.set(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
-			if (! a.initialDepth().isEmpty())
-				psb.set(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
-			if (! a.maxDepth().isEmpty())
-				psb.set(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
+			psb.setIfNotEmpty(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
+			psb.setIfNotEmpty(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
+			psb.prependTo(BEAN_beanDictionary, a.dictionary());
+			psb.setIfNotEmpty(BEAN_beanDictionary, a.dictionary_replace());
+			psb.setIfNotEmpty(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
+			psb.setIfNotEmpty(BEAN_beanMapPutReturnsOldValue, bool(a.beanMapPutReturnsOldValue()));
+			psb.setIfNotEmpty(BEAN_beanMethodVisibility, visibility(a.beanMethodVisibility(), "beanMethodVisibility"));
+			psb.setIfNotEmpty(BEAN_beansRequireDefaultConstructor, bool(a.beansRequireDefaultConstructor()));
+			psb.setIfNotEmpty(BEAN_beansRequireSerializable, bool(a.beansRequireSerializable()));
+			psb.setIfNotEmpty(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));
+			psb.setIfNotEmpty(BEAN_disableBeansRequireSomeProperties, bool(a.disableBeansRequireSomeProperties()));
+			psb.setIfNotEmpty(BEAN_typePropertyName, string(a.typePropertyName()));
+			psb.setIfNotEmpty(CONTEXT_debug, bool(a.debug()));
+			psb.setIfNotEmpty(BEAN_findFluentSetters, bool(a.findFluentSetters()));
+			psb.setIfNotEmpty(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));
+			psb.setIfNotEmpty(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
+			psb.setIfNotEmpty(BEAN_disableIgnoreMissingSetters, bool(a.disableIgnoreMissingSetters()));
+			psb.setIfNotEmpty(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
+			psb.setIfNotEmpty(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
+			psb.setIfNotEmpty(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
+			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> psb.prependTo(BEAN_annotations, x));
+			psb.setIfNotEmpty(CONTEXT_locale, locale(a.locale()));
+			psb.setIfNotEmpty(CONTEXT_mediaType, mediaType(a.mediaType()));
+			psb.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses());
+			psb.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses_replace());
+			psb.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
+			psb.setIfNotEmpty(BEAN_notBeanPackages, stringList(a.notBeanPackages_replace()));
+			psb.setIf(a.propertyNamer() != PropertyNamer.Null.class, BEAN_propertyNamer, a.propertyNamer());
+			psb.setIfNotEmpty(BEAN_sortProperties, bool(a.sortProperties()));
+			psb.prependTo(BEAN_swaps, a.swaps());
+			psb.setIfNotEmpty(BEAN_swaps, a.swaps_replace());
+			psb.setIfNotEmpty(CONTEXT_timeZone, timeZone(a.timeZone()));
+			psb.setIfNotEmpty(BEAN_useEnumNames, bool(a.useEnumNames()));
+			psb.setIfNotEmpty(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
+			psb.setIfNotEmpty(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));
+			psb.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
+			psb.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
+			psb.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
+			psb.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 		}
 
 		private Locale locale(String in) {
-			return Locale.forLanguageTag(string(in));
+			in = string(in);
+			return in == null ? null : Locale.forLanguageTag(in);
 		}
 
 		private MediaType mediaType(String in) {
-			return MediaType.of(string(in));
+			in = string(in);
+			return in == null ? null : MediaType.of(in);
 		}
 
 		private TimeZone timeZone(String in) {
-			return TimeZone.getTimeZone(string(in));
+			in = string(in);
+			return in == null ? null : TimeZone.getTimeZone(in);
 		}
 	}
 }

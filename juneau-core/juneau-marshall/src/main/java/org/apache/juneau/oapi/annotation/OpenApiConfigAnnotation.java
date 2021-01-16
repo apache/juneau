@@ -42,10 +42,8 @@ public class OpenApiConfigAnnotation {
 		public void apply(AnnotationInfo<OpenApiConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			OpenApiConfig a = ai.getAnnotation();
 
-			if (! a.format().isEmpty())
-				psb.set(OAPI_format, string(a.format()));
-			if (! a.collectionFormat().isEmpty())
-				psb.set(OAPI_collectionFormat, string(a.collectionFormat()));
+			psb.setIfNotEmpty(OAPI_format, string(a.format()));
+			psb.setIfNotEmpty(OAPI_collectionFormat, string(a.collectionFormat()));
 		}
 	}
 }

@@ -41,18 +41,13 @@ public class HtmlConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<HtmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			HtmlConfig a = ai.getAnnotation();
-			if (! a.addBeanTypes().isEmpty())
-				psb.set(HTML_addBeanTypes, bool(a.addBeanTypes()));
-			if (! a.addKeyValueTableHeaders().isEmpty())
-				psb.set(HTML_addKeyValueTableHeaders, bool(a.addKeyValueTableHeaders()));
-			if (! a.disableDetectLabelParameters().isEmpty())
-				psb.set(HTML_disableDetectLabelParameters, bool(a.disableDetectLabelParameters()));
-			if (! a.disableDetectLinksInStrings().isEmpty())
-				psb.set(HTML_disableDetectLinksInStrings, bool(a.disableDetectLinksInStrings()));
-			if (! a.labelParameter().isEmpty())
-				psb.set(HTML_labelParameter, string(a.labelParameter()));
-			if (! a.uriAnchorText().isEmpty())
-				psb.set(HTML_uriAnchorText, string(a.uriAnchorText()));
+
+			psb.setIfNotEmpty(HTML_addBeanTypes, bool(a.addBeanTypes()));
+			psb.setIfNotEmpty(HTML_addKeyValueTableHeaders, bool(a.addKeyValueTableHeaders()));
+			psb.setIfNotEmpty(HTML_disableDetectLabelParameters, bool(a.disableDetectLabelParameters()));
+			psb.setIfNotEmpty(HTML_disableDetectLinksInStrings, bool(a.disableDetectLinksInStrings()));
+			psb.setIfNotEmpty(HTML_labelParameter, string(a.labelParameter()));
+			psb.setIfNotEmpty(HTML_uriAnchorText, string(a.uriAnchorText()));
 		}
 	}
 }

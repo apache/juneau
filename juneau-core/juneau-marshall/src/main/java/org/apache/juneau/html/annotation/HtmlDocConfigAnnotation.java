@@ -14,6 +14,7 @@ package org.apache.juneau.html.annotation;
 
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Arrays.*;
 
 import java.util.regex.*;
 
@@ -46,39 +47,21 @@ public class HtmlDocConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<HtmlDocConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			HtmlDocConfig a = ai.getAnnotation();
-			if (a.aside().length > 0)
-				psb.set(HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));
-			if (! "DEFAULT".equalsIgnoreCase(a.asideFloat()))
-				psb.set(HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
-			if (a.footer().length > 0)
-				psb.set(HTMLDOC_footer, resolveList(a.footer(), psb.peek(String[].class, HTMLDOC_footer)));
-			if (a.head().length > 0)
-				psb.set(HTMLDOC_head, resolveList(a.head(), psb.peek(String[].class, HTMLDOC_head)));
-			if (a.header().length > 0)
-				psb.set(HTMLDOC_header, resolveList(a.header(), psb.peek(String[].class, HTMLDOC_header)));
-			if (a.nav().length > 0)
-				psb.set(HTMLDOC_nav, resolveList(a.nav(), psb.peek(String[].class, HTMLDOC_nav)));
-			if (a.navlinks().length > 0)
-				psb.set(HTMLDOC_navlinks, resolveLinks(a.navlinks(), psb.peek(String[].class, HTMLDOC_navlinks)));
-			if (! a.noResultsMessage().isEmpty())
-				psb.set(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
-			if (! a.nowrap().isEmpty())
-				psb.set(HTMLDOC_nowrap, bool(a.nowrap()));
-			if (a.script().length > 0)
-				psb.set(HTMLDOC_script, resolveList(a.script(), psb.peek(String[].class, HTMLDOC_script)));
-			if (a.style().length > 0)
-				psb.set(HTMLDOC_style, resolveList(a.style(), psb.peek(String[].class, HTMLDOC_style)));
-			if (a.stylesheet().length > 0)
-				psb.set(HTMLDOC_stylesheet, resolveList(a.stylesheet(), psb.peek(String[].class, HTMLDOC_stylesheet)));
-			if (a.template() != HtmlDocTemplate.Null.class)
-				psb.set(HTMLDOC_template, a.template());
-			for (Class<? extends HtmlWidget> w : a.widgets()) {
-				try {
-					psb.prependTo(HTMLDOC_widgets, w.newInstance());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+
+			psb.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));
+			psb.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
+			psb.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), psb.peek(String[].class, HTMLDOC_footer)));
+			psb.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), psb.peek(String[].class, HTMLDOC_head)));
+			psb.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), psb.peek(String[].class, HTMLDOC_header)));
+			psb.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), psb.peek(String[].class, HTMLDOC_nav)));
+			psb.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), psb.peek(String[].class, HTMLDOC_navlinks)));
+			psb.setIfNotEmpty(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
+			psb.setIfNotEmpty(HTMLDOC_nowrap, bool(a.nowrap()));
+			psb.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), psb.peek(String[].class, HTMLDOC_script)));
+			psb.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), psb.peek(String[].class, HTMLDOC_style)));
+			psb.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), psb.peek(String[].class, HTMLDOC_stylesheet)));
+			psb.setIf(a.template() != HtmlDocTemplate.Null.class, HTMLDOC_template, a.template());
+			asList(a.widgets()).stream().forEach(x -> psb.prependTo(HTMLDOC_widgets, x));
 		}
 
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");

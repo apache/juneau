@@ -42,20 +42,14 @@ public class JsonSchemaConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<JsonSchemaConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			JsonSchemaConfig a = ai.getAnnotation();
-			if (! a.addDescriptionsTo().isEmpty())
-				psb.set(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
-			if (! a.addExamplesTo().isEmpty())
-				psb.set(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
-			if (! a.allowNestedDescriptions().isEmpty())
-				psb.set(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
-			if (! a.allowNestedExamples().isEmpty())
-				psb.set(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
-			if (a.beanDefMapper() != BeanDefMapper.Null.class)
-				psb.set(JSONSCHEMA_beanDefMapper, a.beanDefMapper());
-			if (! a.ignoreTypes().isEmpty())
-				psb.set(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
-			if (! a.useBeanDefs().isEmpty())
-				psb.set(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
+
+			psb.setIfNotEmpty(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
+			psb.setIfNotEmpty(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
+			psb.setIfNotEmpty(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
+			psb.setIfNotEmpty(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
+			psb.setIf(a.beanDefMapper() != BeanDefMapper.Null.class, JSONSCHEMA_beanDefMapper, a.beanDefMapper());
+			psb.setIfNotEmpty(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
+			psb.setIfNotEmpty(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
 		}
 	}
 }

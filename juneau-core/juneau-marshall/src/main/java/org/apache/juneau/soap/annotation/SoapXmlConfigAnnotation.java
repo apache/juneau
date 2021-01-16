@@ -42,8 +42,7 @@ public class SoapXmlConfigAnnotation {
 		public void apply(AnnotationInfo<SoapXmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			SoapXmlConfig a = ai.getAnnotation();
 
-			if (! a.soapAction().isEmpty())
-				psb.set(SOAPXML_SOAPAction, string(a.soapAction()));
+			psb.setIfNotEmpty(SOAPXML_SOAPAction, string(a.soapAction()));
 		}
 	}
 }

@@ -62,7 +62,8 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return The resolved string.
 	 */
 	protected String string(String in) {
-		return vr.resolve(in);
+		in = vr.resolve(in);
+		return isEmpty(in) ? null : in;
 	}
 
 	/**
@@ -132,10 +133,8 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return The resolved boolean.
 	 */
 	public Boolean bool(String in) {
-		in = vr.resolve(in);
-		if (isEmpty(in))
-			return null;
-		return Boolean.parseBoolean(in);
+		in = string(in);
+		return in == null ? null : Boolean.parseBoolean(in);
 	}
 
 	/**
@@ -145,9 +144,10 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @param loc The annotation field name.
 	 * @return The resolved int.
 	 */
-	protected int integer(String in, String loc) {
+	protected Integer integer(String in, String loc) {
 		try {
-			return Integer.parseInt(vr.resolve(in));
+			in = string(in);
+			return in == null ? null : Integer.parseInt(in);
 		} catch (NumberFormatException e) {
 			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}
@@ -162,7 +162,8 @@ public abstract class ConfigApply<T extends Annotation> {
 	 */
 	protected Visibility visibility(String in, String loc) {
 		try {
-			return Visibility.valueOf(vr.resolve(in));
+			in = string(in);
+			return in == null ? null : Visibility.valueOf(in);
 		} catch (IllegalArgumentException e) {
 			throw new ConfigException("Invalid syntax for visibility on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}

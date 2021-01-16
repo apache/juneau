@@ -42,17 +42,12 @@ public class UonConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<UonConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			UonConfig a = ai.getAnnotation();
-			if (! a.addBeanTypes().isEmpty())
-				psb.set(UON_addBeanTypes, bool(a.addBeanTypes()));
-			if (! a.encoding().isEmpty())
-				psb.set(UON_encoding, bool(a.encoding()));
-			if (! a.paramFormat().isEmpty())
-				psb.set(UON_paramFormat, string(a.paramFormat()));
 
-			if (! a.decoding().isEmpty())
-				psb.set(UON_decoding, bool(a.decoding()));
-			if (! a.validateEnd().isEmpty())
-				psb.set(UON_validateEnd, bool(a.validateEnd()));
+			psb.setIfNotEmpty(UON_addBeanTypes, bool(a.addBeanTypes()));
+			psb.setIfNotEmpty(UON_encoding, bool(a.encoding()));
+			psb.setIfNotEmpty(UON_paramFormat, string(a.paramFormat()));
+			psb.setIfNotEmpty(UON_decoding, bool(a.decoding()));
+			psb.setIfNotEmpty(UON_validateEnd, bool(a.validateEnd()));
 		}
 	}
 }

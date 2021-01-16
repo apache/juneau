@@ -42,8 +42,7 @@ public class MsgPackConfigAnnotation {
 		public void apply(AnnotationInfo<MsgPackConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			MsgPackConfig a = ai.getAnnotation();
 
-			if (! a.addBeanTypes().isEmpty())
-				psb.set(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
+			psb.setIfNotEmpty(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
 		}
 	}
 }

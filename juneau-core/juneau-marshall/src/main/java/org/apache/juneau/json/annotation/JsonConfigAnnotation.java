@@ -42,15 +42,11 @@ public class JsonConfigAnnotation {
 		@Override
 		public void apply(AnnotationInfo<JsonConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			JsonConfig a = ai.getAnnotation();
-			if (! a.addBeanTypes().isEmpty())
-				psb.set(JSON_addBeanTypes, bool(a.addBeanTypes()));
-			if (! a.escapeSolidus().isEmpty())
-				psb.set(JSON_escapeSolidus, bool(a.escapeSolidus()));
-			if (! a.simpleMode().isEmpty())
-				psb.set(JSON_simpleMode, bool(a.simpleMode()));
 
-			if (! a.validateEnd().isEmpty())
-				psb.set(JSON_validateEnd, bool(a.validateEnd()));
+			psb.setIfNotEmpty(JSON_addBeanTypes, bool(a.addBeanTypes()));
+			psb.setIfNotEmpty(JSON_escapeSolidus, bool(a.escapeSolidus()));
+			psb.setIfNotEmpty(JSON_simpleMode, bool(a.simpleMode()));
+			psb.setIfNotEmpty(JSON_validateEnd, bool(a.validateEnd()));
 		}
 	}
 }
