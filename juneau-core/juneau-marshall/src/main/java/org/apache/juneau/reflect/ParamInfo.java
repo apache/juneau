@@ -234,6 +234,16 @@ public final class ParamInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns <jk>true</jk> if the parameter type is an exact match for the specified class.
+	 * 
+	 * @param c The type to check.
+	 * @return <jk>true</jk> if the parameter type is an exact match for the specified class.
+	 */
+	public boolean isType(Class<?> c) {
+		return getParameterType().is(c);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the parameter has a name provided by the class file.
 	 *
 	 * @return <jk>true</jk> if the parameter has a name provided by the class file.

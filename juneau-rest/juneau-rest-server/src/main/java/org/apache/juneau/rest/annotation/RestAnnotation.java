@@ -94,7 +94,7 @@ public class RestAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestInfoProvider> infoProvider=RestInfoProvider.Null.class;
-		Class<? extends RestMethodParam>[] paramResolvers = new Class[0];
+		Class<? extends RestParam>[] restParams = new Class[0];
 		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
@@ -415,17 +415,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#paramResolvers()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder paramResolvers(Class<? extends RestMethodParam>...value) {
-			this.paramResolvers = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#parsers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -499,6 +488,17 @@ public class RestAnnotation {
 		 */
 		public Builder responseHandlers(Class<? extends ResponseHandler>...value) {
 			this.responseHandlers = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#restParams()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder restParams(Class<? extends RestParam>...value) {
+			this.restParams = value;
 			return this;
 		}
 
@@ -659,7 +659,7 @@ public class RestAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestInfoProvider> infoProvider;
-		private final Class<? extends RestMethodParam>[] paramResolvers;
+		private final Class<? extends RestParam>[] restParams;
 		private final Class<? extends BeanFactory> beanFactory;
 		private final Class<?>[] children, parsers, serializers;
 		private final ResourceSwagger swagger;
@@ -695,7 +695,7 @@ public class RestAnnotation {
 			this.infoProvider = b.infoProvider;
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
-			this.paramResolvers = copyOf(b.paramResolvers);
+			this.restParams = copyOf(b.restParams);
 			this.parsers = copyOf(b.parsers);
 			this.partParser = b.partParser;
 			this.partSerializer = b.partSerializer;
@@ -853,11 +853,6 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestMethodParam>[] paramResolvers() {
-			return paramResolvers;
-		}
-
-		@Override /* Rest */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
@@ -890,6 +885,11 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public Class<? extends ResponseHandler>[] responseHandlers() {
 			return responseHandlers;
+		}
+
+		@Override /* Rest */
+		public Class<? extends RestParam>[] restParams() {
+			return restParams;
 		}
 
 		@Override /* Rest */
@@ -984,7 +984,7 @@ public class RestAnnotation {
 			psb.prependTo(REST_converters, a.converters());
 			psb.prependTo(REST_guards, reverse(a.guards()));
 			psb.prependTo(REST_children, a.children());
-			psb.prependTo(REST_paramResolvers, a.paramResolvers());
+			psb.prependTo(REST_restParams, a.restParams());
 			psb.setIf(a.context() != RestContext.Null.class, REST_context, a.context());
 			psb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
 			psb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));

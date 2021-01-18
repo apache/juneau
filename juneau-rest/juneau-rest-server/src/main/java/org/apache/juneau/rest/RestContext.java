@@ -47,14 +47,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.http.annotation.FormData;
-import org.apache.juneau.http.annotation.HasFormData;
-import org.apache.juneau.http.annotation.HasQuery;
-import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -69,6 +61,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.params.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.reshandlers.*;
@@ -1482,98 +1475,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_messages = PREFIX + ".messages.lo";
 
 	/**
-	 * Configuration property:  Java method parameter resolvers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_paramResolvers REST_paramResolvers}
-	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestMethodParam}|Class&lt;{@link org.apache.juneau.rest.RestMethodParam}&gt;&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#paramResolvers()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#paramResolvers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#paramResolvers(RestMethodParam...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
-	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <p>
-	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
-	 * the following resolver:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
-	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestMethodParam {
-	 *
-	 * 		<jc>// Must have no-arg constructor!</jc>
-	 * 		<jk>public</jk> MyRestParam() {
-	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
-	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// The method that creates our object.
-	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
-	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@Rest</ja>(paramResolvers=MyRestParam.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.paramResolvers(MyRestParam.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.addTo(<jsf>REST_paramResolver</jsf>, MyRestParam.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.paramResolvers(MyRestParam.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Now pass it into your method.</jc>
-	 * 		<ja>@RestMethod</ja>(...)
-	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject mySpeciaObject) {
-	 * 			<jc>// Do something with it.</jc>
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * 	<li>
-	 * 		Refer to {@link RestMethodParam} for the list of predefined parameter resolvers.
-	 * </ul>
-	 */
-	public static final String REST_paramResolvers = PREFIX + ".paramResolvers.lo";
-
-	/**
 	 * Configuration property:  Parsers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2323,6 +2224,94 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_responseHandlers = PREFIX + ".responseHandlers.lo";
+
+	/**
+	 * Configuration property:  Java REST method parameter resolvers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_restParams REST_restParams}
+	 * 	<li><b>Name:</b>  <js>"RestContext.restParams.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Class&lt;{@link org.apache.juneau.rest.RestParam}&gt;&gt;</c>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restParams()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restParams(Class...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
+	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
+	 * 	<jk>public class</jk> MyRestParam <jk>implements</jk> RestParam {
+	 *
+	 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
+	 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
+	 *		<jk>public static</jk> MyRestParam <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
+	 *			<jk>if</jk> (<jv>paramInfo</jv>.isType(MySpecialObject.<jk>class</jk>)
+	 *				<jk>return new</jk> MyRestParam();
+	 *			<jk>return null</jk>;
+	 *		}
+	 *
+	 * 		<jk>public</jk> MyRestParam() {}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(<jv>call</jv>.getRestRequest().getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restParams=MyRestParam.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			<jv>builder</jv>.restParams(MyRestParam.<jk>class</jk>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			<jv>builder</jv>.addTo(<jsf>REST_restParams</jsf>, MyRestParam.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restParams(MyRestParam.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Now pass it into your method.</jc>
+	 * 		<ja>@RestMethod</ja>(...)
+	 * 		<jk>public</jk> Object doMyMethod(MySpecialObject <jv>mySpecialObject</jv>) {
+	 * 			<jc>// Do something with it.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * 	<li>
+	 * 		Refer to {@link RestParam} for the list of predefined parameter resolvers.
+	 * </ul>
+	 */
+	public static final String REST_restParams = PREFIX + ".restParams.lo";
 
 	/**
 	 * Configuration property:  Declared roles.
@@ -3179,7 +3168,7 @@ public class RestContext extends BeanContext {
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
-	private final Map<Class<?>,RestMethodParam> paramResolvers;
+	private final Class<? extends RestParam>[] restParams, hookMethodParams;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
@@ -3334,12 +3323,8 @@ public class RestContext extends BeanContext {
 			defaultResponseHeaders = createDefaultResponseHeaders(r, beanFactory);
 			defaultRequestAttributes = createDefaultRequestAttributes(r, beanFactory);
 
-			RestMethodParam[] _paramResolvers = createParamResolvers(r, beanFactory);
-			beanFactory.addBean(RestMethodParam[].class, _paramResolvers);
-			AMap<Class<?>,RestMethodParam> _paramResolvers2 = AMap.of();
-			for (RestMethodParam rp : _paramResolvers)
-				_paramResolvers2.put(rp.forClass(), rp);
-			paramResolvers = _paramResolvers2.unmodifiable();
+			restParams = createRestParams(r, beanFactory);
+			hookMethodParams = createHookMethodParams(r, beanFactory);
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority));
@@ -3561,7 +3546,7 @@ public class RestContext extends BeanContext {
 	}
 
 	private MethodInvoker toRestMethodInvoker(Method m) {
-		return new RestMethodInvoker(m, findParams(m, true, null),  getMethodExecStats(m));
+		return new RestMethodInvoker(m, findHookMethodParams(m, getBeanFactory()), getMethodExecStats(m));
 	}
 
 	/**
@@ -4191,20 +4176,14 @@ public class RestContext extends BeanContext {
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_paramResolvers} value set via any of the following:
+	 * 	<li>Looks for {@link #REST_restParams} value set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#paramResolvers(Class...)}/{@link RestContextBuilder#paramResolvers(RestMethodParam...)}
-	 * 			<li>{@link Rest#paramResolvers()}.
+	 * 			<li>{@link RestContextBuilder#restParams(Class...)}/{@link RestContextBuilder#restParams(Class...)}
+	 * 			<li>{@link Rest#restParams()}.
 	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createParamResolvers()</> method that returns <c>{@link RestMethodParam}[]</c> on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanFactory}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createRestParams()</> method that returns <c>{@link Class}[]</c>.
 	 * 	<li>Resolves it via the bean factory registered in this context.
-	 * 	<li>Instantiates a <c>RestMethodParam[0]</c>.
+	 * 	<li>Instantiates a default set of parameters.
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
@@ -4213,24 +4192,114 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If parameter resolvers could not be instantiated.
 	 * @seealso #REST_paramResolvers
 	 */
-	protected RestMethodParam[] createParamResolvers(Object resource, BeanFactory beanFactory) throws Exception {
-		RestMethodParam[] x = getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, null, beanFactory);
+	@SuppressWarnings("unchecked")
+	protected Class<? extends RestParam>[] createRestParams(Object resource, BeanFactory beanFactory) throws Exception {
+		@SuppressWarnings("rawtypes")
+		AList<Class> x = AList.of(getListProperty(REST_restParams, Class.class, AList.of()));
 
-		if (x == null)
-			x = beanFactory.getBean(RestMethodParam[].class).orElse(null);
+		x.a(
+			AttributeParam.class,
+			BodyParam.class,
+			ConfigParam.class,
+			FormDataParam.class,
+			HasFormDataParam.class,
+			HasQueryParam.class,
+			HeaderParam.class,
+			HttpServletRequestParam.class,
+			HttpServletResponseParam.class,
+			InputStreamParam.class,
+			InputStreamParserParam.class,
+			LocaleParam.class,
+			MessagesParam.class,
+			MethodParam.class,
+			OutputStreamParam.class,
+			ParserParam.class,
+			PathParam.class,
+			QueryParam.class,
+			ReaderParam.class,
+			ReaderParserParam.class,
+			RequestAttributesParam.class,
+			RequestBeanParam.class,
+			RequestBodyParam.class,
+			RequestFormDataParam.class,
+			RequestHeadersParam.class,
+			RequestPathParam.class,
+			RequestQueryParam.class,
+			ResourceBundleParam.class,
+			ResponseBeanParam.class,
+			ResponseHeaderParam.class,
+			ResponseStatusParam.class,
+			RestContextParam.class,
+			RestRequestParam.class,
+			ServetInputStreamParam.class,
+			ServletOutputStreamParam.class,
+			SwaggerParam.class,
+			TimeZoneParam.class,
+			UriContextParam.class,
+			UriResolverParam.class,
+			WriterParam.class,
+			DefaultParam.class
+		);
 
-		if (x == null)
-			x = new RestMethodParam[0];
+		Class<?>[] x2 = x.toArray(new Class[x.size()]);
 
-		x = BeanFactory
+		x2 = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(RestMethodParam[].class, x)
-			.beanCreateMethodFinder(RestMethodParam[].class, resource)
-			.find("createParamResolvers")
-			.withDefault(x)
+			.addBean(Class[].class, x2)
+			.beanCreateMethodFinder(Class[].class, resource)
+			.find("createRestParams")
+			.withDefault(x2)
 			.run();
 
-		return x;
+		return (Class<? extends RestParam>[])x2;
+	}
+
+	/**
+	 * Instantiates the hook method parameter resolvers for this REST resource.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The REST method parameter resolvers for this REST resource.
+	 * @throws Exception If parameter resolvers could not be instantiated.
+	 * @seealso #REST_paramResolvers
+	 */
+	@SuppressWarnings("unchecked")
+	protected Class<? extends RestParam>[] createHookMethodParams(Object resource, BeanFactory beanFactory) throws Exception {
+		@SuppressWarnings("rawtypes")
+		AList<Class> x = AList.of();
+
+		x.a(
+			ConfigParam.class,
+			HeaderParam.class,
+			HttpServletRequestParam.class,
+			HttpServletResponseParam.class,
+			InputStreamParam.class,
+			LocaleParam.class,
+			MessagesParam.class,
+			MethodParam.class,
+			OutputStreamParam.class,
+			ReaderParam.class,
+			ResourceBundleParam.class,
+			RestContextParam.class,
+			RestRequestParam.class,
+			ServetInputStreamParam.class,
+			ServletOutputStreamParam.class,
+			TimeZoneParam.class,
+			WriterParam.class,
+			DefaultParam.class
+		);
+
+		Class<?>[] x2 = x.toArray(new Class[x.size()]);
+
+		x2 = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(Class[].class, x2)
+			.beanCreateMethodFinder(Class[].class, resource)
+			.find("createHookMethodParams")
+			.withDefault(x2)
+			.run();
+
+		return (Class<? extends RestParam>[])x2;
 	}
 
 	/**
@@ -5264,66 +5333,71 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Finds the {@link RestMethodParam} instances to handle resolving objects on the calls to the specified Java method.
+	 * Finds the {@link RestParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
 	 * @param m The Java method being called.
-	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
-	 * @param urlPathMatcher The path pattern to match against.
+	 * @param beanFactory The method context bean factory.
 	 * @return The array of resolvers.
 	 */
-	protected RestMethodParam[] findParams(Method m, boolean isPreOrPost, UrlPathMatcher urlPathMatcher) {
+	protected RestParam[] findRestMethodParams(Method m, BeanFactory beanFactory) {
 
 		MethodInfo mi = MethodInfo.of(m);
 		List<ClassInfo> pt = mi.getParamTypes();
-		RestMethodParam[] rp = new RestMethodParam[pt.size()];
-		PropertyStore ps = getPropertyStore();
+		RestParam[] rp = new RestParam[pt.size()];
+
+		beanFactory = new BeanFactory(beanFactory, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
-
-			ClassInfo t = pt.get(i);
-			if (t.inner() != null) {
-				Class<?> c = t.inner();
-				rp[i] = paramResolvers.get(c);
-				if (rp[i] == null)
-					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
+			ParamInfo pi = mi.getParam(i);
+			beanFactory.addBean(ParamInfo.class, pi);
+			for (Class<? extends RestParam> c : restParams) {
+				try {
+					rp[i] = beanFactory.createBean(c);
+					if (rp[i] != null)
+						break;
+				} catch (ExecutableException e) {
+					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
+				}
 			}
-
-			ParamInfo mpi = mi.getParam(i);
-
-			if (mpi.hasAnnotation(Header.class)) {
-				rp[i] = new RestParamDefaults.HeaderObject(mpi, ps);
-			} else if (mpi.hasAnnotation(Attr.class)) {
-				rp[i] = new RestParamDefaults.AttributeObject(mpi, ps);
-			} else if (mpi.hasAnnotation(Query.class)) {
-				rp[i] = new RestParamDefaults.QueryObject(mpi, ps);
-			} else if (mpi.hasAnnotation(FormData.class)) {
-				rp[i] = new RestParamDefaults.FormDataObject(mpi, ps);
-			} else if (mpi.hasAnnotation(Path.class)) {
-				rp[i] = new RestParamDefaults.PathObject(mpi, ps, urlPathMatcher);
-			} else if (mpi.hasAnnotation(Body.class)) {
-				rp[i] = new RestParamDefaults.BodyObject(mpi, ps);
-			} else if (mpi.hasAnnotation(Request.class)) {
-				rp[i] = new RestParamDefaults.RequestObject(mpi, ps);
-			} else if (mpi.hasAnnotation(Response.class)) {
-				rp[i] = new RestParamDefaults.ResponseObject(mpi, ps);
-			} else if (mpi.hasAnnotation(ResponseHeader.class)) {
-				rp[i] = new RestParamDefaults.ResponseHeaderObject(mpi, ps);
-			} else if (mpi.hasAnnotation(ResponseStatus.class)) {
-				rp[i] = new RestParamDefaults.ResponseStatusObject(t);
-			} else if (mpi.hasAnnotation(HasFormData.class)) {
-				rp[i] = new RestParamDefaults.HasFormDataObject(mpi);
-			} else if (mpi.hasAnnotation(HasQuery.class)) {
-				rp[i] = new RestParamDefaults.HasQueryObject(mpi);
-			} else if (mpi.hasAnnotation(org.apache.juneau.rest.annotation.Method.class)) {
-				rp[i] = new RestParamDefaults.MethodObject(mi, t, mpi);
-			} else if (rp[i] == null) {
-				rp[i] = new RestParamDefaults.BeanFactoryObject(mi, t, mpi);
-			}
+			if (rp[i] == null)
+				throw new InternalServerError("Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
 		}
 
 		return rp;
 	}
 
+	/**
+	 * Finds the {@link RestParam} instances to handle resolving objects on pre-call and post-call Java methods.
+	 *
+	 * @param m The Java method being called.
+	 * @param beanFactory The method context bean factory.
+	 * @return The array of resolvers.
+	 */
+	protected RestParam[] findHookMethodParams(Method m, BeanFactory beanFactory) {
+		MethodInfo mi = MethodInfo.of(m);
+		List<ClassInfo> pt = mi.getParamTypes();
+		RestParam[] rp = new RestParam[pt.size()];
+
+		beanFactory = new BeanFactory(beanFactory, getResource());
+
+		for (int i = 0; i < pt.size(); i++) {
+			ParamInfo pi = mi.getParam(i);
+			beanFactory.addBean(ParamInfo.class, pi);
+			for (Class<? extends RestParam> c : hookMethodParams) {
+				try {
+					rp[i] = beanFactory.createBean(c);
+					if (rp[i] != null)
+						break;
+				} catch (ExecutableException e) {
+					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
+				}
+			}
+			if (rp[i] == null)
+				throw new InternalServerError("Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
+		}
+
+		return rp;
+	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Call handling
@@ -5765,7 +5839,7 @@ public class RestContext extends BeanContext {
 			try {
 				x.invokeUsingFactory(call.getBeanFactory(), call.getResource());
 			} catch (ExecutableException e) {
-				logger.log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getName()));
+				logger.log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}
@@ -5830,7 +5904,7 @@ public class RestContext extends BeanContext {
 			try {
 				x.invokeUsingFactory(beanFactory, getResource());
 			} catch (ExecutableException e) {
-				getLogger().log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking servlet-destroy method ''{0}''.", x.getName()));
+				getLogger().log(Level.WARNING, e.unwrap(), ()->format("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -5928,13 +6002,13 @@ public class RestContext extends BeanContext {
 				.a("defaultResponseHeaders", defaultResponseHeaders)
 				.a("fileFinder", fileFinder)
 				.a("infoProvider", infoProvider)
-				.a("paramResolvers", paramResolvers)
 				.a("parsers", parsers)
 				.a("partParser", partParser)
 				.a("partSerializer", partSerializer)
 				.a("produces", produces)
 				.a("renderResponseStackTraces", renderResponseStackTraces)
 				.a("responseHandlers", responseHandlers)
+				.a("restParams", restParams)
 				.a("serializers", serializers)
 				.a("staticFiles", staticFiles)
 				.a("uriAuthority", uriAuthority)

@@ -30,6 +30,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -366,7 +367,7 @@ public class RestMethod_Params_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		paramResolvers=B2a.class,
+		restParams=B2a.class,
 		allowedHeaderParams="Custom"
 	)
 	public static class B2 {
@@ -376,10 +377,14 @@ public class RestMethod_Params_Test {
 		}
 	}
 
-	public static class B2a extends RestMethodParam {
-		public B2a() {
-			super(RestParamType.HEADER, "Custom", B2b.class);
+	public static class B2a implements RestParam {
+
+		public static B2a create(ParamInfo pi) {
+			if (pi.isType(B2b.class))
+				return new B2a();
+			return null;
 		}
+
 		@Override
 		public Object resolve(RestCall call) throws Exception {
 			return new B2b(call.getRestRequest().getHeader("Custom"));

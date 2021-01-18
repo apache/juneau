@@ -322,56 +322,77 @@ final class SwaggerGenerator {
 					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
 
 			// Finally, look for parameters defined on method.
-			for (RestMethodParam mp : sm.methodParams) {
+			for (ParamInfo mpi : mi.getParams()) {
 
-				RestParamType in = mp.getParamType();
-				ParamInfo mpi = mp.getMethodParamInfo();
+				ClassInfo pt = mpi.getParameterType();
+				Type type = pt.innerType();
 
-				if (in.isAny(BODY, QUERY, FORM_DATA, HEADER, PATH)) {
+				if (mpi.hasAnnotation(Body.class) || pt.hasAnnotation(Body.class)) {
+					OMap param = paramMap.getMap(BODY + ".body", true).a("in", BODY);
+					for (Body a : mpi.getAnnotations(Body.class))
+						merge(param, a);
+					for (Body a : pt.getAnnotations(Body.class))
+						merge(param, a);
+					param.putIfAbsent("required", true);
+					param.ase("schema", getSchema(param.getMap("schema"), type, bs));
+					addBodyExamples(sm, param, false, type);
 
-					String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
+				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
+					String name = null;
+					for (Query a : mpi.getAnnotations(Query.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					for (Query a : pt.getAnnotations(Query.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					OMap param = paramMap.getMap(QUERY + "." + name, true).a("name", name).a("in", QUERY);
+					for (Query a : mpi.getAnnotations(Query.class))
+						merge(param, a);
+					for (Query a : pt.getAnnotations(Query.class))
+						merge(param, a);
+					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, QUERY, type);
 
-					OMap param = paramMap.getMap(key, true);
+				} else if (mpi.hasAnnotation(FormData.class) || pt.hasAnnotation(FormData.class)) {
+					String name = null;
+					for (FormData a : mpi.getAnnotations(FormData.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					for (FormData a : pt.getAnnotations(FormData.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).a("name", name).a("in", FORM_DATA);
+					for (FormData a : mpi.getAnnotations(FormData.class))
+						merge(param, a);
+					for (FormData a : pt.getAnnotations(FormData.class))
+						merge(param, a);
+					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, FORM_DATA, type);
 
-					param.append("in", in);
+				} else if (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class)) {
+					String name = null;
+					for (Header a : mpi.getAnnotations(Header.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					for (Header a : pt.getAnnotations(Header.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					OMap param = paramMap.getMap(HEADER + "." + name, true).a("name", name).a("in", HEADER);
+					for (Header a : mpi.getAnnotations(Header.class))
+						merge(param, a);
+					for (Header a : pt.getAnnotations(Header.class))
+						merge(param, a);
+					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, HEADER, type);
 
-					if (in != BODY)
-						param.append("name", mp.name);
-
-					try {
-						if (mpi != null) {
-							if (in == BODY) {
-								for (Body a : mpi.getAnnotations(Body.class))
-									merge(param, a);
-							} else if (in == QUERY) {
-								for (Query a : mpi.getAnnotations(Query.class))
-									merge(param, a);
-							} else if (in == FORM_DATA) {
-								for (FormData a : mpi.getAnnotations(FormData.class))
-									merge(param, a);
-							} else if (in == HEADER) {
-								for (Header a : mpi.getAnnotations(Header.class))
-									merge(param, a);
-							} else if (in == PATH) {
-								for (Path a : mpi.getAnnotations(Path.class))
-									merge(param, a);
-							}
-						}
-					} catch (ParseException e) {
-						throw new SwaggerException(e, "Malformed swagger JSON object encountered in {0} class {1} method parameter {2}", in, c, mpi);
-					}
-
-
-					if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
-						param.put("required", true);
-
-					if (in == BODY) {
-						param.ase("schema", getSchema(param.getMap("schema"), mp.getType(), bs));
-						addBodyExamples(sm, param, false, mp.getType());
-					} else {
-						mergePartSchema(param, getSchema(param.getMap("schema"), mp.getType(), bs));
-						addParamExample(sm, param, in, mp.getType());
-					}
+				} else if (mpi.hasAnnotation(Path.class) || pt.hasAnnotation(Path.class)) {
+					String name = null;
+					for (Path a : mpi.getAnnotations(Path.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					for (Path a : pt.getAnnotations(Path.class))
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					OMap param = paramMap.getMap(PATH + "." + name, true).a("name", name).a("in", PATH);
+					for (Path a : mpi.getAnnotations(Path.class))
+						merge(param, a);
+					for (Path a : pt.getAnnotations(Path.class))
+						merge(param, a);
+					mergePartSchema(param, getSchema(param.getMap("schema"), type, bs));
+					addParamExample(sm, param, PATH, type);
+					param.putIfAbsent("required", true);
 				}
 			}
 
@@ -443,34 +464,38 @@ final class SwaggerGenerator {
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
-			for (RestMethodParam mp : sm.methodParams) {
+			for (ParamInfo mpi : mi.getParams()) {
 
-				RestParamType in = mp.getParamType();
-				ParamInfo mpi = mp.getMethodParamInfo();
+				ClassInfo pt = mpi.getParameterType();
 
-				if (in == RESPONSE_HEADER) {
-					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class);
+				if (mpi.hasAnnotation(ResponseHeader.class) || pt.hasAnnotation(ResponseHeader.class)) {
+					List<ResponseHeader> la = AList.of(mpi.getAnnotations(ResponseHeader.class)).aa(pt.getAnnotations(ResponseHeader.class));
 					Set<Integer> codes = getCodes2(la, 200);
+					String name = null;
+					for (ResponseHeader a : la)
+						name = firstNonEmpty(a.name(), a.n(), a.value(), name);
+					Type type = mpi.getParameterType().innerType();
 					for (ResponseHeader a : la) {
 						if (! isMulti(a)) {
 							for (Integer code : codes) {
-								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(mp.name, true);
+								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, Value.getParameterType(mp.type), bs));
+								mergePartSchema(header, getSchema(header, Value.getParameterType(type), bs));
 							}
 						}
 					}
 
-				} else if (in == RESPONSE) {
-					List<Response> la = mpi.getAnnotations(Response.class);
+				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
+					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).aa(pt.getAnnotations(Response.class));
 					Set<Integer> codes = getCodes(la, 200);
+					Type type = mpi.getParameterType().innerType();
 					for (Response a : la) {
 						for (Integer code : codes) {
 							OMap response = responses.getMap(String.valueOf(code), true);
 							merge(response, a);
 						}
 					}
-					Type type = Value.getParameterType(mp.type);
+					type = Value.getParameterType(type);
 					if (type != null) {
 						for (String code : responses.keySet()) {
 							OMap om = responses.getMap(code);

@@ -83,7 +83,7 @@ public class MethodInvokerTest {
 
 		assertEquals(m, mi.inner().inner());
 		assertEquals("A", mi.getDeclaringClass().getSimpleName());
-		assertEquals("foo", mi.getName());
+		assertEquals(A.class.getName() + ".foo()", mi.getFullName());
 	}
 
 }

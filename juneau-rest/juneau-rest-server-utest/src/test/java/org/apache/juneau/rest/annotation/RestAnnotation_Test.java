@@ -66,7 +66,6 @@ public class RestAnnotation_Test {
 		.messages("messages")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
-		.paramResolvers(RestMethodParam.class)
 		.parsers(Parser.class)
 		.partParser(HttpPartParser.class)
 		.partSerializer(HttpPartSerializer.class)
@@ -74,6 +73,7 @@ public class RestAnnotation_Test {
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseHandlers(ResponseHandler.class)
+		.restParams(RestParam.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
@@ -117,7 +117,6 @@ public class RestAnnotation_Test {
 		.messages("messages")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
-		.paramResolvers(RestMethodParam.class)
 		.parsers(Parser.class)
 		.partParser(HttpPartParser.class)
 		.partSerializer(HttpPartSerializer.class)
@@ -125,6 +124,7 @@ public class RestAnnotation_Test {
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseHandlers(ResponseHandler.class)
+		.restParams(RestParam.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
@@ -171,7 +171,6 @@ public class RestAnnotation_Test {
 				+ "messages:'messages',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"'],"
-				+ "paramResolvers:['org.apache.juneau.rest.RestMethodParam'],"
 				+ "parsers:['org.apache.juneau.parser.Parser'],"
 				+ "partParser:'org.apache.juneau.httppart.HttpPartParser',"
 				+ "partSerializer:'org.apache.juneau.httppart.HttpPartSerializer',"
@@ -179,6 +178,7 @@ public class RestAnnotation_Test {
 				+ "produces:['produces'],"
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
 				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
+				+ "restParams:['org.apache.juneau.rest.RestParam'],"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
@@ -267,7 +267,6 @@ public class RestAnnotation_Test {
 		messages="messages",
 		on="on",
 		onClass=RestAnnotation_Test.class,
-		paramResolvers=RestMethodParam.class,
 		parsers=Parser.class,
 		partParser=HttpPartParser.class,
 		partSerializer=HttpPartSerializer.class,
@@ -275,6 +274,7 @@ public class RestAnnotation_Test {
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseHandlers=ResponseHandler.class,
+		restParams=RestParam.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
@@ -320,7 +320,6 @@ public class RestAnnotation_Test {
 		messages="messages",
 		on="on",
 		onClass=RestAnnotation_Test.class,
-		paramResolvers=RestMethodParam.class,
 		parsers=Parser.class,
 		partParser=HttpPartParser.class,
 		partSerializer=HttpPartSerializer.class,
@@ -328,6 +327,7 @@ public class RestAnnotation_Test {
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseHandlers=ResponseHandler.class,
+		restParams=RestParam.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,

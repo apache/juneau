@@ -731,20 +731,6 @@ public @interface Rest {
 	Class<?>[] onClass() default {};
 
 	/**
-	 * Java method parameter resolvers.
-	 *
-	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
-	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
-	 * </ul>
-	 */
-	Class<? extends RestMethodParam>[] paramResolvers() default {};
-
-	/**
 	 * Parsers.
 	 *
 	 * <p>
@@ -966,6 +952,20 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
+
+	/**
+	 * Java method parameter resolvers.
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
+	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restParams}
+	 * </ul>
+	 */
+	Class<? extends RestParam>[] restParams() default {};
 
 	/**
 	 * Role guard.

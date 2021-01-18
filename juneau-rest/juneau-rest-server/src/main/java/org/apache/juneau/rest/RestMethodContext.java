@@ -599,7 +599,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
-	final RestMethodParam[] methodParams;
+	final RestParam[] methodParams;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
@@ -649,7 +649,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			beanFactory = new BeanFactory(context.rootBeanFactory, r)
 				.addBean(RestMethodContext.class, this)
-				.addBean(Method.class, method);
+				.addBean(Method.class, method)
+				.addBean(PropertyStore.class, ps);
 			beanFactory.addBean(BeanFactory.class, beanFactory);
 
 			serializers = createSerializers(r, beanFactory, ps);
@@ -676,6 +677,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			pathMatchers = createPathMatchers(r, beanFactory, b.dotAll);
 			beanFactory.addBean(UrlPathMatcher[].class, pathMatchers);
+			beanFactory.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
 			encoders = createEncoders(r, beanFactory);
 			beanFactory.addBean(EncoderGroup.class, encoders);
@@ -713,7 +715,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			responseMeta = ResponseBeanMeta.create(mi, ps);
 
-			methodParams = context.findParams(mi.inner(), false, pathMatchers[this.pathMatchers.length-1]);
+			methodParams = context.findRestMethodParams(mi.inner(), beanFactory);
 
 			this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
@@ -1680,10 +1682,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		Object[] args = new Object[methodParams.length];
 		for (int i = 0; i < methodParams.length; i++) {
+			ParamInfo pi = methodInvoker.inner().getParam(i);
 			try {
 				args[i] = methodParams[i].resolve(call);
 			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.", methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), mi.getDeclaringClass().getFullName(), mi.getSimpleName());
+				throw toHttpException(e, BadRequest.class, "Could not convert resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), mi.getFullName());
 			}
 		}
 

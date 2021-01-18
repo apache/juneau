@@ -2428,7 +2428,13 @@ public final class StringUtils {
 		Object[] args2 = new Object[args.length];
 		for (int i = 0; i < args.length; i++)
 			args2[i] = convertToReadable(args[i]);
-		return MessageFormat.format(pattern, args2);
+
+		int c = countChars(pattern, '\'');
+		if (c % 2 != 0)
+			throw new AssertionError("Dangling single quote found in pattern: " + pattern);
+
+		String msg = MessageFormat.format(pattern, args2);
+		return msg;
 	}
 
 	private static String convertToReadable(Object o) {

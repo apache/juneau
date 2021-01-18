@@ -1372,45 +1372,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Java method parameter resolvers.
-	 *
-	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
-	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	@SuppressWarnings("unchecked")
-	public RestContextBuilder paramResolvers(Class<? extends RestMethodParam>...values) {
-		return prependTo(REST_paramResolvers, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Java method parameter resolvers.
-	 *
-	 * <p>
-	 * Same as {@link #paramResolvers(Class...)} except input is pre-constructed instances.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder paramResolvers(RestMethodParam...values) {
-		return prependTo(REST_paramResolvers, values);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parser listener.
 	 *
 	 * <p>
@@ -1665,6 +1626,27 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder responseHandlers(ResponseHandler...values) {
 		return prependTo(REST_responseHandlers, values);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Java method parameter resolvers.
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restParams}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	@SuppressWarnings("unchecked")
+	public RestContextBuilder restParams(Class<? extends RestParam>...values) {
+		return prependTo(REST_restParams, values);
 	}
 
 	/**

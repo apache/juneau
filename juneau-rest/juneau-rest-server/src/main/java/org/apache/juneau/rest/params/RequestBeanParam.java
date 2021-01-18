@@ -10,59 +10,50 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
-import java.lang.reflect.*;
+package org.apache.juneau.rest.params;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.exception.*;
-import org.apache.juneau.mstat.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * A specialized invoker for methods that are called during a servlet request.
+ * Resolves method parameters annotated with {@link Request} on {@link RestMethod}-annotated Java methods.
+ *
+ * <p>
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>requestBeanMeta</jv>)</c>
+ * with a {@link RequestBeanMeta meta} derived from the {@link Request} annotation and context configuration.
  */
-public class RestMethodInvoker extends MethodInvoker {
+public class RequestBeanParam implements RestParam {
+	private final RequestBeanMeta meta;
 
-	private final RestParam[] params;
+	/**
+	 * Static creator.
+	 *
+	 * @param paramInfo The Java method parameter being resolved.
+	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @return A new {@link RequestBeanParam}, or <jk>null</jk> if the parameter is not annotated with {@link Request}.
+	 */
+	public static RequestBeanParam create(ParamInfo paramInfo, PropertyStore ps) {
+		if (paramInfo.hasAnnotation(Request.class))
+			return new RequestBeanParam(paramInfo, ps);
+		return null;
+	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param m The method being wrapped.
-	 * @param params The parameter resolvers.
-	 * @param stats The instrumentor.
+	 * @param paramInfo The Java method parameter being resolved.
+	 * @param ps The configuration properties of the {@link RestContext}.
 	 */
-	public RestMethodInvoker(Method m, RestParam[] params, MethodExecStats stats) {
-		super(m, stats);
-		this.params = params;
+	protected RequestBeanParam(ParamInfo paramInfo, PropertyStore ps) {
+		this.meta = RequestBeanMeta.create(paramInfo, ps);
 	}
 
-	/**
-	 * Invokes this method from the specified {@link RestCall}.
-	 *
-	 * @param call The REST call.
-	 * @param resource The REST resource object.
-	 * @return The results of the call.
-	 * @throws HttpException If an error occurred during either parameter resolution or method invocation.
-	 */
-	public Object invokeFromCall(RestCall call, Object resource) throws HttpException {
-		Object[] args = new Object[params.length];
-		for (int i = 0; i < params.length; i++) {
-			ParamInfo pi = inner().getParam(i);
-			try {
-				args[i] = params[i].resolve(call);
-			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
-			}
-		}
-		try {
-			return invoke(resource, args);
-		} catch (ExecutableException e) {
-			throw toHttpException(e.unwrap(), InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
-		}
+	@Override /* RestMethodParam */
+	public Object resolve(RestCall call) throws Exception {
+		return call.getRestRequest().getRequest(meta);
 	}
 }

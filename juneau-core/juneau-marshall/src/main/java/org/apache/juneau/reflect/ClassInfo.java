@@ -2353,6 +2353,15 @@ public final class ClassInfo {
 		return c != null && c.isAnnotation();
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link Collection} or an array.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link Collection} or an array.
+	 */
+	public boolean isCollectionOrArray() {
+		return c != null && (Collection.class.isAssignableFrom(c) || c.isArray());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation
 	//-----------------------------------------------------------------------------------------------------------------

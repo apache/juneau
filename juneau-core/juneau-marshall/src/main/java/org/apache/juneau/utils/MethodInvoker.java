@@ -85,7 +85,7 @@ public class MethodInvoker {
 		missing = beanFactory.getMissingParamTypes(m.getParamTypes());
 		if (missing.isEmpty())
 			return invoke(o, beanFactory.getParams(m.getParamTypes()));
-		throw new ExecutableException("Could not find prerequisites to invoke method ''{0}'': {1}", m.getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
+		throw new ExecutableException("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class MethodInvoker {
 	 *
 	 * @return The name of the method.
 	 */
-	public String getName() {
-		return m.getName();
+	public String getFullName() {
+		return m.getFullName();
 	}
 }

@@ -10,59 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
-import java.lang.reflect.*;
+package org.apache.juneau.rest.params;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.exception.*;
-import org.apache.juneau.mstat.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * A specialized invoker for methods that are called during a servlet request.
+ * Resolves method parameters of type {@link UriContext} on {@link RestMethod}-annotated Java methods.
+ *
+ * <p>
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getUriContext() getUriContext}()</c>.
  */
-public class RestMethodInvoker extends MethodInvoker {
-
-	private final RestParam[] params;
+public class UriContextParam extends SimpleRestParam {
 
 	/**
-	 * Constructor.
+	 * Static creator.
 	 *
-	 * @param m The method being wrapped.
-	 * @param params The parameter resolvers.
-	 * @param stats The instrumentor.
+	 * @param paramInfo The Java method parameter being resolved.
+	 * @return A new {@link UriContextParam}, or <jk>null</jk> if the parameter type is not {@link UriContext}.
 	 */
-	public RestMethodInvoker(Method m, RestParam[] params, MethodExecStats stats) {
-		super(m, stats);
-		this.params = params;
+	public static UriContextParam create(ParamInfo paramInfo) {
+		if (paramInfo.isType(UriContext.class))
+			return new UriContextParam();
+		return null;
 	}
 
 	/**
-	 * Invokes this method from the specified {@link RestCall}.
-	 *
-	 * @param call The REST call.
-	 * @param resource The REST resource object.
-	 * @return The results of the call.
-	 * @throws HttpException If an error occurred during either parameter resolution or method invocation.
+	 * Constructor.
 	 */
-	public Object invokeFromCall(RestCall call, Object resource) throws HttpException {
-		Object[] args = new Object[params.length];
-		for (int i = 0; i < params.length; i++) {
-			ParamInfo pi = inner().getParam(i);
-			try {
-				args[i] = params[i].resolve(call);
-			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
-			}
-		}
-		try {
-			return invoke(resource, args);
-		} catch (ExecutableException e) {
-			throw toHttpException(e.unwrap(), InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
-		}
+	protected UriContextParam() {
+		super((c)->c.getRestRequest().getUriContext());
 	}
 }

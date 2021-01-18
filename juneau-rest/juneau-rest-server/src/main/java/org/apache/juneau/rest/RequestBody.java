@@ -68,7 +68,13 @@ public class RequestBody {
 		return this;
 	}
 
-	RequestBody schema(HttpPartSchema schema) {
+	/**
+	 * Sets the schema for this body.
+	 *
+	 * @param schema The new schema for this body.
+	 * @return This object (for method chaining).
+	 */
+	public RequestBody schema(HttpPartSchema schema) {
 		this.schema = schema;
 		return this;
 	}

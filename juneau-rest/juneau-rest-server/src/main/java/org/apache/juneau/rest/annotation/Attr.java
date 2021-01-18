@@ -46,7 +46,7 @@ import org.apache.juneau.oapi.*;
  * </p>
  */
 @Documented
-@Target({PARAMETER})
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Attr {

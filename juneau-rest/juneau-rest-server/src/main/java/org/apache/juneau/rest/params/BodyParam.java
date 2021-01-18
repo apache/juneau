@@ -10,59 +10,52 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import static org.apache.juneau.rest.HttpRuntimeException.*;
+package org.apache.juneau.rest.params;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.http.exception.*;
-import org.apache.juneau.mstat.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * A specialized invoker for methods that are called during a servlet request.
+ * Resolves method parameters and parameter types annotated with {@link Body} on {@link RestMethod}-annotated Java methods.
+ *
+ * <p>
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#schema(HttpPartSchema) schema}(<jv>schema</jv>).{@link RequestBody#asType(Type,Type...) asType}(<jv>type</jv>)</c>.
+ * with a {@link HttpPartSchema schema} derived from the {@link Body} annotation.
  */
-public class RestMethodInvoker extends MethodInvoker {
+public class BodyParam implements RestParam {
 
-	private final RestParam[] params;
+	private final HttpPartSchema schema;
+	private final Type type;
+
+	/**
+	 * Static creator.
+	 *
+	 * @param paramInfo The Java method parameter being resolved.
+	 * @return A new {@link BodyParam}, or <jk>null</jk> if the parameter is not annotated with {@link Body}.
+	 */
+	public static BodyParam create(ParamInfo paramInfo) {
+		if (paramInfo.hasAnnotation(Body.class) || paramInfo.getParameterType().hasAnnotation(Body.class))
+			return new BodyParam(paramInfo);
+		return null;
+	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param m The method being wrapped.
-	 * @param params The parameter resolvers.
-	 * @param stats The instrumentor.
+	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	public RestMethodInvoker(Method m, RestParam[] params, MethodExecStats stats) {
-		super(m, stats);
-		this.params = params;
+	protected BodyParam(ParamInfo paramInfo) {
+		this.type = paramInfo.getParameterType().innerType();
+		this.schema = HttpPartSchema.create(Body.class, paramInfo);
 	}
 
-	/**
-	 * Invokes this method from the specified {@link RestCall}.
-	 *
-	 * @param call The REST call.
-	 * @param resource The REST resource object.
-	 * @return The results of the call.
-	 * @throws HttpException If an error occurred during either parameter resolution or method invocation.
-	 */
-	public Object invokeFromCall(RestCall call, Object resource) throws HttpException {
-		Object[] args = new Object[params.length];
-		for (int i = 0; i < params.length; i++) {
-			ParamInfo pi = inner().getParam(i);
-			try {
-				args[i] = params[i].resolve(call);
-			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
-			}
-		}
-		try {
-			return invoke(resource, args);
-		} catch (ExecutableException e) {
-			throw toHttpException(e.unwrap(), InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
-		}
+	@Override /* RestMethodParam */
+	public Object resolve(RestCall call) throws Exception {
+		return call.getRestRequest().getBody().schema(schema).asType(type);
 	}
 }
