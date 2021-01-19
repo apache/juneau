@@ -900,7 +900,7 @@ public class Remote_QueryAnnotation_Test {
 		}
 		@Query(n="d",allowEmptyValue=true)
 		public List<Object> getX3() {
-			return AList.of();
+			return AList.create();
 		}
 		@Query("e")
 		public List<Object> getX4() {

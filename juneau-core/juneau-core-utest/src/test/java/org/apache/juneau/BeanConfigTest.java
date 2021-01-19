@@ -356,7 +356,7 @@ public class BeanConfigTest {
 		assertEquals("x", session.convertToType(o, ReadOnlyPerson[].class)[0].getName());
 
 		// Multi-dimensional array of beans.
-		o = OList.of(OList.of(new ReadOnlyPerson("x", 123)));
+		o = OList.ofCollections(OList.of(new ReadOnlyPerson("x", 123)));
 		assertEquals("x", session.convertToType(o, ReadOnlyPerson[][].class)[0][0].getName());
 
 		// Array of strings to array of ints

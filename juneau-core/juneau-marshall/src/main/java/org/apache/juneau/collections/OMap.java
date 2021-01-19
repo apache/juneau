@@ -252,21 +252,21 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return An empty map.
 	 */
-	public static OMap of() {
+	public static OMap create() {
 		return new OMap();
 	}
 
 	/**
 	 * Construct a map initialized with the specified map.
 	 *
-	 * @param in
+	 * @param values
 	 * 	The map to copy.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
 	 * @return A new map or <jk>null</jk> if the map was <jk>null</jk>.
 	 */
-	public static OMap ofAll(Map<?,?> in) {
-		return in == null ? null : new OMap(in);
+	public static OMap of(Map<?,?> values) {
+		return values == null ? null : new OMap(values);
 	}
 
 	/**
@@ -396,38 +396,76 @@ public class OMap extends LinkedHashMap<String,Object> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Add.
-	 *
-	 * <p>
 	 * Adds an entry to this map.
 	 *
 	 * @param key The key.
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public OMap a(String key, Object value) {
+	public OMap append(String key, Object value) {
 		put(key, value);
 		return this;
 	}
 
 	/**
-	 * Add.
+	 * Appends all the entries in the specified map to this map.
 	 *
-	 * <p>
-	 * Same as {@link #a(String, Object)}
+	 * @param values The map to copy.
+	 * @return This object (for method chaining).
+	 */
+	public OMap append(Map<String,Object> values) {
+		super.putAll(values);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #append(String,Object)}.
 	 *
 	 * @param key The key.
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public OMap append(String key, Object value) {
-		return a(key,value);
+	public OMap a(String key, Object value) {
+		return append(key, value);
 	}
 
 	/**
-	 * Add if.
+	 * Same as {@link #append(Map)}.
 	 *
-	 * <p>
+	 * @param values The map to copy.
+	 * @return This object (for method chaining).
+	 */
+	public OMap a(Map<String,Object> values) {
+		return append(values);
+	}
+
+	/**
+	 * Add if flag is <jk>true</jk>.
+	 *
+	 * @param flag The flag to check.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public OMap appendIf(boolean flag, String key, Object value) {
+		if (flag)
+			append(key, value);
+		return this;
+	}
+
+	/**
+	 * Add if predicate matches value.
+	 *
+	 * @param test The predicate to match against.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public OMap appendIf(Predicate<Object> test, String key, Object value) {
+		return appendIf(test.test(value), key, value);
+	}
+
+	/**
 	 * Conditionally adds an entry to this map.
 	 *
 	 * @param overwrite Overwrite the previous value if there was one.
@@ -437,7 +475,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public OMap aif(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
+	public OMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
 		if (value == null && skipNullValue)
 			return this;
 		if (skipEmptyValue && ObjectUtils.isEmpty(value))
@@ -449,125 +487,39 @@ public class OMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Add if.
-	 *
-	 * <p>
-	 * Same as {@link #aif(boolean, boolean, boolean, String, Object)}.
-	 *
-	 * @param overwrite Overwrite the previous value if there was one.
-	 * @param skipNullValue Skip adding the value if the value is <jk>null</jk>.
-	 * @param skipEmptyValue Skip adding the value if the value is an empty string.
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
-		return aif(overwrite, skipNullValue, skipEmptyValue, key, value);
-	}
-
-	/**
-	 * Add if.
-	 *
-	 * <p>
-	 * Conditionally adds an entry to this map.
-	 *
-	 * @param flag The boolean value that must be <jk>true</jk> in order to add this entry..
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap aif(boolean flag, String key, Object value) {
-		if (flag)
-			put(key, value);
-		return this;
-	}
-
-	/**
-	 * Add if.
-	 *
-	 * <p>
-	 * Same as {@link #aif(boolean,String,Object)}.
-	 *
-	 * @param flag The boolean value that must be <jk>true</jk> in order to add this entry..
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendIf(boolean flag, String key, Object value) {
-		return aif(flag, key, value);
-	}
-
-	/**
-	 * Add skip empty.
-	 *
-	 * <p>
-	 * A no-op if the value is <jk>null</jk> or an empty string/map/collection.
+	 * Adds any non-<jk>null</jk>/non-empty values to this map.
 	 *
 	 * @param key The key.
 	 * @param values The values.
 	 * @return This object (for method chaining).
 	 */
-	public OMap ase(String key, Object...values) {
+	public OMap appendSkipEmpty(String key, Object...values) {
 		for (Object v : values)
-			aif(true, true, true, key, v);
+			appendIf(true, true, true, key, v);
 		return this;
 	}
 
 	/**
-	 * Add skip empty.
-	 *
-	 * <p>
-	 * Same as {@link #ase(String, Object...)}.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendSkipEmpty(String key, Object value) {
-		return ase(key, value);
-	}
-
-	/**
-	 * Add skip false.
-	 *
-	 * <p>
-	 * A no-op if the value is <jk>false</jk>.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap asf(String key, boolean value) {
-		if (value)
-			a(key, value);
-		return this;
-	}
-
-	/**
-	 * Add skip false.
-	 *
-	 * <p>
-	 * Same as {@link #asf(String, boolean)}.
+	 * Adds any non-false values to this map.
 	 *
 	 * @param key The key.
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
 	public OMap appendSkipFalse(String key, boolean value) {
-		return asf(key, value);
+		if (value)
+			a(key, value);
+		return this;
 	}
 
 	/**
-	 * Add skip minus one.
-	 *
-	 * <p>
-	 * A no-op if the value is <c>-1</c>.
+	 * Adds any non--1 values to this map.
 	 *
 	 * @param key The key.
 	 * @param values The values.
 	 * @return This object (for method chaining).
 	 */
-	public OMap asmo(String key, Number...values) {
+	public OMap appendSkipMinusOne(String key, Number...values) {
 		for (Number v : values)
 			if (v != null && v.intValue() != -1)
 				a(key, v);
@@ -575,198 +527,57 @@ public class OMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Add skip minus one.
-	 *
-	 * <p>
-	 * Same as {@link #asmo(String, Number...)}.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendSkipMinusOne(String key, Number value) {
-		return asmo(key, value);
-	}
-
-	/**
-	 * Add skip null.
-	 *
-	 * <p>
-	 * <jk>null</jk> values are skipped.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public OMap asn(String key, Object value) {
-		if (value != null)
-			a(key, value);
-		return this;
-	}
-
-	/**
-	 * Add skip null.
-	 *
-	 * <p>
-	 * Same as {@link #asn(String, Object)}.
+	 * Adds a value to this map if the value is not <jk>null</jk>.
 	 *
 	 * @param key The key.
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
 	public OMap appendSkipNull(String key, Object value) {
-		return asn(key, value);
-	}
-
-	/**
-	 * Add all.
-	 *
-	 * <p>
-	 * Equivalent to calling {@code putAll(m)}, but returns this map so that the method can be chained.
-	 *
-	 * @param m The map whose contents should be added to this map.
-	 * @return This object (for method chaining).
-	 */
-	public OMap aa(Map<String,Object> m) {
-		if (m != null)
-			putAll(m);
+		if (value != null)
+			a(key, value);
 		return this;
 	}
 
 	/**
-	 * Add all.
-	 *
-	 * <p>
-	 * Same as {@link #aa(Map)}.
-	 *
-	 * @param m The map whose contents should be added to this map.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendAll(Map<String,Object> m) {
-		if (m != null)
-			putAll(m);
-		return this;
-	}
-
-	/**
-	 * Add if null.
-	 *
-	 * <p>
-	 * Sets a value in this map if the entry does not exist or the value is <jk>null</jk>.
+	 * Adds a value in this map if the entry does not exist or the current value is <jk>null</jk>.
 	 *
 	 * @param key The map key.
-	 * @param val The value to set if the current value does not exist or is <jk>null</jk>.
+	 * @param value The value to set if the current value does not exist or is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public OMap aifn(String key, Object val) {
+	public OMap appendIfNull(String key, Object value) {
 		Object o = get(key);
 		if (o == null)
-			put(key, val);
+			put(key, value);
 		return this;
 	}
 
 	/**
-	 * Add if null.
-	 *
-	 * <p>
-	 * Same as {@link #aifn(String, Object)}.
+	 * Adds a value in this map if the entry does not exist or the current value is <jk>null</jk> or an empty string.
 	 *
 	 * @param key The map key.
-	 * @param val The value to set if the current value does not exist or is <jk>null</jk>.
+	 * @param value The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
 	 * @return This object (for method chaining).
 	 */
-	public OMap appendIfNull(String key, Object val) {
-		return aifn(key, val);
-	}
-
-	/**
-	 * Add if empty.
-	 *
-	 * <p>
-	 * Sets a value in this map if the entry does not exist or the value is <jk>null</jk> or an empty string.
-	 *
-	 * @param key The map key.
-	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
-	 * @return This object (for method chaining).
-	 */
-	public OMap aife(String key, Object val) {
+	public OMap appendIfEmpty(String key, Object value) {
 		Object o = get(key);
 		if (o == null || o.toString().isEmpty())
-			put(key, val);
+			put(key, value);
 		return this;
 	}
 
 	/**
-	 * Add if empty.
-	 *
-	 * <p>
-	 * Same as {@link #aife(String, Object)}.
-	 *
-	 * @param key The map key.
-	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendIfEmpty(String key, Object val) {
-		return aife(key, val);
-	}
-
-	/**
-	 * Add if not empty.
-	 *
-	 * <p>
 	 * Adds a mapping if the specified key doesn't exist.
 	 *
 	 * @param key The map key.
-	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
+	 * @param value The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
 	 * @return This object (for method chaining).
 	 */
-	public OMap aifne(String key, Object val) {
+	public OMap appendIfNotExists(String key, Object value) {
 		if (! containsKey(key))
-			put(key, val);
+			put(key, value);
 		return this;
-	}
-
-	/**
-	 * Add if not empty.
-	 *
-	 * <p>
-	 * Same as {@link #aifne(String, Object)}.
-	 *
-	 * @param key The map key.
-	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendIfNotEmpty(String key, Object val) {
-		return aifne(key, val);
-	}
-
-	/**
-	 * Add if predicate matches.
-	 *
-	 * @param p The predicate to match against.
-	 * @param key The map key.
-	 * @param val The value to add if the predicate matches.
-	 * @return This object (for method chaining).
-	 */
-	public OMap aif(Predicate<Object> p, String key, Object val) {
-		if (p.test(val))
-			a(key, val);
-		return this;
-	}
-
-	/**
-	 * Add if predicate matches.
-	 *
-	 * <p>
-	 * Same as {@link #aif(Predicate, String, Object)}.
-	 *
-	 * @param p The predicate to match against.
-	 * @param key The map key.
-	 * @param val The value to add if the predicate matches.
-	 * @return This object (for method chaining).
-	 */
-	public OMap appendIf(Predicate<Object> p, String key, Object val) {
-		return aif(p, key, val);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

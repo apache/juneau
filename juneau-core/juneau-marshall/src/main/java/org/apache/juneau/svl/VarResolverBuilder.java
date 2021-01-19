@@ -28,7 +28,7 @@ import org.apache.juneau.svl.vars.*;
  */
 public class VarResolverBuilder {
 
-	private final List<Var> vars = AList.of();
+	private final List<Var> vars = AList.create();
 	private final Map<String,Object> contextObjects = new HashMap<>();
 
 	/**

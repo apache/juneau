@@ -16,6 +16,7 @@ import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -50,7 +51,7 @@ import org.apache.juneau.serializer.*;
  * @param <T> The entry type.
  */
 @SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
+public class ASet<T> extends LinkedHashSet<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,6 +78,15 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Convenience method for creating an empty set of objects.
+	 *
+	 * @return A new set.
+	 */
+	public static <T> ASet<T> create() {
+		return new ASet<>();
+	}
+
+	/**
 	 * Convenience method for creating a list of objects.
 	 *
 	 * @param t The initial values.
@@ -94,7 +104,33 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @return A new list.
 	 */
 	public static <T> ASet<T> of(Collection<T> c) {
-		return new ASet<T>().aa(c);
+		return new ASet<T>().a(c);
+	}
+
+	/**
+	 * Convenience method for creating a set of collection objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static <T extends Collection<?>> ASet<T> ofCollections(T...values) {
+		ASet<T> l = new ASet<>();
+		for (T v : values)
+			l.add(v);
+		return l;
+	}
+
+	/**
+	 * Convenience method for creating a set of collection objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static <T> ASet<T[]> ofArrays(T[]...values) {
+		ASet<T[]> l = new ASet<>();
+		for (T[] v : values)
+			l.add(v);
+		return l;
 	}
 
 	/**
@@ -117,7 +153,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	public static <T> Set<T> unmodifiable(Collection<T> c) {
 		if (c == null || c.isEmpty())
 			return Collections.emptySet();
-		return new ASet<T>().aa(c).unmodifiable();
+		return new ASet<T>().a(c).unmodifiable();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -125,78 +161,103 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Add.
+	 * Adds the value to this set.
 	 *
-	 * <p>
-	 * Adds an entry to this set.
-	 *
-	 * @param t The entry to add to this set.
+	 * @param value The value to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> a(T t) {
-		add(t);
+	public ASet<T> append(T value) {
+		add(value);
 		return this;
 	}
 
 	/**
-	 * Add.
+	 * Adds all the values in the specified array to this set.
 	 *
-	 * <p>
-	 * Adds multiple entries to this set.
-	 *
-	 * @param t The entries to add to this set.
+	 * @param values The values to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> a(T...t) {
-		Collections.addAll(this, t);
+	public ASet<T> append(T...values) {
+		Collections.addAll(this, values);
 		return this;
 	}
 
 	/**
-	 * Add all.
+	 * Adds all the values in the specified collection to this set.
 	 *
-	 * <p>
-	 * Adds multiple entries to this set.
-	 *
-	 * @param c The entries to add to this set.
+	 * @param values The values to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> aa(Collection<? extends T> c) {
-		if (c != null)
-			addAll(c);
+	public ASet<T> append(Collection<? extends T> values) {
+		addAll(values);
 		return this;
 	}
 
 	/**
-	 * Add if.
+	 * Same as {@link #append(Object)}.
 	 *
-	 * <p>
+	 * @param value The entry to add to this set.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> a(T value) {
+		return append(value);
+	}
+
+	/**
+	 * Same as {@link #append(Object[])}.
+	 *
+	 * @param values The entries to add to this set.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> a(T...values) {
+		return append(values);
+	}
+
+	/**
+	 * Same as {@link #append(Collection)}.
+	 *
+	 * @param values The entries to add to this set.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> a(Collection<? extends T> values) {
+		return append(values);
+	}
+
+	/**
 	 * Adds a value to this set if the boolean value is <jk>true</jk>
 	 *
-	 * @param b The boolean value.
-	 * @param t The value to add.
+	 * @param flag The boolean value.
+	 * @param value The value to add.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> aif(boolean b, T t) {
-		if (b)
-			a(t);
+	public ASet<T> appendIf(boolean flag, T value) {
+		if (flag)
+			a(value);
 		return this;
 	}
 
 	/**
-	 * Add if not null.
-	 *
-	 * <p>
 	 * Adds entries to this set skipping <jk>null</jk> values.
 	 *
-	 * @param t The objects to add to the list.
+	 * @param values The objects to add to the list.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> aifnn(T...t) {
-		for (T o2 : t)
+	public ASet<T> appendIfNotNull(T...values) {
+		for (T o2 : values)
 			if (o2 != null)
 				a(o2);
 		return this;
+	}
+
+	/**
+	 * Add if predicate matches value.
+	 *
+	 * @param test The predicate to match against.
+	 * @param value The value to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> appendIf(Predicate<Object> test, T value) {
+		return appendIf(test.test(value), value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

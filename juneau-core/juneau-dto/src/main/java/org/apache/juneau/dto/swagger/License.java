@@ -217,8 +217,8 @@ public class License extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(name != null, "name")
-			.aif(url != null, "url");
+			.appendIf(name != null, "name")
+			.appendIf(url != null, "url");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

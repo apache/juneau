@@ -468,7 +468,7 @@ public class RestLogger {
 	 * @return A new map containing the properties defined on this context.
 	 */
 	public OMap toMap() {
-		return OMap.of()
+		return OMap.create()
 			.a("logger", logger)
 			.a("stackTraceStore", stackTraceStore)
 			.a("enabled", enabled)

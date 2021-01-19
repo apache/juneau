@@ -33,8 +33,8 @@ public class Assertions_Test {
 		assertString("foo").is("foo");
 		assertThrowable(null).doesNotExist();
 		assertArray(new String[0]).isEmpty();
-		assertCollection(AList.of()).isEmpty();
-		assertList(AList.of()).isEmpty();
+		assertCollection(AList.create()).isEmpty();
+		assertList(AList.create()).isEmpty();
 		assertStream(new ByteArrayInputStream("foo".getBytes())).string().is("foo");
 		assertStream((InputStream)null).string().doesNotExist();
 		assertStream(Optional.of(new ByteArrayInputStream("foo".getBytes()))).string().is("foo");

@@ -31,7 +31,7 @@ public class FileFinderBuilder {
 
 	final Set<LocalDir> roots = new LinkedHashSet<>();
 	long cachingLimit = -1;
-	List<Pattern> include = AList.of(Pattern.compile(".*")), exclude = AList.of();
+	List<Pattern> include = AList.of(Pattern.compile(".*")), exclude = AList.create();
 
 	/**
 	 * Create a new {@link FileFinder} using this builder.

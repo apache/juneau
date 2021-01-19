@@ -221,17 +221,17 @@ public class Restx_Parsers_Test {
 		@RestMethod
 		public OList a(RestRequest req) {
 			// Should show ['text/p3','text/p4','text/p1','text/p2']
-			return OList.ofAll(req.getConsumes());
+			return OList.of(req.getConsumes());
 		}
 		@RestMethod(parsers=P5.class)
 		public OList b(RestRequest req) {
 			// Should show ['text/p5']
-			return OList.ofAll(req.getConsumes());
+			return OList.of(req.getConsumes());
 		}
 		@RestMethod(parsers={P5.class,Inherit.class})
 		public OList c(RestRequest req) {
 			// Should show ['text/p5','text/p3','text/p4','text/p1','text/p2']
-			return OList.ofAll(req.getConsumes());
+			return OList.of(req.getConsumes());
 		}
 	}
 

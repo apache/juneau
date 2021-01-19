@@ -77,7 +77,7 @@ public class ResponseInfoTest {
 		assertObject(t.getHeaders()).isType(Map.class);
 		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
 
-		t.setHeaders(AMap.of());
+		t.setHeaders(AMap.create());
 		assertObject(t.getHeaders()).json().is("{}");
 		assertObject(t.getHeaders()).isType(Map.class);
 
@@ -97,7 +97,7 @@ public class ResponseInfoTest {
 		assertObject(t.getHeaders()).isType(Map.class);
 		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
 
-		t.addHeaders(AMap.of());
+		t.addHeaders(AMap.create());
 		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getHeaders()).isType(Map.class);
 		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
@@ -149,7 +149,7 @@ public class ResponseInfoTest {
 		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertObject(t.getExamples()).isType(Map.class);
 
-		t.setExamples(AMap.of());
+		t.setExamples(AMap.create());
 		assertObject(t.getExamples()).json().is("{}");
 		assertObject(t.getExamples()).isType(Map.class);
 
@@ -168,7 +168,7 @@ public class ResponseInfoTest {
 		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertObject(t.getExamples()).isType(Map.class);
 
-		t.addExamples(AMap.of());
+		t.addExamples(AMap.create());
 		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertObject(t.getExamples()).isType(Map.class);
 

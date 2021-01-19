@@ -745,7 +745,7 @@ public class Remote_PathAnnotation_Test {
 		}
 		@Path(n="d",aev=true)
 		public List<Object> getX3() {
-			return AList.of();
+			return AList.create();
 		}
 		@Path("f")
 		public Object[] getX5() {

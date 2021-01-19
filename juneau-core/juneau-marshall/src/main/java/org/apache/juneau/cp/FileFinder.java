@@ -374,7 +374,7 @@ public class FileFinder {
 	 */
 	public OMap toMap() {
 		return OMap
-			.of()
+			.create()
 			.a("class", getClass().getSimpleName())
 			.a("roots", roots)
 			.a("cachingLimit", cachingLimit)

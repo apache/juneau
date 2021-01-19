@@ -193,10 +193,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		// Add info from @Schema on bean property.
 		if (jsbpm != null) {
-			out.appendAll(jsbpm.getSchema());
+			out.append(jsbpm.getSchema());
 		}
 
-		out.appendAll(jscm.getSchema());
+		out.append(jscm.getSchema());
 
 		out.appendIf(false, true, true, "type", type);
 		out.appendIf(false, true, true, "format", format);
@@ -243,7 +243,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			}
 		}
 
-		out.appendAll(jscm.getSchema());
+		out.append(jscm.getSchema());
 
 		out.appendIf(false, true, true, "description", description);
 		out.appendIf(false, true, true, "x-example", example);

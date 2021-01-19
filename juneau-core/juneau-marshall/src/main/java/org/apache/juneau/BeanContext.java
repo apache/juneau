@@ -30,6 +30,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.utils.ReflectionMapBuilder;
 
 /**
  * Core class of the Juneau architecture.
@@ -2082,7 +2083,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 		ps = ps.subset(new String[]{"Context","BeanContext"});
 
-		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
+		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 		for (Annotation a : ps.getListProperty(BEAN_annotations, Annotation.class)) {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());

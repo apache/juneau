@@ -63,7 +63,7 @@ public class ResolvingOMapTest {
 		m.put("foo", new String[]{null});
 		assertObject(m.get("foo")).json().is("[null]");
 
-		m.put("foo", AList.<String>of().a((String)null));
+		m.put("foo", AList.<String>create().a((String)null));
 		assertObject(m.get("foo")).json().is("[null]");
 
 		m.put("foo", AMap.of("k1",null));

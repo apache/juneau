@@ -118,9 +118,9 @@ public final class SerializerGroup extends BeanTraverseContext {
 		super(ps);
 		this.serializers = AList.unmodifiable(serializers);
 
-		AList<MediaRange> lmtr = AList.of();
+		AList<MediaRange> lmtr = AList.create();
 		ASet<MediaType> lmt = ASet.of();
-		AList<Serializer> l = AList.of();
+		AList<Serializer> l = AList.create();
 		for (Serializer s : serializers) {
 			for (MediaRange m: s.getMediaTypeRanges().getRanges()) {
 				lmtr.add(m);

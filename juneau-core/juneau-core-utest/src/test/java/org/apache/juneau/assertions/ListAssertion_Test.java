@@ -25,7 +25,7 @@ public class ListAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		List<String> x1 = AList.of(), x2 = AList.of("a","b");
+		List<String> x1 = AList.create(), x2 = AList.of("a","b");
 
 		assertThrown(()->assertList(null).exists()).is("Value was null.");
 		assertList(x1).exists();

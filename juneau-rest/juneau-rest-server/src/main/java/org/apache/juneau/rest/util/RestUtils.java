@@ -45,7 +45,7 @@ public final class RestUtils {
 		return httpMsgs.get(rc);
 	}
 
-	private static Map<Integer,String> httpMsgs = AMap.<Integer,String>of()
+	private static Map<Integer,String> httpMsgs = AMap.<Integer,String>create()
 		.a(100, "Continue")
 		.a(101, "Switching Protocols")
 		.a(102, "Processing")
@@ -213,7 +213,7 @@ public final class RestUtils {
 		if (value.length == 0)
 			return fromParent;
 
-		AList<String> l = AList.of();
+		AList<String> l = AList.create();
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
@@ -229,7 +229,7 @@ public final class RestUtils {
 		if (links.length == 0)
 			return parentLinks;
 
-		AList<String> list = AList.of();
+		AList<String> list = AList.create();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
 				list.a(parentLinks);
@@ -251,7 +251,7 @@ public final class RestUtils {
 		if (content.length == 0)
 			return parentContent;
 
-		AList<String> list = AList.of();
+		AList<String> list = AList.create();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
 				list.a(parentContent);
@@ -412,7 +412,7 @@ public final class RestUtils {
 		if (! ArrayUtils.contains(Inherit.class, fromChild))
 			return fromChild;
 
-		AList<Object> l = AList.of();
+		AList<Object> l = AList.create();
 		for (Object o : fromChild) {
 			if (o == Inherit.class)
 				l.a(fromParent);

@@ -320,7 +320,7 @@ public class OpenApiParserSession extends UonParserSession {
 				try {
 					Map<String,Object> m = (Map<String,Object>)type.newInstance();
 					if (m == null)
-						m = OMap.of();
+						m = OMap.create();
 
 					for (String s : ss) {
 						String[] kv = split(s, '=', 2);

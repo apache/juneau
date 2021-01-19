@@ -1401,7 +1401,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isMulti)
 			return innerQuery(flags, AList.of(serializedNameValuePair(name, value, QUERY, serializer, schema, flags)));
 
-		List<NameValuePair> l = AList.of();
+		List<NameValuePair> l = AList.create();
 
 		if (BasicNameValuePair.canCast(value)) {
 			l.add(BasicNameValuePair.cast(value));
@@ -1795,7 +1795,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isMulti)
 			return innerFormData(flags, AList.of(serializedNameValuePair(name, value, FORMDATA, serializer, schema, flags)));
 
-		List<NameValuePair> l = AList.of();
+		List<NameValuePair> l = AList.create();
 
 		if (BasicNameValuePair.canCast(value)) {
 			l.add(BasicNameValuePair.cast(value));
@@ -2250,7 +2250,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isMulti)
 			return innerHeaders(flags, AList.of(serializedHeader(name, value, serializer, schema, flags)));
 
-		List<Header> l = AList.of();
+		List<Header> l = AList.create();
 
 		if (BasicHeader.canCast(value)) {
 			l.add(BasicHeader.cast(value));

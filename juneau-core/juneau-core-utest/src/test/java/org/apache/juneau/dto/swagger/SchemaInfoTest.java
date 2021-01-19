@@ -622,7 +622,7 @@ public class SchemaInfoTest {
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertObject(t.getProperties()).isType(Map.class);
 
-		t.setProperties(AMap.of());
+		t.setProperties(AMap.create());
 		assertObject(t.getProperties()).json().is("{}");
 		assertObject(t.getProperties()).isType(Map.class);
 
@@ -641,7 +641,7 @@ public class SchemaInfoTest {
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertObject(t.getProperties()).isType(Map.class);
 
-		t.addProperties(AMap.of());
+		t.addProperties(AMap.create());
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertObject(t.getProperties()).isType(Map.class);
 

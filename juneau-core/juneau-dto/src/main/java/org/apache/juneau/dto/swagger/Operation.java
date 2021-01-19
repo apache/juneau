@@ -1191,18 +1191,18 @@ public class Operation extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(tags != null, "tags")
-			.aif(summary != null, "summary")
-			.aif(description != null, "description")
-			.aif(externalDocs != null, "externalDocs")
-			.aif(operationId != null, "operationId")
-			.aif(consumes != null, "consumes")
-			.aif(produces != null, "produces")
-			.aif(parameters != null, "parameters")
-			.aif(responses != null, "responses")
-			.aif(schemes != null, "schemes")
-			.aif(deprecated != null, "deprecated")
-			.aif(security != null, "security");
+			.appendIf(tags != null, "tags")
+			.appendIf(summary != null, "summary")
+			.appendIf(description != null, "description")
+			.appendIf(externalDocs != null, "externalDocs")
+			.appendIf(operationId != null, "operationId")
+			.appendIf(consumes != null, "consumes")
+			.appendIf(produces != null, "produces")
+			.appendIf(parameters != null, "parameters")
+			.appendIf(responses != null, "responses")
+			.appendIf(schemes != null, "schemes")
+			.appendIf(deprecated != null, "deprecated")
+			.appendIf(security != null, "security");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

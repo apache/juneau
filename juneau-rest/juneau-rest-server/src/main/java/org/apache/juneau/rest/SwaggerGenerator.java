@@ -116,13 +116,13 @@ final class SwaggerGenerator {
 			OMap sInfo = omSwagger.getMap("info", true);
 
 			sInfo
-				.ase("title",
+				.appendSkipEmpty("title",
 					firstNonEmpty(
 						sInfo.getString("title"),
 						resolve(rr.title())
 					)
 				)
-				.ase("description",
+				.appendSkipEmpty("description",
 					firstNonEmpty(
 						sInfo.getString("description"),
 						resolve(rr.description())
@@ -131,23 +131,23 @@ final class SwaggerGenerator {
 
 			ResourceSwagger r = rr.swagger();
 
-			omSwagger.appendAll(parseMap(r.value(), "@ResourceSwagger(value) on class {0}", c));
+			omSwagger.append(parseMap(r.value(), "@ResourceSwagger(value) on class {0}", c));
 
 			if (! ResourceSwaggerAnnotation.empty(r)) {
 				OMap info = omSwagger.getMap("info", true);
 
 				info
-					.ase("title", resolve(r.title()))
-					.ase("description", resolve(r.description()))
-					.ase("version", resolve(r.version()))
-					.ase("termsOfService", resolve(r.termsOfService()))
-					.ase("contact",
+					.appendSkipEmpty("title", resolve(r.title()))
+					.appendSkipEmpty("description", resolve(r.description()))
+					.appendSkipEmpty("version", resolve(r.version()))
+					.appendSkipEmpty("termsOfService", resolve(r.termsOfService()))
+					.appendSkipEmpty("contact",
 						merge(
 							info.getMap("contact"),
 							toMap(r.contact(), "@ResourceSwagger(contact) on class {0}", c)
 						)
 					)
-					.ase("license",
+					.appendSkipEmpty("license",
 						merge(
 							info.getMap("license"),
 							toMap(r.license(), "@ResourceSwagger(license) on class {0}", c)
@@ -156,13 +156,13 @@ final class SwaggerGenerator {
 			}
 
 			omSwagger
-				.ase("externalDocs",
+				.appendSkipEmpty("externalDocs",
 					merge(
 						omSwagger.getMap("externalDocs"),
 						toMap(r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
 					)
 				)
-				.ase("tags",
+				.appendSkipEmpty("tags",
 					merge(
 						omSwagger.getList("tags"),
 						toList(r.tags(), "@ResourceSwagger(tags) on class {0}", c)
@@ -170,17 +170,17 @@ final class SwaggerGenerator {
 				);
 		}
 
-		omSwagger.ase("externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
+		omSwagger.appendSkipEmpty("externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
 
 		OMap info = omSwagger.getMap("info", true);
 
 		info
-			.ase("title", resolve(mb.findFirstString("title")))
-			.ase("description", resolve(mb.findFirstString("description")))
-			.ase("version", resolve(mb.findFirstString("version")))
-			.ase("termsOfService", resolve(mb.findFirstString("termsOfService")))
-			.ase("contact", parseMap(mb.findFirstString("contact"), "Messages/contact on class {0}", c))
-			.ase("license", parseMap(mb.findFirstString("license"), "Messages/license on class {0}", c));
+			.appendSkipEmpty("title", resolve(mb.findFirstString("title")))
+			.appendSkipEmpty("description", resolve(mb.findFirstString("description")))
+			.appendSkipEmpty("version", resolve(mb.findFirstString("version")))
+			.appendSkipEmpty("termsOfService", resolve(mb.findFirstString("termsOfService")))
+			.appendSkipEmpty("contact", parseMap(mb.findFirstString("contact"), "Messages/contact on class {0}", c))
+			.appendSkipEmpty("license", parseMap(mb.findFirstString("license"), "Messages/license on class {0}", c));
 
 		if (info.isEmpty())
 			omSwagger.remove("info");
@@ -237,15 +237,15 @@ final class SwaggerGenerator {
 			// Add @RestMethod(swagger)
 			MethodSwagger ms = rm.swagger();
 
-			op.appendAll(parseMap(ms.value(), "@MethodSwagger(value) on class {0} method {1}", c, m));
-			op.ase("operationId",
+			op.append(parseMap(ms.value(), "@MethodSwagger(value) on class {0} method {1}", c, m));
+			op.appendSkipEmpty("operationId",
 				firstNonEmpty(
 					resolve(ms.operationId()),
 					op.getString("operationId"),
 					mn
 				)
 			);
-			op.ase("summary",
+			op.appendSkipEmpty("summary",
 				firstNonEmpty(
 					resolve(ms.summary()),
 					resolve(mb.findFirstString(mn + ".summary")),
@@ -253,7 +253,7 @@ final class SwaggerGenerator {
 					resolve(rm.summary())
 				)
 			);
-			op.ase("description",
+			op.appendSkipEmpty("description",
 				firstNonEmpty(
 					resolve(ms.description()),
 					resolve(mb.findFirstString(mn + ".description")),
@@ -261,49 +261,49 @@ final class SwaggerGenerator {
 					resolve(rm.description())
 				)
 			);
-			op.ase("deprecated",
+			op.appendSkipEmpty("deprecated",
 				firstNonEmpty(
 					resolve(ms.deprecated()),
 					(m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null) ? "true" : null
 				)
 			);
-			op.ase("tags",
+			op.appendSkipEmpty("tags",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
 					parseListOrCdl(ms.tags(), "@MethodSwagger(tags) on class {0} method {1}", c, m)
 				)
 			);
-			op.ase("schemes",
+			op.appendSkipEmpty("schemes",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
 					parseListOrCdl(ms.schemes(), "@MethodSwagger(schemes) on class {0} method {1}", c, m)
 				)
 			);
-			op.ase("consumes",
+			op.appendSkipEmpty("consumes",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
 					parseListOrCdl(ms.consumes(), "@MethodSwagger(consumes) on class {0} method {1}", c, m)
 				)
 			);
-			op.ase("produces",
+			op.appendSkipEmpty("produces",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
 					parseListOrCdl(ms.produces(), "@MethodSwagger(produces) on class {0} method {1}", c, m)
 				)
 			);
-			op.ase("parameters",
+			op.appendSkipEmpty("parameters",
 				merge(
 					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
 					parseList(ms.parameters(), "@MethodSwagger(parameters) on class {0} method {1}", c, m)
 				)
 			);
-			op.ase("responses",
+			op.appendSkipEmpty("responses",
 				merge(
 					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
 					parseMap(ms.responses(), "@MethodSwagger(responses) on class {0} method {1}", c, m)
 				)
 			);
-			op.ase("externalDocs",
+			op.appendSkipEmpty("externalDocs",
 				merge(
 					op.getMap("externalDocs"),
 					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
@@ -334,7 +334,7 @@ final class SwaggerGenerator {
 					for (Body a : pt.getAnnotations(Body.class))
 						merge(param, a);
 					param.putIfAbsent("required", true);
-					param.ase("schema", getSchema(param.getMap("schema"), type, bs));
+					param.appendSkipEmpty("schema", getSchema(param.getMap("schema"), type, bs));
 					addBodyExamples(sm, param, false, type);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
@@ -410,7 +410,7 @@ final class SwaggerGenerator {
 							OMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							if (! om.containsKey("schema"))
-								om.ase("schema", getSchema(om.getMap("schema"), eci.inner(), bs));
+								om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), eci.inner(), bs));
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
@@ -437,7 +437,7 @@ final class SwaggerGenerator {
 						OMap om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
 						if (! om.containsKey("schema"))
-							om.ase("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
+							om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
 						addBodyExamples(sm, om, true, m.getGenericReturnType());
 					}
 				}
@@ -459,7 +459,7 @@ final class SwaggerGenerator {
 			} else if (m.getGenericReturnType() != void.class) {
 				OMap om = responses.getMap("200", true);
 				if (! om.containsKey("schema"))
-					om.ase("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
+					om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
 				addBodyExamples(sm, om, true, m.getGenericReturnType());
 			}
 
@@ -469,7 +469,7 @@ final class SwaggerGenerator {
 				ClassInfo pt = mpi.getParameterType();
 
 				if (mpi.hasAnnotation(ResponseHeader.class) || pt.hasAnnotation(ResponseHeader.class)) {
-					List<ResponseHeader> la = AList.of(mpi.getAnnotations(ResponseHeader.class)).aa(pt.getAnnotations(ResponseHeader.class));
+					List<ResponseHeader> la = AList.of(mpi.getAnnotations(ResponseHeader.class)).a(pt.getAnnotations(ResponseHeader.class));
 					Set<Integer> codes = getCodes2(la, 200);
 					String name = null;
 					for (ResponseHeader a : la)
@@ -486,7 +486,7 @@ final class SwaggerGenerator {
 					}
 
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
-					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).aa(pt.getAnnotations(Response.class));
+					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).a(pt.getAnnotations(Response.class));
 					Set<Integer> codes = getCodes(la, 200);
 					Type type = mpi.getParameterType().innerType();
 					for (Response a : la) {
@@ -500,7 +500,7 @@ final class SwaggerGenerator {
 						for (String code : responses.keySet()) {
 							OMap om = responses.getMap(code);
 							if (! om.containsKey("schema"))
-								om.ase("schema", getSchema(om.getMap("schema"), type, bs));
+								om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), type, bs));
 						}
 					}
 				}
@@ -699,7 +699,7 @@ final class SwaggerGenerator {
 			OMap om2 = parseMap(joinnl(value), location, locationArgs);
 		if (om == null)
 			return om2;
-		return om.appendAll(om2);
+		return om.append(om2);
 	}
 
 	private OMap merge(OMap...maps) {
@@ -735,8 +735,8 @@ final class SwaggerGenerator {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
-			.ase("description", resolve(joinnl(a.description())))
-			.ase("url", resolve(a.url()));
+			.appendSkipEmpty("description", resolve(joinnl(a.description())))
+			.appendSkipEmpty("url", resolve(a.url()));
 		return nullIfEmpty(om);
 	}
 
@@ -744,9 +744,9 @@ final class SwaggerGenerator {
 		if (ContactAnnotation.empty(a))
 			return null;
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
-			.ase("name", resolve(a.name()))
-			.ase("url", resolve(a.url()))
-			.ase("email", resolve(a.email()));
+			.appendSkipEmpty("name", resolve(a.name()))
+			.appendSkipEmpty("url", resolve(a.url()))
+			.appendSkipEmpty("email", resolve(a.email()));
 		return nullIfEmpty(om);
 	}
 
@@ -754,17 +754,17 @@ final class SwaggerGenerator {
 		if (LicenseAnnotation.empty(a))
 			return null;
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
-			.ase("name", resolve(a.name()))
-			.ase("url", resolve(a.url()));
+			.appendSkipEmpty("name", resolve(a.name()))
+			.appendSkipEmpty("url", resolve(a.url()));
 		return nullIfEmpty(om);
 	}
 
 	private OMap toMap(Tag a, String location, Object...locationArgs) throws ParseException {
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs);
 		om
-			.ase("name", resolve(a.name()))
-			.ase("description", resolve(joinnl(a.description())))
-			.asn("externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
+			.appendSkipEmpty("name", resolve(a.name()))
+			.appendSkipEmpty("description", resolve(joinnl(a.description())))
+			.appendSkipNull("externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
 		return nullIfEmpty(om);
 	}
 
@@ -792,7 +792,7 @@ final class SwaggerGenerator {
 		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
 
-		OMap om = fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
+		OMap om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
 
 		return nullIfEmpty(om);
 	}
@@ -802,11 +802,11 @@ final class SwaggerGenerator {
 	 */
 	private OMap fixSwaggerExtensions(OMap om) {
 		om
-			.asn("discriminator", om.remove("x-discriminator"))
-			.asn("readOnly", om.remove("x-readOnly"))
-			.asn("xml", om.remove("x-xml"))
-			.asn("externalDocs", om.remove("x-externalDocs"))
-			.asn("example", om.remove("x-example"));
+			.appendSkipNull("discriminator", om.remove("x-discriminator"))
+			.appendSkipNull("readOnly", om.remove("x-readOnly"))
+			.appendSkipNull("xml", om.remove("x-xml"))
+			.appendSkipNull("externalDocs", om.remove("x-externalDocs"))
+			.appendSkipNull("example", om.remove("x-example"));
 		return nullIfEmpty(om);
 	}
 
@@ -933,11 +933,11 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.ase("x-examples", parseMap(a.examples()), parseMap(a.exs()))
-			.asf("required", a.required() || a.r())
-			.ase("schema", merge(om.getMap("schema"), a.schema()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("x-examples", parseMap(a.examples()), parseMap(a.exs()))
+			.appendSkipFalse("required", a.required() || a.r())
+			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
 		;
 	}
 
@@ -948,27 +948,27 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.asf("allowEmptyValue", a.allowEmptyValue() || a.aev())
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("format", a.format(), a.f())
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.asf("required", a.required() || a.r())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue() || a.aev())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipFalse("required", a.required() || a.r())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -979,27 +979,27 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.asf("allowEmptyValue", a.allowEmptyValue() || a.aev())
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("format", a.format(), a.f())
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.asf("required", a.required())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue() || a.aev())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipFalse("required", a.required())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -1010,26 +1010,26 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("format", a.format(), a.f())
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.asf("required", a.required() || a.r())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipFalse("required", a.required() || a.r())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -1040,24 +1040,24 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("format", a.format(), a.f())
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 		;
 	}
 
@@ -1068,39 +1068,39 @@ final class SwaggerGenerator {
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.ase("additionalProperties", toOMap(a.additionalProperties()))
-			.ase("allOf", joinnl(a.allOf()))
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("discriminator", a.discriminator())
-			.ase("description", resolve(a.description()), resolve(a.d()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("x-example", resolve(a.example()), resolve(a.ex()))
-			.ase("examples", parseMap(a.examples()), parseMap(a.exs()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
-			.ase("format", a.format(), a.f())
-			.ase("ignore", a.ignore() ? "true" : null)
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.asmo("maxProperties", a.maxProperties(), a.maxp())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.asmo("minProperties", a.minProperties(), a.minp())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.ase("properties", toOMap(a.properties()))
-			.asf("readOnly", a.readOnly() || a.ro())
-			.asf("required", a.required() || a.r())
-			.ase("title", a.title())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
-			.ase("xml", joinnl(a.xml()))
-			.ase("$ref", a.$ref())
+			.appendSkipEmpty("additionalProperties", toOMap(a.additionalProperties()))
+			.appendSkipEmpty("allOf", joinnl(a.allOf()))
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("discriminator", a.discriminator())
+			.appendSkipEmpty("description", resolve(a.description()), resolve(a.d()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("x-example", resolve(a.example()), resolve(a.ex()))
+			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipMinusOne("maxProperties", a.maxProperties(), a.maxp())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipMinusOne("minProperties", a.minProperties(), a.minp())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipEmpty("properties", toOMap(a.properties()))
+			.appendSkipFalse("readOnly", a.readOnly() || a.ro())
+			.appendSkipFalse("required", a.required() || a.r())
+			.appendSkipEmpty("title", a.title())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipEmpty("xml", joinnl(a.xml()))
+			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
 
@@ -1111,8 +1111,8 @@ final class SwaggerGenerator {
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.ase("description", resolve(a.description()))
-			.ase("url", a.url())
+			.appendSkipEmpty("description", resolve(a.description()))
+			.appendSkipEmpty("url", a.url())
 		;
 	}
 
@@ -1123,24 +1123,24 @@ final class SwaggerGenerator {
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("format", a.format(), a.f())
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
-			.ase("type", a.type(), a.t())
-			.ase("$ref", a.$ref())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
 
@@ -1151,24 +1151,24 @@ final class SwaggerGenerator {
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("format", a.format(), a.f())
-			.ase("items", toOMap(a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
-			.ase("$ref", a.$ref())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("items", toOMap(a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
 
@@ -1179,11 +1179,11 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.ase("examples", parseMap(a.examples()), parseMap(a.exs()))
-			.ase("headers", merge(om.getMap("headers"), a.headers()))
-			.ase("schema", merge(om.getMap("schema"), a.schema()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
+			.appendSkipEmpty("headers", merge(om.getMap("headers"), a.headers()))
+			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
 		;
 	}
 
@@ -1207,26 +1207,26 @@ final class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(a.api()));
 		return om
-			.ase("collectionFormat", a.collectionFormat(), a.cf())
-			.ase("default", joinnl(a._default(), a.df()))
-			.ase("description", resolve(a.description(), a.d()))
-			.ase("enum", toSet(a._enum()), toSet(a.e()))
-			.ase("x-example", resolve(a.example(), a.ex()))
-			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.ase("format", a.format(), a.f())
-			.ase("items", merge(om.getMap("items"), a.items()))
-			.ase("maximum", a.maximum(), a.max())
-			.asmo("maxItems", a.maxItems(), a.maxi())
-			.asmo("maxLength", a.maxLength(), a.maxl())
-			.ase("minimum", a.minimum(), a.min())
-			.asmo("minItems", a.minItems(), a.mini())
-			.asmo("minLength", a.minLength(), a.minl())
-			.ase("multipleOf", a.multipleOf(), a.mo())
-			.ase("pattern", a.pattern(), a.p())
-			.ase("type", a.type(), a.t())
-			.asf("uniqueItems", a.uniqueItems() || a.ui())
-			.ase("$ref", a.$ref())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
+			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
+			.appendSkipEmpty("description", resolve(a.description(), a.d()))
+			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
+			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendSkipEmpty("format", a.format(), a.f())
+			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
+			.appendSkipEmpty("maximum", a.maximum(), a.max())
+			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
+			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
+			.appendSkipEmpty("minimum", a.minimum(), a.min())
+			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
+			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
+			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
+			.appendSkipEmpty("pattern", a.pattern(), a.p())
+			.appendSkipEmpty("type", a.type(), a.t())
+			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
+			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
 

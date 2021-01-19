@@ -1836,7 +1836,7 @@ public final class ClassInfo {
 	}
 
 	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
-		AMap.<Class<?>,Object>of()
+		AMap.<Class<?>,Object>create()
 			.a(Boolean.TYPE, false)
 			.a(Character.TYPE, (char)0)
 			.a(Short.TYPE, (short)0)

@@ -133,7 +133,7 @@ public class MediaType implements Comparable<MediaType>  {
 	public MediaType(HeaderElement e) {
 		mediaType = e.getName();
 
-		List<NameValuePair> parameters = AList.of();
+		List<NameValuePair> parameters = AList.create();
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q"))
 				break;

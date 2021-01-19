@@ -32,7 +32,7 @@ public class RestLoggerBuilder {
 
 	Logger logger;
 	StackTraceStore stackTraceDatabase;
-	List<RestLoggerRule> normalRules = AList.of(), debugRules = AList.of();
+	List<RestLoggerRule> normalRules = AList.create(), debugRules = AList.create();
 	Enablement enabled;
 	Predicate<HttpServletRequest> enabledTest;
 	RestLoggingDetail requestDetail, responseDetail;

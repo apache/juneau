@@ -248,9 +248,9 @@ public class Tag extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(name != null, "name")
-			.aif(description != null, "description")
-			.aif(externalDocs != null, "externalDocs");
+			.appendIf(name != null, "name")
+			.appendIf(description != null, "description")
+			.appendIf(externalDocs != null, "externalDocs");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

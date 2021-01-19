@@ -92,7 +92,7 @@ public class StringRanges {
 	 */
 	public StringRanges(HeaderElement[] e) {
 
-		List<StringRange> l = AList.of();
+		List<StringRange> l = AList.create();
 		for (HeaderElement e2 : e)
 			l.add(new StringRange(e2));
 

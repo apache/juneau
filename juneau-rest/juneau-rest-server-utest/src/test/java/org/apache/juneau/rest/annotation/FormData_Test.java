@@ -99,28 +99,28 @@ public class FormData_Test {
 	public static class C {
 		@RestMethod(method=POST, defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestFormData formData) {
-			return OMap.of()
+			return OMap.create()
 				.a("f1", formData.getString("f1"))
 				.a("f2", formData.getString("f2"))
 				.a("f3", formData.getString("f3"));
 		}
 		@RestMethod(method=POST)
 		public OMap b(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
-			return OMap.of()
+			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
 		@RestMethod(method=POST)
 		public OMap c(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
-			return OMap.of()
+			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
 		@RestMethod(method=POST, defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap d(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
-			return OMap.of()
+			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);

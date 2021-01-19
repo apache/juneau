@@ -398,7 +398,7 @@ public class PropertyStoreTest {
 		b.addTo("A.f1.sc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}");
 		b.set("A.f1.sc/remove", AList.of(Integer.class, String.class));
-		b.removeFrom("A.f1.sc", AList.of());
+		b.removeFrom("A.f1.sc", AList.create());
 		b.removeFrom("A.f1.sc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.sc':['java.util.Map']}}");
 
@@ -408,7 +408,7 @@ public class PropertyStoreTest {
 		b.addTo("A.f1.sc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}");
 		b.set("A.f1.sc/remove", AList.of(Integer.class, String.class));
-		b.set("A.f1.sc/remove", AList.of());
+		b.set("A.f1.sc/remove", AList.create());
 		b.removeFrom("A.f1.sc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.sc':['java.util.Map']}}");
 
@@ -623,7 +623,7 @@ public class PropertyStoreTest {
 		b.prependTo("A.f1.lc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}");
 		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
-		b.removeFrom("A.f1.lc", AList.of());
+		b.removeFrom("A.f1.lc", AList.create());
 		b.removeFrom("A.f1.lc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.Map']}}");
 
@@ -633,7 +633,7 @@ public class PropertyStoreTest {
 		b.prependTo("A.f1.lc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}");
 		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
-		b.set("A.f1.lc/remove", AList.of());
+		b.set("A.f1.lc/remove", AList.create());
 		b.removeFrom("A.f1.lc", AList.of(List.class));
 		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.Map']}}");
 
@@ -697,7 +697,7 @@ public class PropertyStoreTest {
 		b.prependTo("A.f1.lo", AList.of(LinkedList.class));
 		assertObject(b.build()).json().is("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}");
 		b.set("A.f1.lo/remove", AList.of(HashMap.class));
-		b.removeFrom("A.f1.lo", AList.of());
+		b.removeFrom("A.f1.lo", AList.create());
 		b.removeFrom("A.f1.lo", AList.of(LinkedList.class));
 		assertObject(b.build()).json().is("{A:{'f1.lo':['java.lang.StringBuilder']}}");
 
@@ -707,7 +707,7 @@ public class PropertyStoreTest {
 		b.prependTo("A.f1.lo", AList.of(LinkedList.class));
 		assertObject(b.build()).json().is("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}");
 		b.set("A.f1.lo/remove", AList.of(HashMap.class));
-		b.set("A.f1.lo/remove", AList.of());
+		b.set("A.f1.lo/remove", AList.create());
 		b.removeFrom("A.f1.lo", AList.of(LinkedList.class));
 		assertObject(b.build()).json().is("{A:{'f1.lo':['java.lang.StringBuilder']}}");
 

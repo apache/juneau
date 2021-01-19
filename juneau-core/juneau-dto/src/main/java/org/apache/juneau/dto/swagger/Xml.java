@@ -361,11 +361,11 @@ public class Xml extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(name != null, "name")
-			.aif(namespace != null, "namespace")
-			.aif(prefix != null, "prefix")
-			.aif(attribute != null, "attribute")
-			.aif(wrapped != null, "wrapped");
+			.appendIf(name != null, "name")
+			.appendIf(namespace != null, "namespace")
+			.appendIf(prefix != null, "prefix")
+			.appendIf(attribute != null, "attribute")
+			.appendIf(wrapped != null, "wrapped");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

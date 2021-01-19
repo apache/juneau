@@ -202,17 +202,17 @@ public class Restx_Serializers_Test {
 		@RestMethod
 		public OList a(RestResponse res) {
 			// Should show ['text/s3','text/s4','text/s1','text/s2']
-			return OList.ofAll(res.getSupportedMediaTypes());
+			return OList.of(res.getSupportedMediaTypes());
 		}
 		@RestMethod(serializers=S5.class)
 		public OList b(RestResponse res) {
 			// Should show ['text/s5']
-			return OList.ofAll(res.getSupportedMediaTypes());
+			return OList.of(res.getSupportedMediaTypes());
 		}
 		@RestMethod(serializers={S5.class,Inherit.class})
 		public OList c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
-			return OList.ofAll(res.getSupportedMediaTypes());
+			return OList.of(res.getSupportedMediaTypes());
 		}
 	}
 

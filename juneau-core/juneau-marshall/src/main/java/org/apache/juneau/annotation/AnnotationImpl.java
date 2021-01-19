@@ -80,7 +80,7 @@ public class AnnotationImpl implements Annotation {
 	 * @return The contents of this annotation as a map.
 	 */
 	public OMap toMap() {
-		OMap om = OMap.of();
+		OMap om = OMap.create();
 		try {
 			for (Method m : AnnotationUtils.getSortedAnnotationMethods(annotationType()))
 				om.a(m.getName(), m.invoke(this));

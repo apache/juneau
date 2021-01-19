@@ -23,7 +23,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ReflectionMapTest {
 
-	private static ReflectionMap.Builder<Number> create() {
+	private static ReflectionMapBuilder<Number> create() {
 		return ReflectionMap.create(Number.class);
 	}
 

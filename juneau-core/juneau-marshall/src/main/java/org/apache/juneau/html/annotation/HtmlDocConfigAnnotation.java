@@ -67,7 +67,7 @@ public class HtmlDocConfigAnnotation {
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 		private String[] resolveLinks(Object[] value, String[] prev) {
-			AList<String> list = AList.of();
+			AList<String> list = AList.create();
 			for (Object v : value) {
 				String s = string(stringify(v));
 				if (s == null)

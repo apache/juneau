@@ -135,7 +135,7 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 		if (o instanceof EntityTag[])
 			return AList.of((EntityTag[])o).unmodifiable();
 
-		AList<EntityTag> l = AList.of();
+		AList<EntityTag> l = AList.create();
 		if (o instanceof Collection) {
 			for (Object o2 : (Collection<?>)o)
 				l.add(EntityTag.of(o2));

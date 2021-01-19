@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
 public abstract class HttpResponse {
 
 	private final String message;
-	private AMap<String,Object> headers = AMap.of();
+	private AMap<String,Object> headers = AMap.create();
 
 	/**
 	 * Constructor.

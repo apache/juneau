@@ -185,7 +185,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 		if (o == null)
 			return null;
 
-		AList<String> l = AList.of();
+		AList<String> l = AList.create();
 		if (o instanceof Collection) {
 			for (Object o2 : (Collection<?>)o)
 				l.add(stringify(o2));

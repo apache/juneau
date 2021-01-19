@@ -157,7 +157,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03c_integerListField_emptyList() throws Exception {
 		B03 x = new B03();
-		x.f1 = Optional.of(AList.of());
+		x.f1 = Optional.of(AList.create());
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(0, x.f1.get().size());

@@ -476,11 +476,11 @@ public class ResponseInfo extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(description != null, "description")
-			.aif(schema != null, "schema")
-			.aif(headers != null, "headers")
-			.aif(example != null, "example")
-			.aif(examples != null, "examples");
+			.appendIf(description != null, "description")
+			.appendIf(schema != null, "schema")
+			.appendIf(headers != null, "headers")
+			.appendIf(example != null, "example")
+			.appendIf(examples != null, "examples");
 		return new MultiSet<>(s, super.keySet());
 	}
 

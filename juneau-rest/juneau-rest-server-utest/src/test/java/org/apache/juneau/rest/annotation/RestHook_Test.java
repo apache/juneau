@@ -478,7 +478,7 @@ public class RestHook_Test {
 		}
 		@RestMethod(path="/")
 		public OMap a(RestRequest req, RestResponse res) {
-			return OMap.of()
+			return OMap.create()
 				.a("1", res.getHeader("start1-called"))
 				.a("2", res.getHeader("start2-called"))
 				.a("3", res.getHeader("start3-called"))
@@ -529,7 +529,7 @@ public class RestHook_Test {
 		}
 		@RestMethod(path="/")
 		public OMap a(RestRequest req, RestResponse res) {
-			return OMap.of()
+			return OMap.create()
 				.a("1", res.getHeader("pre1-called"))
 				.a("2", res.getHeader("pre2-called"))
 				.a("3", res.getHeader("pre3-called"))

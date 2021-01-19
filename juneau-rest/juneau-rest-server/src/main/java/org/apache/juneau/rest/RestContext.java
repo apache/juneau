@@ -3217,7 +3217,7 @@ public class RestContext extends BeanContext {
 
 	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
 
-	private final ReflectionMap<Enablement> debugEnablement;
+	private final DebugEnablementMap debugEnablementMap;
 
 	// Gets set when postInitChildFirst() gets called.
 	private final AtomicBoolean initialized = new AtomicBoolean(false);
@@ -3292,7 +3292,7 @@ public class RestContext extends BeanContext {
 			config = builder.config.resolving(varResolver.createSession());
 			beanFactory.addBean(Config.class, config);
 
-			responseHandlers = createResponseHandlers(r, beanFactory);
+			responseHandlers = createResponseHandlers(r, beanFactory).asArray();
 			beanFactory.addBean(ResponseHandler[].class, responseHandlers);
 
 			callLogger = createCallLogger(r, beanFactory);
@@ -3319,12 +3319,12 @@ public class RestContext extends BeanContext {
 			staticFiles = createStaticFiles(r, beanFactory);
 			beanFactory.addBean(StaticFiles.class, staticFiles);
 
-			defaultRequestHeaders = createDefaultRequestHeaders(r, beanFactory);
-			defaultResponseHeaders = createDefaultResponseHeaders(r, beanFactory);
-			defaultRequestAttributes = createDefaultRequestAttributes(r, beanFactory);
+			defaultRequestHeaders = createDefaultRequestHeaders(r, beanFactory).asArray();
+			defaultResponseHeaders = createDefaultResponseHeaders(r, beanFactory).asArray();
+			defaultRequestAttributes = createDefaultRequestAttributes(r, beanFactory).asArray();
 
-			restParams = createRestParams(r, beanFactory);
-			hookMethodParams = createHookMethodParams(r, beanFactory);
+			restParams = createRestParams(r, beanFactory).asArray();
+			hookMethodParams = createHookMethodParams(r, beanFactory).asArray();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority));
@@ -3338,33 +3338,9 @@ public class RestContext extends BeanContext {
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
-			ReflectionMap.Builder<Enablement> deb = ReflectionMap.create(Enablement.class);
-			for (String s : split(getStringProperty(REST_debugOn, ""))) {
-				s = s.trim();
-				if (! s.isEmpty()) {
-					int i = s.indexOf('=');
-					if (i == -1)
-						deb.append(s.trim(), Enablement.ALWAYS);
-					else
-						deb.append(s.substring(0, i).trim(), Enablement.fromString(s.substring(i+1).trim()));
-				}
-			}
+			debugEnablementMap = createDebugEnablement(r).build();
 
-			Enablement defaultDebug = getInstanceProperty(REST_debugDefault, Enablement.class, null);
-			if (defaultDebug == null)
-				defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
-
-			Enablement de = getInstanceProperty(REST_debug, Enablement.class, defaultDebug);
-			if (de != null)
-				deb.append(rci.getFullName(), de);
-			for (MethodInfo mi : rci.getPublicMethods())
-				for (RestMethod a : mi.getAnnotations(RestMethod.class))
-					if (a != null && ! a.debug().isEmpty())
-						deb.append(mi.getFullName(), Enablement.fromString(a.debug()));
-
-			this.debugEnablement = deb.build();
-
-			this.debug = debugEnablement.find(rci.inner(), Enablement.class).orElse(Enablement.NEVER);
+			debug = debugEnablementMap.find(rci.inner(), Enablement.class).orElse(Enablement.NEVER);
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
@@ -3580,6 +3556,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_fileFinder
 	 */
 	protected FileFinder createFileFinder(Object resource, BeanFactory beanFactory) throws Exception {
+
 		FileFinder x = null;
 
 		if (resource instanceof FileFinder)
@@ -3638,6 +3615,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_infoProvider
 	 */
 	protected RestInfoProvider createInfoProvider(Object resource, BeanFactory beanFactory) throws Exception {
+
 		RestInfoProvider x = null;
 
 		if (resource instanceof RestInfoProvider)
@@ -3695,6 +3673,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_staticFiles
 	 */
 	protected StaticFiles createStaticFiles(Object resource, BeanFactory beanFactory) throws Exception {
+
 		StaticFiles x = null;
 
 		if (resource instanceof StaticFiles)
@@ -3755,6 +3734,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_callLogger
 	 */
 	protected RestLogger createCallLogger(Object resource, BeanFactory beanFactory) throws Exception {
+
 		RestLogger x = null;
 
 		if (resource instanceof RestLogger)
@@ -3812,6 +3792,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_beanFactory
 	 */
 	protected BeanFactory createBeanFactory(Object resource) throws Exception {
+
 		BeanFactory x = null;
 
 		if (resource instanceof BeanFactory)
@@ -3870,6 +3851,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_beanFactory
 	 */
 	protected BeanFactory createRootBeanFactory(Object resource) throws Exception {
+
 		BeanFactory x = null;
 
 		if (resource instanceof BeanFactory)
@@ -3922,19 +3904,19 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If response handlers could not be instantiated.
 	 * @seealso #REST_responseHandlers
 	 */
-	protected ResponseHandler[] createResponseHandlers(Object resource, BeanFactory beanFactory) throws Exception {
-		ResponseHandler[] x = getInstanceArrayProperty(REST_responseHandlers, ResponseHandler.class, null, beanFactory);
+	protected ResponseHandlerList createResponseHandlers(Object resource, BeanFactory beanFactory) throws Exception {
 
-		if (x == null)
-			x = beanFactory.getBean(ResponseHandler[].class).orElse(null);
+		ResponseHandlerList x = ResponseHandlerList.create();
 
-		if (x == null)
-			x = new ResponseHandler[0];
+		x.append(getInstanceArrayProperty(REST_responseHandlers, ResponseHandler.class, new ResponseHandler[0], beanFactory));
+
+		if (x.isEmpty())
+			x.append(beanFactory.getBean(ResponseHandlerList.class).orElse(null));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(ResponseHandler[].class, x)
-			.beanCreateMethodFinder(ResponseHandler[].class, resource)
+			.addBean(ResponseHandlerList.class, x)
+			.beanCreateMethodFinder(ResponseHandlerList.class, resource)
 			.find("createResponseHandlers")
 			.withDefault(x)
 			.run();
@@ -3972,6 +3954,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_serializers
 	 */
 	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+
 		SerializerGroup g = beanFactory.getBean(SerializerGroup.class).orElse(null);
 
 		if (g == null) {
@@ -4031,6 +4014,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_parsers
 	 */
 	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+
 		ParserGroup g = beanFactory.getBean(ParserGroup.class).orElse(null);
 
 		if (g == null) {
@@ -4090,6 +4074,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_partSerializer
 	 */
 	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory) throws Exception {
+
 		HttpPartSerializer x = null;
 
 		if (resource instanceof HttpPartSerializer)
@@ -4145,6 +4130,7 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_partParser
 	 */
 	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory) throws Exception {
+
 		HttpPartParser x = null;
 
 		if (resource instanceof HttpPartParser)
@@ -4193,11 +4179,14 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_paramResolvers
 	 */
 	@SuppressWarnings("unchecked")
-	protected Class<? extends RestParam>[] createRestParams(Object resource, BeanFactory beanFactory) throws Exception {
-		@SuppressWarnings("rawtypes")
-		AList<Class> x = AList.of(getListProperty(REST_restParams, Class.class, AList.of()));
+	protected RestParamList createRestParams(Object resource, BeanFactory beanFactory) throws Exception {
 
-		x.a(
+		RestParamList x = RestParamList.create();
+
+		for (Class<?> c : getListProperty(REST_restParams, Class.class, AList.create()))
+			x.append((Class<? extends RestParam>)c);
+
+		x.append(
 			AttributeParam.class,
 			BodyParam.class,
 			ConfigParam.class,
@@ -4241,17 +4230,15 @@ public class RestContext extends BeanContext {
 			DefaultParam.class
 		);
 
-		Class<?>[] x2 = x.toArray(new Class[x.size()]);
-
-		x2 = BeanFactory
+		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(Class[].class, x2)
-			.beanCreateMethodFinder(Class[].class, resource)
+			.addBean(RestParamList.class, x)
+			.beanCreateMethodFinder(RestParamList.class, resource)
 			.find("createRestParams")
-			.withDefault(x2)
+			.withDefault(x)
 			.run();
 
-		return (Class<? extends RestParam>[])x2;
+		return x;
 	}
 
 	/**
@@ -4264,11 +4251,11 @@ public class RestContext extends BeanContext {
 	 * @seealso #REST_paramResolvers
 	 */
 	@SuppressWarnings("unchecked")
-	protected Class<? extends RestParam>[] createHookMethodParams(Object resource, BeanFactory beanFactory) throws Exception {
-		@SuppressWarnings("rawtypes")
-		AList<Class> x = AList.of();
+	protected RestParamList createHookMethodParams(Object resource, BeanFactory beanFactory) throws Exception {
 
-		x.a(
+		RestParamList x = RestParamList.create();
+
+		x.append(
 			ConfigParam.class,
 			HeaderParam.class,
 			HttpServletRequestParam.class,
@@ -4289,17 +4276,15 @@ public class RestContext extends BeanContext {
 			DefaultParam.class
 		);
 
-		Class<?>[] x2 = x.toArray(new Class[x.size()]);
-
-		x2 = BeanFactory
+		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(Class[].class, x2)
-			.beanCreateMethodFinder(Class[].class, resource)
+			.addBean(RestParamList.class, x)
+			.beanCreateMethodFinder(RestParamList.class, resource)
 			.find("createHookMethodParams")
-			.withDefault(x2)
+			.withDefault(x)
 			.run();
 
-		return (Class<? extends RestParam>[])x2;
+		return x;
 	}
 
 	/**
@@ -4325,6 +4310,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If logger could not be instantiated.
 	 */
 	protected Logger createLogger(Object resource, BeanFactory beanFactory) throws Exception {
+
 		Logger x = beanFactory.getBean(Logger.class).orElse(null);
 
 		if (x == null)
@@ -4364,6 +4350,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If JSON schema generator could not be instantiated.
 	 */
 	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory) throws Exception {
+
 		JsonSchemaGenerator x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
 
 		if (x == null)
@@ -4406,6 +4393,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If variable resolver could not be instantiated.
 	 */
 	protected VarResolver createVarResolver(Object resource, BeanFactory beanFactory) throws Exception {
+
 		VarResolver x = beanFactory.getBean(VarResolver.class).orElse(null);
 
 		if (x == null)
@@ -4446,6 +4434,7 @@ public class RestContext extends BeanContext {
 	 */
 	@SuppressWarnings("unchecked")
 	protected VarList createVars(Object resource, BeanFactory beanFactory) throws Exception {
+
 		VarList x = beanFactory.getBean(VarList.class).orElse(null);
 
 		if (x == null)
@@ -4501,6 +4490,7 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
 	protected StackTraceStore createStackTraceStore(Object resource, BeanFactory beanFactory) throws Exception {
+
 		StackTraceStore x = beanFactory.getBean(StackTraceStore.class).orElse(null);
 
 		if (x == null)
@@ -4525,23 +4515,21 @@ public class RestContext extends BeanContext {
 	 * @return The default request headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected org.apache.http.Header[] createDefaultRequestHeaders(Object resource, BeanFactory beanFactory) throws Exception {
-		AMap<String,org.apache.http.Header> x = AMap.of();
+	protected HeaderList createDefaultRequestHeaders(Object resource, BeanFactory beanFactory) throws Exception {
 
-		for (org.apache.http.Header y : getInstanceArrayProperty(REST_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory))
-			x.put(y.getName().toUpperCase(), y);
+		HeaderList x = HeaderList.create();
 
-		org.apache.http.Header[] x2 = x.values().toArray(new org.apache.http.Header[x.size()]);
+		x.appendUnique(getInstanceArrayProperty(REST_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
 
-		x2 = BeanFactory
+		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(org.apache.http.Header[].class, x2)
-			.beanCreateMethodFinder(org.apache.http.Header[].class, resource)
+			.addBean(HeaderList.class, x)
+			.beanCreateMethodFinder(HeaderList.class, resource)
 			.find("createDefaultRequestHeaders")
-			.withDefault(x2)
+			.withDefault(x)
 			.run();
 
-		return x2;
+		return x;
 	}
 
 	/**
@@ -4552,23 +4540,21 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected org.apache.http.Header[] createDefaultResponseHeaders(Object resource, BeanFactory beanFactory) throws Exception {
-		AMap<String,org.apache.http.Header> x = AMap.of();
+	protected HeaderList createDefaultResponseHeaders(Object resource, BeanFactory beanFactory) throws Exception {
 
-		for (org.apache.http.Header y : getInstanceArrayProperty(REST_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory))
-			x.put(y.getName().toUpperCase(), y);
+		HeaderList x = HeaderList.create();
 
-		org.apache.http.Header[] x2 = x.values().toArray(new org.apache.http.Header[x.size()]);
+		x.appendUnique(getInstanceArrayProperty(REST_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
 
-		x2 = BeanFactory
+		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(org.apache.http.Header[].class, x2)
-			.beanCreateMethodFinder(org.apache.http.Header[].class, resource)
+			.addBean(HeaderList.class, x)
+			.beanCreateMethodFinder(HeaderList.class, resource)
 			.find("createDefaultResponseHeaders")
-			.withDefault(x2)
+			.withDefault(x)
 			.run();
 
-		return x2;
+		return x;
 	}
 
 	/**
@@ -4579,23 +4565,58 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected NamedAttribute[] createDefaultRequestAttributes(Object resource, BeanFactory beanFactory) throws Exception {
-		AMap<String,NamedAttribute> x = AMap.of();
+	protected NamedAttributeList createDefaultRequestAttributes(Object resource, BeanFactory beanFactory) throws Exception {
 
-		for (NamedAttribute y : getInstanceArrayProperty(REST_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory))
-			x.put(y.getName(), y);
+		NamedAttributeList x = NamedAttributeList.create();
 
-		NamedAttribute[] x2 = x.values().toArray(new NamedAttribute[x.size()]);
+		x.appendUnique(getInstanceArrayProperty(REST_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory));
 
-		x2 = BeanFactory
+		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(NamedAttribute[].class, x2)
-			.beanCreateMethodFinder(NamedAttribute[].class, resource)
+			.addBean(NamedAttributeList.class, x)
+			.beanCreateMethodFinder(NamedAttributeList.class, resource)
 			.find("createDefaultRequestAttributes")
-			.withDefault(x2)
+			.withDefault(x)
 			.run();
 
-		return x2;
+		return x;
+	}
+
+	/**
+	 * Instantiates the debug enablement map builder for this REST object.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The default response headers for this REST object.
+	 */
+	protected DebugEnablementMapBuilder createDebugEnablement(Object resource) {
+
+		ClassInfo rci = ClassInfo.ofProxy(resource);
+
+		DebugEnablementMapBuilder deb = DebugEnablementMap.create();
+		for (String s : split(getStringProperty(REST_debugOn, ""))) {
+			s = s.trim();
+			if (! s.isEmpty()) {
+				int i = s.indexOf('=');
+				if (i == -1)
+					deb.append(s.trim(), Enablement.ALWAYS);
+				else
+					deb.append(s.substring(0, i).trim(), Enablement.fromString(s.substring(i+1).trim()));
+			}
+		}
+
+		Enablement defaultDebug = getInstanceProperty(REST_debugDefault, Enablement.class, null);
+		if (defaultDebug == null)
+			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
+
+		Enablement de = getInstanceProperty(REST_debug, Enablement.class, defaultDebug);
+		if (de != null)
+			deb.append(rci.getFullName(), de);
+		for (MethodInfo mi : rci.getPublicMethods())
+			for (RestMethod a : mi.getAnnotations(RestMethod.class))
+				if (a != null && ! a.debug().isEmpty())
+					deb.append(mi.getFullName(), Enablement.fromString(a.debug()));
+
+		return deb;
 	}
 
 	/**
@@ -4605,7 +4626,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createStartCallMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -4622,7 +4643,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createEndCallMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -4639,7 +4660,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createPostInitMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -4656,7 +4677,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createPostInitChildFirstMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -4673,7 +4694,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createDestroyMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -4690,7 +4711,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createPreCallMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -4707,7 +4728,7 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 */
 	protected List<Method> createPostCallMethods(Object resource) {
-		Map<String,Method> x = AMap.of();
+		Map<String,Method> x = AMap.create();
 
 		for (MethodInfo m : ClassInfo.ofProxy(resource).getAllMethodsParentFirst())
 			for (RestHook h : m.getAnnotations(RestHook.class))
@@ -5011,7 +5032,7 @@ public class RestContext extends BeanContext {
 	public Enablement getDebug(Method method) {
 		if (method == null)
 			return null;
-		return debugEnablement.find(method).orElse(debug);
+		return debugEnablementMap.find(method).orElse(debug);
 	}
 
 	/**
@@ -6037,7 +6058,7 @@ public class RestContext extends BeanContext {
 		}
 
 		Map<String,List<RestMethodContext>> getMap() {
-			AMap<String,List<RestMethodContext>> m = AMap.of();
+			AMap<String,List<RestMethodContext>> m = AMap.create();
 			for (Map.Entry<String,TreeSet<RestMethodContext>> e : map.entrySet())
 				m.put(e.getKey(), AList.of(e.getValue()));
 			return m.unmodifiable();

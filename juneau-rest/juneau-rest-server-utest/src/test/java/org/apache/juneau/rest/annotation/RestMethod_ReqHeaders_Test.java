@@ -31,7 +31,7 @@ public class RestMethod_ReqHeaders_Test {
 	public static class A {
 		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(RequestHeaders headers) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", headers.getString("H1"))
 				.a("h2", headers.getString("H2"))
 				.a("h3", headers.getString("H3"));
@@ -54,7 +54,7 @@ public class RestMethod_ReqHeaders_Test {
 	public static class B {
 		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(RequestHeaders headers) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", headers.getString("h1"))
 				.a("h2", headers.getString("h2"))
 				.a("h3", headers.getString("h3"));

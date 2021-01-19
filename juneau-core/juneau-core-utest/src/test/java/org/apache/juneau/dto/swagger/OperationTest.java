@@ -355,7 +355,7 @@ public class OperationTest {
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertObject(t.getResponses()).isType(Map.class);
 
-		t.setResponses(AMap.of());
+		t.setResponses(AMap.create());
 		assertObject(t.getResponses()).json().is("{}");
 		assertObject(t.getResponses()).isType(Map.class);
 
@@ -374,7 +374,7 @@ public class OperationTest {
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertObject(t.getResponses()).isType(Map.class);
 
-		t.addResponses(AMap.of());
+		t.addResponses(AMap.create());
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertObject(t.getResponses()).isType(Map.class);
 

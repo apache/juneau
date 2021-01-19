@@ -129,7 +129,7 @@ public class RestClient_Config_Serializer_Test {
 	}
 
 	public static class A9 {
-		public List<String> f1 = AList.of();
+		public List<String> f1 = AList.create();
 		public String[] f2 = {};
 	}
 
@@ -140,8 +140,8 @@ public class RestClient_Config_Serializer_Test {
 	}
 
 	public static class A10 {
-		public Map<String,String> f1 = AMap.of();
-		public OMap f2 = OMap.of();
+		public Map<String,String> f1 = AMap.create();
+		public OMap f2 = OMap.create();
 	}
 
 	@Test

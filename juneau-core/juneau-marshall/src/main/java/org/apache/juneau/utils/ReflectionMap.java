@@ -13,7 +13,6 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.lang.Character.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -132,7 +131,7 @@ public class ReflectionMap<V> {
 	 *
 	 * @param b Initializer object.
 	 */
-	ReflectionMap(Builder<V> b) {
+	protected ReflectionMap(ReflectionMapBuilder<V> b) {
 		this.classEntries = Collections.unmodifiableList(new ArrayList<>(b.classEntries));
 		this.methodEntries = Collections.unmodifiableList(new ArrayList<>(b.methodEntries));
 		this.fieldEntries = Collections.unmodifiableList(new ArrayList<>(b.fieldEntries));
@@ -150,78 +149,8 @@ public class ReflectionMap<V> {
 	 * @param c The type of object in this map.
 	 * @return A new instance of this object.
 	 */
-	public static <V> ReflectionMap.Builder<V> create(Class<V> c) {
-		return new ReflectionMap.Builder<>();
-	}
-
-	/**
-	 * Creates a new builder object for {@link ReflectionMap} objects.
-	 *
-	 * @param <V> The type of object in this map.
-	 */
-	public static class Builder<V> {
-		List<ClassEntry<V>> classEntries = new ArrayList<>();
-		List<MethodEntry<V>> methodEntries = new ArrayList<>();
-		List<FieldEntry<V>> fieldEntries = new ArrayList<>();
-		List<ConstructorEntry<V>> constructorEntries = new ArrayList<>();
-
-		/**
-		 * Adds a mapping to this builder.
-		 *
-		 * @param key
-		 * 	The mapping key.
-		 * 	<br>Can be any of the following:
-		 * 	<ul>
-		 * 		<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
-		 * 		<li>Simple class name (e.g. <js>"MyClass"</js>).
-		 * 		<li>All classes (e.g. <js>"*"</js>).
-		 * 		<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
-		 * 		<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
-		 * 		<li>A comma-delimited list of anything on this list.
-		 * 	</ul>
-		 * @param value The value for this mapping.
-		 * @return This object (for method chaining).
-		 */
-		public Builder<V> append(String key, V value) {
-			if (isEmpty(key))
-				throw new RuntimeException("Invalid reflection signature: [" + key + "]");
-			try {
-				for (String k : splitNames(key)) {
-					if (k.endsWith(")")) {
-						int i = k.substring(0, k.indexOf('(')).lastIndexOf('.');
-						if (i == -1 || isUpperCase(k.charAt(i+1))) {
-							constructorEntries.add(new ConstructorEntry<>(k, value));
-						} else {
-							methodEntries.add(new MethodEntry<>(k, value));
-						}
-					} else {
-						int i = k.lastIndexOf('.');
-						if (i == -1) {
-							classEntries.add(new ClassEntry<>(k, value));
-						} else if (isUpperCase(k.charAt(i+1))) {
-							classEntries.add(new ClassEntry<>(k, value));
-							fieldEntries.add(new FieldEntry<>(k, value));
-						} else {
-							methodEntries.add(new MethodEntry<>(k, value));
-							fieldEntries.add(new FieldEntry<>(k, value));
-						}
-					}
-				}
-			} catch (IndexOutOfBoundsException e) {
-				throw new RuntimeException("Invalid reflection signature: [" + key + "]");
-			}
-
-			return this;
-		}
-
-		/**
-		 * Create new instance of {@link ReflectionMap} based on the contents of this builder.
-		 *
-		 * @return A new {@link ReflectionMap} object.
-		 */
-		public ReflectionMap<V> build() {
-			return new ReflectionMap<>(this);
-		}
+	public static <V> ReflectionMapBuilder<V> create(Class<V> c) {
+		return new ReflectionMapBuilder<>();
 	}
 
 	static List<String> splitNames(String key) {
@@ -304,7 +233,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Class<?> c, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.of();
+			l = AList.create();
 		if (! noClassEntries)
 			for (ClassEntry<V> e : classEntries)
 				if (e.matches(c) && e.value != null)
@@ -370,7 +299,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Method m, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.of();
+			l = AList.create();
 		if (! noMethodEntries)
 			for (MethodEntry<V> e : methodEntries)
 				if (e.matches(m) && e.value != null)
@@ -436,7 +365,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Field f, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.of();
+			l = AList.create();
 		if (! noFieldEntries)
 			for (FieldEntry<V> e : fieldEntries)
 				if (e.matches(f) && e.value != null)
@@ -502,7 +431,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Constructor<?> c, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.of();
+			l = AList.create();
 		if (! noConstructorEntries)
 			for (ConstructorEntry<V> e : constructorEntries)
 				if (e.matches(c) && e.value != null)

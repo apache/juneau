@@ -86,7 +86,7 @@ public class MediaRanges {
 	 */
 	public MediaRanges(HeaderElement[] e) {
 
-		List<MediaRange> l = AList.of();
+		List<MediaRange> l = AList.create();
 		for (HeaderElement e2 : e)
 			l.add(new MediaRange(e2));
 

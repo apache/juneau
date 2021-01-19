@@ -46,7 +46,7 @@ public class MediaRange extends MediaType {
 
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
-		List<NameValuePair> extensions = AList.of();
+		List<NameValuePair> extensions = AList.create();
 		boolean foundQ = false;
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q")) {

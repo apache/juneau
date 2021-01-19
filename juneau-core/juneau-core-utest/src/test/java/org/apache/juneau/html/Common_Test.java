@@ -120,7 +120,7 @@ public class Common_Test {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = AList.of();
+			t.f1 = AList.create();
 			t.f2 = AList.of(null,A.create());
 			return t;
 		}

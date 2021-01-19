@@ -447,12 +447,12 @@ public class Info extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(title != null, "title")
-			.aif(description != null, "description")
-			.aif(termsOfService != null, "termsOfService")
-			.aif(contact != null, "contact")
-			.aif(license != null, "license")
-			.aif(version != null, "version");
+			.appendIf(title != null, "title")
+			.appendIf(description != null, "description")
+			.appendIf(termsOfService != null, "termsOfService")
+			.appendIf(contact != null, "contact")
+			.appendIf(license != null, "license")
+			.appendIf(version != null, "version");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

@@ -124,8 +124,8 @@ public final class ParserGroup extends BeanContext {
 		super(ps);
 		this.parsers = AList.unmodifiable(parsers);
 
-		AList<MediaType> lmt = AList.of();
-		AList<Parser> l = AList.of();
+		AList<MediaType> lmt = AList.create();
+		AList<Parser> l = AList.create();
 		for (Parser p : parsers) {
 			for (MediaType m: p.getMediaTypes()) {
 				lmt.add(m);

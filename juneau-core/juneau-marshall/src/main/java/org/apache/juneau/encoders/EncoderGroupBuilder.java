@@ -30,7 +30,7 @@ public class EncoderGroupBuilder {
 	 * Create an empty encoder group builder.
 	 */
 	public EncoderGroupBuilder() {
-		this.encoders = AList.of();
+		this.encoders = AList.create();
 	}
 
 	/**
@@ -39,8 +39,8 @@ public class EncoderGroupBuilder {
 	 * @param copyFrom The encoder group that we're copying settings and encoders from.
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {
-		this.encoders = AList.of();
-		encoders.arev(copyFrom.getEncoders());
+		this.encoders = AList.create();
+		encoders.appendReverse(copyFrom.getEncoders());
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(Encoder...e) {
-		encoders.arev(e);
+		encoders.appendReverse(e);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(List<Encoder> e) {
-		encoders.arev(e);
+		encoders.appendReverse(e);
 		return this;
 	}
 

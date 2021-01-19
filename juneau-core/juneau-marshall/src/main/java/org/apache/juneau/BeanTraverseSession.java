@@ -289,10 +289,10 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final OMap getLastLocation() {
-		return OMap.of()
-			.asn("currentClass", currentClass)
-			.asn("currentProperty", currentProperty)
-			.ase("stack", stack);
+		return OMap.create()
+			.appendSkipNull("currentClass", currentClass)
+			.appendSkipNull("currentProperty", currentProperty)
+			.appendSkipEmpty("stack", stack);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

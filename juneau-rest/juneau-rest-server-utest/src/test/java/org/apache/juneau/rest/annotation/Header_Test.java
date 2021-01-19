@@ -107,7 +107,7 @@ public class Header_Test {
 	public static class B {
 		@RestMethod
 		public OMap a(@Header(name="H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
 				.a("h3", h3);
@@ -130,7 +130,7 @@ public class Header_Test {
 	public static class C {
 		@RestMethod
 		public OMap a(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
 				.a("h3", h3);
@@ -153,7 +153,7 @@ public class Header_Test {
 	public static class D1 {
 		@RestMethod
 		public OMap a(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
 				.a("h3", h3);
@@ -172,7 +172,7 @@ public class Header_Test {
 	public static class D2 {
 		@RestMethod
 		public OMap a(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
 				.a("h3", h3);
@@ -195,7 +195,7 @@ public class Header_Test {
 	public static class E {
 		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
-			return OMap.of()
+			return OMap.create()
 				.a("h1", h1)
 				.a("h2", h2)
 				.a("h3", h3);

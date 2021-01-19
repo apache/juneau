@@ -33,7 +33,7 @@ public class DefaultFilteringOMap extends OMap {
 	 */
 	public DefaultFilteringOMap(OMap m) {
 		super();
-		appendAll(m);
+		append(m);
 	}
 
 	/**

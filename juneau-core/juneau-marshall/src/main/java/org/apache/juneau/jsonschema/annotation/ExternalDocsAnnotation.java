@@ -80,8 +80,8 @@ public class ExternalDocsAnnotation {
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.ase("description", joinnl(a.description()))
-			.ase("url", a.url())
+			.appendSkipEmpty("description", joinnl(a.description()))
+			.appendSkipEmpty("url", a.url())
 		;
 	}
 

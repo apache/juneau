@@ -1410,21 +1410,21 @@ public class Swagger extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(swagger != null, "swagger")
-			.aif(info != null, "info")
-			.aif(host != null, "host")
-			.aif(basePath != null, "basePath")
-			.aif(schemes != null, "schemes")
-			.aif(consumes != null, "consumes")
-			.aif(produces != null, "produces")
-			.aif(paths != null, "paths")
-			.aif(definitions != null, "definitions")
-			.aif(parameters != null, "parameters")
-			.aif(responses != null, "responses")
-			.aif(securityDefinitions != null, "securityDefinitions")
-			.aif(security != null, "security")
-			.aif(tags != null, "tags")
-			.aif(externalDocs != null, "externalDocs");
+			.appendIf(swagger != null, "swagger")
+			.appendIf(info != null, "info")
+			.appendIf(host != null, "host")
+			.appendIf(basePath != null, "basePath")
+			.appendIf(schemes != null, "schemes")
+			.appendIf(consumes != null, "consumes")
+			.appendIf(produces != null, "produces")
+			.appendIf(paths != null, "paths")
+			.appendIf(definitions != null, "definitions")
+			.appendIf(parameters != null, "parameters")
+			.appendIf(responses != null, "responses")
+			.appendIf(securityDefinitions != null, "securityDefinitions")
+			.appendIf(security != null, "security")
+			.appendIf(tags != null, "tags")
+			.appendIf(externalDocs != null, "externalDocs");
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -402,13 +402,13 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 	}
 
 	public static class T5 {
-		public List<String> f1 = AList.of();
+		public List<String> f1 = AList.create();
 		public String[] f2 = {};
 	}
 
 	public static class T6 {
-		public Map<String,String> f1 = AMap.of();
-		public OMap f2 = OMap.of();
+		public Map<String,String> f1 = AMap.create();
+		public OMap f2 = OMap.create();
 	}
 
 	public static class T7 {

@@ -932,7 +932,7 @@ public class Remote_FormDataAnnotation_Test {
 		}
 		@FormData(n="d",aev=true)
 		public List<Object> getX3() {
-			return AList.of();
+			return AList.create();
 		}
 		@FormData("e")
 		public List<Object> getX4() {

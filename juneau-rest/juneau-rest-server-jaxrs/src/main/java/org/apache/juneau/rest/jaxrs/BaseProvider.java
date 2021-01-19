@@ -85,7 +85,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (sm == null)
 				throw new WebApplicationException(SC_NOT_ACCEPTABLE);
 			Serializer s = sm.getSerializer();
-			OMap mp = OMap.of();
+			OMap mp = OMap.create();
 			mp.append("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
@@ -121,7 +121,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (pm == null)
 				throw new WebApplicationException(SC_UNSUPPORTED_MEDIA_TYPE);
 			Parser p = pm.getParser();
-			OMap mp = OMap.of();
+			OMap mp = OMap.create();
 			mp.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);

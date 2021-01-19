@@ -140,9 +140,9 @@ public class BeanMeta<T> {
 		BeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
-		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.of();
-		AMap<Method,String> getterProps = AMap.of();
-		AMap<Method,String> setterProps = AMap.of();
+		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.create();
+		AMap<Method,String> getterProps = AMap.create();
+		AMap<Method,String> setterProps = AMap.create();
 		BeanPropertyMeta dynaProperty;
 
 		AMap<Class<?>,Class<?>[]> typeVarImpls;
@@ -172,7 +172,7 @@ public class BeanMeta<T> {
 					mVis = ctx.getBeanMethodVisibility(),
 					fVis = ctx.getBeanFieldVisibility();
 
-				AList<Class<?>> bdClasses = AList.of();
+				AList<Class<?>> bdClasses = AList.create();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
 					bdClasses.a(beanFilter.getBeanDictionary());
 
@@ -390,7 +390,7 @@ public class BeanMeta<T> {
 					}
 				}
 
-				typeVarImpls = AMap.of();
+				typeVarImpls = AMap.create();
 				findTypeVarImpls(c, typeVarImpls);
 				if (typeVarImpls.isEmpty())
 					typeVarImpls = null;

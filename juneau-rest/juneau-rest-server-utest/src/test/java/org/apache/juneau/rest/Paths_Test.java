@@ -29,7 +29,7 @@ public class Paths_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	static OMap getPaths(RestRequest req) {
-		return OMap.of()
+		return OMap.create()
 			.a("pathInfo", req.getPathInfo())
 			.a("pathRemainder", req.getPathMatch().getRemainder())
 			.a("pathRemainderUndecoded", req.getPathMatch().getRemainderUndecoded())

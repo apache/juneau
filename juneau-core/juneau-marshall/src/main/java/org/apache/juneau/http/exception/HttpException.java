@@ -37,7 +37,7 @@ public class HttpException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private int status;
-	private AMap<String,Object> headers = AMap.of();
+	private AMap<String,Object> headers = AMap.create();
 
 	/**
 	 * Constructor.

@@ -165,7 +165,7 @@ public class SecuritySchemeTest {
 		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertObject(t.getScopes()).isType(Map.class);
 
-		t.setScopes(AMap.of());
+		t.setScopes(AMap.create());
 		assertObject(t.getScopes()).json().is("{}");
 		assertObject(t.getScopes()).isType(Map.class);
 
@@ -184,7 +184,7 @@ public class SecuritySchemeTest {
 		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertObject(t.getScopes()).isType(Map.class);
 
-		t.addScopes(AMap.of());
+		t.addScopes(AMap.create());
 		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertObject(t.getScopes()).isType(Map.class);
 

@@ -553,14 +553,14 @@ public class SecurityScheme extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(type != null, "type")
-			.aif(description != null, "description")
-			.aif(name != null, "name")
-			.aif(in != null, "in")
-			.aif(flow != null, "flow")
-			.aif(authorizationUrl != null, "authorizationUrl")
-			.aif(tokenUrl != null, "tokenUrl")
-			.aif(scopes != null, "scopes");
+			.appendIf(type != null, "type")
+			.appendIf(description != null, "description")
+			.appendIf(name != null, "name")
+			.appendIf(in != null, "in")
+			.appendIf(flow != null, "flow")
+			.appendIf(authorizationUrl != null, "authorizationUrl")
+			.appendIf(tokenUrl != null, "tokenUrl")
+			.appendIf(scopes != null, "scopes");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

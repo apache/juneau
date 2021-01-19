@@ -15,6 +15,7 @@ package org.apache.juneau.collections;
 import static java.util.Collections.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -46,7 +47,7 @@ import org.apache.juneau.serializer.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public final class ASortedMap<K,V> extends TreeMap<K,V> {
+public class ASortedMap<K,V> extends TreeMap<K,V> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -88,7 +89,7 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 	 *
 	 * @return A new empty map.
 	 */
-	public static <K,V> ASortedMap<K,V> of() {
+	public static <K,V> ASortedMap<K,V> create() {
 		return new ASortedMap<>();
 	}
 
@@ -140,33 +141,73 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Add.
-	 *
-	 * <p>
 	 * Adds an entry to this map.
 	 *
-	 * @param k The key.
-	 * @param v The value.
+	 * @param key The key.
+	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public ASortedMap<K,V> a(K k, V v) {
-		put(k, v);
+	public ASortedMap<K,V> append(K key, V value) {
+		put(key, value);
 		return this;
 	}
 
 	/**
-	 * Add all.
-	 *
-	 * <p>
 	 * Appends all the entries in the specified map to this map.
 	 *
-	 * @param c The map to copy.
+	 * @param values The map to copy.
 	 * @return This object (for method chaining).
 	 */
-	public ASortedMap<K,V> aa(Map<K,V> c) {
-		if (c != null)
-			super.putAll(c);
+	public ASortedMap<K,V> append(Map<K,V> values) {
+		super.putAll(values);
 		return this;
+	}
+
+	/**
+	 * Same as {@link #append(Object,Object)}.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ASortedMap<K,V> a(K key, V value) {
+		return append(key, value);
+	}
+
+	/**
+	 * Same as {@link #append(Map)}.
+	 *
+	 * @param values The map to copy.
+	 * @return This object (for method chaining).
+	 */
+	public ASortedMap<K,V> a(Map<K,V> values) {
+		return append(values);
+	}
+
+	/**
+	 * Add if flag is <jk>true</jk>.
+	 *
+	 * @param flag The flag to check.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ASortedMap<K,V> appendIf(boolean flag, K key, V value) {
+		if (flag)
+			append(key, value);
+		return this;
+	}
+
+	/**
+	 * Add if predicate matches value.
+	 *
+	 * @param test The predicate to match against.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ASortedMap<K,V> appendIf(Predicate<Object> test, K key, V value) {
+		return appendIf(test.test(value), key, value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -623,7 +623,7 @@ public class OpenApiTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void f02b_tArray_3dStringList() throws Exception {
-		List<List<List<String>>> in = AList.ofa(AList.ofa(AList.ofa("a")));
+		List<List<List<String>>> in = AList.ofCollections(AList.ofCollections(AList.of("a")));
 		HttpPartSchema ps = tArray().items(
 			tArray().items(
 				tArray()
@@ -634,7 +634,7 @@ public class OpenApiTest {
 		List<String> r = parse(ps, s, List.class, List.class, List.class, String.class);
 		assertEquals(in, r);
 
-		in =  AList.ofa(AList.ofa(AList.ofa("a","b"),AList.ofa("c","d")),AList.ofa(AList.ofa("e","f"),AList.ofa("g","h")));
+		in =  AList.ofCollections(AList.ofCollections(AList.of("a","b"),AList.of("c","d")),AList.ofCollections(AList.of("e","f"),AList.of("g","h")));
 		s = serialize(ps, in);
 		assertEquals("a\\\\\\,b\\,c\\\\\\,d,e\\\\\\,f\\,g\\\\\\,h", s);
 		r = parse(ps, s, List.class, List.class, List.class, String.class);

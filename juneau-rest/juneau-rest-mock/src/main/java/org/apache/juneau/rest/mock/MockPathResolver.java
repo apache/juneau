@@ -225,7 +225,7 @@ class MockPathResolver {
 
 	@Override
 	public String toString() {
-		return OMap.of()
+		return OMap.create()
 			.a("uri", uri)
 			.a("contextPath", contextPath)
 			.a("servletPath", servletPath)

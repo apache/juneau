@@ -76,7 +76,7 @@ public class RemoteMeta {
 		if (clientVersion != null)
 			headerSupplier.add(BasicStringHeader.of(versionHeader, clientVersion));
 
-		AMap<Method,RemoteMethodMeta> methods = AMap.of();
+		AMap<Method,RemoteMethodMeta> methods = AMap.create();
 		for (MethodInfo m : ci.getPublicMethods())
 			methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), "GET"));
 

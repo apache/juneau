@@ -702,61 +702,61 @@ public class HttpPartSchema {
 
 		// Validation.
 		List<String> errors = new ArrayList<>();
-		AList<String> notAllowed = AList.of();
+		AList<String> notAllowed = AList.create();
 		boolean invalidFormat = false;
 		switch (type) {
 			case STRING: {
-				notAllowed.aif(properties != null, "properties");
-				notAllowed.aif(additionalProperties != null, "additionalProperties");
-				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.aif(items != null, "items");
-				notAllowed.aif(maximum != null, "maximum");
-				notAllowed.aif(minimum != null, "minimum");
-				notAllowed.aif(multipleOf != null, "multipleOf");
-				notAllowed.aif(maxItems != null, "maxItems");
-				notAllowed.aif(minItems != null, "minItems");
-				notAllowed.aif(minProperties != null, "minProperties");
+				notAllowed.appendIf(properties != null, "properties");
+				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
+				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.appendIf(uniqueItems, "uniqueItems");
+				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.appendIf(items != null, "items");
+				notAllowed.appendIf(maximum != null, "maximum");
+				notAllowed.appendIf(minimum != null, "minimum");
+				notAllowed.appendIf(multipleOf != null, "multipleOf");
+				notAllowed.appendIf(maxItems != null, "maxItems");
+				notAllowed.appendIf(minItems != null, "minItems");
+				notAllowed.appendIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.BYTE, HttpPartFormat.BINARY, HttpPartFormat.BINARY_SPACED, HttpPartFormat.DATE, HttpPartFormat.DATE_TIME, HttpPartFormat.PASSWORD, HttpPartFormat.UON, HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
-				notAllowed.aif(properties != null, "properties");
-				notAllowed.aif(additionalProperties != null, "additionalProperties");
-				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.aif(pattern != null, "pattern");
-				notAllowed.aif(maximum != null, "maximum");
-				notAllowed.aif(minimum != null, "minimum");
-				notAllowed.aif(multipleOf != null, "multipleOf");
-				notAllowed.aif(maxLength != null, "maxLength");
-				notAllowed.aif(minLength != null, "minLength");
-				notAllowed.aif(maxProperties != null, "maxProperties");
-				notAllowed.aif(minProperties != null, "minProperties");
+				notAllowed.appendIf(properties != null, "properties");
+				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
+				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.appendIf(pattern != null, "pattern");
+				notAllowed.appendIf(maximum != null, "maximum");
+				notAllowed.appendIf(minimum != null, "minimum");
+				notAllowed.appendIf(multipleOf != null, "multipleOf");
+				notAllowed.appendIf(maxLength != null, "maxLength");
+				notAllowed.appendIf(minLength != null, "minLength");
+				notAllowed.appendIf(maxProperties != null, "maxProperties");
+				notAllowed.appendIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.aif(! _enum.isEmpty(), "_enum");
-				notAllowed.aif(properties != null, "properties");
-				notAllowed.aif(additionalProperties != null, "additionalProperties");
-				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.aif(pattern != null, "pattern");
-				notAllowed.aif(items != null, "items");
-				notAllowed.aif(maximum != null, "maximum");
-				notAllowed.aif(minimum != null, "minimum");
-				notAllowed.aif(multipleOf != null, "multipleOf");
-				notAllowed.aif(maxItems != null, "maxItems");
-				notAllowed.aif(maxLength != null, "maxLength");
-				notAllowed.aif(maxProperties != null, "maxProperties");
-				notAllowed.aif(minItems != null, "minItems");
-				notAllowed.aif(minLength != null, "minLength");
-				notAllowed.aif(minProperties != null, "minProperties");
+				notAllowed.appendIf(! _enum.isEmpty(), "_enum");
+				notAllowed.appendIf(properties != null, "properties");
+				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
+				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.appendIf(uniqueItems, "uniqueItems");
+				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.appendIf(pattern != null, "pattern");
+				notAllowed.appendIf(items != null, "items");
+				notAllowed.appendIf(maximum != null, "maximum");
+				notAllowed.appendIf(minimum != null, "minimum");
+				notAllowed.appendIf(multipleOf != null, "multipleOf");
+				notAllowed.appendIf(maxItems != null, "maxItems");
+				notAllowed.appendIf(maxLength != null, "maxLength");
+				notAllowed.appendIf(maxProperties != null, "maxProperties");
+				notAllowed.appendIf(minItems != null, "minItems");
+				notAllowed.appendIf(minLength != null, "minLength");
+				notAllowed.appendIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
@@ -764,50 +764,50 @@ public class HttpPartSchema {
 				break;
 			}
 			case INTEGER: {
-				notAllowed.aif(properties != null, "properties");
-				notAllowed.aif(additionalProperties != null, "additionalProperties");
-				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.aif(pattern != null, "pattern");
-				notAllowed.aif(items != null, "items");
-				notAllowed.aif(maxItems != null, "maxItems");
-				notAllowed.aif(maxLength != null, "maxLength");
-				notAllowed.aif(maxProperties != null, "maxProperties");
-				notAllowed.aif(minItems != null, "minItems");
-				notAllowed.aif(minLength != null, "minLength");
-				notAllowed.aif(minProperties != null, "minProperties");
+				notAllowed.appendIf(properties != null, "properties");
+				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
+				notAllowed.appendIf(uniqueItems, "uniqueItems");
+				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.appendIf(pattern != null, "pattern");
+				notAllowed.appendIf(items != null, "items");
+				notAllowed.appendIf(maxItems != null, "maxItems");
+				notAllowed.appendIf(maxLength != null, "maxLength");
+				notAllowed.appendIf(maxProperties != null, "maxProperties");
+				notAllowed.appendIf(minItems != null, "minItems");
+				notAllowed.appendIf(minLength != null, "minLength");
+				notAllowed.appendIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.INT32, HttpPartFormat.INT64);
 				break;
 			}
 			case NUMBER: {
-				notAllowed.aif(properties != null, "properties");
-				notAllowed.aif(additionalProperties != null, "additionalProperties");
-				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.aif(pattern != null, "pattern");
-				notAllowed.aif(items != null, "items");
-				notAllowed.aif(maxItems != null, "maxItems");
-				notAllowed.aif(maxLength != null, "maxLength");
-				notAllowed.aif(maxProperties != null, "maxProperties");
-				notAllowed.aif(minItems != null, "minItems");
-				notAllowed.aif(minLength != null, "minLength");
-				notAllowed.aif(minProperties != null, "minProperties");
+				notAllowed.appendIf(properties != null, "properties");
+				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
+				notAllowed.appendIf(uniqueItems, "uniqueItems");
+				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.appendIf(pattern != null, "pattern");
+				notAllowed.appendIf(items != null, "items");
+				notAllowed.appendIf(maxItems != null, "maxItems");
+				notAllowed.appendIf(maxLength != null, "maxLength");
+				notAllowed.appendIf(maxProperties != null, "maxProperties");
+				notAllowed.appendIf(minItems != null, "minItems");
+				notAllowed.appendIf(minLength != null, "minLength");
+				notAllowed.appendIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.FLOAT, HttpPartFormat.DOUBLE);
 				break;
 			}
 			case OBJECT: {
-				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(pattern != null, "pattern");
-				notAllowed.aif(items != null, "items");
-				notAllowed.aif(maximum != null, "maximum");
-				notAllowed.aif(minimum != null, "minimum");
-				notAllowed.aif(multipleOf != null, "multipleOf");
-				notAllowed.aif(maxItems != null, "maxItems");
-				notAllowed.aif(maxLength != null, "maxLength");
-				notAllowed.aif(minItems != null, "minItems");
-				notAllowed.aif(minLength != null, "minLength");
+				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.appendIf(uniqueItems, "uniqueItems");
+				notAllowed.appendIf(pattern != null, "pattern");
+				notAllowed.appendIf(items != null, "items");
+				notAllowed.appendIf(maximum != null, "maximum");
+				notAllowed.appendIf(minimum != null, "minimum");
+				notAllowed.appendIf(multipleOf != null, "multipleOf");
+				notAllowed.appendIf(maxItems != null, "maxItems");
+				notAllowed.appendIf(maxLength != null, "maxLength");
+				notAllowed.appendIf(minItems != null, "minItems");
+				notAllowed.appendIf(minLength != null, "minLength");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT);
 				break;
 			}
@@ -1546,32 +1546,32 @@ public class HttpPartSchema {
 	public String toString() {
 		try {
 			OMap m = new OMap()
-				.ase("name", name)
-				.ase("type", type)
-				.ase("format", format)
-				.ase("codes", codes)
-				.ase("default", _default)
-				.ase("enum", _enum)
-				.ase("properties", properties)
-				.asf("allowEmptyValue", allowEmptyValue)
-				.asf("exclusiveMaximum", exclusiveMaximum)
-				.asf("exclusiveMinimum", exclusiveMinimum)
-				.asf("required", required)
-				.asf("uniqueItems", uniqueItems)
-				.asf("skipIfEmpty", skipIfEmpty)
-				.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
-				.ase("pattern", pattern)
-				.asn("items", items)
-				.asn("additionalProperties", additionalProperties)
-				.asmo("maximum", maximum)
-				.asmo("minimum", minimum)
-				.asmo("multipleOf", multipleOf)
-				.asmo("maxLength", maxLength)
-				.asmo("minLength", minLength)
-				.asmo("maxItems", maxItems)
-				.asmo("minItems", minItems)
-				.asmo("maxProperties", maxProperties)
-				.asmo("minProperties", minProperties)
+				.appendSkipEmpty("name", name)
+				.appendSkipEmpty("type", type)
+				.appendSkipEmpty("format", format)
+				.appendSkipEmpty("codes", codes)
+				.appendSkipEmpty("default", _default)
+				.appendSkipEmpty("enum", _enum)
+				.appendSkipEmpty("properties", properties)
+				.appendSkipFalse("allowEmptyValue", allowEmptyValue)
+				.appendSkipFalse("exclusiveMaximum", exclusiveMaximum)
+				.appendSkipFalse("exclusiveMinimum", exclusiveMinimum)
+				.appendSkipFalse("required", required)
+				.appendSkipFalse("uniqueItems", uniqueItems)
+				.appendSkipFalse("skipIfEmpty", skipIfEmpty)
+				.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+				.appendSkipEmpty("pattern", pattern)
+				.appendSkipNull("items", items)
+				.appendSkipNull("additionalProperties", additionalProperties)
+				.appendSkipMinusOne("maximum", maximum)
+				.appendSkipMinusOne("minimum", minimum)
+				.appendSkipMinusOne("multipleOf", multipleOf)
+				.appendSkipMinusOne("maxLength", maxLength)
+				.appendSkipMinusOne("minLength", minLength)
+				.appendSkipMinusOne("maxItems", maxItems)
+				.appendSkipMinusOne("minItems", minItems)
+				.appendSkipMinusOne("maxProperties", maxProperties)
+				.appendSkipMinusOne("minProperties", minProperties)
 				.append("parsedType", parsedType)
 			;
 			return m.toString();

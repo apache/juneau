@@ -143,7 +143,7 @@ public class RestLoggerRule {
 	}
 
 	private OMap toMap() {
-		return OMap.of()
+		return OMap.create()
 			.a("codeFilter", statusFilter)
 			.a("exceptionFilter", exceptionFilter)
 			.a("requestFilter", requestFilter)

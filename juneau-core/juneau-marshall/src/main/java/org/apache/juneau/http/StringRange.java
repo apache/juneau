@@ -66,7 +66,7 @@ public class StringRange {
 
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
-		List<NameValuePair> extensions = AList.of();
+		List<NameValuePair> extensions = AList.create();
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q")) {
 				qValue = Float.parseFloat(p.getValue());

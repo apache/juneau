@@ -401,7 +401,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2||null", serialize(ps, new int[][]{{1,2},{},null}));
 		assertEquals("1,2,null||null", serialize(ps, new Integer[][]{{1,2,null},{},null}));
 		assertEquals("1,2,null||null", serialize(ps, new Object[][]{{1,2,null},{},null}));
-		assertEquals("1,2,null||null", serialize(ps, AList.of(AList.of(1,2,null),AList.of(),null)));
+		assertEquals("1,2,null||null", serialize(ps, AList.of(AList.of(1,2,null),AList.create(),null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

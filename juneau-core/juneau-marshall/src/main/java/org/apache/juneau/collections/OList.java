@@ -244,20 +244,46 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return An empty list.
 	 */
-	public static OList of() {
+	public static OList create() {
 		return new OList();
 	}
 
 	/**
 	 * Construct a list initialized with the specified list.
 	 *
-	 * @param in
+	 * @param values
 	 * 	The list to copy.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
 	 */
-	public static OList ofAll(Collection<?> in) {
-		return in == null ? null : new OList(in);
+	public static OList of(Collection<?> values) {
+		return values == null ? null : new OList(values);
+	}
+
+	/**
+	 * Convenience method for creating a list of collection objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static OList ofCollections(Collection<?>...values) {
+		OList l = new OList();
+		for (Collection<?> v : values)
+			l.add(v);
+		return l;
+	}
+
+	/**
+	 * Convenience method for creating a list of array objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static OList ofArrays(Object[]...values) {
+		OList l = new OList();
+		for (Object[] v : values)
+			l.add(v);
+		return l;
 	}
 
 	/**
@@ -319,13 +345,13 @@ public class OList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Construct a list initialized with the specified key/value pairs.
+	 * Construct a list initialized with the specified values.
 	 *
-	 * @param entries The entries to add to this list.
-	 * @return A new map, never <jk>null</jk>.
+	 * @param values The values to add to this list.
+	 * @return A new list, never <jk>null</jk>.
 	 */
-	public static OList of(Object... entries) {
-		return new OList(entries);
+	public static OList of(Object... values) {
+		return new OList(values);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -354,205 +380,144 @@ public class OList extends LinkedList<Object> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Add.
+	 * Adds the value to this list.
 	 *
-	 * <p>
-	 * Adds an entry to this list.
-	 *
-	 * @param o The entry to add to this list.
+	 * @param value The value to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public OList a(Object o) {
-		add(o);
+	public OList append(Object value) {
+		add(value);
 		return this;
 	}
 
 	/**
-	 * Add.
+	 * Adds all the values in the specified array to this list.
 	 *
-	 * <p>
-	 * Same as {@link #a(Object)}
-	 *
-	 * @param o The entry to add to this list.
+	 * @param values The values to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public OList append(Object o) {
-		add(o);
+	public OList append(Object...values) {
+		Collections.addAll(this, values);
 		return this;
 	}
 
 	/**
-	 * Add.
+	 * Adds all the values in the specified collection to this list.
 	 *
-	 * <p>
-	 * Adds multiple entries to this list.
-	 *
-	 * @param o The entries to add to this list.
+	 * @param values The values to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public OList a(Object...o) {
-		for (Object o2 : o)
-			add(o2);
+	public OList append(Collection<?> values) {
+		if (values != null)
+			addAll(values);
 		return this;
 	}
 
 	/**
-	 * Add.
+	 * Same as {@link #append(Object)}.
 	 *
-	 * <p>
-	 * Same as {@link #a(Object...)}
-	 *
-	 * @param o The entries to add to this list.
+	 * @param value The entry to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public OList append(Object...o) {
-		for (Object o2 : o)
-			add(o2);
-		return this;
+	public OList a(Object value) {
+		return append(value);
 	}
 
 	/**
-	 * Add all.
+	 * Same as {@link #append(Collection)}.
 	 *
-	 * <p>
-	 * Adds all the entries in the specified collection to this list.
-	 *
-	 * @param c The collection to add to this list.  Can be <jk>null</jk>.
+	 * @param values The collection to add to this list.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public OList aa(Collection<?> c) {
-		if (c != null)
-			addAll(c);
-		return this;
+	public OList a(Collection<?> values) {
+		return append(values);
 	}
 
 	/**
-	 * Add all.
+	 * Same as {@link #append(Object...)}.
 	 *
-	 * <p>
-	 * Same as {@link #aa(Collection)}.
-	 *
-	 * @param c The collection to add to this list.  Can be <jk>null</jk>.
+	 * @param values The array to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public OList appendAll(Collection<?> c) {
-		if (c != null)
-			addAll(c);
-		return this;
+	public OList a(Object...values) {
+		return append(values);
 	}
 
 	/**
-	 * Add if.
-	 *
-	 * <p>
 	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
 	 *
-	 * @param b The boolean flag.
-	 * @param val The value to add.
+	 * @param flag The boolean flag.
+	 * @param value The value to add.
 	 * @return This object (for method chaining).
 	 */
-	public OList aif(boolean b, Object val) {
-		if (b)
-			a(val);
+	public OList appendIf(boolean flag, Object value) {
+		if (flag)
+			a(value);
 		return this;
 	}
 
 	/**
-	 * Add if.
+	 * Adds entries to this list skipping <jk>null</jk> values.
 	 *
-	 * <p>
-	 * Same as {@link #aif(boolean, Object)}.
-	 *
-	 * @param b The boolean flag.
-	 * @param val The value to add.
+	 * @param values The objects to add to the list.
 	 * @return This object (for method chaining).
 	 */
-	public OList appendIf(boolean b, Object val) {
-		return aif(b, val);
+	public OList appendIfNotNull(Object...values) {
+		for (Object o2 : values)
+			if (o2 != null)
+				a(o2);
+		return this;
 	}
 
 	/**
-	 * Add if not empty.
+	 * Adds all the entries in the specified collection to this list in reverse order.
 	 *
-	 * <p>
-	 * Adds entries to this list skipping any empty or <jk>null</jk> values.
-	 *
-	 * @param o The objects to add to the list.
+	 * @param values The collection to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public OList aifne(String...o) {
-		for (String s : o)
+	public OList appendReverse(List<?> values) {
+		for (ListIterator<?> i = values.listIterator(values.size()); i.hasPrevious();)
+			add(i.previous());
+		return this;
+	}
+
+	/**
+	 * Adds the contents of the array to the list in reverse order.
+	 *
+	 * <p>
+	 * i.e. add values from the array from end-to-start order to the end of the list.
+	 *
+	 * @param values The collection to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public OList appendReverse(Object...values) {
+		for (int i = values.length - 1; i >= 0; i--)
+			add(values[i]);
+		return this;
+	}
+
+	/**
+	 * Add values but skip any strings that are <jk>null</jk> or empty.
+	 *
+	 * @param values The objects to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	public OList appendIfNotEmpty(String...values) {
+		for (String s : values)
 			if (isNotEmpty(s))
 				add(s);
 		return this;
 	}
 
 	/**
-	 * Add if not empty.
-	 *
-	 * <p>
-	 * Same as {@link #aifne(String...)}.
-	 *
-	 * @param o The objects to add to the list.
-	 * @return This object (for method chaining).
-	 */
-	public OList appendIfNotEmpty(String...o) {
-		return aifne(o);
-	}
-
-	/**
-	 * Add if not null.
-	 *
-	 * <p>
-	 * Adds entries to this list skipping <jk>null</jk> values.
-	 *
-	 * @param o The objects to add to the list.
-	 * @return This object (for method chaining).
-	 */
-	public OList aifnn(Object...o) {
-		for (Object o2 : o)
-			if (o2 != null)
-				add(o2);
-		return this;
-	}
-	/**
-	 * Add if not null.
-	 *
-	 * <p>
-	 * Same as {@link #aifnn(Object...)}.
-	 *
-	 * @param o The objects to add to the list.
-	 * @return This object (for method chaining).
-	 */
-	public OList appendIfNotNull(Object...o) {
-		return aifnn(o);
-	}
-
-	/**
 	 * Add if predicate matches.
 	 *
-	 * @param p The predicate to match against.
-	 * @param val The value to add if the predicate matches.
+	 * @param test The predicate to match against.
+	 * @param value The value to add if the predicate matches.
 	 * @return This object (for method chaining).
 	 */
-	public OList aif(Predicate<Object> p, Object val) {
-		if (p.test(val))
-			a(val);
-		return this;
-	}
-
-	/**
-	 * Add if predicate matches.
-	 *
-	 * <p>
-	 * Same as {@link #aif(Predicate, Object)}.
-	 *
-	 * @param p The predicate to match against.
-	 * @param val The value to add if the predicate matches.
-	 * @return This object (for method chaining).
-	 */
-	public OList appendIf(Predicate<Object> p, Object val) {
-		return aif(p, val);
+	public OList appendIf(Predicate<Object> test, Object value) {
+		return appendIf(test.test(value), value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

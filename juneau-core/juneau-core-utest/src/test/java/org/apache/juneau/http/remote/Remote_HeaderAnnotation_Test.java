@@ -853,7 +853,7 @@ public class Remote_HeaderAnnotation_Test {
 		}
 		@Header(name="d",aev=true)
 		public List<Object> getX3() {
-			return AList.of();
+			return AList.create();
 		}
 		@Header("e")
 		public List<Object> getX4() {

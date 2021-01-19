@@ -16,6 +16,7 @@ import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -33,13 +34,13 @@ import org.apache.juneau.serializer.*;
  * 	AList&lt;String&gt; l = AList.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
  *
  * 	<jc>// Append to list.</jc>
- * 	l.a(<js>"baz"</js>).a(<js>"qux"</js>);
+ * 	l.append(<js>"baz"</js>, <js>"qux"</js>);
  *
  * 	<jc>// Create an unmodifiable view of this list.</jc>
  * 	List&lt;String&gt; l2 = l.unmodifiable();
  *
  * 	<jc>// Convert it to an array.</jc>
- * 	String[] array = l.asArrayOf(String.<jk>class</jk>);
+ * 	String[] array = l.asArray();
  *
  * 	<jc>// Convert to simplified JSON.</jc>
  * 	String json = l.asString();
@@ -51,7 +52,7 @@ import org.apache.juneau.serializer.*;
  * @param <T> The entry type.
  */
 @SuppressWarnings({"unchecked"})
-public final class AList<T> extends ArrayList<T> {
+public class AList<T> extends ArrayList<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -99,33 +100,19 @@ public final class AList<T> extends ArrayList<T> {
 	 *
 	 * @return A new list.
 	 */
-	public static <T> AList<T> of() {
+	public static <T> AList<T> create() {
 		return new AList<>();
 	}
 
 	/**
 	 * Convenience method for creating a list of objects.
 	 *
-	 * @param t The initial values.
+	 * @param values The initial values.
 	 * @return A new list.
 	 */
 	@SafeVarargs
-	public static <T> AList<T> of(T...t) {
-		return new AList<T>(t.length).a(t);
-	}
-
-	/**
-	 * Convenience method for creating a list of objects.
-	 *
-	 * <p>
-	 * Identical to {@link #of(Object...)} but allows you to distinguish from {@link #of(Collection)} when creating
-	 * multi-dimensional lists.
-	 *
-	 * @param t The initial values.
-	 * @return A new list.
-	 */
-	public static <T> AList<T> ofa(T...t) {
-		return new AList<T>(t.length).a(t);
+	public static <T> AList<T> of(T...values) {
+		return new AList<T>(values.length).a(values);
 	}
 
 	/**
@@ -134,22 +121,48 @@ public final class AList<T> extends ArrayList<T> {
 	 * <p>
 	 * Creates a list with the same capacity as the array.
 	 *
-	 * @param c The initial values.
+	 * @param values The initial values.
 	 * @return A new list.
 	 */
-	public static <T> AList<T> of(Collection<T> c) {
-		c = c == null ? emptyList() : c;
-		return new AList<T>(c.size()).aa(c);
+	public static <T> AList<T> of(Collection<T> values) {
+		values = values == null ? emptyList() : values;
+		return new AList<T>(values.size()).a(values);
+	}
+
+	/**
+	 * Convenience method for creating a list of collection objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static <T extends Collection<?>> AList<T> ofCollections(T...values) {
+		AList<T> l = new AList<>();
+		for (T v : values)
+			l.add(v);
+		return l;
+	}
+
+	/**
+	 * Convenience method for creating a list of collection objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static <T> AList<T[]> ofArrays(T[]...values) {
+		AList<T[]> l = new AList<>();
+		for (T[] v : values)
+			l.add(v);
+		return l;
 	}
 
 	/**
 	 * Creates a copy of the collection if it's not <jk>null</jk>.
 	 *
-	 * @param c The initial values.
+	 * @param values The initial values.
 	 * @return A new list, or <jk>null</jk> if the collection is <jk>null</jk>.
 	 */
-	public static <T> AList<T> nullable(Collection<T> c) {
-		return c == null ? null : of(c);
+	public static <T> AList<T> nullable(Collection<T> values) {
+		return values == null ? null : of(values);
 	}
 
 	/**
@@ -158,24 +171,24 @@ public final class AList<T> extends ArrayList<T> {
 	 * <p>
 	 * Creates a list with the same capacity as the array.
 	 *
-	 * @param t The initial values.
+	 * @param values The initial values.
 	 * @return A new list.
 	 */
-	public static <T> List<T> unmodifiable(T...t) {
-		return t.length == 0 ? emptyList() : of(t).unmodifiable();
+	public static <T> List<T> unmodifiable(T...values) {
+		return values.length == 0 ? emptyList() : of(values).unmodifiable();
 	}
 
 	/**
 	 * Convenience method for creating an unmodifiable list out of the specified collection.
 	 *
-	 * @param c The collection to add.
+	 * @param values The collection to add.
 	 * @param <T> The element type.
 	 * @return An unmodifiable list, never <jk>null</jk>.
 	 */
-	public static <T> List<T> unmodifiable(Collection<T> c) {
-		if (c == null || c.isEmpty())
+	public static <T> List<T> unmodifiable(Collection<T> values) {
+		if (values == null || values.isEmpty())
 			return Collections.emptyList();
-		return new AList<T>(c.size()).aa(c).unmodifiable();
+		return new AList<T>(values.size()).a(values).unmodifiable();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -183,78 +196,103 @@ public final class AList<T> extends ArrayList<T> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Add.
+	 * Adds the value to this list.
 	 *
-	 * <p>
-	 * Adds an entry to this list.
-	 *
-	 * @param t The entry to add to this list.
+	 * @param value The value to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> a(T t) {
-		add(t);
+	public AList<T> append(T value) {
+		add(value);
 		return this;
 	}
 
 	/**
-	 * Add.
+	 * Adds all the values in the specified array to this list.
 	 *
-	 * <p>
-	 * Adds multiple entries to this list.
-	 *
-	 * @param t The entries to add to this list.
+	 * @param values The values to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> a(T...t) {
-		Collections.addAll(this, t);
+	public AList<T> append(T...values) {
+		Collections.addAll(this, values);
 		return this;
 	}
 
 	/**
-	 * Add all.
+	 * Adds all the values in the specified collection to this list.
 	 *
-	 * <p>
-	 * Adds all the entries in the specified collection to this list.
-	 *
-	 * @param c The collection to add to this list.  Can be <jk>null</jk>.
+	 * @param values The values to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> aa(Collection<? extends T> c) {
-		if (c != null)
-			addAll(c);
+	public AList<T> append(Collection<? extends T> values) {
+		addAll(values);
 		return this;
 	}
 
 	/**
-	 * Add if.
+	 * Same as {@link #append(Object)}.
 	 *
-	 * <p>
+	 * @param value The entry to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> a(T value) {
+		return append(value);
+	}
+
+	/**
+	 * Same as {@link #append(Collection)}.
+	 *
+	 * @param values The collection to add to this list.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> a(Collection<? extends T> values) {
+		return append(values);
+	}
+
+	/**
+	 * Same as {@link #append(Object...)}.
+	 *
+	 * @param values The array to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> a(T...values) {
+		return append(values);
+	}
+
+	/**
 	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
 	 *
-	 * @param b The boolean flag.
-	 * @param val The value to add.
+	 * @param flag The boolean flag.
+	 * @param value The value to add.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> aif(boolean b, T val) {
-		if (b)
-			a(val);
+	public AList<T> appendIf(boolean flag, T value) {
+		if (flag)
+			a(value);
 		return this;
 	}
 
 	/**
-	 * Add if not null.
-	 *
-	 * <p>
 	 * Adds entries to this list skipping <jk>null</jk> values.
 	 *
-	 * @param t The objects to add to the list.
+	 * @param values The objects to add to the list.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> aifnn(T...t) {
-		for (T o2 : t)
+	public AList<T> appendIfNotNull(T...values) {
+		for (T o2 : values)
 			if (o2 != null)
 				a(o2);
 		return this;
+	}
+
+	/**
+	 * Add if predicate matches value.
+	 *
+	 * @param test The predicate to match against.
+	 * @param value The value to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> appendIf(Predicate<Object> test, T value) {
+		return appendIf(test.test(value), value);
 	}
 
 	/**
@@ -263,11 +301,11 @@ public final class AList<T> extends ArrayList<T> {
 	 * <p>
 	 * Adds all the entries in the specified collection to this list in reverse order.
 	 *
-	 * @param c The collection to add to this list.
+	 * @param values The collection to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> arev(List<? extends T> c) {
-		for (ListIterator<? extends T> i = c.listIterator(c.size()); i.hasPrevious();)
+	public AList<T> appendReverse(List<? extends T> values) {
+		for (ListIterator<? extends T> i = values.listIterator(values.size()); i.hasPrevious();)
 			add(i.previous());
 		return this;
 	}
@@ -281,12 +319,12 @@ public final class AList<T> extends ArrayList<T> {
 	 * <p>
 	 * i.e. add values from the array from end-to-start order to the end of the list.
 	 *
-	 * @param c The collection to add to this list.
+	 * @param values The collection to add to this list.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> arev(T[] c) {
-		for (int i = c.length - 1; i >= 0; i--)
-			add(c[i]);
+	public AList<T> appendReverse(T...values) {
+		for (int i = values.length - 1; i >= 0; i--)
+			add(values[i]);
 		return this;
 	}
 

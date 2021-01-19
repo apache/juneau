@@ -25,7 +25,7 @@ public class CollectionAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		List<String> x1 = AList.of(), x2 = AList.of("a","b");
+		List<String> x1 = AList.create(), x2 = AList.of("a","b");
 
 		assertThrown(()->assertCollection(null).exists()).is("Value was null.");
 		assertCollection(x1).exists();

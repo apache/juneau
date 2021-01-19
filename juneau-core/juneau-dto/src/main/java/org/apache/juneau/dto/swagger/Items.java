@@ -1070,24 +1070,24 @@ public class Items extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(type != null, "type")
-			.aif(format != null, "format")
-			.aif(items != null, "items")
-			.aif(collectionFormat != null, "collectionFormat")
-			.aif(_default != null, "default")
-			.aif(maximum != null, "maximum")
-			.aif(exclusiveMaximum != null, "exclusiveMaximum")
-			.aif(minimum != null, "minimum")
-			.aif(exclusiveMinimum != null, "exclusiveMinimum")
-			.aif(maxLength != null, "maxLength")
-			.aif(minLength != null, "minLength")
-			.aif(pattern != null, "pattern")
-			.aif(maxItems != null, "maxItems")
-			.aif(minItems != null, "minItems")
-			.aif(uniqueItems != null, "uniqueItems")
-			.aif(_enum != null, "enum")
-			.aif(multipleOf != null, "multipleOf")
-			.aif(ref != null, "$ref");
+			.appendIf(type != null, "type")
+			.appendIf(format != null, "format")
+			.appendIf(items != null, "items")
+			.appendIf(collectionFormat != null, "collectionFormat")
+			.appendIf(_default != null, "default")
+			.appendIf(maximum != null, "maximum")
+			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.appendIf(minimum != null, "minimum")
+			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.appendIf(maxLength != null, "maxLength")
+			.appendIf(minLength != null, "minLength")
+			.appendIf(pattern != null, "pattern")
+			.appendIf(maxItems != null, "maxItems")
+			.appendIf(minItems != null, "minItems")
+			.appendIf(uniqueItems != null, "uniqueItems")
+			.appendIf(_enum != null, "enum")
+			.appendIf(multipleOf != null, "multipleOf")
+			.appendIf(ref != null, "$ref");
 		return new MultiSet<>(s, super.keySet());
 	}
 

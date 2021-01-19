@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  */
 public class StaticFilesBuilder extends FileFinderBuilder {
 
-	List<Header> headers = AList.of();
+	List<Header> headers = AList.create();
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 
 	/**

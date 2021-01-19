@@ -38,7 +38,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * Create an empty serializer group builder.
 	 */
 	public SerializerGroupBuilder() {
-		this.serializers = AList.of();
+		this.serializers = AList.create();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.serializers = AList.of().arev(copyFrom.getSerializers());
+		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Class<?>...s) {
-		serializers.arev(s);
+		serializers.appendReverse((Object[])s);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Serializer...s) {
-		serializers.arev(s);
+		serializers.appendReverse((Object[])s);
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(List<Object> s) {
-		serializers.arev(s);
+		serializers.appendReverse(s);
 		return this;
 	}
 
@@ -101,7 +101,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Object...s) {
-		serializers.arev(s);
+		serializers.appendReverse(s);
 		return this;
 	}
 

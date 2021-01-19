@@ -31,8 +31,8 @@ public class ComboInput<T> {
 	String exceptionMsg;
 	private Predicate<String> skipTest;
 	private Function<T,T> convert;
-	private List<Function<T,String>> verify = AList.of();
-	List<Class<?>> swaps = AList.of();
+	private List<Function<T,String>> verify = AList.create();
+	List<Class<?>> swaps = AList.create();
 	final Type type;
 	String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;

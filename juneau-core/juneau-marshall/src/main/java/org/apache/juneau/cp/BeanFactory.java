@@ -263,7 +263,7 @@ public class BeanFactory {
 	 * @return A list of types that are missing from this factory.
 	 */
 	public List<ClassInfo> getMissingParamTypes(List<ClassInfo> paramTypes) {
-		List<ClassInfo> l = AList.of();
+		List<ClassInfo> l = AList.create();
 		for (int i = 0; i < paramTypes.size(); i++) {
 			ClassInfo pt = paramTypes.get(i);
 			ClassInfo ptu = pt.unwrap(Optional.class);
@@ -306,10 +306,10 @@ public class BeanFactory {
 	 * @return The contents of this bean factory as a readable map of values.
 	 */
 	public OMap toMap() {
-		return OMap.of()
+		return OMap.create()
 			.a("beanMap", beanMap.keySet().stream().map(x -> x.getSimpleName()).collect(Collectors.toList()))
-			.asn("outer", ObjectUtils.identity(outer))
-			.asn("parent", parent.orElse(null));
+			.appendSkipNull("outer", ObjectUtils.identity(outer))
+			.appendSkipNull("parent", parent.orElse(null));
 	}
 
 	@Override /* Object */

@@ -270,9 +270,9 @@ public class Contact extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(name != null, "name")
-			.aif(url != null, "url")
-			.aif(email != null, "email");
+			.appendIf(name != null, "name")
+			.appendIf(url != null, "url")
+			.appendIf(email != null, "email");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

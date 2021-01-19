@@ -15,6 +15,7 @@ package org.apache.juneau.collections;
 import static java.util.Collections.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
@@ -47,7 +48,7 @@ import org.apache.juneau.serializer.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public final class AMap<K,V> extends LinkedHashMap<K,V> {
+public class AMap<K,V> extends LinkedHashMap<K,V> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -78,7 +79,7 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 *
 	 * @return A new empty map.
 	 */
-	public static <K,V> AMap<K,V> of() {
+	public static <K,V> AMap<K,V> create() {
 		return new AMap<>();
 	}
 
@@ -106,7 +107,7 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <K,V> AMap<K,V> ofPairs(Object...parameters) {
-		AMap<K,V> m = AMap.of();
+		AMap<K,V> m = AMap.create();
 		if (parameters.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into AMap.ofPairs()");
 		for (int i = 0; i < parameters.length; i+=2)
@@ -187,32 +188,73 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Add.
-	 *
-	 * <p>
 	 * Adds an entry to this map.
 	 *
-	 * @param k The key.
-	 * @param v The value.
+	 * @param key The key.
+	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public AMap<K,V> a(K k, V v) {
-		put(k, v);
+	public AMap<K,V> append(K key, V value) {
+		put(key, value);
 		return this;
 	}
 
 	/**
-	 * Add all.
-	 *
-	 * <p>
 	 * Appends all the entries in the specified map to this map.
 	 *
-	 * @param c The map to copy.
+	 * @param values The map to copy.
 	 * @return This object (for method chaining).
 	 */
-	public AMap<K,V> aa(Map<K,V> c) {
-		super.putAll(c);
+	public AMap<K,V> append(Map<K,V> values) {
+		super.putAll(values);
 		return this;
+	}
+
+	/**
+	 * Same as {@link #append(Object,Object)}.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public AMap<K,V> a(K key, V value) {
+		return append(key, value);
+	}
+
+	/**
+	 * Same as {@link #append(Map)}.
+	 *
+	 * @param values The map to copy.
+	 * @return This object (for method chaining).
+	 */
+	public AMap<K,V> a(Map<K,V> values) {
+		return append(values);
+	}
+
+	/**
+	 * Add if flag is <jk>true</jk>.
+	 *
+	 * @param flag The flag to check.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public AMap<K,V> appendIf(boolean flag, K key, V value) {
+		if (flag)
+			append(key, value);
+		return this;
+	}
+
+	/**
+	 * Add if predicate matches value.
+	 *
+	 * @param test The predicate to match against.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public AMap<K,V> appendIf(Predicate<Object> test, K key, V value) {
+		return appendIf(test.test(value), key, value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

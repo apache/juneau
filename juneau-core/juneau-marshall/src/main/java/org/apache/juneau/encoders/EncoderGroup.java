@@ -96,8 +96,8 @@ public final class EncoderGroup {
 	public EncoderGroup(Encoder[] encoders) {
 		this.encoders = AList.unmodifiable(encoders);
 
-		AList<String> lc = AList.of();
-		AList<Encoder> l = AList.of();
+		AList<String> lc = AList.create();
+		AList<Encoder> l = AList.create();
 		for (Encoder e : encoders) {
 			for (String c: e.getCodings()) {
 				lc.add(c);

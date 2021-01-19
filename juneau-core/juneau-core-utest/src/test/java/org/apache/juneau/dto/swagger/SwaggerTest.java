@@ -292,7 +292,7 @@ public class SwaggerTest {
 		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertObject(t.getPaths()).isType(Map.class);
 
-		t.setPaths(AMap.of());
+		t.setPaths(AMap.create());
 		assertObject(t.getPaths()).json().is("{}");
 		assertObject(t.getPaths()).isType(Map.class);
 
@@ -311,7 +311,7 @@ public class SwaggerTest {
 		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertObject(t.getPaths()).isType(Map.class);
 
-		t.addPaths(AMap.of());
+		t.addPaths(AMap.create());
 		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertObject(t.getPaths()).isType(Map.class);
 
@@ -366,7 +366,7 @@ public class SwaggerTest {
 		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getDefinitions()).isType(Map.class);
 
-		t.setDefinitions(AMap.of());
+		t.setDefinitions(AMap.create());
 		assertObject(t.getDefinitions()).json().is("{}");
 		assertObject(t.getDefinitions()).isType(Map.class);
 
@@ -385,7 +385,7 @@ public class SwaggerTest {
 		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getDefinitions()).isType(Map.class);
 
-		t.addDefinitions(AMap.of());
+		t.addDefinitions(AMap.create());
 		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getDefinitions()).isType(Map.class);
 
@@ -435,7 +435,7 @@ public class SwaggerTest {
 		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertObject(t.getParameters()).isType(Map.class);
 
-		t.setParameters(AMap.of());
+		t.setParameters(AMap.create());
 		assertObject(t.getParameters()).json().is("{}");
 		assertObject(t.getParameters()).isType(Map.class);
 
@@ -454,7 +454,7 @@ public class SwaggerTest {
 		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertObject(t.getParameters()).isType(Map.class);
 
-		t.addParameters(AMap.of());
+		t.addParameters(AMap.create());
 		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertObject(t.getParameters()).isType(Map.class);
 
@@ -504,7 +504,7 @@ public class SwaggerTest {
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertObject(t.getResponses()).isType(Map.class);
 
-		t.setResponses(AMap.of());
+		t.setResponses(AMap.create());
 		assertObject(t.getResponses()).json().is("{}");
 		assertObject(t.getResponses()).isType(Map.class);
 
@@ -523,7 +523,7 @@ public class SwaggerTest {
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertObject(t.getResponses()).isType(Map.class);
 
-		t.addResponses(AMap.of());
+		t.addResponses(AMap.create());
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertObject(t.getResponses()).isType(Map.class);
 
@@ -575,7 +575,7 @@ public class SwaggerTest {
 		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getSecurityDefinitions()).isType(Map.class);
 
-		t.setSecurityDefinitions(AMap.of());
+		t.setSecurityDefinitions(AMap.create());
 		assertObject(t.getSecurityDefinitions()).json().is("{}");
 		assertObject(t.getSecurityDefinitions()).isType(Map.class);
 
@@ -594,7 +594,7 @@ public class SwaggerTest {
 		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getSecurityDefinitions()).isType(Map.class);
 
-		t.addSecurityDefinitions(AMap.of());
+		t.addSecurityDefinitions(AMap.create());
 		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertObject(t.getSecurityDefinitions()).isType(Map.class);
 

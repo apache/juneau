@@ -163,7 +163,7 @@ public final class BeanPropertyMeta {
 
 		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
-			AList<Class<?>> bdClasses = AList.of();
+			AList<Class<?>> bdClasses = AList.create();
 
 			if (field == null && getter == null && setter == null)
 				return false;

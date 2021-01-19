@@ -38,7 +38,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * Create an empty parser group builder.
 	 */
 	public ParserGroupBuilder() {
-		this.parsers = AList.of();
+		this.parsers = AList.create();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.parsers = AList.of().arev(copyFrom.getParsers());
+		this.parsers = AList.create().appendReverse(copyFrom.getParsers());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Class<?>...p) {
-		parsers.arev(p);
+		parsers.appendReverse((Object[])p);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Parser...p) {
-		parsers.arev(p);
+		parsers.appendReverse((Object[])p);
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(List<Object> p) {
-		parsers.arev(p);
+		parsers.appendReverse(p);
 		return this;
 	}
 
@@ -101,7 +101,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Object...p) {
-		parsers.arev(p);
+		parsers.appendReverse(p);
 		return this;
 	}
 

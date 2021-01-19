@@ -135,7 +135,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 
-		ASortedMap<String,Object> m = ASortedMap.of();
+		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
 				m.put(k.substring(5), getProperty("RdfCommon." + k));

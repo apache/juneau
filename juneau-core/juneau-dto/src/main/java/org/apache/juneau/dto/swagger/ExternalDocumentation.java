@@ -219,8 +219,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.aif(description != null, "description")
-			.aif(url != null, "url");
+			.appendIf(description != null, "description")
+			.appendIf(url != null, "url");
 		return new MultiSet<>(s, super.keySet());
 	}
 }
