@@ -75,7 +75,7 @@ public class Messages_Test {
 		assertString(x1.forLocale(CHINA).getString("file")).is("MessageBundleTest1.properties");
 		assertString(x1.forLocale((Locale)null).getString("file")).is("MessageBundleTest1.properties");
 
-		Messages x2 = Messages.create(MessageBundleTest1.class).locale(null).build();
+		Messages x2 = Messages.create(MessageBundleTest1.class).locale((Locale)null).build();
 		assertString(x2.getString("file")).is("MessageBundleTest1.properties");
 		assertString(x2.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
 		assertString(x2.forLocale(JAPAN).getString("file")).is("MessageBundleTest1_ja_JP.properties");

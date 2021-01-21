@@ -52,6 +52,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
@@ -3345,29 +3346,25 @@ public class RestContext extends BeanContext {
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 
-			Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class);
-			Messages msgs = null;
-			for (int i = mbl.length-1; i >= 0; i--)
-				msgs = Messages.create(firstNonNull(mbl[i].getA(), rci.inner())).name(mbl[i].getB()).parent(msgs).build();
-			this.msgs = msgs;
+			msgs = createMessages(r);
 
-			this.fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
+			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 
 			String p = builder.getPath();
 			if (! p.endsWith("/*"))
 				p += "/*";
-			this.pathMatcher = UrlPathMatcher.of(p);
+			pathMatcher = UrlPathMatcher.of(p);
 
-			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
+			childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
-			this.startCallMethods = createStartCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			this.endCallMethods = createEndCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			this.postInitMethods = createPostInitMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			this.postInitChildFirstMethods = createPostInitChildFirstMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			this.destroyMethods = createDestroyMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			startCallMethods = createStartCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			endCallMethods = createEndCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			postInitMethods = createPostInitMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			postInitChildFirstMethods = createPostInitChildFirstMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+			destroyMethods = createDestroyMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 
-			this.preCallMethods = createPreCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
-			this.postCallMethods = createPostCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
+			preCallMethods = createPreCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
+			postCallMethods = createPostCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -4617,6 +4614,37 @@ public class RestContext extends BeanContext {
 					deb.append(mi.getFullName(), Enablement.fromString(a.debug()));
 
 		return deb;
+	}
+
+	/**
+	 * Instantiates the messages for this REST object.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The messages for this REST object.
+	 * @throws Exception An error occurred.
+	 */
+	protected Messages createMessages(Object resource) throws Exception {
+		Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class);
+		Messages msgs = null;
+		for (int i = mbl.length-1; i >= 0; i--) {
+			Class<?> c = firstNonNull(mbl[i].getA(), resource.getClass());
+			String value = mbl[i].getB();
+			if (isJsonObject(value,true)) {
+				MessagesString x = SimpleJson.DEFAULT.read(value, MessagesString.class);
+				msgs = Messages.create(c).name(x.name).baseNames(split(x.baseNames, ',')).locale(x.locale).parent(msgs).build();
+			} else {
+				msgs = Messages.create(c).name(value).parent(msgs).build();
+			}
+		}
+		if (msgs == null)
+			msgs = Messages.create(resource.getClass()).build();
+		return msgs;
+	}
+
+	private static class MessagesString {
+		public String name;
+		public String[] baseNames;
+		public String locale;
 	}
 
 	/**

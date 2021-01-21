@@ -94,6 +94,18 @@ public class MessagesBuilder {
 	}
 
 	/**
+	 * Specifies the locale.
+	 *
+	 * @param locale
+	 * 	The locale.
+	 * 	If <jk>null</jk>, the default locale is used.
+	 * @return This object (for method chaining).
+	 */
+	public MessagesBuilder locale(String locale) {
+		return locale(locale == null ? null : Locale.forLanguageTag(locale));
+	}
+
+	/**
 	 * Creates a new {@link Messages} based on the setting of this builder.
 	 *
 	 * @return A new {@link Messages} object.

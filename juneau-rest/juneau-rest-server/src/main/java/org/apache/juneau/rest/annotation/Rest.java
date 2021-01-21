@@ -697,6 +697,26 @@ public @interface Rest {
 	 *
 	 * Identifies the location of the resource bundle for this class.
 	 *
+	 * <p>
+	 * There are two possible formats:
+	 * <ul>
+	 * 	<li>A simple string - Represents the {@link MessagesBuilder#name(String) name} of the resource bundle.
+	 * 		<br><br><i>Example:</i>
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// Bundle name is Messages.properties.</jc>
+	 * 	<ja>@Rest</ja>(messages=<js>"Messages"</js>)
+	 * 		</p>
+	 * 	<li>Simplified JSON - Represents parameters for the {@link MessagesBuilder} class.
+	 * 		<br><br><i>Example:</i>
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// Bundles can be found in two packages.</jc>
+	 * 	<ja>@Rest</ja>(messages=<js>"{name:'Messages',baseNames:['{package}.{name}','{package}.i18n.{name}']"</js>)
+	 * 		</p>
+	 * </ul>
+	 *
+	 * <p>
+	 * If the bundle name is not specified, the class name of the resource object is used.
+	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
