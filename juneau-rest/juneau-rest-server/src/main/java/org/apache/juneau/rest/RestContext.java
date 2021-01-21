@@ -4575,7 +4575,7 @@ public class RestContext extends BeanContext {
 					if (mi.isNotPublic())
 						throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
-					RestMethodContextBuilder rmcb = new RestMethodContextBuilder(resource, mi.inner(), this);
+					RestMethodContextBuilder rmcb = new RestMethodContextBuilder(mi.inner(), this);
 					RestMethodContext rmc = rmcb.build();
 					String httpMethod = rmc.getHttpMethod();
 
@@ -4584,11 +4584,13 @@ public class RestContext extends BeanContext {
 					// We override the CallMethod.invoke() method to insert our logic.
 					if ("RRPC".equals(httpMethod)) {
 
-						RestMethodContextBuilder smb = new RestMethodContextBuilder(resource, mi.inner(), this);
-						smb.dotAll();
+						RestMethodContext smb = new RestMethodContextBuilder(mi.inner(), this)
+							.dotAll()
+							.context(RrpcRestMethodContext.class)
+							.build();
 						x
-							.add("GET", smb.build(RrpcRestMethodContext.class))
-							.add("POST", smb.build(RrpcRestMethodContext.class));
+							.add("GET", smb)
+							.add("POST", smb);
 
 					} else {
 						x.add(rmc);

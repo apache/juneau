@@ -117,6 +117,21 @@ public @interface RestMethod {
 	String[] consumes() default {};
 
 	/**
+	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must provide the following:
+	 * <ul>
+	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestMethodContextBuilder}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link RestMethodContextBuilder#context(Class)}
+	 * </ul>
+	 */
+	Class<? extends RestMethodContext> context() default RestMethodContext.Null.class;
+
+	/**
 	 * Class-level response converters.
 	 *
 	 * <p>

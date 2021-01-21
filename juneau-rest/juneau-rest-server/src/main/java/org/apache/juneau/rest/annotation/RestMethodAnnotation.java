@@ -61,6 +61,7 @@ public class RestMethodAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
+		Class<? extends RestMethodContext> context = RestMethodContext.Null.class;
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
 		int priority = 0;
 		MethodSwagger swagger = MethodSwaggerAnnotation.DEFAULT;
@@ -102,6 +103,17 @@ public class RestMethodAnnotation {
 		 */
 		public Builder consumes(String...value) {
 			this.consumes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestMethod#context()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder context(Class<? extends RestMethodContext> value) {
+			this.context = value;
 			return this;
 		}
 
@@ -413,6 +425,7 @@ public class RestMethodAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
+		private final Class<? extends RestMethodContext> context;
 		private final Class<?>[] encoders, parsers, serializers;
 		private final int priority;
 		private final MethodSwagger swagger;
@@ -423,6 +436,7 @@ public class RestMethodAnnotation {
 			super(b);
 			this.clientVersion = b.clientVersion;
 			this.consumes = copyOf(b.consumes);
+			this.context = b.context;
 			this.converters = copyOf(b.converters);
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
@@ -460,6 +474,11 @@ public class RestMethodAnnotation {
 		@Override /* RestMethod */
 		public String[] consumes() {
 			return consumes;
+		}
+
+		@Override /* RestMethod */
+		public Class<? extends RestMethodContext> context() {
+			return context;
 		}
 
 		@Override /* RestMethod */
@@ -615,6 +634,7 @@ public class RestMethodAnnotation {
 			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
 			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 			psb.set(REST_encoders, merge(ConverterUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
+			psb.setIf(a.context() != RestMethodContext.Null.class, RESTMETHOD_context, a.context());
 			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTMETHOD_defaultRequestHeaders, x));

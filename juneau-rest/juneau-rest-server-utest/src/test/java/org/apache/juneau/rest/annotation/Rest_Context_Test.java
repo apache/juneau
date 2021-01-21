@@ -91,7 +91,7 @@ public class Rest_Context_Test {
 
 	@Test
 	public void a05_invalidConstructor() throws Exception {
-		assertThrown(()->client(A5.class)).contains("Invalid class specified for REST_context");
+		assertThrown(()->client(A5.class)).contains("Could not create instance");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

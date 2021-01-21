@@ -36,6 +36,7 @@ public class RestMethodAnnotation_Test {
 	RestMethod a1 = RestMethodAnnotation.create()
 		.clientVersion("clientVersion")
 		.consumes("consumes")
+		.context(RestMethodContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -68,6 +69,7 @@ public class RestMethodAnnotation_Test {
 	RestMethod a2 = RestMethodAnnotation.create()
 		.clientVersion("clientVersion")
 		.consumes("consumes")
+		.context(RestMethodContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -103,6 +105,7 @@ public class RestMethodAnnotation_Test {
 			+ "{"
 				+ "clientVersion:'clientVersion',"
 				+ "consumes:['consumes'],"
+				+ "context:'org.apache.juneau.rest.RestMethodContext',"
 				+ "converters:['org.apache.juneau.rest.RestConverter'],"
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
@@ -178,6 +181,7 @@ public class RestMethodAnnotation_Test {
 	@RestMethod(
 		clientVersion="clientVersion",
 		consumes="consumes",
+		context=RestMethodContext.class,
 		converters=RestConverter.class,
 		debug="debug",
 		defaultAccept="defaultAccept",
@@ -212,6 +216,7 @@ public class RestMethodAnnotation_Test {
 	@RestMethod(
 		clientVersion="clientVersion",
 		consumes="consumes",
+		context=RestMethodContext.class,
 		converters=RestConverter.class,
 		debug="debug",
 		defaultAccept="defaultAccept",

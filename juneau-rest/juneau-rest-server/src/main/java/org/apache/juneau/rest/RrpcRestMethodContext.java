@@ -35,11 +35,11 @@ public class RrpcRestMethodContext extends RestMethodContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing the settings for this context.
+	 * @param builder The builder for this method context.
 	 * @throws ServletException Problem with metadata was detected.
 	 */
-	public RrpcRestMethodContext(PropertyStore ps) throws ServletException {
-		super(ps);
+	public RrpcRestMethodContext(RestMethodContextBuilder builder) throws ServletException {
+		super(builder);
 
 		ClassMeta<?> interfaceClass = getClassMeta(mi.inner().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.getInnerClass(), null);

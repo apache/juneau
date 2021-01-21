@@ -65,6 +65,14 @@ import org.apache.juneau.utils.*;
 @ConfigurableContext(nocache=true)
 public class RestMethodContext extends BeanContext implements Comparable<RestMethodContext>  {
 
+	/** Represents a null value for the {@link RestMethod#context()} annotation.*/
+	@SuppressWarnings("javadoc")
+	public static final class Null extends RestMethodContext {
+		public Null(RestMethodContextBuilder builder) throws Exception {
+			super(builder);
+		}
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
@@ -155,6 +163,37 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_clientVersion = PREFIX + ".clientVersion.s";
+
+	/**
+	 * Configuration property:  REST method context class.
+	 *
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_context RESTMETHOD_context}
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.context.c"</js>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestMethodContext}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestMethodContext}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#context()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#context(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the functions are implemented.
+	 *
+	 * <p>
+	 * The subclass must provide the following:
+	 * <ul>
+	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestMethodContextBuilder}.
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_context = PREFIX + ".context.c";
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -638,16 +677,17 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	/**
 	 * Context constructor.
 	 *
-	 * @param ps The property store with settings.
+	 * @param builder The builder for this object.
 	 * @throws ServletException If context could not be created.
 	 */
-	public RestMethodContext(PropertyStore ps) throws ServletException {
-		super(ps);
+	public RestMethodContext(RestMethodContextBuilder builder) throws ServletException {
+		super(builder.getPropertyStore());
 
 		try {
-			context = getInstanceProperty("RestMethodContext.restContext.o", RestContext.class);
-			method = getInstanceProperty("RestMethodContext.restMethod.o", Method.class);
-			boolean dotAll = getBooleanProperty("RestMethodContext.dotAll.b", false);
+			context = builder.restContext;
+			method = builder.restMethod;
+
+			PropertyStore ps = getPropertyStore();
 
 			methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
 			mi = MethodInfo.of(method).accessible();
@@ -681,7 +721,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
  			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
-			pathMatchers = createPathMatchers(r, beanFactory, dotAll).asArray();
+			pathMatchers = createPathMatchers(r, beanFactory).asArray();
 			beanFactory.addBean(UrlPathMatcher[].class, pathMatchers);
 			beanFactory.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
@@ -1223,14 +1263,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
-	 * @param dotAll If {@link RestMethodContextBuilder#dotAll()} was specified.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 * @seealso #RESTMETHOD_paths
 	 */
-	protected UrlPathMatcherList createPathMatchers(Object resource, BeanFactory beanFactory, boolean dotAll) throws Exception {
+	protected UrlPathMatcherList createPathMatchers(Object resource, BeanFactory beanFactory) throws Exception {
 
 		UrlPathMatcherList x = UrlPathMatcherList.create();
+		boolean dotAll = getBooleanProperty("RestMethodContext.dotAll.b", false);
 
 		for (String p : getArrayProperty(RESTMETHOD_path, String.class)) {
 			if (dotAll && ! p.endsWith("/*"))

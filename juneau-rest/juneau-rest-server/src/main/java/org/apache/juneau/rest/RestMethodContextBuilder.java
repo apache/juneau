@@ -13,17 +13,18 @@
 package org.apache.juneau.rest;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.RestMethodContext.*;
 
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
-import javax.servlet.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -35,22 +36,29 @@ import java.lang.reflect.Method;
  */
 public class RestMethodContextBuilder extends BeanContextBuilder {
 
-	@Override
+	RestContext restContext;
+	Method restMethod;
+
+	@Override /* BeanContextBuilder */
 	public RestMethodContext build() {
 		try {
-			return new RestMethodContext(getPropertyStore());
-		} catch (ServletException e) {
-			throw new RuntimeException(e);
+			PropertyStore ps = getPropertyStore();
+			Class<? extends RestMethodContext> c = ps.getClassProperty(RESTMETHOD_context, RestMethodContext.class, RestMethodContext.class);
+			BeanFactory bf = new BeanFactory(restContext.rootBeanFactory, restContext.getResource());
+			bf.addBean(RestMethodContextBuilder.class, this);
+			return bf.createBean(c);
+		} catch (Exception e) {
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
-	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
-		set("RestMethodContext.restContext.o", context);
-		set("RestMethodContext.restMethod.o", method);
-		set("RestMethodContext.restObject.o", context.getResource());  // Added to force a new cache hash.
+	RestMethodContextBuilder(java.lang.reflect.Method method, RestContext context) throws RestServletException {
+
+		this.restContext = context;
+		this.restMethod = method;
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
-		MethodInfo mi = MethodInfo.of(servlet.getClass(), method);
+		MethodInfo mi = MethodInfo.of(context.getResource().getClass(), method);
 
 		try {
 
@@ -110,6 +118,25 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestMethodContextBuilder clientVersion(String value) {
 		return set(RESTMETHOD_clientVersion, value);
+	}
+
+	/**
+	 * <i><l>RestMethodContext</l> configuration property:&emsp;</i>  REST method context class.
+	 *
+	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must provide the following:
+	 * <ul>
+	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestMethodContextBuilder}.
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestMethodContextBuilder context(Class<? extends RestMethodContext> value) {
+		return set(RESTMETHOD_context, value);
 	}
 
 	/**

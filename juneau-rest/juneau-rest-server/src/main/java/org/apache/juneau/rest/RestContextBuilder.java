@@ -185,10 +185,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		try {
 			PropertyStore ps = getPropertyStore();
 			Class<? extends RestContext> c = ps.getClassProperty(REST_context, RestContext.class, RestContext.class);
-			ConstructorInfo ci = ClassInfo.of(c).getConstructor(Visibility.PUBLIC, RestContextBuilder.class);
-			if (ci == null)
-				throw new InternalServerError("Invalid class specified for REST_context.  Must extend from RestContext and provide a public constructor of the form T(RestContextBuilder).");
-			return ci.invoke(this);
+			BeanFactory bf = new BeanFactory(beanFactory, resource);
+			bf.addBean(RestContextBuilder.class, this);
+			return bf.createBean(c);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
