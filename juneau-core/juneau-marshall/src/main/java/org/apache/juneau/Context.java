@@ -931,7 +931,7 @@ public abstract class Context {
 		return new DefaultFilteringOMap()
 			.a("Context", new DefaultFilteringOMap()
 				.a("identityCode", identityCode)
-				.a("propertyStore", propertyStore)
+				.a("propertyStore", System.identityHashCode(propertyStore))
 			);
 	}
 }

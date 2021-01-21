@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.ParseException;
@@ -636,15 +635,22 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final Enablement debug;
 	final int hierarchyDepth;
 
-	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
-		super(b.getPropertyStore());
+	/**
+	 * Context constructor.
+	 *
+	 * @param ps The property store with settings.
+	 * @throws ServletException If context could not be created.
+	 */
+	public RestMethodContext(PropertyStore ps) throws ServletException {
+		super(ps);
 
 		try {
-			context = b.context;
-			method = b.method;
+			context = getInstanceProperty("RestMethodContext.restContext.o", RestContext.class);
+			method = getInstanceProperty("RestMethodContext.restMethod.o", Method.class);
+			boolean dotAll = getBooleanProperty("RestMethodContext.dotAll.b", false);
+
 			methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
 			mi = MethodInfo.of(method).accessible();
-			PropertyStore ps = getPropertyStore();
 			Object r = context.getResource();
 
 			beanFactory = new BeanFactory(context.rootBeanFactory, r)
@@ -675,7 +681,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
  			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
-			pathMatchers = createPathMatchers(r, beanFactory, b.dotAll).asArray();
+			pathMatchers = createPathMatchers(r, beanFactory, dotAll).asArray();
 			beanFactory.addBean(UrlPathMatcher[].class, pathMatchers);
 			beanFactory.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
@@ -695,7 +701,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			defaultRequestAttributes = createDefaultRequestAttributes(r, beanFactory, method, context).asArray();
 
 			int _hierarchyDepth = 0;
-			Class<?> sc = b.method.getDeclaringClass().getSuperclass();
+			Class<?> sc = method.getDeclaringClass().getSuperclass();
 			while (sc != null) {
 				_hierarchyDepth++;
 				sc = sc.getSuperclass();
@@ -1299,7 +1305,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		HeaderList x = HeaderList.create();
 
 		x.appendUnique(context.defaultRequestHeaders);
-		
+
 		x.appendUnique(getInstanceArrayProperty(RESTMETHOD_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
@@ -1344,7 +1350,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		HeaderList x = HeaderList.create();
 
 		x.appendUnique(context.defaultResponseHeaders);
-		
+
 		x.appendUnique(getInstanceArrayProperty(RESTMETHOD_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
 
 		x = BeanFactory
@@ -1372,7 +1378,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		NamedAttributeList x = NamedAttributeList.create();
 
 		x.appendUnique(context.defaultRequestAttributes);
-		
+
 		x.appendUnique(getInstanceArrayProperty(RESTMETHOD_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory));
 
 		x = BeanFactory
@@ -1619,13 +1625,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		return pm;
 	}
 
-
 	/**
 	 * Workhorse method.
 	 *
-	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
+	 * @param call Invokes the specified call against this Java method.
+	 * @throws Throwable Typically an HTTP exception.  Anything else will result in an HTTP 500.
 	 */
-	void invoke(RestCall call) throws Throwable {
+	protected void invoke(RestCall call) throws Throwable {
 
 		UrlPathMatch pm = call.getUrlPathMatch();
 		if (pm == null)

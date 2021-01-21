@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.Enablement.*;
 import static java.util.Collections.*;
@@ -64,7 +63,6 @@ import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.params.*;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
@@ -3184,8 +3182,7 @@ public class RestContext extends BeanContext {
 	private final Messages msgs;
 	private final Config config;
 	private final VarResolver varResolver;
-	private final Map<String,List<RestMethodContext>> methodMap;
-	private final List<RestMethodContext> methods;
+	private final RestMethods restMethods;
 	private final Map<String,RestContext> childResources;
 	private final StackTraceStore stackTraceStore;
 	private final Logger logger;
@@ -3366,105 +3363,8 @@ public class RestContext extends BeanContext {
 			preCallMethods = createPreCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 			postCallMethods = createPostCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 
-			//----------------------------------------------------------------------------------------------------
-			// Initialize the child resources.
-			// Done after initializing fields above since we pass this object to the child resources.
-			//----------------------------------------------------------------------------------------------------
-			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
-			MethodMapBuilder methodMapBuilder = new MethodMapBuilder();
+			restMethods = createRestMethods(r).build();
 
-			for (MethodInfo mi : rci.getPublicMethods()) {
-				RestMethod a = mi.getLastAnnotation(RestMethod.class);
-
-				// Also include methods on @Rest-annotated interfaces.
-				if (a == null) {
-					for (Method mi2 : mi.getMatching()) {
-						Class<?> ci2 = mi2.getDeclaringClass();
-						if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null) {
-							a = RestMethodAnnotation.DEFAULT;
-						}
-					}
-				}
-				if (a != null) {
-					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(a.method()) + "," + fixMethodPath(a.path().length > 0 ? a.path()[0] : ""));
-					try {
-						if (mi.isNotPublic())
-							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
-
-						RestMethodContextBuilder rmcb = new RestMethodContextBuilder(r, mi.inner(), this);
-						RestMethodContext sm = new RestMethodContext(rmcb);
-						String httpMethod = sm.getHttpMethod();
-
-						// RRPC is a special case where a method returns an interface that we
-						// can perform REST calls against.
-						// We override the CallMethod.invoke() method to insert our logic.
-						if ("RRPC".equals(httpMethod)) {
-
-							final ClassMeta<?> interfaceClass = getClassMeta(mi.inner().getGenericReturnType());
-							final RrpcInterfaceMeta rim = new RrpcInterfaceMeta(interfaceClass.getInnerClass(), null);
-							if (rim.getMethodsByPath().isEmpty())
-								throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
-
-							RestMethodContextBuilder smb = new RestMethodContextBuilder(r, mi.inner(), this);
-							smb.dotAll();
-							sm = new RestMethodContext(smb) {
-
-								@Override
-								void invoke(RestCall call) throws Throwable {
-
-									super.invoke(call);
-
-									final Object o = call.getOutput();
-
-									if ("GET".equals(call.getMethod())) {
-										call.output(rim.getMethodsByPath().keySet());
-										return;
-
-									} else if ("POST".equals(call.getMethod())) {
-										String pip = call.getUrlPath().getPath();
-										if (pip.indexOf('/') != -1)
-											pip = pip.substring(pip.lastIndexOf('/')+1);
-										pip = urlDecode(pip);
-										RrpcInterfaceMethodMeta rmm = rim.getMethodMetaByPath(pip);
-										if (rmm != null) {
-											Method m = rmm.getJavaMethod();
-											try {
-												RestRequest req = call.getRestRequest();
-												// Parse the args and invoke the method.
-												Parser p = req.getBody().getParser();
-												Object[] args = null;
-												if (m.getGenericParameterTypes().length == 0)
-													args = new Object[0];
-												else {
-													try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {
-														args = p.parseArgs(in, m.getGenericParameterTypes());
-													}
-												}
-												Object output = m.invoke(o, args);
-												call.output(output);
-												return;
-											} catch (Exception e) {
-												throw toHttpException(e, InternalServerError.class);
-											}
-										}
-									}
-									throw new NotFound();
-								}
-							};
-
-							methodMapBuilder.add("GET", sm).add("POST", sm);
-
-						} else {
-							methodMapBuilder.add(httpMethod, sm);
-						}
-					} catch (Throwable e) {
-						throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}, methods={1}", rci.inner().getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound));
-					}
-				}
-			}
-
-			this.methodMap = methodMapBuilder.getMap();
-			this.methods = methodMapBuilder.getList();
 
 			// Initialize our child resources.
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
@@ -4648,6 +4548,61 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Creates the set of {@link RestMethodContext} objects that represent the methods on this resource.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The builder for the {@link RestMethods} object.
+	 * @throws Exception An error occurred.
+	 */
+	protected RestMethodsBuilder createRestMethods(Object resource) throws Exception {
+		RestMethodsBuilder x = new RestMethodsBuilder();
+		ClassInfo rci = ClassInfo.of(resource);
+
+		for (MethodInfo mi : rci.getPublicMethods()) {
+			RestMethod a = mi.getLastAnnotation(RestMethod.class);
+
+			// Also include methods on @Rest-annotated interfaces.
+			if (a == null) {
+				for (Method mi2 : mi.getMatching()) {
+					Class<?> ci2 = mi2.getDeclaringClass();
+					if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null) {
+						a = RestMethodAnnotation.DEFAULT;
+					}
+				}
+			}
+			if (a != null) {
+				try {
+					if (mi.isNotPublic())
+						throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
+
+					RestMethodContextBuilder rmcb = new RestMethodContextBuilder(resource, mi.inner(), this);
+					RestMethodContext rmc = rmcb.build();
+					String httpMethod = rmc.getHttpMethod();
+
+					// RRPC is a special case where a method returns an interface that we
+					// can perform REST calls against.
+					// We override the CallMethod.invoke() method to insert our logic.
+					if ("RRPC".equals(httpMethod)) {
+
+						RestMethodContextBuilder smb = new RestMethodContextBuilder(resource, mi.inner(), this);
+						smb.dotAll();
+						x
+							.add("GET", smb.build(RrpcRestMethodContext.class))
+							.add("POST", smb.build(RrpcRestMethodContext.class));
+
+					} else {
+						x.add(rmc);
+					}
+				} catch (Throwable e) {
+					throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
+				}
+			}
+		}
+
+		return x;
+	}
+
+	/**
 	 * Instantiates the list of {@link HookEvent#START_CALL} methods.
 	 *
 	 * @param resource The REST resource object.
@@ -5341,7 +5296,7 @@ public class RestContext extends BeanContext {
 	 * 	An unmodifiable map of Java method names to call method objects.
 	 */
 	public List<RestMethodContext> getMethodContexts() {
-		return methods;
+		return restMethods.getMethodContexts();
 	}
 
 	/**
@@ -5572,7 +5527,7 @@ public class RestContext extends BeanContext {
 
 			// If the specified method has been defined in a subclass, invoke it.
 			try {
-				findMethod(call).invoke(call);
+				restMethods.findMethod(call).invoke(call);
 			} catch (NotFound e) {
 				if (call.getStatus() == 0)
 					call.status(404);
@@ -5595,46 +5550,6 @@ public class RestContext extends BeanContext {
 
 		call.finish();
 		finishCall(call);
-	}
-
-	private RestMethodContext findMethod(RestCall call) throws Throwable {
-		String m = call.getMethod();
-
-		int rc = 0;
-		if (methodMap.containsKey(m)) {
-			for (RestMethodContext mc : methodMap.get(m)) {
-				int mrc = mc.match(call);
-				if (mrc == 2)
-					return mc;
-				rc = Math.max(rc, mrc);
-			}
-		}
-
-		if (methodMap.containsKey("*")) {
-			for (RestMethodContext mc : methodMap.get("*")) {
-				int mrc = mc.match(call);
-				if (mrc == 2)
-					return mc;
-				rc = Math.max(rc, mrc);
-			}
-		}
-
-		// If no paths matched, see if the path matches any other methods.
-		// Note that we don't want to match against "/*" patterns such as getOptions().
-		if (rc == 0) {
-			for (RestMethodContext mc : methods) {
-				if (! mc.getPathPattern().endsWith("/*")) {
-					int mrc = mc.match(call);
-					if (mrc == 2)
-						throw new MethodNotAllowed();
-				}
-			}
-		}
-
-		if (rc == 1)
-			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, call.getPathInfo());
-
-		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), getResource().getClass().getName());
 	}
 
 	private boolean isDebug(RestCall call) {
@@ -6071,29 +5986,4 @@ public class RestContext extends BeanContext {
 	// Helpers.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static class MethodMapBuilder  {
-		TreeMap<String,TreeSet<RestMethodContext>> map = new TreeMap<>();
-		Set<RestMethodContext> set = ASet.of();
-
-
-		MethodMapBuilder add(String httpMethodName, RestMethodContext mc) {
-			httpMethodName = httpMethodName.toUpperCase();
-			if (! map.containsKey(httpMethodName))
-				map.put(httpMethodName, new TreeSet<>());
-			map.get(httpMethodName).add(mc);
-			set.add(mc);
-			return this;
-		}
-
-		Map<String,List<RestMethodContext>> getMap() {
-			AMap<String,List<RestMethodContext>> m = AMap.create();
-			for (Map.Entry<String,TreeSet<RestMethodContext>> e : map.entrySet())
-				m.put(e.getKey(), AList.of(e.getValue()));
-			return m.unmodifiable();
-		}
-
-		List<RestMethodContext> getList() {
-			return AList.of(set).unmodifiable();
-		}
-	}
 }

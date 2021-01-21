@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.Assert.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.rest.annotation.*;
@@ -36,8 +36,8 @@ public class RestContext_ThreadLocals_Test {
 
 		@RestHook(HookEvent.END_CALL)
 		public void assertThreadsNotSet() {
-			assertNull(getRequest());
-			assertNull(getResponse());
+			assertThrown(()->getRequest()).contains("No active request on current thread.");
+			assertThrown(()->getResponse()).contains("No active request on current thread.");
 		}
 	}
 	static MockRestClient a = MockRestClient.build(A.class);
@@ -62,8 +62,8 @@ public class RestContext_ThreadLocals_Test {
 	public static class B extends BasicRestServletGroup {
 		@RestHook(HookEvent.END_CALL)
 		public void assertThreadsNotSet2() {
-			assertNull(getRequest());
-			assertNull(getResponse());
+			assertThrown(()->getRequest()).contains("No active request on current thread.");
+			assertThrown(()->getResponse()).contains("No active request on current thread.");
 		}
 	}
 	static MockRestClient b = MockRestClient.build(B.class);

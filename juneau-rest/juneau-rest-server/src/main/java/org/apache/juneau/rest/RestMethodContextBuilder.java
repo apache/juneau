@@ -19,6 +19,8 @@ import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
+import javax.servlet.*;
+
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
@@ -33,14 +35,19 @@ import java.lang.reflect.Method;
  */
 public class RestMethodContextBuilder extends BeanContextBuilder {
 
-	RestContext context;
-	java.lang.reflect.Method method;
-
-	boolean dotAll;
+	@Override
+	public RestMethodContext build() {
+		try {
+			return new RestMethodContext(getPropertyStore());
+		} catch (ServletException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
-		this.context = context;
-		this.method = method;
+		set("RestMethodContext.restContext.o", context);
+		set("RestMethodContext.restMethod.o", method);
+		set("RestMethodContext.restObject.o", context.getResource());  // Added to force a new cache hash.
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 		MethodInfo mi = MethodInfo.of(servlet.getClass(), method);
@@ -79,7 +86,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestMethodContextBuilder dotAll() {
-		this.dotAll = true;
+		set("RestMethodContext.dotAll.b", true);
 		return this;
 	}
 
