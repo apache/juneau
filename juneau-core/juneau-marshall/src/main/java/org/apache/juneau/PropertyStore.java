@@ -198,15 +198,15 @@ public final class PropertyStore {
 	 */
 	public static PropertyStore DEFAULT = PropertyStore.create().build();
 
-	final SortedMap<String,PropertyGroup> groups;
+	final Map<String,PropertyGroup> groups;
 	private final int hashCode;
 
 	// Created by PropertyStoreBuilder.build()
 	PropertyStore(Map<String,PropertyGroupBuilder> propertyMaps) {
-		TreeMap<String,PropertyGroup> m = new TreeMap<>();
+		Map<String,PropertyGroup> m = new LinkedHashMap<>();
 		for (Map.Entry<String,PropertyGroupBuilder> p : propertyMaps.entrySet())
 			m.put(p.getKey(), p.getValue().build());
-		this.groups = Collections.unmodifiableSortedMap(m);
+		this.groups = Collections.unmodifiableMap(m);
 		this.hashCode = groups.hashCode();
 	}
 
@@ -228,7 +228,7 @@ public final class PropertyStore {
 	}
 
 	private PropertyStore(SortedMap<String,PropertyGroup> propertyMaps) {
-		this.groups = Collections.unmodifiableSortedMap(propertyMaps);
+		this.groups = Collections.unmodifiableMap(new LinkedHashMap<>(propertyMaps));
 		this.hashCode = groups.hashCode();
 	}
 
@@ -663,14 +663,14 @@ public final class PropertyStore {
 	 * A group of properties with the same prefixes.
 	 */
 	public static class PropertyGroup {
-		final SortedMap<String,Property> properties;
+		final Map<String,Property> properties;
 		private final int hashCode;
 
 		PropertyGroup(Map<String,MutableProperty> properties) {
-			TreeMap<String,Property> m = new TreeMap<>();
+			Map<String,Property> m = new LinkedHashMap<>();
 			for (Map.Entry<String,MutableProperty> p : properties.entrySet())
 				m.put(p.getKey(), p.getValue().build());
-			this.properties = Collections.unmodifiableSortedMap(m);
+			this.properties = Collections.unmodifiableMap(m);
 			this.hashCode = this.properties.hashCode();
 		}
 
