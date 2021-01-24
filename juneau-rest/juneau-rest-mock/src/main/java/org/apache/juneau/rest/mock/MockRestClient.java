@@ -229,9 +229,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		MOCKRESTCLIENT_pathVars = PREFIX + "pathVars.oms";
 
 
-	private static Map<Class<?>,RestContext>
-		CONTEXTS_DEBUG = new ConcurrentHashMap<>(),
-		CONTEXTS_NORMAL = new ConcurrentHashMap<>();
+	private static Map<Class<?>,RestContext> REST_CONTEXTS = new ConcurrentHashMap<>();
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance properties
@@ -274,11 +272,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			String contextPath = ps.getProperty(MOCKRESTCLIENT_contextPath, String.class, null);
 			String servletPath = ps.getProperty(MOCKRESTCLIENT_servletPath, String.class, null);
 			String rootUrl = ps.getProperty(RESTCLIENT_rootUri, String.class, "http://localhost");
-			boolean isDebug = ps.getProperty(CONTEXT_debug, Boolean.class, false);
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
-			Map<Class<?>,RestContext> contexts = isDebug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
-			if (! contexts.containsKey(c)) {
+			if (! REST_CONTEXTS.containsKey(c)) {
 				boolean isClass = restBean instanceof Class;
 				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
 				RestContext rc = RestContext
@@ -288,9 +284,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 					.build()
 					.postInit()
 					.postInitChildFirst();
-				contexts.put(c, rc);
+				REST_CONTEXTS.put(c, rc);
 			}
-			RestContext restBeanCtx = contexts.get(c);
+			RestContext restBeanCtx = REST_CONTEXTS.get(c);
 			psb.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
 
 			if (servletPath == null)
