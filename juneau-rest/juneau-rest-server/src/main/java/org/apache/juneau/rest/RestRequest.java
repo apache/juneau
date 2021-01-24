@@ -1633,6 +1633,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return inner;
 	}
 
+	/**
+	 * Returns the REST object of this call.
+	 *
+	 * @return The REST object of this call.
+	 */
+	public Object getResource() {
+		return call.getResource();
+	}
+
 	<T> ClassMeta<T> getClassMeta(Type type, Type[] args) {
 		return beanSession.getClassMeta(type, args);
 	}

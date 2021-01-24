@@ -117,9 +117,9 @@ public class RequestVar extends MultipartResolvingVar {
 				return req.getResourceTitle();
 		} else if (c == 's') {
 			if ("servletClass".equals(key))
-				return req.getContext().getResource().getClass().getName();
+				return req.getContext().getResourceClass().getName();
 			if ("servletClassSimple".equals(key))
-				return req.getContext().getResource().getClass().getSimpleName();
+				return req.getContext().getResourceClass().getSimpleName();
 			if ("servletParentURI".equals(key))
 				return req.getUriContext().getRootRelativeServletPathParent();
 			if ("servletPath".equals(key))

@@ -64,7 +64,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		this.beanFactory = context.rootBeanFactory;
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
-		MethodInfo mi = MethodInfo.of(context.getResource().getClass(), method);
+		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
 		try {
 

@@ -44,8 +44,8 @@ public class BasicFileFinder extends FileFinder {
 			.create()
 			.dir("static")
 			.dir("htdocs")
-			.cp(context.getResource().getClass(), "htdocs", true)
-			.cp(context.getResource().getClass(), "/htdocs", true)
+			.cp(context.getResourceClass(), "htdocs", true)
+			.cp(context.getResourceClass(), "/htdocs", true)
 			.caching(1_000_000)
 			.exclude("(?i).*\\.(class|properties)")
 		);

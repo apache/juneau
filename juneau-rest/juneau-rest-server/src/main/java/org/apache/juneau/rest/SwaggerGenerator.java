@@ -61,7 +61,6 @@ final class SwaggerGenerator {
 	private final JsonParser jp = JsonParser.create().ignoreUnknownBeanProperties().build();
 	private final JsonSchemaGeneratorSession js;
 	private final Class<?> c;
-	private final Object resource;
 	private final Messages mb;
 	private final FileFinder fileFinder;
 
@@ -78,8 +77,7 @@ final class SwaggerGenerator {
 		this.locale = locale;
 		this.context = context;
 		this.js = context.getJsonSchemaGenerator().createSession();
-		this.c = context.getResource().getClass();
-		this.resource = context.getResource();
+		this.c = context.getResourceClass();
 		this.mb = context.getMessages().forLocale(locale);
 		this.fileFinder = fileFinder == null ? context.getFileFinder() : fileFinder;
 	}
@@ -97,7 +95,7 @@ final class SwaggerGenerator {
 	 */
 	public Swagger getSwagger() throws Exception {
 
-		ClassInfo rci = ClassInfo.ofProxy(resource);
+		ClassInfo rci = ClassInfo.of(c);
 
 		rci.getSimpleName();
 

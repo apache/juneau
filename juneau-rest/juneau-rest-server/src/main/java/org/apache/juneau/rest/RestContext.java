@@ -3385,6 +3385,7 @@ public class RestContext extends BeanContext {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final Supplier<?> resource;
+	private final Class<?> resourceClass;
 
 	final RestContextBuilder builder;
 	private final boolean
@@ -3495,7 +3496,8 @@ public class RestContext extends BeanContext {
 		try {
 			this.builder = builder;
 
-			this.resource = builder.resource instanceof Supplier ? (Supplier<?>)builder.resource : ()->builder.resource;
+			this.resourceClass = builder.resourceClass;
+			this.resource = builder.resource;
 			Object r = getResource();
 
 			parentContext = builder.parentContext;
@@ -4842,7 +4844,12 @@ public class RestContext extends BeanContext {
 				if (oc == builder.resourceClass)
 					continue;
 				cb = RestContext.create(this, builder.inner, oc, null);
-				o = BeanFactory.of(beanFactory, resource).addBean(RestContextBuilder.class, cb).createBean(oc);
+				BeanFactory bf = BeanFactory.of(beanFactory, resource).addBean(RestContextBuilder.class, cb);
+				if (bf.getBean(oc).isPresent()) {
+					o = (Supplier<?>)()->bf.getBean(oc).get();  // If we resolved via injection, always get it this way.
+				} else {
+					o = bf.createBean(oc);
+				}
 			} else {
 				cb = RestContext.create(this, builder.inner, o.getClass(), o);
 			}
@@ -5594,6 +5601,15 @@ public class RestContext extends BeanContext {
 	 */
 	public RestContextStats getStats() {
 		return new RestContextStats(startTime, getMethodExecStats());
+	}
+
+	/**
+	 * Returns the resource class type.
+	 *
+	 * @return The resource class type.
+	 */
+	public Class<?> getResourceClass() {
+		return resourceClass;
 	}
 
 	/**

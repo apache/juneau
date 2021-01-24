@@ -106,7 +106,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	// Read-only snapshots of these will be made in RestServletContext.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	Object resource;
+	Supplier<?> resource;
 	ServletContext servletContext;
 
 	Config config;
@@ -185,7 +185,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		try {
 			PropertyStore ps = getPropertyStore();
 			Class<? extends RestContext> c = ps.getClassProperty(REST_contextClass, RestContext.class, RestContext.class);
-			BeanFactory bf = BeanFactory.of(beanFactory, resource);
+			BeanFactory bf = BeanFactory.of(beanFactory, resource.get());
 			bf.addBean(RestContextBuilder.class, this);
 			return bf.createBean(c);
 		} catch (Exception e) {
@@ -228,8 +228,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	protected Config createConfig(Class<?> resourceClass, BeanFactory beanFactory) throws Exception {
 		ClassInfo rci = ClassInfo.of(resourceClass);
 		Config x = null;
-		if (resource instanceof Config)
-			x = (Config)resource;
+		Object o = resource == null ? null : resource.get();
+		if (o instanceof Config)
+			x = (Config)o;
 		if (x == null)
 			x = beanFactory.getBean(Config.class).orElse(null);
 
@@ -257,7 +258,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
 	RestContextBuilder init(Object resource) throws ServletException {
-		this.resource = resource;
+		this.resource = resource instanceof Supplier ? (Supplier<?>)resource : ()->resource;
 
 		ClassInfo rci = ClassInfo.ofProxy(resource);
 

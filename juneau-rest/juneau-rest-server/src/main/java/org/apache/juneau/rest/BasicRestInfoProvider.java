@@ -66,7 +66,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			description;
 
 		Builder(RestContext context) {
-			ClassInfo ci = ClassInfo.ofProxy(context.getResource());
+			ClassInfo ci = ClassInfo.of(context.getResourceClass());
 			for (Rest r : ci.getAnnotations(Rest.class)) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
