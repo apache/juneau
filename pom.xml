@@ -50,7 +50,7 @@
 		<derby.version>10.10.2.0</derby.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>
 		<javax.inject.version>1</javax.inject.version>
-		<springframework.version>2.0.1.RELEASE</springframework.version>
+		<springboot.version>2.4.2</springboot.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 	</properties>
 

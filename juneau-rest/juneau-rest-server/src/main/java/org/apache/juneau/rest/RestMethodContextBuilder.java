@@ -39,23 +39,29 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	RestContext restContext;
 	Method restMethod;
 
+	private BeanFactory beanFactory;
+	private Class<? extends RestMethodContext> implClass;
+
 	@Override /* BeanContextBuilder */
 	public RestMethodContext build() {
 		try {
 			PropertyStore ps = getPropertyStore();
-			Class<? extends RestMethodContext> c = ps.getClassProperty(RESTMETHOD_context, RestMethodContext.class, RestMethodContext.class);
-			BeanFactory bf = new BeanFactory(restContext.rootBeanFactory, restContext.getResource());
-			bf.addBean(RestMethodContextBuilder.class, this);
-			return bf.createBean(c);
+
+			Class<? extends RestMethodContext> ic = implClass;
+			if (ic == null)
+				ic = ps.getClassProperty(RESTMETHOD_contextClass, RestMethodContext.class, RestMethodContext.class);
+
+			return BeanFactory.of(beanFactory).addBean(RestMethodContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
-	RestMethodContextBuilder(java.lang.reflect.Method method, RestContext context) throws RestServletException {
+	RestMethodContextBuilder(java.lang.reflect.Method method, RestContext context) {
 
 		this.restContext = context;
 		this.restMethod = method;
+		this.beanFactory = context.rootBeanFactory;
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 		MethodInfo mi = MethodInfo.of(context.getResource().getClass(), method);
@@ -81,10 +87,8 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			applyAnnotations(mi.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vrs);
 
-		} catch (RestServletException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new RestServletException(e, "Exception occurred while initializing method ''{0}''", sig);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -95,6 +99,40 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	 */
 	public RestMethodContextBuilder dotAll() {
 		set("RestMethodContext.dotAll.b", true);
+		return this;
+	}
+
+
+	/**
+	 * Specifies a {@link RestMethodContext} implementation subclass to use.
+	 *
+	 * <p>
+	 * When specified, the {@link #build()} method will create an instance of that class instead of the default {@link RestMethodContext}.
+	 *
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestMethodContextBuilder} - This object.
+	 * 	<li>Any beans found in the specified {@link #beanFactory(BeanFactory) bean factory}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanFactory(BeanFactory) bean factory}.
+	 * </ul>
+	 *
+	 * @param implClass The implementation class to build.
+	 * @return This object (for method chaining).
+	 */
+	public RestMethodContextBuilder implClass(Class<? extends RestMethodContext> implClass) {
+		this.implClass = implClass;
+		return this;
+	}
+
+	/**
+	 * Specifies a {@link BeanFactory} to use when resolving constructor arguments.
+	 *
+	 * @param beanFactory The bean factory to use for resolving constructor arguments.
+	 * @return This object (for method chaining).
+	 */
+	public RestMethodContextBuilder beanFactory(BeanFactory beanFactory) {
+		this.beanFactory = beanFactory;
 		return this;
 	}
 
@@ -135,8 +173,8 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestMethodContextBuilder context(Class<? extends RestMethodContext> value) {
-		return set(RESTMETHOD_context, value);
+	public RestMethodContextBuilder contextClass(Class<? extends RestMethodContext> value) {
+		return set(RESTMETHOD_contextClass, value);
 	}
 
 	/**

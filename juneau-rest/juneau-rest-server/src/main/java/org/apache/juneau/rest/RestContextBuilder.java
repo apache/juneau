@@ -184,8 +184,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContext build() {
 		try {
 			PropertyStore ps = getPropertyStore();
-			Class<? extends RestContext> c = ps.getClassProperty(REST_context, RestContext.class, RestContext.class);
-			BeanFactory bf = new BeanFactory(beanFactory, resource);
+			Class<? extends RestContext> c = ps.getClassProperty(REST_contextClass, RestContext.class, RestContext.class);
+			BeanFactory bf = BeanFactory.of(beanFactory, resource);
 			bf.addBean(RestContextBuilder.class, this);
 			return bf.createBean(c);
 		} catch (Exception e) {
@@ -214,7 +214,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (x == null && parentContext.isPresent()) {
 			x = parentContext.get().rootBeanFactory;
 		}
-		return new BeanFactory(x, resource.orElse(null));
+		return BeanFactory.of(x, resource.orElse(null));
 	}
 
 	/**
@@ -745,41 +745,19 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST context class.
 	 *
-	 * <review>NEEDS REVIEW</review>
 	 * <p>
 	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
 	 *
-	 * <p>
-	 * The subclass must provide the following:
-	 * <ul>
-	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestContextBuilder}.
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_contextClass}
 	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our REST class</jc>
-	 * 	<ja>@Rest</ja>(context=MyRestContext.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 * 		...
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>
-	 * 	<jk>public class</jk> MyResource {
-	 * 		...
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.context(MyRestContext.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder context(Class<? extends RestContext> value) {
-		return set(REST_context, value);
+	public RestContextBuilder contextClass(Class<? extends RestContext> value) {
+		return set(REST_contextClass, value);
 	}
 
 	/**
@@ -1371,6 +1349,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST method context class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_methodContextClass}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder methodContextClass(Class<? extends RestMethodContext> value) {
+		return set(REST_methodContextClass, value);
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parser listener.
 	 *
 	 * <p>
@@ -1625,6 +1621,42 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder responseHandlers(ResponseHandler...values) {
 		return prependTo(REST_responseHandlers, values);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST children class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restChildrenClass}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder restChildrenClass(Class<? extends RestChildren> value) {
+		return set(REST_restChildrenClass, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST methods class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestMethods} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restMethodsClass}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder restMethodsClass(Class<? extends RestMethods> value) {
+		return set(REST_restMethodsClass, value);
 	}
 
 	/**

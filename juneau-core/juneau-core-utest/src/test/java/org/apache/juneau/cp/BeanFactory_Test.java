@@ -39,7 +39,7 @@ public class BeanFactory_Test {
 		bf.addBean(A.class, new A());
 		assertBoolean(bf.hasBean(A.class)).isTrue();
 		assertObject(bf.getBean(A.class)).exists();
-		bf = new BeanFactory(bf, null);
+		bf = BeanFactory.of(bf);
 		assertBoolean(bf.hasBean(A.class)).isTrue();
 		assertObject(bf.getBean(A.class)).exists();
 	}
@@ -270,7 +270,7 @@ public class BeanFactory_Test {
 	public void d01b_createBean_construct_withArgs_inner() throws Exception {
 		BeanFactory bf = new BeanFactory();
 		assertThrown(()->bf.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: BeanFactory_Test,A.");
-		BeanFactory bf2 = new BeanFactory(null,this);
+		BeanFactory bf2 = BeanFactory.of(null,this);
 		assertThrown(()->bf2.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: A.");
 		bf2.addBean(A.class, new A());
 		assertObject(bf2.createBean(D1b.class)).exists();

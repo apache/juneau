@@ -23,6 +23,16 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class RestMethods {
 
+	/**
+	 * Represents a null value for the {@link Rest#restMethodsClass()} annotation.
+	 */
+	@SuppressWarnings("javadoc")
+	public final class Null extends RestMethods {
+		public Null(RestMethodsBuilder builder) throws Exception {
+			super(builder);
+		}
+	}
+
 	private final Map<String,List<RestMethodContext>> map;
 	private List<RestMethodContext> list;
 
@@ -35,7 +45,12 @@ public class RestMethods {
 		return new RestMethodsBuilder();
 	}
 
-	RestMethods(RestMethodsBuilder builder) {
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder containing the settings for this object.
+	 */
+	public RestMethods(RestMethodsBuilder builder) {
 		AMap<String,List<RestMethodContext>> m = AMap.create();
 		for (Map.Entry<String,TreeSet<RestMethodContext>> e : builder.map.entrySet())
 			m.put(e.getKey(), AList.of(e.getValue()));

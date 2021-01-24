@@ -126,10 +126,10 @@ public @interface RestMethod {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestMethodContextBuilder#context(Class)}
+	 * 	<li class='jm'>{@link RestMethodContextBuilder#contextClass(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestMethodContext> context() default RestMethodContext.Null.class;
+	Class<? extends RestMethodContext> contextClass() default RestMethodContext.Null.class;
 
 	/**
 	 * Class-level response converters.

@@ -42,7 +42,7 @@ public class Rest_Context_Test {
 		a1.get().run().assertBody().is("RestContext");
 	}
 
-	@Rest(context=X1.class)
+	@Rest(contextClass=X1.class)
 	public static class A2 extends A1 {}
 
 	@Test
@@ -64,7 +64,7 @@ public class Rest_Context_Test {
 	public static class A4 extends A1 {
 		 @RestHook(HookEvent.INIT)
 		 public void init(RestContextBuilder builder) throws Exception {
-			 builder.context(X1.class);
+			 builder.contextClass(X1.class);
 		 }
 	}
 
@@ -81,7 +81,7 @@ public class Rest_Context_Test {
 		}
 	}
 
-	@Rest(context=X2.class)
+	@Rest(contextClass=X2.class)
 	public static class A5 {
 		@RestMethod
 		public String get(RestContext context) {

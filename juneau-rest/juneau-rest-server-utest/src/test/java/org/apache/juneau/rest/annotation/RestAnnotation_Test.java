@@ -47,7 +47,7 @@ public class RestAnnotation_Test {
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
 		.consumes("consumes")
-		.context(RestContext.class)
+		.contextClass(RestContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.debugOn("debugOn")
@@ -63,6 +63,7 @@ public class RestAnnotation_Test {
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
 		.maxInput("maxInput")
+		.methodContextClass(RestMethodContext.class)
 		.messages("messages")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
@@ -73,6 +74,8 @@ public class RestAnnotation_Test {
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseHandlers(ResponseHandler.class)
+		.restChildrenClass(RestChildren.class)
+		.restMethodsClass(RestMethods.class)
 		.restParams(RestParam.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -98,7 +101,7 @@ public class RestAnnotation_Test {
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
 		.consumes("consumes")
-		.context(RestContext.class)
+		.contextClass(RestContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.debugOn("debugOn")
@@ -114,6 +117,7 @@ public class RestAnnotation_Test {
 		.guards(RestGuard.class)
 		.infoProvider(BasicRestInfoProvider.class)
 		.maxInput("maxInput")
+		.methodContextClass(RestMethodContext.class)
 		.messages("messages")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
@@ -124,6 +128,8 @@ public class RestAnnotation_Test {
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseHandlers(ResponseHandler.class)
+		.restChildrenClass(RestChildren.class)
+		.restMethodsClass(RestMethods.class)
 		.restParams(RestParam.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -140,7 +146,7 @@ public class RestAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).json().stderr().is(""
 			+ "{"
 				+ "allowedHeaderParams:'allowedHeaderParams',"
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"
@@ -151,7 +157,7 @@ public class RestAnnotation_Test {
 				+ "clientVersionHeader:'clientVersionHeader',"
 				+ "config:'config',"
 				+ "consumes:['consumes'],"
-				+ "context:'org.apache.juneau.rest.RestContext',"
+				+ "contextClass:'org.apache.juneau.rest.RestContext',"
 				+ "converters:['org.apache.juneau.rest.RestConverter'],"
 				+ "debug:'debug',"
 				+ "debugOn:'debugOn',"
@@ -169,6 +175,7 @@ public class RestAnnotation_Test {
 				+ "infoProvider:'org.apache.juneau.rest.BasicRestInfoProvider',"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
+				+ "methodContextClass:'org.apache.juneau.rest.RestMethodContext',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"'],"
 				+ "parsers:['org.apache.juneau.parser.Parser'],"
@@ -178,6 +185,8 @@ public class RestAnnotation_Test {
 				+ "produces:['produces'],"
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
 				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
+				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
+				+ "restMethodsClass:'org.apache.juneau.rest.RestMethods',"
 				+ "restParams:['org.apache.juneau.rest.RestParam'],"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -248,7 +257,7 @@ public class RestAnnotation_Test {
 		clientVersionHeader="clientVersionHeader",
 		config="config",
 		consumes="consumes",
-		context=RestContext.class,
+		contextClass=RestContext.class,
 		converters=RestConverter.class,
 		debug="debug",
 		debugOn="debugOn",
@@ -264,6 +273,7 @@ public class RestAnnotation_Test {
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
 		maxInput="maxInput",
+		methodContextClass=RestMethodContext.class,
 		messages="messages",
 		on="on",
 		onClass=RestAnnotation_Test.class,
@@ -274,6 +284,8 @@ public class RestAnnotation_Test {
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseHandlers=ResponseHandler.class,
+		restChildrenClass=RestChildren.class,
+		restMethodsClass=RestMethods.class,
 		restParams=RestParam.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
@@ -301,7 +313,7 @@ public class RestAnnotation_Test {
 		clientVersionHeader="clientVersionHeader",
 		config="config",
 		consumes="consumes",
-		context=RestContext.class,
+		contextClass=RestContext.class,
 		converters=RestConverter.class,
 		debug="debug",
 		debugOn="debugOn",
@@ -317,6 +329,7 @@ public class RestAnnotation_Test {
 		guards=RestGuard.class,
 		infoProvider=BasicRestInfoProvider.class,
 		maxInput="maxInput",
+		methodContextClass=RestMethodContext.class,
 		messages="messages",
 		on="on",
 		onClass=RestAnnotation_Test.class,
@@ -327,6 +340,8 @@ public class RestAnnotation_Test {
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseHandlers=ResponseHandler.class,
+		restChildrenClass=RestChildren.class,
+		restMethodsClass=RestMethods.class,
 		restParams=RestParam.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",

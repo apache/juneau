@@ -294,7 +294,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			psb.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
 
 			if (servletPath == null)
-				servletPath = toValidContextPath(restBeanCtx.getPath());
+				servletPath = toValidContextPath(restBeanCtx.getFullPath());
 
 			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
 

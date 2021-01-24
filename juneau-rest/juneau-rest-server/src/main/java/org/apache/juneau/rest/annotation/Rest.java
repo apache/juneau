@@ -271,39 +271,16 @@ public @interface Rest {
 	String[] consumes() default {};
 
 	/**
+	 * REST context class.
+	 *
+	 * <p>
 	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
 	 *
-	 * <review>NEEDS REVIEW</review>
-	 * <p>
-	 * The subclass must provide the following:
-	 * <ul>
-	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestContextBuilder}.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our extended context class</jc>
-	 * 	<jk>public</jk> MyRestContext <jk>extends</jk> RestContext {
-	 * 		<jk>public</jk> MyRestContext(RestContextBuilder <jv>builder</jv>) {
-	 * 			<jk>super</jk>(<jv>builder</jv>);
-	 * 		}
-	 *
-	 * 		// Override any methods.
-	 * 	}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our REST class</jc>
-	 * 	<ja>@Rest</ja>(context=MyRestContext.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 * 		...
-	 * 	}
-	 * </p>
-	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContextBuilder#context(Class)}
+	 * 	<li class='jm'>{@link RestContext#REST_contextClass}
 	 * </ul>
 	 */
-	Class<? extends RestContext> context() default RestContext.Null.class;
+	Class<? extends RestContext> contextClass() default RestContext.Null.class;
 
 	/**
 	 * Class-level response converters.
@@ -730,6 +707,15 @@ public @interface Rest {
 	String messages() default "";
 
 	/**
+	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
+	 * 
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_methodContextClass}
+	 * </ul>
+	 */
+	Class<? extends RestMethodContext> methodContextClass() default RestMethodContext.Null.class;
+
+	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
@@ -972,6 +958,30 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
+
+	/**
+	 * REST children class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restChildrenClass}
+	 * </ul>
+	 */
+	Class<? extends RestChildren> restChildrenClass() default RestChildren.Null.class;
+
+	/**
+	 * REST methods class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestMethods} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restMethodsClass}
+	 * </ul>
+	 */
+	Class<? extends RestMethods> restMethodsClass() default RestMethods.Null.class;
 
 	/**
 	 * Java method parameter resolvers.

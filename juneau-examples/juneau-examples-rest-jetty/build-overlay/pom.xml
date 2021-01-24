@@ -40,7 +40,7 @@
 
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<derby.version>${derby.version}</derby.version>
-		<springframework.version>${springframework.version}</springframework.version>
+		<springboot.version>${springboot.version}</springboot.version>
 		<javax.inject.version>1</javax.inject.version>
 		<juneau.version>${version}</juneau.version>
 		<jena.version>${jena.version}</jena.version>
@@ -64,7 +64,7 @@
 			<artifactId>juneau-marshall-rdf</artifactId>
 			<version>\${juneau.version}</version>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -88,11 +88,11 @@
 			<version>\${hibernate.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>xml-apis</groupId>
-		    <artifactId>xml-apis</artifactId>
-		    <version>\${xml.apis.version}</version>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>\${xml.apis.version}</version>
 		</dependency>
-		
+
 		<!-- Optional RDF support -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
@@ -131,11 +131,11 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-       			<version>3.0.2</version>
+				<version>3.0.2</version>
  				<executions>
 					<execution>
 						<id>package-config</id>
@@ -200,5 +200,5 @@
 
 		</plugins>
 	</build>
-	
+
 </project>

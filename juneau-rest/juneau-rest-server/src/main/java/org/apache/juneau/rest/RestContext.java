@@ -84,7 +84,9 @@ import org.apache.juneau.xml.*;
 @ConfigurableContext(nocache=true)
 public class RestContext extends BeanContext {
 
-	/** Represents a null value for the {@link Rest#context()} annotation.*/
+	/**
+	 * Represents a null value for the {@link Rest#contextClass()} annotation.
+	 */
 	@SuppressWarnings("javadoc")
 	public static final class Null extends RestContext {
 		public Null(RestContextBuilder builder) throws Exception {
@@ -1474,6 +1476,84 @@ public class RestContext extends BeanContext {
 	public static final String REST_messages = PREFIX + ".messages.lo";
 
 	/**
+	 * Configuration property:  REST method context class.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_methodContextClass REST_methodContextClass}
+	 * 	<li><b>Name:</b>  <js>"RestContext.methodContextClass.c"</js>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestMethodContext}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestMethodContext}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#methodContextClass()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#contextClass()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#methodContextClass(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#contextClass(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestMethodContextBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanFactory bean factory}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanFactory bean factory}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
+	 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
+	 * 	<jk>public</jk> MyRestMethodContext <jk>extends</jk> RestMethodContext {
+	 *
+	 * 		<jk>private final</jk> Optional&lt;? <jk>extends</jk> Supplier&lt;Object&gt;&gt; <jf>fooSupplier</jf>;
+	 *
+	 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
+	 * 		<jk>public</jk> MyRestMethodContext(RestMethodContextBuilder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-><jk>null</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override the method used to create default request attributes.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>protected</jk> NamedAttributeList createDefaultRequestAttributes(Object <jv>resource</jv>, BeanFactory <jv>beanFactory</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return super</jk>
+	 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanFactory</jv>, <jv>method</jv>, <jv>context</jv>)
+	 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-><jf>fooSupplier</jf>.get());
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(methodContextClass=MyRestMethodContext.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.methodContextClass(MyRestMethodContext.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<ja>@RestMethod</ja>
+	 * 		<jk>public</jk> Object getFoo(RequestAttributes <jv>attributes</jv>) {
+	 * 			<jk>return</jk> <jv>attributes</jv>.get(<js>"foo"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_methodContextClass = PREFIX + ".methodContextClass.c";
+
+	/**
 	 * Configuration property:  Parsers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2225,6 +2305,142 @@ public class RestContext extends BeanContext {
 	public static final String REST_responseHandlers = PREFIX + ".responseHandlers.lo";
 
 	/**
+	 * Configuration property:  REST children class.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_restChildrenClass REST_restChildrenClass}
+	 * 	<li><b>Name:</b>  <js>"RestContext.restChildrenClass.c"</js>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestChildren}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestChildren}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restChildrenClass()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restChildrenClass(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestChildrenBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanFactory bean factory}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanFactory bean factory}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class</jc>
+	 * 	<jk>public</jk> MyRestChildren <jk>extends</jk> RestChildren {
+	 * 		<jk>public</jk> MyRestChildren(RestChildrenBuilder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 		}
+	 *
+	 * 		<jc>// Override any methods.</jc>
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Optional&lt;RestChildMatch&gt; findMatch(RestCall <jv>call</jv>) {
+	 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
+	 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
+	 * 				<jc>// Do our own special handling.</jc>
+	 * 			}
+	 * 			<jk>return super</jk>.findMatch(<jv>call</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restChildrenClass=MyRestChildren.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restChildrenClass(MyRestChildren.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_restChildrenClass = PREFIX + ".restChildrenClass.c";
+
+	/**
+	 * Configuration property:  REST methods class.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_restMethodsClass REST_restMethodsClass}
+	 * 	<li><b>Name:</b>  <js>"RestContext.restMethodsClass.c"</js>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestMethods}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestMethods}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#restMethodsClass()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#restMethodsClass(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to extend the {@link RestMethods} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must have a public constructor that takes in any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link RestMethodsBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanFactory bean factory}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanFactory bean factory}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class</jc>
+	 * 	<jk>public</jk> MyRestMethods <jk>extends</jk> RestMethods {
+	 * 		<jk>public</jk> MyRestMethods(RestMethodsBuilder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 		}
+	 *
+	 * 		<jc>// Override any methods.</jc>
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> RestMethodContext findMethod(RestCall <jv>call</jv>) <jk>throws</jk> MethodNotAllowed, PreconditionFailed, NotFound {
+	 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
+	 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
+	 * 				<jc>// Do our own special handling.</jc>
+	 * 			}
+	 * 			<jk>return super</jk>.findMethod(<jv>call</jv>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(restMethodsClass=MyRestMethods.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.restMethodsClass(MyRestMethods.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_restMethodsClass = PREFIX + ".restMethodsClass.c";
+
+	/**
 	 * Configuration property:  Java REST method parameter resolvers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2809,22 +3025,20 @@ public class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  REST context class.
 	 *
-	 * <review>NEEDS REVIEW</review>
-	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_context REST_context}
-	 * 	<li><b>Name:</b>  <js>"RestContext.context.c"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_contextClass REST_contextClass}
+	 * 	<li><b>Name:</b>  <js>"RestContext.contextClass.c"</js>
 	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestContext}&gt;</c>
 	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestContext}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#context()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#contextClass()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#context(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#contextClass(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2833,37 +3047,56 @@ public class RestContext extends BeanContext {
 	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
 	 *
 	 * <p>
-	 * The subclass must provide the following:
+	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
-	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestContextBuilder}.
+	 * 	<li>{@link RestContextBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanFactory bean factory}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanFactory bean factory}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Our extended context class</jc>
+	 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
+	 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
 	 * 	<jk>public</jk> MyRestContext <jk>extends</jk> RestContext {
-	 * 		<jk>public</jk> MyRestContext(RestContextBuilder <jv>builder</jv>) {
+	 *
+	 * 		<jk>private final</jk> Optional&lt;? <jk>extends</jk> Supplier&lt;Object&gt;&gt; <jf>fooSupplier</jf>;
+	 *
+	 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
+	 * 		<jk>public</jk> MyRestContext(RestMethodContextBuilder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
 	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-><jk>null</jk>);
 	 * 		}
 	 *
-	 * 		<jc>// Override any methods.</jc>
+	 * 		<jc>// Override the method used to create default request attributes.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>protected</jk> NamedAttributeList createDefaultRequestAttributes(Object <jv>resource</jv>, BeanFactory <jv>beanFactory</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return super</jk>
+	 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanFactory</jv>)
+	 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-><jf>fooSupplier</jf>.get());
+	 * 		}
 	 * 	}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(context=MyRestContext.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(contextClass=MyRestContext.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 * 		...
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.context(MyRestContext.<jk>class</jk>);
+	 * 			<jv>builder</jv>.contextClass(MyRestContext.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<ja>@RestMethod</ja>
+	 * 		<jk>public</jk> Object getFoo(RequestAttributes <jv>attributes</jv>) {
+	 * 			<jk>return</jk> <jv>attributes</jv>.get(<js>"foo"</js>);
 	 * 		}
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_context = PREFIX + ".context.c";
+	public static final String REST_contextClass = PREFIX + ".context.c";
 
 	/**
 	 * Configuration property:  Resource URI authority path.
@@ -3162,7 +3395,7 @@ public class RestContext extends BeanContext {
 		clientVersionHeader,
 		uriAuthority,
 		uriContext;
-	final String fullPath;
+	final String path, fullPath;
 	final UrlPathMatcher pathMatcher;
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
@@ -3183,7 +3416,7 @@ public class RestContext extends BeanContext {
 	private final Config config;
 	private final VarResolver varResolver;
 	private final RestMethods restMethods;
-	private final Map<String,RestContext> childResources;
+	private final RestChildren restChildren;
 	private final StackTraceStore stackTraceStore;
 	private final Logger logger;
 	private final RestInfoProvider infoProvider;
@@ -3346,13 +3579,12 @@ public class RestContext extends BeanContext {
 			msgs = createMessages(r);
 
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
+			path = builder.getPath();
 
-			String p = builder.getPath();
+			String p = path;
 			if (! p.endsWith("/*"))
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
-
-			childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
 			startCallMethods = createStartCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			endCallMethods = createEndCallMethods(r).stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
@@ -3364,42 +3596,7 @@ public class RestContext extends BeanContext {
 			postCallMethods = createPostCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 
 			restMethods = createRestMethods(r).build();
-
-
-			// Initialize our child resources.
-			for (Object o : getArrayProperty(REST_children, Object.class)) {
-				String path = null;
-
-				if (o instanceof RestChild) {
-					RestChild rc = (RestChild)o;
-					path = rc.path;
-					o = rc.resource;
-				}
-
-				RestContextBuilder cb = null;
-
-				if (o instanceof Class) {
-					Class<?> oc = (Class<?>)o;
-					// Don't allow specifying yourself as a child.  Causes an infinite loop.
-					if (oc == builder.resourceClass)
-						continue;
-					cb = RestContext.create(this, builder.inner, oc, null);
-					o = new BeanFactory(beanFactory, r).addBean(RestContextBuilder.class, cb).createBean(oc);
-				} else {
-					cb = RestContext.create(this, builder.inner, o.getClass(), o);
-				}
-
-				if (path != null)
-					cb.path(path);
-
-				RestContext cc = cb.init(o).build();
-
-				MethodInfo mi = ClassInfo.of(o).getMethod("setContext", RestContext.class);
-				if (mi != null)
-					mi.accessible().invoke(o, cc);
-
-				childResources.put(cb.getPath(), cc);
-			}
+			restChildren = createRestChildren(r).build();
 
 			infoProvider = createInfoProvider(r, beanFactory);
 
@@ -3755,7 +3952,7 @@ public class RestContext extends BeanContext {
 			x = (BeanFactory)resource;
 
 		BeanFactory parent = parentContext == null ? null : parentContext.rootBeanFactory;
-		BeanFactory bf = new BeanFactory(parent, resource);
+		BeanFactory bf = BeanFactory.of(parent, resource);
 		bf.addBean(BeanFactory.class, bf);
 
 		if (x == null)
@@ -4555,7 +4752,11 @@ public class RestContext extends BeanContext {
 	 * @throws Exception An error occurred.
 	 */
 	protected RestMethodsBuilder createRestMethods(Object resource) throws Exception {
-		RestMethodsBuilder x = new RestMethodsBuilder();
+		RestMethodsBuilder x = RestMethods
+			.create()
+			.beanFactory(rootBeanFactory)
+			.implClass(getClassProperty(REST_restMethodsClass, RestMethods.class));
+
 		ClassInfo rci = ClassInfo.of(resource);
 
 		for (MethodInfo mi : rci.getPublicMethods()) {
@@ -4575,8 +4776,12 @@ public class RestContext extends BeanContext {
 					if (mi.isNotPublic())
 						throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
-					RestMethodContextBuilder rmcb = new RestMethodContextBuilder(mi.inner(), this);
-					RestMethodContext rmc = rmcb.build();
+					RestMethodContext rmc = RestMethodContext
+						.create(mi.inner(), this)
+						.beanFactory(rootBeanFactory)
+						.implClass(getClassProperty(REST_methodContextClass, RestMethodContext.class))
+						.build();
+
 					String httpMethod = rmc.getHttpMethod();
 
 					// RRPC is a special case where a method returns an interface that we
@@ -4584,9 +4789,11 @@ public class RestContext extends BeanContext {
 					// We override the CallMethod.invoke() method to insert our logic.
 					if ("RRPC".equals(httpMethod)) {
 
-						RestMethodContext smb = new RestMethodContextBuilder(mi.inner(), this)
+						RestMethodContext smb = RestMethodContext
+							.create(mi.inner(), this)
 							.dotAll()
-							.context(RrpcRestMethodContext.class)
+							.beanFactory(rootBeanFactory)
+							.implClass(RrpcRestMethodContext.class)
 							.build();
 						x
 							.add("GET", smb)
@@ -4601,6 +4808,56 @@ public class RestContext extends BeanContext {
 			}
 		}
 
+		return x;
+	}
+
+	/**
+	 * Creates the builder for the children of this resource.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The builder for the {@link RestChildren} object.
+	 * @throws Exception An error occurred.
+	 */
+	protected RestChildrenBuilder createRestChildren(Object resource) throws Exception {
+		RestChildrenBuilder x = RestChildren
+			.create()
+			.beanFactory(rootBeanFactory)
+			.implClass(getClassProperty(REST_restChildrenClass, RestChildren.class));
+
+		// Initialize our child resources.
+		for (Object o : getArrayProperty(REST_children, Object.class)) {
+			String path = null;
+
+			if (o instanceof RestChild) {
+				RestChild rc = (RestChild)o;
+				path = rc.path;
+				o = rc.resource;
+			}
+
+			RestContextBuilder cb = null;
+
+			if (o instanceof Class) {
+				Class<?> oc = (Class<?>)o;
+				// Don't allow specifying yourself as a child.  Causes an infinite loop.
+				if (oc == builder.resourceClass)
+					continue;
+				cb = RestContext.create(this, builder.inner, oc, null);
+				o = BeanFactory.of(beanFactory, resource).addBean(RestContextBuilder.class, cb).createBean(oc);
+			} else {
+				cb = RestContext.create(this, builder.inner, o.getClass(), o);
+			}
+
+			if (path != null)
+				cb.path(path);
+
+			RestContext cc = cb.init(o).build();
+
+			MethodInfo mi = ClassInfo.of(o).getMethod("setContext", RestContext.class);
+			if (mi != null)
+				mi.accessible().invoke(o, cc);
+
+			x.add(cc);
+		}
 		return x;
 	}
 
@@ -4835,7 +5092,7 @@ public class RestContext extends BeanContext {
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
-	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
+	 * {@link RestContextBuilder#path(String)} method.
 	 *
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
@@ -4847,6 +5104,23 @@ public class RestContext extends BeanContext {
 	 * @return The servlet path.
 	 */
 	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
+	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
+	 *
+	 * <p>
+	 * If path is not specified, returns <js>""</js>.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_path}
+	 * </ul>
+	 *
+	 * @return The full path.
+	 */
+	public String getFullPath() {
 		return fullPath;
 	}
 
@@ -4938,7 +5212,7 @@ public class RestContext extends BeanContext {
 	 * 	Keys are the {@link Rest#path() @Rest(path)} annotation defined on the child resource.
 	 */
 	public Map<String,RestContext> getChildResources() {
-		return Collections.unmodifiableMap(childResources);
+		return restChildren.asMap();
 	}
 
 	/**
@@ -5351,7 +5625,7 @@ public class RestContext extends BeanContext {
 		List<ClassInfo> pt = mi.getParamTypes();
 		RestParam[] rp = new RestParam[pt.size()];
 
-		beanFactory = new BeanFactory(beanFactory, getResource());
+		beanFactory = BeanFactory.of(beanFactory, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
 			ParamInfo pi = mi.getParam(i);
@@ -5384,7 +5658,7 @@ public class RestContext extends BeanContext {
 		List<ClassInfo> pt = mi.getParamTypes();
 		RestParam[] rp = new RestParam[pt.size()];
 
-		beanFactory = new BeanFactory(beanFactory, getResource());
+		beanFactory = BeanFactory.of(beanFactory, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
 			ParamInfo pi = mi.getParam(i);
@@ -5499,24 +5773,20 @@ public class RestContext extends BeanContext {
 			}
 
 			// If this resource has child resources, try to recursively call them.
-			String pi = call.getPathInfoUndecoded();
-			if ((! childResources.isEmpty()) && pi != null && ! pi.equals("/")) {
-				for (RestContext rc : getChildResources().values()) {
-					UrlPathMatcher upp = rc.pathMatcher;
-					UrlPathMatch uppm = upp.match(call.getUrlPath());
-					if (uppm != null) {
-						if (! uppm.hasEmptyVars()) {
-							call.pathVars(uppm.getVars());
-							HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
-								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
-								.servletPath(call.getServletPath() + uppm.getPrefix());
-							rc.execute(rc.getResource(), childRequest, call.getResponse());  // TODO - resource needs to be dynamically retrieved.
-						} else {
-							call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
-						}
-						return;
-					}
+			Optional<RestChildMatch> childMatch = restChildren.findMatch(call);
+			if (childMatch.isPresent()) {
+				UrlPathMatch uppm = childMatch.get().getPathMatch();
+				RestContext rc = childMatch.get().getChildContext();
+				if (! uppm.hasEmptyVars()) {
+					call.pathVars(uppm.getVars());
+					HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
+						.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+						.servletPath(call.getServletPath() + uppm.getPrefix());
+					rc.execute(rc.getResource(), childRequest, call.getResponse());
+				} else {
+					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 				}
+				return;
 			}
 
 			if (isDebug(call))
@@ -5835,8 +6105,7 @@ public class RestContext extends BeanContext {
 				throw new ServletException(e.unwrap());
 			}
 		}
-		for (RestContext childContext : this.childResources.values())
-			childContext.postInit();
+		restChildren.postInit();
 		return this;
 	}
 
@@ -5849,8 +6118,7 @@ public class RestContext extends BeanContext {
 	public RestContext postInitChildFirst() throws ServletException {
 		if (initialized.get())
 			return this;
-		for (RestContext childContext : this.childResources.values())
-			childContext.postInitChildFirst();
+		restChildren.postInitChildFirst();
 		for (MethodInvoker x : postInitChildFirstMethods) {
 			try {
 				x.invokeUsingFactory(beanFactory, getResource());
@@ -5863,7 +6131,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Called during servlet initialization to invoke all {@link HookEvent#DESTROY} methods.
+	 * Called during servlet destruction to invoke all {@link HookEvent#DESTROY} methods.
 	 */
 	protected void destroy() {
 		for (MethodInvoker x : destroyMethods) {
@@ -5874,11 +6142,7 @@ public class RestContext extends BeanContext {
 			}
 		}
 
-		for (RestContext r : childResources.values()) {
-			r.destroy();
-			if (r.getResource() instanceof Servlet)
-				((Servlet)r.getResource()).destroy();
-		}
+		restChildren.destroy();
 	}
 
 	/**

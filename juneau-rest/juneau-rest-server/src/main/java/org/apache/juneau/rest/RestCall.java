@@ -60,7 +60,7 @@ public class RestCall {
 	public RestCall(Object resource, RestContext context, HttpServletRequest req, HttpServletResponse res) {
 		this.context = context;
 		this.resource = resource;
-		beanFactory = new BeanFactory(context.rootBeanFactory,  resource);
+		beanFactory = BeanFactory.of(context.rootBeanFactory, resource);
 		beanFactory.addBean(RestContext.class, context);
 		request(req).response(res);
 	}

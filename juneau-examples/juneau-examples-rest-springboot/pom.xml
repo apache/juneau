@@ -37,7 +37,6 @@
 		<!-- Java 8 required because Jetty requires it. -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<springframework.version>2.0.1.RELEASE</springframework.version>
 	</properties>
 
 
@@ -59,7 +58,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${springframework.version}</version>
+			<version>${springboot.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -87,6 +86,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${springboot.version}</version>
 				<executions>
 					<execution>
 						<goals>

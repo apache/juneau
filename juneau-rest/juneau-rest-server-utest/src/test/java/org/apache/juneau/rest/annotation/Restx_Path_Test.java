@@ -30,20 +30,20 @@ public class Restx_Path_Test {
 	public static class A  {
 		@RestMethod(path="/")
 		public String a(RestContext c) {
-			return "A-" + c.getPath();
+			return "A-" + c.getFullPath();
 		}
 	}
 	@Rest(path="/p1", children={A2.class})
 	public static class A1 {
 		@RestMethod(path="/")
 		public String a(RestContext c) {
-			return "A01-" + c.getPath();
+			return "A01-" + c.getFullPath();
 		}
 	}
 	public static class A2a  {
 		@RestMethod(path="/")
 		public String a(RestContext c) {
-			return "A02a-" + c.getPath();
+			return "A02a-" + c.getFullPath();
 		}
 	}
 	@Rest(path="/p2")

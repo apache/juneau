@@ -74,7 +74,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return A new bean factory.
 	 */
 	public BeanFactory createBeanFactory(Optional<BeanFactory> parent) {
-		return new BeanFactory(parent.orElse(null), this);
+		return BeanFactory.of(parent.orElse(null), this);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public abstract class RestServlet extends HttpServlet {
 	public synchronized String getPath() {
 		RestContext context = this.context.get();
 		if (context != null)
-			return context.getPath();
+			return context.getFullPath();
 		ClassInfo ci = ClassInfo.of(getClass());
 		String path = "";
 		for (Rest rr : ci.getAnnotations(Rest.class))

@@ -65,7 +65,7 @@ import org.apache.juneau.utils.*;
 @ConfigurableContext(nocache=true)
 public class RestMethodContext extends BeanContext implements Comparable<RestMethodContext>  {
 
-	/** Represents a null value for the {@link RestMethod#context()} annotation.*/
+	/** Represents a null value for the {@link RestMethod#contextClass()} annotation.*/
 	@SuppressWarnings("javadoc")
 	public static final class Null extends RestMethodContext {
 		public Null(RestMethodContextBuilder builder) throws Exception {
@@ -168,18 +168,20 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  REST method context class.
 	 *
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_context RESTMETHOD_context}
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.context.c"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_contextClass RESTMETHOD_contextClass}
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.contextClass.c"</js>
 	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestMethodContext}&gt;</c>
 	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestMethodContext}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#context()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#methodContextClass()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#contextClass()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#context(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#methodContextClass(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestMethodContextBuilder#contextClass(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -188,12 +190,48 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the functions are implemented.
 	 *
 	 * <p>
-	 * The subclass must provide the following:
+	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
-	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestMethodContextBuilder}.
+	 * 	<li>{@link RestMethodContextBuilder} - The builder for the object.
+	 * 	<li>Any beans found in the specified {@link #REST_beanFactory bean factory}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanFactory bean factory}.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
+	 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
+	 * 	<jk>public</jk> MyRestMethodContext <jk>extends</jk> RestMethodContext {
+	 *
+	 * 		<jk>private final</jk> Optional&lt;? <jk>extends</jk> Supplier&lt;Object&gt;&gt; <jf>fooSupplier</jf>;
+	 *
+	 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
+	 * 		<jk>public</jk> MyRestMethodContext(RestMethodContextBuilder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-><jk>null</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Override the method used to create default request attributes.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>protected</jk> NamedAttributeList createDefaultRequestAttributes(Object <jv>resource</jv>, BeanFactory <jv>beanFactory</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return super</jk>
+	 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanFactory</jv>, <jv>method</jv>, <jv>context</jv>)
+	 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-><jf>fooSupplier</jf>.get());
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 * 		<ja>@RestMethod</ja>(contextClass=MyRestMethodContext.<jk>class</jk>)
+	 * 		<jk>public</jk> Object getFoo(RequestAttributes <jv>attributes</jv>) {
+	 * 			<jk>return</jk> <jv>attributes</jv>.get(<js>"foo"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
-	public static final String RESTMETHOD_context = PREFIX + ".context.c";
+	public static final String RESTMETHOD_contextClass = PREFIX + ".contextClass.c";
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -675,6 +713,17 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final int hierarchyDepth;
 
 	/**
+	 * Creator.
+	 *
+	 * @param method The Java method this context belongs to.
+	 * @param context The Java class context.
+	 * @return A new builder.
+	 */
+	public static RestMethodContextBuilder create(java.lang.reflect.Method method, RestContext context) {
+		return new RestMethodContextBuilder(method, context);
+	}
+
+	/**
 	 * Context constructor.
 	 *
 	 * @param builder The builder for this object.
@@ -693,7 +742,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			mi = MethodInfo.of(method).accessible();
 			Object r = context.getResource();
 
-			beanFactory = new BeanFactory(context.rootBeanFactory, r)
+			beanFactory = BeanFactory.of(context.rootBeanFactory, r)
 				.addBean(RestMethodContext.class, this)
 				.addBean(Method.class, method)
 				.addBean(PropertyStore.class, ps);

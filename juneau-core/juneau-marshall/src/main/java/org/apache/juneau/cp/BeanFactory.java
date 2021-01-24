@@ -61,6 +61,16 @@ public class BeanFactory {
 	}
 
 	/**
+	 * Static creator.
+	 *
+	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
+	 * @return A new {@link BeanFactory} object.
+	 */
+	public static BeanFactory of(BeanFactory parent) {
+		return new BeanFactory(parent, null);
+	}
+
+	/**
 	 * Default constructor.
 	 */
 	public BeanFactory() {
