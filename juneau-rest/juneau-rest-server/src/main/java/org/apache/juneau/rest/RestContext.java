@@ -18,8 +18,10 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.Enablement.*;
 import static java.util.Collections.*;
+import static java.util.logging.Level.*;
 import static java.util.Arrays.*;
 
 import java.io.*;
@@ -63,6 +65,7 @@ import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.params.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
@@ -2893,6 +2896,34 @@ public class RestContext extends BeanContext {
 	public static final String REST_staticFilesDefault = PREFIX + ".staticFilesDefault.o";
 
 	/**
+	 * Configuration property:  Swagger provider class.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_swaggerProviderClass REST_swaggerProviderClass}
+	 * 	<li><b>Name:</b>  <js>"RestContext.swaggerProviderClass.c"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.SwaggerProvider}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.SwaggerProvider}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#infoProvider()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#infoProvider(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#infoProvider(RestInfoProvider)}
+	 * 		</ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The default static file finder.
+	 * <p>
+	 * This setting is inherited from the parent context.
+	 */
+	public static final String REST_swaggerProviderClass = PREFIX + ".swaggerProviderClass.c";
+
+	/**
 	 * Configuration property:  Supported accept media types.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3421,6 +3452,7 @@ public class RestContext extends BeanContext {
 	private final StackTraceStore stackTraceStore;
 	private final Logger logger;
 	private final RestInfoProvider infoProvider;
+	private final SwaggerProvider swaggerProvider;
 	private final HttpException initException;
 	private final RestContext parentContext;
 	final BeanFactory rootBeanFactory;
@@ -3503,9 +3535,9 @@ public class RestContext extends BeanContext {
 			parentContext = builder.parentContext;
 			ClassInfo rci = ClassInfo.ofProxy(r);
 
-			rootBeanFactory = createRootBeanFactory(r);
+			rootBeanFactory = createBeanFactory(r);
 
-			beanFactory = createBeanFactory(r);
+			beanFactory = BeanFactory.of(rootBeanFactory, r);
 			beanFactory.addBean(BeanFactory.class, beanFactory);
 			beanFactory.addBean(RestContext.class, this);
 			beanFactory.addBean(Object.class, r);
@@ -3597,10 +3629,11 @@ public class RestContext extends BeanContext {
 			preCallMethods = createPreCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 			postCallMethods = createPostCallMethods(r).stream().map(this::toRestMethodInvoker).toArray(RestMethodInvoker[]:: new);
 
-			restMethods = createRestMethods(r).build();
-			restChildren = createRestChildren(r).build();
+			restMethods = createRestMethods(r);
+			restChildren = createRestChildren(r);
 
 			infoProvider = createInfoProvider(r, beanFactory);
+			swaggerProvider = createSwaggerProvider(r, beanFactory);
 
 		} catch (HttpException e) {
 			_initException = e;
@@ -3622,7 +3655,83 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Instantiates the bean factory for this REST resource.
+	 *
+	 * <p>
+	 * The bean factory is typically used for passing in injected beans into REST contexts and for storing beans
+	 * created by the REST context.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself if it's an instance of {@link BeanFactory}.
+	 * 	<li>Looks for {@link #REST_beanFactory} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#beanFactory(Class)}/{@link RestContextBuilder#beanFactory(BeanFactory)}
+	 * 			<li>{@link Rest#beanFactory()}.
+	 * 		</ul>
+	 * 	<li>Instantiates a new {@link BeanFactory}.
+	 * 		Uses the parent context's root bean factory as the parent bean factory if this is a child resource.
+	 * </ul>
+	 *
+	 * <p>
+	 * Your REST class can also implement a create method called <c>createBeanFactory()</c> to instantiate your own
+	 * bean factory.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bpcode w800'>
+	 * 	<ja>@Rest</ja>
+	 * 	<jk>public class</jk> MyRestClass {
+	 *
+	 * 		<jk>public</jk> BeanFactory createBeanFactory(Optional&lt;BeanFactory&gt; <jv>parentBeanFactory</jv>) <jk>throws</jk> Exception {
+	 * 			<jc>// Create your own bean factory here.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The <c>createBeanFactory()</c> method can be static or non-static can contain any of the following arguments:
+	 * <ul>
+	 * 	<li><c>{@link Optional}&lt;{@link BeanFactory}&gt;</c> - The parent root bean factory if this is a child resource.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_beanFactory}
+	 * </ul>
+	 *
+	 * @param resource The REST resource object.
+	 * @return The bean factory for this REST resource.
+	 * @throws Exception If bean factory could not be instantiated.
+	 */
+	protected BeanFactory createBeanFactory(Object resource) throws Exception {
+
+		BeanFactory x = null;
+
+		if (resource instanceof BeanFactory)
+			x = (BeanFactory)resource;
+
+		if (x == null && parentContext != null)
+			x = parentContext.rootBeanFactory;
+
+		if (x == null)
+			x = getInstanceProperty(REST_beanFactory, BeanFactory.class, null, x);
+
+		x = BeanFactory
+			.of(x, resource)
+			.addBean(BeanFactory.class, x)
+			.beanCreateMethodFinder(BeanFactory.class, resource)
+			.find("createBeanFactory")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
 	 * Instantiates the file finder for this REST resource.
+	 *
+	 * <p>
+	 * The file finder is used to retrieve localized files from the classpath.
 	 *
 	 * <p>
 	 * Instantiates based on the following logic:
@@ -3633,23 +3742,44 @@ public class RestContext extends BeanContext {
 	 * 			<li>{@link RestContextBuilder#fileFinder(Class)}/{@link RestContextBuilder#fileFinder(FileFinder)}
 	 * 			<li>{@link Rest#fileFinder()}.
 	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createFileFinder()</> method that returns {@link FileFinder} on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanFactory}
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean factory registered in this context (including any Spring beans).
+	 * 	<li>Resolves it via the {@link #createBeanFactory(Object) bean factory} registered in this context (including Spring beans if using SpringRestServlet).
 	 * 	<li>Looks for value in {@link #REST_fileFinderDefault} setting.
-	 * 	<li>Instantiates a {@link BasicFileFinder}.
+	 * 	<li>Instantiates via {@link #createFileFinderBuilder(Object, BeanFactory)}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Your REST class can also implement a create method called <c>createFileFinder()</c> to instantiate your own
+	 * file finder.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bpcode w800'>
+	 * 	<ja>@Rest</ja>
+	 * 	<jk>public class</jk> MyRestClass {
+	 *
+	 * 		<jk>public</jk> FileFinder createFileFinder() <jk>throws</jk> Exception {
+	 * 			<jc>// Create your own file finder here.</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The <c>createFileFinder()</c> method can be static or non-static can contain any of the following arguments:
+	 * <ul>
+	 * 	<li>{@link FileFinder} - The file finder that would have been returned by this method.
+	 * 	<li>{@link FileFinderBuilder} - The file finder returned by {@link #createFileFinderBuilder(Object,BeanFactory)}.
+	 * 	<li>{@link RestContext} - This REST context.
+	 * 	<li>{@link BeanFactory} - The bean factory of this REST context.
+	 * 	<li>Any {@doc RestInjection injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_fileFinder}
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
-	 * @seealso #REST_fileFinder
 	 */
 	protected FileFinder createFileFinder(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -3668,12 +3798,45 @@ public class RestContext extends BeanContext {
 			x = getInstanceProperty(REST_fileFinderDefault, FileFinder.class, null, beanFactory);
 
 		if (x == null)
-			x = new BasicFileFinder(this);
+			x = createFileFinderBuilder(resource, beanFactory).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
 			.addBean(FileFinder.class, x)
 			.beanCreateMethodFinder(FileFinder.class, resource)
+			.find("createFileFinder")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the file finder builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createFileFinder(Object, BeanFactory)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The file finder builder for this REST resource.
+	 * @throws Exception If file finder builder could not be instantiated.
+	 */
+	protected FileFinderBuilder createFileFinderBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		FileFinderBuilder x = FileFinder
+			.create()
+			.dir("static")
+			.dir("htdocs")
+			.cp(getResourceClass(), "htdocs", true)
+			.cp(getResourceClass(), "/htdocs", true)
+			.caching(1_000_000)
+			.exclude("(?i).*\\.(class|properties)");
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(FileFinderBuilder.class, x)
+			.beanCreateMethodFinder(FileFinderBuilder.class, resource)
 			.find("createFileFinder")
 			.withDefault(x)
 			.run();
@@ -3704,11 +3867,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicRestInfoProvider}.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_infoProvider}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The info provider for this REST resource.
 	 * @throws Exception If info provider could not be instantiated.
-	 * @seealso #REST_infoProvider
 	 */
 	protected RestInfoProvider createInfoProvider(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -3762,11 +3928,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicStaticFiles}.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_staticFiles}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
-	 * @seealso #REST_staticFiles
 	 */
 	protected StaticFiles createStaticFiles(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -3785,12 +3954,46 @@ public class RestContext extends BeanContext {
 			x = getInstanceProperty(REST_staticFilesDefault, StaticFiles.class, null, beanFactory);
 
 		if (x == null)
-			x = new BasicStaticFiles(this);
+			x = createStaticFilesBuilder(resource, beanFactory).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
 			.addBean(StaticFiles.class, x)
 			.beanCreateMethodFinder(StaticFiles.class, resource)
+			.find("createStaticFiles")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the static files builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createStaticFiles(Object, BeanFactory)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The static files builder for this REST resource.
+	 * @throws Exception If static files builder could not be instantiated.
+	 */
+	protected StaticFilesBuilder createStaticFilesBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		StaticFilesBuilder x = StaticFiles
+			.create()
+			.dir("static")
+			.dir("htdocs")
+			.cp(getResourceClass(), "htdocs", true)
+			.cp(getResourceClass(), "/htdocs", true)
+			.caching(1_000_000)
+			.exclude("(?i).*\\.(class|properties)")
+			.headers(CacheControl.of("max-age=86400, public"));
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(StaticFilesBuilder.class, x)
+			.beanCreateMethodFinder(StaticFilesBuilder.class, resource)
 			.find("createStaticFiles")
 			.withDefault(x)
 			.run();
@@ -3823,11 +4026,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a {@link BasicFileFinder}.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_callLogger}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The file finder for this REST resource.
 	 * @throws Exception If file finder could not be instantiated.
-	 * @seealso #REST_callLogger
 	 */
 	protected RestLogger createCallLogger(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -3846,7 +4052,7 @@ public class RestContext extends BeanContext {
 			x = getInstanceProperty(REST_callLoggerDefault, RestLogger.class, null, beanFactory);
 
 		if (x == null)
-			x = new BasicRestLogger(this);
+			x = createCallLoggerBuilder(resource, beanFactory).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -3860,112 +4066,49 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Instantiates the bean factory for this REST resource.
+	 * Instantiates the call logger builder for this REST resource.
 	 *
 	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link BeanFactory}.
-	 * 	<li>Looks for {@link #REST_beanFactory} value set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#beanFactory(Class)}/{@link RestContextBuilder#beanFactory(BeanFactory)}
-	 * 			<li>{@link Rest#beanFactory()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>beanFactory()</> method that returns {@link BeanFactory} on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanFactory} - The parent resource bean factory if this is a child.
-	 * 			<li>Any {@doc RestInjection injected beans}.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean factory registered in this context.
-	 * 	<li>Instantiates a {@link BeanFactory}.
-	 * </ul>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createCallLogger(Object, BeanFactory)} method.
 	 *
 	 * @param resource The REST resource object.
-	 * @return The bean factory for this REST resource.
-	 * @throws Exception If bean factory could not be instantiated.
-	 * @seealso #REST_beanFactory
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The call logger builder for this REST resource.
+	 * @throws Exception If call logger builder could not be instantiated.
 	 */
-	protected BeanFactory createBeanFactory(Object resource) throws Exception {
+	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, BeanFactory beanFactory) throws Exception {
 
-		BeanFactory x = null;
+		RestLoggerBuilder x = RestLogger
+			.create()
+			.normalRules(  // Rules when debugging is not enabled.
+				RestLogger.createRule()  // Log 500+ errors with status-line and header information.
+					.statusFilter(a -> a >= 500)
+					.level(SEVERE)
+					.requestDetail(HEADER)
+					.responseDetail(HEADER)
+					.build(),
+				RestLogger.createRule()  // Log 400-500 errors with just status-line information.
+					.statusFilter(a -> a >= 400)
+					.level(WARNING)
+					.requestDetail(STATUS_LINE)
+					.responseDetail(STATUS_LINE)
+					.build()
+			)
+			.debugRules(  // Rules when debugging is enabled.
+				RestLogger.createRule()  // Log everything with full details.
+					.level(SEVERE)
+					.requestDetail(ENTITY)
+					.responseDetail(ENTITY)
+					.build()
+			)
+			.logger(getLogger())
+			.stackTraceStore(getStackTraceStore());
 
-		if (resource instanceof BeanFactory)
-			x = (BeanFactory)resource;
-
-		BeanFactory bf = createRootBeanFactory(resource)
-			.addBean(RestContext.class, this)
-			.addBean(BeanFactory.class, parentContext == null ? null : parentContext.rootBeanFactory)
-			.addBean(PropertyStore.class, getPropertyStore())
-			.addBean(Object.class, resource);
-
-		if (x == null)
-			x = getInstanceProperty(REST_beanFactory, BeanFactory.class, null, bf);
-
-		if (x == null)
-			x = bf;
-
-		x = bf
-			.beanCreateMethodFinder(BeanFactory.class, resource)
-			.find("createBeanFactory")
-			.withDefault(x)
-			.run();
-
-		return x;
-	}
-
-	/**
-	 * Instantiates the root bean factory for this REST resource.
-	 *
-	 * <p>
-	 * The root bean factory is the factory used for passing in injected beans.
-	 * Beans created by this context are not added to this factory.
-	 *
-	 * <p>
-	 * Instantiates based on the following logic:
-	 * <ul>
-	 * 	<li>Returns the resource class itself is an instance of {@link BeanFactory}.
-	 * 	<li>Looks for {@link #REST_beanFactory} value set via any of the following:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#beanFactory(Class)}/{@link RestContextBuilder#beanFactory(BeanFactory)}
-	 * 			<li>{@link Rest#beanFactory()}.
-	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>beanFactory()</> method that returns {@link BeanFactory} on the
-	 * 		resource class with any of the following arguments:
-	 * 		<ul>
-	 * 			<li>{@link RestContext}
-	 * 			<li>{@link BeanFactory} - The parent resource bean factory if this is a child.
-	 * 		</ul>
-	 * 	<li>Resolves it via the bean factory registered in this context.
-	 * 	<li>Instantiates a {@link BeanFactory}.
-	 * </ul>
-	 *
-	 * @param resource The REST resource object.
-	 * @return The bean factory for this REST resource.
-	 * @throws Exception If bean factory could not be instantiated.
-	 * @seealso #REST_beanFactory
-	 */
-	protected BeanFactory createRootBeanFactory(Object resource) throws Exception {
-
-		BeanFactory x = null;
-
-		if (resource instanceof BeanFactory)
-			x = (BeanFactory)resource;
-
-		BeanFactory parent = parentContext == null ? null : parentContext.rootBeanFactory;
-		BeanFactory bf = BeanFactory.of(parent, resource);
-		bf.addBean(BeanFactory.class, bf);
-
-		if (x == null)
-			x = getInstanceProperty(REST_beanFactory, BeanFactory.class, null, bf);
-
-		if (x == null)
-			x = bf;
-
-		x = bf
-			.beanCreateMethodFinder(BeanFactory.class, resource)
-			.find("createBeanFactory")
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(RestLoggerBuilder.class, x)
+			.beanCreateMethodFinder(RestLoggerBuilder.class, resource)
+			.find("createCallLogger")
 			.withDefault(x)
 			.run();
 
@@ -3994,11 +4137,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>ResponseHandler[0]</c>.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_responseHandlers}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The response handlers for this REST resource.
 	 * @throws Exception If response handlers could not be instantiated.
-	 * @seealso #REST_responseHandlers
 	 */
 	protected ResponseHandlerList createResponseHandlers(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -4042,12 +4188,15 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>Serializer[0]</c>.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_serializers}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @param ps The property store to apply to all serialiers.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
-	 * @seealso #REST_serializers
 	 */
 	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 
@@ -4102,12 +4251,15 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates a <c>Parser[0]</c>.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_parsers}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @param ps The property store to apply to all serialiers.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
-	 * @seealso #REST_parsers
 	 */
 	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
 
@@ -4163,11 +4315,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates an {@link OpenApiSerializer}.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_partSerializer}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
-	 * @seealso #REST_partSerializer
 	 */
 	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -4219,11 +4374,14 @@ public class RestContext extends BeanContext {
 	 * 	<li>Instantiates an {@link OpenApiSerializer}.
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_partParser}
+	 * </ul>
+	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
-	 * @seealso #REST_partParser
 	 */
 	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory) throws Exception {
 
@@ -4272,7 +4430,6 @@ public class RestContext extends BeanContext {
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The REST method parameter resolvers for this REST resource.
 	 * @throws Exception If parameter resolvers could not be instantiated.
-	 * @seealso #REST_paramResolvers
 	 */
 	@SuppressWarnings("unchecked")
 	protected RestParamList createRestParams(Object resource, BeanFactory beanFactory) throws Exception {
@@ -4344,7 +4501,6 @@ public class RestContext extends BeanContext {
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
 	 * @return The REST method parameter resolvers for this REST resource.
 	 * @throws Exception If parameter resolvers could not be instantiated.
-	 * @seealso #REST_paramResolvers
 	 */
 	@SuppressWarnings("unchecked")
 	protected RestParamList createHookMethodParams(Object resource, BeanFactory beanFactory) throws Exception {
@@ -4446,14 +4602,10 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If JSON schema generator could not be instantiated.
 	 */
 	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory) throws Exception {
-
 		JsonSchemaGenerator x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
 
 		if (x == null)
-			x = JsonSchemaGenerator
-				.create()
-				.apply(getPropertyStore())
-				.build();
+			x = createJsonSchemaGeneratorBuilder(resource, beanFactory).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -4464,6 +4616,116 @@ public class RestContext extends BeanContext {
 			.run();
 
 		return x;
+	}
+
+	/**
+	 * Instantiates the JSON-schema generator builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createJsonSchemaGenerator(Object, BeanFactory)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The JSON-schema generator builder for this REST resource.
+	 * @throws Exception If JSON-schema generator builder could not be instantiated.
+	 */
+	protected JsonSchemaGeneratorBuilder createJsonSchemaGeneratorBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+		JsonSchemaGeneratorBuilder x = JsonSchemaGenerator
+			.create()
+			.apply(getPropertyStore());
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(JsonSchemaGeneratorBuilder.class, x)
+			.beanCreateMethodFinder(JsonSchemaGeneratorBuilder.class, resource)
+			.find("createJsonSchemaGenerator")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the REST info provider for this REST resource.
+	 *
+	 * <p>
+	 * Instantiates based on the following logic:
+	 * <ul>
+	 * 	<li>Returns the resource class itself is an instance of {@link RestInfoProvider}.
+	 * 	<li>Looks for {@link #REST_infoProvider} value set via any of the following:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#infoProvider(Class)}/{@link RestContextBuilder#infoProvider(RestInfoProvider)}
+	 * 			<li>{@link Rest#infoProvider()}.
+	 * 		</ul>
+	 * 	<li>Looks for a static or non-static <c>createInfoProvider()</> method that returns {@link RestInfoProvider} on the
+	 * 		resource class with any of the following arguments:
+	 * 		<ul>
+	 * 			<li>{@link RestContext}
+	 * 			<li>{@link BeanFactory}
+	 * 			<li>Any {@doc RestInjection injected beans}.
+	 * 		</ul>
+	 * 	<li>Resolves it via the bean factory registered in this context.
+	 * 	<li>Instantiates a {@link BasicRestInfoProvider}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link #REST_infoProvider}
+	 * </ul>
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The info provider for this REST resource.
+	 * @throws Exception If info provider could not be instantiated.
+	 */
+	protected SwaggerProvider createSwaggerProvider(Object resource, BeanFactory beanFactory) throws Exception {
+		SwaggerProvider x = beanFactory.getBean(SwaggerProvider.class).orElse(null);
+
+		if (x == null)
+			x = createSwaggerProviderBuilder(resource, beanFactory).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(SwaggerProvider.class, x)
+			.beanCreateMethodFinder(SwaggerProvider.class, resource)
+			.find("createSwaggerProvider")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the REST API builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createSwaggerProvider(Object, BeanFactory)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The REST API builder for this REST resource.
+	 * @throws Exception If REST API builder could not be instantiated.
+	 */
+	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		SwaggerProviderBuilder x = SwaggerProvider
+				.create()
+				.beanFactory(beanFactory)
+				.fileFinder(getFileFinder())
+				.messages(getMessages())
+				.varResolver(getVarResolver())
+				.jsonSchemaGenerator(createJsonSchemaGenerator(resource, beanFactory))
+				.implClass(getClassProperty(REST_swaggerProviderClass, SwaggerProvider.class, SwaggerProvider.class));
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(SwaggerProviderBuilder.class, x)
+			.beanCreateMethodFinder(SwaggerProviderBuilder.class, resource)
+			.find("createSwaggerProvider")
+			.withDefault(x)
+			.run();
+
+		return x;
+
 	}
 
 	/**
@@ -4723,21 +4985,58 @@ public class RestContext extends BeanContext {
 	 * @throws Exception An error occurred.
 	 */
 	protected Messages createMessages(Object resource) throws Exception {
+
+		Messages x = createMessagesBuilder(resource).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(Messages.class, x)
+			.beanCreateMethodFinder(Messages.class, resource)
+			.find("createMessages")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the Messages builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createMessages(Object)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The messages builder for this REST resource.
+	 * @throws Exception If messages builder could not be instantiated.
+	 */
+	protected MessagesBuilder createMessagesBuilder(Object resource) throws Exception {
+
 		Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class);
-		Messages msgs = null;
+		MessagesBuilder x = null;
+
 		for (int i = mbl.length-1; i >= 0; i--) {
 			Class<?> c = firstNonNull(mbl[i].getA(), resource.getClass());
 			String value = mbl[i].getB();
 			if (isJsonObject(value,true)) {
-				MessagesString x = SimpleJson.DEFAULT.read(value, MessagesString.class);
-				msgs = Messages.create(c).name(x.name).baseNames(split(x.baseNames, ',')).locale(x.locale).parent(msgs).build();
+				MessagesString ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
+				x = Messages.create(c).name(ms.name).baseNames(split(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
 			} else {
-				msgs = Messages.create(c).name(value).parent(msgs).build();
+				x = Messages.create(c).name(value).parent(x == null ? null : x.build());
 			}
 		}
-		if (msgs == null)
-			msgs = Messages.create(resource.getClass()).build();
-		return msgs;
+
+		if (x == null)
+			x = Messages.create(resource.getClass());
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(MessagesBuilder.class, x)
+			.beanCreateMethodFinder(MessagesBuilder.class, resource)
+			.find("createMessages")
+			.withDefault(x)
+			.run();
+
+		return x;
 	}
 
 	private static class MessagesString {
@@ -4753,7 +5052,33 @@ public class RestContext extends BeanContext {
 	 * @return The builder for the {@link RestMethods} object.
 	 * @throws Exception An error occurred.
 	 */
-	protected RestMethodsBuilder createRestMethods(Object resource) throws Exception {
+	protected RestMethods createRestMethods(Object resource) throws Exception {
+
+		RestMethods x = createRestMethodsBuilder(resource).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(RestMethods.class, x)
+			.beanCreateMethodFinder(RestMethods.class, resource)
+			.find("createRestMethods")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the REST methods builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createRestMethods(Object)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The REST methods builder for this REST resource.
+	 * @throws Exception If REST methods builder could not be instantiated.
+	 */
+	protected RestMethodsBuilder createRestMethodsBuilder(Object resource) throws Exception {
+
 		RestMethodsBuilder x = RestMethods
 			.create()
 			.beanFactory(rootBeanFactory)
@@ -4810,6 +5135,14 @@ public class RestContext extends BeanContext {
 			}
 		}
 
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(RestMethodsBuilder.class, x)
+			.beanCreateMethodFinder(RestMethodsBuilder.class, resource)
+			.find("createRestMethods")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -4820,7 +5153,33 @@ public class RestContext extends BeanContext {
 	 * @return The builder for the {@link RestChildren} object.
 	 * @throws Exception An error occurred.
 	 */
-	protected RestChildrenBuilder createRestChildren(Object resource) throws Exception {
+	protected RestChildren createRestChildren(Object resource) throws Exception {
+
+		RestChildren x = createRestChildrenBuilder(resource).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(RestChildren.class, x)
+			.beanCreateMethodFinder(RestChildren.class, resource)
+			.find("createRestChildren")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the REST children builder for this REST resource.
+	 *
+	 * <p>
+	 * Allows subclasses to intercept and modify the builder used by the {@link #createRestChildren(Object)} method.
+	 *
+	 * @param resource The REST resource object.
+	 * @return The REST children builder for this REST resource.
+	 * @throws Exception If REST children builder could not be instantiated.
+	 */
+	protected RestChildrenBuilder createRestChildrenBuilder(Object resource) throws Exception {
+
 		RestChildrenBuilder x = RestChildren
 			.create()
 			.beanFactory(rootBeanFactory)
@@ -4865,6 +5224,15 @@ public class RestContext extends BeanContext {
 
 			x.add(cc);
 		}
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(RestChildrenBuilder.class, x)
+			.beanCreateMethodFinder(RestChildrenBuilder.class, resource)
+			.find("createRestChildren")
+			.withDefault(x)
+			.run();
+
 		return x;
 	}
 
@@ -5174,6 +5542,21 @@ public class RestContext extends BeanContext {
 	 */
 	public RestInfoProvider getInfoProvider() {
 		return infoProvider;
+	}
+
+	/**
+	 * Returns the Swagger provider used by this resource.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_swaggerProviderClass}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The information provider for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public SwaggerProvider getSwaggerProvider() {
+		return swaggerProvider;
 	}
 
 	/**
