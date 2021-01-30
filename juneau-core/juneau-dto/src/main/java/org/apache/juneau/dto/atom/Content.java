@@ -17,9 +17,8 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -94,9 +93,12 @@ public class Content extends Text {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the source URI.
+	 * Bean property getter:  <property>src</property>.
 	 *
-	 * @return the source URI.
+	 * <p>
+	 * The source URI.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public URI getSrc() {
@@ -104,21 +106,48 @@ public class Content extends Text {
 	}
 
 	/**
-	 * Sets the source URI.
+	 * Bean property setter:  <property>src</property>.
+	 *
+	 * <p>
+	 * The source URI.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSrc(Object value) {
+		this.src = toURI(value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>src</property>.
 	 *
-	 * @param src The source URI.
+	 * <p>
+	 * The source URI.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> src() {
+		return Optional.ofNullable(src);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>src</property>.
+	 *
+	 * <p>
+	 * The source URI.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("src")
-	public Content src(Object src) {
-		this.src = toURI(src);
+	public Content src(Object value) {
+		setSrc(value);
 		return this;
 	}
 

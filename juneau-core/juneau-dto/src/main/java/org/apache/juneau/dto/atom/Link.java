@@ -14,6 +14,8 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -71,9 +73,12 @@ public class Link extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the href of the target of this link.
+	 * Bean property getter:  <property>href</property>.
 	 *
-	 * @return The href of the target of this link.
+	 * <p>
+	 * The href of the target of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getHref() {
@@ -81,21 +86,54 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Sets the href of the target of this link.
+	 * Bean property setter:  <property>href</property>.
 	 *
-	 * @param href The href of the target of this link.
+	 * <p>
+	 * The href of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setHref(String value) {
+		this.href = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>href</property>.
+	 *
+	 * <p>
+	 * The href of the target of this link.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> href() {
+		return Optional.ofNullable(href);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>href</property>.
+	 *
+	 * <p>
+	 * The href of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("href")
-	public Link href(String href) {
-		this.href = href;
+	public Link href(String value) {
+		setHref(value);
 		return this;
 	}
 
 	/**
-	 * Returns the rel of this link.
+	 * Bean property getter:  <property>rel</property>.
 	 *
-	 * @return The rel of this link.
+	 * <p>
+	 * The rel of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getRel() {
@@ -103,21 +141,54 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Sets the rel of this link.
+	 * Bean property setter:  <property>rel</property>.
 	 *
-	 * @param rel The rel of this link.
+	 * <p>
+	 * The rel of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setRel(String value) {
+		this.rel = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>rel</property>.
+	 *
+	 * <p>
+	 * The rel of this link.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> rel() {
+		return Optional.ofNullable(rel);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>rel</property>.
+	 *
+	 * <p>
+	 * The rel of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("rel")
-	public Link rel(String rel) {
-		this.rel = rel;
+	public Link rel(String value) {
+		setRel(value);
 		return this;
 	}
 
 	/**
-	 * Returns the content type of the target of this link.
+	 * Bean property getter:  <property>type</property>.
 	 *
-	 * @return The content type of the target of this link.
+	 * <p>
+	 * The content type of the target of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getType() {
@@ -125,7 +196,10 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Sets the content type of the target of this link.
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of the target of this link.
 	 *
 	 * <p>
 	 * Must be one of the following:
@@ -136,19 +210,49 @@ public class Link extends Common {
 	 * 	<li><jk>null</jk> (defaults to <js>"text"</js>)
 	 * </ul>
 	 *
-	 * @param type The content type of the target of this link.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setType(String value) {
+		this.type = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of the target of this link.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> type() {
+		return Optional.ofNullable(type);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("type")
-	public Link type(String type) {
-		this.type = type;
+	public Link type(String value) {
+		setType(value);
 		return this;
 	}
 
 	/**
-	 * Returns the language of the target of this link.
+	 * Bean property getter:  <property>hreflang</property>.
 	 *
-	 * @return The language of the target of this link.
+	 * <p>
+	 * The language of the target of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getHreflang() {
@@ -156,21 +260,54 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Sets the language of the target of this link.
+	 * Bean property setter:  <property>hreflang</property>.
 	 *
-	 * @param hreflang The language of the target of this link.
+	 * <p>
+	 * The language of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setHreflang(String value) {
+		this.hreflang = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>hreflang</property>.
+	 *
+	 * <p>
+	 * The language of the target of this link.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> hreflang() {
+		return Optional.ofNullable(hreflang);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>hreflang</property>.
+	 *
+	 * <p>
+	 * The language of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("hreflang")
-	public Link hreflang(String hreflang) {
-		this.hreflang = hreflang;
+	public Link hreflang(String value) {
+		setHreflang(value);
 		return this;
 	}
 
 	/**
-	 * Returns the title of the target of this link.
+	 * Bean property getter:  <property>title</property>.
 	 *
-	 * @return The title of the target of this link.
+	 * <p>
+	 * The title of the target of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getTitle() {
@@ -178,21 +315,54 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Sets the title of the target of this link.
+	 * Bean property setter:  <property>title</property>.
 	 *
-	 * @param title The title of the target of this link.
+	 * <p>
+	 * The title of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setTitle(String value) {
+		this.title = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>title</property>.
+	 *
+	 * <p>
+	 * The title of the target of this link.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> title() {
+		return Optional.ofNullable(title);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>title</property>.
+	 *
+	 * <p>
+	 * The title of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("title")
-	public Link title(String title) {
-		this.title = title;
+	public Link title(String value) {
+		setTitle(value);
 		return this;
 	}
 
 	/**
-	 * Returns the length of the contents of the target of this link.
+	 * Bean property getter:  <property>length</property>.
 	 *
-	 * @return The length of the contents of the target of this link.
+	 * <p>
+	 * The length of the contents of the target of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public Integer getLength() {
@@ -200,14 +370,44 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Sets the length of the contents of the target of this link.
+	 * Bean property setter:  <property>length</property>.
 	 *
-	 * @param length The length of the contents of the target of this link.
+	 * <p>
+	 * The length of the contents of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setLength(Integer value) {
+		this.length = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>length</property>.
+	 *
+	 * <p>
+	 * The length of the contents of the target of this link.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> length() {
+		return Optional.ofNullable(length);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>length</property>.
+	 *
+	 * <p>
+	 * The length of the contents of the target of this link.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("length")
-	public Link length(Integer length) {
-		this.length = length;
+	public Link length(Integer value) {
+		setLength(value);
 		return this;
 	}
 

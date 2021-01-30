@@ -14,8 +14,6 @@ package org.apache.juneau.dto.atom;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-
 /**
  * Represents an <c>atomSource</c> construct in the RFC4287 specification.
  *
@@ -58,98 +56,234 @@ public class Source extends CommonEntry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the generator info of this source.
+	 * Bean property getter:  <property>generator</property>.
 	 *
-	 * @return The generator info of this source.
+	 * <p>
+	 * The generator info of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Generator getGenerator() {
 		return generator;
 	}
 
 	/**
-	 * Sets the generator info of this source.
+	 * Bean property setter:  <property>generator</property>.
 	 *
-	 * @param generator The generator info of this source.
+	 * <p>
+	 * The generator info of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setGenerator(Generator value) {
+		this.generator = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>generator</property>.
+	 *
+	 * <p>
+	 * The generator info of this source.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Generator> generator() {
+		return Optional.ofNullable(generator);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>generator</property>.
+	 *
+	 * <p>
+	 * The generator info of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("generator")
-	public Source generator(Generator generator) {
-		this.generator = generator;
+	public Source generator(Generator value) {
+		setGenerator(value);
 		return this;
 	}
 
 	/**
-	 * Returns the icon of this source.
+	 * Bean property getter:  <property>icon</property>.
 	 *
-	 * @return The icon of this source.
+	 * <p>
+	 * The icon of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Icon getIcon() {
 		return icon;
 	}
 
 	/**
-	 * Sets the icon of this source.
+	 * Bean property setter:  <property>icon</property>.
 	 *
-	 * @param icon The icon of this source.
+	 * <p>
+	 * The icon of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setIcon(Icon value) {
+		this.icon = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>icon</property>.
+	 *
+	 * <p>
+	 * The icon of this source.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Icon> icon() {
+		return Optional.ofNullable(icon);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>icon</property>.
+	 *
+	 * <p>
+	 * The icon of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("icon")
-	public Source icon(Icon icon) {
-		this.icon = icon;
+	public Source icon(Icon value) {
+		setIcon(value);
 		return this;
 	}
 
 	/**
-	 * Returns the logo of this source.
+	 * Bean property getter:  <property>logo</property>.
 	 *
-	 * @return The logo of this source.
+	 * <p>
+	 * The logo of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Logo getLogo() {
 		return logo;
 	}
 
 	/**
-	 * Sets the logo of this source.
+	 * Bean property setter:  <property>logo</property>.
 	 *
-	 * @param logo The logo of this source.
+	 * <p>
+	 * The logo of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setLogo(Logo value) {
+		this.logo = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>logo</property>.
+	 *
+	 * <p>
+	 * The logo of this source.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Logo> logo() {
+		return Optional.ofNullable(logo);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>logo</property>.
+	 *
+	 * <p>
+	 * The logo of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("logo")
-	public Source logo(Logo logo) {
-		this.logo = logo;
+	public Source logo(Logo value) {
+		setLogo(value);
 		return this;
 	}
 
 	/**
-	 * Returns the subtitle of this source.
+	 * Bean property getter:  <property>subtitle</property>.
 	 *
-	 * @return The subtitle of this source.
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Text getSubtitle() {
 		return subtitle;
 	}
 
 	/**
-	 * Sets the subtitle of this source.
+	 * Bean property setter:  <property>subtitle</property>.
 	 *
-	 * @param subtitle The subtitle of this source.
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSubtitle(Text value) {
+		this.subtitle = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Text> subtitle() {
+		return Optional.ofNullable(subtitle);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("subtitle")
-	public Source subtitle(Text subtitle) {
-		this.subtitle = subtitle;
+	public Source subtitle(Text value) {
+		setSubtitle(value);
 		return this;
 	}
 
 	/**
-	 * Sets the subtitle of this source.
+	 * Bean property fluent setter:  <property>subtitle</property>.
 	 *
-	 * @param subtitle The subtitle of this source.
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("subtitle")
-	public Source subtitle(String subtitle) {
-		this.subtitle = new Text(subtitle);
+	public Source subtitle(String value) {
+		setSubtitle(new Text(value));
 		return this;
 	}
 

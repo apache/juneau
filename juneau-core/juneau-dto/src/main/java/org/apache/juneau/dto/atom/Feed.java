@@ -92,105 +92,244 @@ public class Feed extends CommonEntry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns generator information on this feed.
+	 * Bean property getter:  <property>generator</property>.
 	 *
-	 * @return The generator information on this feed.
+	 * <p>
+	 * The generator information on this feed.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Generator getGenerator() {
 		return generator;
 	}
 
 	/**
-	 * Sets the generator information on this feed.
+	 * Bean property setter:  <property>generator</property>.
 	 *
-	 * @param generator The generator information on this feed.
+	 * <p>
+	 * The generator information on this feed.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setGenerator(Generator value) {
+		this.generator = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>generator</property>.
+	 *
+	 * <p>
+	 * The generator information on this feed.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Generator> generator() {
+		return Optional.ofNullable(generator);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>generator</property>.
+	 *
+	 * <p>
+	 * The generator information on this feed.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("generator")
-	public Feed generator(Generator generator) {
-		this.generator = generator;
+	public Feed generator(Generator value) {
+		setGenerator(value);
 		return this;
 	}
 
 	/**
-	 * Returns the feed icon.
+	 * Bean property getter:  <property>icon</property>.
 	 *
-	 * @return The feed icon.
+	 * <p>
+	 * The feed icon.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Icon getIcon() {
 		return icon;
 	}
 
 	/**
-	 * Sets the feed icon.
+	 * Bean property setter:  <property>icon</property>.
 	 *
-	 * @param icon The feed icon.
+	 * <p>
+	 * The feed icon.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setIcon(Icon value) {
+		this.icon = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>icon</property>.
+	 *
+	 * <p>
+	 * The feed icon.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Icon> icon() {
+		return Optional.ofNullable(icon);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>icon</property>.
+	 *
+	 * <p>
+	 * The feed icon.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("icon")
-	public Feed icon(Icon icon) {
-		this.icon = icon;
+	public Feed icon(Icon value) {
+		setIcon(value);
 		return this;
 	}
 
 	/**
-	 * Returns the feed logo.
+	 * Bean property getter:  <property>logo</property>.
 	 *
-	 * @return The feed logo.
+	 * <p>
+	 * The feed logo.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Logo getLogo() {
 		return logo;
 	}
 
 	/**
-	 * Sets the feed logo.
+	 * Bean property setter:  <property>logo</property>.
 	 *
-	 * @param logo The feed logo.
+	 * <p>
+	 * The feed logo.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setLogo(Logo value) {
+		this.logo = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>logo</property>.
+	 *
+	 * <p>
+	 * The feed logo.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Logo> logo() {
+		return Optional.ofNullable(logo);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>logo</property>.
+	 *
+	 * <p>
+	 * The feed logo.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("logo")
-	public Feed logo(Logo logo) {
-		this.logo = logo;
+	public Feed logo(Logo value) {
+		setLogo(value);
 		return this;
 	}
 
 	/**
-	 * Returns the feed subtitle.
+	 * Bean property getter:  <property>subtitle</property>.
 	 *
-	 * @return The feed subtitle.
+	 * <p>
+	 * The feed subtitle.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("subtitle")
-	public Text getSubTitle() {
+	public Text getSubtitle() {
 		return subtitle;
 	}
 
 	/**
-	 * Sets the feed subtitle.
+	 * Bean property setter:  <property>subtitle</property>.
 	 *
-	 * @param subtitle The feed subtitle.
+	 * <p>
+	 * The feed subtitle.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSubtitle(Text value) {
+		this.subtitle = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * The feed subtitle.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Text> subtitle() {
+		return Optional.ofNullable(subtitle);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * The feed subtitle.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("subtitle")
-	public Feed subtitle(Text subtitle) {
-		this.subtitle = subtitle;
+	public Feed subtitle(Text value) {
+		setSubtitle(value);
 		return this;
 	}
 
 	/**
-	 * Sets the feed subtitle.
+	 * Bean property fluent setter:  <property>subtitle</property>.
 	 *
-	 * @param subtitle The feed subtitle.
+	 * <p>
+	 * The feed subtitle.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Feed subtitle(String subtitle) {
-		this.subtitle = new Text(subtitle);
+	public Feed subtitle(String value) {
+		setSubtitle(new Text(value));
 		return this;
 	}
 
 	/**
-	 * Returns the entries in the feed.
+	 * Bean property getter:  <property>entries</property>.
 	 *
-	 * @return The entries in the feed.
+	 * <p>
+	 * The entries in the feed.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=COLLAPSED)
 	public Entry[] getEntries() {
@@ -198,14 +337,44 @@ public class Feed extends CommonEntry {
 	}
 
 	/**
-	 * Sets the entries in the feed.
+	 * Bean property setter:  <property>entries</property>.
 	 *
-	 * @param entries The entries in the feed.
+	 * <p>
+	 * The entries in the feed.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setEntries(Entry[] value) {
+		this.entries = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>entries</property>.
+	 *
+	 * <p>
+	 * The entries in the feed.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Entry[]> entries() {
+		return Optional.ofNullable(entries);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>entries</property>.
+	 *
+	 * <p>
+	 * The entries in the feed.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("entries")
-	public Feed entries(Entry...entries) {
-		this.entries = entries;
+	public Feed entries(Entry...value) {
+		setEntries(value);
 		return this;
 	}
 

@@ -14,6 +14,8 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -56,9 +58,12 @@ public class Id extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the content of this identifier.
+	 * Bean property getter:  <property>text</property>.
 	 *
-	 * @return The content of this identifier.
+	 * <p>
+	 * The content of this identifier.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=TEXT)
 	public String getText() {
@@ -66,14 +71,44 @@ public class Id extends Common {
 	}
 
 	/**
-	 * Sets the content of this identifier.
+	 * Bean property setter:  <property>text</property>.
 	 *
-	 * @param text The content of this identifier.
+	 * <p>
+	 * The content of this identifier.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setText(String value) {
+		this.text = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this identifier.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> text() {
+		return Optional.ofNullable(text);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this identifier.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("text")
-	public Id text(String text) {
-		this.text = text;
+	public Id text(String value) {
+		setText(value);
 		return this;
 	}
 

@@ -17,8 +17,8 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -67,7 +67,12 @@ public class Category extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * @return The category term.
+	 * Bean property getter:  <property>term</property>.
+	 *
+	 * <p>
+	 * The category term.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getTerm() {
@@ -75,21 +80,55 @@ public class Category extends Common {
 	}
 
 	/**
-	 * Sets the category term.
+	 * Bean property setter:  <property>term</property>.
 	 *
-	 * @param term The category term.
+	 * <p>
+	 * The category term.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	@Xml(format=ATTR)
+	public void setTerm(String value) {
+		this.term = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>term</property>.
+	 *
+	 * <p>
+	 * The category term.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> term() {
+		return Optional.ofNullable(term);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>term</property>.
+	 *
+	 * <p>
+	 * The category term.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("term")
-	public Category term(String term) {
-		this.term = term;
+	public Category term(String value) {
+		setTerm(value);
 		return this;
 	}
 
 	/**
-	 * Returns the category scheme.
+	 * Bean property getter:  <property>scheme</property>.
 	 *
-	 * @return The category scheme.
+	 * <p>
+	 * The category scheme.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public URI getScheme() {
@@ -97,28 +136,58 @@ public class Category extends Common {
 	}
 
 	/**
-	 * Sets the category scheme.
+	 * Bean property setter:  <property>scheme</property>.
+	 *
+	 * <p>
+	 * The category scheme.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setScheme(Object value) {
+		this.scheme = toURI(value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>scheme</property>.
 	 *
-	 * @param scheme The category scheme.
+	 * <p>
+	 * The category scheme.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> scheme() {
+		return Optional.ofNullable(scheme);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>scheme</property>.
+	 *
+	 * <p>
+	 * The category scheme.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("scheme")
-	public Category scheme(Object scheme) {
-		this.scheme = toURI(scheme);
+	public Category scheme(Object value) {
+		setScheme(value);
 		return this;
 	}
 
 	/**
-	 * Returns the category label.
+	 * Bean property getter:  <property>label</property>.
 	 *
-	 * @return The category label.
+	 * <p>
+	 * The category label.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getLabel() {
@@ -126,14 +195,44 @@ public class Category extends Common {
 	}
 
 	/**
-	 * Sets the category label.
+	 * Bean property setter:  <property>scheme</property>.
 	 *
-	 * @param label The category label.
+	 * <p>
+	 * The category label.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setLabel(String value) {
+		this.label = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>label</property>.
+	 *
+	 * <p>
+	 * The category label.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> label() {
+		return Optional.ofNullable(label);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>label</property>.
+	 *
+	 * <p>
+	 * The category label.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("label")
-	public Category label(String label) {
-		this.label = label;
+	public Category label(String value) {
+		setLabel(value);
 		return this;
 	}
 

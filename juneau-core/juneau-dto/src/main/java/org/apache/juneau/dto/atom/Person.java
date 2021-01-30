@@ -16,10 +16,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
 import org.apache.juneau.*;
-
-import org.apache.juneau.annotation.*;
 
 /**
  * Represents an <c>atomPersonConstruct</c> construct in the RFC4287 specification.
@@ -64,37 +63,76 @@ public class Person extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the name of the person.
+	 * Bean property getter:  <property>name</property>.
 	 *
-	 * @return The name of the person.
+	 * <p>
+	 * The name of the person.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Sets the name of the person.
+	 * Bean property setter:  <property>name</property>.
 	 *
-	 * @param name The name of the person.
+	 * <p>
+	 * The name of the person.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the person.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> name() {
+		return Optional.ofNullable(name);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the person.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("name")
-	public Person name(String name) {
-		this.name = name;
+	public Person name(String value) {
+		setName(value);
 		return this;
 	}
 
 	/**
-	 * Returns the URI of the person.
+	 * Bean property getter:  <property>uri</property>.
 	 *
-	 * @return The URI of the person.
+	 * <p>
+	 * The URI of the person.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public URI getUri() {
 		return uri;
 	}
 
 	/**
-	 * Sets the URI of the person.
+	 * Bean property setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of the person.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -103,33 +141,93 @@ public class Person extends Common {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The URI of the person.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUri(Object value) {
+		this.uri = toURI(value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of the person.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> uri() {
+		return Optional.ofNullable(uri);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>v</property>.
+	 *
+	 * <p>
+	 * The URI of the person.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("uri")
-	public Person uri(Object uri) {
-		this.uri = toURI(uri);
+	public Person uri(Object value) {
+		setUri(value);
 		return this;
 	}
 
 	/**
-	 * Returns the email address of the person.
+	 * Bean property getter:  <property>email</property>.
 	 *
-	 * @return The email address of the person.
+	 * <p>
+	 * The email address of the person.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getEmail() {
 		return email;
 	}
 
 	/**
-	 * Sets the email address of the person.
+	 * Bean property setter:  <property>email</property>.
 	 *
-	 * @param email The email address of the person.
+	 * <p>
+	 * The email address of the person.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setEmail(String value) {
+		this.email = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>email</property>.
+	 *
+	 * <p>
+	 * The email address of the person.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> email() {
+		return Optional.ofNullable(email);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>email</property>.
+	 *
+	 * <p>
+	 * The email address of the person.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("email")
-	public Person email(String email) {
-		this.email = email;
+	public Person email(String value) {
+		setEmail(value);
 		return this;
 	}
 

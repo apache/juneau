@@ -14,7 +14,8 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import org.apache.juneau.annotation.*;
+import java.util.*;
+
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -69,9 +70,12 @@ public class Text extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the content type of this content.
+	 * Bean property getter:  <property>type</property>.
 	 *
-	 * @return The content type of this content.
+	 * <p>
+	 * The content type of this content.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getType() {
@@ -79,7 +83,10 @@ public class Text extends Common {
 	}
 
 	/**
-	 * Sets the content type of this content.
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of this content.
 	 *
 	 * <p>
 	 * Must be one of the following:
@@ -90,19 +97,52 @@ public class Text extends Common {
 	 * 	<li><jk>null</jk> (defaults to <js>"text"</js>)
 	 * </ul>
 	 *
-	 * @param type The content type of this content.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	/**
+	 * @param value The content type of this content.
+	 */
+	public void setType(String value) {
+		this.type = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of this content.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> type() {
+		return Optional.ofNullable(type);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of this content.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("type")
-	public Text type(String type) {
-		this.type = type;
+	public Text type(String value) {
+		setType(value);
 		return this;
 	}
 
 	/**
-	 * Returns the content of this content.
+	 * Bean property getter:  <property>text</property>.
 	 *
-	 * @return The content of this content.
+	 * <p>
+	 * The content of this content.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=XMLTEXT)
 	public String getText() {
@@ -110,14 +150,44 @@ public class Text extends Common {
 	}
 
 	/**
-	 * Sets the content of this content.
+	 * Bean property setter:  <property>text</property>.
 	 *
-	 * @param text The content of this content.
+	 * <p>
+	 * The content of this content.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setText(String value) {
+		this.text = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this content.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> text() {
+		return Optional.ofNullable(text);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this content.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("text")
-	public Text text(String text) {
-		this.text = text;
+	public Text text(String value) {
+		setText(value);
 		return this;
 	}
 

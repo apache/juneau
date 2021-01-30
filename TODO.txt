@@ -1,8 +1,15 @@
 RestCall.exception(...) should accumulate exceptions, not just one.
 Replace RestInfoProvider with Swagger.
-Rework RestCallLogger.
-x @Rest(path) should allow you to match against file name (e.g. "favicon.ico")
+xxx Rework RestCallLogger.
+xxx @Rest(path) should allow you to match against file name (e.g. "favicon.ico")
 Replace @Rest(paths) with just @Rest(path)
-Auto-injection into REST interfaces.
+Auto-injection into REST interfaces (via providers?)
 ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
 Re-add @PathRemainder annotation.
+xxx Replace RestResourceResolver with ObjectFactory (or something already predefined?).
+xxx Remove @Rest(properties) and all that stuff.
+Add a createConfig() method on RestContext.
+Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
+
+Instead of PropertyStores, builders should produce settings which are passed to contexts.
+

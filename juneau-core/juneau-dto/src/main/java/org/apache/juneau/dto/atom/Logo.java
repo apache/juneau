@@ -17,6 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -69,9 +70,12 @@ public class Logo extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the URI of the logo.
+	 * Bean property getter:  <property>uri</property>.
 	 *
-	 * @return The URI of the logo.
+	 * <p>
+	 * The URI of the logo.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ELEMENTS)
 	public URI getUri() {
@@ -79,7 +83,10 @@ public class Logo extends Common {
 	}
 
 	/**
-	 * Sets the URI of the logo.
+	 * Bean property setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of the logo.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -88,12 +95,39 @@ public class Logo extends Common {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The URI of the logo.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUri(Object value) {
+		this.uri = toURI(value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of the logo.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> uri() {
+		return Optional.ofNullable(uri);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of the logo.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("uri")
-	public Logo uri(Object uri) {
-		this.uri = toURI(uri);
+	public Logo uri(Object value) {
+		setUri(value);
 		return this;
 	}
 

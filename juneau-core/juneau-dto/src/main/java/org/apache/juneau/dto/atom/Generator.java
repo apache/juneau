@@ -17,8 +17,8 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -66,9 +66,12 @@ public class Generator extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the URI of this generator statement.
+	 * Bean property getter:  <property>uri</property>.
 	 *
-	 * @return The URI of this generator statement.
+	 * <p>
+	 * The URI of this generator statement.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public URI getUri() {
@@ -76,28 +79,58 @@ public class Generator extends Common {
 	}
 
 	/**
-	 * Sets the URI of this generator statement.
+	 * Bean property setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of this generator statement.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUri(Object value) {
+		this.uri = toURI(value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>uri</property>.
 	 *
-	 * @param uri The URI of this generator statement.
+	 * <p>
+	 * The URI of this generator statement.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> uri() {
+		return Optional.ofNullable(uri);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * The URI of this generator statement.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("uri")
-	public Generator uri(Object uri) {
-		this.uri = toURI(uri);
+	public Generator uri(Object value) {
+		setUri(value);
 		return this;
 	}
 
 	/**
-	 * Returns the version of this generator statement.
+	 * Bean property getter:  <property>version</property>.
 	 *
-	 * @return The version of this generator statement.
+	 * <p>
+	 * The version of this generator statement.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
 	public String getVersion() {
@@ -105,21 +138,54 @@ public class Generator extends Common {
 	}
 
 	/**
-	 * Sets the version of this generator statement.
+	 * Bean property setter:  <property>version</property>.
 	 *
-	 * @param version The version of this generator statement.
+	 * <p>
+	 * The version of this generator statement.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setVersion(String value) {
+		this.version = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>version</property>.
+	 *
+	 * <p>
+	 * The version of this generator statement.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> version() {
+		return Optional.ofNullable(version);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>version</property>.
+	 *
+	 * <p>
+	 * The version of this generator statement.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("version")
-	public Generator version(String version) {
-		this.version = version;
+	public Generator version(String value) {
+		setVersion(value);
 		return this;
 	}
 
 	/**
-	 * Returns the content of this generator statement.
+	 * Bean property getter:  <property>text</property>.
 	 *
-	 * @return The content of this generator statement.
+	 * <p>
+	 * The content of this generator statement.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=TEXT)
 	public String getText() {
@@ -127,14 +193,44 @@ public class Generator extends Common {
 	}
 
 	/**
-	 * Sets the content of this generator statement.
+	 * Bean property setter:  <property>text</property>.
 	 *
-	 * @param text The content of this generator statement.
+	 * <p>
+	 * The content of this generator statement.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setText(String value) {
+		this.text = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this generator statement.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> text() {
+		return Optional.ofNullable(text);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this generator statement.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("text")
-	public Generator text(String text) {
-		this.text = text;
+	public Generator text(String value) {
+		setText(value);
 		return this;
 	}
 

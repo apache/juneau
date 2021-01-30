@@ -86,110 +86,250 @@ public class Entry extends CommonEntry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the content of this entry.
+	 * Bean property getter:  <property>content</property>.
 	 *
-	 * @return The content of this entry.
+	 * <p>
+	 * The content of this entry.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Content getContent() {
 		return content;
 	}
 
 	/**
-	 * Sets the content of this entry.
+	 * Bean property setter:  <property>content</property>.
 	 *
-	 * @param content The content of this entry.
+	 * <p>
+	 * The content of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setContent(Content value) {
+		this.content = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>content</property>.
+	 *
+	 * <p>
+	 * The content of this entry.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Content> content() {
+		return Optional.ofNullable(content);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>content</property>.
+	 *
+	 * <p>
+	 * The content of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("content")
-	public Entry content(Content content) {
-		this.content = content;
+	public Entry content(Content value) {
+		setContent(value);
 		return this;
 	}
 
 	/**
-	 * Returns the publish timestamp of this entry.
+	 * Bean property getter:  <property>published</property>.
 	 *
-	 * @return The publish timestamp of this entry.
+	 * <p>
+	 * The publish timestamp of this entry.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Calendar getPublished() {
 		return published;
 	}
 
 	/**
-	 * Sets the publish timestamp of this entry.
+	 * Bean property setter:  <property>published</property>.
 	 *
-	 * @param published The publish timestamp of this entry.
+	 * <p>
+	 * The publish timestamp of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setPublished(Calendar value) {
+		this.published = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>published</property>.
+	 *
+	 * <p>
+	 * The publish timestamp of this entry.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Calendar> published() {
+		return Optional.ofNullable(published);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>published</property>.
+	 *
+	 * <p>
+	 * The publish timestamp of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("published")
-	public Entry published(Calendar published) {
-		this.published = published;
+	public Entry published(Calendar value) {
+		setPublished(value);
 		return this;
 	}
 
 	/**
-	 * Sets the publish timestamp of this entry.
+	 * Bean property fluent setter:  <property>published</property>.
 	 *
-	 * @param published The publish timestamp of this entry in ISO8601 format.
+	 * <p>
+	 * The publish timestamp of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("published")
-	public Entry published(String published) {
-		this.published = parseDateTime(published);
+	public Entry published(String value) {
+		setPublished(parseDateTime(value));
 		return this;
 	}
 
 	/**
-	 * Returns the source of this entry.
+	 * Bean property getter:  <property>source</property>.
 	 *
-	 * @return The source of this entry.
+	 * <p>
+	 * The source of this entry.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Source getSource() {
 		return source;
 	}
 
 	/**
-	 * Sets the source of this entry.
+	 * Bean property setter:  <property>source</property>.
 	 *
-	 * @param source The source of this entry.
+	 * <p>
+	 * The source of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSource(Source value) {
+		this.source = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>source</property>.
+	 *
+	 * <p>
+	 * The source of this entry.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Source> source() {
+		return Optional.ofNullable(source);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>source</property>.
+	 *
+	 * <p>
+	 * The source of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("source")
-	public Entry source(Source source) {
-		this.source = source;
+	public Entry source(Source value) {
+		setSource(value);
 		return this;
 	}
 
 	/**
-	 * Returns the summary of this entry.
+	 * Bean property getter:  <property>summary</property>.
 	 *
-	 * @return The summary of this entry.
+	 * <p>
+	 * The summary of this entry.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Text getSummary() {
 		return summary;
 	}
 
 	/**
-	 * Sets the summary of this entry.
+	 * Bean property setter:  <property>summary</property>.
 	 *
-	 * @param summary The summary of this entry.
+	 * <p>
+	 * The summary of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSummary(Text value) {
+		this.summary = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * The summary of this entry.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Text> summary() {
+		return Optional.ofNullable(summary);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * The summary of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("summary")
-	public Entry summary(Text summary) {
-		this.summary = summary;
+	public Entry summary(Text value) {
+		setSummary(value);
 		return this;
 	}
 
 	/**
-	 * Sets the summary of this entry.
+	 * Bean property fluent setter:  <property>summary</property>.
 	 *
-	 * @param summary The summary of this entry.
+	 * <p>
+	 * The summary of this entry.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("summary")
-	public Entry summary(String summary) {
-		this.summary = new Text(summary);
+	public Entry summary(String value) {
+		setSummary(new Text(value));
 		return this;
 	}
 

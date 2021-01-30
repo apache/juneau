@@ -17,9 +17,8 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 import java.net.URI;
+import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -50,9 +49,12 @@ public abstract class Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the uri base of this object.
+	 * Bean property getter:  <property>base</property>.
 	 *
-	 * @return The URI base of this object.
+	 * <p>
+	 * The URI base of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(prefix="xml", format=ATTR)
 	public URI getBase() {
@@ -60,28 +62,58 @@ public abstract class Common {
 	}
 
 	/**
-	 * Sets the URI base of this object.
+	 * Bean property setter:  <property>term</property>.
+	 *
+	 * <p>
+	 * The URI base of this object.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setBase(Object value) {
+		this.base = toURI(value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>base</property>.
 	 *
-	 * @param base The URI base of this object.
+	 * <p>
+	 * The URI base of this object.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> base() {
+		return Optional.ofNullable(base);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>base</property>.
+	 *
+	 * <p>
+	 * The URI base of this object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("base")
-	public Common base(Object base) {
-		this.base = toURI(base);
+	public Common base(Object value) {
+		setBase(value);
 		return this;
 	}
 
 	/**
-	 * Returns the language of this object.
+	 * Bean property getter:  <property>lang</property>.
 	 *
-	 * @return The language of this object.
+	 * <p>
+	 * The language of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(prefix="xml", format=ATTR)
 	public String getLang() {
@@ -89,14 +121,44 @@ public abstract class Common {
 	}
 
 	/**
-	 * Sets the language of this object.
+	 * Bean property setter:  <property>lang</property>.
 	 *
-	 * @param lang The language of this object.
+	 * <p>
+	 * The language of this object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setLang(String value) {
+		this.lang = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>lang</property>.
+	 *
+	 * <p>
+	 * The language of this object.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> lang() {
+		return Optional.ofNullable(lang);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>lang</property>.
+	 *
+	 * <p>
+	 * The language of this object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@Beanp("lang")
-	public Common lang(String lang) {
-		this.lang = lang;
+	public Common lang(String value) {
+		setLang(value);
 		return this;
 	}
 
