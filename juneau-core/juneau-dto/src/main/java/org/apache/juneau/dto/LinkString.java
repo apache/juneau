@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
@@ -64,13 +65,17 @@ public class LinkString implements Comparable<LinkString> {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// name
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
 	 * <p>
 	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
 	 *
-	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getName() {
 		return name;
@@ -79,13 +84,48 @@ public class LinkString implements Comparable<LinkString> {
 	/**
 	 * Bean property setter:  <property>name</property>.
 	 *
-	 * @param name The new value for the <property>name</property> property on this bean.
+	 * <p>
+	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> name() {
+		return Optional.ofNullable(name);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public LinkString name(String name) {
-		this.name = name;
+	public LinkString name(String value) {
+		setName(value);
 		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// uri
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>uri</property>.
@@ -93,7 +133,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * <p>
 	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
 	 *
-	 * @return The value of the <property>href</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public java.net.URI getUri() {
 		return uri;
@@ -102,34 +142,84 @@ public class LinkString implements Comparable<LinkString> {
 	/**
 	 * Bean property setter:  <property>uri</property>.
 	 *
-	 * @param uri The new value for the <property>href</property> property on this bean.
+	 * <p>
+	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUri(java.net.URI value) {
+		this.uri = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<java.net.URI> uri() {
+		return Optional.ofNullable(uri);
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public LinkString uri(String uri) {
-		uri(uri, new Object[0]);
+	public LinkString uri(java.net.URI value) {
+		setUri(value);
 		return this;
 	}
 
 	/**
-	 * Bean property setter:  <property>uri</property>.
+	 * Bean property fluent setter:  <property>uri</property>.
 	 *
 	 * <p>
-	 * Same as {@link #uri(String)} except allows for {@link MessageFormat} style arguments.
+	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
 	 *
-	 * @param uri The new href.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public LinkString uri(String uri, Object...args) {
+	public LinkString uri(String value) {
+		uri(value, new Object[0]);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @param args {@link MessageFormat}-style arguments in the URL.
+	 * @return This object (for method chaining).
+	 */
+	public LinkString uri(String value, Object...args) {
 		for (int i = 0; i < args.length; i++)
 			try {
 				args[i] = OpenApiSerializer.DEFAULT.createSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) {
 				throw new RuntimeException(e);
 			}
-		this.uri = java.net.URI.create(format(uri, args));
+		this.uri = java.net.URI.create(format(value, args));
 		return this;
 	}
+
 
 	/**
 	 * Returns the name so that the {@link PojoQuery} class can search against it.

@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.swagger.ui;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static java.util.Collections.*;
 
 import java.util.*;
 import java.util.Map;
@@ -430,7 +431,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		if (s == null)
 			return null;
 		if (s.indexOf(',') == -1)
-			return Collections.<Object>singletonList(s);
+			return singletonList(s);
 		List<Object> l = new ArrayList<>();
 		String[] sa = s.split("\n");
 		for (int i = 0; i < sa.length; i++) {
