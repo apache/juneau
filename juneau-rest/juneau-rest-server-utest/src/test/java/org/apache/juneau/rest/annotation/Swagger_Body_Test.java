@@ -51,8 +51,8 @@ public class Swagger_Body_Test {
 			"description:'a\nb',",
 			"required:true,",
 			"schema:{type:'string'},",
-			"x-example:'\\'a\\'',",
-			"x-examples:{foo:'bar'}"
+			"example:'\\'a\\'',",
+			"examples:{foo:'bar'}"
 		})
 		public static class A2 {
 			public A2(String x) {}
@@ -65,8 +65,8 @@ public class Swagger_Body_Test {
 				"description:'a\nb',",
 				"required:true,",
 				"schema:{type:'string'},",
-				"x-example:'\\'a\\'',",
-				"x-examples:{foo:'bar'}"
+				"example:'\\'a\\'',",
+				"examples:{foo:'bar'}"
 			},
 			d={"b","c"},
 			schema=@Schema(type="string"),
@@ -83,6 +83,7 @@ public class Swagger_Body_Test {
 	@Test
 	public void a01_fromPojo() throws Exception {
 		Swagger s = getSwagger(A.class);
+		System.err.println(s);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
@@ -207,8 +208,8 @@ public class Swagger_Body_Test {
 				"description:'a\nb',",
 				"required:true,",
 				"schema:{type:'string'},",
-				"x-example:'a',",
-				"x-examples:{foo:'bar'}"
+				"example:'a',",
+				"examples:{foo:'bar'}"
 			}) D2 b) {}
 
 		public static class D3 {
@@ -222,8 +223,8 @@ public class Swagger_Body_Test {
 					"description:'a\nb',",
 					"required:true,",
 					"schema:{type:'string'},",
-					"x-example:'a',",
-					"x-examples:{foo:'bar'}"
+					"example:'a',",
+					"examples:{foo:'bar'}"
 				},
 				d= {"b","c"},
 				schema=@Schema(type="string"),

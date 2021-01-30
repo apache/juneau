@@ -19,7 +19,6 @@ import java.net.*;
 import java.net.URI;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -30,13 +29,13 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
+ * 	Contact <jv>contact</jv> = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>contact</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>contact</jv>.toString();
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Output</jc>
@@ -71,9 +70,9 @@ public class Contact extends SwaggerElement {
 	public Contact(Contact copyFrom) {
 		super(copyFrom);
 
+		this.email = copyFrom.email;
 		this.name = copyFrom.name;
 		this.url = copyFrom.url;
-		this.email = copyFrom.email;
 	}
 
 	/**
@@ -85,91 +84,9 @@ public class Contact extends SwaggerElement {
 		return new Contact(this);
 	}
 
-	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Bean property setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact setName(String value) {
-		name = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact name(Object value) {
-		return setName(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public URI getUrl() {
-		return url;
-	}
-
-	/**
-	 * Bean property setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact setUrl(URI value) {
-		url = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setUrl(URI)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact url(Object value) {
-		return setUrl(StringUtils.toURI(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// email
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>email</property>.
@@ -193,52 +110,186 @@ public class Contact extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Contact setEmail(String value) {
+	public void setEmail(String value) {
 		email = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setEmail(String)}.
+	 * Bean property fluent getter:  <property>email</property>.
+	 *
+	 * <p>
+	 * The email address of the contact person/organization.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> email() {
+		return Optional.ofNullable(getEmail());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>email</property>.
+	 *
+	 * <p>
+	 * The email address of the contact person/organization.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Contact email(Object value) {
-		return setEmail(stringify(value));
+	public Contact email(String value) {
+		setEmail(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// name
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the name property is not null or empty.
+	 * Bean property setter:  <property>name</property>.
 	 *
-	 * @return <jk>true</jk> if the name property is not null or empty.
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
-	public boolean hasName() {
-		return isNotEmpty(name);
+	public void setName(String value) {
+		name = value;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the URL property is not null.
+	 * Bean property fluent getter:  <property>name</property>.
 	 *
-	 * @return <jk>true</jk> if the URL property is not null.
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public boolean hasUrl() {
-		return url != null;
+	public Optional<String> name() {
+		return Optional.ofNullable(getName());
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the email property is not null or empty.
+	 * Bean property fluent setter:  <property>name</property>.
 	 *
-	 * @return <jk>true</jk> if the email property is not null or empty.
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public boolean hasEmail() {
-		return isNotEmpty(email);
+	public Contact name(String value) {
+		setName(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// url
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public URI getUrl() {
+		return url;
+	}
+
+	/**
+	 * Bean property setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUrl(URI value) {
+		url = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> url() {
+		return Optional.ofNullable(getUrl());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Contact url(URI value) {
+		setUrl(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Contact url(URL value) {
+		setUrl(StringUtils.toURI(value));
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Contact url(String value) {
+		setUrl(StringUtils.toURI(value));
+		return this;
 	}
 
 	@Override /* SwaggerElement */
@@ -246,9 +297,9 @@ public class Contact extends SwaggerElement {
 		if (property == null)
 			return null;
 		switch (property) {
+			case "email": return toType(getEmail(), type);
 			case "name": return toType(getName(), type);
 			case "url": return toType(getUrl(), type);
-			case "email": return toType(getEmail(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -258,9 +309,9 @@ public class Contact extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "url": return url(value);
-			case "email": return email(value);
+			case "email": return email(stringify(value));
+			case "name": return name(stringify(value));
+			case "url": return url(StringUtils.toURI(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -270,9 +321,9 @@ public class Contact extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
+			.appendIf(email != null, "email")
 			.appendIf(name != null, "name")
-			.appendIf(url != null, "url")
-			.appendIf(email != null, "email");
+			.appendIf(url != null, "url");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

@@ -52,11 +52,11 @@ public class Swagger extends SwaggerElement {
 		basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
-	private List<String> schemes;
-	private List<MediaType>
+	private Set<String> schemes;
+	private Set<MediaType>
 		consumes,
 		produces;
-	private List<Tag> tags;
+	private Set<Tag> tags;
 	private List<Map<String,List<String>>> security;
 	private Map<String,OMap> definitions;
 	private Map<String,ParameterInfo> parameters;
@@ -77,34 +77,14 @@ public class Swagger extends SwaggerElement {
 	public Swagger(Swagger copyFrom) {
 		super(copyFrom);
 
-		this.swagger = copyFrom.swagger;
-		this.host = copyFrom.host;
 		this.basePath = copyFrom.basePath;
-		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
+		this.consumes = newSet(copyFrom.consumes);
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		this.schemes = newList(copyFrom.schemes);
-		this.consumes = newList(copyFrom.consumes);
-		this.produces = newList(copyFrom.produces);
-
-		if (copyFrom.tags == null) {
-			this.tags = null;
-		} else {
-			this.tags = new ArrayList<>();
-			for (Tag t : copyFrom.tags)
-				this.tags.add(t.copy());
-		}
-
-		if (copyFrom.security == null) {
-			this.security = null;
-		} else {
-			this.security = new ArrayList<>();
-			for (Map<String,List<String>> m : copyFrom.security) {
-				Map<String,List<String>> m2 = new LinkedHashMap<>();
-				for (Map.Entry<String,List<String>> e : m.entrySet())
-					m2.put(e.getKey(), newList(e.getValue()));
-				this.security.add(m2);
-			}
-		}
+		this.host = copyFrom.host;
+		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
+		this.produces = newSet(copyFrom.produces);
+		this.schemes = newSet(copyFrom.schemes);
+		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
 		if (copyFrom.definitions == null) {
@@ -113,6 +93,18 @@ public class Swagger extends SwaggerElement {
 			this.definitions = new LinkedHashMap<>();
 			for (Map.Entry<String,OMap> e : copyFrom.definitions.entrySet())
 				this.definitions.put(e.getKey(), new OMap(e.getValue()));
+		}
+
+		if (copyFrom.paths == null) {
+			this.paths = null;
+		} else {
+			this.paths = new LinkedHashMap<>();
+			for (Map.Entry<String,OperationMap> e : copyFrom.paths.entrySet()) {
+				OperationMap m = new OperationMap();
+				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
+					m.put(e2.getKey(), e2.getValue().copy());
+				this.paths.put(e.getKey(), m);
+			}
 		}
 
 		if (copyFrom.parameters == null) {
@@ -131,6 +123,18 @@ public class Swagger extends SwaggerElement {
 				this.responses.put(e.getKey(), e.getValue().copy());
 		}
 
+		if (copyFrom.security == null) {
+			this.security = null;
+		} else {
+			this.security = new ArrayList<>();
+			for (Map<String,List<String>> m : copyFrom.security) {
+				Map<String,List<String>> m2 = new LinkedHashMap<>();
+				for (Map.Entry<String,List<String>> e : m.entrySet())
+					m2.put(e.getKey(), newList(e.getValue()));
+				this.security.add(m2);
+			}
+		}
+
 		if (copyFrom.securityDefinitions == null) {
 			this.securityDefinitions = null;
 		} else {
@@ -139,16 +143,12 @@ public class Swagger extends SwaggerElement {
 				this.securityDefinitions.put(e.getKey(), e.getValue().copy());
 		}
 
-		if (copyFrom.paths == null) {
-			this.paths = null;
+		if (copyFrom.tags == null) {
+			this.tags = null;
 		} else {
-			this.paths = new LinkedHashMap<>();
-			for (Map.Entry<String,OperationMap> e : copyFrom.paths.entrySet()) {
-				OperationMap m = new OperationMap();
-				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
-					m.put(e2.getKey(), e2.getValue().copy());
-				this.paths.put(e.getKey(), m);
-			}
+			this.tags = new LinkedHashSet<>();
+			for (Tag t : copyFrom.tags)
+				this.tags.add(t.copy());
 		}
 	}
 
@@ -161,107 +161,359 @@ public class Swagger extends SwaggerElement {
 		return new Swagger(this);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// basePath
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>swagger</property>.
+	 * Bean property getter:  <property>basePath</property>.
 	 *
 	 * <p>
-	 * Specifies the Swagger Specification version being used.
-	 *
-	 * <p>
-	 * It can be used by the Swagger UI and other clients to interpret the API listing.
+	 * The base path on which the API is served, which is relative to the <c>host</c>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getSwagger() {
-		return swagger;
+	public String getBasePath() {
+		return basePath;
 	}
 
 	/**
-	 * Bean property setter:  <property>swagger</property>.
+	 * Bean property setter:  <property>basePath</property>.
 	 *
 	 * <p>
-	 * Specifies the Swagger Specification version being used.
-	 *
-	 * <p>
-	 * It can be used by the Swagger UI and other clients to interpret the API listing.
+	 * The base path on which the API is served, which is relative to the <c>host</c>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
+	 * 	<br>The value MUST start with a leading slash (/).
+	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
-	public Swagger setSwagger(String value) {
-		swagger = value;
-		return this;
+	public void setBasePath(String value) {
+		basePath = value;
 	}
 
 	/**
-	 * Same as {@link #setSwagger(String)}.
+	 * Bean property fluent getter:  <property>basePath</property>.
+	 *
+	 * <p>
+	 * The base path on which the API is served, which is relative to the <c>host</c>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> basePath() {
+		return Optional.ofNullable(getBasePath());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>basePath</property>.
+	 *
+	 * <p>
+	 * The base path on which the API is served, which is relative to the <c>host</c>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
+	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
+	 * 	<br>The value MUST start with a leading slash (/).
+	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger swagger(Object value) {
-		return setSwagger(stringify(value));
+	public Swagger basePath(String value) {
+		setBasePath(value);
+		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// consumes
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>info</property>.
+	 * Bean property getter:  <property>consumes</property>.
 	 *
 	 * <p>
-	 * Provides metadata about the API.
-	 *
-	 * <p>
-	 * The metadata can be used by the clients if needed.
+	 * A list of MIME types the APIs can consume.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Info getInfo() {
-		return info;
+	public Set<MediaType> getConsumes() {
+		return consumes;
 	}
 
 	/**
-	 * Bean property setter:  <property>info</property>.
+	 * Bean property setter:  <property>consumes</property>.
 	 *
 	 * <p>
-	 * Provides metadata about the API.
-	 *
-	 * <p>
-	 * The metadata can be used by the clients if needed.
+	 * A list of MIME types the APIs can consume.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setConsumes(Collection<MediaType> value) {
+		consumes = newSet(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can consume.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setInfo(Info value) {
-		info = value;
+	public Swagger addConsumes(Collection<MediaType> values) {
+		consumes = addToSet(consumes, values);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setInfo(Info)}.
+	 * Bean property fluent getter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can consume.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Set<MediaType>> consumes() {
+		return Optional.ofNullable(getConsumes());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can consume.
+	 *
+	 * @param value
+	 * 	The values to set on this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger consumes(Collection<MediaType> value) {
+		setConsumes(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can consume.
+	 *
+	 * @param value
+	 * 	The values to set on this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger consumes(MediaType...value) {
+		setConsumes(toSet(value, MediaType.class));
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can consume.
+	 *
+	 * @param value
+	 * 	The values to set on this property.
+	 * 	<br>Strings can be JSON arrays.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger consumes(String...value) {
+		setConsumes(toSet(value, MediaType.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// definitions
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * An object to hold data types produced and consumed by operations.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,OMap> getDefinitions() {
+		return definitions;
+	}
+
+	/**
+	 * Bean property setter:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * An object to hold data types produced and consumed by operations.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Info}
-	 * 		<li><c>String</c> - JSON object representation of {@link Info}
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	info(<js>"{title:'title',description:'description',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setDefinitions(Map<String,OMap> value) {
+		definitions = newMap(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * An object to hold data types produced and consumed by operations.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger info(Object value) {
-		return setInfo(toType(value, Info.class));
+	public Swagger addDefinitions(Map<String,OMap> values) {
+		definitions = addToMap(definitions, values);
+		return this;
 	}
+
+	/**
+	 * Bean property appender:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>definitions</property> property.
+	 *
+	 * @param name A definition name.
+	 * @param schema The schema that the name defines.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger definition(String name, OMap schema) {
+		definitions = addToMap(definitions, name, schema);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * An object to hold data types produced and consumed by operations.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Map<String,OMap>> definitions() {
+		return Optional.ofNullable(getDefinitions());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * An object to hold data types produced and consumed by operations.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger definitions(Map<String,OMap> value) {
+		setDefinitions(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>definitions</property>.
+	 *
+	 * <p>
+	 * An object to hold data types produced and consumed by operations.
+	 *
+	 * @param json
+	 * 	The value to set on this property as JSON.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger definitions(String json) {
+		setDefinitions(toMap(json, String.class, OMap.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// externalDocs
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public ExternalDocumentation getExternalDocs() {
+		return externalDocs;
+	}
+
+	/**
+	 * Bean property setter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setExternalDocs(ExternalDocumentation value) {
+		externalDocs = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<ExternalDocumentation> externalDocs() {
+		return Optional.ofNullable(getExternalDocs());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger externalDocs(ExternalDocumentation value) {
+		setExternalDocs(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation as raw JSON.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
+	 * </p>
+	 *
+	 * @param json
+	 * 	The new value for this property as JSON.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger externalDocs(String json) {
+		setExternalDocs(toType(json, ExternalDocumentation.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// host
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>host</property>.
@@ -288,19 +540,31 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
 	 * 	<br>The host does not support {@doc ExtSwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Swagger setHost(String value) {
+	public void setHost(String value) {
 		host = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setHost(String)}.
+	 * Bean property fluent getter:  <property>host</property>.
+	 *
+	 * <p>
+	 * The host (name or IP) serving the API.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> host() {
+		return Optional.ofNullable(getHost());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>host</property>.
+	 *
+	 * <p>
+	 * The host (name or IP) serving the API.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
@@ -308,319 +572,193 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger host(Object value) {
-		return setHost(stringify(value));
+	public Swagger host(String value) {
+		setHost(value);
+		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// info
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>basePath</property>.
+	 * Bean property getter:  <property>info</property>.
 	 *
 	 * <p>
-	 * The base path on which the API is served, which is relative to the <c>host</c>.
+	 * Provides metadata about the API.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getBasePath() {
-		return basePath;
+	public Info getInfo() {
+		return info;
 	}
 
 	/**
-	 * Bean property setter:  <property>basePath</property>.
+	 * Bean property setter:  <property>info</property>.
 	 *
 	 * <p>
-	 * The base path on which the API is served, which is relative to the <c>host</c>.
+	 * Provides metadata about the API.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
-	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Property value is required.
+	 */
+	public void setInfo(Info value) {
+		info = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>info</property>.
+	 *
+	 * <p>
+	 * Provides metadata about the API.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Info> info() {
+		return Optional.ofNullable(getInfo());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>info</property>.
+	 *
+	 * <p>
+	 * Provides metadata about the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setBasePath(String value) {
-		basePath = value;
+	public Swagger info(Info value) {
+		setInfo(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setBasePath(String)}.
+	 * Bean property fluent setter:  <property>info</property>.
 	 *
-	 * @param value
+	 * <p>
+	 * Provides metadata about the API as raw JSON.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	info(<js>"{title:'title',description:'description',...}"</js>);
+	 * </p>
+	 *
+	 * @param json
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
-	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger basePath(Object value) {
-		return setBasePath(stringify(value));
+	public Swagger info(String json) {
+		setInfo(toType(json, Info.class));
+		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// parameters
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>schemes</property>.
+	 * Bean property getter:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * The transfer protocol of the API.
-	 *
-	 * <p>
-	 * If the <c>schemes</c> is not included, the default scheme to be used is the one used to access the Swagger
-	 * definition itself.
+	 * An object to hold parameters that can be used across operations.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getSchemes() {
-		return schemes;
+	public Map<String,ParameterInfo> getParameters() {
+		return parameters;
 	}
 
 	/**
-	 * Bean property setter:  <property>schemes</property>.
+	 * Bean property setter:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * The transfer protocol of the API.
-	 *
-	 * <p>
-	 * If the <c>schemes</c> is not included, the default scheme to be used is the one used to access the Swagger
-	 * definition itself.
+	 * An object to hold parameters that can be used across operations.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"http"</js>
-	 * 		<li><js>"https"</js>
-	 * 		<li><js>"ws"</js>
-	 * 		<li><js>"wss"</js>
-	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Swagger setSchemes(Collection<String> value) {
-		schemes = newList(value);
-		return this;
+	public void setParameters(Map<String,ParameterInfo> value) {
+		parameters = newMap(value);
 	}
 
 	/**
-	 * Adds one or more values to the <property>schemes</property> property.
+	 * Bean property appender:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * The transfer protocol of the API.
-	 *
-	 * <p>
-	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
-	 * If the <c>schemes</c> is not included, the default scheme to be used is the one used to access the Swagger
-	 * definition itself.
+	 * An object to hold parameters that can be used across operations.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"http"</js>
-	 * 		<li><js>"https"</js>
-	 * 		<li><js>"ws"</js>
-	 * 		<li><js>"wss"</js>
-	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addSchemes(Collection<String> values) {
-		schemes = addToList(schemes, values);
+	public Swagger addParameters(Map<String,ParameterInfo> values) {
+		parameters = addToMap(parameters, values);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #addSchemes(Collection)}.
+	 * Bean property appender:  <property>parameters</property>.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Collection&lt;String&gt;</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
-	 * 		</p>
-	 * 		<li><c>String</c> - Individual values
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	schemes(<js>"scheme1"</js>, <js>"scheme2"</js>);
-	 * 		</p>
-	 * 	</ul>
+	 * <p>
+	 * Adds a single value to the <property>parameter</property> property.
+	 *
+	 * @param name The parameter name.
+	 * @param parameter The parameter definition.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger schemes(Object...values) {
-		schemes = addToList(schemes, values, String.class);
+	public Swagger parameter(String name, ParameterInfo parameter) {
+		parameters = addToMap(parameters, name, parameter);
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>consumes</property>.
+	 * Bean property fluent getter:  <property>parameters</property>.
 	 *
-	 * <p>
-	 * A list of MIME types the APIs can consume.
-	 *
-	 * <p>
-	 * This is global to all APIs but can be overridden on specific API calls.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public List<MediaType> getConsumes() {
-		return consumes;
+	public Optional<Map<String,ParameterInfo>> parameters() {
+		return Optional.ofNullable(getParameters());
 	}
 
 	/**
-	 * Bean property setter:  <property>consumes</property>.
+	 * Bean property fluent setter:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * A list of MIME types the APIs can consume.
-	 *
-	 * <p>
-	 * This is global to all APIs but can be overridden on specific API calls.
+	 * An object to hold parameters that can be used across operations.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setConsumes(Collection<MediaType> value) {
-		consumes = newList(value);
+	public Swagger parameters(Map<String,ParameterInfo> value) {
+		setParameters(value);
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>consumes</property> property.
+	 * Bean property fluent setter:  <property>parameters</property>.
 	 *
 	 * <p>
-	 * A list of MIME types the operation can consume.
-	 * This overrides the <c>consumes</c> definition at the Swagger Object.
-	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * An object to hold parameters that can be used across operations.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * @param json
+	 * 	The value to set on this property as JSON.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addConsumes(Collection<MediaType> values) {
-		consumes = addToList(consumes, values);
+	public Swagger parameters(String json) {
+		setParameters(toMap(json, String.class, ParameterInfo.class));
 		return this;
 	}
 
-	/**
-	 * Adds one or more values to the <property>consumes</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link MediaType}
-	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	consumes(<js>"['text/json']"</js>);
-	 * 			</p>
-	 * 		<li><c>String</c> - Individual values
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	consumes(<js>"text/json"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger consumes(Object...values) {
-		consumes = addToList(consumes, values, MediaType.class);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the APIs can produce.
-	 *
-	 * <p>
-	 * This is global to all APIs but can be overridden on specific API calls.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<MediaType> getProduces() {
-		return produces;
-	}
-
-	/**
-	 * Bean property setter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the APIs can produce.
-	 *
-	 * <p>
-	 * This is global to all APIs but can be overridden on specific API calls.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger setProduces(Collection<MediaType> value) {
-		produces = newList(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>produces</property> property.
-	 *
-	 * <p>
-	 * A list of MIME types the APIs can produce.
-	 *
-	 * <p>
-	 * This is global to all APIs but can be overridden on specific API calls.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger addProduces(Collection<MediaType> values) {
-		produces = addToList(produces, values);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>produces</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link MediaType}
-	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	consumes(<js>"['text/json']"</js>);
-	 * 			</p>
-	 * 		<li><c>String</c> - Individual values
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	consumes(<js>"text/json"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger produces(Object...values) {
-		produces = addToList(produces, values, MediaType.class);
-		return this;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// paths
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>paths</property>.
@@ -635,48 +773,6 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Shortcut for calling <c>getPaths().get(path);</c>
-	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).
-	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
-	 */
-	public OperationMap getPath(String path) {
-		return getPaths().get(path);
-	}
-
-	/**
-	 * Shortcut for calling <c>getPaths().get(path).get(operation);</c>
-	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).
-	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
-	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
-	 */
-	public Operation getOperation(String path, String operation) {
-		OperationMap om = getPath(path);
-		if (om == null)
-			return null;
-		return om.get(operation);
-	}
-
-	/**
-	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
-	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).
-	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
-	 * @param status The HTTP response status (e.g. <js>"200"</js>).
-	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
-	 */
-	public ResponseInfo getResponseInfo(String path, String operation, Object status) {
-		OperationMap om = getPath(path);
-		if (om == null)
-			return null;
-		Operation op = om.get(operation);
-		if (op == null)
-			return null;
-		return op.getResponse(status);
-	}
-
-	/**
 	 * Bean property setter:  <property>paths</property>.
 	 *
 	 * <p>
@@ -685,21 +781,16 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
 	 */
-	public Swagger setPaths(Map<String,OperationMap> value) {
+	public void setPaths(Map<String,OperationMap> value) {
 		paths = newSortedMap(value, PATH_COMPARATOR);
-		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>produces</property> property.
+	 * Bean property appender:  <property>paths</property>.
 	 *
 	 * <p>
-	 * A list of MIME types the APIs can produce.
-	 *
-	 * <p>
-	 * This is global to all APIs but can be overridden on specific API calls.
+	 * The available paths and operations for the API.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
@@ -712,6 +803,9 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>paths</property>.
+	 *
+	 * <p>
 	 * Adds a single value to the <property>paths</property> property.
 	 *
 	 * @param path The path template.
@@ -732,202 +826,813 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>paths</property> property.
+	 * Bean property fluent getter:  <property>paths</property>.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Map&lt;String,Map&lt;String,{@link Operation}&gt;|String&gt;</c>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Map&lt;String,{@link Operation}&gt;&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	paths(<js>"{'foo':{'get':{operationId:'operationId',...}}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * <p>
+	 * The available paths and operations for the API.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Map<String,OperationMap>> paths() {
+		return Optional.ofNullable(getPaths());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>paths</property>.
+	 *
+	 * <p>
+	 * The available paths and operations for the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger paths(Map<String,OperationMap> value) {
+		setPaths(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>paths</property>.
+	 *
+	 * <p>
+	 * The available paths and operations for the API.
+	 *
+	 * @param json
+	 * 	The values to set on this property as JSON.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Swagger paths(Object...values) {
-		if (paths == null)
-			paths = new TreeMap<>(PATH_COMPARATOR);
-		paths = addToMap((Map)paths, values, String.class, Map.class, String.class, Operation.class);
+	public Swagger paths(String json) {
+		setPaths(addToMap(new TreeMap(PATH_COMPARATOR), new Object[]{json}, String.class, Map.class, String.class, Operation.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// produces
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<MediaType> getProduces() {
+		return produces;
+	}
+
+	/**
+	 * Bean property setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setProduces(Collection<MediaType> value) {
+		produces = newSet(value);
+	}
+
+	/**
+	 * Adds one or more values to the <property>produces</property> property.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger addProduces(Collection<MediaType> values) {
+		produces = addToSet(produces, values);
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>definitions</property>.
+	 * Bean property fluent getter:  <property>produces</property>.
 	 *
 	 * <p>
-	 * An object to hold data types produced and consumed by operations.
+	 * A list of MIME types the APIs can produce.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public Map<String,OMap> getDefinitions() {
-		return definitions;
+	public Optional<Set<MediaType>> produces() {
+		return Optional.ofNullable(getProduces());
 	}
 
 	/**
-	 * Bean property setter:  <property>definitions</property>.
+	 * Bean property fluent setter:  <property>produces</property>.
 	 *
 	 * <p>
-	 * An object to hold data types produced and consumed by operations.
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger produces(Collection<MediaType> value) {
+		setProduces(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger produces(MediaType...value) {
+		setProduces(toSet(value, MediaType.class));
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Strings can be JSON arrays.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger produces(String...value) {
+		setProduces(toSet(value, MediaType.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// responses
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * An object to hold responses that can be used across operations.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,ResponseInfo> getResponses() {
+		return responses;
+	}
+
+	/**
+	 * Bean property setter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * An object to hold responses that can be used across operations.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setResponses(Map<String,ResponseInfo> value) {
+		responses = newMap(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>responses</property>.
+	 *
+	 * <p>
+	 * Adds one or more values to the <property>responses</property> property.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger addResponses(Map<String,ResponseInfo> values) {
+		responses = addToMap(responses, values);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>responses</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>responses</property> property.
+	 *
+	 * @param name The response name.
+	 * @param response The response definition.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger response(String name, ResponseInfo response) {
+		responses = addToMap(responses, name, response);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * An object to hold responses that can be used across operations.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Map<String,ResponseInfo>> responses() {
+		return Optional.ofNullable(getResponses());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * An object to hold responses that can be used across operations.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger responses(Map<String,ResponseInfo> value) {
+		setResponses(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * An object to hold responses that can be used across operations.
+	 *
+	 * @param json
+	 * 	The values to set on this property as JSON.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger responses(String json) {
+		setResponses(toMap(json, String.class, ResponseInfo.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// schemes
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<String> getSchemes() {
+		return schemes;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"https"</js>
+	 * 		<li><js>"ws"</js>
+	 * 		<li><js>"wss"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSchemes(Collection<String> value) {
+		schemes = newSet(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"https"</js>
+	 * 		<li><js>"ws"</js>
+	 * 		<li><js>"wss"</js>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger addSchemes(Collection<String> values) {
+		schemes = addToSet(schemes, values);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Set<String>> schemes() {
+		return Optional.ofNullable(getSchemes());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @param value
+	 * 	The values to set on this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger schemes(Collection<String> value) {
+		setSchemes(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Strings can be JSON arrays.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger schemes(String...value) {
+		setSchemes(toSet(value, String.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// security
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Map<String,List<String>>> getSecurity() {
+		return security;
+	}
+
+	/**
+	 * Bean property setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSecurity(Collection<Map<String,List<String>>> value) {
+		security = newList(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
+		security = addToList(security, values);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>security</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>securityDefinitions</property> property.
+	 *
+	 * @param scheme The security scheme that applies to this operation
+	 * @param alternatives
+	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * @return This object (for method chaining).
+	 */
+	public Swagger security(String scheme, String...alternatives) {
+		Map<String,List<String>> m = new LinkedHashMap<>();
+		m.put(scheme, Arrays.asList(alternatives));
+		return addSecurity(Collections.singleton(m));
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>securities</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<List<Map<String,List<String>>>> security() {
+		return Optional.ofNullable(getSecurity());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger security(Collection<Map<String,List<String>>> value) {
+		setSecurity(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @param json
+	 * 	The value to set on this property as JSON.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Swagger security(String json) {
+		setSecurity((List)toList(json, Map.class, String.class, List.class, String.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// securityDefinitions
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Security scheme definitions that can be used across the specification.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,SecurityScheme> getSecurityDefinitions() {
+		return securityDefinitions;
+	}
+
+	/**
+	 * Bean property setter:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Security scheme definitions that can be used across the specification.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setSecurityDefinitions(Map<String,SecurityScheme> value) {
+		securityDefinitions = newMap(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Security scheme definitions that can be used across the specification.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger addSecurityDefinitions(Map<String,SecurityScheme> values) {
+		securityDefinitions = addToMap(securityDefinitions, values);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>securityDefinitions</property> property.
+	 *
+	 * @param name A security name.
+	 * @param securityScheme A security schema.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger securityDefinition(String name, SecurityScheme securityScheme) {
+		securityDefinitions = addToMap(securityDefinitions, name, securityScheme);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Security scheme definitions that can be used across the specification.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Map<String,SecurityScheme>> securityDefinitions() {
+		return Optional.ofNullable(getSecurityDefinitions());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Security scheme definitions that can be used across the specification.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger securityDefinitions(Map<String,SecurityScheme> value) {
+		setSecurityDefinitions(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>securityDefinitions</property>.
+	 *
+	 * <p>
+	 * Security scheme definitions that can be used across the specification.
+	 *
+	 * @param json
+	 * 	The value to set on this property as JSON.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger securityDefinitions(String json) {
+		setSecurityDefinitions(toMap(json, String.class, SecurityScheme.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// swagger
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>swagger</property>.
+	 *
+	 * <p>
+	 * Specifies the Swagger Specification version being used.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getSwagger() {
+		return swagger;
+	}
+
+	/**
+	 * Bean property setter:  <property>swagger</property>.
+	 *
+	 * <p>
+	 * Specifies the Swagger Specification version being used.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 */
+	public void setSwagger(String value) {
+		swagger = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>swagger</property>.
+	 *
+	 * <p>
+	 * Specifies the Swagger Specification version being used.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> swagger() {
+		return Optional.ofNullable(getSwagger());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>swagger</property>.
+	 *
+	 * <p>
+	 * Specifies the Swagger Specification version being used.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setDefinitions(Map<String,OMap> value) {
-		definitions = newMap(value);
+	public Swagger swagger(String value) {
+		setSwagger(value);
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// tags
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Adds one or more values to the <property>definitions</property> property.
+	 * Bean property getter:  <property>tags</property>.
 	 *
 	 * <p>
-	 * An object to hold data types produced and consumed by operations.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger addDefinitions(Map<String,OMap> values) {
-		definitions = addToMap(definitions, values);
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>definitions</property> property.
-	 *
-	 * @param name A definition name.
-	 * @param schema The schema that the name defines.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger definition(String name, OMap schema) {
-		definitions = addToMap(definitions, name, schema);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>definitions</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;|String&gt;</c>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	definitions(<js>"{'foo':{'bar':{format:'format',...}}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger definitions(Object...values) {
-		definitions = addToMap(definitions, values, String.class, OMap.class);
-		return this;
-	}
-
-	/**
-	 * Convenience method for testing whether this Swagger has one or more definitions defined.
-	 *
-	 * @return <jk>true</jk> if this Swagger has one or more definitions defined.
-	 */
-	public boolean hasDefinitions() {
-		return definitions != null && ! definitions.isEmpty();
-	}
-
-	/**
-	 * Bean property getter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * An object to hold parameters that can be used across operations.
-	 *
-	 * <p>
-	 * This property does not define global parameters for all operations.
+	 * A list of tags used by the specification with additional metadata.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ParameterInfo> getParameters() {
-		return parameters;
+	public Set<Tag> getTags() {
+		return tags;
 	}
 
 	/**
-	 * Bean property setter:  <property>parameters</property>.
+	 * Bean property setter:  <property>tags</property>.
 	 *
 	 * <p>
-	 * An object to hold parameters that can be used across operations.
-	 *
-	 * <p>
-	 * This property does not define global parameters for all operations.
+	 * A list of tags used by the specification with additional metadata.
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
+	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
+	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
+	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Swagger setParameters(Map<String,ParameterInfo> value) {
-		parameters = newMap(value);
-		return this;
+	public void setTags(Collection<Tag> value) {
+		tags = newSet(value);
 	}
 
 	/**
-	 * Adds one or more values to the <property>parameters</property> property.
+	 * Bean property appender:  <property>tags</property>.
 	 *
 	 * <p>
-	 * An object to hold parameters that can be used across operations.
-	 *
-	 * <p>
-	 * This property does not define global parameters for all operations.
+	 * A list of tags used by the specification with additional metadata.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
+	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
+	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
+	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
+	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addParameters(Map<String,ParameterInfo> values) {
-		parameters = addToMap(parameters, values);
+	public Swagger addTags(Collection<Tag> values) {
+		tags = addToSet(tags, values);
 		return this;
 	}
 
 	/**
-	 * Adds a single value to the <property>parameter</property> property.
+	 * Bean property fluent getter:  <property>tags</property>.
 	 *
-	 * @param name The parameter name.
-	 * @param parameter The parameter definition.
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Set<Tag>> tags() {
+		return Optional.ofNullable(getTags());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger parameter(String name, ParameterInfo parameter) {
-		parameters = addToMap(parameters, name, parameter);
+	public Swagger tags(Collection<Tag> value) {
+		setTags(value);
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>properties</property> property.
+	 * Bean property fluent setter:  <property>tags</property>.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Map&lt;String,{@link ParameterInfo}|String&gt;</c>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link ParameterInfo}&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	parameters(<js>"{'foo':{name:'name',...}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param json
+	 * 	The new value for this property as JSON.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger parameters(Object...values) {
-		parameters = addToMap(parameters, values, String.class, ParameterInfo.class);
+	public Swagger tags(String json) {
+		setTags(toSet(json, Tag.class));
 		return this;
+	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Convenience methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Shortcut for calling <c>getPaths().get(path);</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
+	 */
+	public OperationMap getPath(String path) {
+		return getPaths().get(path);
+	}
+
+	/**
+	 * Shortcut for calling <c>Optional.of(getPaths().get(path));</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @return The operation map for the specified path as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<OperationMap> path(String path) {
+		return Optional.ofNullable(getPath(path));
+	}
+
+	/**
+	 * Shortcut for calling <c>getPaths().get(path).get(operation);</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
+	 */
+	public Operation getOperation(String path, String operation) {
+		OperationMap om = getPath(path);
+		if (om == null)
+			return null;
+		return om.get(operation);
+	}
+
+	/**
+	 * Shortcut for calling <c>Optional.of(getPaths().get(path).get(operation));</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @return The operation for the specified path and operation id as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Operation> operation(String path, String operation) {
+		return Optional.ofNullable(getOperation(path, operation));
+	}
+
+	/**
+	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @param status The HTTP response status (e.g. <js>"200"</js>).
+	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
+	 */
+	public ResponseInfo getResponseInfo(String path, String operation, String status) {
+		OperationMap om = getPath(path);
+		if (om == null)
+			return null;
+		Operation op = om.get(operation);
+		if (op == null)
+			return null;
+		return op.getResponse(status);
+	}
+
+	/**
+	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @param status The HTTP response status (e.g. <js>"200"</js>).
+	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
+	 */
+	public ResponseInfo getResponseInfo(String path, String operation, int status) {
+		return getResponseInfo(path, operation, String.valueOf(status));
+	}
+
+	/**
+	 * Shortcut for calling <c>Optional.of(getPaths().get(path).get(operation).getResponse(status));</c>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @param status The HTTP response status (e.g. <js>"200"</js>).
+	 * @return The operation for the specified path and operation id as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<ResponseInfo> responseInfo(String path, String operation, String status) {
+		return Optional.ofNullable(getResponseInfo(path, operation, status));
 	}
 
 	/**
@@ -951,456 +1656,64 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>responses</property>.
+	 * Convenience method for calling <c>getPath(path).get(method).getParameter(in,name);</c>
 	 *
-	 * <p>
-	 * An object to hold responses that can be used across operations.
-	 *
-	 * <p>
-	 * This property does not define global responses for all operations.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param path The HTTP path.
+	 * @param method The HTTP method.
+	 * @param in The parameter type.
+	 * @param name The parameter name.
+	 * @return The parameter information as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public Map<String,ResponseInfo> getResponses() {
-		return responses;
+	public Optional<ParameterInfo> parameterInfo(String path, String method, String in, String name) {
+		return Optional.of(getParameterInfo(path, method, in, name));
 	}
 
-	/**
-	 * Bean property setter:  <property>responses</property>.
-	 *
-	 * <p>
-	 * An object to hold responses that can be used across operations.
-	 *
-	 * <p>
-	 * This property does not define global responses for all operations.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger setResponses(Map<String,ResponseInfo> value) {
-		responses = newMap(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>responses</property> property.
-	 *
-	 * <p>
-	 * An object to hold responses that can be used across operations.
-	 *
-	 * <p>
-	 * This property does not define global responses for all operations.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger addResponses(Map<String,ResponseInfo> values) {
-		responses = addToMap(responses, values);
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>responses</property> property.
-	 *
-	 * @param name The response name.
-	 * @param response The response definition.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger response(String name, ResponseInfo response) {
-		responses = addToMap(responses, name, response);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>properties</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Map&lt;String,{@link ResponseInfo}|String&gt;</c>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link ResponseInfo}&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	responses(<js>"{'foo':{description:'description',...}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger responses(Object...values) {
-		responses = addToMap(responses, values, String.class, ResponseInfo.class);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>securityDefinitions</property>.
-	 *
-	 * <p>
-	 * Security scheme definitions that can be used across the specification.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,SecurityScheme> getSecurityDefinitions() {
-		return securityDefinitions;
-	}
-
-	/**
-	 * Bean property setter:  <property>securityDefinitions</property>.
-	 *
-	 * <p>
-	 * Security scheme definitions that can be used across the specification.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger setSecurityDefinitions(Map<String,SecurityScheme> value) {
-		securityDefinitions = newMap(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>securityDefinitions</property> property.
-	 *
-	 * <p>
-	 * Security scheme definitions that can be used across the specification.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger addSecurityDefinitions(Map<String,SecurityScheme> values) {
-		securityDefinitions = addToMap(securityDefinitions, values);
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>securityDefinitions</property> property.
-	 *
-	 * @param name A security name.
-	 * @param securityScheme A security schema.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger securityDefinition(String name, SecurityScheme securityScheme) {
-		securityDefinitions = addToMap(securityDefinitions, name, securityScheme);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>securityDefinitions</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Map&lt;String,{@link SecurityScheme}|String&gt;</c>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link SecurityScheme}&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	securityDefinitions(<js>"{'foo':{name:'name',...}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger securityDefinitions(Object...values) {
-		securityDefinitions = addToMap(securityDefinitions, values, String.class, SecurityScheme.class);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for the API as a whole.
-	 *
-	 * <p>
-	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
-	 * between the security requirements).
-	 * <br>Individual operations can override this definition.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Map<String,List<String>>> getSecurity() {
-		return security;
-	}
-
-	/**
-	 * Bean property setter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for the API as a whole.
-	 *
-	 * <p>
-	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
-	 * between the security requirements).
-	 * <br>Individual operations can override this definition.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger setSecurity(Collection<Map<String,List<String>>> value) {
-		security = newList(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>security</property> property.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for the API as a whole.
-	 *
-	 * <p>
-	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
-	 * between the security requirements).
-	 * <br>Individual operations can override this definition.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
-		security = addToList(security, values);
-		return this;
-	}
-
-
-	/**
-	 * Adds a single value to the <property>securityDefinitions</property> property.
-	 *
-	 * @param scheme The security scheme that applies to this operation
-	 * @param alternatives
-	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
-	 * @return This object (for method chaining).
-	 */
-	public Swagger security(String scheme, String...alternatives) {
-		Map<String,List<String>> m = new LinkedHashMap<>();
-		m.put(scheme, Arrays.asList(alternatives));
-		return addSecurity(Collections.singleton(m));
-	}
-
-	/**
-	 * Adds one or more values to the <property>securityDefinitions</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	securities(<js>"[{...}]"</js>);
-	 * 			</p>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,List&lt;String&gt;&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	securities(<js>"{...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Swagger securities(Object...values) {
-		security = addToList((List)security, values, Map.class, String.class, List.class, String.class);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags used by the specification with additional metadata.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Tag> getTags() {
-		return tags;
-	}
-
-	/**
-	 * Bean property setter:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags used by the specification with additional metadata.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
-	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
-	 * 	<br>Each tag name in the list MUST be unique.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger setTags(Collection<Tag> value) {
-		tags = newList(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>security</property> property.
-	 *
-	 * <p>
-	 * A list of tags used by the specification with additional metadata.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
-	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
-	 * 	<br>Each tag name in the list MUST be unique.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger addTags(Collection<Tag> values) {
-		tags = addToList(tags, values);
-		return this;
-	}
-
-
-	/**
-	 * Adds one or more values to the <property>tags</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Tag}
-	 * 		<li><c>Collection&lt;{@link Tag}|String&gt;</c>
-	 * 		<li><c>{@link Tag}[]</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link Tag}&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	tags(<js>"[{name:'name',description:'description',...}]"</js>);
-	 * 			</p>
-	 * 		<li><c>String</c> - JSON object representation of <c>{@link Tag}</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	tags(<js>"{name:'name',description:'description',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger tags(Object...values) {
-		tags = addToList(tags, values, Tag.class);
-		return this;
-	}
-
-	/**
-	 * Convenience method for testing whether this Swagger has one or more tags defined.
-	 *
-	 * @return <jk>true</jk> if this Swagger has one or more tags defined.
-	 */
-	public boolean hasTags() {
-		return tags != null && ! tags.isEmpty();
-	}
-
-	/**
-	 * Bean property getter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
-
-	/**
-	 * Bean property setter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger setExternalDocs(ExternalDocumentation value) {
-		externalDocs = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link ExternalDocumentation}
-	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Swagger externalDocs(Object value) {
-		return setExternalDocs(toType(value, ExternalDocumentation.class));
-	}
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "swagger": return toType(getSwagger(), type);
-			case "info": return toType(getInfo(), type);
-			case "host": return toType(getHost(), type);
 			case "basePath": return toType(getBasePath(), type);
-			case "schemes": return toType(getSchemes(), type);
 			case "consumes": return toType(getConsumes(), type);
-			case "produces": return toType(getProduces(), type);
-			case "paths": return toType(getPaths(), type);
 			case "definitions": return toType(getDefinitions(), type);
-			case "parameters": return toType(getParameters(), type);
-			case "responses": return toType(getResponses(), type);
-			case "securityDefinitions": return toType(getSecurityDefinitions(), type);
-			case "security": return toType(getSecurity(), type);
-			case "tags": return toType(getTags(), type);
 			case "externalDocs": return toType(getExternalDocs(), type);
+			case "host": return toType(getHost(), type);
+			case "info": return toType(getInfo(), type);
+			case "parameters": return toType(getParameters(), type);
+			case "paths": return toType(getPaths(), type);
+			case "produces": return toType(getProduces(), type);
+			case "responses": return toType(getResponses(), type);
+			case "schemes": return toType(getSchemes(), type);
+			case "security": return toType(getSecurity(), type);
+			case "securityDefinitions": return toType(getSecurityDefinitions(), type);
+			case "swagger": return toType(getSwagger(), type);
+			case "tags": return toType(getTags(), type);
 			default: return super.get(property, type);
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override /* SwaggerElement */
 	public Swagger set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "swagger": return swagger(value);
-			case "info": return info(value);
-			case "host": return host(value);
-			case "basePath": return basePath(value);
-			case "schemes": return setSchemes(null).schemes(value);
-			case "consumes": return setConsumes(null).consumes(value);
-			case "produces": return setProduces(null).produces(value);
-			case "paths": return setPaths(null).paths(value);
-			case "definitions": return setDefinitions(null).definitions(value);
-			case "parameters": return setParameters(null).parameters(value);
-			case "responses": return setResponses(null).responses(value);
-			case "securityDefinitions": return setSecurityDefinitions(null).securityDefinitions(value);
-			case "security": return setSecurity(null).securities(value);
-			case "tags": return setTags(null).tags(value);
-			case "externalDocs": return externalDocs(value);
+			case "basePath": return basePath(stringify(value));
+			case "consumes": return consumes(toList(value, MediaType.class));
+			case "definitions": return definitions(toMap(value, String.class, OMap.class));
+			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
+			case "host": return host(stringify(value));
+			case "info": return info(toType(value, Info.class));
+			case "parameters": return parameters(toMap(value, String.class, ParameterInfo.class));
+			case "paths": return paths(toMap(value, String.class, OperationMap.class));
+			case "produces": return produces(toList(value, MediaType.class));
+			case "responses": return responses(toMap(value, String.class, ResponseInfo.class));
+			case "schemes": return schemes(toList(value, String.class));
+			case "security": return security((List)toList(value, Map.class, String.class, List.class, String.class));
+			case "securityDefinitions": return securityDefinitions(toMap(value, String.class, SecurityScheme.class));
+			case "swagger": return swagger(stringify(value));
+			case "tags": return tags(toList(value, Tag.class));
 			default:
 				super.set(property, value);
 				return this;
@@ -1410,21 +1723,21 @@ public class Swagger extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(swagger != null, "swagger")
-			.appendIf(info != null, "info")
-			.appendIf(host != null, "host")
 			.appendIf(basePath != null, "basePath")
-			.appendIf(schemes != null, "schemes")
 			.appendIf(consumes != null, "consumes")
-			.appendIf(produces != null, "produces")
-			.appendIf(paths != null, "paths")
 			.appendIf(definitions != null, "definitions")
+			.appendIf(externalDocs != null, "externalDocs")
+			.appendIf(host != null, "host")
+			.appendIf(info != null, "info")
 			.appendIf(parameters != null, "parameters")
+			.appendIf(paths != null, "paths")
+			.appendIf(produces != null, "produces")
 			.appendIf(responses != null, "responses")
-			.appendIf(securityDefinitions != null, "securityDefinitions")
+			.appendIf(schemes != null, "schemes")
 			.appendIf(security != null, "security")
-			.appendIf(tags != null, "tags")
-			.appendIf(externalDocs != null, "externalDocs");
+			.appendIf(securityDefinitions != null, "securityDefinitions")
+			.appendIf(swagger != null, "swagger")
+			.appendIf(tags != null, "tags");
 		return new MultiSet<>(s, super.keySet());
 	}
 

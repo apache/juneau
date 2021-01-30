@@ -27,190 +27,107 @@ import org.junit.*;
  * Testcase for {@link ResponseInfo}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class ResponseInfoTest {
+public class ResponseInfo_Test {
 
 	/**
 	 * Test method for {@link ResponseInfo#description(java.lang.Object)}.
 	 */
 	@Test
-	public void testDescription() {
+	public void a01_description() {
 		ResponseInfo t = new ResponseInfo();
 
 		t.description("foo");
-		assertEquals("foo", t.getDescription());
-
-		t.description(new StringBuilder("foo"));
-		assertEquals("foo", t.getDescription());
-		assertObject(t.getDescription()).isType(String.class);
+		assertString(t.description()).is("foo");
 
 		t.description(null);
-		assertNull(t.getDescription());
+		assertString(t.description()).isNull();
 	}
 
 	/**
 	 * Test method for {@link ResponseInfo#schema(java.lang.Object)}.
 	 */
 	@Test
-	public void testSchema() {
+	public void a02_schema() {
 		ResponseInfo t = new ResponseInfo();
 
 		t.schema(schemaInfo().title("foo"));
-		assertObject(t.getSchema()).json().is("{title:'foo'}");
+		assertObject(t.schema()).isType(SchemaInfo.class).json().is("{title:'foo'}");
 
 		t.schema("{title:'foo'}");
-		assertObject(t.getSchema()).json().is("{title:'foo'}");
-		assertObject(t.getSchema()).isType(SchemaInfo.class);
+		assertObject(t.schema()).isType(SchemaInfo.class).json().is("{title:'foo'}");
 
-		t.schema(null);
-		assertNull(t.getSchema());
+		t.schema((String)null);
+		assertObject(t.schema()).isNull();
 	}
 
 	/**
 	 * Test method for {@link ResponseInfo#setHeaders(java.util.Map)}.
 	 */
 	@Test
-	public void testSetHeaders() {
+	public void a03_headers() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.setHeaders(AMap.of("foo",headerInfo("bar")));
-		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
-		assertObject(t.getHeaders()).isType(Map.class);
-		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
+		t.headers(AMap.of("foo",headerInfo("bar")));
+		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
-		t.setHeaders(AMap.create());
-		assertObject(t.getHeaders()).json().is("{}");
-		assertObject(t.getHeaders()).isType(Map.class);
+		t.headers(AMap.create());
+		assertObject(t.headers()).isType(Map.class).json().is("{}");
 
-		t.setHeaders(null);
-		assertNull(t.getExamples());
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#addHeaders(java.util.Map)}.
-	 */
-	@Test
-	public void testAddHeaders() {
-		ResponseInfo t = new ResponseInfo();
+		t.headers((Map<String,HeaderInfo>)null);
+		assertObject(t.headers()).isNull();
 
 		t.addHeaders(AMap.of("foo",headerInfo("bar")));
-		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
-		assertObject(t.getHeaders()).isType(Map.class);
-		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
+		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.addHeaders(AMap.create());
-		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
-		assertObject(t.getHeaders()).isType(Map.class);
-		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
+		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.addHeaders(null);
-		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
-		assertObject(t.getHeaders()).isType(Map.class);
-		assertObject(t.getHeaders().get("foo")).isType(HeaderInfo.class);
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#header(java.lang.String, org.apache.juneau.dto.swagger.HeaderInfo)}.
-	 */
-	@Test
-	public void testHeader() {
-		ResponseInfo t = new ResponseInfo();
-
-		t.header("a", headerInfo("a1"));
-		t.header("b", null);
-		t.header(null, headerInfo("c1"));
-
-		assertObject(t.getHeaders()).json().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#headers(java.lang.Object[])}.
-	 */
-	@Test
-	public void testHeaders() {
-		ResponseInfo t = new ResponseInfo();
-
-		t.headers(AMap.of("a", headerInfo("a1")));
-		t.headers(AMap.of("b", "{type:'b1'}"));
-		t.headers("{c:{type:'c1'}}");
-		t.headers("{}");
-		t.headers((Object[])null);
-
-		assertObject(t.getHeaders()).json().is("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}");
+		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 	}
 
 	/**
 	 * Test method for {@link ResponseInfo#setExamples(java.util.Map)}.
 	 */
 	@Test
-	public void testSetExamples() {
+	public void a04_examples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.setExamples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
-		assertObject(t.getExamples()).isType(Map.class);
+		t.examples(AMap.of("foo","bar","baz",AList.of("qux")));
+		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
 
-		t.setExamples(AMap.create());
-		assertObject(t.getExamples()).json().is("{}");
-		assertObject(t.getExamples()).isType(Map.class);
+		t.examples(AMap.create());
+		assertObject(t.examples()).isType(Map.class).json().is("{}");
 
-		t.setExamples(null);
-		assertNull(t.getExamples());
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#addExamples(java.util.Map)}.
-	 */
-	@Test
-	public void testAddExamples() {
-		ResponseInfo t = new ResponseInfo();
+		t.examples((Map<String,Object>)null);
+		assertObject(t.examples()).isNull();
 
 		t.addExamples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
-		assertObject(t.getExamples()).isType(Map.class);
+		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(AMap.create());
-		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
-		assertObject(t.getExamples()).isType(Map.class);
+		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(null);
-		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
-		assertObject(t.getExamples()).isType(Map.class);
-	}
+		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
 
-	/**
-	 * Test method for {@link ResponseInfo#example(java.lang.String, java.lang.Object)}.
-	 */
-	@Test
-	public void testExample() {
-		ResponseInfo t = new ResponseInfo();
-
+		t.examples(AMap.create());
 		t.example("text/a", "a");
 		t.example("text/b", null);
 		t.example(null, "c");
 
-		assertObject(t.getExamples()).json().is("{'text/a':'a','text/b':null,null:'c'}");
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#examples(java.lang.Object[])}.
-	 */
-	@Test
-	public void testExamples() {
-		ResponseInfo t = new ResponseInfo();
-
-		t.examples(AMap.of("1",AList.of("a")));
-		t.examples("{2:{c1:'c2'}}");
-		t.examples("{}");
-		t.examples((Object)null);
-
-		assertObject(t.getExamples()).json().is("{'1':['a'],'2':{c1:'c2'}}");
+		assertObject(t.examples()).json().is("{'text/a':'a','text/b':null,null:'c'}");
 	}
 
 	/**
 	 * Test method for {@link ResponseInfo#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		ResponseInfo t = new ResponseInfo();
 
 		t
@@ -240,11 +157,11 @@ public class ResponseInfoTest {
 
 		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
-		assertEquals("a", t.get("description", String.class));
-		assertEquals("{foo:'bar',baz:['qux']}", t.get("examples", String.class));
-		assertEquals("{a:{type:'a1'}}", t.get("headers", String.class));
-		assertEquals("{type:'d'}", t.get("schema", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("description", String.class)).is("a");
+		assertString(t.get("examples", String.class)).is("{foo:'bar',baz:['qux']}");
+		assertString(t.get("headers", String.class)).is("{a:{type:'a1'}}");
+		assertString(t.get("schema", String.class)).is("{type:'d'}");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("description", Object.class)).isType(String.class);
 		assertObject(t.get("examples", Object.class)).isType(Map.class);
@@ -260,5 +177,40 @@ public class ResponseInfoTest {
 
 		String s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, ResponseInfo.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		ResponseInfo t = new ResponseInfo();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("description", "a")
+			.set("examples", AMap.of("foo","bar","baz",AList.of("qux")))
+			.set("headers", AMap.of("a", headerInfo("a1")))
+			.set("schema", schemaInfo().type("d"))
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		ResponseInfo t = new ResponseInfo();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("description", "a")
+			.set("examples", AMap.of("foo","bar","baz",AList.of("qux")))
+			.set("headers", AMap.of("a", headerInfo("a1")))
+			.set("schema", schemaInfo().type("d"))
+			.set("$ref", "ref");
+
+		assertObject(t.keySet()).json().is("['description','examples','headers','schema','$ref']");
 	}
 }

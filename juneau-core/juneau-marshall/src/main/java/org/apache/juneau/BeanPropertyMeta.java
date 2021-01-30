@@ -770,7 +770,7 @@ public final class BeanPropertyMeta {
 
 					Collection valueList = (Collection)value;
 					Collection propList = (Collection)r;
-						ClassMeta elementType = rawTypeMeta.getElementType();
+					ClassMeta elementType = rawTypeMeta.getElementType();
 
 					// If the property type is abstract, then we either need to reuse the existing
 					// collection (if it's not null), or try to assign the value directly.
@@ -779,7 +779,7 @@ public final class BeanPropertyMeta {
 							if (setter == null && field == null)
 								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
 
-							if (propertyClass.isInstance(valueList)) {
+							if (propertyClass.isInstance(valueList) || (setter != null && setter.getParameterTypes()[0] == Collection.class)) {
 								if (! elementType.isObject()) {
 										List l = new OList(valueList);
 										for (ListIterator<Object> i = l.listIterator(); i.hasNext(); ) {

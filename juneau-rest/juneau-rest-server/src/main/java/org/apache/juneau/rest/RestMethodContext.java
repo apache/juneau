@@ -1925,6 +1925,34 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		return debug;
 	}
 
+	Optional<List<MediaType>> supportedAcceptTypes() {
+		return Optional.of(supportedAcceptTypes);
+	}
+
+	Optional<List<MediaType>> supportedContentTypes() {
+		return Optional.of(supportedContentTypes);
+	}
+
+	Optional<PropertyStore> propertyStore() {
+		return Optional.of(getPropertyStore());
+	}
+
+	Optional<String> defaultCharset() {
+		return Optional.of(defaultCharset);
+	}
+
+	Optional<NameValuePair[]> defaultRequestFormData() {
+		return Optional.of(defaultRequestFormData);
+	}
+
+	Optional<SerializerGroup> serializers() {
+		return Optional.of(serializers);
+	}
+
+	Optional<ParserGroup> parsers() {
+		return Optional.of(parsers);
+	}
+
 	@Override /* Object */
 	public boolean equals(Object o) {
 		return (o instanceof RestMethodContext) && eq(this, (RestMethodContext)o, (x,y)->x.method.equals(y.method));

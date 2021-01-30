@@ -194,7 +194,7 @@ public class SchemaAnnotation {
 			.appendSkipEmpty("type", a.type(), a.t())
 			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
 			.appendSkipEmpty("xml", joinnl(a.xml()))
-			.appendSkipEmpty("x-example", joinnl(a.example(), a.ex()))
+			.appendSkipEmpty("example", joinnl(a.example(), a.ex()))
 			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}

@@ -27,443 +27,311 @@ import org.junit.*;
  * Testcase for {@link Items}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class ItemsTest {
+public class Items_Test {
 
 	/**
 	 * Test method for {@link Items#type(java.lang.Object)}.
 	 */
 	@Test
-	public void testType() {
+	public void a01_type() {
 		Items t = new Items();
 
 		t.type("foo");
-		assertEquals("foo", t.getType());
-
-		t.type(new StringBuilder("foo"));
-		assertEquals("foo", t.getType());
-		assertObject(t.getType()).isType(String.class);
+		assertString(t.type()).is("foo");
 
 		t.type(null);
-		assertNull(t.getType());
+		assertString(t.type()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#format(java.lang.Object)}.
 	 */
 	@Test
-	public void testFormat() {
+	public void a02_format() {
 		Items t = new Items();
 
 		t.format("foo");
-		assertEquals("foo", t.getFormat());
-
-		t.format(new StringBuilder("foo"));
-		assertEquals("foo", t.getFormat());
-		assertObject(t.getFormat()).isType(String.class);
+		assertString(t.format()).is("foo");
 
 		t.format(null);
-		assertNull(t.getFormat());
+		assertString(t.format()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#items(java.lang.Object)}.
 	 */
 	@Test
-	public void testItems() {
+	public void a03_items() {
 		Items t = new Items();
 
 		t.items(items("foo"));
-		assertObject(t.getItems()).json().is("{type:'foo'}");
+		assertObject(t.items()).json().is("{type:'foo'}");
 
 		t.items("{type:'foo'}");
-		assertObject(t.getItems()).json().is("{type:'foo'}");
-		assertObject(t.getItems()).isType(Items.class);
+		assertObject(t.items()).isType(Items.class).json().is("{type:'foo'}");
 
-		t.items(null);
-		assertNull(t.getItems());
+		t.items((String)null);
+		assertObject(t.items()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#collectionFormat(java.lang.Object)}.
 	 */
 	@Test
-	public void testCollectionFormat() {
+	public void a04_collectionFormat() {
 		Items t = new Items();
 
 		t.collectionFormat("foo");
-		assertEquals("foo", t.getCollectionFormat());
-
-		t.collectionFormat(new StringBuilder("foo"));
-		assertEquals("foo", t.getCollectionFormat());
-		assertObject(t.getCollectionFormat()).isType(String.class);
+		assertString(t.collectionFormat()).is("foo");
 
 		t.collectionFormat(null);
-		assertNull(t.getCollectionFormat());
+		assertString(t.collectionFormat()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#_default(java.lang.Object)}.
 	 */
 	@Test
-	public void test_default() {
+	public void a05_default() {
 		Items t = new Items();
 
 		t._default("foo");
-		assertEquals("foo", t.getDefault());
+		assertObject(t._default()).is("foo");
 
 		t._default(new StringBuilder("foo"));
-		assertEquals("foo", t.getDefault().toString());
-		assertObject(t.getDefault()).isType(StringBuilder.class);
+		assertObject(t._default()).isType(StringBuilder.class).string().is("foo");
 
 		t._default(null);
-		assertNull(t.getDefault());
+		assertObject(t._default()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#maximum(java.lang.Object)}.
 	 */
 	@Test
-	public void testMaximum() {
+	public void a06_maximum() {
 		Items t = new Items();
 
 		t.maximum(123);
-		assertEquals(123, t.getMaximum());
-		assertObject(t.getMaximum()).isType(Integer.class);
+		assertObject(t.maximum()).isType(Integer.class).is(123);
 
 		t.maximum(123f);
-		assertEquals(123f, t.getMaximum());
-		assertObject(t.getMaximum()).isType(Float.class);
+		assertObject(t.maximum()).isType(Float.class).is(123f);
 
 		t.maximum("123");
-		assertEquals(123, t.getMaximum());
-		assertObject(t.getMaximum()).isType(Integer.class);
+		assertObject(t.maximum()).isType(Integer.class).is(123);
 
-		t.maximum(new StringBuilder("123"));
-		assertEquals(123, t.getMaximum());
-		assertObject(t.getMaximum()).isType(Integer.class);
-
-		t.maximum(null);
-		assertNull(t.getMaximum());
+		t.maximum((String)null);
+		assertObject(t.maximum()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#exclusiveMaximum(java.lang.Object)}.
 	 */
 	@Test
-	public void testExclusiveMaximum() {
+	public void a07_exclusiveMaximum() {
 		Items t = new Items();
 
 		t.exclusiveMaximum(true);
-		assertEquals(true, t.getExclusiveMaximum());
-		assertObject(t.getExclusiveMaximum()).isType(Boolean.class);
+		assertObject(t.exclusiveMaximum()).isType(Boolean.class).is(true);
 
 		t.exclusiveMaximum("true");
-		assertEquals(true, t.getExclusiveMaximum());
-		assertObject(t.getExclusiveMaximum()).isType(Boolean.class);
+		assertObject(t.exclusiveMaximum()).isType(Boolean.class).is(true);
 
-		t.exclusiveMaximum(new StringBuilder("true"));
-		assertEquals(true, t.getExclusiveMaximum());
-		assertObject(t.getExclusiveMaximum()).isType(Boolean.class);
-
-		t.exclusiveMaximum(null);
-		assertNull(t.getExclusiveMaximum());
+		t.exclusiveMaximum((String)null);
+		assertObject(t.exclusiveMaximum()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#minimum(java.lang.Object)}.
 	 */
 	@Test
-	public void testMinimum() {
+	public void a08_minimum() {
 		Items t = new Items();
 
 		t.minimum(123);
-		assertEquals(123, t.getMinimum());
-		assertObject(t.getMinimum()).isType(Integer.class);
+		assertObject(t.minimum()).isType(Integer.class).is(123);
 
 		t.minimum(123f);
-		assertEquals(123f, t.getMinimum());
-		assertObject(t.getMinimum()).isType(Float.class);
+		assertObject(t.minimum()).isType(Float.class).is(123f);
 
 		t.minimum("123");
-		assertEquals(123, t.getMinimum());
-		assertObject(t.getMinimum()).isType(Integer.class);
+		assertObject(t.minimum()).isType(Integer.class).is(123);
 
-		t.minimum(new StringBuilder("123"));
-		assertEquals(123, t.getMinimum());
-		assertObject(t.getMinimum()).isType(Integer.class);
-
-		t.minimum(null);
-		assertNull(t.getMinimum());
+		t.minimum((String)null);
+		assertObject(t.minimum()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#exclusiveMinimum(java.lang.Object)}.
 	 */
 	@Test
-	public void testExclusiveMinimum() {
+	public void a09_exclusiveMinimum() {
 		Items t = new Items();
 
 		t.exclusiveMinimum(true);
-		assertEquals(true, t.getExclusiveMinimum());
-		assertObject(t.getExclusiveMinimum()).isType(Boolean.class);
+		assertObject(t.exclusiveMinimum()).isType(Boolean.class).is(true);
 
 		t.exclusiveMinimum("true");
-		assertEquals(true, t.getExclusiveMinimum());
-		assertObject(t.getExclusiveMinimum()).isType(Boolean.class);
+		assertObject(t.exclusiveMinimum()).isType(Boolean.class).is(true);
 
-		t.exclusiveMinimum(new StringBuilder("true"));
-		assertEquals(true, t.getExclusiveMinimum());
-		assertObject(t.getExclusiveMinimum()).isType(Boolean.class);
-
-		t.exclusiveMinimum(null);
-		assertNull(t.getExclusiveMinimum());
+		t.exclusiveMinimum((String)null);
+		assertObject(t.exclusiveMinimum()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#maxLength(java.lang.Object)}.
 	 */
 	@Test
-	public void testMaxLength() {
+	public void a10_maxLength() {
 		Items t = new Items();
 
 		t.maxLength(123);
-		assertEquals(123, t.getMaxLength().intValue());
-		assertObject(t.getMaxLength()).isType(Integer.class);
-
-		t.maxLength(123f);
-		assertEquals(123, t.getMaxLength().intValue());
-		assertObject(t.getMaxLength()).isType(Integer.class);
+		assertObject(t.maxLength()).isType(Integer.class).is(123);
 
 		t.maxLength("123");
-		assertEquals(123, t.getMaxLength().intValue());
-		assertObject(t.getMaxLength()).isType(Integer.class);
+		assertObject(t.maxLength()).isType(Integer.class).is(123);
 
-		t.maxLength(new StringBuilder("123"));
-		assertEquals(123, t.getMaxLength().intValue());
-		assertObject(t.getMaxLength()).isType(Integer.class);
-
-		t.maxLength(null);
-		assertNull(t.getMaxLength());
+		t.maxLength((String)null);
+		assertObject(t.maxLength()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#minLength(java.lang.Object)}.
 	 */
 	@Test
-	public void testMinLength() {
+	public void a11_minLength() {
 		Items t = new Items();
 
 		t.minLength(123);
-		assertEquals(123, t.getMinLength().intValue());
-		assertObject(t.getMinLength()).isType(Integer.class);
-
-		t.minLength(123f);
-		assertEquals(123, t.getMinLength().intValue());
-		assertObject(t.getMinLength()).isType(Integer.class);
+		assertObject(t.minLength()).isType(Integer.class).is(123);
 
 		t.minLength("123");
-		assertEquals(123, t.getMinLength().intValue());
-		assertObject(t.getMinLength()).isType(Integer.class);
+		assertObject(t.minLength()).isType(Integer.class).is(123);
 
-		t.minLength(new StringBuilder("123"));
-		assertEquals(123, t.getMinLength().intValue());
-		assertObject(t.getMinLength()).isType(Integer.class);
-
-		t.minLength(null);
-		assertNull(t.getMinLength());
+		t.minLength((String)null);
+		assertObject(t.minLength()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#pattern(java.lang.Object)}.
 	 */
 	@Test
-	public void testPattern() {
+	public void a12_pattern() {
 		Items t = new Items();
 
 		t.pattern("foo");
-		assertEquals("foo", t.getPattern());
-
-		t.pattern(new StringBuilder("foo"));
-		assertEquals("foo", t.getPattern());
-		assertObject(t.getPattern()).isType(String.class);
+		assertString(t.pattern()).is("foo");
 
 		t.pattern(null);
-		assertNull(t.getPattern());
+		assertString(t.pattern()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#maxItems(java.lang.Object)}.
 	 */
 	@Test
-	public void testMaxItems() {
+	public void a13_maxItems() {
 		Items t = new Items();
 
 		t.maxItems(123);
-		assertEquals(123, t.getMaxItems().intValue());
-		assertObject(t.getMaxItems()).isType(Integer.class);
-
-		t.maxItems(123f);
-		assertEquals(123, t.getMaxItems().intValue());
-		assertObject(t.getMaxItems()).isType(Integer.class);
+		assertObject(t.maxItems()).isType(Integer.class).is(123);
 
 		t.maxItems("123");
-		assertEquals(123, t.getMaxItems().intValue());
-		assertObject(t.getMaxItems()).isType(Integer.class);
+		assertObject(t.maxItems()).isType(Integer.class).is(123);
 
-		t.maxItems(new StringBuilder("123"));
-		assertEquals(123, t.getMaxItems().intValue());
-		assertObject(t.getMaxItems()).isType(Integer.class);
-
-		t.maxItems(null);
-		assertNull(t.getMaxItems());
+		t.maxItems((String)null);
+		assertObject(t.maxItems()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#minItems(java.lang.Object)}.
 	 */
 	@Test
-	public void testMinItems() {
+	public void a14_minItems() {
 		Items t = new Items();
 
 		t.minItems(123);
-		assertEquals(123, t.getMinItems().intValue());
-		assertObject(t.getMinItems()).isType(Integer.class);
-
-		t.minItems(123f);
-		assertEquals(123, t.getMinItems().intValue());
-		assertObject(t.getMinItems()).isType(Integer.class);
+		assertObject(t.minItems()).isType(Integer.class).is(123);
 
 		t.minItems("123");
-		assertEquals(123, t.getMinItems().intValue());
-		assertObject(t.getMinItems()).isType(Integer.class);
+		assertObject(t.minItems()).isType(Integer.class).is(123);
 
-		t.minItems(new StringBuilder("123"));
-		assertEquals(123, t.getMinItems().intValue());
-		assertObject(t.getMinItems()).isType(Integer.class);
-
-		t.minItems(null);
-		assertNull(t.getMinItems());
+		t.minItems((String)null);
+		assertObject(t.minItems()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#uniqueItems(java.lang.Object)}.
 	 */
 	@Test
-	public void testUniqueItems() {
+	public void a15_uniqueItems() {
 		Items t = new Items();
 
 		t.uniqueItems(true);
-		assertEquals(true, t.getUniqueItems());
-		assertObject(t.getUniqueItems()).isType(Boolean.class);
+		assertObject(t.uniqueItems()).isType(Boolean.class).is(true);
 
 		t.uniqueItems("true");
-		assertEquals(true, t.getUniqueItems());
-		assertObject(t.getUniqueItems()).isType(Boolean.class);
+		assertObject(t.uniqueItems()).isType(Boolean.class).is(true);
 
-		t.uniqueItems(new StringBuilder("true"));
-		assertEquals(true, t.getUniqueItems());
-		assertObject(t.getUniqueItems()).isType(Boolean.class);
-
-		t.uniqueItems(null);
-		assertNull(t.getUniqueItems());
+		t.uniqueItems((String)null);
+		assertObject(t.uniqueItems()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#setEnum(java.util.Collection)}.
 	 */
 	@Test
-	public void testSetEnum() {
-		Items t = new Items();
-
-		t.setEnum(ASet.of("foo","bar"));
-		assertObject(t.getEnum()).json().is("['foo','bar']");
-		assertObject(t.getEnum()).isType(List.class);
-
-		t.setEnum(ASet.of());
-		assertObject(t.getEnum()).json().is("[]");
-		assertObject(t.getEnum()).isType(List.class);
-
-		t.setEnum(null);
-		assertNull(t.getEnum());
-	}
-
-	/**
-	 * Test method for {@link Items#addEnum(java.util.Collection)}.
-	 */
-	@Test
-	public void testAddEnum() {
-		Items t = new Items();
-
-		t.addEnum(ASet.of("foo","bar"));
-		assertObject(t.getEnum()).json().is("['foo','bar']");
-		assertObject(t.getEnum()).isType(List.class);
-
-		t.addEnum(ASet.of("baz"));
-		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertObject(t.getEnum()).isType(List.class);
-
-		t.addEnum(null);
-		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertObject(t.getEnum()).isType(List.class);
-	}
-
-	/**
-	 * Test method for {@link Items#_enum(java.lang.Object[])}.
-	 */
-	@Test
-	public void test_enum() {
+	public void a16_enum() {
 		Items t = new Items();
 
 		t._enum(ASet.of("foo","bar"));
-		assertObject(t.getEnum()).json().is("['foo','bar']");
-		assertObject(t.getEnum()).isType(List.class);
+		assertObject(t._enum()).isType(Set.class).json().is("['foo','bar']");
 
-		t._enum(ASet.of("baz"));
-		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertObject(t.getEnum()).isType(List.class);
+		t._enum("foo","baz");
+		assertObject(t._enum()).isType(Set.class).json().is("['foo','baz']");
 
-		t._enum((Object[])null);
-		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertObject(t.getEnum()).isType(List.class);
+		t._enum(ASet.of());
+		assertObject(t._enum()).isType(Set.class).json().is("[]");
 
-		t.setEnum(null);
-		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
-		assertObject(t.getEnum()).json().is("['foo','bar','baz','qux','quux']");
-		assertObject(t.getEnum()).isType(List.class);
+		t._enum((Collection<Object>)null);
+		assertObject(t._enum()).isNull();
+
+		t.addEnum(ASet.of("foo","bar"));
+		assertObject(t.getEnum()).isType(Set.class).json().is("['foo','bar']");
+
+		t.addEnum(ASet.of("baz"));
+		assertObject(t.getEnum()).isType(Set.class).json().is("['foo','bar','baz']");
+
+		t.addEnum(null);
+		assertObject(t.getEnum()).isType(Set.class).json().is("['foo','bar','baz']");
 	}
 
 	/**
 	 * Test method for {@link Items#multipleOf(java.lang.Object)}.
 	 */
 	@Test
-	public void testMultipleOf() {
+	public void a17_multipleOf() {
 		Items t = new Items();
 
 		t.multipleOf(123);
-		assertEquals(123, t.getMultipleOf());
-		assertObject(t.getMultipleOf()).isType(Integer.class);
+		assertObject(t.multipleOf()).isType(Integer.class).is(123);
 
 		t.multipleOf(123f);
-		assertEquals(123f, t.getMultipleOf());
-		assertObject(t.getMultipleOf()).isType(Float.class);
+		assertObject(t.multipleOf()).isType(Float.class).is(123f);
 
 		t.multipleOf("123");
-		assertEquals(123, t.getMultipleOf());
-		assertObject(t.getMultipleOf()).isType(Integer.class);
+		assertObject(t.multipleOf()).isType(Integer.class).is(123);
 
-		t.multipleOf(new StringBuilder("123"));
-		assertEquals(123, t.getMultipleOf());
-		assertObject(t.getMultipleOf()).isType(Integer.class);
-
-		t.multipleOf(null);
-		assertNull(t.getMultipleOf());
+		t.multipleOf((String)null);
+		assertObject(t.multipleOf()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Items#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		Items t = new Items();
 
 		t
@@ -532,27 +400,27 @@ public class ItemsTest {
 
 		assertObject(t).json().is("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
 
-		assertEquals("a", t.get("default", String.class));
-		assertEquals("['b']", t.get("enum", String.class));
-		assertEquals("c", t.get("collectionFormat", String.class));
-		assertEquals("true", t.get("exclusiveMaximum", String.class));
-		assertEquals("true", t.get("exclusiveMinimum", String.class));
-		assertEquals("g", t.get("format", String.class));
-		assertEquals("{type:'h'}", t.get("items", String.class));
-		assertEquals("123.0", t.get("maximum", String.class));
-		assertEquals("123", t.get("maxItems", String.class));
-		assertEquals("123", t.get("maxLength", String.class));
-		assertEquals("123.0", t.get("minimum", String.class));
-		assertEquals("123", t.get("minItems", String.class));
-		assertEquals("123", t.get("minLength", String.class));
-		assertEquals("123.0", t.get("multipleOf", String.class));
-		assertEquals("i", t.get("pattern", String.class));
-		assertEquals("j", t.get("type", String.class));
-		assertEquals("true", t.get("uniqueItems", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("default", String.class)).is("a");
+		assertString(t.get("enum", String.class)).is("['b']");
+		assertString(t.get("collectionFormat", String.class)).is("c");
+		assertString(t.get("exclusiveMaximum", String.class)).is("true");
+		assertString(t.get("exclusiveMinimum", String.class)).is("true");
+		assertString(t.get("format", String.class)).is("g");
+		assertString(t.get("items", String.class)).is("{type:'h'}");
+		assertString(t.get("maximum", String.class)).is("123.0");
+		assertString(t.get("maxItems", String.class)).is("123");
+		assertString(t.get("maxLength", String.class)).is("123");
+		assertString(t.get("minimum", String.class)).is("123.0");
+		assertString(t.get("minItems", String.class)).is("123");
+		assertString(t.get("minLength", String.class)).is("123");
+		assertString(t.get("multipleOf", String.class)).is("123.0");
+		assertString(t.get("pattern", String.class)).is("i");
+		assertString(t.get("type", String.class)).is("j");
+		assertString(t.get("uniqueItems", String.class)).is("true");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("default", Object.class)).isType(StringBuilder.class);
-		assertObject(t.get("enum", Object.class)).isType(List.class);
+		assertObject(t.get("enum", Object.class)).isType(Set.class);
 		assertObject(t.get("collectionFormat", Object.class)).isType(String.class);
 		assertObject(t.get("exclusiveMaximum", Object.class)).isType(Boolean.class);
 		assertObject(t.get("exclusiveMinimum", Object.class)).isType(Boolean.class);
@@ -577,5 +445,69 @@ public class ItemsTest {
 
 		String s = "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, Items.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		Items t = new Items();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("default", "a")
+			.set("enum", ASet.of("b"))
+			.set("collectionFormat", "c")
+			.set("exclusiveMaximum", true)
+			.set("exclusiveMinimum", true)
+			.set("format", "g")
+			.set("items", items("h"))
+			.set("maximum", 123f)
+			.set("maxItems", 123)
+			.set("maxLength", 123)
+			.set("minimum", 123f)
+			.set("minItems", 123)
+			.set("minLength", 123)
+			.set("multipleOf", 123f)
+			.set("pattern", "i")
+			.set("type", "j")
+			.set("uniqueItems", true)
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		Items t = new Items();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("collectionFormat", "c")
+			.set("default", "a")
+			.set("enum", ASet.of("b"))
+			.set("exclusiveMaximum", true)
+			.set("exclusiveMinimum", true)
+			.set("format", "g")
+			.set("items", items("h"))
+			.set("maximum", 123f)
+			.set("maxItems", 123)
+			.set("maxLength", 123)
+			.set("minimum", 123f)
+			.set("minItems", 123)
+			.set("minLength", 123)
+			.set("multipleOf", 123f)
+			.set("pattern", "i")
+			.set("$ref", "ref")
+			.set("type", "j")
+			.set("uniqueItems", true);
+
+		assertObject(t.keySet()).json().is(
+			"['collectionFormat','default','enum','exclusiveMaximum','exclusiveMinimum','format','items','maximum','maxItems',"
+			+ "'maxLength','minimum','minItems','minLength','multipleOf','pattern','$ref','type','uniqueItems']"
+		);
 	}
 }

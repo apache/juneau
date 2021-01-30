@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.dto.swagger.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
@@ -353,9 +354,9 @@ public @interface RestMethod {
 	 * This description is used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The value returned by {@link RestRequest#getMethodDescription()}.
+	 * 		The value returned by {@link Operation#getDescription()} in the auto-generated swagger.
 	 * 	<li>
-	 * 		The <js>"$R{methodDescription}"</js> variable.
+	 * 		The <js>"$RS{methodDescription}"</js> variable.
 	 * 	<li>
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
@@ -366,10 +367,6 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
 	 * </ul>
 	 */
 	String[] description() default {};
@@ -758,9 +755,9 @@ public @interface RestMethod {
 	 * This summary is used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The value returned by {@link RestRequest#getMethodSummary()}.
+	 * 		The value returned by {@link Operation#getSummary()} in the auto-generated swagger.
 	 * 	<li>
-	 * 		The <js>"$R{methodSummary}"</js> variable.
+	 * 		The <js>"$RS{methodSummary}"</js> variable.
 	 * 	<li>
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
@@ -820,7 +817,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link MethodSwagger}
-	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
+	 * 	<li class='jc'>{@link SwaggerProvider}
 	 * </ul>
 	 */
 	MethodSwagger swagger() default @MethodSwagger;

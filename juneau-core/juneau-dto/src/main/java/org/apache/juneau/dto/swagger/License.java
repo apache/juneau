@@ -30,13 +30,12 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	License x = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
+ * 	License <jv>license</jv> = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>license</jv>.toString();
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Output</jc>
@@ -82,6 +81,10 @@ public class License extends SwaggerElement {
 		return new License(this);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// name
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -103,25 +106,42 @@ public class License extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
 	 */
-	public License setName(String value) {
+	public void setName(String value) {
 		name = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setName(String)}.
+	 * Bean property fluent getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The license name used for the API.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> name() {
+		return Optional.ofNullable(getName());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The license name used for the API.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public License name(Object value) {
-		return setName(stringify(value));
+	public License name(String value) {
+		setName(value);
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// url
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -145,49 +165,69 @@ public class License extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUrl(URI value) {
+		url = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>url</property>.
+	 *
+	 * <p>
+	 * A URL to the license used for the API.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> url() {
+		return Optional.ofNullable(getUrl());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * A URL to the license used for the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public License setUrl(URI value) {
-		url = value;
+	public License url(URI value) {
+		setUrl(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setUrl(URI)}.
+	 * Bean property fluent setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * A URL to the license used for the API.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 			<br>Converted to a URI using <code>URI.<jsm>create</jsm>(value.toString())</code>
-	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public License url(Object value) {
-		return setUrl(StringUtils.toURI(value));
+	public License url(URL value) {
+		setUrl(StringUtils.toURI(value));
+		return this;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the name property is not null or empty.
+	 * Bean property fluent setter:  <property>url</property>.
 	 *
-	 * @return <jk>true</jk> if the name property is not null or empty.
-	 */
-	public boolean hasName() {
-		return isNotEmpty(name);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the url property is not null.
+	 * <p>
+	 * A URL to the license used for the API.
 	 *
-	 * @return <jk>true</jk> if the url property is not null.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public boolean hasUrl() {
-		return url != null;
+	public License url(String value) {
+		setUrl(StringUtils.toURI(value));
+		return this;
 	}
 
 	@Override /* SwaggerElement */
@@ -206,8 +246,8 @@ public class License extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "url": return url(value);
+			case "name": return name(stringify(value));
+			case "url": return url(StringUtils.toURI(value));
 			default:
 				super.set(property, value);
 				return this;

@@ -71,13 +71,13 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	ParameterInfo x = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
+ * 	ParameterInfo <jv>info</jv> = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>info</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>info</jv>.toString();
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Output</jc>
@@ -91,7 +91,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,x-example,x-examples,*")
+@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,example,examples,*")
 public class ParameterInfo extends SwaggerElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
@@ -124,8 +124,8 @@ public class ParameterInfo extends SwaggerElement {
 	private SchemaInfo schema;
 	private Items items;
 	private Object _default;
-	private List<Object> _enum;
-	private String example;
+	private Set<Object> _enum;
+	private Object example;
 	private Map<String,String> examples;
 
 	/**
@@ -141,30 +141,30 @@ public class ParameterInfo extends SwaggerElement {
 	public ParameterInfo(ParameterInfo copyFrom) {
 		super(copyFrom);
 
-		this.name = copyFrom.name;
-		this.in = copyFrom.in;
-		this.description = copyFrom.description;
-		this.type = copyFrom.type;
-		this.format = copyFrom.format;
-		this.pattern = copyFrom.pattern;
-		this.collectionFormat = copyFrom.collectionFormat;
-		this.maximum = copyFrom.maximum;
-		this.minimum = copyFrom.minimum;
-		this.multipleOf = copyFrom.multipleOf;
-		this.maxLength = copyFrom.maxLength;
-		this.minLength = copyFrom.minLength;
-		this.maxItems = copyFrom.maxItems;
-		this.minItems = copyFrom.minItems;
-		this.required = copyFrom.required;
 		this.allowEmptyValue = copyFrom.allowEmptyValue;
+		this.collectionFormat = copyFrom.collectionFormat;
+		this._default = copyFrom._default;
+		this.description = copyFrom.description;
+		this._enum = newSet(copyFrom._enum);
+		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
-		this.uniqueItems = copyFrom.uniqueItems;
-		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		this.format = copyFrom.format;
+		this.in = copyFrom.in;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
-		this._default = copyFrom._default;
-		this._enum = newList(copyFrom._enum);
-		this.example = copyFrom.example;
+		this.maximum = copyFrom.maximum;
+		this.maxItems = copyFrom.maxItems;
+		this.maxLength = copyFrom.maxLength;
+		this.minimum = copyFrom.minimum;
+		this.minItems = copyFrom.minItems;
+		this.minLength = copyFrom.minLength;
+		this.multipleOf = copyFrom.multipleOf;
+		this.name = copyFrom.name;
+		this.pattern = copyFrom.pattern;
+		this.required = copyFrom.required;
+		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
+		this.type = copyFrom.type;
+		this.uniqueItems = copyFrom.uniqueItems;
 
 		if (copyFrom.examples == null)
 			this.examples = null;
@@ -251,399 +251,9 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the parameter.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Parameter names are case sensitive.
-	 * 	<li>
-	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the {@doc ExtSwaggerPathsObject Paths Object}.
-	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerPathTemplating Path Templating}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Bean property setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the parameter.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Parameter names are case sensitive.
-	 * 	<li>
-	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the {@doc ExtSwaggerPathsObject Paths Object}.
-	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerPathTemplating Path Templating}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setName(String value) {
-		if (! "body".equals(in))
-			name = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo name(Object value) {
-		return setName(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getIn() {
-		return in;
-	}
-
-	/**
-	 * Bean property setter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"query"</js>
-	 * 		<li><js>"header"</js>
-	 * 		<li><js>"path"</js>
-	 * 		<li><js>"formData"</js>
-	 * 		<li><js>"body"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setIn(String value) {
-		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, VALID_IN
-			);
-		in = value;
-		if ("path".equals(value))
-			required = true;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setIn(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"query"</js>
-	 * 		<li><js>"header"</js>
-	 * 		<li><js>"path"</js>
-	 * 		<li><js>"formData"</js>
-	 * 		<li><js>"body"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo in(Object value) {
-		return setIn(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 * <br>This could contain examples of use.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 * <br>This could contain examples of use.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo description(Object value) {
-		return setDescription(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
-	 * Bean property setter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * <p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setRequired(Boolean value) {
-		required = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setRequired(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo required(Object value) {
-		return setRequired(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setSchema(SchemaInfo value) {
-		schema = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setSchema(SchemaInfo)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link SchemaInfo}
-	 * 		<li><c>String</c> - JSON object representation of {@link SchemaInfo}
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo schema(Object value) {
-		return setSchema(toType(value, SchemaInfo.class));
-	}
-
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * Bean property setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
-	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setType(String value) {
-		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, VALID_TYPES
-			);
-		type = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setType(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
-	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo type(Object value) {
-		return setType(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Bean property setter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setFormat(String value) {
-		format = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setFormat(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo format(Object value) {
-		return setFormat(stringify(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// allowEmptyValue
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>allowEmptyValue</property>.
@@ -667,85 +277,64 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
 	 *
-	 * <p>
-	 * This is valid only for either <c>query</c> or <c>formData</c> parameters and allows you to send a
-	 * parameter with a name only or an empty value.
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Default is <jk>false</jk>.
-	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo setAllowEmptyValue(Boolean value) {
+	public void setAllowEmptyValue(Boolean value) {
 		allowEmptyValue = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setAllowEmptyValue(Boolean)}.
+	 * Bean property fluent getter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued parameters.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> allowEmptyValue() {
+		return Optional.ofNullable(getAllowEmptyValue());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued parameters.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo allowEmptyValue(Object value) {
-		return setAllowEmptyValue(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Items getItems() {
-		return items;
-	}
-
-	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setItems(Items value) {
-		items = value;
+	public ParameterInfo allowEmptyValue(Boolean value) {
+		setAllowEmptyValue(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setItems(Items)}.
+	 * Bean property fluent setter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued parameters.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><c>String</c> - JSON object representation of {@link Items}
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo items(Object value) {
-		return setItems(toType(value, Items.class));
+	public ParameterInfo allowEmptyValue(String value) {
+		setAllowEmptyValue(toBoolean(value));
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// collectionFormat
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
@@ -778,24 +367,36 @@ public class ParameterInfo extends SwaggerElement {
 	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo setCollectionFormat(String value) {
+	public void setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, VALID_COLLECTION_FORMATS
 			);
 		collectionFormat = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setCollectionFormat(String)}.
+	 * Bean property fluent getter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> collectionFormat() {
+		return Optional.ofNullable(getCollectionFormat());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
@@ -809,9 +410,14 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo collectionFormat(Object value) {
-		return setCollectionFormat(stringify(value));
+	public ParameterInfo collectionFormat(String value) {
+		setCollectionFormat(value);
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// default
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -822,10 +428,6 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -842,473 +444,130 @@ public class ParameterInfo extends SwaggerElement {
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo setDefault(Object value) {
+	public void setDefault(Object value) {
 		_default = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setDefault(Object)}.
+	 * Bean property fluent getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Object> _default() {
+		return Optional.ofNullable(getDefault());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo _default(Object value) {
-		return setDefault(value);
-	}
-
-	/**
-	 * Bean property getter:  <property>maximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMaximum() {
-		return maximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>maximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setMaximum(Number value) {
-		maximum = value;
+		setDefault(value);
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setMaximum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo maximum(Object value) {
-		return setMaximum(toNumber(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// description
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setExclusiveMaximum(Boolean value) {
-		exclusiveMaximum = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo exclusiveMaximum(Object value) {
-		return setExclusiveMaximum(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>minimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMinimum() {
-		return minimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>minimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setMinimum(Number value) {
-		minimum = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinimum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo minimum(Object value) {
-		return setMinimum(toNumber(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setExclusiveMinimum(Boolean value) {
-		exclusiveMinimum = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo exclusiveMinimum(Object value) {
-		return setExclusiveMinimum(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>maxLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setMaxLength(Integer value) {
-		maxLength = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMaxLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo maxLength(Object value) {
-		return setMaxLength(toInteger(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>minLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>minLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setMinLength(Integer value) {
-		minLength = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo minLength(Object value) {
-		return setMinLength(toInteger(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>pattern</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * Bean property setter:  <property>pattern</property>.
+	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * This string SHOULD be a valid regular expression.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setPattern(String value) {
-		pattern = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setPattern(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo pattern(Object value) {
-		return setPattern(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>maxItems</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * A brief description of the parameter.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxItems() {
-		return maxItems;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * Bean property setter:  <property>maxItems</property>.
+	 * Bean property setter:  <property>description</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setMaxItems(Integer value) {
-		maxItems = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMaxItems(Integer)}.
+	 * <p>
+	 * A brief description of the parameter.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo maxItems(Object value) {
-		return setMaxItems(toInteger(value));
+	public void setDescription(String value) {
+		description = value;
 	}
 
 	/**
-	 * Bean property getter:  <property>minItems</property>.
+	 * Bean property fluent getter:  <property>description</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * <p>
+	 * A brief description of the parameter.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public Integer getMinItems() {
-		return minItems;
+	public Optional<String> description() {
+		return Optional.ofNullable(getDescription());
 	}
 
 	/**
-	 * Bean property setter:  <property>minItems</property>.
+	 * Bean property fluent setter:  <property>description</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setMinItems(Integer value) {
-		minItems = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinItems(Integer)}.
+	 * <p>
+	 * A brief description of the parameter.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo minItems(Object value) {
-		return setMinItems(toInteger(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>uniqueItems</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo setUniqueItems(Boolean value) {
-		uniqueItems = value;
+	public ParameterInfo description(String value) {
+		setDescription(value);
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setUniqueItems(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ParameterInfo uniqueItems(Object value) {
-		return setUniqueItems(toBoolean(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// enum
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() {
+	public Set<Object> getEnum() {
 		return _enum;
 	}
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum = newList(value);
-		return this;
+	public void setEnum(Collection<Object> value) {
+		_enum = newSet(value);
 	}
 
 	/**
-	 * Adds one or more values to the <property>enum</property> property.
+	 * Bean property appender:  <property>enum</property>.
 	 *
 	 * @param value
 	 * 	The values to add to this property.
@@ -1316,142 +575,114 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo addEnum(Collection<Object> value) {
-		_enum = addToList(_enum, value);
+		_enum = addToSet(_enum, value);
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>enum</property> property.
+	 * Bean property fluent getter:  <property>enum</property>.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Object</c>
-	 * 		<li><c>Collection&lt;Object&gt;</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Object&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	_enum(<js>"['foo','bar']"</js>);
-	 * 			</p>
-	 * 		<li><c>String</c> - Individual values
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public ParameterInfo _enum(Object...values) {
-		_enum = addToList(_enum, values, Object.class);
-		return this;
+	public Optional<Set<Object>> _enum() {
+		return Optional.ofNullable(getEnum());
 	}
 
 	/**
-	 * Bean property getter:  <property>multipleOf</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>multipleOf</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property fluent setter:  <property>enum</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo setMultipleOf(Number value) {
-		multipleOf = value;
+	public ParameterInfo _enum(Collection<Object> value) {
+		setEnum(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setMultipleOf(Number)}.
+	 * Bean property fluent setter:  <property>enum</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Strings can be JSON arrays.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo multipleOf(Object value) {
-		return setMultipleOf(toNumber(value));
+	public ParameterInfo _enum(Object...value) {
+		setEnum(toSet(value, Object.class));
+		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// example
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>x-example</property>.
+	 * Bean property getter:  <property>example</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("x-example")
-	public String getExample() {
+	public Object getExample() {
 		return example;
 	}
 
 	/**
-	 * Bean property setter:  <property>x-example</property>.
+	 * Bean property setter:  <property>example</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	@Beanp("x-example")
-	public ParameterInfo setExample(String value) {
+	public void setExample(Object value) {
 		example = value;
-		return this;
 	}
 
 	/**
-	 * Bean property setter:  <property>x-example</property>.
+	 * Bean property fluent getter:  <property>example</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Object> example() {
+		return Optional.ofNullable(getExample());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>example</property>.
 	 *
 	 * @param value The property value.
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo example(Object value) {
-		example = StringUtils.stringify(value);
+		setExample(value);
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// examples
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>x-examples</property>.
+	 * Bean property getter:  <property>examples</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("x-examples")
 	public Map<String,String> getExamples() {
 		return examples;
 	}
 
 	/**
-	 * Bean property setter:  <property>x-examples</property>.
+	 * Bean property setter:  <property>examples</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	@Beanp("x-examples")
-	public ParameterInfo setExamples(Map<String,String> value) {
+	public void setExamples(Map<String,String> value) {
 		examples = newMap(value);
-		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>x-examples</property> property.
+	 * Bean property appender:  <property>examples</property>.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
@@ -1464,7 +695,10 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Adds a single value to the <property>x-examples</property> property.
+	 * Bean property appender:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>examples</property> property.
 	 *
 	 * @param name The extra property name.
 	 * @param value The extra property value.
@@ -1476,57 +710,1220 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>x-examples</property> property.
+	 * Bean property fluent getter:  <property>examples</property>.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Map&lt;String,String&gt;</c>
-	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Object&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Map<String,String>> examples() {
+		return Optional.ofNullable(getExamples());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>examples</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ParameterInfo examples(Object...values) {
-		examples = addToMap(examples, values, String.class, String.class);
+	public ParameterInfo examples(Map<String,String> value) {
+		setExamples(value);
 		return this;
 	}
+
+	/**
+	 * Bean property fluent setter:  <property>examples</property>.
+	 *
+	 * @param json
+	 * 	The new value for this property as a JSON object.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo examples(String json) {
+		setExamples(toMap(json, String.class, String.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// exclusiveMaximum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMaximum() {
+		return exclusiveMaximum;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setExclusiveMaximum(Boolean value) {
+		exclusiveMaximum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> exclusiveMaximum() {
+		return Optional.ofNullable(getExclusiveMaximum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo exclusiveMaximum(Boolean value) {
+		setExclusiveMaximum(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo exclusiveMaximum(String value) {
+		setExclusiveMaximum(toBoolean(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// exclusiveMinimum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMinimum() {
+		return exclusiveMinimum;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setExclusiveMinimum(Boolean value) {
+		exclusiveMinimum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> exclusiveMinimum() {
+		return Optional.ofNullable(getExclusiveMinimum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo exclusiveMinimum(Boolean value) {
+		setExclusiveMinimum(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo exclusiveMinimum(String value) {
+		setExclusiveMinimum(toBoolean(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// format
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setFormat(String value) {
+		format = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> format() {
+		return Optional.ofNullable(getFormat());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo format(String value) {
+		setFormat(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// in
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getIn() {
+		return in;
+	}
+
+	/**
+	 * Bean property setter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"query"</js>
+	 * 		<li><js>"header"</js>
+	 * 		<li><js>"path"</js>
+	 * 		<li><js>"formData"</js>
+	 * 		<li><js>"body"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
+	 */
+	public void setIn(String value) {
+		if (isStrict() && ! contains(value, VALID_IN))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
+				value, VALID_IN
+			);
+		in = value;
+		if ("path".equals(value))
+			required = true;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> in() {
+		return Optional.ofNullable(getIn());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"query"</js>
+	 * 		<li><js>"header"</js>
+	 * 		<li><js>"path"</js>
+	 * 		<li><js>"formData"</js>
+	 * 		<li><js>"body"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo in(String value) {
+		setIn(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// items
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Items getItems() {
+		return items;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setItems(Items value) {
+		items = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Items> items() {
+		return Optional.ofNullable(getItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo items(Items value) {
+		setItems(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array as raw JSON.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
+	 * </p>
+	 *
+	 * @param json
+	 * 	The new value for this property as JSON.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo items(String json) {
+		setItems(toType(json, Items.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// maximum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>maximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * Bean property setter:  <property>maximum</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setMaximum(Number value) {
+		maximum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>maximum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Number> maximum() {
+		return Optional.ofNullable(getMaximum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maximum(Number value) {
+		setMaximum(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maximum(String value) {
+		setMaximum(toNumber(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// maxItems
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>maxItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxItems() {
+		return maxItems;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxItems</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setMaxItems(Integer value) {
+		maxItems = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>maxItems</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> maxItems() {
+		return Optional.ofNullable(getMaxItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maxItems(Integer value) {
+		setMaxItems(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maxItems(String value) {
+		setMaxItems(toInteger(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// maxLength
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxLength</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setMaxLength(Integer value) {
+		maxLength = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> maxLength() {
+		return Optional.ofNullable(getMaxLength());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maxLength(Integer value) {
+		setMaxLength(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maxLength(String value) {
+		setMaxLength(toInteger(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// minimum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>minimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * Bean property setter:  <property>minimum</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setMinimum(Number value) {
+		minimum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>minimum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Number> minimum() {
+		return Optional.ofNullable(getMinimum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minimum(Number value) {
+		setMinimum(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minimum(String value) {
+		setMinimum(toNumber(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// minItems
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>minItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinItems() {
+		return minItems;
+	}
+
+	/**
+	 * Bean property setter:  <property>minItems</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setMinItems(Integer value) {
+		minItems = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>minItems</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> minItems() {
+		return Optional.ofNullable(getMinItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minItems(Integer value) {
+		setMinItems(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minItems(String value) {
+		setMinItems(toInteger(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// minLength
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>minLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinLength() {
+		return minLength;
+	}
+
+	/**
+	 * Bean property setter:  <property>minLength</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setMinLength(Integer value) {
+		minLength = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>minLength</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> minLength() {
+		return Optional.ofNullable(getMinLength());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minLength(Integer value) {
+		setMinLength(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minLength(String value) {
+		setMinLength(toInteger(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// multipleOf
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>multipleOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMultipleOf() {
+		return multipleOf;
+	}
+
+	/**
+	 * Bean property setter:  <property>multipleOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMultipleOf(Number value) {
+		multipleOf = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>multipleOf</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Number> multipleOf() {
+		return Optional.ofNullable(getMultipleOf());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>multipleOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo multipleOf(Number value) {
+		setMultipleOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>multipleOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo multipleOf(String value) {
+		setMultipleOf(toNumber(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// name
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the parameter.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Parameter names are case sensitive.
+	 * 	<li>
+	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
+	 * 		from the <c>path</c> field in the {@doc ExtSwaggerPathsObject Paths Object}.
+	 * 	<li>
+	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
+	 * </ul>
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Bean property setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 */
+	public void setName(String value) {
+		if (! "body".equals(in))
+			name = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the parameter.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> name() {
+		return Optional.ofNullable(getName());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo name(String value) {
+		setName(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// pattern
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>pattern</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * Bean property setter:  <property>pattern</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>This string SHOULD be a valid regular expression.
+	 */
+	public void setPattern(String value) {
+		pattern = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>pattern</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> pattern() {
+		return Optional.ofNullable(getPattern());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>pattern</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>This string SHOULD be a valid regular expression.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo pattern(String value) {
+		setPattern(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// required
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+
+	/**
+	 * Bean property setter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
+	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setRequired(Boolean value) {
+		required = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> required() {
+		return Optional.ofNullable(getRequired());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
+	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo required(Boolean value) {
+		setRequired(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
+	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo required(String value) {
+		setRequired(toBoolean(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// schema
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Bean property setter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 */
+	public void setSchema(SchemaInfo value) {
+		schema = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<SchemaInfo> schema() {
+		return Optional.ofNullable(getSchema());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo schema(SchemaInfo value) {
+		setSchema(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter as raw JSON.
+	 *
+	 * <h5 class='section'>Example:,/h5>
+	 * <p class='bcode w800'>
+	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
+	 * </p>
+	 *
+	 * @param json
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo schema(String json) {
+		setSchema(toType(json, SchemaInfo.class));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// type
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 		<li><js>"file"</js>
+	 * 	</ul>
+	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
+	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
+	 * 	<br>Property value is required.
+	 */
+	public void setType(String value) {
+		if (isStrict() && ! contains(value, VALID_TYPES))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
+				value, VALID_TYPES
+			);
+		type = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> type() {
+		return Optional.ofNullable(getType());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 		<li><js>"file"</js>
+	 * 	</ul>
+	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
+	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
+	 * 	<br>Property value is required.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo type(String value) {
+		setType(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// uniqueItems
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
+	}
+
+	/**
+	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value The new value for this property.
+	 */
+	public void setUniqueItems(Boolean value) {
+		uniqueItems = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> uniqueItems() {
+		return Optional.ofNullable(getUniqueItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo uniqueItems(Boolean value) {
+		setUniqueItems(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo uniqueItems(String value) {
+		setUniqueItems(toBoolean(value));
+		return this;
+	}
+
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "name": return toType(getName(), type);
-			case "in": return toType(getIn(), type);
+			case "allowEmptyValue": return toType(getAllowEmptyValue(), type);
+			case "collectionFormat": return toType(getCollectionFormat(), type);
+			case "default": return toType(getDefault(), type);
 			case "description": return toType(getDescription(), type);
+			case "enum": return toType(getEnum(), type);
+			case "example": return toType(getExample(), type);
+			case "examples": return toType(getExamples(), type);
+			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
+			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
+			case "format": return toType(getFormat(), type);
+			case "in": return toType(getIn(), type);
+			case "items": return toType(getItems(), type);
+			case "maximum": return toType(getMaximum(), type);
+			case "maxItems": return toType(getMaxItems(), type);
+			case "maxLength": return toType(getMaxLength(), type);
+			case "minimum": return toType(getMinimum(), type);
+			case "minItems": return toType(getMinItems(), type);
+			case "minLength": return toType(getMinLength(), type);
+			case "multipleOf": return toType(getMultipleOf(), type);
+			case "name": return toType(getName(), type);
+			case "pattern": return toType(getPattern(), type);
 			case "required": return toType(getRequired(), type);
 			case "schema": return toType(getSchema(), type);
 			case "type": return toType(getType(), type);
-			case "format": return toType(getFormat(), type);
-			case "allowEmptyValue": return toType(getAllowEmptyValue(), type);
-			case "items": return toType(getItems(), type);
-			case "collectionFormat": return toType(getCollectionFormat(), type);
-			case "default": return toType(getDefault(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "minItems": return toType(getMinItems(), type);
 			case "uniqueItems": return toType(getUniqueItems(), type);
-			case "enum": return toType(getEnum(), type);
-			case "multipleOf": return toType(getMultipleOf(), type);
-			case "x-example": return toType(getExample(), type);
-			case "x-examples": return toType(getExamples(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1536,31 +1933,31 @@ public class ParameterInfo extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "in": return in(value);
-			case "description": return description(value);
-			case "required": return required(value);
-			case "schema": return schema(value);
-			case "type": return type(value);
-			case "format": return format(value);
-			case "allowEmptyValue": return allowEmptyValue(value);
-			case "items": return items(value);
-			case "collectionFormat": return collectionFormat(value);
+			case "allowEmptyValue": return allowEmptyValue(toBoolean(value));
+			case "collectionFormat": return collectionFormat(stringify(value));
 			case "default": return _default(value);
-			case "maximum": return maximum(value);
-			case "exclusiveMaximum": return exclusiveMaximum(value);
-			case "minimum": return minimum(value);
-			case "exclusiveMinimum": return exclusiveMinimum(value);
-			case "maxLength": return maxLength(value);
-			case "minLength": return minLength(value);
-			case "pattern": return pattern(value);
-			case "maxItems": return maxItems(value);
-			case "minItems": return minItems(value);
-			case "uniqueItems": return uniqueItems(value);
-			case "enum": return setEnum(null)._enum(value);
-			case "multipleOf": return multipleOf(value);
-			case "x-example": return example(value);
-			case "x-examples": return examples(value);
+			case "description": return description(stringify(value));
+			case "enum": return _enum(value);
+			case "example": return example(stringify(value));
+			case "examples": return examples(toMap(value, String.class, String.class));
+			case "exclusiveMaximum": return exclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum": return exclusiveMinimum(toBoolean(value));
+			case "format": return format(stringify(value));
+			case "in": return in(stringify(value));
+			case "items": return items(toType(value, Items.class));
+			case "maximum": return maximum(toNumber(value));
+			case "maxItems": return maxItems(toInteger(value));
+			case "maxLength": return maxLength(toInteger(value));
+			case "minimum": return minimum(toNumber(value));
+			case "minItems": return minItems(toInteger(value));
+			case "minLength": return minLength(toInteger(value));
+			case "multipleOf": return multipleOf(toNumber(value));
+			case "name": return name(stringify(value));
+			case "pattern": return pattern(stringify(value));
+			case "required": return required(toBoolean(value));
+			case "schema": return schema(toType(value, SchemaInfo.class));
+			case "type": return type(stringify(value));
+			case "uniqueItems": return uniqueItems(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -1570,31 +1967,31 @@ public class ParameterInfo extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(name != null, "name")
-			.appendIf(in != null, "in")
+			.appendIf(allowEmptyValue != null, "allowEmptyValue")
+			.appendIf(collectionFormat != null, "collectionFormat")
+			.appendIf(_default != null, "default")
 			.appendIf(description != null, "description")
+			.appendIf(_enum != null, "enum")
+			.appendIf(example != null, "example")
+			.appendIf(examples != null, "examples")
+			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.appendIf(format != null, "format")
+			.appendIf(in != null, "in")
+			.appendIf(items != null, "items")
+			.appendIf(maximum != null, "maximum")
+			.appendIf(maxItems != null, "maxItems")
+			.appendIf(maxLength != null, "maxLength")
+			.appendIf(minimum != null, "minimum")
+			.appendIf(minItems != null, "minItems")
+			.appendIf(minLength != null, "minLength")
+			.appendIf(multipleOf != null, "multipleOf")
+			.appendIf(name != null, "name")
+			.appendIf(pattern != null, "pattern")
 			.appendIf(required != null, "required")
 			.appendIf(schema != null, "schema")
 			.appendIf(type != null, "type")
-			.appendIf(format != null, "format")
-			.appendIf(allowEmptyValue != null, "allowEmptyValue")
-			.appendIf(items != null, "items")
-			.appendIf(collectionFormat != null, "collectionFormat")
-			.appendIf(_default != null, "default")
-			.appendIf(maximum != null, "maximum")
-			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.appendIf(minimum != null, "minimum")
-			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.appendIf(maxLength != null, "maxLength")
-			.appendIf(minLength != null, "minLength")
-			.appendIf(pattern != null, "pattern")
-			.appendIf(maxItems != null, "maxItems")
-			.appendIf(minItems != null, "minItems")
-			.appendIf(uniqueItems != null, "uniqueItems")
-			.appendIf(_enum != null, "enum")
-			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(example != null, "x-example")
-			.appendIf(examples != null, "x-examples");
+			.appendIf(uniqueItems != null, "uniqueItems");
 		return new MultiSet<>(s, super.keySet());
 	}
 

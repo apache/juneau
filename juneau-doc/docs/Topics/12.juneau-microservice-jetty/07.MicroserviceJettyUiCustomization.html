@@ -69,8 +69,8 @@ UI Customization
 	
 			<jc>// Default page header contents.</jc>
 			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @Rest(description)</jc>
+				<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+				<js>"&lt;h2&gt;$RS{methodSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @Rest(description)</jc>
 				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
 			},
 	

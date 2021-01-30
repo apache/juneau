@@ -137,7 +137,7 @@ import org.apache.juneau.xml.*;
  * {@link Rest#parsers() @Rest(parsers)} annotations on subclasses.
  *
  * <p>
- * This subclass also provides a default OPTIONS page by implementing a {@link #getApi(RestRequest)} that returns a
+ * This subclass also provides a default OPTIONS page by implementing a {@link #getSwagger(RestRequest)} that returns a
  * POJO consisting of beans describing the class.
  *
  * <p>
@@ -162,12 +162,8 @@ public abstract class BasicRestServlet extends RestServlet implements BasicUnive
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* BasicRestConfig */
-	public Swagger getApi(RestRequest req) {
-		try {
-			return req.getSwagger();
-		} catch (Exception e) {
-			throw new InternalServerError(e);
-		}
+	public Swagger getSwagger(RestRequest req) {
+		return req.getSwagger().orElseThrow(NotFound::new);
 	}
 
 	@Override /* BasicRestConfig */

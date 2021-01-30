@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
@@ -30,13 +31,9 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"authorityPath"</js> - Value returned by {@link RestRequest#getAuthorityPath()}
  * 	<li><js>"contextPath"</js> - Value returned by {@link RestRequest#getContextPath()}
  * 	<li><js>"method"</js> - Value returned by {@link RestRequest#getMethod()}
- * 	<li><js>"methodDescription"</js> - Value returned by {@link RestRequest#getMethodDescription()}
- * 	<li><js>"methodSummary"</js> - Value returned by {@link RestRequest#getMethodSummary()}
  * 	<li><js>"pathInfo"</js> - Value returned by {@link RestRequest#getPathInfo()}
  * 	<li><js>"requestParentURI"</js> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}
  * 	<li><js>"requestURI"</js> - Value returned by {@link RestRequest#getRequestURI()}
- * 	<li><js>"resourceDescription"</js> - Value returned by {@link RestRequest#getResourceDescription()}
- * 	<li><js>"resourceTitle"</js> - See {@link RestRequest#getResourceTitle()}
  * 	<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
  * 	<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
  * 	<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}
@@ -99,10 +96,6 @@ public class RequestVar extends MultipartResolvingVar {
 		} else if (c == 'm') {
 			if ("method".equals(key))
 				return req.getMethod();
-			if ("methodDescription".equals(key))
-				return req.getMethodDescription();
-			if ("methodSummary".equals(key))
-				return req.getMethodSummary();
 		} else if (c == 'p') {
 			if ("pathInfo".equals(key))
 				return req.getPathInfo();
@@ -111,10 +104,6 @@ public class RequestVar extends MultipartResolvingVar {
 				return req.getUriContext().getRootRelativePathInfoParent();
 			if ("requestURI".equals(key))
 				return req.getRequestURI();
-			if ("resourceDescription".equals(key))
-				return req.getResourceDescription();
-			if ("resourceTitle".equals(key))
-				return req.getResourceTitle();
 		} else if (c == 's') {
 			if ("servletClass".equals(key))
 				return req.getContext().getResourceClass().getName();
@@ -126,8 +115,6 @@ public class RequestVar extends MultipartResolvingVar {
 				return req.getServletPath();
 			if ("servletURI".equals(key))
 				return req.getUriContext().getRootRelativeServletPath();
-			if ("siteName".equals(key))
-				return req.getSiteName();
 		}
 		return req.getAttributes().getString(key);
 	}

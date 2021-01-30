@@ -14,7 +14,6 @@ package org.apache.juneau.rest.vars;
 
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -29,25 +28,25 @@ import org.apache.juneau.svl.*;
  * Rest info variable resolver.
  *
  * <p>
- * The format for this var is <js>"$RI{key1[,key2...]}"</js>.
+ * The format for this var is <js>"$RS{key1[,key2...]}"</js>.
  *
  * <p>
- * Used to resolve values returned by {@link RestRequest#getInfoProvider()}..
+ * Used to resolve values returned by {@link RestRequest#getSwagger()}..
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <p>
  * The possible values are:
  * <ul>
  * 	<li><js>"contact"</js> - Value returned by {@link Info#getContact()}
- * 	<li><js>"description"</js> - Value returned by {@link RestInfoProvider#getDescription(RestRequest)}
+ * 	<li><js>"description"</js> - Value returned by {@link Info#getDescription()}
  * 	<li><js>"externalDocs"</js> - Value returned by {@link Swagger#getExternalDocs()}
  * 	<li><js>"license"</js> - Value returned by {@link Info#getLicense()}
- * 	<li><js>"methodDescription"</js> - Value returned by {@link RestInfoProvider#getMethodDescription(Method,RestRequest)}
- * 	<li><js>"methodSummary"</js> - Value returned by {@link RestInfoProvider#getMethodSummary(Method,RestRequest)}
- * 	<li><js>"siteName"</js> - Value returned by {@link RestInfoProvider#getSiteName(RestRequest)}
+ * 	<li><js>"methodDescription"</js> - Value returned by {@link Operation#getDescription()}
+ * 	<li><js>"methodSummary"</js> - Value returned by {@link Operation#getSummary()}
+ * 	<li><js>"siteName"</js> - Value returned by {@link Info#getSiteName()}
  * 	<li><js>"tags"</js> - Value returned by {@link Swagger#getTags()}
  * 	<li><js>"termsOfService"</js> - Value returned by {@link Info#getTermsOfService()}
- * 	<li><js>"title"</js> - See {@link RestInfoProvider#getTitle(RestRequest)}
+ * 	<li><js>"title"</js> - See {@link Info#getTitle()}
  * 	<li><js>"version"</js> - See {@link Info#getVersion()}
  * </ul>
  *
@@ -69,17 +68,17 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'>{@doc RestSvlVariables}
  * </ul>
  */
-public class RestInfoVar extends MultipartResolvingVar {
+public class RequestSwaggerVar extends MultipartResolvingVar {
 
 	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
-	public static final String NAME = "RI";
+	public static final String NAME = "RS";
 
 	/**
 	 * Constructor.
 	 */
-	public RestInfoVar() {
+	public RequestSwaggerVar() {
 		super(NAME);
 	}
 
@@ -97,48 +96,40 @@ public class RestInfoVar extends MultipartResolvingVar {
 	public String resolve(VarResolverSession session, String key) throws HttpException, InternalServerError {
 		try {
 			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
-			Swagger swagger = req.getSwagger();
-			RestInfoProvider rip = req.getInfoProvider();
+			Optional<Swagger> swagger = req.getSwagger();
 			WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+			Optional<Operation> methodSwagger = req.getMethodSwagger();
 			char c = StringUtils.charAt(key, 0);
 			if (c == 'c') {
-				if ("contact".equals(key)) {
-					Contact x = swagger.getInfo().getContact();
-					return x == null ? null : s.toString(x);
-				}
+				if ("contact".equals(key))
+					return swagger.flatMap(Swagger::info).flatMap(Info::contact).map(Contact::toString).orElse(null);
 			} else if (c == 'd') {
 				if ("description".equals(key))
-					return rip.getDescription(req);
+					return swagger.flatMap(Swagger::info).flatMap(Info::description).orElse(null);
 			} else if (c == 'e') {
-				if ("externalDocs".equals(key)) {
-					ExternalDocumentation x = swagger.getExternalDocs();
-					return x == null ? null : s.toString(x);
-				}
+				if ("externalDocs".equals(key))
+					return swagger.flatMap(Swagger::externalDocs).map(ExternalDocumentation::toString).orElse(null);
 			} else if (c == 'l') {
-				if ("license".equals(key)) {
-					License x = swagger.getInfo().getLicense();
-					return x == null ? null : s.toString(x);
-				}
+				if ("license".equals(key))
+					return swagger.flatMap(Swagger::info).flatMap(Info::license).map(License::toString).orElse(null);
 			} else if (c == 'm') {
 				if ("methodDescription".equals(key))
-					return rip.getMethodDescription(req.getJavaMethod(), req);
+					return methodSwagger.flatMap(Operation::description).orElse(null);
 				if ("methodSummary".equals(key))
-					return rip.getMethodSummary(req.getJavaMethod(), req);
-			} else if (c == 's') {
+					return methodSwagger.flatMap(Operation::summary).orElse(null);
+			} else if (c == 'r') {
 				if ("siteName".equals(key))
-					return rip.getSiteName(req);
+					return swagger.flatMap(Swagger::info).flatMap(Info::siteName).orElse(null);
 			} else if (c == 't') {
-				if ("tags".equals(key)) {
-					List<Tag> x = swagger.getTags();
-					return x == null ? null : s.toString(x);
-				} else if ("termsOfService".equals(key)) {
-					return swagger.getInfo().getTermsOfService();
-				} else if ("title".equals(key)) {
-					return swagger.getInfo().getTitle();
-				}
+				if ("tags".equals(key))
+					return swagger.flatMap(Swagger::tags).map(x -> s.toString(x)).orElse(null);
+				if ("termsOfService".equals(key))
+					return swagger.flatMap(Swagger::info).flatMap(Info::termsOfService).orElse(null);
+				if ("title".equals(key))
+					return swagger.flatMap(Swagger::info).flatMap(Info::title).orElse(null);
 			} else if (c == 'v') {
 				if ("version".equals(key))
-					return swagger.getInfo().getVersion();
+					return swagger.flatMap(Swagger::info).flatMap(Info::version).orElse(null);
 			}
 			return null;
 		} catch (Exception e) {

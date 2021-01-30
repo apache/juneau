@@ -246,7 +246,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		out.append(jscm.getSchema());
 
 		out.appendIf(false, true, true, "description", description);
-		out.appendIf(false, true, true, "x-example", example);
+		out.appendIf(false, true, true, "example", example);
 
 //		if (ds != null)
 //			out.appendAll(ds);

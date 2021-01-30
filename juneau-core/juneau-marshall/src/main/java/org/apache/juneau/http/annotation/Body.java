@@ -245,9 +245,9 @@ public @interface Body {
 	 * There are several other options for defining this example:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Defining an <js>"x-example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+	 * 		Defining an <js>"example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
 	 * 	<li>
-	 * 		Defining an <js>"x-example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
+	 * 		Defining an <js>"example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
 	 * 	<li>
 	 * 		Allowing Juneau to auto-generate a code example.
 	 * </ul>

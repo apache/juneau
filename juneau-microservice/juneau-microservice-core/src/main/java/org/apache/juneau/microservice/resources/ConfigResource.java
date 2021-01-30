@@ -57,7 +57,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Show contents of config file as an OMap.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'Config file as a map of map of objects.', 'x-example':{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}"
+				"200:{ description:'Config file as a map of map of objects.', example:{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}"
 			}
 		)
 	)
@@ -93,7 +93,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Show contents of config file section as an OMap.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
 		)
 	)
@@ -111,7 +111,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Show value of config file entry as a simple string.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'Entry value.', 'x-example':'servlet:/htdocs/themes/dark.css'}"
+				"200:{ description:'Entry value.', example:'servlet:/htdocs/themes/dark.css'}"
 			}
 		)
 	)
@@ -130,7 +130,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Update the contents of the config file from a FORM post.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
 		)
 	)
@@ -148,7 +148,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Update the contents of the config file from raw text.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
 		)
 	)
@@ -166,7 +166,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Add or overwrite a config file section.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
+				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
 		)
 	)
@@ -189,7 +189,7 @@ public class ConfigResource extends BasicRestServlet {
 		description="Add or overwrite a config file entry.",
 		swagger=@MethodSwagger(
 			responses={
-				"200:{ description:'The updated value.', 'x-example':'servlet:/htdocs/themes/dark.css'}"
+				"200:{ description:'The updated value.', example:'servlet:/htdocs/themes/dark.css'}"
 			}
 		)
 	)

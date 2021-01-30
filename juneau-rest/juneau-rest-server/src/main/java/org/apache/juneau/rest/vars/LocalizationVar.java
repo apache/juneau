@@ -14,6 +14,7 @@ package org.apache.juneau.rest.vars;
 
 import java.util.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -41,6 +42,7 @@ import org.apache.juneau.svl.*;
  */
 public class LocalizationVar extends MultipartVar {
 
+	private static final String SESSION_messages = "messages";
 	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
@@ -58,13 +60,16 @@ public class LocalizationVar extends MultipartVar {
 		if (args.length > 0) {
 			String key = args[0];
 			String[] a = (args.length > 1) ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
-			return session.getSessionObject(RestRequest.class, SESSION_req, true).getMessage(key, (Object[])a);
+			Messages messages = session.getSessionObject(Messages.class, SESSION_messages, false);
+			if (messages == null)
+				messages = session.getSessionObject(RestRequest.class, SESSION_req, true).getMessages();
+			return messages.getString(key, (Object[])a);
 		}
 		return "";
 	}
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.hasSessionObject(SESSION_messages) || session.hasSessionObject(SESSION_req);
 	}
 }

@@ -303,7 +303,7 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
-	 * <mk>x-examples</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>examples</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.

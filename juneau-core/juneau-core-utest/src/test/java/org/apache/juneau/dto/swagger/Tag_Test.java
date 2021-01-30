@@ -24,67 +24,58 @@ import org.junit.*;
  * Testcase for {@link Tag}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class TagTest {
+public class Tag_Test {
 
 	/**
 	 * Test method for {@link Tag#name(java.lang.Object)}.
 	 */
 	@Test
-	public void testName() {
+	public void a01_name() {
 		Tag t = new Tag();
 
 		t.name("foo");
-		assertEquals("foo", t.getName());
-
-		t.name(new StringBuilder("foo"));
-		assertEquals("foo", t.getName());
-		assertObject(t.getName()).isType(String.class);
+		assertString(t.name()).is("foo");
 
 		t.name(null);
-		assertNull(t.getName());
+		assertString(t.name()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Tag#description(java.lang.Object)}.
 	 */
 	@Test
-	public void testDescription() {
+	public void a02_description() {
 		Tag t = new Tag();
 
 		t.description("foo");
-		assertEquals("foo", t.getDescription());
-
-		t.description(new StringBuilder("foo"));
-		assertEquals("foo", t.getDescription());
-		assertObject(t.getDescription()).isType(String.class);
+		assertString(t.description()).is("foo");
 
 		t.description(null);
-		assertNull(t.getDescription());
+		assertString(t.description()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Tag#externalDocs(java.lang.Object)}.
 	 */
 	@Test
-	public void testExternalDocs() {
+	public void a03_externalDocs() {
 		Tag t = new Tag();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
+		assertObject(t.externalDocs()).json().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
-		assertObject(t.getExternalDocs()).isType(ExternalDocumentation.class);
+		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).json().is("{url:'foo'}");;
 
-		t.externalDocs(null);
-		assertNull(t.getExternalDocs());
+		t.externalDocs((String)null);
+		assertObject(t.externalDocs()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Tag#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		Tag t = new Tag();
 
 		t
@@ -111,10 +102,10 @@ public class TagTest {
 
 		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
-		assertEquals("a", t.get("description", String.class));
-		assertEquals("{url:'b'}", t.get("externalDocs", String.class));
-		assertEquals("c", t.get("name", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("description", String.class)).is("a");
+		assertString(t.get("externalDocs", String.class)).is("{url:'b'}");
+		assertString(t.get("name", String.class)).is("c");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("description", Object.class)).isType(String.class);
 		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);
@@ -128,5 +119,38 @@ public class TagTest {
 
 		String s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, Tag.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		Tag t = new Tag();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("description", "a")
+			.set("externalDocs", externalDocumentation("b"))
+			.set("name", "c")
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		Tag t = new Tag();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("description", "a")
+			.set("externalDocs", externalDocumentation("b"))
+			.set("name", "c")
+			.set("$ref", "ref");
+
+		assertObject(t.keySet()).json().is("['description','externalDocs','name','$ref']");
 	}
 }

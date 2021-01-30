@@ -98,7 +98,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	private HttpServletRequest inner;
 	private final RestContext context;
-	private RestMethodContext restJavaMethod;
+	private Optional<RestMethodContext> methodContext = Optional.empty();
 
 	private final String method;
 	private RequestBody body;
@@ -194,30 +194,30 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm) throws IOException {
-		this.restJavaMethod = rjm;
-		this.javaMethod = rjm.method;
-		this.beanSession = rjm.createSession();
-		this.partParserSession = rjm.partParser.createPartSession(getParserSessionArgs());
-		this.partSerializerSession = rjm.partSerializer.createPartSession(getSerializerSessionArgs());
+	final void init(RestMethodContext rmc) throws IOException {
+		this.methodContext = Optional.of(rmc);
+		this.javaMethod = rmc.method;
+		this.beanSession = rmc.createSession();
+		this.partParserSession = rmc.partParser.createPartSession(getParserSessionArgs());
+		this.partSerializerSession = rmc.partSerializer.createPartSession(getSerializerSessionArgs());
 		this.pathParams
 			.parser(partParserSession);
 		this.queryParams
-			.addDefault(rjm.defaultRequestQuery)
+			.addDefault(rmc.defaultRequestQuery)
 			.parser(partParserSession);
 		this.headers
-			.addDefault(rjm.defaultRequestHeaders)
+			.addDefault(rmc.defaultRequestHeaders)
 			.addDefault(context.defaultRequestHeaders)
 			.parser(partParserSession);
 		this.attrs = new RequestAttributes(this);
 		this.attrs
-			.addDefault(rjm.defaultRequestAttributes)
+			.addDefault(rmc.defaultRequestAttributes)
 			.addDefault(context.defaultRequestAttributes);
 		this.body
-			.encoders(rjm.encoders)
-			.parsers(rjm.parsers)
+			.encoders(rmc.encoders)
+			.parsers(rmc.parsers)
 			.headers(headers)
-			.maxInput(rjm.maxInput);
+			.maxInput(rmc.maxInput);
 
 		if (isDebug()) {
 			inner = CachingHttpServletRequest.wrap(inner);
@@ -310,7 +310,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getProduces() {
-		return restJavaMethod == null ? Collections.<MediaType>emptyList() : restJavaMethod.supportedAcceptTypes;
+		return methodContext.flatMap(RestMethodContext::supportedAcceptTypes).orElse(emptyList());
 	}
 
 	/**
@@ -319,7 +319,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getConsumes() {
-		return restJavaMethod == null ? Collections.<MediaType>emptyList() : restJavaMethod.supportedContentTypes;
+		return methodContext.flatMap(RestMethodContext::supportedContentTypes).orElse(emptyList());
 	}
 
 	/**
@@ -333,7 +333,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public PropertyStore getPropertyStore() {
-		return restJavaMethod == null ? PropertyStore.DEFAULT : restJavaMethod.getPropertyStore();
+		return methodContext.flatMap(RestMethodContext::propertyStore).orElse(PropertyStore.DEFAULT);
 	}
 
 	/**
@@ -359,8 +359,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				if (i > 0)
 					charset = h.substring(i+9).trim();
 			}
-			if (charset == null && restJavaMethod != null)
-				charset = restJavaMethod.defaultCharset;
+			if (charset == null)
+				charset = methodContext.flatMap(RestMethodContext::defaultCharset).orElse(null);
 			if (charset == null)
 				charset = "UTF-8";
 			if (! Charset.isSupported(charset))
@@ -609,8 +609,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			if (restJavaMethod != null)
-				formData.addDefault(restJavaMethod.defaultRequestFormData);
+			formData.addDefault(methodContext.flatMap(RestMethodContext::defaultRequestFormData).orElse(new NameValuePair[0]));
 			return formData;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
@@ -880,53 +879,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Resource information provider.
-	 *
-	 * <p>
-	 * Returns a {@link RestInfoProvider} object that encapsulates all the textual meta-data on this resource such as
-	 * descriptions, titles, and Swagger documentation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
-	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 *
-	 * 		<jc>// Get information provider.</jc>
-	 * 		RestInfoProvider p = req.getInfoProvider();
-	 *
-	 * 		<jc>// Get localized strings.</jc>
-	 * 		String resourceTitle = p.getTitle(req);
-	 * 		String methodDescription = p.getMethodDescription(req.getMethod(), req);
-	 * 		Contact contact = p.getContact(req);
-	 * 		..
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The {@link RestInfoProvider} object can also be passed as a parameter on the method.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
-	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSiteName()}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceTitle()}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodSummary()}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
-	 * 	<li class='link'>{@doc RestSwagger}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The info provider on the resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public RestInfoProvider getInfoProvider() {
-		return context.getInfoProvider();
-	}
-
-	/**
 	 * Returns the localized swagger associated with the resource.
 	 *
 	 * <p>
@@ -946,9 +898,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
-	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}
+	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_swaggerProvider}
 	 * 	<li class='link'>{@doc RestSwagger}
 	 * </ul>
 	 *
@@ -956,109 +906,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The swagger associated with the resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Swagger getSwagger() {
-		try {
-			if (swagger == null)
-				swagger = context.getInfoProvider().getSwagger(this);
-			return swagger;
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
-		}
-	}
-
-	/**
-	 * Returns the localized site name.
-	 *
-	 * <p>
-	 * The site name is intended to be a title that can be applied to the entire site.
-	 *
-	 * <p>
-	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
-	 * common parent class like so:
-	 * <p class='bcode w800'>
-	 *  <ja>@HtmlDocConfig</ja>(
-	 * 		header={
-	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
-	 * 			<js>"&lt;h2&gt;$R{resourceTitle}&lt;/h2&gt;"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
-	 *
-	 * @return The localized site name.
-	 */
-	public String getSiteName() {
-		try {
-			return context.getInfoProvider().getSiteName(this);
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
-		}
-	}
-
-	/**
-	 * Returns the localized resource title.
-	 *
-	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
-	 *
-	 * @return The localized resource title.
-	 */
-	public String getResourceTitle() {
-		try {
-			return context.getInfoProvider().getTitle(this);
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
-		}
-	}
-
-	/**
-	 * Returns the localized resource description.
-	 *
-	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
-	 *
-	 * @return The localized resource description.
-	 */
-	public String getResourceDescription() {
-		try {
-			return context.getInfoProvider().getDescription(this);
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
-		}
-	}
-
-	/**
-	 * Returns the localized method summary.
-	 *
-	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(Method, RestRequest)} with this object.
-	 *
-	 * @return The localized method description.
-	 */
-	public String getMethodSummary() {
-		try {
-			return context.getInfoProvider().getMethodSummary(javaMethod, this);
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
-		}
-	}
-
-	/**
-	 * Returns the localized method description.
-	 *
-	 * <p>
-	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(Method, RestRequest)} with this object.
-	 *
-	 * @return The localized method description.
-	 */
-	public String getMethodDescription() {
-		try {
-			return context.getInfoProvider().getMethodDescription(javaMethod, this);
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
-		}
+	public Optional<Swagger> getSwagger() {
+		return context.getSwagger(getLocale());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1075,7 +924,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
-		return restJavaMethod == null ? SerializerGroup.EMPTY : restJavaMethod.serializers;
+		return methodContext.flatMap(RestMethodContext::serializers).orElse(SerializerGroup.EMPTY);
 	}
 
 	/**
@@ -1088,7 +937,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParsers() {
-		return restJavaMethod == null ? ParserGroup.EMPTY : restJavaMethod.parsers;
+		return methodContext.flatMap(RestMethodContext::parsers).orElse(ParserGroup.EMPTY);
 	}
 
 	/**
@@ -1592,7 +1441,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		return restJavaMethod == null ? this.context.getResponseBeanMeta(o) : restJavaMethod.getResponseBeanMeta(o);
+		return methodContext.isPresent() ? methodContext.get().getResponseBeanMeta(o) : context.getResponseBeanMeta(o);
 	}
 
 	/**
@@ -1602,7 +1451,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
-		return restJavaMethod == null ? null : restJavaMethod.getResponseHeaderMeta(o);
+		return methodContext.isPresent() ? methodContext.get().getResponseHeaderMeta(o) : null;
 	}
 
 	/**
@@ -1612,16 +1461,33 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
 	 */
 	public ResponsePartMeta getResponseBodyMeta(Object o) {
-		return restJavaMethod == null ? null : restJavaMethod.getResponseBodyMeta(o);
+		return methodContext.isPresent() ? methodContext.get().getResponseBodyMeta(o) : null;
 	}
 
 	/**
-	 * Returns the schema generator with settings assigned on this method and class.
+	 * Returns access to the inner {@link RestMethodContext} of this method.
 	 *
-	 * @return The schema generator.
+	 * @return The {@link RestMethodContext} of this method.  May be <jk>null</jk> if method has not yet been found.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() {
-		return restJavaMethod == null ? context.getJsonSchemaGenerator() : restJavaMethod.getJsonSchemaGenerator();
+	public Optional<RestMethodContext> getMethodContext() {
+		return methodContext;
+	}
+
+	/**
+	 * Returns the swagger for the Java method invoked.
+	 *
+	 * @return The swagger for the Java method as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Operation> getMethodSwagger() {
+
+		if (! methodContext.isPresent())
+			return Optional.empty();
+
+		Optional<Swagger> swagger = context.getSwagger(getLocale());
+		if (! swagger.isPresent())
+			return Optional.empty();
+
+		return swagger.get().operation(methodContext.get().getPathPattern(), getMethod().toLowerCase());
 	}
 
 	/**

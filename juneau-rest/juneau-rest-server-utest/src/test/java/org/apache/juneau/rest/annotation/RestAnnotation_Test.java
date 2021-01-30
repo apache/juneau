@@ -61,7 +61,6 @@ public class RestAnnotation_Test {
 		.encoders(Encoder.class)
 		.fileFinder(FileFinder.class)
 		.guards(RestGuard.class)
-		.infoProvider(BasicRestInfoProvider.class)
 		.maxInput("maxInput")
 		.methodContextClass(RestMethodContext.class)
 		.messages("messages")
@@ -83,6 +82,7 @@ public class RestAnnotation_Test {
 		.siteName("siteName")
 		.staticFiles(StaticFiles.class)
 		.swagger(ResourceSwaggerAnnotation.DEFAULT)
+		.swaggerProvider(SwaggerProvider.class)
 		.title("title")
 		.uriAuthority("uriAuthority")
 		.uriContext("uriContext")
@@ -115,7 +115,6 @@ public class RestAnnotation_Test {
 		.encoders(Encoder.class)
 		.fileFinder(FileFinder.class)
 		.guards(RestGuard.class)
-		.infoProvider(BasicRestInfoProvider.class)
 		.maxInput("maxInput")
 		.methodContextClass(RestMethodContext.class)
 		.messages("messages")
@@ -137,6 +136,7 @@ public class RestAnnotation_Test {
 		.siteName("siteName")
 		.staticFiles(StaticFiles.class)
 		.swagger(ResourceSwaggerAnnotation.DEFAULT)
+		.swaggerProvider(SwaggerProvider.class)
 		.title("title")
 		.uriAuthority("uriAuthority")
 		.uriContext("uriContext")
@@ -172,7 +172,6 @@ public class RestAnnotation_Test {
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "fileFinder:'org.apache.juneau.cp.FileFinder',"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
-				+ "infoProvider:'org.apache.juneau.rest.BasicRestInfoProvider',"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
 				+ "methodContextClass:'org.apache.juneau.rest.RestMethodContext',"
@@ -194,6 +193,7 @@ public class RestAnnotation_Test {
 				+ "siteName:'siteName',"
 				+ "staticFiles:'org.apache.juneau.rest.StaticFiles',"
 				+ "swagger:{contact:{email:'',name:'',url:'',value:[]},description:[],externalDocs:{description:[],url:'',value:[]},license:{name:'',url:'',value:[]},tags:[],termsOfService:[],title:[],value:[],version:''},"
+				+ "swaggerProvider:'org.apache.juneau.rest.SwaggerProvider',"
 				+ "title:['title'],"
 				+ "uriAuthority:'uriAuthority',"
 				+ "uriContext:'uriContext',"
@@ -271,7 +271,6 @@ public class RestAnnotation_Test {
 		encoders=Encoder.class,
 		fileFinder=FileFinder.class,
 		guards=RestGuard.class,
-		infoProvider=BasicRestInfoProvider.class,
 		maxInput="maxInput",
 		methodContextClass=RestMethodContext.class,
 		messages="messages",
@@ -293,6 +292,7 @@ public class RestAnnotation_Test {
 		siteName="siteName",
 		staticFiles=StaticFiles.class,
 		swagger=@ResourceSwagger,
+		swaggerProvider=SwaggerProvider.class,
 		title="title",
 		uriAuthority="uriAuthority",
 		uriContext="uriContext",
@@ -327,7 +327,6 @@ public class RestAnnotation_Test {
 		encoders=Encoder.class,
 		fileFinder=FileFinder.class,
 		guards=RestGuard.class,
-		infoProvider=BasicRestInfoProvider.class,
 		maxInput="maxInput",
 		methodContextClass=RestMethodContext.class,
 		messages="messages",
@@ -349,6 +348,7 @@ public class RestAnnotation_Test {
 		siteName="siteName",
 		staticFiles=StaticFiles.class,
 		swagger=@ResourceSwagger,
+		swaggerProvider=SwaggerProvider.class,
 		title="title",
 		uriAuthority="uriAuthority",
 		uriContext="uriContext",

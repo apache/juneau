@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Tag;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -45,15 +46,15 @@ public class Swagger_Test {
 	private Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).fileFinder(TestClasspathFileFinder.class).build();
 		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null));
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
+		SwaggerProvider ip = rc.getSwaggerProvider();
+		return ip.getSwagger(rc, req.getLocale());
 	}
 
 	private static Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
 		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null));
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
+		SwaggerProvider ip = rc.getSwaggerProvider();
+		return ip.getSwagger(rc, req.getLocale());
 	}
 
 	public static class TestClasspathFileFinder extends FileFinder {
@@ -65,7 +66,7 @@ public class Swagger_Test {
 		@Override
 		public Optional<InputStream> find(String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))
-				return Optional.of(BasicRestInfoProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
+				return Optional.of(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
 			return super.find(name, locale);
 		}
 	}
@@ -1602,7 +1603,7 @@ public class Swagger_Test {
 		assertEquals("{id:1}", getSwaggerWithFile(new L1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
 	public static class L2 {
 		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
@@ -1612,13 +1613,14 @@ public class Swagger_Test {
 
 	@Test
 	public void l02_query_example_swaggerOnClass() throws Exception {
+		System.err.println(getSwagger(new L2()));
 		assertEquals("{id:2}", getSwagger(new L2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 		assertEquals("{id:2}", getSwaggerWithFile(new L2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
 	public static class L3 {
-		@RestMethod(method=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',x-example:'{id:3}'}]"))
+		@RestMethod(method=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',example:'{id:3}'}]"))
 		public X a() {
 			return null;
 		}
@@ -1630,7 +1632,7 @@ public class Swagger_Test {
 		assertEquals("{id:3}", getSwaggerWithFile(new L3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
 	public static class L4 {
 		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query(n="foo",ex="{id:4}") X foo) {
@@ -1644,7 +1646,7 @@ public class Swagger_Test {
 		assertEquals("{id:4}", getSwaggerWithFile(new L4()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',example:'{id:2}'}]}}}"))
 	public static class L5 {
 		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query(n="foo",ex="{id:$L{5}}") X foo) {
@@ -1676,7 +1678,7 @@ public class Swagger_Test {
 		assertObject(getSwaggerWithFile(new M1()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).json().is("{foo:'a'}");
 	}
 
-	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
 	public static class M2 {
 		@RestMethod(method=GET,path="/path/{foo}/body")
 		public X a(@Body X foo) {
@@ -1690,9 +1692,9 @@ public class Swagger_Test {
 		assertObject(getSwaggerWithFile(new M2()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).json().is("{foo:'b'}");
 	}
 
-	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
 	public static class M3 {
-		@RestMethod(method=GET,path="/path/{foo}/body",swagger=@MethodSwagger("parameters:[{'in':'body',x-examples:{foo:'c'}}]"))
+		@RestMethod(method=GET,path="/path/{foo}/body",swagger=@MethodSwagger("parameters:[{'in':'body',examples:{foo:'c'}}]"))
 		public X a() {
 			return null;
 		}
@@ -1704,7 +1706,7 @@ public class Swagger_Test {
 		assertObject(getSwaggerWithFile(new M3()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples()).json().is("{foo:'c'}");
 	}
 
-	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
 	public static class M4 {
 		@RestMethod(method=GET,path="/path/{foo}/body")
 		public X a(@Body(exs="{foo:'d'}") X foo) {
@@ -2344,6 +2346,9 @@ public class Swagger_Test {
 		Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getBody().asString(), Swagger.class);
 		Operation o = s.getOperation("/", "get");
 		ParameterInfo pi = o.getParameter("body", null);
+
+		SimpleJson.DEFAULT_READABLE.println(s);
+
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", pi.getExamples().get("application/json+simple"));
 		ResponseInfo ri = o.getResponse("200");
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json+simple"));

@@ -41,6 +41,6 @@ public class SwaggerParam extends SimpleRestParam {
 	 * Constructor.
 	 */
 	protected SwaggerParam() {
-		super((c)->c.getRestRequest().getSwagger());
+		super((c)->c.getRestRequest().getSwagger().orElse(null));
 	}
 }

@@ -90,7 +90,7 @@
 						schema: {
 							$ref: '#/definitions/Foo'
 						},
-						'x-example': "{id:1}"
+						example: "{id:1}"
 					}
 				]
 			}
@@ -119,8 +119,8 @@
 						schema: {
 							$ref: '#/definitions/Foo'
 						},						
-						'x-example': "{id:1}",
-						'x-examples': {
+						example: "{id:1}",
+						examples: {
 							foo: 'a'
 						}						
 					}
@@ -145,7 +145,7 @@
 								description: 's-description'
 							}
 						},
-						x-example: "{foo:'a'}",
+						example: "{foo:'a'}",
 						examples: {
 							foo: 'a'
 						}

@@ -25,49 +25,47 @@ import org.junit.*;
  * Testcase for {@link License}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class LicenseTest {
+public class License_Test {
 
 	/**
 	 * Test method for {@link License#name(java.lang.Object)}.
 	 */
 	@Test
-	public void testName() {
+	public void a01_name() {
 		License t = new License();
 
 		t.name("foo");
-		assertEquals("foo", t.getName());
-
-		t.name(new StringBuilder("foo"));
-		assertEquals("foo", t.getName());
-		assertObject(t.getName()).isType(String.class);
+		assertString(t.name()).is("foo");
 
 		t.name(null);
-		assertNull(t.getName());
+		assertString(t.name()).isNull();
 	}
 
 	/**
 	 * Test method for {@link License#url(java.lang.Object)}.
 	 */
 	@Test
-	public void testUrl() {
+	public void a02_url() throws Exception {
 		License t = new License();
 
 		t.url(URI.create("foo"));
-		assertEquals("foo", t.getUrl().toString());
+		assertObject(t.url()).isType(URI.class).string().is("foo");
 
-		t.url("foo");
-		assertEquals("foo", t.getUrl().toString());
-		assertObject(t.getUrl()).isType(URI.class);
+		t.url("bar");
+		assertObject(t.url()).isType(URI.class).string().is("bar");
 
-		t.url(null);
-		assertNull(t.getUrl());
+		t.url(new URL("http://baz"));
+		assertObject(t.url()).isType(URI.class).string().is("http://baz");
+
+		t.url((String)null);
+		assertObject(t.url()).isNull();
 	}
 
 	/**
 	 * Test method for {@link License#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		License t = new License();
 
 		t
@@ -91,9 +89,9 @@ public class LicenseTest {
 
 		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
 
-		assertEquals("a", t.get("name", String.class));
-		assertEquals("b", t.get("url", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("name", String.class)).is("a");
+		assertString(t.get("url", String.class)).is("b");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("name", Object.class)).isType(String.class);
 		assertObject(t.get("url", Object.class)).isType(URI.class);
@@ -106,5 +104,36 @@ public class LicenseTest {
 
 		String s = "{name:'a',url:'b','$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, License.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		License t = new License();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("name", "a")
+			.set("url", URI.create("b"))
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		License t = new License();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("name", "a")
+			.set("url", URI.create("b"))
+			.set("$ref", "ref");
+
+		assertObject(t.keySet()).json().is("['name','url','$ref']");
 	}
 }

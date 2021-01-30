@@ -79,7 +79,7 @@ public class Nls_Test {
 		@RestMethod(description="foo")
 		public Swagger options(RestRequest req) {
 			// Should get to the options page without errors
-			return req.getSwagger();
+			return req.getSwagger().orElse(null);
 		}
 	}
 

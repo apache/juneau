@@ -134,6 +134,16 @@ public class ASet<T> extends LinkedHashSet<T> {
 	}
 
 	/**
+	 * Creates a copy of the collection if it's not <jk>null</jk>.
+	 *
+	 * @param values The initial values.
+	 * @return A new list, or <jk>null</jk> if the collection is <jk>null</jk>.
+	 */
+	public static <T> ASet<T> nullable(Collection<T> values) {
+		return values == null ? null : of(values);
+	}
+
+	/**
 	 * Convenience method for creating an unmodifiable set of objects.
 	 *
 	 * @param t The initial values.

@@ -41,7 +41,7 @@ import org.apache.juneau.rest.annotation.*;
 @JsonSchemaConfig(
 	// Add descriptions to the following types when not specified:
 	addDescriptionsTo="bean,collection,array,map,enum",
-	// Add x-example to the following types:
+	// Add example to the following types:
 	addExamplesTo="bean,collection,array,map",
 	// Don't generate schema information on the Swagger bean itself or HTML beans.
 	ignoreTypes="Swagger,org.apache.juneau.dto.html5.*",
@@ -81,7 +81,7 @@ public interface BasicRestMethods {
 		// Never show aside contents of page inherited from class.
 		aside="NONE"
 	)
-	public Swagger getApi(RestRequest req);
+	public Swagger getSwagger(RestRequest req);
 
 	/**
 	 * [GET /htdocs/*] - Retrieve static file.

@@ -140,10 +140,98 @@ public final class CollectionUtils {
 					}
 				}
 			}
-			return l.isEmpty() ? null : l;
+			return l;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Adds a set of values to an existing set.
+	 *
+	 * @param appendTo
+	 * 	The set to append to.
+	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashSet} will be created.
+	 * @param values The values to add.
+	 * @param type The data type of the elements.
+	 * @param args The generic type arguments of the data type.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> Set<T> addToSet(Set<T> appendTo, Object[] values, Class<T> type, Type...args) {
+		if (values == null)
+			return appendTo;
+		try {
+			Set<T> l = appendTo;
+			if (appendTo == null)
+				l = new LinkedHashSet<>();
+			for (Object o : values) {
+				if (o != null) {
+					if (isJsonArray(o, false)) {
+						for (Object o2 : new OList(o.toString()))
+							l.add(toType(o2, type, args));
+					} else if (o instanceof Collection) {
+						for (Object o2 : (Collection<?>)o)
+							l.add(toType(o2, type, args));
+					} else if (o.getClass().isArray()) {
+						for (int i = 0; i < Array.getLength(o); i++)
+							l.add(toType(Array.get(o, i), type, args));
+					} else {
+						l.add(toType(o, type, args));
+					}
+				}
+			}
+			return l;
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Creates a new list from the specified values.
+	 *
+	 * @param values The values to add.
+	 * @param type The data type of the elements.
+	 * @param args The generic type arguments of the data type.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> List<T> toList(Object[] values, Class<T> type, Type...args) {
+		return addToList(new ArrayList<T>(), values, type, args);
+	}
+
+	/**
+	 * Creates a new list from the specified values.
+	 *
+	 * @param value The value to add.
+	 * @param type The data type of the elements.
+	 * @param args The generic type arguments of the data type.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> List<T> toList(Object value, Class<T> type, Type...args) {
+		return addToList(new ArrayList<T>(), new Object[]{value}, type, args);
+	}
+
+	/**
+	 * Creates a new set from the specified values.
+	 *
+	 * @param values The values to add.
+	 * @param type The data type of the elements.
+	 * @param args The generic type arguments of the data type.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> Set<T> toSet(Object[] values, Class<T> type, Type...args) {
+		return addToSet(new LinkedHashSet<T>(), values, type, args);
+	}
+
+	/**
+	 * Creates a new set from the specified value.
+	 *
+	 * @param value The value to add.
+	 * @param type The data type of the elements.
+	 * @param args The generic type arguments of the data type.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> Set<T> toSet(Object value, Class<T> type, Type...args) {
+		return addToSet(new LinkedHashSet<T>(), new Object[]{value}, type, args);
 	}
 
 	/**
@@ -186,6 +274,32 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Creates a new map from the specified values.
+	 *
+	 * @param values The values to add.
+	 * @param keyType The data type of the keys.
+	 * @param valueType The data type of the values.
+	 * @param valueTypeArgs The generic type arguments of the data type of the values.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <K,V> Map<K,V> toMap(Object[] values, Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
+		return addToMap(new LinkedHashMap<>(), values, keyType, valueType, valueTypeArgs);
+	}
+
+	/**
+	 * Creates a new map from the specified value.
+	 *
+	 * @param values The values to add.
+	 * @param keyType The data type of the keys.
+	 * @param valueType The data type of the values.
+	 * @param valueTypeArgs The generic type arguments of the data type of the values.
+	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 */
+	public static <K,V> Map<K,V> toMap(Object values, Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
+		return addToMap(new LinkedHashMap<>(), new Object[]{values}, keyType, valueType, valueTypeArgs);
+	}
+
+	/**
 	 * Creates a new list from the specified collection.
 	 *
 	 * @param val The value to copy from.
@@ -193,6 +307,16 @@ public final class CollectionUtils {
 	 */
 	public static <T> AList<T> newList(Collection<T> val) {
 		return AList.nullable(val);
+	}
+
+	/**
+	 * Creates a new set from the specified collection.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> ASet<T> newSet(Collection<T> val) {
+		return ASet.nullable(val);
 	}
 
 	/**
@@ -208,6 +332,25 @@ public final class CollectionUtils {
 		if (val != null) {
 			if (l == null)
 				l = new ArrayList<>(val);
+			else
+				l.addAll(val);
+		}
+		return l;
+	}
+
+	/**
+	 * Copies the specified values into an existing list.
+	 *
+	 * @param l
+	 * 	The list to add to.
+	 * 	<br>If <jk>null</jk>, a new {@link ArrayList} will be created.
+	 * @param val The values to add.
+	 * @return The list with values copied into it.
+	 */
+	public static <T> Set<T> addToSet(Set<T> l, Collection<T> val) {
+		if (val != null) {
+			if (l == null)
+				l = new LinkedHashSet<>(val);
 			else
 				l.addAll(val);
 		}

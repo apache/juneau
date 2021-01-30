@@ -15,6 +15,7 @@ package org.apache.juneau.dto.swagger;
 import java.net.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Various useful static methods for creating Swagger elements.
@@ -58,7 +59,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name, Object url, String email) {
-		return contact().name(name).url(url).email(email);
+		return contact().name(name).url(StringUtils.toURI(url)).email(email);
 	}
 
 	/**
@@ -82,7 +83,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url) {
-		return externalDocumentation().url(url);
+		return externalDocumentation().url(StringUtils.toURI(url));
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url, String description) {
-		return externalDocumentation().url(url).description(description);
+		return externalDocumentation().url(StringUtils.toURI(url)).description(description);
 	}
 
 	/**

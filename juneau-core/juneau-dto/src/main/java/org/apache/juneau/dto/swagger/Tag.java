@@ -30,15 +30,15 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Tag x = <jsm>tag</jsm>()
+ * 	Tag <jv>tag</jv> = <jsm>tag</jsm>()
  * 		.name(<js>"pet"</js>)
  * 		.description(<js>"Pets operations"</js>)
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>tag</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>tag</jv>.toString();
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Output</jc>
@@ -73,9 +73,9 @@ public class Tag extends SwaggerElement {
 	public Tag(Tag copyFrom) {
 		super(copyFrom);
 
-		this.name = copyFrom.name;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.name = copyFrom.name;
 	}
 
 	/**
@@ -87,46 +87,9 @@ public class Tag extends SwaggerElement {
 		return new Tag(this);
 	}
 
-	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the tag.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Bean property setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the tag.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public Tag setName(String value) {
-		name = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Tag name(Object value) {
-		return setName(stringify(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// description
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -150,25 +113,39 @@ public class Tag extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Tag setDescription(String value) {
+	public void setDescription(String value) {
 		description = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setDescription(String)}.
+	 * Bean property fluent getter:  <property>description</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> description() {
+		return Optional.ofNullable(getDescription());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description for the tag.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag description(Object value) {
-		return setDescription(stringify(value));
+	public Tag description(String value) {
+		setDescription(value);
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// externalDocs
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -191,42 +168,127 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setExternalDocs(ExternalDocumentation value) {
+		externalDocs = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation for this tag.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<ExternalDocumentation> externalDocs() {
+		return Optional.ofNullable(getExternalDocs());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation for this tag.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag setExternalDocs(ExternalDocumentation value) {
-		externalDocs = value;
+	public Tag externalDocs(ExternalDocumentation value) {
+		setExternalDocs(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
+	 * Bean property fluent setter:  <property>externalDocs</property>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link ExternalDocumentation}
-	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
+	 * <p>
+	 * Additional external documentation for this tag as raw JSON.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
-	 * 			</p>
-	 * 	</ul>
+	 * </p>
+	 *
+	 * @param json
+	 * 	The new value for this property as JSON.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Tag externalDocs(Object value) {
-		return setExternalDocs(toType(value, ExternalDocumentation.class));
+	public Tag externalDocs(String json) {
+		setExternalDocs(toType(json, ExternalDocumentation.class));
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// name
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the tag.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Bean property setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the tag.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 */
+	public void setName(String value) {
+		name = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the tag.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> name() {
+		return Optional.ofNullable(getName());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the tag.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Tag name(String value) {
+		setName(value);
+		return this;
+	}
+
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "name": return toType(getName(), type);
 			case "description": return toType(getDescription(), type);
 			case "externalDocs": return toType(getExternalDocs(), type);
+			case "name": return toType(getName(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -236,9 +298,9 @@ public class Tag extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "description": return description(value);
-			case "externalDocs": return externalDocs(value);
+			case "description": return description(stringify(value));
+			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
+			case "name": return name(stringify(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -248,9 +310,9 @@ public class Tag extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(name != null, "name")
 			.appendIf(description != null, "description")
-			.appendIf(externalDocs != null, "externalDocs");
+			.appendIf(externalDocs != null, "externalDocs")
+			.appendIf(name != null, "name");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
@@ -25,67 +24,61 @@ import org.junit.*;
  * Testcase for {@link Contact}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class ContactTest {
+public class Contact_Test {
 
 	/**
 	 * Test method for {@link Contact#name(java.lang.Object)}.
 	 */
 	@Test
-	public void testName() {
+	public void a01_name() {
 		Contact t = new Contact();
 
 		t.name("foo");
-		assertEquals("foo", t.getName());
-
-		t.name(new StringBuilder("foo"));
-		assertEquals("foo", t.getName());
-		assertObject(t.getName()).isType(String.class);
+		assertString(t.name()).is("foo");
 
 		t.name(null);
-		assertNull(t.getName());
+		assertString(t.name()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Contact#url(java.lang.Object)}.
 	 */
 	@Test
-	public void testUrl() {
+	public void a02_url() throws Exception {
 		Contact t = new Contact();
 
 		t.url("foo");
-		assertEquals("foo", t.getUrl().toString());
+		assertString(t.url()).is("foo");
 
-		t.url(new StringBuilder("foo"));
-		assertEquals("foo", t.getUrl().toString());
-		assertObject(t.getUrl()).isType(URI.class);
+		t.url(URI.create("http://bar"));
+		assertString(t.url()).is("http://bar");
 
-		t.url(null);
-		assertNull(t.getUrl());
+		t.url(new URL("http://baz"));
+		assertString(t.url()).is("http://baz");
+
+		t.url((String)null);
+		assertString(t.url()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Contact#email(java.lang.Object)}.
 	 */
 	@Test
-	public void testEmail() {
+	public void a03_email() {
 		Contact t = new Contact();
 
 		t.email("foo");
-		assertEquals("foo", t.getEmail());
-
-		t.email(new StringBuilder("foo"));
-		assertEquals("foo", t.getEmail());
-		assertObject(t.getEmail()).isType(String.class);
+		assertString(t.email()).is("foo");
 
 		t.email(null);
-		assertNull(t.getEmail());
+		assertString(t.email()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Contact#set(String, Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		Contact t = new Contact();
 
 		t
@@ -104,21 +97,49 @@ public class ContactTest {
 
 		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
-		assertEquals("foo", t.get("name", String.class));
-		assertEquals("bar", t.get("url", URI.class).toString());
-		assertEquals("baz", t.get("email", String.class));
-		assertEquals("qux", t.get("$ref", String.class));
-
-		assertObject(t.get("name", String.class)).isType(String.class);
-		assertObject(t.get("url", URI.class)).isType(URI.class);
-		assertObject(t.get("email", String.class)).isType(String.class);
-		assertObject(t.get("$ref", String.class)).isType(String.class);
+		assertObject(t.get("name", String.class)).isType(String.class).is("foo");
+		assertObject(t.get("url", URI.class)).isType(URI.class).string().is("bar");
+		assertObject(t.get("email", String.class)).isType(String.class).is("baz");
+		assertObject(t.get("$ref", String.class)).isType(String.class).is("qux");
 
 		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		assertObject(t.get("null", Object.class)).isNull();
+		assertObject(t.get(null, Object.class)).isNull();
+		assertObject(t.get("foo", Object.class)).isNull();
 
 		assertObject(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class)).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		Contact t = new Contact();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("name", "foo")
+			.set("url", "bar")
+			.set("email", "baz")
+			.set("$ref", "qux")
+			.copy();
+
+		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		Contact t = new Contact();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("name", "foo")
+			.set("url", "bar")
+			.set("email", "baz")
+			.set("$ref", "qux");
+
+		assertObject(t.keySet()).json().is("['email','name','url','$ref']");
 	}
 }

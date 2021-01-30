@@ -14,7 +14,6 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.json.*;
@@ -24,121 +23,103 @@ import org.junit.*;
  * Testcase for {@link Info}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class InfoTest {
+public class Info_Test {
 
 	/**
 	 * Test method for {@link Info#title(java.lang.Object)}.
 	 */
 	@Test
-	public void testTitle() {
+	public void a01_title() {
 		Info t = new Info();
 
 		t.title("foo");
-		assertEquals("foo", t.getTitle());
-
-		t.title(new StringBuilder("foo"));
-		assertEquals("foo", t.getTitle());
-		assertObject(t.getTitle()).isType(String.class);
+		assertString(t.title()).is("foo");
 
 		t.title(null);
-		assertNull(t.getTitle());
+		assertString(t.title()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Info#description(java.lang.Object)}.
 	 */
 	@Test
-	public void testDescription() {
+	public void a02_description() {
 		Info t = new Info();
 
 		t.description("foo");
-		assertEquals("foo", t.getDescription());
-
-		t.description(new StringBuilder("foo"));
-		assertEquals("foo", t.getDescription());
-		assertObject(t.getDescription()).isType(String.class);
+		assertString(t.description()).is("foo");
 
 		t.description(null);
-		assertNull(t.getDescription());
+		assertString(t.description()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Info#termsOfService(java.lang.Object)}.
 	 */
 	@Test
-	public void testTermsOfService() {
+	public void a03_termsOfService() {
 		Info t = new Info();
 
 		t.termsOfService("foo");
-		assertEquals("foo", t.getTermsOfService());
-
-		t.termsOfService(new StringBuilder("foo"));
-		assertEquals("foo", t.getTermsOfService());
-		assertObject(t.getTermsOfService()).isType(String.class);
+		assertString(t.termsOfService()).is("foo");
 
 		t.termsOfService(null);
-		assertNull(t.getTermsOfService());
+		assertString(t.termsOfService()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Info#contact(java.lang.Object)}.
 	 */
 	@Test
-	public void testContact() {
+	public void a04_contact() {
 		Info t = new Info();
 
 		t.contact(contact("foo"));
-		assertObject(t.getContact()).json().is("{name:'foo'}");
+		assertObject(t.contact()).json().is("{name:'foo'}");
 
 		t.contact("{name:'foo'}");
-		assertObject(t.getContact()).json().is("{name:'foo'}");
-		assertObject(t.getContact()).isType(Contact.class);
+		assertObject(t.contact()).isType(Contact.class).json().is("{name:'foo'}");
 
-		t.contact(null);
-		assertNull(t.getContact());
+		t.contact((String)null);
+		assertObject(t.contact()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Info#license(java.lang.Object)}.
 	 */
 	@Test
-	public void testLicense() {
+	public void a05_license() {
 		Info t = new Info();
 
 		t.license(license("foo"));
-		assertObject(t.getLicense()).json().is("{name:'foo'}");
+		assertObject(t.license()).isType(License.class).json().is("{name:'foo'}");
 
 		t.license("{name:'foo'}");
-		assertObject(t.getLicense()).json().is("{name:'foo'}");
-		assertObject(t.getLicense()).isType(License.class);
+		assertObject(t.license()).isType(License.class).json().is("{name:'foo'}");
 
-		t.license(null);
-		assertNull(t.getLicense());
+		t.license((String)null);
+		assertObject(t.license()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Info#version(java.lang.Object)}.
 	 */
 	@Test
-	public void testVersion() {
+	public void a06_version() {
 		Info t = new Info();
 
 		t.version("foo");
-		assertEquals("foo", t.getVersion());
-
-		t.version(new StringBuilder("foo"));
-		assertEquals("foo", t.getVersion());
-		assertObject(t.getVersion()).isType(String.class);
+		assertString(t.version()).is("foo");
 
 		t.version(null);
-		assertNull(t.getVersion());
+		assertString(t.version()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Info#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		Info t = new Info();
 
 		t
@@ -174,13 +155,13 @@ public class InfoTest {
 
 		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
-		assertEquals("{name:'a'}", t.get("contact", String.class));
-		assertEquals("b", t.get("description", String.class));
-		assertEquals("{name:'c'}", t.get("license", String.class));
-		assertEquals("d", t.get("termsOfService", String.class));
-		assertEquals("e", t.get("title", String.class));
-		assertEquals("f", t.get("version", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("contact", String.class)).is("{name:'a'}");
+		assertString(t.get("description", String.class)).is("b");
+		assertString(t.get("license", String.class)).is("{name:'c'}");
+		assertString(t.get("termsOfService", String.class)).is("d");
+		assertString(t.get("title", String.class)).is("e");
+		assertString(t.get("version", String.class)).is("f");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("contact", Object.class)).isType(Contact.class);
 		assertObject(t.get("description", Object.class)).isType(String.class);
@@ -191,11 +172,50 @@ public class InfoTest {
 		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		assertObject(t.get("null", Object.class)).isNull();
+		assertObject(t.get(null, Object.class)).isNull();
+		assertObject(t.get("foo", Object.class)).isNull();
 
 		String s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, Info.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		Info t = new Info();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("contact", contact("a"))
+			.set("description", "b")
+			.set("license", license("c"))
+			.set("termsOfService", "d")
+			.set("title", "e")
+			.set("version", "f")
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		Info t = new Info();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("contact", contact("a"))
+			.set("description", "b")
+			.set("license", license("c"))
+			.set("termsOfService", "d")
+			.set("title", "e")
+			.set("version", "f")
+			.set("$ref", "ref");
+
+		assertObject(t.keySet()).json().is("['contact','description','license','termsOfService','title','version','$ref']");
 	}
 }

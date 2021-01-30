@@ -93,7 +93,7 @@ public class RestAnnotation {
 		Class<? extends RestContext> contextClass = RestContext.Null.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
-		Class<? extends RestInfoProvider> infoProvider=RestInfoProvider.Null.class;
+		Class<? extends SwaggerProvider> swaggerProvider=SwaggerProvider.Null.class;
 		Class<? extends RestParam>[] restParams = new Class[0];
 		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
 		Class<? extends RestMethodContext> methodContextClass = RestMethodContext.Null.class;
@@ -385,17 +385,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#infoProvider()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder infoProvider(Class<? extends RestInfoProvider> value) {
-			this.infoProvider = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#maxInput()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -605,6 +594,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#swaggerProvider()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
+			this.swaggerProvider = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#title()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -694,7 +694,7 @@ public class RestAnnotation {
 		private final Class<? extends RestContext> contextClass;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
-		private final Class<? extends RestInfoProvider> infoProvider;
+		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends RestParam>[] restParams;
 		private final Class<? extends BeanFactory> beanFactory;
 		private final Class<? extends RestMethodContext> methodContextClass;
@@ -731,7 +731,6 @@ public class RestAnnotation {
 			this.encoders = copyOf(b.encoders);
 			this.fileFinder = b.fileFinder;
 			this.guards = copyOf(b.guards);
-			this.infoProvider = b.infoProvider;
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
 			this.methodContextClass = b.methodContextClass;
@@ -751,6 +750,7 @@ public class RestAnnotation {
 			this.siteName = b.siteName;
 			this.staticFiles = b.staticFiles;
 			this.swagger = b.swagger;
+			this.swaggerProvider = b.swaggerProvider;
 			this.title = copyOf(b.title);
 			this.uriAuthority = b.uriAuthority;
 			this.uriContext = b.uriContext;
@@ -880,11 +880,6 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestInfoProvider> infoProvider() {
-			return infoProvider;
-		}
-
-		@Override /* Rest */
 		public String maxInput() {
 			return maxInput;
 		}
@@ -980,6 +975,11 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
+		public Class<? extends SwaggerProvider> swaggerProvider() {
+			return swaggerProvider;
+		}
+
+		@Override /* Rest */
 		public String[] title() {
 			return title;
 		}
@@ -1054,7 +1054,7 @@ public class RestAnnotation {
 			psb.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
 			psb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
 			psb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
-			psb.setIf(a.infoProvider() != RestInfoProvider.Null.class, REST_infoProvider, a.infoProvider());
+			psb.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
 			psb.setIf(a.methodContextClass() != RestMethodContext.Null.class, REST_methodContextClass, a.methodContextClass());
 			psb.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
 			psb.setIf(a.restMethodsClass() != RestMethods.Null.class, REST_restMethodsClass, a.restMethodsClass());

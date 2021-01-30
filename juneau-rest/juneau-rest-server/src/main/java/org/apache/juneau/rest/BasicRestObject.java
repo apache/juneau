@@ -42,12 +42,8 @@ public abstract class BasicRestObject extends RestObject implements BasicUnivers
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* BasicRestConfig */
-	public Swagger getApi(RestRequest req) {
-		try {
-			return req.getSwagger();
-		} catch (Exception e) {
-			throw new InternalServerError(e);
-		}
+	public Swagger getSwagger(RestRequest req) {
+		return req.getSwagger().orElseThrow(NotFound::new);
 	}
 
 	@Override /* BasicRestConfig */

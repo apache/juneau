@@ -166,13 +166,13 @@ public abstract class RrpcServlet extends BasicRestServlet {
 					"schema: {",
 						"type': 'array'",
 					"},",
-					"x-examples: {",
+					"examples: {",
 						"'application/json+lax': '[\\'foo\\', 123, true]'",
 					"}",
 				"}"
 			},
 			responses= {
-				"200:{ description:'The return object serialized', schema:{type:'any'},'x-example':{foo:123} }",
+				"200:{ description:'The return object serialized', schema:{type:'any'},example:{foo:123} }",
 			}
 		)
 	)

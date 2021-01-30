@@ -57,7 +57,7 @@ public class Swagger_Path_Test {
 				"description:'a\nb',",
 				"type:'string',",
 				"enum:['a','b'],",
-				"x-example:'a'"
+				"example:'a'"
 			}
 		)
 		public static class A2 {
@@ -76,7 +76,7 @@ public class Swagger_Path_Test {
 				"description:'b\nc',",
 				"type:'string',",
 				"enum:['b','c'],",
-				"x-example:'b'"
+				"example:'b'"
 			},
 			d={"a","b"},
 			t="string",
@@ -126,7 +126,7 @@ public class Swagger_Path_Test {
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).json().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/a/a'}}");
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/a/a'}}");
 
 		x = s.getParameterInfo("/b/{P}","get","path","P");
 		assertEquals("P", x.getName());
@@ -134,7 +134,7 @@ public class Swagger_Path_Test {
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).json().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/b/a'}}");
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/b/a'}}");
 
 		x = s.getParameterInfo("/c/{P}","get","path","P");
 		assertEquals("P", x.getName());
@@ -142,7 +142,7 @@ public class Swagger_Path_Test {
 		assertEquals("string", x.getType());
 		assertObject(x.getEnum()).json().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/c/a'}}");
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/c/a'}}");
 
 		x = s.getParameterInfo("/d/{P}","get","path","P");
 		assertEquals("P", x.getName());

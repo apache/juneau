@@ -29,8 +29,8 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 			Object r = c.newInstance();
 			RestContext rc = RestContext.create(r).build();
 			RestRequest req = rc.createRequest(new RestCall(r, rc, new MockServletRequest(), null));
-			RestInfoProvider ip = rc.getInfoProvider();
-			return ip.getSwagger(req);
+			SwaggerProvider ip = rc.getSwaggerProvider();
+			return ip.getSwagger(rc, req.getLocale());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

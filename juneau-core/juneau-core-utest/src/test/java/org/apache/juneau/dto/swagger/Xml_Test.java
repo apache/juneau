@@ -23,113 +23,89 @@ import org.junit.*;
  * Testcase for {@link Xml}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class XmlTest {
+public class Xml_Test {
 
 	/**
 	 * Test method for {@link Xml#name(java.lang.Object)}.
 	 */
 	@Test
-	public void testName() {
+	public void a01_name() {
 		Xml t = new Xml();
 
 		t.name("foo");
-		assertEquals("foo", t.getName());
-
-		t.name(new StringBuilder("foo"));
-		assertEquals("foo", t.getName());
-		assertObject(t.getName()).isType(String.class);
+		assertString(t.name()).is("foo");
 
 		t.name(null);
-		assertNull(t.getName());
+		assertString(t.name()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Xml#namespace(java.lang.Object)}.
 	 */
 	@Test
-	public void testNamespace() {
+	public void a02_namespace() {
 		Xml t = new Xml();
 
 		t.namespace("foo");
-		assertEquals("foo", t.getNamespace());
-
-		t.namespace(new StringBuilder("foo"));
-		assertEquals("foo", t.getNamespace());
-		assertObject(t.getNamespace()).isType(String.class);
+		assertString(t.namespace()).is("foo");
 
 		t.namespace(null);
-		assertNull(t.getNamespace());
+		assertString(t.namespace()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Xml#prefix(java.lang.Object)}.
 	 */
 	@Test
-	public void testPrefix() {
+	public void a03_prefix() {
 		Xml t = new Xml();
 
 		t.prefix("foo");
-		assertEquals("foo", t.getPrefix());
-
-		t.prefix(new StringBuilder("foo"));
-		assertEquals("foo", t.getPrefix());
-		assertObject(t.getPrefix()).isType(String.class);
+		assertString(t.prefix()).is("foo");
 
 		t.prefix(null);
-		assertNull(t.getPrefix());
+		assertString(t.prefix()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Xml#attribute(java.lang.Object)}.
 	 */
 	@Test
-	public void testAttribute() {
+	public void a04_attribute() {
 		Xml t = new Xml();
 
 		t.attribute(true);
-		assertEquals(true, t.getAttribute());
-		assertObject(t.getAttribute()).isType(Boolean.class);
+		assertObject(t.attribute()).isType(Boolean.class).is(true);
 
 		t.attribute("true");
-		assertEquals(true, t.getAttribute());
-		assertObject(t.getAttribute()).isType(Boolean.class);
+		assertObject(t.attribute()).isType(Boolean.class).is(true);
 
-		t.attribute(new StringBuilder("true"));
-		assertEquals(true, t.getAttribute());
-		assertObject(t.getAttribute()).isType(Boolean.class);
-
-		t.attribute(null);
-		assertNull(t.getAttribute());
+		t.attribute((String)null);
+		assertObject(t.attribute()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Xml#wrapped(java.lang.Object)}.
 	 */
 	@Test
-	public void testWrapped() {
+	public void a05_wrapped() {
 		Xml t = new Xml();
 
 		t.wrapped(true);
-		assertEquals(true, t.getWrapped());
-		assertObject(t.getWrapped()).isType(Boolean.class);
+		assertObject(t.wrapped()).isType(Boolean.class).is(true);
 
 		t.wrapped("true");
-		assertEquals(true, t.getWrapped());
-		assertObject(t.getWrapped()).isType(Boolean.class);
+		assertObject(t.wrapped()).isType(Boolean.class).is(true);
 
-		t.wrapped(new StringBuilder("true"));
-		assertEquals(true, t.getWrapped());
-		assertObject(t.getWrapped()).isType(Boolean.class);
-
-		t.wrapped(null);
-		assertNull(t.getWrapped());
+		t.wrapped((String)null);
+		assertObject(t.wrapped()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Xml#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		Xml t = new Xml();
 
 		t
@@ -162,12 +138,12 @@ public class XmlTest {
 
 		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
-		assertEquals("true", t.get("attribute", String.class));
-		assertEquals("a", t.get("name", String.class));
-		assertEquals("b", t.get("namespace", String.class));
-		assertEquals("c", t.get("prefix", String.class));
-		assertEquals("true", t.get("wrapped", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("attribute", String.class)).is("true");
+		assertString(t.get("name", String.class)).is("a");
+		assertString(t.get("namespace", String.class)).is("b");
+		assertString(t.get("prefix", String.class)).is("c");
+		assertString(t.get("wrapped", String.class)).is("true");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("attribute", Object.class)).isType(Boolean.class);
 		assertObject(t.get("name", Object.class)).isType(String.class);
@@ -183,5 +159,42 @@ public class XmlTest {
 
 		String s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, Xml.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		Xml t = new Xml();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("attribute", true)
+			.set("name", "a")
+			.set("namespace", "b")
+			.set("prefix", "c")
+			.set("wrapped", true)
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		Xml t = new Xml();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("attribute", true)
+			.set("name", "a")
+			.set("namespace", "b")
+			.set("prefix", "c")
+			.set("wrapped", true)
+			.set("$ref", "ref");
+
+		assertObject(t.keySet()).json().is("['attribute','name','namespace','prefix','wrapped','$ref']");
 	}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -34,13 +33,13 @@ import org.apache.juneau.json.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Items x = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
+ * 	Items <jv>items</jv> = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>items</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>items</jv>.toString();
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Output</jc>
@@ -81,7 +80,7 @@ public class Items extends SwaggerElement {
 		uniqueItems;
 	private Items items;
 	private Object _default;
-	private List<Object> _enum;
+	private Set<Object> _enum;
 
 	/**
 	 * Default constructor.
@@ -96,24 +95,24 @@ public class Items extends SwaggerElement {
 	public Items(Items copyFrom) {
 		super(copyFrom);
 
-		this.type = copyFrom.type;
-		this.format = copyFrom.format;
 		this.collectionFormat = copyFrom.collectionFormat;
-		this.pattern = copyFrom.pattern;
-		this.maximum = copyFrom.maximum;
-		this.minimum = copyFrom.minimum;
-		this.multipleOf = copyFrom.multipleOf;
-		this.maxLength = copyFrom.maxLength;
-		this.minLength = copyFrom.minLength;
-		this.maxItems = copyFrom.maxItems;
-		this.minItems = copyFrom.minItems;
+		this._default = copyFrom._default;
+		this._enum = newSet(copyFrom._enum);
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
-		this.uniqueItems = copyFrom.uniqueItems;
+		this.format = copyFrom.format;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
-		this._default = copyFrom._default;
-		this._enum = newList(copyFrom._enum);
+		this.maximum = copyFrom.maximum;
+		this.maxItems = copyFrom.maxItems;
+		this.maxLength = copyFrom.maxLength;
+		this.minimum = copyFrom.minimum;
+		this.minItems = copyFrom.minItems;
+		this.minLength = copyFrom.minLength;
+		this.multipleOf = copyFrom.multipleOf;
+		this.pattern = copyFrom.pattern;
 		this.ref = copyFrom.ref;
+		this.type = copyFrom.type;
+		this.uniqueItems = copyFrom.uniqueItems;
 	}
 
 	/**
@@ -132,170 +131,9 @@ public class Items extends SwaggerElement {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The internal type of the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * Bean property setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The internal type of the array.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public Items setType(String value) {
-		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new RuntimeException(
-				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
-				+ SimpleJsonSerializer.DEFAULT.toString(VALID_TYPES));
-		type = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setType(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items type(Object value) {
-		return setType(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned <c>type</c>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Bean property setter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned <c>type</c>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items setFormat(String value) {
-		format = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setFormat(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items format(Object value) {
-		return setFormat(stringify(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Items getItems() {
-		return items;
-	}
-
-	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items setItems(Items value) {
-		items = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setItems(Items)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><c>String</c> - JSON object representation of {@link Items}
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items items(Object value) {
-		return setItems(toType(value, Items.class));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// collectionFormat
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
@@ -325,24 +163,36 @@ public class Items extends SwaggerElement {
 	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Items setCollectionFormat(String value) {
-		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
+	public void setCollectionFormat(String value) {
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, VALID_COLLECTION_FORMATS
 			);
 		collectionFormat = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setCollectionFormat(String)}.
+	 * Bean property fluent getter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> collectionFormat() {
+		return Optional.ofNullable(getCollectionFormat());
+	}
+
+	/**
+	 * Bean property setter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
@@ -353,9 +203,14 @@ public class Items extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items collectionFormat(Object value) {
-		return setCollectionFormat(stringify(value));
+	public Items collectionFormat(String value) {
+		setCollectionFormat(value);
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// default
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -368,10 +223,6 @@ public class Items extends SwaggerElement {
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -393,22 +244,45 @@ public class Items extends SwaggerElement {
 	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Items setDefault(Object value) {
+	public void setDefault(Object value) {
 		_default = value;
-		return this;
 	}
 
 	/**
-	 * Same as {@link #setDefault(Object)}.
+	 * Bean property fluent getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the item that the server will use if none is provided.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		<js>"default"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
+	 * </ul>
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Object> _default() {
+		return Optional.ofNullable(getDefault());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the item that the server will use if none is provided.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		<js>"default"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
+	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -416,58 +290,85 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items _default(Object value) {
-		return setDefault(value);
+		setDefault(value);
+		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// enum
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>maximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMaximum() {
-		return maximum;
+	public Set<Object> getEnum() {
+		return _enum;
 	}
 
 	/**
-	 * Bean property setter:  <property>maximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property setter:  <property>enum</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setEnum(Collection<Object> value) {
+		_enum = newSet(value);
+	}
+
+	/**
+	 * Bean property appender:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void addEnum(Collection<Object> value) {
+		_enum = addToSet(_enum, value);
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>enum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Set<Object>> _enum() {
+		return Optional.ofNullable(getEnum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMaximum(Number value) {
-		maximum = value;
+	public Items _enum(Collection<Object> value) {
+		setEnum(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setMaximum(Number)}.
+	 * Bean property fluent setter:  <property>enum</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>String values can be JSON arrays.
 	 * @return This object (for method chaining).
 	 */
-	public Items maximum(Object value) {
-		return setMaximum(toNumber(value));
+	public Items _enum(Object...value) {
+		setEnum(toSet(value, Object.class));
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// exclusiveMaximum
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -478,82 +379,55 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Items setExclusiveMaximum(Boolean value) {
+	public void setExclusiveMaximum(Boolean value) {
 		exclusiveMaximum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> exclusiveMaximum() {
+		return Optional.ofNullable(getExclusiveMaximum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items exclusiveMaximum(Boolean value) {
+		setExclusiveMaximum(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items exclusiveMaximum(Object value) {
-		return setExclusiveMaximum(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>minimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMinimum() {
-		return minimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>minimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property fluent setter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMinimum(Number value) {
-		minimum = value;
+	public Items exclusiveMaximum(String value) {
+		setExclusiveMaximum(toBoolean(value));
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setMinimum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items minimum(Object value) {
-		return setMinimum(toNumber(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// exclusiveMinimum
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -564,171 +438,254 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Items setExclusiveMinimum(Boolean value) {
+	public void setExclusiveMinimum(Boolean value) {
 		exclusiveMinimum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> exclusiveMinimum() {
+		return Optional.ofNullable(getExclusiveMinimum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items exclusiveMinimum(Boolean value) {
+		setExclusiveMinimum(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items exclusiveMinimum(Object value) {
-		return setExclusiveMinimum(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>maxLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property fluent setter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMaxLength(Integer value) {
-		maxLength = value;
+	public Items exclusiveMinimum(String value) {
+		setExclusiveMinimum(toBoolean(value));
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setMaxLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items maxLength(Object value) {
-		return setMaxLength(toInteger(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// format
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Bean property getter:  <property>minLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>minLength</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items setMinLength(Integer value) {
-		minLength = value;
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items minLength(Object value) {
-		return setMinLength(toInteger(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>pattern</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * Bean property setter:  <property>pattern</property>.
+	 * Bean property getter:  <property>format</property>.
 	 *
 	 * <p>
-	 * This string SHOULD be a valid regular expression.
+	 * The extending format for the previously mentioned <c>type</c>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned <c>type</c>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setFormat(String value) {
+		format = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned <c>type</c>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> format() {
+		return Optional.ofNullable(getFormat());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned <c>type</c>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setPattern(String value) {
-		pattern = value;
+	public Items format(String value) {
+		setFormat(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// items
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Items getItems() {
+		return items;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setItems(Items value) {
+		items = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Items> items() {
+		return Optional.ofNullable(getItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items items(Items value) {
+		setItems(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setPattern(String)}.
+	 * Bean property fluent setter:  <property>items</property>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
+	 * <p>
+	 * Describes the type of items in the array in raw JSON.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
+	 * </p>
+	 *
+	 * @param json
+	 * 	The new value for this property as JSON.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items pattern(Object value) {
-		return setPattern(stringify(value));
+	public Items items(String json) {
+		setItems(toType(json, Items.class));
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// maximum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>maximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * Bean property setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMaximum(Number value) {
+		maximum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>maximum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Number> maximum() {
+		return Optional.ofNullable(getMaximum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items maximum(Number value) {
+		setMaximum(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items maximum(String value) {
+		setMaximum(toNumber(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// maxItems
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -739,39 +696,173 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMaxItems(Integer value) {
+		maxItems = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>maxItems</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> maxItems() {
+		return Optional.ofNullable(getMaxItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxItems</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMaxItems(Integer value) {
-		maxItems = value;
+	public Items maxItems(Integer value) {
+		setMaxItems(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setMaxItems(Integer)}.
+	 * Bean property fluent setter:  <property>maxItems</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items maxItems(Object value) {
-		return setMaxItems(toInteger(value));
+	public Items maxItems(String value) {
+		setMaxItems(toInteger(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// maxLength
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxLength() {
+		return maxLength;
 	}
 
 	/**
-	 * Bean property getter:  <property>minItems</property>.
+	 * Bean property setter:  <property>maxLength</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMaxLength(Integer value) {
+		maxLength = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> maxLength() {
+		return Optional.ofNullable(getMaxLength());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items maxLength(Integer value) {
+		setMaxLength(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>maxLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items maxLength(String value) {
+		setMaxLength(toInteger(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// minimum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>minimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * Bean property setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMinimum(Number value) {
+		minimum = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>minimum</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Number> minimum() {
+		return Optional.ofNullable(getMinimum());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items minimum(Number value) {
+		setMinimum(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items minimum(String value) {
+		setMinimum(toNumber(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// minItems
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>minItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -782,153 +873,114 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
-	public Items setMinItems(Integer value) {
+	public void setMinItems(Integer value) {
 		minItems = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>minItems</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> minItems() {
+		return Optional.ofNullable(getMinItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items minItems(Integer value) {
+		setMinItems(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setMinItems(Integer)}.
+	 * Bean property fluent setter:  <property>minItems</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items minItems(Object value) {
-		return setMinItems(toInteger(value));
+	public Items minItems(String value) {
+		setMinItems(toInteger(value));
+		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// minLength
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
+	public Integer getMinLength() {
+		return minLength;
 	}
 
 	/**
-	 * Bean property setter:  <property>uniqueItems</property>.
+	 * Bean property setter:  <property>minLength</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMinLength(Integer value) {
+		minLength = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>minLength</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Integer> minLength() {
+		return Optional.ofNullable(getMinLength());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>minLength</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setUniqueItems(Boolean value) {
-		uniqueItems = value;
+	public Items minLength(Integer value) {
+		setMinLength(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setUniqueItems(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items uniqueItems(Object value) {
-		return setUniqueItems(toBoolean(value));
-	}
-
-	/**
-	 * Bean property getter:  <property>enum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
-
-	/**
-	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * Bean property fluent setter:  <property>minLength</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setEnum(Collection<Object> value) {
-		_enum = newList(value);
+	public Items minLength(String value) {
+		setMinLength(toInteger(value));
 		return this;
 	}
 
-	/**
-	 * Adds one or more values to the <property>enum</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Items addEnum(Collection<Object> values) {
-		_enum = addToList(_enum, values);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>enum</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><c>Object</c>
-	 * 		<li><c>Collection&lt;Object&gt;</c>
-	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Object&gt;</c>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	_enum(<js>"['foo','bar']"</js>);
-	 * 			</p>
-	 * 		<li><c>String</c> - Individual values
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Example </jc>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Items _enum(Object...values) {
-		_enum = addToList(_enum, values, Object.class);
-		return this;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// multipleOf
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -939,32 +991,100 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
-	 * </ul>
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setMultipleOf(Number value) {
+		multipleOf = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>multipleOf</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Number> multipleOf() {
+		return Optional.ofNullable(getMultipleOf());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>multipleOf</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items setMultipleOf(Number value) {
-		multipleOf = value;
+	public Items multipleOf(Number value) {
+		setMultipleOf(value);
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setMultipleOf(Number)}.
+	 * Bean property fluent setter:  <property>multipleOf</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items multipleOf(Object value) {
-		return setMultipleOf(toNumber(value));
+	public Items multipleOf(String value) {
+		setMultipleOf(toNumber(value));
+		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// pattern
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>pattern</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * Bean property setter:  <property>pattern</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>This string SHOULD be a valid regular expression.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setPattern(String value) {
+		pattern = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>pattern</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> pattern() {
+		return Optional.ofNullable(getPattern());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>pattern</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>This string SHOULD be a valid regular expression.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items pattern(String value) {
+		setPattern(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// $ref
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
@@ -977,63 +1097,199 @@ public class Items extends SwaggerElement {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 *
-	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 */
-	public boolean hasRef() {
-		return ref != null;
-	}
-
-	/**
 	 * Bean property setter:  <property>$ref</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
 	 */
 	@Beanp("$ref")
-	public Items setRef(Object value) {
-		ref = StringUtils.stringify(value);
-		return this;
+	public void setRef(String value) {
+		ref = value;
 	}
 
 	/**
-	 * Same as {@link #setRef(Object)}.
+	 * Bean property fluent getter:  <property>$ref</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> ref() {
+		return Optional.ofNullable(getRef());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>$ref</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Items ref(Object value) {
-		return setRef(value);
+	public Items ref(String value) {
+		setRef(value);
+		return this;
 	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// type
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The internal type of the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The internal type of the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
+	 */
+	public void setType(String value) {
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
+			throw new RuntimeException(
+				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
+				+ SimpleJsonSerializer.DEFAULT.toString(VALID_TYPES));
+		type = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The internal type of the array.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String> type() {
+		return Optional.ofNullable(getType());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The internal type of the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items type(String value) {
+		setType(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// uniqueItems
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
+	}
+
+	/**
+	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 */
+	public void setUniqueItems(Boolean value) {
+		uniqueItems = value;
+	}
+
+	/**
+	 * Bean property fluent getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Boolean> uniqueItems() {
+		return Optional.ofNullable(getUniqueItems());
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items uniqueItems(Boolean value) {
+		setUniqueItems(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
+	 */
+	public Items uniqueItems(String value) {
+		setUniqueItems(toBoolean(value));
+		return this;
+	}
+
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "type": return toType(getType(), type);
-			case "format": return toType(getFormat(), type);
-			case "items": return toType(getItems(), type);
 			case "collectionFormat": return toType(getCollectionFormat(), type);
 			case "default": return toType(getDefault(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "minItems": return toType(getMinItems(), type);
-			case "uniqueItems": return toType(getUniqueItems(), type);
 			case "enum": return toType(getEnum(), type);
+			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
+			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
+			case "format": return toType(getFormat(), type);
+			case "items": return toType(getItems(), type);
+			case "maximum": return toType(getMaximum(), type);
+			case "maxItems": return toType(getMaxItems(), type);
+			case "maxLength": return toType(getMaxLength(), type);
+			case "minimum": return toType(getMinimum(), type);
+			case "minItems": return toType(getMinItems(), type);
+			case "minLength": return toType(getMinLength(), type);
 			case "multipleOf": return toType(getMultipleOf(), type);
+			case "pattern": return toType(getPattern(), type);
 			case "$ref": return toType(getRef(), type);
+			case "type": return toType(getType(), type);
+			case "uniqueItems": return toType(getUniqueItems(), type);
 			default: return super.get(property, type);
 		}
 	}
@@ -1043,24 +1299,24 @@ public class Items extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "type": return type(value);
-			case "format": return format(value);
-			case "items": return items(value);
-			case "collectionFormat": return collectionFormat(value);
+			case "collectionFormat": return collectionFormat(stringify(value));
 			case "default": return _default(value);
-			case "maximum": return maximum(value);
-			case "exclusiveMaximum": return exclusiveMaximum(value);
-			case "minimum": return minimum(value);
-			case "exclusiveMinimum": return exclusiveMinimum(value);
-			case "maxLength": return maxLength(value);
-			case "minLength": return minLength(value);
-			case "pattern": return pattern(value);
-			case "maxItems": return maxItems(value);
-			case "minItems": return minItems(value);
-			case "uniqueItems": return uniqueItems(value);
-			case "enum": return setEnum(null)._enum(value);
-			case "multipleOf": return multipleOf(value);
-			case "$ref": return ref(value);
+			case "enum": return _enum(value);
+			case "exclusiveMaximum": return exclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum": return exclusiveMinimum(toBoolean(value));
+			case "format": return format(stringify(value));
+			case "items": return items(toType(value,Items.class));
+			case "maximum": return maximum(toNumber(value));
+			case "maxItems": return maxItems(toInteger(value));
+			case "maxLength": return maxLength(toInteger(value));
+			case "minimum": return minimum(toNumber(value));
+			case "minItems": return minItems(toInteger(value));
+			case "minLength": return minLength(toInteger(value));
+			case "multipleOf": return multipleOf(toNumber(value));
+			case "pattern": return pattern(stringify(value));
+			case "$ref": return ref(stringify(value));
+			case "type": return type(stringify(value));
+			case "uniqueItems": return uniqueItems(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -1070,24 +1326,24 @@ public class Items extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(type != null, "type")
-			.appendIf(format != null, "format")
-			.appendIf(items != null, "items")
 			.appendIf(collectionFormat != null, "collectionFormat")
 			.appendIf(_default != null, "default")
-			.appendIf(maximum != null, "maximum")
-			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.appendIf(minimum != null, "minimum")
-			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.appendIf(maxLength != null, "maxLength")
-			.appendIf(minLength != null, "minLength")
-			.appendIf(pattern != null, "pattern")
-			.appendIf(maxItems != null, "maxItems")
-			.appendIf(minItems != null, "minItems")
-			.appendIf(uniqueItems != null, "uniqueItems")
 			.appendIf(_enum != null, "enum")
+			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.appendIf(format != null, "format")
+			.appendIf(items != null, "items")
+			.appendIf(maximum != null, "maximum")
+			.appendIf(maxItems != null, "maxItems")
+			.appendIf(maxLength != null, "maxLength")
+			.appendIf(minimum != null, "minimum")
+			.appendIf(minItems != null, "minItems")
+			.appendIf(minLength != null, "minLength")
 			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(ref != null, "$ref");
+			.appendIf(pattern != null, "pattern")
+			.appendIf(ref != null, "$ref")
+			.appendIf(type != null, "type")
+			.appendIf(uniqueItems != null, "uniqueItems");
 		return new MultiSet<>(s, super.keySet());
 	}
 

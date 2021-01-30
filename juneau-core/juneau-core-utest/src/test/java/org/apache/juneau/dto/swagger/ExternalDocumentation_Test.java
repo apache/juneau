@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
@@ -25,49 +24,47 @@ import org.junit.*;
  * Testcase for {@link ExternalDocumentation}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class ExternalDocumentationTest {
+public class ExternalDocumentation_Test {
 
 	/**
 	 * Test method for {@link ExternalDocumentation#description(java.lang.Object)}.
 	 */
 	@Test
-	public void testDescription() {
+	public void a01_description() {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		t.description("foo");
-		assertEquals("foo", t.getDescription());
-
-		t.description(new StringBuilder("foo"));
-		assertEquals("foo", t.getDescription());
-		assertObject(t.getDescription()).isType(String.class);
+		assertString(t.description()).is("foo");
 
 		t.description(null);
-		assertNull(t.getDescription());
+		assertString(t.description()).isNull();
 	}
 
 	/**
 	 * Test method for {@link ExternalDocumentation#url(java.lang.Object)}.
 	 */
 	@Test
-	public void testUrl() {
+	public void a02_url() throws Exception {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		t.url("foo");
-		assertEquals("foo", t.getUrl().toString());
+		assertString(t.url()).is("foo");
 
-		t.url(new StringBuilder("foo"));
-		assertEquals("foo", t.getUrl().toString());
-		assertObject(t.getUrl()).isType(URI.class);
+		t.url(URI.create("http://bar"));
+		assertString(t.url()).is("http://bar");
 
-		t.url(null);
-		assertNull(t.getUrl());
+		t.url(new URL("http://baz"));
+		assertString(t.url()).is("http://baz");
+
+		t.url((String)null);
+		assertString(t.url()).isNull();
 	}
 
 	/**
 	 * Test method for {@link ExternalDocumentation#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		t
@@ -84,19 +81,46 @@ public class ExternalDocumentationTest {
 
 		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
 
-		assertEquals("foo", t.get("description", String.class));
-		assertEquals("bar", t.get("url", URI.class).toString());
-		assertEquals("baz", t.get("$ref", String.class));
-
-		assertObject(t.get("description", String.class)).isType(String.class);
-		assertObject(t.get("url", URI.class)).isType(URI.class);
-		assertObject(t.get("$ref", String.class)).isType(String.class);
+		assertObject(t.get("description", String.class)).isType(String.class).is("foo");
+		assertObject(t.get("url", URI.class)).isType(URI.class).string().is("bar");
+		assertObject(t.get("$ref", String.class)).isType(String.class).is("baz");
 
 		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		assertObject(t.get("null", Object.class)).isNull();
+		assertObject(t.get(null, Object.class)).isNull();
+		assertObject(t.get("foo", Object.class)).isNull();
 
 		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).json().is("{description:'foo',url:'bar','$ref':'baz'}");
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		ExternalDocumentation t = new ExternalDocumentation();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("description", "foo")
+			.set("url", "bar")
+			.set("$ref", "baz")
+			.copy();
+
+		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		ExternalDocumentation t = new ExternalDocumentation();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("description", "foo")
+			.set("url", "bar")
+			.set("$ref", "baz");
+
+		assertObject(t.keySet()).json().is("['description','url','$ref']");
 	}
 }

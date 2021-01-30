@@ -185,7 +185,7 @@ public @interface Rest {
 	 * The resolver used for resolving instances of child resources and various other beans including:
 	 * <ul>
 	 * 	<li>{@link RestLogger}
-	 * 	<li>{@link RestInfoProvider}
+	 * 	<li>{@link SwaggerProvider}
 	 * 	<li>{@link FileFinder}
 	 * 	<li>{@link StaticFiles}
 	 * </ul>
@@ -557,7 +557,6 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * It is used to populate the Swagger description field.
-	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceDescription()} method.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -566,10 +565,6 @@ public @interface Rest {
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
 	 * </ul>
 	 */
 	String[] description() default {};
@@ -619,36 +614,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
-
-	/**
-	 * Configuration property:  REST info provider.
-	 *
-	 * <p>
-	 * Class used to retrieve title/description/swagger information about a resource.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default info provider if not specified is {@link BasicRestInfoProvider}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestInfoProvider} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
-	 * </ul>
-	 */
-	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.Null.class;
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
@@ -708,7 +673,7 @@ public @interface Rest {
 
 	/**
 	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
-	 * 
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_methodContextClass}
 	 * </ul>
@@ -1098,16 +1063,13 @@ public @interface Rest {
 	 * The site name is intended to be a title that can be applied to the entire site.
 	 *
 	 * <p>
-	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
-	 *
-	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
 	 * <p class='bcode w800'>
 	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		header={
-	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
-	 * 			<js>"&lt;h2&gt;$R{resourceTitle}&lt;/h2&gt;"</js>
+	 * 			<js>"&lt;h1&gt;$RS{siteName}&lt;/h1&gt;"</js>,
+	 * 			<js>"&lt;h2&gt;$RS{title}&lt;/h2&gt;"</js>
 	 * 		}
 	 * 	)
 	 * </p>
@@ -1116,10 +1078,6 @@ public @interface Rest {
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestInfoProvider#getSiteName(RestRequest)}
 	 * </ul>
 	 */
 	String siteName() default "";
@@ -1173,17 +1131,45 @@ public @interface Rest {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link ResourceSwagger}
-	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>
 	 */
 	ResourceSwagger swagger() default @ResourceSwagger;
+
+	/**
+	 * Configuration property:  Swagger provider.
+	 *
+	 * <p>
+	 * Class used to retrieve swagger information about a resource.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default info provider if not specified is {@link SwaggerProvider}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link SwaggerProvider} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
+	 * </ul>
+	 */
+	Class<? extends SwaggerProvider> swaggerProvider() default SwaggerProvider.Null.class;
 
 	/**
 	 * Optional servlet title.
 	 *
 	 * <p>
 	 * It is used to populate the Swagger title field.
-	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceTitle()} method.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -1191,10 +1177,6 @@ public @interface Rest {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestInfoProvider#getTitle(RestRequest)}
 	 * </ul>
 	 */
 	String[] title() default {};

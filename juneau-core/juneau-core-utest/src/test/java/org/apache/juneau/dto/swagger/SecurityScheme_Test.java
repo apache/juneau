@@ -26,193 +26,137 @@ import org.junit.*;
  * Testcase for {@link SecurityScheme}.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class SecuritySchemeTest {
+public class SecurityScheme_Test {
 
 	/**
 	 * Test method for {@link SecurityScheme#type(java.lang.Object)}.
 	 */
 	@Test
-	public void testType() {
+	public void a01_type() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.type("foo");
-		assertEquals("foo", t.getType());
-
-		t.type(new StringBuilder("foo"));
-		assertEquals("foo", t.getType());
-		assertObject(t.getType()).isType(String.class);
+		assertString(t.type()).is("foo");
 
 		t.type(null);
-		assertNull(t.getType());
+		assertString(t.type()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#description(java.lang.Object)}.
 	 */
 	@Test
-	public void testDescription() {
+	public void a02_description() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.description("foo");
-		assertEquals("foo", t.getDescription());
-
-		t.description(new StringBuilder("foo"));
-		assertEquals("foo", t.getDescription());
-		assertObject(t.getDescription()).isType(String.class);
+		assertString(t.description()).is("foo");
 
 		t.description(null);
-		assertNull(t.getDescription());
+		assertString(t.description()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#name(java.lang.Object)}.
 	 */
 	@Test
-	public void testName() {
+	public void a03_name() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.name("foo");
-		assertEquals("foo", t.getName());
-
-		t.name(new StringBuilder("foo"));
-		assertEquals("foo", t.getName());
-		assertObject(t.getName()).isType(String.class);
+		assertString(t.name()).is("foo");
 
 		t.name(null);
-		assertNull(t.getName());
+		assertString(t.name()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#in(java.lang.Object)}.
 	 */
 	@Test
-	public void testIn() {
+	public void a04_in() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.in("foo");
-		assertEquals("foo", t.getIn());
-
-		t.in(new StringBuilder("foo"));
-		assertEquals("foo", t.getIn());
-		assertObject(t.getIn()).isType(String.class);
+		assertString(t.in()).is("foo");
 
 		t.in(null);
-		assertNull(t.getIn());
+		assertString(t.in()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#flow(java.lang.Object)}.
 	 */
 	@Test
-	public void testFlow() {
+	public void a05_flow() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.flow("foo");
-		assertEquals("foo", t.getFlow());
-
-		t.flow(new StringBuilder("foo"));
-		assertEquals("foo", t.getFlow());
-		assertObject(t.getFlow()).isType(String.class);
+		assertString(t.flow()).is("foo");
 
 		t.flow(null);
-		assertNull(t.getFlow());
+		assertString(t.flow()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#authorizationUrl(java.lang.Object)}.
 	 */
 	@Test
-	public void testAuthorizationUrl() {
+	public void a06_authorizationUrl() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.authorizationUrl("foo");
-		assertEquals("foo", t.getAuthorizationUrl());
-
-		t.authorizationUrl(new StringBuilder("foo"));
-		assertEquals("foo", t.getAuthorizationUrl());
-		assertObject(t.getAuthorizationUrl()).isType(String.class);
+		assertString(t.authorizationUrl()).is("foo");
 
 		t.authorizationUrl(null);
-		assertNull(t.getAuthorizationUrl());
+		assertString(t.authorizationUrl()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#tokenUrl(java.lang.Object)}.
 	 */
 	@Test
-	public void testTokenUrl() {
+	public void a07_tokenUrl() {
 		SecurityScheme t = new SecurityScheme();
 
 		t.tokenUrl("foo");
-		assertEquals("foo", t.getTokenUrl());
-
-		t.tokenUrl(new StringBuilder("foo"));
-		assertEquals("foo", t.getTokenUrl());
-		assertObject(t.getTokenUrl()).isType(String.class);
+		assertString(t.tokenUrl()).is("foo");
 
 		t.tokenUrl(null);
-		assertNull(t.getTokenUrl());
+		assertString(t.tokenUrl()).isNull();
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#setScopes(java.util.Map)}.
 	 */
 	@Test
-	public void testSetScopes() {
+	public void a08_scopes() {
 		SecurityScheme t = new SecurityScheme();
 
-		t.setScopes(AMap.of("foo","bar"));
-		assertObject(t.getScopes()).json().is("{foo:'bar'}");
-		assertObject(t.getScopes()).isType(Map.class);
+		t.scopes(AMap.of("foo","bar"));
+		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
 
-		t.setScopes(AMap.create());
-		assertObject(t.getScopes()).json().is("{}");
-		assertObject(t.getScopes()).isType(Map.class);
+		t.scopes(AMap.create());
+		assertObject(t.scopes()).isType(Map.class).json().is("{}");
 
-		t.setScopes(null);
-		assertNull(t.getScopes());
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#addScopes(java.util.Map)}.
-	 */
-	@Test
-	public void testAddScopes() {
-		SecurityScheme t = new SecurityScheme();
+		t.scopes((Map<String,String>)null);
+		assertObject(t.scopes()).isNull();
 
 		t.addScopes(AMap.of("foo","bar"));
-		assertObject(t.getScopes()).json().is("{foo:'bar'}");
-		assertObject(t.getScopes()).isType(Map.class);
+		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
 
 		t.addScopes(AMap.create());
-		assertObject(t.getScopes()).json().is("{foo:'bar'}");
-		assertObject(t.getScopes()).isType(Map.class);
+		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
 
 		t.addScopes(null);
-		assertObject(t.getScopes()).json().is("{foo:'bar'}");
-		assertObject(t.getScopes()).isType(Map.class);
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#scopes(java.lang.Object[])}.
-	 */
-	@Test
-	public void testScopes() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.scopes(AMap.of("a","a1"));
-		t.scopes("{b:'b1'}");
-		t.scopes("{}");
-		t.scopes((Object[])null);
-
-		assertObject(t.getScopes()).json().is("{a:'a1',b:'b1'}");
+		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test
-	public void testSet() throws Exception {
+	public void b01_set() throws Exception {
 		SecurityScheme t = new SecurityScheme();
 
 		t
@@ -254,15 +198,15 @@ public class SecuritySchemeTest {
 
 		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
-		assertEquals("a", t.get("authorizationUrl", String.class));
-		assertEquals("b", t.get("description", String.class));
-		assertEquals("c", t.get("flow", String.class));
-		assertEquals("d", t.get("in", String.class));
-		assertEquals("e", t.get("name", String.class));
-		assertEquals("{foo:'bar'}", t.get("scopes", String.class));
-		assertEquals("f", t.get("tokenUrl", String.class));
-		assertEquals("g", t.get("type", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertString(t.get("authorizationUrl", String.class)).is("a");
+		assertString(t.get("description", String.class)).is("b");
+		assertString(t.get("flow", String.class)).is("c");
+		assertString(t.get("in", String.class)).is("d");
+		assertString(t.get("name", String.class)).is("e");
+		assertString(t.get("scopes", String.class)).is("{foo:'bar'}");
+		assertString(t.get("tokenUrl", String.class)).is("f");
+		assertString(t.get("type", String.class)).is("g");
+		assertString(t.get("$ref", String.class)).is("ref");
 
 		assertObject(t.get("authorizationUrl", Object.class)).isType(String.class);
 		assertObject(t.get("description", Object.class)).isType(String.class);
@@ -281,5 +225,48 @@ public class SecuritySchemeTest {
 
 		String s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, SecurityScheme.class)).json().is(s);
+	}
+
+	@Test
+	public void b02_copy() throws Exception {
+		SecurityScheme t = new SecurityScheme();
+
+		t = t.copy();
+
+		assertObject(t).json().is("{}");
+
+		t
+			.set("authorizationUrl", "a")
+			.set("description", "b")
+			.set("flow", "c")
+			.set("in", "d")
+			.set("name", "e")
+			.set("scopes", AMap.of("foo","bar"))
+			.set("tokenUrl", "f")
+			.set("type", "g")
+			.set("$ref", "ref")
+			.copy();
+
+		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+	}
+
+	@Test
+	public void b03_keySet() throws Exception {
+		SecurityScheme t = new SecurityScheme();
+
+		assertObject(t.keySet()).json().is("[]");
+
+		t
+			.set("authorizationUrl", "a")
+			.set("description", "b")
+			.set("flow", "c")
+			.set("in", "d")
+			.set("name", "e")
+			.set("scopes", AMap.of("foo","bar"))
+			.set("tokenUrl", "f")
+			.set("type", "g")
+			.set("$ref", "ref");
+
+		assertObject(t.keySet()).json().is("['authorizationUrl','description','flow','in','name','scopes','tokenUrl','type','$ref']");
 	}
 }

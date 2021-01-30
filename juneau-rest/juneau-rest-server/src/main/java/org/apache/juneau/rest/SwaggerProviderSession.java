@@ -20,10 +20,6 @@ import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.jsonschema.annotation.Items;
-import org.apache.juneau.jsonschema.annotation.Tag;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
@@ -35,71 +31,61 @@ import org.apache.juneau.http.annotation.License;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.jsonschema.annotation.Items;
+import org.apache.juneau.jsonschema.annotation.Tag;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.util.RestUtils;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Default implementation of {@link RestInfoProvider}.
- *
- * <p>
- * Subclasses can override these methods to tailor how HTTP REST resources are documented.
- *
- * <ul class='seealso'>
- * 	<li class='jf'>{@link RestContext#REST_infoProvider}
- * 	<li class='link'>{@doc RestSwagger}
- * </ul>
+ * A single session of generating a Swagger document.
  */
-final class SwaggerGenerator {
+public class SwaggerProviderSession {
 
-	private final VarResolverSession vr;
-	private final Locale locale;
 	private final RestContext context;
+	private final Class<?> c;
+	private final ClassInfo rci;
+	private final FileFinder ff;
+	private final Messages mb;
+	private final VarResolverSession vr;
 	private final JsonParser jp = JsonParser.create().ignoreUnknownBeanProperties().build();
 	private final JsonSchemaGeneratorSession js;
-	private final Class<?> c;
-	private final Messages mb;
-	private final FileFinder fileFinder;
+	private final Locale locale;
+
 
 	/**
 	 * Constructor.
 	 *
-	 * @param context The REST class context.
-	 * @param fileFinder The file finder to use for finding localized Swagger JSON files.
-	 * @param vr The variable resolver.
-	 * @param locale The locale.
+	 * @param context The context of the REST object we're generating Swagger about.
+	 * @param locale The language of the swagger we're asking for.
+	 * @param ff The file finder to use for finding JSON files.
+	 * @param messages The messages to use for finding localized strings.
+	 * @param vr The variable resolver to use for resolving variables in the swagger.
+	 * @param js The JSON-schema generator to use for stuff like examples.
 	 */
-	public SwaggerGenerator(RestContext context, FileFinder fileFinder, VarResolverSession vr, Locale locale) {
-		this.vr = vr;
-		this.locale = locale;
+	public SwaggerProviderSession(RestContext context, Locale locale, FileFinder ff, Messages messages, VarResolverSession vr, JsonSchemaGeneratorSession js) {
 		this.context = context;
-		this.js = context.getJsonSchemaGenerator().createSession();
 		this.c = context.getResourceClass();
-		this.mb = context.getMessages().forLocale(locale);
-		this.fileFinder = fileFinder == null ? context.getFileFinder() : fileFinder;
+		this.rci = ClassInfo.of(c);
+		this.ff = ff;
+		this.mb = messages;
+		this.vr = vr;
+		this.js = js;
+		this.locale = locale;
 	}
 
 	/**
-	 * Returns the localized swagger for this REST resource.
+	 * Generates the swagger.
 	 *
-	 * <p>
-	 * Subclasses can override this method to customize the Swagger.
-	 *
-	 * @return
-	 * 	A new Swagger instance.
-	 * 	<br>Never <jk>null</jk>.
-	 * @throws Exception Error occurred.
+	 * @return A new {@link Swagger} object.
+	 * @throws Exception If an error occurred producing the Swagger.
 	 */
 	public Swagger getSwagger() throws Exception {
-
-		ClassInfo rci = ClassInfo.of(c);
-
-		rci.getSimpleName();
-
-		FileFinder ff = fileFinder;
 
 		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
 
@@ -333,7 +319,7 @@ final class SwaggerGenerator {
 						merge(param, a);
 					param.putIfAbsent("required", true);
 					param.appendSkipEmpty("schema", getSchema(param.getMap("schema"), type, bs));
-					addBodyExamples(sm, param, false, type);
+					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
 					String name = null;
@@ -436,7 +422,7 @@ final class SwaggerGenerator {
 						merge(om, a);
 						if (! om.containsKey("schema"))
 							om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
-						addBodyExamples(sm, om, true, m.getGenericReturnType());
+						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 					}
 				}
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
@@ -458,7 +444,7 @@ final class SwaggerGenerator {
 				OMap om = responses.getMap("200", true);
 				if (! om.containsKey("schema"))
 					om.appendSkipEmpty("schema", getSchema(om.getMap("schema"), m.getGenericReturnType(), bs));
-				addBodyExamples(sm, om, true, m.getGenericReturnType());
+				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
@@ -560,7 +546,6 @@ final class SwaggerGenerator {
 			throw new RestServletException(e, "Error detected in swagger.");
 		}
 	}
-
 	//=================================================================================================================
 	// Utility methods
 	//=================================================================================================================
@@ -808,14 +793,14 @@ final class SwaggerGenerator {
 		return nullIfEmpty(om);
 	}
 
-	private void addBodyExamples(RestMethodContext sm, OMap piri, boolean response, Type type) throws Exception {
+	private void addBodyExamples(RestMethodContext sm, OMap piri, boolean response, Type type, Locale locale) throws Exception {
 
-		String sex = piri.getString("x-example");
+		String sex = piri.getString("example");
 
 		if (sex == null) {
 			OMap schema = resolveRef(piri.getMap("schema"));
 			if (schema != null)
-				sex = schema.getString("example", schema.getString("x-example"));
+				sex = schema.getString("example", schema.getString("example"));
 		}
 
 		if (isEmpty(sex))
@@ -831,7 +816,7 @@ final class SwaggerGenerator {
 			}
 		}
 
-		String examplesKey = response ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
+		String examplesKey = "examples";  // Parameters don't have an examples attribute.
 
 		OMap examples = piri.getMap(examplesKey);
 		if (examples == null)
@@ -866,12 +851,12 @@ final class SwaggerGenerator {
 
 	private void addParamExample(RestMethodContext sm, OMap piri, RestParamType in, Type type) throws Exception {
 
-		String s = piri.getString("x-example");
+		String s = piri.getString("example");
 
 		if (isEmpty(s))
 			return;
 
-		OMap examples = piri.getMap("x-examples");
+		OMap examples = piri.getMap("examples");
 		if (examples == null)
 			examples = new OMap();
 
@@ -889,7 +874,7 @@ final class SwaggerGenerator {
 		examples.put("example", s);
 
 		if (! examples.isEmpty())
-			piri.put("x-examples", examples);
+			piri.put("examples", examples);
 	}
 
 
@@ -932,8 +917,8 @@ final class SwaggerGenerator {
 			om.putAll(parseMap(a.api()));
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
-			.appendSkipEmpty("x-examples", parseMap(a.examples()), parseMap(a.exs()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
 			.appendSkipFalse("required", a.required() || a.r())
 			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
 		;
@@ -951,7 +936,7 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("format", a.format(), a.f())
@@ -982,7 +967,7 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("format", a.format(), a.f())
@@ -1012,7 +997,7 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("format", a.format(), a.f())
@@ -1041,7 +1026,7 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("format", a.format(), a.f())
@@ -1073,7 +1058,7 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("discriminator", a.discriminator())
 			.appendSkipEmpty("description", resolve(a.description()), resolve(a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("x-example", resolve(a.example()), resolve(a.ex()))
+			.appendSkipEmpty("example", resolve(a.example()), resolve(a.ex()))
 			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
@@ -1178,7 +1163,7 @@ final class SwaggerGenerator {
 			om.putAll(parseMap(a.api()));
 		return om
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipEmpty("examples", parseMap(a.examples()), parseMap(a.exs()))
 			.appendSkipEmpty("headers", merge(om.getMap("headers"), a.headers()))
 			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
@@ -1209,7 +1194,7 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
 			.appendSkipEmpty("description", resolve(a.description(), a.d()))
 			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("x-example", resolve(a.example(), a.ex()))
+			.appendSkipEmpty("example", resolve(a.example(), a.ex()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
 			.appendSkipEmpty("format", a.format(), a.f())
@@ -1235,7 +1220,7 @@ final class SwaggerGenerator {
 				.appendIf(false, true, true, "default", schema.remove("default"))
 				.appendIf(false, true, true, "description", schema.remove("enum"))
 				.appendIf(false, true, true, "enum", schema.remove("enum"))
-				.appendIf(false, true, true, "x-example", schema.remove("x-example"))
+				.appendIf(false, true, true, "example", schema.remove("example"))
 				.appendIf(false, true, true, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
 				.appendIf(false, true, true, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
 				.appendIf(false, true, true, "format", schema.remove("format"))

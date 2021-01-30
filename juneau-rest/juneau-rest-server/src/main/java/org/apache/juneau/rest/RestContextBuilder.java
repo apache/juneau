@@ -420,29 +420,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	//----------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow body URL parameter.
-	 *
-	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
-	 * URL parameter.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?body=(name='John%20Smith',age=45)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder disableAllowBodyParam() {
-		return set(REST_disableAllowBodyParam);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed header URL parameters.
 	 *
 	 * <p>
@@ -528,7 +505,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The resolver used for resolving instances of child resources and various other beans including:
 	 * <ul>
 	 * 	<li>{@link RestLogger}
-	 * 	<li>{@link RestInfoProvider}
+	 * 	<li>{@link SwaggerProvider}
 	 * 	<li>{@link FileFinder}
 	 * 	<li>{@link StaticFiles}
 	 * </ul>
@@ -559,7 +536,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The resolver used for resolving instances of child resources and various other beans including:
 	 * <ul>
 	 * 	<li>{@link RestLogger}
-	 * 	<li>{@link RestInfoProvider}
+	 * 	<li>{@link SwaggerProvider}
 	 * 	<li>{@link FileFinder}
 	 * 	<li>{@link StaticFiles}
 	 * </ul>
@@ -1096,6 +1073,29 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow body URL parameter.
+	 *
+	 * <p>
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
+	 * <br>
+	 * For example:
+	 * <p class='bcode w800'>
+	 *  ?body=(name='John%20Smith',age=45)
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder disableAllowBodyParam() {
+		return set(REST_disableAllowBodyParam);
+	}
+
+	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Compression encoders.
 	 *
 	 * <p>
@@ -1250,47 +1250,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder guards(RestGuard...values) {
 		return prependTo(REST_guards, values);
 	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST info provider.
-	 *
-	 * <p>
-	 * Class used to retrieve title/description/swagger information about a resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestInfoProvider}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder infoProvider(Class<? extends RestInfoProvider> value) {
-		return set(REST_infoProvider, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST info provider.
-	 *
-	 * <p>
-	 * Same as {@link #infoProvider(Class)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestInfoProvider}.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder infoProvider(RestInfoProvider value) {
-		return set(REST_infoProvider, value);
-	}
-
 
 	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  The maximum allowed input size (in bytes) on HTTP requests.
@@ -2077,6 +2036,46 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder staticFilesDefault(StaticFiles value) {
 		return set(REST_staticFilesDefault, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Swagger provider.
+	 *
+	 * <p>
+	 * Class used to retrieve swagger information about a resource.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link SwaggerProvider}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder swaggerProvider(Class<? extends SwaggerProvider> value) {
+		return set(REST_swaggerProvider, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Swagger provider.
+	 *
+	 * <p>
+	 * Same as {@link #swaggerProvider(Class)} except input is a pre-constructed instance.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link SwaggerProvider}.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder swaggerProvider(SwaggerProvider value) {
+		return set(REST_swaggerProvider, value);
 	}
 
 	/**
