@@ -69,7 +69,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
 		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.isNowrap());
 
-		varSessionObject(HtmlWidgetVar.SESSION_htmlWidgets, ctx.getWidgets());
+		addVarBean(HtmlWidgetMap.class, ctx.getWidgets());
 	}
 
 	@Override /* SerializerSession */

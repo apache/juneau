@@ -336,8 +336,8 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	}
 
 	@Override /* MicroserviceBuilder */
-	public JettyMicroserviceBuilder varContext(String name, Object object) {
-		super.varContext(name, object);
+	public <T> JettyMicroserviceBuilder varBean(Class<T> c, T value) {
+		super.varBean(c, value);
 		return this;
 	}
 

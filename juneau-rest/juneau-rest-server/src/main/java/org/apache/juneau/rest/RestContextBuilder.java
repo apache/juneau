@@ -149,7 +149,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				.defaultVars()
 				.vars(ConfigVar.class)
 				.vars(FileVar.class)
-				.contextObject("crm", FileFinder.create().cp(resourceClass,null,true).build());
+				.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build());
 
 			VarResolver vr = varResolverBuilder.build();
 			beanFactory.addBean(VarResolver.class, vr);
@@ -159,7 +159,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			beanFactory.addBean(Config.class, config);
 
 			// Add our config file to the variable resolver.
-			varResolverBuilder.contextObject(ConfigVar.SESSION_config, config);
+			varResolverBuilder.bean(Config.class, config);
 			vr = varResolverBuilder.build();
 			beanFactory.addBean(VarResolver.class, vr);
 
@@ -313,20 +313,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * information.
 	 *
 	 * <p>
-	 * For example, the {@link ConfigVar} needs access to this resource's {@link Config} through the
-	 * {@link ConfigVar#SESSION_config} object that can be specified as either a session object (temporary) or
-	 * context object (permanent).
+	 * For example, the {@link ConfigVar} needs access to this resource's {@link Config} object
+	 *
 	 * In this case, we call the following code to add it to the context map:
 	 * <p class='bcode w800'>
-	 * 	config.addVarContextObject(<jsf>SESSION_config</jsf>, configFile);
+	 * 	config.varBean(Config.<jk>class</jk>, configFile);
 	 * </p>
 	 *
-	 * @param name The context object key (i.e. the name that the Var class looks for).
-	 * @param object The context object.
+	 * @param beanType The bean type being added.
+	 * @param bean The bean being added.
+	 * @param <T> The bean type being added.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder varContextObject(String name, Object object) {
-		this.varResolverBuilder.contextObject(name, object);
+	public <T> RestContextBuilder varBean(Class<T> beanType, T bean) {
+		this.varResolverBuilder.bean(beanType, bean);
 		return this;
 	}
 

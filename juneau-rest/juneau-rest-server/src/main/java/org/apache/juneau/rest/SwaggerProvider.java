@@ -83,7 +83,7 @@ public class SwaggerProvider {
 		Class<?> c = context.getResourceClass();
 		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create().cp(c,null,false).build();
 		Messages mb = messages != null ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
-		VarResolverSession vrs = vr.createSession().sessionObject("messages", mb);
+		VarResolverSession vrs = vr.createSession().bean(Messages.class, mb);
 		SwaggerProviderSession session = new SwaggerProviderSession(context, locale, ff, messages, vrs, js.createSession());
 
 		return session.getSwagger();

@@ -18,6 +18,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -31,7 +32,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Instances of this class are created through the {@link VarResolver#createSession()} and
- * {@link VarResolver#createSession(Map)} methods.
+ * {@link VarResolver#createSession(BeanFactory)} methods.
  *
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
@@ -43,7 +44,7 @@ import org.apache.juneau.internal.*;
 public class VarResolverSession {
 
 	private final VarResolverContext context;
-	private final Map<String,Object> sessionObjects;
+	private final BeanFactory beanFactory;
 
 	/**
 	 * Constructor.
@@ -51,27 +52,12 @@ public class VarResolverSession {
 	 * @param context
 	 * 	The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with
 	 * 	that resolver.
-	 * @param sessionObjects The session objects.
+	 * @param beanFactory The bean factory to use for resolving beans needed by vars.
 	 *
 	 */
-	public VarResolverSession(VarResolverContext context, Map<String,Object> sessionObjects) {
+	public VarResolverSession(VarResolverContext context, BeanFactory beanFactory) {
 		this.context = context;
-		if (sessionObjects != null)
-			this.sessionObjects = sessionObjects;
-		else
-			this.sessionObjects = new HashMap<>();
-	}
-
-	/**
-	 * Adds a session object to this session.
-	 *
-	 * @param name The name of the session object.
-	 * @param o The session object.
-	 * @return This method (for method chaining).
-	 */
-	public VarResolverSession sessionObject(String name, Object o) {
-		sessionObjects.put(name, o);
-		return this;
+		this.beanFactory = BeanFactory.of(beanFactory, null);
 	}
 
 	/**
@@ -380,46 +366,18 @@ public class VarResolverSession {
 	;
 
 	/**
-	 * Returns the session object with the specified name.
+	 * Returns the bean from the registered bean factory.
 	 *
-	 * <p>
-	 * Casts it to the specified class type for you.
-	 *
-	 * @param c The class type to cast to.
-	 * @param name The name of the session object.
-	 * @param throwNotSetException Throw a {@link VarResolverException} if the session object is not set.
+	 * @param c The bean type.
 	 * @return
-	 * 	The session object.
+	 * 	The bean.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws VarResolverException If session object with specified name does not exist.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getSessionObject(Class<T> c, String name, boolean throwNotSetException) {
-		T t = null;
-		try {
-			t = (T)sessionObjects.get(name);
-			if (t == null) {
-				sessionObjects.put(name, this.context.getContextObject(name));
-				t = (T)sessionObjects.get(name);
-			}
-		} catch (Exception e) {
-			throw new VarResolverException(e,
-				"Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c);
-		}
-		if (t == null && throwNotSetException)
-			throw new VarResolverException(
-				"Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name);
+	public <T> Optional<T> getBean(Class<T> c) {
+		Optional<T> t = beanFactory.getBean(c);
+		if (! t.isPresent())
+			t = context.beanFactory.getBean(c);
 		return t;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this session has the specified session object.
-	 *
-	 * @param name Session object name.
-	 * @return <jk>true</jk> if this session has the specified session object
-	 */
-	public boolean hasSessionObject(String name) {
-		return getSessionObject(Object.class, name, false) != null;
 	}
 
 	/**
@@ -446,8 +404,21 @@ public class VarResolverSession {
 		return out;
 	}
 
+	/**
+	 * Adds a bean to this session.
+	 *
+	 * @param <T> The bean type.
+	 * @param c The bean type.
+	 * @param value The bean.
+	 * @return This object (for method chaining).
+	 */
+	public <T> VarResolverSession bean(Class<T> c, T value) {
+		beanFactory.addBean(c, value);
+		return this;
+	}
+
 	@Override /* Object */
 	public String toString() {
-		return "var=" + this.context.getVarMap().keySet() + ", contextObjects=" + this.context.getContextObjects().keySet() + ", sessionObjects=" + this.sessionObjects.keySet();
+		return "var=" + this.context.getVarMap().keySet() + ", context.beanFactory=" + this.context.beanFactory + ", session.beanFactory=" + beanFactory;
 	}
 }

@@ -15,6 +15,7 @@ package org.apache.juneau.rest.vars;
 import java.util.*;
 
 import org.apache.juneau.cp.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -25,8 +26,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$L{key[,args...]}"</js>.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  *
  * <p>
  * Values are pulled from the {@link RestRequest#getMessage(String,Object[])} method.
@@ -41,9 +41,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class LocalizationVar extends MultipartVar {
-
-	private static final String SESSION_messages = "messages";
-	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "L";
@@ -60,9 +57,11 @@ public class LocalizationVar extends MultipartVar {
 		if (args.length > 0) {
 			String key = args[0];
 			String[] a = (args.length > 1) ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
-			Messages messages = session.getSessionObject(Messages.class, SESSION_messages, false);
+			Messages messages = null;
+			if (session.getBean(RestRequest.class).isPresent())
+				messages = session.getBean(RestRequest.class).get().getMessages();
 			if (messages == null)
-				messages = session.getSessionObject(RestRequest.class, SESSION_req, true).getMessages();
+				messages = session.getBean(Messages.class).orElseThrow(InternalServerError::new);
 			return messages.getString(key, (Object[])a);
 		}
 		return "";
@@ -70,6 +69,6 @@ public class LocalizationVar extends MultipartVar {
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_messages) || session.hasSessionObject(SESSION_req);
+		return session.getBean(Messages.class).isPresent() || session.getBean(RestRequest.class).isPresent();
 	}
 }

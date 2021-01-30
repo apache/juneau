@@ -14,6 +14,7 @@ package org.apache.juneau.rest.vars;
 
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -41,14 +42,12 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	String resourceTitle = restRequest.resolveVars(<js>"$R{resourceTitle}"</js>);
- * 	String resourceTitleOrDescription = restRequest.resolveVars(<js>"$R{resourceTitle,resourceDescription}"</js>);
+ * 	String <jv>servletClass</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$R{servletClass}"</js>);
  * </p>
  *
  * <ul class='notes'>
  * 	<li>
- * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
- * 		or a session object on the resolver session.
+ * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
@@ -58,10 +57,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RequestVar extends MultipartResolvingVar {
-
-	private static final String SESSION_req = "req";
-	private static final String SESSION_res = "res";
-
 
 	/** The name of this variable. */
 	public static final String NAME = "R";
@@ -85,7 +80,7 @@ public class RequestVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
+		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		char c = StringUtils.charAt(key, 0);
 		if (c == 'a') {
 			if ("authorityPath".equals(key))
@@ -121,6 +116,6 @@ public class RequestVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req) && session.hasSessionObject(SESSION_res);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

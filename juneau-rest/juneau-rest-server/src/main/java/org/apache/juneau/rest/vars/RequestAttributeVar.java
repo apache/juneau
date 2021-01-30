@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -31,14 +32,13 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	String foo = restRequest.resolveVars(<js>"$RA{foo}"</js>);
- * 	String fooOrBar = restRequest.resolveVars(<js>"$RA{foo,bar}"</js>);
+ * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RA{foo}"</js>);
+ * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RA{foo,bar}"</js>);
  * </p>
  *
  * <ul class='notes'>
  * 	<li>
- * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
- * 		or a session object on the resolver session.
+ * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
@@ -48,9 +48,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RequestAttributeVar extends MultipartResolvingVar {
-
-	private static final String SESSION_req = "req";
-
 
 	/** The name of this variable. */
 	public static final String NAME = "RA";
@@ -74,12 +71,12 @@ public class RequestAttributeVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
+		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		return stringify(req.getAttribute(key));
 	}
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -22,8 +23,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$I{key[,defaultValue]}"</js>.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  *
  * <p>
  * Values are pulled from the {@link RestServlet#getInitParameter(String)} method.
@@ -38,8 +38,6 @@ import org.apache.juneau.svl.*;
  */
 public class ServletInitParamVar extends DefaultingVar {
 
-	private static final String SESSION_req = "req";
-
 	/** The name of this variable. */
 	public static final String NAME = "I";
 
@@ -52,11 +50,11 @@ public class ServletInitParamVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(RestRequest.class, SESSION_req, true).getContext().getServletInitParameter(key);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getContext().getServletInitParameter(key);
 	}
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

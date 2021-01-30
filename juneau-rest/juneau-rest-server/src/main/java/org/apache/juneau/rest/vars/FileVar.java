@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -47,13 +48,14 @@ import org.apache.juneau.svl.*;
  * Files of type HTML, XHTML, XML, JSON, Javascript, and CSS will be stripped of comments.
  * This allows you to place license headers in files without them being serialized to the output.
  *
+ * <p>
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc SvlVariables}
  * </ul>
  */
 public class FileVar extends DefaultingVar {
-
-	private static final String SESSION_req = "req";
 
 	/**
 	 * The name of this variable.
@@ -70,25 +72,21 @@ public class FileVar extends DefaultingVar {
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, false);
-		if (req != null) {
+		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 
-			String s = req.getFileFinder().getString(key).orElse(null);
-			if (s == null)
-				return null;
-			String subType = FileUtils.getExtension(key);
-			if ("html".equals(subType) || "xhtml".equals(subType) || "xml".equals(subType))
-				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
-			else if ("json".equals(subType) || "javascript".equals(subType) || "css".equals(subType))
-				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
-			return s;
-		}
-
-		return null;
+		String s = req.getFileFinder().getString(key).orElse(null);
+		if (s == null)
+			return null;
+		String subType = FileUtils.getExtension(key);
+		if ("html".equals(subType) || "xhtml".equals(subType) || "xml".equals(subType))
+			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
+		else if ("json".equals(subType) || "javascript".equals(subType) || "css".equals(subType))
+			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
+		return s;
 	}
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

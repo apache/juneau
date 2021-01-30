@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -27,8 +28,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$SA{contentType,key[,defaultValue]}"</js>.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
@@ -39,8 +39,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class SerializedRequestAttrVar extends StreamedVar {
-
-	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "SA";
@@ -58,15 +56,13 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		if (i == -1)
 			throw new RuntimeException("Invalid format for $SA var.  Must be of the format $SA{contentType,key[,defaultValue]}");
 		String[] s2 = split(key);
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
-		if (req != null) {
-			Object o = req.getAttribute(key);
-			if (o == null)
-				o = key;
-			Serializer s = req.getSerializers().getSerializer(s2[0]);
-			if (s != null)
-				s.serialize(w, o);
-		}
+		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
+		Object o = req.getAttribute(key);
+		if (o == null)
+			o = key;
+		Serializer s = req.getSerializers().getSerializer(s2[0]);
+		if (s != null)
+			s.serialize(w, o);
 	}
 
 	@Override  /* Var */
@@ -81,6 +77,6 @@ public class SerializedRequestAttrVar extends StreamedVar {
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

@@ -369,18 +369,19 @@ public class MicroserviceBuilder {
 	}
 
 	/**
-	 * Adds a var resolver context object for vars defined in the configuration and var resolver.
+	 * Adds a bean for vars defined in the var resolver.
 	 *
 	 * <p>
-	 * This calls {@link VarResolverBuilder#contextObject(String,Object)} on the var resolver used to construct the configuration
+	 * This calls {@link VarResolverBuilder#bean(Class,Object)} on the var resolver used to construct the configuration
 	 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
 	 *
-	 * @param name The context object name.
-	 * @param object The context object.
+	 * @param c The bean type.
+	 * @param value The bean.
+	 * @param <T> The bean type.
 	 * @return This object (for method chaining).
 	 */
-	public MicroserviceBuilder varContext(String name, Object object) {
-		varResolverBuilder.contextObject(name, object);
+	public <T> MicroserviceBuilder varBean(Class<T> c, T value) {
+		varResolverBuilder.bean(c, value);
 		return this;
 	}
 

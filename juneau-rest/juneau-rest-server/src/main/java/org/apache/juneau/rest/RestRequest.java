@@ -1192,9 +1192,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (varSession == null)
 			varSession = context
 				.getVarResolver()
-				.createSession(context.getSessionObjects(call))
-				.sessionObject("req", this)
-				.sessionObject("res", res);
+				.createSession(call.getBeanFactory())
+				.bean(RestRequest.class, this)
+				.bean(RestResponse.class, res)
+				.bean(RestCall.class, call);
 		return varSession;
 	}
 

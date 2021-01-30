@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
 /**
@@ -29,7 +30,7 @@ import org.apache.juneau.svl.vars.*;
 public class VarResolverBuilder {
 
 	private final List<Var> vars = AList.create();
-	private final Map<String,Object> contextObjects = new HashMap<>();
+	private BeanFactory beanFactory = new BeanFactory();
 
 	/**
 	 * Create a new var resolver using the settings in this builder.
@@ -37,7 +38,7 @@ public class VarResolverBuilder {
 	 * @return A new var resolver.
 	 */
 	public VarResolver build() {
-		return new VarResolver(vars.toArray(new Var[vars.size()]), contextObjects);
+		return new VarResolver(vars.toArray(new Var[vars.size()]), beanFactory);
 	}
 
 	/**
@@ -126,33 +127,26 @@ public class VarResolverBuilder {
 	}
 
 	/**
-	 * Associates a context object with this resolver.
+	 * Associates a bean factory with this builder.
 	 *
-	 * <p>
-	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
-	 * output.
-	 *
-	 * @param name The name of the context object.
-	 * @param object The context object.
+	 * @param value The bean factory to associate with this var resolver.
 	 * @return This object (for method chaining).
 	 */
-	public VarResolverBuilder contextObject(String name, Object object) {
-		contextObjects.put(name, object);
+	public VarResolverBuilder beanFactory(BeanFactory value) {
+		this.beanFactory = BeanFactory.of(value);
 		return this;
 	}
 
 	/**
-	 * Associates multiple context objects with this resolver.
+	 * Adds a bean to the bean factory in this session.
 	 *
-	 * <p>
-	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
-	 * output.
-	 *
-	 * @param map A map of context objects keyed by their name.
+	 * @param <T> The bean type.
+	 * @param c The bean type.
+	 * @param value The bean.
 	 * @return This object (for method chaining).
 	 */
-	public VarResolverBuilder contextObjects(Map<String,Object> map) {
-		contextObjects.putAll(map);
+	public <T> VarResolverBuilder bean(Class<T> c, T value) {
+		beanFactory.addBean(c, value);
 		return this;
 	}
 }

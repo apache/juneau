@@ -18,6 +18,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
@@ -37,9 +38,6 @@ import org.apache.juneau.html.*;
  * </ul>
  */
 public abstract class Widget implements HtmlWidget {
-
-	private static final String SESSION_req = "req";
-	private static final String SESSION_res = "res";
 
 	/**
 	 * The widget key.
@@ -61,11 +59,11 @@ public abstract class Widget implements HtmlWidget {
 	}
 
 	private RestRequest req(VarResolverSession session) {
-		return session.getSessionObject(RestRequest.class, SESSION_req, true);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 	}
 
 	private RestResponse res(VarResolverSession session) {
-		return session.getSessionObject(RestResponse.class, SESSION_res, true);
+		return session.getBean(RestResponse.class).orElseThrow(InternalServerError::new);
 	}
 
 	@Override /* HtmlWidget */

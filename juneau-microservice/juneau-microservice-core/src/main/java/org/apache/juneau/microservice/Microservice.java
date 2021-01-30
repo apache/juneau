@@ -31,7 +31,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
@@ -226,7 +225,7 @@ public class Microservice implements ConfigEventListener {
 		// Var resolver.
 		//-------------------------------------------------------------------------------------------------------------
 		VarResolverBuilder varResolverBuilder = builder.varResolverBuilder;
-		this.varResolver = varResolverBuilder.contextObject(ConfigVar.SESSION_config, config).build();
+		this.varResolver = varResolverBuilder.bean(Config.class, config).build();
 
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
@@ -601,7 +600,7 @@ public class Microservice implements ConfigEventListener {
 	 * Variables can be controlled by the following methods:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link MicroserviceBuilder#vars(Class...)}
-	 * 	<li class='jm'>{@link MicroserviceBuilder#varContext(String, Object)}
+	 * 	<li class='jm'>{@link MicroserviceBuilder#varBean(Class,Object)}
 	 * </ul>
 	 *
 	 * @return The VarResolver used by this Microservice, or <jk>null</jk> if it was never created.

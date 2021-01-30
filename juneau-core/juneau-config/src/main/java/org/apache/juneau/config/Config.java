@@ -457,7 +457,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		varSession = getInstanceProperty(CONFIG_varResolver, VarResolver.class, VarResolver.DEFAULT)
 			.builder()
 			.vars(ConfigVar.class)
-			.contextObject(ConfigVar.SESSION_config, this)
+			.bean(Config.class, this)
 			.build()
 			.createSession();
 		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength);

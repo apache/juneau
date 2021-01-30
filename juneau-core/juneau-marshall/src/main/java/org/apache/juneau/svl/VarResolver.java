@@ -13,8 +13,8 @@
 package org.apache.juneau.svl;
 
 import java.io.*;
-import java.util.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
 /**
@@ -101,8 +101,8 @@ public class VarResolver {
 	 * @param vars The var classes
 	 * @param contextObjects
 	 */
-	VarResolver(Var[] vars, Map<String,Object> contextObjects) {
-		this.ctx = new VarResolverContext(vars, contextObjects);
+	VarResolver(Var[] vars, BeanFactory beanFactory) {
+		this.ctx = new VarResolverContext(vars, beanFactory);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class VarResolver {
 	public VarResolverBuilder builder() {
 		return new VarResolverBuilder()
 			.vars(ctx.getVars())
-			.contextObjects(ctx.getContextObjects());
+			.beanFactory(ctx.beanFactory);
 	}
 
 	/**
@@ -128,10 +128,6 @@ public class VarResolver {
 	/**
 	 * Creates a new resolver session with no session objects.
 	 *
-	 * <p>
-	 * Session objects can be associated with the specified session using the {@link VarResolverSession#sessionObject(String, Object)}
-	 * method.
-	 *
 	 * @return A new resolver session.
 	 */
 	public VarResolverSession createSession() {
@@ -139,13 +135,13 @@ public class VarResolver {
 	}
 
 	/**
-	 * Same as {@link #createSession()} except allows you to specify session objects as a map.
+	 * Same as {@link #createSession()} except allows you to specify a bean factory for resolving beans.
 	 *
-	 * @param sessionObjects The session objects to associate with the session.
+	 * @param beanFactory The bean factory to associate with this session.
 	 * @return A new resolver session.
 	 */
-	public VarResolverSession createSession(Map<String,Object> sessionObjects) {
-		return new VarResolverSession(ctx, sessionObjects);
+	public VarResolverSession createSession(BeanFactory beanFactory) {
+		return new VarResolverSession(ctx, beanFactory);
 	}
 
 	/**

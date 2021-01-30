@@ -86,12 +86,12 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Adds a session object to the {@link VarResolverSession} in this session.
 	 *
-	 * @param name The session object key.
-	 * @param value The session object.
+	 * @param c The bean type being added.
+	 * @param value The bean being added.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerSession varSessionObject(String name, Object value) {
-		getVarResolver().sessionObject(name, value);
+	public <T> SerializerSession addVarBean(Class<T> c, T value) {
+		getVarResolver().bean(c, value);
 		return this;
 	}
 

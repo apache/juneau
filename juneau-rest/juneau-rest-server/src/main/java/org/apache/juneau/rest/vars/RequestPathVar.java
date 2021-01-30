@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -28,14 +29,13 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// URI path pattern = "/foo/{foo}/bar/{bar}"</jc>
- * 	String foo = restRequest.resolveVars(<js>"$RP{foo}"</js>);
- * 	String fooOrBar = restRequest.resolveVars(<js>"$RP{foo,bar}"</js>);
+ * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RP{foo}"</js>);
+ * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RP{foo,bar}"</js>);
  * </p>
  *
  * <ul class='notes'>
  * 	<li>
- * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
- * 		or a session object on the resolver session.
+ * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
@@ -45,8 +45,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RequestPathVar extends MultipartResolvingVar {
-
-	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "RP";
@@ -70,7 +68,7 @@ public class RequestPathVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
+		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		if ("REMAINDER".equals(key))
 			return req.getPathRemainder();
 		return req.getPath(key);
@@ -78,6 +76,6 @@ public class RequestPathVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

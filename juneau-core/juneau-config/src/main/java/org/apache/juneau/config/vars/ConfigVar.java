@@ -23,20 +23,22 @@ import org.apache.juneau.svl.*;
  * See {@link Config#getString(String)} for the format of the key.
  *
  * <p>
- * This variable resolver requires that a {@link Config} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * This variable resolver requires that a {@link Config} bean be available in the resolver session bean factory.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a config object.</jc>
- * 	Config config = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+ * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  *
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<jk>class</jk>)
- * 		.addContextObject(<jsf>SESSION_config</jsf>, configFile);
+ * 	VarResolver <jv>resolver<jv> = VarResolver
+ * 		.<jsm>create</jsm>()
+ * 		.vars(ConfigVar.<jk>class</jk>)
+ * 		.bean(Config.<jk>class</jk>, <jv>config</jv>)
+ * 		.build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>resolver<jv>.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
  * </p>
  *
  * <p>
@@ -50,11 +52,6 @@ import org.apache.juneau.svl.*;
  */
 public class ConfigVar extends DefaultingVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link Config} object.
-	 */
-	public static final String SESSION_config = "config";
-
 	/** The name of this variable. */
 	public static final String NAME = "C";
 
@@ -67,6 +64,11 @@ public class ConfigVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(Config.class, SESSION_config, true).getString(key);
+		return session.getBean(Config.class).get().getString(key);
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(Config.class).isPresent();
 	}
 }

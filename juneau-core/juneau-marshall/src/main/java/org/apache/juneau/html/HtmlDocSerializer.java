@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -723,7 +721,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	private final String noResultsMessage;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
-	private final Map<String,HtmlWidget> widgets;
+	private final HtmlWidgetMap widgets;
 
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
 
@@ -779,10 +777,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		noResultsMessage = getStringProperty(HTMLDOC_noResultsMessage, "<p>no results</p>");
 		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
 
-		Map<String,HtmlWidget> widgets = new HashMap<>();
-		for (HtmlWidget w : getInstanceArrayProperty(HTMLDOC_widgets, HtmlWidget.class))
-			widgets.put(w.getName(), w);
-		this.widgets = Collections.unmodifiableMap(widgets);
+		widgets = new HtmlWidgetMap();
+		widgets.append(getInstanceArrayProperty(HTMLDOC_widgets, HtmlWidget.class));
 	}
 
 	@Override /* Context */
@@ -977,7 +973,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	Widgets defined on this serializers.
 	 */
-	protected final Map<String,HtmlWidget> getWidgets() {
+	protected final HtmlWidgetMap getWidgets() {
 		return widgets;
 	}
 

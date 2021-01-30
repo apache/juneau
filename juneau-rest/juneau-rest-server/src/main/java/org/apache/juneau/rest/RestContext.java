@@ -4609,7 +4609,7 @@ public class RestContext extends BeanContext {
 		if (x == null)
 			x = builder.varResolverBuilder
 				.vars(createVars(resource,beanFactory))
-				.contextObject("messages", getMessages())
+				.bean(Messages.class, getMessages())
 				.build();
 
 		x = BeanFactory
@@ -6265,22 +6265,6 @@ public class RestContext extends BeanContext {
 		} catch (Exception e1) {
 			req.setAttribute("Exception", e1);
 		}
-	}
-
-	/**
-	 * Returns the session objects for the specified request.
-	 *
-	 * <p>
-	 * The default implementation simply returns a single map containing <c>{'req':req,'res',res}</c>.
-	 *
-	 * @param call The current REST call.
-	 * @return The session objects for that request.
-	 */
-	public Map<String,Object> getSessionObjects(RestCall call) {
-		Map<String,Object> m = new HashMap<>();
-		m.put("req", call.getRequest());
-		m.put("res", call.getResponse());
-		return m;
 	}
 
 	/**

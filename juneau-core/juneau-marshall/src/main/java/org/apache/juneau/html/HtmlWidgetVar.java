@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.util.*;
-
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.svl.*;
 
@@ -39,11 +37,6 @@ import org.apache.juneau.svl.*;
 public class HtmlWidgetVar extends SimpleVar {
 
 	/**
-	 * The name of the session or context object that identifies the object containing the widgets to resolve.
-	 */
-	public static final String SESSION_htmlWidgets = "htmlWidgets";
-
-	/**
 	 * The name of this variable.
 	 */
 	public static final String NAME = "W";
@@ -55,12 +48,11 @@ public class HtmlWidgetVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
-		Map<String,HtmlWidget> widgets = (Map<String,HtmlWidget>)session.getSessionObject(Object.class, SESSION_htmlWidgets, false);
+		HtmlWidgetMap m = session.getBean(HtmlWidgetMap.class).orElseThrow(RuntimeException::new);
 
-		HtmlWidget w = widgets.get(key);
+		HtmlWidget w = m.get(key);
 		if (w == null)
 			return "unknown-widget-"+key;
 
@@ -69,6 +61,6 @@ public class HtmlWidgetVar extends SimpleVar {
 
 	@Override
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_htmlWidgets);
+		return session.getBean(HtmlWidgetMap.class).isPresent();
 	}
 }

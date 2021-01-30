@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.vars;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -30,6 +31,9 @@ import org.apache.juneau.svl.*;
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
  *
  * <p>
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
+ *
+ * <p>
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver()}.
  *
  * <ul class='seealso'>
@@ -37,8 +41,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class UrlVar extends SimpleVar {
-
-	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "U";
@@ -52,12 +54,11 @@ public class UrlVar extends SimpleVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
-		return req.getUriResolver().resolve(key);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getUriResolver().resolve(key);
 	}
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }

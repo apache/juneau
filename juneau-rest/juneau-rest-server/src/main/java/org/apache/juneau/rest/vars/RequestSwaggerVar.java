@@ -52,14 +52,13 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	String title = restRequest.resolveVars(<js>"$RI{title}"</js>);
- * 	String titleOrDescription = restRequest.resolveVars(<js>"$RI{title,description}"</js>);
+ * 	String <jv>title</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RS{title}"</js>);
+ * 	String <jv>titleOrDescription</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RS{title,description}"</js>);
  * </p>
  *
  * <ul class='notes'>
  * 	<li>
- * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
- * 		or a session object on the resolver session.
+ * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
  * 	<li>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
@@ -69,8 +68,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RequestSwaggerVar extends MultipartResolvingVar {
-
-	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "RS";
@@ -95,7 +92,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) throws HttpException, InternalServerError {
 		try {
-			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
+			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 			Optional<Swagger> swagger = req.getSwagger();
 			WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 			Optional<Operation> methodSwagger = req.getMethodSwagger();
@@ -139,6 +136,6 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public boolean canResolve(VarResolverSession session) {
-		return session.hasSessionObject(SESSION_req);
+		return session.getBean(RestRequest.class).isPresent();
 	}
 }
