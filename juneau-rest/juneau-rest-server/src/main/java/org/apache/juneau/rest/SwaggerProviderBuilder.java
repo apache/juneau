@@ -45,11 +45,20 @@ public class SwaggerProviderBuilder {
 	 */
 	public SwaggerProvider build() {
 		try {
-			Class<? extends SwaggerProvider> ic = isConcrete(implClass) ? implClass : BasicSwaggerProvider.class;
+			Class<? extends SwaggerProvider> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
 			return BeanFactory.of(beanFactory).addBeans(SwaggerProviderBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
+	}
+
+	/**
+	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
+	 *
+	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
+	 */
+	protected Class<? extends SwaggerProvider> getDefaultImplClass() {
+		return BasicSwaggerProvider.class;
 	}
 
 	/**

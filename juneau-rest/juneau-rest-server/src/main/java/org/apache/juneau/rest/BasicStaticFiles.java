@@ -12,46 +12,110 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.FileUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+
+import java.io.*;
+import java.util.*;
+
+import javax.activation.*;
+
+import org.apache.http.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
- * Basic implementation of resource finder used for finding static files served up for REST resources.
+ * API for retrieving localized static files from either the classpath or file system.
  *
  * <p>
- * This implementation has the following attributes:
- * <ul>
- * 	<li>Looks for files in the following locations:
- * 		<li><js>"static"</js> working subdirectory.
- * 		<li><js>"htdocs"</js> working subdirectory.
- * 		<li><js>"htdocs"</js> subpackage from this class and all parent classes.
- * 		<li><js>"htdocs"</js> root package from this class and all parent classes.
- * 	</li>
- * 	<li>Caches any files smaller than 1MB into memory.
- * 	<li>Ignores any <js>".class"</js> or <js>".properties"</js> files found.
- * 	<li>Adds header <js>"Cache-Control: max-age=86400, public"</js> to all resources.
- * </ul>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@link RestContext#REST_staticFiles}
- * </ul>
+ * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link BasicHttpResource}
+ * objects with arbitrary headers.
  */
-public class BasicStaticFiles extends StaticFiles {
+public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
+
+	private final Header[] headers;
+	private final MimetypesFileTypeMap mimeTypes;
+	private final int hashCode;
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static StaticFilesBuilder create() {
+		return new StaticFilesBuilder();
+	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param context The context of the REST resource this finder belongs to.
+	 * @param builder The builder object.
 	 */
-	public BasicStaticFiles(RestContext context) {
-		super(StaticFiles
-			.create()
-			.dir("static")
-			.dir("htdocs")
-			.cp(context.getResourceClass(), "htdocs", true)
-			.cp(context.getResourceClass(), "/htdocs", true)
-			.caching(1_000_000)
-			.exclude("(?i).*\\.(class|properties)")
-			.headers(CacheControl.of("max-age=86400, public"))
-		);
+	public BasicStaticFiles(StaticFilesBuilder builder) {
+		super(builder);
+		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
+		this.mimeTypes = builder.mimeTypes;
+		this.hashCode = HashCode.of(hashCode(), headers);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Can be used when subclassing and overriding the {@link #resolve(String, Locale)} method.
+	 */
+	protected BasicStaticFiles() {
+		super();
+		this.headers = new Header[0];
+		this.mimeTypes = null;
+		this.hashCode = HashCode.of(hashCode(), headers);
+	}
+
+	/**
+	 * Resolve the specified path.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide specialized handling.
+	 *
+	 * @param path The path to resolve to a static file.
+	 * @param locale Optional locale.
+	 * @return The resource, or <jk>null</jk> if not found.
+	 */
+	@Override /* StaticFiles */
+	public Optional<BasicHttpResource> resolve(String path, Locale locale) {
+		try {
+			Optional<InputStream> is = getStream(path);
+			if (! is.isPresent())
+				return Optional.empty();
+			return Optional.of(
+				BasicHttpResource
+					.of(is.get())
+					.header(ContentType.of(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
+					.headers(headers)
+			);
+		} catch (IOException e) {
+			throw new InternalServerError(e);
+		}
+	}
+
+	@Override /* FileFinder */
+	public OMap toMap() {
+		return super.toMap()
+			.a("headers", headers)
+		;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		return super.equals(o) && o instanceof BasicStaticFiles && eq(this, (BasicStaticFiles)o, (x,y)->eq(x.headers, y.headers));
 	}
 }

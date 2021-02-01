@@ -42,11 +42,20 @@ public class FileFinderBuilder {
 	 */
 	public FileFinder build() {
 		try {
-			Class<? extends FileFinder> ic = isConcrete(implClass) ? implClass : BasicFileFinder.class;
+			Class<? extends FileFinder> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
 			return BeanFactory.of(beanFactory).addBeans(FileFinderBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e.getCause().getMessage(), e.getCause());
 		}
+	}
+
+	/**
+	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
+	 *
+	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
+	 */
+	protected Class<? extends FileFinder> getDefaultImplClass() {
+		return BasicFileFinder.class;
 	}
 
 	/**

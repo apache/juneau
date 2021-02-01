@@ -2913,7 +2913,7 @@ public class RestContext extends BeanContext {
 	 * 	// and resolve methods for special handling of special cases and adds a Foo header to all requests.</jc>
 	 * 	<jk>public class</jk> MyStaticFiles <jk>extends</jk> StaticFiles {
 	 *
-	 * 		<jk>public</jk> MyStaticFiles() {
+	 * 		<jk>public</jk> MyStaticFiles() <jk>extends</jk> BasicStaticFiles {
 	 * 			<jk>super</jk>(
 	 * 				<jk>new</jk> StaticFilesBuilder()
 	 * 					.dir(<js>"/files"</js>)
@@ -3688,14 +3688,18 @@ public class RestContext extends BeanContext {
 		if (resource instanceof FileFinder)
 			x = (FileFinder)resource;
 
-		if (x == null)
-			x = getInstanceProperty(REST_fileFinder, FileFinder.class, null, beanFactory);
+		Object o = getProperty(REST_fileFinder);
+		if (o instanceof FileFinder)
+			x = (FileFinder)o;
 
 		if (x == null)
 			x = beanFactory.getBean(FileFinder.class).orElse(null);
 
-		if (x == null)
-			x = getInstanceProperty(REST_fileFinderDefault, BasicFileFinder.class, null, beanFactory);
+		if (x == null) {
+			o = getProperty(REST_fileFinderDefault);
+			if (o instanceof FileFinder)
+				x = (FileFinder)o;
+		}
 
 		if (x == null)
 			x = createFileFinderBuilder(resource, beanFactory).build();
@@ -3722,10 +3726,28 @@ public class RestContext extends BeanContext {
 	 * @return The file finder builder for this REST resource.
 	 * @throws Exception If file finder builder could not be instantiated.
 	 */
+	@SuppressWarnings("unchecked")
 	protected FileFinderBuilder createFileFinderBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		Class<? extends FileFinder> c = null;
+
+		Object o = getProperty(REST_fileFinder);
+		if (o instanceof Class)
+			c = (Class<? extends FileFinder>)o;
+
+		if (c == null) {
+			o = getProperty(REST_fileFinderDefault);
+			if (o instanceof Class)
+				c = (Class<? extends FileFinder>)o;
+		}
+
+		if (c == null)
+			c = BasicFileFinder.class;
 
 		FileFinderBuilder x = FileFinder
 			.create()
+			.beanFactory(beanFactory)
+			.implClass(c)
 			.dir("static")
 			.dir("htdocs")
 			.cp(getResourceClass(), "htdocs", true)
@@ -3785,17 +3807,19 @@ public class RestContext extends BeanContext {
 		if (resource instanceof StaticFiles)
 			x = (StaticFiles)resource;
 
-		if (x == null)
-			x = getInstanceProperty(REST_staticFiles, StaticFiles.class, null, beanFactory);
+		Object o = getProperty(REST_staticFiles);
+		if (o instanceof StaticFiles)
+			x = (StaticFiles)o;
 
 		if (x == null)
 			x = beanFactory.getBean(StaticFiles.class).orElse(null);
 
-		if (x == null)
-			x = getInstanceProperty(REST_staticFilesDefault, StaticFiles.class, null, beanFactory);
+		o = getProperty(REST_staticFilesDefault);
+		if (o instanceof StaticFiles)
+			x = (StaticFiles)o;
 
 		if (x == null)
-			x = createStaticFilesBuilder(resource, beanFactory).build();
+			x = (StaticFiles)createStaticFilesBuilder(resource, beanFactory).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -3819,10 +3843,28 @@ public class RestContext extends BeanContext {
 	 * @return The static files builder for this REST resource.
 	 * @throws Exception If static files builder could not be instantiated.
 	 */
+	@SuppressWarnings("unchecked")
 	protected StaticFilesBuilder createStaticFilesBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		Class<? extends StaticFiles> c = null;
+
+		Object o = getProperty(REST_staticFiles);
+		if (o instanceof Class)
+			c = (Class<? extends StaticFiles>)o;
+
+		if (c == null) {
+			o = getProperty(REST_staticFilesDefault);
+			if (o instanceof Class)
+				c = (Class<? extends StaticFiles>)o;
+		}
+
+		if (c == null)
+			c = BasicStaticFiles.class;
 
 		StaticFilesBuilder x = StaticFiles
 			.create()
+			.beanFactory(beanFactory)
+			.implClass((Class<? extends FileFinder>)c)
 			.dir("static")
 			.dir("htdocs")
 			.cp(getResourceClass(), "htdocs", true)

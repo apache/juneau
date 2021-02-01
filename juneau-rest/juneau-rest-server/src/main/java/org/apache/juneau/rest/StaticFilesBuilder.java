@@ -24,21 +24,16 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Builder class for {@link StaticFiles} objects.
+ * Builder class for {@link BasicStaticFiles} objects.
  */
 public class StaticFilesBuilder extends FileFinderBuilder {
 
 	List<Header> headers = AList.create();
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 
-	/**
-	 * Create a new {@link StaticFiles} using this builder.
-	 *
-	 * @return A new {@link StaticFiles}
-	 */
 	@Override
-	public StaticFiles build() {
-		return new StaticFiles(this);
+	protected Class<? extends FileFinder> getDefaultImplClass() {
+		return BasicStaticFiles.class;
 	}
 
 	/**
@@ -115,6 +110,18 @@ public class StaticFilesBuilder extends FileFinderBuilder {
 	@Override
 	public StaticFilesBuilder exclude(String...patterns) {
 		super.exclude(patterns);
+		return this;
+	}
+
+	@Override
+	public StaticFilesBuilder implClass(Class<? extends FileFinder> value) {
+		super.implClass(value);
+		return this;
+	}
+
+	@Override
+	public StaticFilesBuilder beanFactory(BeanFactory value) {
+		super.beanFactory(value);
 		return this;
 	}
 
