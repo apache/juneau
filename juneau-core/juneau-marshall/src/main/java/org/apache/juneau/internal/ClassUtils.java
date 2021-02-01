@@ -322,6 +322,20 @@ public final class ClassUtils {
 		return null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this class is not <jk>null</jk> and isn't abstract or an interface.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if this class is not <jk>null</jk> and isn't abstract or an interface.
+	 */
+	public static boolean isConcrete(Class<?> c) {
+		if (c == null)
+			return false;
+		ClassInfo ci = ClassInfo.of(c);
+		if (ci.isAbstract())
+			return false;
+		return true;
+	}
 
 	/**
 	 * Returns the class name for the specified object.

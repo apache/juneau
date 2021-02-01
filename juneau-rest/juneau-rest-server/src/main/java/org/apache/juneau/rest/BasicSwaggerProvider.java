@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Basic implementation of a {@link SwaggerProvider}.
- * 
+ *
  * TODO
  */
 public class BasicSwaggerProvider implements SwaggerProvider {

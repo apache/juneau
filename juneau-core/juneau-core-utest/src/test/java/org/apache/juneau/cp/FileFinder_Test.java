@@ -654,16 +654,17 @@ public class FileFinder_Test {
 
 	@Test
 	public void e03_subclassing() throws Exception {
-		E03b x = E03b
+		FileFinder x = E03b
 			.create()
 			.dir(".")
 			.caching(100_000_000)
-			.build(E03b.class);
+			.implClass(E03b.class)
+			.build();
 		assertObject(x).isType(E03b.class);
 	}
 
 	public static class E03a extends FileFinderBuilder {}
-	public static class E03b extends FileFinder {
+	public static class E03b extends BasicFileFinder {
 		public static E03a create() {
 			return new E03a();
 		}

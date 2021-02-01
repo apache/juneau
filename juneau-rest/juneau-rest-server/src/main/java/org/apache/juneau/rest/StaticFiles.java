@@ -32,10 +32,10 @@ import org.apache.juneau.internal.*;
  * API for retrieving localized static files from either the classpath or file system.
  *
  * <p>
- * Provides the same functionality as {@link FileFinder} but adds support for returning files as {@link BasicHttpResource}
+ * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link BasicHttpResource}
  * objects with arbitrary headers.
  */
-public class StaticFiles extends FileFinder {
+public class StaticFiles extends BasicFileFinder {
 
 	/** Represents no static files */
 	public static final class Null extends StaticFiles {}

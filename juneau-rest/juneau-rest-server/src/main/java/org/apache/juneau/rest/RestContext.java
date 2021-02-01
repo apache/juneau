@@ -1463,7 +1463,7 @@ public class RestContext extends BeanContext {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a file finder that looks for files in the /files working subdirectory, but overrides the find()
 	 * 	// method for special handling of special cases.</jc>
-	 * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> FileFinder {
+	 * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
 	 *
 	 * 		<jk>public</jk> MyFileFinder() {
 	 * 			<jk>super</jk>(
@@ -1526,7 +1526,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_fileFinderDefault REST_fileFinderDefault}
 	 * 	<li><b>Name:</b>  <js>"RestContext.fileFinderDefault.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.FileFinder}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicFileFinder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.cp.BasicFileFinder}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3695,7 +3695,7 @@ public class RestContext extends BeanContext {
 			x = beanFactory.getBean(FileFinder.class).orElse(null);
 
 		if (x == null)
-			x = getInstanceProperty(REST_fileFinderDefault, FileFinder.class, null, beanFactory);
+			x = getInstanceProperty(REST_fileFinderDefault, BasicFileFinder.class, null, beanFactory);
 
 		if (x == null)
 			x = createFileFinderBuilder(resource, beanFactory).build();
@@ -3761,7 +3761,7 @@ public class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link BeanFactory}
-	 * 			<li>{@link FileFinder}
+	 * 			<li>{@link BasicFileFinder}
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean factory registered in this context.
@@ -3859,7 +3859,7 @@ public class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link BeanFactory}
-	 * 			<li>{@link FileFinder}
+	 * 			<li>{@link BasicFileFinder}
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean factory registered in this context.

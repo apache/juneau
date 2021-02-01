@@ -57,7 +57,7 @@ public class Swagger_Test {
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
-	public static class TestClasspathFileFinder extends FileFinder {
+	public static class TestClasspathFileFinder extends BasicFileFinder {
 
 		public TestClasspathFileFinder() {
 			super(FileFinder.create().cp(Swagger_Test.class, null, false));

@@ -141,6 +141,29 @@ public class BeanFactory {
 	}
 
 	/**
+	 * Same as {@link #addBean(Class, Object)} but also adds subtypes of the bean.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param c The class to associate this bean with.
+	 * @param t The bean.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> BeanFactory addBeans(Class<T> c, T t) {
+		if (t == null)
+			beanMap.remove(c);
+		else {
+			addBean(c, t);
+			Class<T> c2 = (Class<T>)t.getClass();
+			while (c2 != c) {
+				addBean(c2, t);
+				c2 = (Class<T>) c2.getSuperclass();
+			}
+		}
+		return this;
+	}
+
+	/**
 	 * Adds a bean supplier of the specified type to this factory.
 	 *
 	 * @param <T> The class to associate this bean with.

@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.exception.*;
@@ -35,7 +36,7 @@ public class SwaggerProviderBuilder {
 
 	/**
 	 * Creates a new {@link SwaggerProvider} object from this builder.
-	 * 
+	 *
 	 * <p>
 	 * Instantiates an instance of the {@link #implClass(Class) implementation class} or
 	 * else {@link BasicSwaggerProvider} if implementation class was not specified.
@@ -44,8 +45,8 @@ public class SwaggerProviderBuilder {
 	 */
 	public SwaggerProvider build() {
 		try {
-			Class<? extends SwaggerProvider> ic = (implClass == null || implClass == SwaggerProvider.class) ? BasicSwaggerProvider.class : implClass;
-			return BeanFactory.of(beanFactory).addBean(SwaggerProviderBuilder.class, this).createBean(ic);
+			Class<? extends SwaggerProvider> ic = isConcrete(implClass) ? implClass : BasicSwaggerProvider.class;
+			return BeanFactory.of(beanFactory).addBeans(SwaggerProviderBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}

@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.nio.file.*;
 import java.util.*;
@@ -22,7 +23,6 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * Builder for {@link FileFinder} objects.
@@ -32,6 +32,8 @@ public class FileFinderBuilder {
 	final Set<LocalDir> roots = new LinkedHashSet<>();
 	long cachingLimit = -1;
 	List<Pattern> include = AList.of(Pattern.compile(".*")), exclude = AList.create();
+	private Class<? extends FileFinder> implClass;
+	private BeanFactory beanFactory;
 
 	/**
 	 * Create a new {@link FileFinder} using this builder.
@@ -39,23 +41,12 @@ public class FileFinderBuilder {
 	 * @return A new {@link FileFinder}
 	 */
 	public FileFinder build() {
-		return new FileFinder(this);
-	}
-
-	/**
-	 * Create a new {@link FileFinder} subclass using this builder.
-	 *
-	 * <p>
-	 * Subclass must have a public constructor that takes in a single {@link FileFinderBuilder} object.
-	 *
-	 * @param c The subclass of {@link FileFinder} to instantiate.
-	 * @param <T> The subclass of {@link FileFinder} to instantiate.
-	 *
-	 * @return A new {@link FileFinder}
-	 * @throws ExecutableException Thrown from constructor.
-	 */
-	public <T extends FileFinder> T build(Class<T> c) throws ExecutableException {
-		return ClassInfo.of(c).getPublicConstructor(this).invoke(this);
+		try {
+			Class<? extends FileFinder> ic = isConcrete(implClass) ? implClass : BasicFileFinder.class;
+			return BeanFactory.of(beanFactory).addBeans(FileFinderBuilder.class, this).createBean(ic);
+		} catch (ExecutableException e) {
+			throw new RuntimeException(e.getCause().getMessage(), e.getCause());
+		}
 	}
 
 	/**
@@ -137,6 +128,33 @@ public class FileFinderBuilder {
 	@FluentSetter
 	public FileFinderBuilder exclude(String...patterns) {
 		this.exclude = Arrays.asList(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
+		return this;
+	}
+
+	/**
+	 * Specifies the bean factory to use for instantiating the {@link FileFinder} object.
+	 *
+	 * <p>
+	 * Can be used to instantiate {@link FileFinder} implementations with injected constructor argument beans.
+	 *
+	 * @param value The new value for this setting.
+	 * @return  This object (for method chaining).
+	 */
+	@FluentSetter
+	public FileFinderBuilder beanFactory(BeanFactory value) {
+		this.beanFactory = value;
+		return this;
+	}
+
+	/**
+	 * Specifies a subclass of {@link FileFinder} to create when the {@link #build()} method is called.
+	 *
+	 * @param value The new value for this setting.
+	 * @return  This object (for method chaining).
+	 */
+	@FluentSetter
+	public FileFinderBuilder implClass(Class<? extends FileFinder> value) {
+		this.implClass = value;
 		return this;
 	}
 
