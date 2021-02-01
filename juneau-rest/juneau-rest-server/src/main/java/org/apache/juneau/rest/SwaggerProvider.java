@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;

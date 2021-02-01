@@ -435,7 +435,7 @@ public abstract class RestServlet extends HttpServlet {
 	public void onStartCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
 
 	/**
-	 * Method that gets called immediately before the <ja>@RestMethod</ja> annotated method gets called.
+	 * Method that gets called immediately before the <ja>@RestOp</ja> annotated method gets called.
 	 *
 	 * <p>
 	 * At this point, the {@link RestRequest} object has been fully initialized, and all {@link RestGuard} and
@@ -465,7 +465,7 @@ public abstract class RestServlet extends HttpServlet {
 	public void onPreCall(RestRequest req, RestResponse res) throws Exception {}
 
 	/**
-	 * Method that gets called immediately after the <ja>@RestMethod</ja> annotated method gets called.
+	 * Method that gets called immediately after the <ja>@RestOp</ja> annotated method gets called.
 	 *
 	 * <p>
 	 * At this point, the output object returned by the method call has been set on the response, but

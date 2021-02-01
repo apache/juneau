@@ -50,12 +50,12 @@ import org.apache.juneau.http.exception.*;
 public class ConfigResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/",
 		summary="Get config file contents",
 		description="Show contents of config file as an OMap.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file as a map of map of objects.', example:{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}"
 			}
@@ -65,7 +65,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getContext().getConfig().toMap();
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/edit",
 		summary="Render form entry page for editing config file",
@@ -86,12 +86,12 @@ public class ConfigResource extends BasicRestServlet {
 		);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/{section}",
 		summary="Get config file section contents",
 		description="Show contents of config file section as an OMap.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
@@ -104,12 +104,12 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/{section}/{key}",
 		summary="Get config file entry value",
 		description="Show value of config file entry as a simple string.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Entry value.', example:'servlet:/htdocs/themes/dark.css'}"
 			}
@@ -123,12 +123,12 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section).getString(key);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=POST,
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from a FORM post.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
@@ -141,12 +141,12 @@ public class ConfigResource extends BasicRestServlet {
 		return setConfigContents(new StringReader(contents));
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=PUT,
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from raw text.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
@@ -159,12 +159,12 @@ public class ConfigResource extends BasicRestServlet {
 		return getContext().getConfig().load(contents, true).toMap();
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=PUT,
 		path="/{section}",
 		summary="Update config section contents",
 		description="Add or overwrite a config file section.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
@@ -182,12 +182,12 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=PUT,
 		path="/{section}/{key}",
 		summary="Update config entry value",
 		description="Add or overwrite a config file entry.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'The updated value.', example:'servlet:/htdocs/themes/dark.css'}"
 			}

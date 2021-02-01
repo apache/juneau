@@ -26,7 +26,7 @@ import org.apache.juneau.http.exception.*;
  *
  * <p>
  * Guards are applied to REST methods declaratively through the {@link Rest#guards() @Rest(guards)} or
- * {@link RestMethod#guards() @RestMethod(guards)} annotations.
+ * {@link RestOp#guards() @RestOp(guards)} annotations.
  *
  * <p>
  * If multiple guards are specified, ALL guards must pass in order for the request to proceed.
@@ -48,7 +48,7 @@ import org.apache.juneau.http.exception.*;
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// Delete method with guard that only allows Billy to call it.</jc>
- * 		<ja>@RestMethod</ja>(method=<jsf>DELETE</jsf>, guards=BillyGuard.<jk>class</jk>)
+ * 		<ja>@RestOp</ja>(method=<jsf>DELETE</jsf>, guards=BillyGuard.<jk>class</jk>)
  * 		<jk>public</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
  * 	}
  * </p>

@@ -46,37 +46,37 @@ public class Rest_Debug_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debug=""), various @RestMethod(debug)
+	// @Rest(debug=""), various @RestOp(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class)
 	public static class A1 implements BasicUniversalRest {
-		@RestMethod
+		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="foo")
+		@RestOp(debug="foo")
 		public boolean e(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean f(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean g(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -126,32 +126,32 @@ public class Rest_Debug_Test {
 
 	@Rest(callLogger=CaptureLogger.class)
 	public static class A1a extends BasicRestObject {
-		@RestMethod
+		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="foo")
+		@RestOp(debug="foo")
 		public boolean e(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean f(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean g(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -200,37 +200,37 @@ public class Rest_Debug_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debug="true"), various @RestMethod(debug)
+	// @Rest(debug="true"), various @RestOp(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class, debug="true")
 	public static class A2 implements BasicUniversalRest {
-		@RestMethod
+		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="foo")
+		@RestOp(debug="foo")
 		public boolean e(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean f(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean g(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -279,37 +279,37 @@ public class Rest_Debug_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debug="false"), various @RestMethod(debug)
+	// @Rest(debug="false"), various @RestOp(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class,debug="false")
 	public static class A3 implements BasicUniversalRest {
-		@RestMethod
+		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="foo")
+		@RestOp(debug="foo")
 		public boolean e(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean f(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean g(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -358,37 +358,37 @@ public class Rest_Debug_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debug="conditional"), various @RestMethod(debug)
+	// @Rest(debug="conditional"), various @RestOp(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class,debug="conditional")
 	public static class A4 implements BasicUniversalRest {
-		@RestMethod
+		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="foo")
+		@RestOp(debug="foo")
 		public boolean e(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean f(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean g(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -437,7 +437,7 @@ public class Rest_Debug_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debugOn=""), various @RestMethod(debug)
+	// @Rest(debugOn=""), various @RestOp(debug)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -450,164 +450,164 @@ public class Rest_Debug_Test {
 	)
 	public static class C1 implements BasicUniversalRest {
 
-		@RestMethod
+		@RestOp
 		public boolean a1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean a2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean a3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean a4(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=false
-		@RestMethod
+		@RestOp
 		public boolean b1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean b2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean b3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean b5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean b6(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=true
-		@RestMethod
+		@RestOp
 		public boolean c1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean c2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean c3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean c4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean c6(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=conditional
-		@RestMethod
+		@RestOp
 		public boolean d1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean d2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean d3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean d4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean d5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d6(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=foo
-		@RestMethod
+		@RestOp
 		public boolean e1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean e2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean e3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean e4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean e5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean e6(RestRequest req) {
 			return req.isDebug();
 		}
 
-		@RestMethod
+		@RestOp
 		public boolean f1(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean f2(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean f3(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean f4(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
 
-		@RestMethod
+		@RestOp
 		public boolean g1(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean g2(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean g3(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean g4(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
@@ -784,164 +784,164 @@ public class Rest_Debug_Test {
 	)
 	public static class C2 implements BasicUniversalRest {
 
-		@RestMethod
+		@RestOp
 		public boolean a1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean a2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean a3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean a4(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=false
-		@RestMethod
+		@RestOp
 		public boolean b1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean b2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean b3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean b4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean b5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean b6(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=true
-		@RestMethod
+		@RestOp
 		public boolean c1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean c2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean c3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean c4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean c5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean c6(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=conditional
-		@RestMethod
+		@RestOp
 		public boolean d1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean d2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean d3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean d4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean d5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean d6(RestRequest req) {
 			return req.isDebug();
 		}
 
 		// debug=foo
-		@RestMethod
+		@RestOp
 		public boolean e1(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean e2(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod
+		@RestOp
 		public boolean e3(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean e4(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean e5(RestRequest req) {
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean e6(RestRequest req) {
 			return req.isDebug();
 		}
 
-		@RestMethod
+		@RestOp
 		public boolean f1(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean f2(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean f3(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean f4(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
 
-		@RestMethod
+		@RestOp
 		public boolean g1(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="false")
+		@RestOp(debug="false")
 		public boolean g2(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="true")
+		@RestOp(debug="true")
 		public boolean g3(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
-		@RestMethod(debug="conditional")
+		@RestOp(debug="conditional")
 		public boolean g4(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();

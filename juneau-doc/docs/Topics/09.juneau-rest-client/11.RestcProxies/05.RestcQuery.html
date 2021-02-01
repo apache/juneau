@@ -17,7 +17,7 @@
 @Query
 
 <p>
-	The {@link oaj.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	The {@link oaj.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
 	to denote that they are query parameters on the request.
 </p>
 <ul class='javatree'>
@@ -54,34 +54,34 @@
 	<jk>public interface</jk> MyProxy {
  
 		<jc>// Explicit names specified for query parameters.</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String parameters(
 			<ja>@Query</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>,
 			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
  
 		<jc>// Multiple values pulled from a NameValuePairSupplier object.</jc>
 		<jc>// Same as @Query("*").</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String nameValuePairs(<ja>@Query</ja> NameValuePairSupplier <jv>nameValuePairSupplier</jv>);
  
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Query("*").</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String map(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<jc>// Same as @Query("*").</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String bean(<ja>@Query</ja> MyBean <jv>myBean</jv>);
 
 		<jc>// An entire query string as a String.</jc>
 		<jc>// Same as @Query("*").</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String string(<ja>@Query</ja> String <jv>string</jv>);
 
 		<jc>// An entire query string as a Reader.</jc>
 		<jc>// Same as @Query("*").</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String reader(<ja>@Query</ja> Reader <jv>reader</jv>);
 	}
 </p>

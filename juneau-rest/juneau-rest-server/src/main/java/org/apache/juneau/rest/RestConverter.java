@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
  * Converters are associated with REST methods through the following:
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Rest#converters()}
- * 	<li class='ja'>{@link RestMethod#converters()}
+ * 	<li class='ja'>{@link RestOp#converters()}
  * 	<li class='jf'>{@link RestContext#REST_converters}
  * 	<li class='jm'>{@link RestContextBuilder#converters(Class...)}
  * 	<li class='jm'>{@link RestContextBuilder#converters(RestConverter...)}
@@ -39,7 +39,7 @@ import org.apache.juneau.serializer.*;
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// GET request handler</jc>
- * 		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
+ * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
  * 		<jk>public</jk> HttpServletRequest doGet(RestRequest req) {
  * 			res.setTitle(<js>"Contents of HttpServletRequest object"</js>);
  * 			<jk>return</jk> req;

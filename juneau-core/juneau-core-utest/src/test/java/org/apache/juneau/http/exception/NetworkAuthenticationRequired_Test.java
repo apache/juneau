@@ -27,27 +27,27 @@ public class NetworkAuthenticationRequired_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws NetworkAuthenticationRequired {
 			throw new NetworkAuthenticationRequired();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws NetworkAuthenticationRequired {
 			throw new NetworkAuthenticationRequired("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws NetworkAuthenticationRequired {
 			throw new NetworkAuthenticationRequired(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws NetworkAuthenticationRequired {
 			throw new NetworkAuthenticationRequired(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws NetworkAuthenticationRequired {
 			throw new NetworkAuthenticationRequired().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws NetworkAuthenticationRequired {
 			throw new NetworkAuthenticationRequired("foo");
 		}

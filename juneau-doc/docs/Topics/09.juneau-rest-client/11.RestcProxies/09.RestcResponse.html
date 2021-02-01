@@ -16,7 +16,7 @@
 @Response
 
 <p>
-	The {@link oaj.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
+	The {@link oaj.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteOp</ja>-annotated methods.
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.Response}
@@ -32,7 +32,7 @@
 	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {
 		
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		CreatePetResponse postPet(...);
 	}
 </p>

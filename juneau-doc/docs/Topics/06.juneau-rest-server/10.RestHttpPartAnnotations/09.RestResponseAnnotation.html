@@ -36,10 +36,10 @@
 	It can be used in the following locations:
 </p>
 <ul>
-	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated methods.
-	<li>Return type classes of <ja>@RestMethod</ja>-annotated methods.
-	<li><ja>@RestMethod</ja>-annotated methods themselves.
-	<li>Arguments and argument-types of <ja>@RestMethod</ja>-annotated methods.
+	<li>Exception classes thrown from <ja>@RestOp</ja>-annotated methods.
+	<li>Return type classes of <ja>@RestOp</ja>-annotated methods.
+	<li><ja>@RestOp</ja>-annotated methods themselves.
+	<li>Arguments and argument-types of <ja>@RestOp</ja>-annotated methods.
 </ul>
 
 <p>
@@ -72,7 +72,7 @@
 	}
 
 	<jc>// Our REST method that throws an annotated exception.</jc>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password
@@ -155,20 +155,20 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Usage</jc>
-	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	<jk>public</jk> Redirect addPet(Pet pet) {
 		<jc>// Redirect to servlet root</jc>
 		<jk>return new</jk> Redirect(URI.<jsm>create</jsm>(<js>"servlet:/"</js>));
 	}
 </p>
 
-<h5 class='topic'>@Resource on @RestMethod-annotated methods</h5>
+<h5 class='topic'>@Resource on @RestOp-annotated methods</h5>
 <p>
 	The <ja>@Response</ja> annotation can also be applied to the Java method itself which is effectively
 	the same as applying it to the return type (albeit for this method only).
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<ja>@Response</ja>(code=200, description=<js>"OK"</js>)
 	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
@@ -185,13 +185,13 @@
 	method return annotation take precedence over the values defined on the type.
 </p>
 
-<h5 class='topic'>@Resource on @RestMethod-annotated method parameters</h5>
+<h5 class='topic'>@Resource on @RestOp-annotated method parameters</h5>
 <p>
 	The <ja>@Response</ja> annotation can also be applied to the Java method parameters when the parameter type 
 	is {@link oaj.Value} (a placeholder for objects).
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,
@@ -206,7 +206,7 @@
 	<ja>@Response</ja>-annotated types can also be used as value parameters:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public void</jk> login(
 		...
 		<ja>@Response</ja> Value&lt;Ok&gt; res
@@ -221,7 +221,7 @@
 	that it's a <ja>@Response</ja> bean.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		...
 		Value&lt;Ok&gt; res  <jc>// @Response annotation not needed.</jc>
@@ -320,13 +320,13 @@
 			serializers=OpenApiSerializer.<jk>class</jk>,
 			defaultAccept=<js>"text/openapi"</js>
 		)
-		<ja>@RestMethod</ja>
+		<ja>@RestOp</ja>
 		<jk>public</jk> String[] example1() {
 			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
 		}
 
 		<jc>// Example 2 - Same as above.  Annotation on parameter.</jc>
-		<ja>@RestMethod</ja>
+		<ja>@RestOp</ja>
 		<jk>public void</jk> example2(
 			<ja>@Response</ja>(
 				serializers=OpenApiSerializer.<jk>class</jk>,
@@ -351,7 +351,7 @@
 			defaultAccept=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(collectionFormat=<js>"pipes"</js>)
 		)
-		<ja>@RestMethod</ja>
+		<ja>@RestOp</ja>
 		<jk>public</jk> String[] example1() {
 			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
 		}
@@ -384,7 +384,7 @@
 	The following two examples are equivalent:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
 	<jk>public void</jk> sendContinue(
 		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
 	) 
@@ -393,7 +393,7 @@
 	}
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
 	<jk>public void</jk> sendContinue(RestResponse res) {
 		res.setStatus(100);
 		res.setOutput(<js>"OK"</js>);

@@ -61,7 +61,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(
 		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
 		<ja>@Query</ja>(<js>"p2"</js>) String p2, 
@@ -71,7 +71,7 @@
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestRequest req) {
 		RequestQuery q = req.getQuery();
 		<jk>int</jk> p1 = q.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
@@ -88,17 +88,17 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; map) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Query</ja> MyBean bean) {...}
 </p>
 
@@ -111,7 +111,7 @@
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testQuery"</js>)	
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/testQuery"</js>)	
 	<jk>public void</jk> testQuery(
 		<ja>@Query</ja>(
 			name=<js>"queryParamName"</js>,

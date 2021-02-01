@@ -27,27 +27,27 @@ public class InsufficentStorage_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws InsufficientStorage {
 			throw new InsufficientStorage();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws InsufficientStorage {
 			throw new InsufficientStorage("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws InsufficientStorage {
 			throw new InsufficientStorage(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws InsufficientStorage {
 			throw new InsufficientStorage(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws InsufficientStorage {
 			throw new InsufficientStorage().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws InsufficientStorage {
 			throw new InsufficientStorage("foo");
 		}

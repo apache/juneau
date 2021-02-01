@@ -23,9 +23,9 @@ public class IMUsed_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public IMUsed getA1() { return new IMUsed(); }
-		@RestMethod public IMUsed getA2() { return new IMUsed("foo"); }
-		@RestMethod public IMUsed getA3() { return new IMUsed().header("Foo","bar"); }
+		@RestOp public IMUsed getA1() { return new IMUsed(); }
+		@RestOp public IMUsed getA2() { return new IMUsed("foo"); }
+		@RestOp public IMUsed getA3() { return new IMUsed().header("Foo","bar"); }
 	}
 
 	@Test

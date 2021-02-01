@@ -105,23 +105,23 @@ public class Restx_Parsers_Test {
 
 	@Rest(parsers=PA.class)
 	public static class A {
-		@RestMethod(method=PUT)
+		@RestOp(method=PUT)
 		public String a(@Body String in) {
 			return in;
 		}
-		@RestMethod(method=PUT, parsers=PB.class)
+		@RestOp(method=PUT, parsers=PB.class)
 		public String b(@Body String in) {
 			return in;
 		}
-		@RestMethod(method=PUT, parsers={Inherit.class, PB.class,PC.class})
+		@RestOp(method=PUT, parsers={Inherit.class, PB.class,PC.class})
 		public String c(@Body String in) {
 			return in;
 		}
-		@RestMethod(method=PUT, parsers={Inherit.class, PD.class})
+		@RestOp(method=PUT, parsers={Inherit.class, PD.class})
 		public String d(@Body String in) {
 			return in;
 		}
-		@RestMethod(method=PUT)
+		@RestOp(method=PUT)
 		public String e(@Body String in) {
 			return in;
 		}
@@ -218,17 +218,17 @@ public class Restx_Parsers_Test {
 
 	@Rest
 	public static class B2 extends B1 {
-		@RestMethod
+		@RestOp
 		public OList a(RestRequest req) {
 			// Should show ['text/p3','text/p4','text/p1','text/p2']
 			return OList.of(req.getConsumes());
 		}
-		@RestMethod(parsers=P5.class)
+		@RestOp(parsers=P5.class)
 		public OList b(RestRequest req) {
 			// Should show ['text/p5']
 			return OList.of(req.getConsumes());
 		}
-		@RestMethod(parsers={P5.class,Inherit.class})
+		@RestOp(parsers={P5.class,Inherit.class})
 		public OList c(RestRequest req) {
 			// Should show ['text/p5','text/p3','text/p4','text/p1','text/p2']
 			return OList.of(req.getConsumes());

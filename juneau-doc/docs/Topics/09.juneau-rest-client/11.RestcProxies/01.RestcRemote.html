@@ -159,15 +159,15 @@ specific language governing permissions and limitations under the License.
 <p class='bpcode w800'>
 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	// Note that this also matches 2.0.1.</jc>
-	<ja>@RestMethod</ja>(clientVersion=<js>"2.0"</js>)
+	<ja>@RestOp</ja>(clientVersion=<js>"2.0"</js>)
 	<jk>public</jk> Object getFoo()  {...}
 
 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	<ja>@RestMethod</ja>(clientVersion=<js>"[1.1,2.0)"</js>)
+	<ja>@RestOp</ja>(clientVersion=<js>"[1.1,2.0)"</js>)
 	<jk>public</jk> Object getFoo()  {...}
 
 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
-	<ja>@RestMethod</ja>(clientVersion=<js>"[0,1.1)"</js>)
+	<ja>@RestOp</ja>(clientVersion=<js>"[0,1.1)"</js>)
 	<jk>public</jk> Object getFoo()  {...}
 </p>
 

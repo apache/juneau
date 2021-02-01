@@ -96,7 +96,7 @@ public class LogsResource extends BasicRestServlet {
 		);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/*",
 		summary="View information on file or directory",
@@ -113,7 +113,7 @@ public class LogsResource extends BasicRestServlet {
 		return new FileResource(dir, path, allowDeletes, true);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method="VIEW",
 		path="/*",
 		summary="View contents of log file",
@@ -173,13 +173,13 @@ public class LogsResource extends BasicRestServlet {
 		}
 	}
 
-	@RestMethod(
+	@RestOp(
 		method="PARSE",
 		path="/*",
 		converters=Queryable.class,
 		summary="View parsed contents of file",
 		description="View the parsed contents of a file.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			parameters={
 				 Queryable.SWAGGER_PARAMS
 			}
@@ -206,7 +206,7 @@ public class LogsResource extends BasicRestServlet {
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method="DOWNLOAD",
 		path="/*",
 		summary="Download file",
@@ -221,7 +221,7 @@ public class LogsResource extends BasicRestServlet {
 		}
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=DELETE,
 		path="/*",
 		summary="Delete log file",

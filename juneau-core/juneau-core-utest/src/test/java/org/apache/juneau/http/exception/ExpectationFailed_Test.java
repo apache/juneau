@@ -27,27 +27,27 @@ public class ExpectationFailed_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws ExpectationFailed {
 			throw new ExpectationFailed();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws ExpectationFailed {
 			throw new ExpectationFailed("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws ExpectationFailed {
 			throw new ExpectationFailed(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws ExpectationFailed {
 			throw new ExpectationFailed(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws ExpectationFailed {
 			throw new ExpectationFailed().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws ExpectationFailed {
 			throw new ExpectationFailed("foo");
 		}

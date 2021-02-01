@@ -23,19 +23,19 @@ import org.apache.juneau.dto.html5.*;
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
  *
  * 		<jc>// Produces &lt;a href=&quot;/foo&quot;>bar&lt;/a></jc>
- * 		<ja>@RestMethod</ja>
+ * 		<ja>@RestOp</ja>
  * 		<jk>public</jk> Hyperlink a01() {
  * 			<jk>return new</jk> Hyperlink(<js>"foo"</js>, <js>"bar"</js>);
  * 		}
  *
  * 		<jc>// Produces &lt;ul>&lt;li>&lt;a href=&quot;/foo&quot;>bar&lt;/a>&lt;/li>&lt;/ul></jc>
- * 		<ja>@RestMethod</ja>
+ * 		<ja>@RestOp</ja>
  * 		<jk>public</jk> Hyperlink[] a02() {
  * 			<jk>return new</jk> Hyperlink[]{a01()};
  * 		}
  *
  * 		<jc>// Produces &lt;ul>&lt;li>&lt;a href=&quot;/foo&quot;>bar&lt;/a>&lt;/li>&lt;/ul></jc>
- * 		<ja>@RestMethod</ja>
+ * 		<ja>@RestOp</ja>
  * 		<jk>public</jk> Collection&lt;Hyperlink> a03() {
  * 			<jk>return</jk> Arrays.<jsm>asList</jsm>(a02());
  * 		}

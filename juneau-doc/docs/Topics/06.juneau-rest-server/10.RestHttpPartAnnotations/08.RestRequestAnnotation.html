@@ -16,7 +16,7 @@
 @Request
 
 <p>
-	The {@link oaj.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
+	The {@link oaj.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestOp</ja>-annotated method 
 	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
 </p>
 <ul class='javatree'>
@@ -28,7 +28,7 @@
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<ja>@RestOp</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(UpdatePet updatePet) {...}
 
 	<ja>@Request</ja>
@@ -48,10 +48,10 @@
 	}
 </p>
 <p>
-	The example above is identical in behavior to specifying individual annotated parameters on the <ja>@RestMethod</ja>-annotated method:
+	The example above is identical in behavior to specifying individual annotated parameters on the <ja>@RestOp</ja>-annotated method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<ja>@RestOp</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(
 		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> petId,
 		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> debug,
@@ -92,7 +92,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<ja>@RestOp</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet updatePet) {...}
 
 	<ja>@Request</ja>

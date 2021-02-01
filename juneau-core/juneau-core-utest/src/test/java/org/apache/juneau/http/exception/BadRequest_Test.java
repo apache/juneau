@@ -27,27 +27,27 @@ public class BadRequest_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws BadRequest {
 			throw new BadRequest();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws BadRequest {
 			throw new BadRequest("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws BadRequest {
 			throw new BadRequest(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws BadRequest {
 			throw new BadRequest(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws BadRequest {
 			throw new BadRequest().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws BadRequest {
 			throw new BadRequest("foo");
 		}

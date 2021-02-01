@@ -52,7 +52,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String get(RestResponse res) {
 			res.setHeader("X","x");
 			res.setStatus(201);
@@ -69,7 +69,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Remote
 	public static interface A1b {
-		@RemoteMethod A1a get();
+		@RemoteOp A1a get();
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Remote
 	public static interface A2b {
-		@RemoteMethod A2a get();
+		@RemoteOp A2a get();
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Rest
 	public static class A3 implements BasicJsonRest {
-		@RestMethod
+		@RestOp
 		public ABean get() {
 			return bean;
 		}
@@ -111,7 +111,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Remote
 	public static interface A3b {
-		@RemoteMethod A3a get();
+		@RemoteOp A3a get();
 	}
 
 	@Test

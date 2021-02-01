@@ -28,7 +28,7 @@ import org.apache.juneau.jena.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes/methods/fields/packages.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <p>

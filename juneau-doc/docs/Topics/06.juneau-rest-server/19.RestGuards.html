@@ -23,7 +23,7 @@ Guards
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oajr.annotation.Rest#guards() Rest(guards)} 
-	<li class='ja'>{@link oajr.annotation.RestMethod#guards() RestMethod(guards)} 
+	<li class='ja'>{@link oajr.annotation.RestOp#guards() RestOp(guards)} 
 	<li class='jm'>{@link oajr.RestContextBuilder#guards(Class...)} 
 </ul>
 <p class='bpcode w800'>
@@ -41,7 +41,7 @@ Guards
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 
  		<jc>// Delete method that only Billy is allowed to call.</jc>
- 		<ja>@RestMethod</ja>(method=<js>"DELETE"</js>)
+ 		<ja>@RestOp</ja>(method=<js>"DELETE"</js>)
 		<jk>public</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
  	}
 </p>
@@ -50,7 +50,7 @@ Guards
 </p>
 <p class='bpcode w800'>
 	<jc>// DELETE method</jc>
-	<ja>@RestMethod</ja>(method=<jsf>DELETE</jsf>, guards={AdminGuard.<jk>class</jk>})
+	<ja>@RestOp</ja>(method=<jsf>DELETE</jsf>, guards={AdminGuard.<jk>class</jk>})
 	<jk>public void</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
 </p>
 <p class='bpcode w800'>

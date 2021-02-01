@@ -35,7 +35,7 @@ public abstract class BasicRestObjectGroup extends BasicRestObject {
 	 * @param req The HTTP request.
 	 * @return The bean containing links to the child resources.
 	 */
-	@RestMethod(method=GET, path="/", summary="Navigation page")
+	@RestOp(method=GET, path="/", summary="Navigation page")
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return new ChildResourceDescriptions(req);
 	}

@@ -18,12 +18,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link Parser} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link Parser} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#getParser() getParser}()</c>.
  */
-public class ParserParam extends SimpleRestParam {
+public class ParserParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

@@ -27,7 +27,7 @@ public class Rest_AllowedHeaderParams_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String put(RequestHeaders h) {
 			return "Accept="+h.getAccept().getValue()+",Content-Type=" + h.getContentType().getValue() + ",Custom=" + h.getString("Custom");
 		}

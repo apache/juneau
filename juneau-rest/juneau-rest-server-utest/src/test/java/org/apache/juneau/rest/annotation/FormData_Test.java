@@ -38,7 +38,7 @@ public class FormData_Test {
 
 	@Rest(parsers=UrlEncodingParser.class)
 	public static class A {
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public String a(RestRequest req, @FormData(name="p1",allowEmptyValue=true) String p1, @FormData(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getString("p2")+","+f.get("p2", int.class)+"]";
@@ -68,12 +68,12 @@ public class FormData_Test {
 
 	@Rest
 	public static class B {
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public String a(RestRequest req, @FormData(value="p1") String p1) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
 		}
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public String b(RestRequest req, @FormData(value="p1",format="uon") String p1) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
@@ -97,28 +97,28 @@ public class FormData_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod(method=POST, defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+		@RestOp(method=POST, defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestFormData formData) {
 			return OMap.create()
 				.a("f1", formData.getString("f1"))
 				.a("f2", formData.getString("f2"))
 				.a("f3", formData.getString("f3"));
 		}
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public OMap b(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public OMap c(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
-		@RestMethod(method=POST, defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+		@RestOp(method=POST, defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap d(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
 			return OMap.create()
 				.a("f1", f1)
@@ -150,22 +150,22 @@ public class FormData_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class D {
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public Object a(@FormData("f1") Optional<Integer> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public Object b(@FormData("f1") Optional<ABean> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public Object c(@FormData("f1") Optional<List<ABean>> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public Object d(@FormData("f1") List<Optional<ABean>> f1) throws Exception {
 			return f1;
 		}

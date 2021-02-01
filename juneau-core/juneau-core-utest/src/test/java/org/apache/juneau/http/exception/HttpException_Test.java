@@ -27,23 +27,23 @@ public class HttpException_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws HttpException {
 			throw new HttpException(new RuntimeException("foo"), 225, "bar {0}", "baz");
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws HttpException {
 			throw new HttpException("foo").setStatus(225);
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws HttpException {
 			throw new HttpException(new RuntimeException("baz"), 225);
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws HttpException {
 			throw new HttpException(225, "bar {0}", "baz");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws HttpException {
 			throw new HttpException(null).setStatus(225).header("Foo", "bar");
 		}

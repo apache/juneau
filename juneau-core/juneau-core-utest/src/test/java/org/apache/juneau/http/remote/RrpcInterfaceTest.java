@@ -237,7 +237,7 @@ public class RrpcInterfaceTest {
 		//-----------------------------------------------------------------------------------------------------------------
 		// Test that Q-values are being resolved correctly.
 		//-----------------------------------------------------------------------------------------------------------------
-		@RestMethod(method=RRPC,path="/proxy/*")
+		@RestOp(method=RRPC,path="/proxy/*")
 		public InterfaceProxy getProxy() {
 			return new InterfaceProxy() {
 

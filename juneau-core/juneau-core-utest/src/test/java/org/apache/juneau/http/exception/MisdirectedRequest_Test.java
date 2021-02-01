@@ -27,27 +27,27 @@ public class MisdirectedRequest_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws MisdirectedRequest {
 			throw new MisdirectedRequest();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws MisdirectedRequest {
 			throw new MisdirectedRequest("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws MisdirectedRequest {
 			throw new MisdirectedRequest(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws MisdirectedRequest {
 			throw new MisdirectedRequest(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws MisdirectedRequest {
 			throw new MisdirectedRequest().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws MisdirectedRequest {
 			throw new MisdirectedRequest("foo");
 		}

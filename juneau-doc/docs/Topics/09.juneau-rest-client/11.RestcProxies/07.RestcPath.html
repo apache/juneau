@@ -17,7 +17,7 @@
 @Path
 
 <p>
-	The {@link oaj.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	The {@link oaj.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
 	to denote that they are path parameters on the request.
 </p>
 <ul class='javatree'>
@@ -49,22 +49,22 @@
 
 		<jc>// Explicit names specified for path parameters.</jc>
 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}/{bar}"</js>)
+		<ja>@RemoteOp</ja>(path=<js>"/mymethod1/{foo}/{bar}"</js>)
 		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 
 		<jc>// Multiple values pulled from a NameValuePairSupplier object.</jc>
 		<jc>// Same as @Path("*").</jc>
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
+		<ja>@RemoteOp</ja>(path=<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
 		String myProxyMethod2(<ja>@Path</ja> NameValuePairSupplier <jv>nameValuePairSupplier</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Path("*").</jc>
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3/{foo}/{bar}/{baz}"</js>)
+		<ja>@RemoteOp</ja>(path=<js>"/mymethod3/{foo}/{bar}/{baz}"</js>)
 		String myProxyMethod3(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<jc>// Same as @Path("*").</jc>
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4/{foo}/{bar}/{baz}"</js>)
+		<ja>@RemoteOp</ja>(path=<js>"/mymethod4/{foo}/{bar}/{baz}"</js>)
 		String myProxyMethod4(<ja>@Path</ja> MyBean <jv>myBean</jv>);
 	}
 </p>

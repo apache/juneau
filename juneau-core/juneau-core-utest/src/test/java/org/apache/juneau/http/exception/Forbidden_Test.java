@@ -27,27 +27,27 @@ public class Forbidden_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws Forbidden {
 			throw new Forbidden();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws Forbidden {
 			throw new Forbidden("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws Forbidden {
 			throw new Forbidden(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws Forbidden {
 			throw new Forbidden(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws Forbidden {
 			throw new Forbidden().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws Forbidden {
 			throw new Forbidden("foo");
 		}

@@ -74,7 +74,7 @@ import org.apache.juneau.rest.logging.*;
  * 		)
  * 		<jk>public static class</jk> EchoRest {
  *
- * 			<ja>@RestMethod</ja>(
+ * 			<ja>@RestOp</ja>(
  * 				method=<jsf>PUT</jsf>,
  * 				path=<js>"/echo"</js>
  * 			)
@@ -145,7 +145,7 @@ import org.apache.juneau.rest.logging.*;
  * <p class='bcode w800'>
  * 	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
  * 	<jk>public class</jk> A {
- * 		<ja>@RestMethod</ja>
+ * 		<ja>@RestOp</ja>
  * 		<jk>public</jk> String get() {
  * 			<jk>return</jk> <js>"OK"</js>;
  * 		}
@@ -182,7 +182,7 @@ import org.apache.juneau.rest.logging.*;
  * 	<ja>@Remote</ja>
  * 	<jk>public interface</jk> MyRemoteInterface {
  *
- * 		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+ * 		<ja>@RemoteOp</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
  * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
  * 	}
  *
@@ -190,7 +190,7 @@ import org.apache.juneau.rest.logging.*;
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest {
  *
- * 		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
+ * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
  * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
  * 			<jk>return</jk> id;
  * 		}

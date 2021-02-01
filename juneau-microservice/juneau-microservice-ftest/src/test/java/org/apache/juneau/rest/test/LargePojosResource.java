@@ -31,12 +31,12 @@ public class LargePojosResource extends BasicRestServletJena {
 	//====================================================================================================
 	// Test how long it takes to serialize/parse various content types.
 	//====================================================================================================
-	@RestMethod(method=GET, path="/")
+	@RestOp(method=GET, path="/")
 	public LargePojo testGet() {
 		return LargePojo.get();
 	}
 
-	@RestMethod(method=PUT, path="/")
+	@RestOp(method=PUT, path="/")
 	public String testPut(@Body LargePojo in) {
 		return "ok";
 	}

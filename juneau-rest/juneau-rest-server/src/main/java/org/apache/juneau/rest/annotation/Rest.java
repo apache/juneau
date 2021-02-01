@@ -412,7 +412,7 @@ public @interface Rest {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource {
 	 *
-	 *		<ja>@RestMethod</ja>
+	 *		<ja>@RestOp</ja>
 	 *		<jk>public void</jk> String doX() {
 	 *			...
 	 *		}
@@ -435,7 +435,7 @@ public @interface Rest {
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		These debug settings override the settings define via {@link Rest#debug()} and {@link RestMethod#debug()}.
+	 * 		These debug settings override the settings define via {@link Rest#debug()} and {@link RestOp#debug()}.
 	 * 	<li>
 	 * 		These debug settings can be overridden at runtime by directly calling {@link RestRequest#setDebug()}.
 	 * </ul>
@@ -672,15 +672,6 @@ public @interface Rest {
 	String messages() default "";
 
 	/**
-	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_methodContextClass}
-	 * </ul>
-	 */
-	Class<? extends RestMethodContext> methodContextClass() default RestMethodContext.Null.class;
-
-	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
@@ -778,7 +769,7 @@ public @interface Rest {
 	 *		path=<js>"/grandchild"</js>
 	 *	)
 	 *	<jk>public class</jk> GrandchildResource {
-	 *		<ja>@RestMethod</ja>(
+	 *		<ja>@RestOp</ja>(
 	 *			path=<js>"/"</js>
 	 *		)
 	 *		<jk>public</jk> String sayHello() {
@@ -841,7 +832,7 @@ public @interface Rest {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
-	 *		<ja>@RestMethod</ja>(
+	 *		<ja>@RestOp</ja>(
 	 *			path=<js>"/{baz}"</js>
 	 *		)
 	 *		<jk>public void</jk> String doX(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyPojo baz) {
@@ -940,16 +931,25 @@ public @interface Rest {
 	 * REST methods class.
 	 *
 	 * <p>
-	 * Allows you to extend the {@link RestMethods} class to modify how any of the methods are implemented.
+	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restMethodsClass}
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationsClass}
 	 * </ul>
 	 */
-	Class<? extends RestMethods> restMethodsClass() default RestMethods.Null.class;
+	Class<? extends RestOperations> restOperationsClass() default RestOperations.Null.class;
 
 	/**
-	 * Java method parameter resolvers.
+	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationContextClass}
+	 * </ul>
+	 */
+	Class<? extends RestOperationContext> restOperationContextClass() default RestOperationContext.Null.class;
+
+	/**
+	 * Java REST operation method parameter resolvers.
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
@@ -957,10 +957,10 @@ public @interface Rest {
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restParams}
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationParams}
 	 * </ul>
 	 */
-	Class<? extends RestParam>[] restParams() default {};
+	Class<? extends RestOperationParam>[] restOperationParams() default {};
 
 	/**
 	 * Role guard.
@@ -1118,7 +1118,7 @@ public @interface Rest {
 	 * 		path=<js>"/addressBook"</js>,
 	 *
 	 * 		<jc>// Swagger info.</jc>
-	 * 		swagger=@ResourceSwagger({
+	 * 		swagger=@Swagger({
 	 * 			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
 	 * 			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
 	 * 			<js>"version:'2.0',</js>,
@@ -1130,10 +1130,10 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link ResourceSwagger}
+	 * 	<li class='ja'>{@link Swagger}
 	 * </ul>
 	 */
-	ResourceSwagger swagger() default @ResourceSwagger;
+	Swagger swagger() default @Swagger;
 
 	/**
 	 * Configuration property:  Swagger provider.

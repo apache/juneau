@@ -36,7 +36,7 @@ import org.apache.juneau.transforms.*;
 	path="/echo",
 	title="Request echo service",
 	description="Echos the current HttpServletRequest object back to the browser.",
-	swagger=@ResourceSwagger(
+	swagger=@Swagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
 		version="2.0",
@@ -85,7 +85,7 @@ public class RequestEchoResource extends BasicRestObject {
 	 * @param req The HTTP servlet request.
 	 * @return The same request to serialize as the response.
 	 */
-	@RestMethod(method="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
+	@RestOp(method="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
 	public HttpServletRequest doGet(RestRequest req) {
 		// Just echo the request back as the response.
 		return req;

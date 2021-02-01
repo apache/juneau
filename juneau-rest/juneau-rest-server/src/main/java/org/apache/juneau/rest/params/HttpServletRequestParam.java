@@ -20,12 +20,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link HttpServletRequest} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link HttpServletRequest} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRequest() getRequest}()</c>.
  */
-public class HttpServletRequestParam extends SimpleRestParam {
+public class HttpServletRequestParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

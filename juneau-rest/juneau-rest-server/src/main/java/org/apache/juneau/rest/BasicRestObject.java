@@ -16,7 +16,7 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.*;
@@ -35,7 +35,7 @@ import org.apache.juneau.http.exception.*;
  * </ul>
  */
 @Rest
-public abstract class BasicRestObject extends RestObject implements BasicUniversalRest, BasicRestMethods {
+public abstract class BasicRestObject extends RestObject implements BasicUniversalRest, BasicRestOperations {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicRestConfig methods

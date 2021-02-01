@@ -38,7 +38,7 @@ public class RestClient_Query_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod
+		@RestOp
 		public Reader getQuery(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getQuery().asQueryString());
 		}

@@ -16,7 +16,7 @@
 @ResponseHeader
 
 <p>
-	The {@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response headers.
+	The {@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestOp</ja>-annotated parameters to denote them as an HTTP response headers.
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
@@ -57,14 +57,14 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public void</jk> login(RestResponse res) {
 		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
 		...
 	}
  
 	<jc>// Example #2 - Use on parameter.</jc>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public void</jk> login(
 			<ja>@ResponseHeader</ja>(
 				name=<js>"X-Rate-Limit"</js>,
@@ -81,7 +81,7 @@
 	}
 
 	<jc>// Example #3 - Use on type.</jc>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public void</jk> login(Value&lt;RateLimit&gt; rateLimit) {
 		rateLimit.set(<jk>new</jk> RateLimit());
 		...

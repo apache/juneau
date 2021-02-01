@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * </ul>
  *
  * <ul class='seealso'>

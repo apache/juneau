@@ -14,21 +14,21 @@
  -->
 
 {8.2.0-updated}
-@RemoteMethod
+@RemoteOp
 
 <p>
-	The {@link oaj.http.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
+	The {@link oaj.http.remote.RemoteOp @RemoteOp} annotation is applied to methods
 	of <ja>@Remote</ja>-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oaj.http.remote.RemoteMethod}
+	<li class='ja'>{@link oaj.http.remote.RemoteOp}
 	<ul>
-		<li class='jf'>{@link oaj.http.remote.RemoteMethod#method method}
-		<li class='jf'>{@link oaj.http.remote.RemoteMethod#path path}
-		<li class='jf'>{@link oaj.http.remote.RemoteMethod#returns returns}
+		<li class='jf'>{@link oaj.http.remote.RemoteOp#method method}
+		<li class='jf'>{@link oaj.http.remote.RemoteOp#path path}
+		<li class='jf'>{@link oaj.http.remote.RemoteOp#returns returns}
 	</ul>
 </ul>
-<h5 class='topic'>@RemoteMethod(method/path)</h5>
+<h5 class='topic'>@RemoteOp(method/path)</h5>
 <p>
 	The HTTP method and path are mapped to a Java method using the <c>method</c> and <c>path</c> annotations.
 </p>
@@ -38,7 +38,7 @@
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pets/{petId}</jc>
-		<ja>@RemoteMethod</ja>(method=<js>"GET"</js>, path=<js>"/pets/{petId}"</js>)
+		<ja>@RemoteOp</ja>(method=<js>"GET"</js>, path=<js>"/pets/{petId}"</js>)
 		Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>id</jv>);
 	}
 </p>
@@ -59,12 +59,12 @@
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pet</jc>
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		Pet getPet(...);
 	}
 </p>
 <p>
-	In such cases, the <ja>@RemoteMethod</ja> annotation is optional.
+	In such cases, the <ja>@RemoteOp</ja> annotation is optional.
 </p>
 <p>
 	Method names matching the following pattern are assumed to be implying the HTTP method name:
@@ -120,7 +120,7 @@
 	</tr>
 </table>
 
-<h5 class='topic'>@RemoteMethod(returns)</h5>
+<h5 class='topic'>@RemoteOp(returns)</h5>
 <p>
 	The return type of the Java methods of can be any of the following:
 </p>
@@ -149,7 +149,7 @@
 </ul>
 
 <p>
-	If you're only interested in the HTTP status code of the response, you can use the {@link oaj.http.remote.RemoteMethod#returns() returns}
+	If you're only interested in the HTTP status code of the response, you can use the {@link oaj.http.remote.RemoteOp#returns() returns}
 	annotation with a value of {@link oaj.http.remote.RemoteReturn#STATUS STATUS}:
 </p>
 <h5 class='figure'>Example:</h5>
@@ -159,7 +159,7 @@
 		
 		<jc>// POST /pets</jc>
 		<jc>// Returns HTTP status code.</jc>
-		<ja>@RemoteMethod</ja>(returns=<jsf>STATUS</jsf>)
+		<ja>@RemoteOp</ja>(returns=<jsf>STATUS</jsf>)
 		<jk>int</jk> postPets(...);
 	}
 </p>

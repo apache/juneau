@@ -119,7 +119,7 @@ DtoExamples
 		<jd>/** 
 		* GET request handler 
 		*/</jd> 
-		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>) 
+		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Feed getFeed() <jk>throws</jk> Exception { 
 			<jk>return</jk> <jf>feed</jf>; 
 		} 
@@ -128,7 +128,7 @@ DtoExamples
 		* PUT request handler. 
 		* Replaces the feed with the specified content, and then mirrors it as the response. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>) 
+		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Feed setFeed(<ja>@Body</ja> Feed feed) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>feed</jf> = feed; 
 			<jk>return</jk> feed; 
@@ -215,7 +215,7 @@ DtoExamples
 		} 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>) 
+		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> JsonSchema getSchema() <jk>throws</jk> Exception { 
 			<jk>return</jk> <jf>schema</jf>; 
 		} 
@@ -224,7 +224,7 @@ DtoExamples
 		* PUT request handler. 
 		* Replaces the schema document with the specified content, and then mirrors it as the response. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>) 
+		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> JsonSchema setSchema(<ja>@Body</ja> JsonSchema schema) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>schema</jf> = schema; 
 			<jk>return</jk> schema; 

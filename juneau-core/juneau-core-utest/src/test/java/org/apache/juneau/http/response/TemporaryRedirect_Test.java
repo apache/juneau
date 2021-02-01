@@ -25,10 +25,10 @@ public class TemporaryRedirect_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public TemporaryRedirect getA1() { return new TemporaryRedirect(); }
-		@RestMethod public TemporaryRedirect getA2() { return new TemporaryRedirect("foo"); }
-		@RestMethod public TemporaryRedirect getA3() { return new TemporaryRedirect(URI.create("servlet:/foo")); }
-		@RestMethod public TemporaryRedirect getA4() { return new TemporaryRedirect().header("Foo","bar"); }
+		@RestOp public TemporaryRedirect getA1() { return new TemporaryRedirect(); }
+		@RestOp public TemporaryRedirect getA2() { return new TemporaryRedirect("foo"); }
+		@RestOp public TemporaryRedirect getA3() { return new TemporaryRedirect(URI.create("servlet:/foo")); }
+		@RestOp public TemporaryRedirect getA4() { return new TemporaryRedirect().header("Foo","bar"); }
 	}
 
 	@Test

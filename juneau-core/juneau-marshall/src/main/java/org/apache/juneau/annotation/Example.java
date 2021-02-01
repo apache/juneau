@@ -28,7 +28,7 @@ import org.apache.juneau.*;
  * 	<li>Static method that returns an example of the POJO.
  * 	<li>Static field that contains an example of the POJO.
  * 	<li>On a class.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <h5 class='figure'>Examples:</h5>

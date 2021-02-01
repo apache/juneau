@@ -17,7 +17,7 @@ package org.apache.juneau.rest;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(
+ * 	<ja>@RestOp</ja>(
  *
  * 		<jc>// Override the serializers for this method, but also inherit the serializers from the class.
  * 		// Class-level serializers will be inserted in the location in the array.</jc>

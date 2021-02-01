@@ -27,27 +27,27 @@ public class VariantAlsoNegotiates_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws VariantAlsoNegotiates {
 			throw new VariantAlsoNegotiates();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws VariantAlsoNegotiates {
 			throw new VariantAlsoNegotiates("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws VariantAlsoNegotiates {
 			throw new VariantAlsoNegotiates(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws VariantAlsoNegotiates {
 			throw new VariantAlsoNegotiates(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws VariantAlsoNegotiates {
 			throw new VariantAlsoNegotiates().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws VariantAlsoNegotiates {
 			throw new VariantAlsoNegotiates("foo");
 		}

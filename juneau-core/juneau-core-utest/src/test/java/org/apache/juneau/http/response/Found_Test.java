@@ -25,10 +25,10 @@ public class Found_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public Found getA1() { return new Found(); }
-		@RestMethod public Found getA2() { return new Found("foo"); }
-		@RestMethod public Found getA3() { return new Found(URI.create("servlet:/foo")); }
-		@RestMethod public Found getA4() { return new Found().header("Foo","bar"); }
+		@RestOp public Found getA1() { return new Found(); }
+		@RestOp public Found getA2() { return new Found("foo"); }
+		@RestOp public Found getA3() { return new Found(URI.create("servlet:/foo")); }
+		@RestOp public Found getA4() { return new Found().header("Foo","bar"); }
 	}
 
 	@Test

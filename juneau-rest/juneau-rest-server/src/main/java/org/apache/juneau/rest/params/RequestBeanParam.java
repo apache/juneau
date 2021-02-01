@@ -20,13 +20,13 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link Request} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters annotated with {@link Request} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(<jv>requestBeanMeta</jv>)</c>
  * with a {@link RequestBeanMeta meta} derived from the {@link Request} annotation and context configuration.
  */
-public class RequestBeanParam implements RestParam {
+public class RequestBeanParam implements RestOperationParam {
 	private final RequestBeanMeta meta;
 
 	/**
@@ -52,7 +52,7 @@ public class RequestBeanParam implements RestParam {
 		this.meta = RequestBeanMeta.create(paramInfo, ps);
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getRequest(meta);
 	}

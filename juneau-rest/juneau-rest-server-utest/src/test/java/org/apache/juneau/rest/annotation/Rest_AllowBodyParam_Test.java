@@ -29,14 +29,14 @@ public class Rest_AllowBodyParam_Test {
 
 	@Rest(disableAllowBodyParam="false")
 	public static class A1 {
-		@RestMethod
+		@RestOp
 		public OMap put(@Body OMap body) {
 			return body;
 		}
 	}
 	@Rest(disableAllowBodyParam="true")
 	public static class A2 {
-		@RestMethod
+		@RestOp
 		public OMap put(@Body OMap body) {
 			return body;
 		}

@@ -19,12 +19,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link Reader} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link Reader} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getReader() getReader}()</c>.
  */
-public class ReaderParam extends SimpleRestParam {
+public class ReaderParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

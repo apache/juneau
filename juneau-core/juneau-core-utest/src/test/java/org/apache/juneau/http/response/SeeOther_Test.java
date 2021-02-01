@@ -25,10 +25,10 @@ public class SeeOther_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public SeeOther getA1() { return new SeeOther(); }
-		@RestMethod public SeeOther getA2() { return new SeeOther("foo"); }
-		@RestMethod public SeeOther getA3() { return new SeeOther(URI.create("servlet:/foo")); }
-		@RestMethod public SeeOther getA4() { return new SeeOther().header("Foo","bar"); }
+		@RestOp public SeeOther getA1() { return new SeeOther(); }
+		@RestOp public SeeOther getA2() { return new SeeOther("foo"); }
+		@RestOp public SeeOther getA3() { return new SeeOther(URI.create("servlet:/foo")); }
+		@RestOp public SeeOther getA4() { return new SeeOther().header("Foo","bar"); }
 	}
 
 	@Test

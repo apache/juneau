@@ -27,27 +27,27 @@ public class PayloadTooLarge_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws PayloadTooLarge {
 			throw new PayloadTooLarge();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws PayloadTooLarge {
 			throw new PayloadTooLarge("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws PayloadTooLarge {
 			throw new PayloadTooLarge(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws PayloadTooLarge {
 			throw new PayloadTooLarge(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws PayloadTooLarge {
 			throw new PayloadTooLarge().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws PayloadTooLarge {
 			throw new PayloadTooLarge("foo");
 		}

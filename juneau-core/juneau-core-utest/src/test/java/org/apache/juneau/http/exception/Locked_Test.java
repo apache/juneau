@@ -27,27 +27,27 @@ public class Locked_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws Locked {
 			throw new Locked();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws Locked {
 			throw new Locked("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws Locked {
 			throw new Locked(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws Locked {
 			throw new Locked(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws Locked {
 			throw new Locked().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws Locked {
 			throw new Locked("foo");
 		}

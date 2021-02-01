@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Bean getter/setter/field.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <ul class='notes'>

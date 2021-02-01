@@ -30,17 +30,17 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
  *
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
+ * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+ * 	<ja>@RestOp</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
  * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest rb) {...}
  *
  * 	<jk>public interface</jk> MyRequest {
@@ -74,7 +74,7 @@ import org.apache.juneau.oapi.*;
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Same as above but annotation defined on interface.</jc>
- * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+ * 	<ja>@RestOp</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
  * 	<jk>public void</jk> myMethod(MyRequest rb) {...}
  *
  *	<ja>@Request</ja>
@@ -97,7 +97,7 @@ import org.apache.juneau.oapi.*;
  * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
+ * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
  * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
  * 	}
  *

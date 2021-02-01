@@ -33,12 +33,12 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Can be used in the following locations:
  *  <ul>
- * 	<li>Exception classes thrown from server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Return type classes of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Return type classes of server-side <ja>@RemoteMethod</ja>-annotated methods.
- * 	<li>Client-side <ja>@RemoteMethod</ja>-annotated methods.
- * 	<li>Return type interfaces of client-side <ja>@RemoteMethod</ja>-annotated methods.
+ * 	<li>Exception classes thrown from server-side <ja>@RestOp</ja>-annotated methods.
+ * 	<li>Return type classes of server-side <ja>@RestOp</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
+ * 	<li>Return type classes of server-side <ja>@RemoteOp</ja>-annotated methods.
+ * 	<li>Client-side <ja>@RemoteOp</ja>-annotated methods.
+ * 	<li>Return type interfaces of client-side <ja>@RemoteOp</ja>-annotated methods.
  * </ul>
  *
  * <ul class='seealso'>
@@ -203,7 +203,7 @@ public @interface Response {
 	 * There are several other options for defining this example:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Defining an <js>"example"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+	 * 		Defining an <js>"example"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@Swagger</ja>(value)</code>/<code><ja>@OpSwagger</ja>(value)</code>).
 	 * 	<li>
 	 * 		Defining an <js>"example"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
 	 * 	<li>

@@ -26,19 +26,19 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Identifies a POJO retrieved from the request attributes map.
  *
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a value
+ * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a value
  * retrieved from the request attributes.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+ * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(<ja>@Attr</ja>(<js>"ETag"</js>) UUID etag) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+ * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
  * 		UUID etag = req.getAttributes().get(UUID.<jk>class</jk>, <js>"ETag"</js>);
  * 		...
@@ -78,7 +78,7 @@ public @interface Attr {
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
+	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> OMap allAttributes) {...}
 	 * 		</p>
 	 * 	</li>

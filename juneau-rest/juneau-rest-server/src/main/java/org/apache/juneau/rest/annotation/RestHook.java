@@ -68,8 +68,8 @@ import org.apache.juneau.rest.*;
  * 	<li>REST call lifecycle events:
  * 		<ul>
  * 			<li>{@link HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
- * 			<li>{@link HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestMethod</ja> method is invoked.
- * 			<li>{@link HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestMethod</ja> method is invoked.
+ * 			<li>{@link HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
+ * 			<li>{@link HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
  * 			<li>{@link HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
  * 		</ul>
  * </ul>

@@ -35,19 +35,19 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod(path="/echoBody")
+		@RestOp(path="/echoBody")
 		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getBody().getReader();
 		}
-		@RestMethod(path="/checkHeader")
+		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().get(req.getHeader("Check"));
 		}
-		@RestMethod(path="/checkQuery")
+		@RestOp(path="/checkQuery")
 		public Reader getQuery(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getQuery().asQueryString());
 		}
-		@RestMethod(path="/checkFormData")
+		@RestOp(path="/checkFormData")
 		public Reader postFormData(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getFormData().asQueryString());
 		}
@@ -88,7 +88,7 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Rest
 	public static class A2b extends BasicRestObject {
-		@RestMethod
+		@RestOp
 		public Reader postTest(org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws IOException {
 			res.setHeader("X",req.getHeaders().getString("X"));
 			return req.getBody().getReader();

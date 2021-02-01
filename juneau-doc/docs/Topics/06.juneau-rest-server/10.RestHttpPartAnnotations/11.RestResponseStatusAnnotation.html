@@ -16,7 +16,7 @@
 @ResponseStatus
 
 <p>
-	The {@link oaj.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response status codes.
+	The {@link oaj.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestOp</ja>-annotated parameters to denote them as an HTTP response status codes.
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.ResponseStatus}
@@ -28,7 +28,7 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter.</jc>
-	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,

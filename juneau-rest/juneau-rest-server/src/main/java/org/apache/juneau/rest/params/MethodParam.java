@@ -17,7 +17,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link Method} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters annotated with {@link Method} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getMethod() getMethod}()</c>.
@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The parameter type must be {@link String}.
  */
-public class MethodParam implements RestParam {
+public class MethodParam implements RestOperationParam {
 
 	/**
 	 * Static creator.
@@ -45,7 +45,7 @@ public class MethodParam implements RestParam {
 	protected MethodParam() {
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getMethod();
 	}

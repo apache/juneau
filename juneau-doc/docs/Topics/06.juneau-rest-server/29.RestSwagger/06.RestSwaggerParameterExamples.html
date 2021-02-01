@@ -24,7 +24,7 @@ Parameter Examples
 	The examples for query/form-data/path/header parameters can be defined using the <c>example</c> attribute on your annotated parameters as shown here:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		...
 	)
 	<jk>public</jk> Collection&lt;Pet&gt; getPets(
@@ -88,7 +88,7 @@ Parameter Examples
 	<li>
 		{@link oaj.http.annotation.Body#examples() @Body(examples)} annotation.
 	<li>
-		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <c><ja>@ResourceSwagger</ja>(value)</c>/<c><ja>@MethodSwagger</ja>(value)</c>).
+		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <c><ja>@Swagger</ja>(value)</c>/<c><ja>@OpSwagger</ja>(value)</c>).
 	<li>
 		Defining an <js>"x-examples"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
 	<li>
@@ -158,7 +158,7 @@ Parameter Examples
 			],
 </p>
 <p>
-	Another option is to define these directly in your resource Swagger JSON file, or via {@link oajr.annotation.Rest#swagger() @Rest(swagger)}/{@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)}. 
+	Another option is to define these directly in your resource Swagger JSON file, or via {@link oajr.annotation.Rest#swagger() @Rest(swagger)}/{@link oajr.annotation.RestOp#swagger() @RestOp(swagger)}. 
 </p>
 <p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
@@ -168,7 +168,7 @@ Parameter Examples
 <p class='bpcode w800'>
 	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
 
-		<ja>@RestMethod</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 			...
 		)
 		<ja>@JsonSchemaConfig</ja>(

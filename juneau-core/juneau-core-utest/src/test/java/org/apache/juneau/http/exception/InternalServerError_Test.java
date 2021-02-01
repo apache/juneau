@@ -27,27 +27,27 @@ public class InternalServerError_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws InternalServerError {
 			throw new InternalServerError();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws InternalServerError {
 			throw new InternalServerError("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws InternalServerError {
 			throw new InternalServerError(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws InternalServerError {
 			throw new InternalServerError(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws InternalServerError {
 			throw new InternalServerError().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws InternalServerError {
 			throw new InternalServerError("foo");
 		}

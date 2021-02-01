@@ -21,9 +21,9 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link ResponseStatus} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters annotated with {@link ResponseStatus} on {@link RestOp}-annotated Java methods.
  */
-public class ResponseStatusParam implements RestParam {
+public class ResponseStatusParam implements RestOperationParam {
 
 	private final Type type;
 
@@ -52,7 +52,7 @@ public class ResponseStatusParam implements RestParam {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(final RestCall call) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {

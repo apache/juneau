@@ -53,7 +53,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(path="/a/{x}")
+		@RestOp(path="/a/{x}")
 		public String getA(@Path("x") Object x) {
 			return x.toString();
 		}
@@ -61,28 +61,28 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface A1 {
-		@RemoteMethod(path="a/{x}") String getX1(@Path("x") int b);
-		@RemoteMethod(path="a/{x}") String getX2(@Path("x") float b);
-		@RemoteMethod(path="a/{x}") String getX3(@Path("x") Bean b);
-		@RemoteMethod(path="a/{x}") String getX4(@Path("*") Bean b);
-		@RemoteMethod(path="a/{x}") String getX5(@Path Bean b);
-		@RemoteMethod(path="a/{x}") String getX6(@Path("x") Bean[] b);
-		@RemoteMethod(path="a/{x}") String getX7(@Path(n="x",cf="uon") Bean[] b);
-		@RemoteMethod(path="a/{x}") String getX8(@Path("x") List<Bean> b);
-		@RemoteMethod(path="a/{x}") String getX9(@Path(n="x",cf="uon") List<Bean> b);
-		@RemoteMethod(path="a/{x}") String getX10(@Path("x") Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX11(@Path("*") Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX12(@Path Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX13(@Path(n="x",cf="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX14(@Path(f="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX15(@Path("*") NameValuePairSupplier b);
-		@RemoteMethod(path="a/{x}") String getX16(@Path NameValuePairSupplier b);
-		@RemoteMethod(path="a/{x}") String getX17(@Path(n="x",serializer=UonSerializer.class) Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX18(@Path(n="*") NameValuePair b);
-		@RemoteMethod(path="a/{x}") String getX19(@Path NameValuePair b);
-		@RemoteMethod(path="a/{x}") String getX20(@Path NameValuePair[] b);
-		@RemoteMethod(path="a/{x}") String getX21(@Path String b);
-		@RemoteMethod(path="a/{x}") String getX22(@Path List<NameValuePair> b);
+		@RemoteOp(path="a/{x}") String getX1(@Path("x") int b);
+		@RemoteOp(path="a/{x}") String getX2(@Path("x") float b);
+		@RemoteOp(path="a/{x}") String getX3(@Path("x") Bean b);
+		@RemoteOp(path="a/{x}") String getX4(@Path("*") Bean b);
+		@RemoteOp(path="a/{x}") String getX5(@Path Bean b);
+		@RemoteOp(path="a/{x}") String getX6(@Path("x") Bean[] b);
+		@RemoteOp(path="a/{x}") String getX7(@Path(n="x",cf="uon") Bean[] b);
+		@RemoteOp(path="a/{x}") String getX8(@Path("x") List<Bean> b);
+		@RemoteOp(path="a/{x}") String getX9(@Path(n="x",cf="uon") List<Bean> b);
+		@RemoteOp(path="a/{x}") String getX10(@Path("x") Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX11(@Path("*") Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX12(@Path Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX13(@Path(n="x",cf="uon") Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX14(@Path(f="uon") Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX15(@Path("*") NameValuePairSupplier b);
+		@RemoteOp(path="a/{x}") String getX16(@Path NameValuePairSupplier b);
+		@RemoteOp(path="a/{x}") String getX17(@Path(n="x",serializer=UonSerializer.class) Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX18(@Path(n="*") NameValuePair b);
+		@RemoteOp(path="a/{x}") String getX19(@Path NameValuePair b);
+		@RemoteOp(path="a/{x}") String getX20(@Path NameValuePair[] b);
+		@RemoteOp(path="a/{x}") String getX21(@Path String b);
+		@RemoteOp(path="a/{x}") String getX22(@Path List<NameValuePair> b);
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class B {
-		@RestMethod(path="/a/{x}")
+		@RestOp(path="/a/{x}")
 		public String getA(@Path("x") Object x) {
 			return x.toString();
 		}
@@ -127,13 +127,13 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface B1 {
-		@RemoteMethod(path="/a/{x}") String getX1(@Path(n="x") String...b);
-		@RemoteMethod(path="/a/{x}") String getX2(@Path(n="x",cf="csv") String...b);
-		@RemoteMethod(path="/a/{x}") String getX3(@Path(n="x",cf="ssv") String...b);
-		@RemoteMethod(path="/a/{x}") String getX4(@Path(n="x",cf="tsv") String...b);
-		@RemoteMethod(path="/a/{x}") String getX5(@Path(n="x",cf="pipes") String...b);
-		@RemoteMethod(path="/a/{x}") String getX6(@Path(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteMethod(path="/a/{x}") String getX7(@Path(n="x",cf="uon") String...b);
+		@RemoteOp(path="/a/{x}") String getX1(@Path(n="x") String...b);
+		@RemoteOp(path="/a/{x}") String getX2(@Path(n="x",cf="csv") String...b);
+		@RemoteOp(path="/a/{x}") String getX3(@Path(n="x",cf="ssv") String...b);
+		@RemoteOp(path="/a/{x}") String getX4(@Path(n="x",cf="tsv") String...b);
+		@RemoteOp(path="/a/{x}") String getX5(@Path(n="x",cf="pipes") String...b);
+		@RemoteOp(path="/a/{x}") String getX6(@Path(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/a/{x}") String getX7(@Path(n="x",cf="uon") String...b);
 	}
 
 	@Test
@@ -154,7 +154,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod(path="/a/{x}")
+		@RestOp(path="/a/{x}")
 		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
@@ -163,48 +163,48 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface C1 {
-		@RemoteMethod(path="/a/{x}") String getX1(@Path(n="x",min="1",max="10") int b);
-		@RemoteMethod(path="/a/{x}") String getX2(@Path(n="x",min="1",max="10",emin=false,emax=false) int b);
-		@RemoteMethod(path="/a/{x}") String getX3(@Path(n="x",min="1",max="10",emin=true,emax=true) int b);
-		@RemoteMethod(path="/a/{x}") String getX4(@Path(n="x",min="1",max="10") short b);
-		@RemoteMethod(path="/a/{x}") String getX5(@Path(n="x",min="1",max="10",emin=false,emax=false) short b);
-		@RemoteMethod(path="/a/{x}") String getX6(@Path(n="x",min="1",max="10",emin=true,emax=true) short b);
-		@RemoteMethod(path="/a/{x}") String getX7(@Path(n="x",min="1",max="10") long b);
-		@RemoteMethod(path="/a/{x}") String getX8(@Path(n="x",min="1",max="10",emin=false,emax=false) long b);
-		@RemoteMethod(path="/a/{x}") String getX9(@Path(n="x",min="1",max="10",emin=true,emax=true) long b);
-		@RemoteMethod(path="/a/{x}") String getX10(@Path(n="x",min="1",max="10") float b);
-		@RemoteMethod(path="/a/{x}") String getX11(@Path(n="x",min="1",max="10",emin=false,emax=false) float b);
-		@RemoteMethod(path="/a/{x}") String getX12(@Path(n="x",min="1",max="10",emin=true,emax=true) float b);
-		@RemoteMethod(path="/a/{x}") String getX13(@Path(n="x",min="1",max="10") double b);
-		@RemoteMethod(path="/a/{x}") String getX14(@Path(n="x",min="1",max="10",emin=false,emax=false) double b);
-		@RemoteMethod(path="/a/{x}") String getX15(@Path(n="x",min="1",max="10",emin=true,emax=true) double b);
-		@RemoteMethod(path="/a/{x}") String getX16(@Path(n="x",min="1",max="10") byte b);
-		@RemoteMethod(path="/a/{x}") String getX17(@Path(n="x",min="1",max="10",emin=false,emax=false) byte b);
-		@RemoteMethod(path="/a/{x}") String getX18(@Path(n="x",min="1",max="10",emin=true,emax=true) byte b);
-		@RemoteMethod(path="/a/{x}") String getX19(@Path(n="x",min="1",max="10") AtomicInteger b);
-		@RemoteMethod(path="/a/{x}") String getX20(@Path(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
-		@RemoteMethod(path="/a/{x}") String getX21(@Path(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
-		@RemoteMethod(path="/a/{x}") String getX22(@Path(n="x",min="1",max="10") BigDecimal b);
-		@RemoteMethod(path="/a/{x}") String getX23(@Path(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
-		@RemoteMethod(path="/a/{x}") String getX24(@Path(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
-		@RemoteMethod(path="/a/{x}") String getX25(@Path(n="x",min="1",max="10") Integer b);
-		@RemoteMethod(path="/a/{x}") String getX26(@Path(n="x",min="1",max="10",emin=false,emax=false) Integer b);
-		@RemoteMethod(path="/a/{x}") String getX27(@Path(n="x",min="1",max="10",emin=true,emax=true) Integer b);
-		@RemoteMethod(path="/a/{x}") String getX28(@Path(n="x",min="1",max="10") Short b);
-		@RemoteMethod(path="/a/{x}") String getX29(@Path(n="x",min="1",max="10",emin=false,emax=false) Short b);
-		@RemoteMethod(path="/a/{x}") String getX30(@Path(n="x",min="1",max="10",emin=true,emax=true) Short b);
-		@RemoteMethod(path="/a/{x}") String getX31(@Path(n="x",min="1",max="10") Long b);
-		@RemoteMethod(path="/a/{x}") String getX32(@Path(n="x",min="1",max="10",emin=false,emax=false) Long b);
-		@RemoteMethod(path="/a/{x}") String getX33(@Path(n="x",min="1",max="10",emin=true,emax=true) Long b);
-		@RemoteMethod(path="/a/{x}") String getX34(@Path(n="x",min="1",max="10") Float b);
-		@RemoteMethod(path="/a/{x}") String getX35(@Path(n="x",min="1",max="10",emin=false,emax=false) Float b);
-		@RemoteMethod(path="/a/{x}") String getX36(@Path(n="x",min="1",max="10",emin=true,emax=true) Float b);
-		@RemoteMethod(path="/a/{x}") String getX37(@Path(n="x",min="1",max="10") Double b);
-		@RemoteMethod(path="/a/{x}") String getX38(@Path(n="x",min="1",max="10",emin=false,emax=false) Double b);
-		@RemoteMethod(path="/a/{x}") String getX39(@Path(n="x",min="1",max="10",emin=true,emax=true) Double b);
-		@RemoteMethod(path="/a/{x}") String getX40(@Path(n="x",min="1",max="10") Byte b);
-		@RemoteMethod(path="/a/{x}") String getX41(@Path(n="x",min="1",max="10",emin=false,emax=false) Byte b);
-		@RemoteMethod(path="/a/{x}") String getX42(@Path(n="x",min="1",max="10",emin=true,emax=true) Byte b);
+		@RemoteOp(path="/a/{x}") String getX1(@Path(n="x",min="1",max="10") int b);
+		@RemoteOp(path="/a/{x}") String getX2(@Path(n="x",min="1",max="10",emin=false,emax=false) int b);
+		@RemoteOp(path="/a/{x}") String getX3(@Path(n="x",min="1",max="10",emin=true,emax=true) int b);
+		@RemoteOp(path="/a/{x}") String getX4(@Path(n="x",min="1",max="10") short b);
+		@RemoteOp(path="/a/{x}") String getX5(@Path(n="x",min="1",max="10",emin=false,emax=false) short b);
+		@RemoteOp(path="/a/{x}") String getX6(@Path(n="x",min="1",max="10",emin=true,emax=true) short b);
+		@RemoteOp(path="/a/{x}") String getX7(@Path(n="x",min="1",max="10") long b);
+		@RemoteOp(path="/a/{x}") String getX8(@Path(n="x",min="1",max="10",emin=false,emax=false) long b);
+		@RemoteOp(path="/a/{x}") String getX9(@Path(n="x",min="1",max="10",emin=true,emax=true) long b);
+		@RemoteOp(path="/a/{x}") String getX10(@Path(n="x",min="1",max="10") float b);
+		@RemoteOp(path="/a/{x}") String getX11(@Path(n="x",min="1",max="10",emin=false,emax=false) float b);
+		@RemoteOp(path="/a/{x}") String getX12(@Path(n="x",min="1",max="10",emin=true,emax=true) float b);
+		@RemoteOp(path="/a/{x}") String getX13(@Path(n="x",min="1",max="10") double b);
+		@RemoteOp(path="/a/{x}") String getX14(@Path(n="x",min="1",max="10",emin=false,emax=false) double b);
+		@RemoteOp(path="/a/{x}") String getX15(@Path(n="x",min="1",max="10",emin=true,emax=true) double b);
+		@RemoteOp(path="/a/{x}") String getX16(@Path(n="x",min="1",max="10") byte b);
+		@RemoteOp(path="/a/{x}") String getX17(@Path(n="x",min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteOp(path="/a/{x}") String getX18(@Path(n="x",min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteOp(path="/a/{x}") String getX19(@Path(n="x",min="1",max="10") AtomicInteger b);
+		@RemoteOp(path="/a/{x}") String getX20(@Path(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteOp(path="/a/{x}") String getX21(@Path(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteOp(path="/a/{x}") String getX22(@Path(n="x",min="1",max="10") BigDecimal b);
+		@RemoteOp(path="/a/{x}") String getX23(@Path(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteOp(path="/a/{x}") String getX24(@Path(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteOp(path="/a/{x}") String getX25(@Path(n="x",min="1",max="10") Integer b);
+		@RemoteOp(path="/a/{x}") String getX26(@Path(n="x",min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteOp(path="/a/{x}") String getX27(@Path(n="x",min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteOp(path="/a/{x}") String getX28(@Path(n="x",min="1",max="10") Short b);
+		@RemoteOp(path="/a/{x}") String getX29(@Path(n="x",min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteOp(path="/a/{x}") String getX30(@Path(n="x",min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteOp(path="/a/{x}") String getX31(@Path(n="x",min="1",max="10") Long b);
+		@RemoteOp(path="/a/{x}") String getX32(@Path(n="x",min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteOp(path="/a/{x}") String getX33(@Path(n="x",min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteOp(path="/a/{x}") String getX34(@Path(n="x",min="1",max="10") Float b);
+		@RemoteOp(path="/a/{x}") String getX35(@Path(n="x",min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteOp(path="/a/{x}") String getX36(@Path(n="x",min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteOp(path="/a/{x}") String getX37(@Path(n="x",min="1",max="10") Double b);
+		@RemoteOp(path="/a/{x}") String getX38(@Path(n="x",min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteOp(path="/a/{x}") String getX39(@Path(n="x",min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteOp(path="/a/{x}") String getX40(@Path(n="x",min="1",max="10") Byte b);
+		@RemoteOp(path="/a/{x}") String getX41(@Path(n="x",min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteOp(path="/a/{x}") String getX42(@Path(n="x",min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	@Test
@@ -386,7 +386,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class D {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
@@ -395,12 +395,12 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface D1 {
-		@RemoteMethod(path="/{x}") String getX1(@Path(n="x",cf="pipes",mini=1,maxi=2) String...b);
-		@RemoteMethod(path="/{x}") String getX2(@Path(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
-		@RemoteMethod(path="/{x}") String getX3(@Path(n="x",cf="pipes",ui=false) String...b);
-		@RemoteMethod(path="/{x}") String getX4(@Path(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
-		@RemoteMethod(path="/{x}") String getX5(@Path(n="x",cf="pipes",ui=true) String...b);
-		@RemoteMethod(path="/{x}") String getX6(@Path(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
+		@RemoteOp(path="/{x}") String getX1(@Path(n="x",cf="pipes",mini=1,maxi=2) String...b);
+		@RemoteOp(path="/{x}") String getX2(@Path(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
+		@RemoteOp(path="/{x}") String getX3(@Path(n="x",cf="pipes",ui=false) String...b);
+		@RemoteOp(path="/{x}") String getX4(@Path(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteOp(path="/{x}") String getX5(@Path(n="x",cf="pipes",ui=true) String...b);
+		@RemoteOp(path="/{x}") String getX6(@Path(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	@Test
@@ -430,7 +430,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class E {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
@@ -439,12 +439,12 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface E1 {
-		@RemoteMethod(path="/{x}") String getX1(@Path(n="x",minl=2,maxl=3) String b);
-		@RemoteMethod(path="/{x}") String getX2(@Path(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
-		@RemoteMethod(path="/{x}") String getX3(@Path(n="x",e={"foo"}) String b);
-		@RemoteMethod(path="/{x}") String getX4(@Path(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
-		@RemoteMethod(path="/{x}") String getX5(@Path(n="x",p="foo\\d{1,3}") String b);
-		@RemoteMethod(path="/{x}") String getX6(@Path(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
+		@RemoteOp(path="/{x}") String getX1(@Path(n="x",minl=2,maxl=3) String b);
+		@RemoteOp(path="/{x}") String getX2(@Path(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteOp(path="/{x}") String getX3(@Path(n="x",e={"foo"}) String b);
+		@RemoteOp(path="/{x}") String getX4(@Path(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteOp(path="/{x}") String getX5(@Path(n="x",p="foo\\d{1,3}") String b);
+		@RemoteOp(path="/{x}") String getX6(@Path(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	@Test
@@ -477,7 +477,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class F {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
@@ -486,20 +486,20 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface F1 {
-		@RemoteMethod(path="/{x}") String getX1(@Path(n="x",mo="2") int b);
-		@RemoteMethod(path="/{x}") String getX2(@Path(n="x",mo="2") short b);
-		@RemoteMethod(path="/{x}") String getX3(@Path(n="x",mo="2") long b);
-		@RemoteMethod(path="/{x}") String getX4(@Path(n="x",mo="2") float b);
-		@RemoteMethod(path="/{x}") String getX5(@Path(n="x",mo="2") double b);
-		@RemoteMethod(path="/{x}") String getX6(@Path(n="x",mo="2") byte b);
-		@RemoteMethod(path="/{x}") String getX7(@Path(n="x",mo="2") AtomicInteger b);
-		@RemoteMethod(path="/{x}") String getX8(@Path(n="x",mo="2") BigDecimal b);
-		@RemoteMethod(path="/{x}") String getX9(@Path(n="x",mo="2") Integer b);
-		@RemoteMethod(path="/{x}") String getX10(@Path(n="x",mo="2") Short b);
-		@RemoteMethod(path="/{x}") String getX11(@Path(n="x",mo="2") Long b);
-		@RemoteMethod(path="/{x}") String getX12(@Path(n="x",mo="2") Float b);
-		@RemoteMethod(path="/{x}") String getX13(@Path(n="x",mo="2") Double b);
-		@RemoteMethod(path="/{x}") String getX14(@Path(n="x",mo="2") Byte b);
+		@RemoteOp(path="/{x}") String getX1(@Path(n="x",mo="2") int b);
+		@RemoteOp(path="/{x}") String getX2(@Path(n="x",mo="2") short b);
+		@RemoteOp(path="/{x}") String getX3(@Path(n="x",mo="2") long b);
+		@RemoteOp(path="/{x}") String getX4(@Path(n="x",mo="2") float b);
+		@RemoteOp(path="/{x}") String getX5(@Path(n="x",mo="2") double b);
+		@RemoteOp(path="/{x}") String getX6(@Path(n="x",mo="2") byte b);
+		@RemoteOp(path="/{x}") String getX7(@Path(n="x",mo="2") AtomicInteger b);
+		@RemoteOp(path="/{x}") String getX8(@Path(n="x",mo="2") BigDecimal b);
+		@RemoteOp(path="/{x}") String getX9(@Path(n="x",mo="2") Integer b);
+		@RemoteOp(path="/{x}") String getX10(@Path(n="x",mo="2") Short b);
+		@RemoteOp(path="/{x}") String getX11(@Path(n="x",mo="2") Long b);
+		@RemoteOp(path="/{x}") String getX12(@Path(n="x",mo="2") Float b);
+		@RemoteOp(path="/{x}") String getX13(@Path(n="x",mo="2") Double b);
+		@RemoteOp(path="/{x}") String getX14(@Path(n="x",mo="2") Byte b);
 	}
 
 	@Test
@@ -545,7 +545,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface G1 {
-		@RemoteMethod(path="/{x}") String getX1(@Path("x") String b);
+		@RemoteOp(path="/{x}") String getX1(@Path("x") String b);
 	}
 
 	@Test
@@ -560,7 +560,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class H {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
@@ -569,7 +569,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public static interface H1 {
-		@RemoteMethod(path="/{x}") String getX1(@Path(n="x",serializer=XPartSerializer.class) String b);
+		@RemoteOp(path="/{x}") String getX1(@Path(n="x",serializer=XPartSerializer.class) String b);
 	}
 
 	@Test
@@ -584,7 +584,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class K  {
-		@RestMethod(path="/*")
+		@RestOp(path="/*")
 		public String get(RestRequest req) throws Exception {
 			return req.getPathMatch().getRemainder();
 		}
@@ -596,8 +596,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K1 {
-		@RemoteMethod(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX1(@Request K1a rb);
-		@RemoteMethod(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request(serializer=XSerializer.class) K1a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX1(@Request K1a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request(serializer=XSerializer.class) K1a rb);
 	}
 
 	public static class K1a {
@@ -642,8 +642,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K2 {
-		@RemoteMethod(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX1(@Request K2a rb);
-		@RemoteMethod(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request(serializer=XSerializer.class) K2a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX1(@Request K2a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request(serializer=XSerializer.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -680,8 +680,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K3 {
-		@RemoteMethod(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}/{f1}/{f2}/{f3}/{f4}") String getX1(@Request K3a rb);
-		@RemoteMethod(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}/{f1}/{f2}/{f3}/{f4}") String getX2(@Request(serializer=XSerializer.class) K3a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}/{f1}/{f2}/{f3}/{f4}") String getX1(@Request K3a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}/{f1}/{f2}/{f3}/{f4}") String getX2(@Request(serializer=XSerializer.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -726,8 +726,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K4 {
-		@RemoteMethod(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX1(@Request K4a rb);
-		@RemoteMethod(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request(serializer=XSerializer.class) K4a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX1(@Request K4a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request(serializer=XSerializer.class) K4a rb);
 	}
 
 	public static class K4a {

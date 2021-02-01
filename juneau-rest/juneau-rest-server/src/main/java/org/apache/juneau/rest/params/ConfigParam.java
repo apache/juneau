@@ -18,12 +18,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link Config} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link Config} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getContext() getContext}().{@link RestContext#getConfig() getConfig}()</c>.
  */
-public class ConfigParam extends SimpleRestParam {
+public class ConfigParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

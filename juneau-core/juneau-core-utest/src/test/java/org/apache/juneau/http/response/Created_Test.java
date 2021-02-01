@@ -23,9 +23,9 @@ public class Created_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public Created getA1() { return new Created(); }
-		@RestMethod public Created getA2() { return new Created("foo"); }
-		@RestMethod public Created getA3() { return new Created().header("Foo","bar"); }
+		@RestOp public Created getA1() { return new Created(); }
+		@RestOp public Created getA2() { return new Created("foo"); }
+		@RestOp public Created getA3() { return new Created().header("Foo","bar"); }
 	}
 
 	@Test

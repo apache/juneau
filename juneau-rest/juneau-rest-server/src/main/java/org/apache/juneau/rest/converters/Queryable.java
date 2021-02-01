@@ -16,7 +16,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Converter for enabling of {@link PojoQuery} support on response objects returned by a <c>@RestMethod</c> method.
+ * Converter for enabling of {@link PojoQuery} support on response objects returned by a <c>@RestOp</c> method.
  *
  * <p>
  * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}

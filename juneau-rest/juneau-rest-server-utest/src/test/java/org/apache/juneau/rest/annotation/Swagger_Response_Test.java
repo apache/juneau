@@ -47,9 +47,9 @@ public class Swagger_Response_Test {
 		public static class A1 {
 			public A1(String x){}
 		}
-		@RestMethod
+		@RestOp
 		public void a(Value<A1> r) {}
-		@RestMethod
+		@RestOp
 		public A1 b() {return null;}
 
 		@Response(
@@ -64,9 +64,9 @@ public class Swagger_Response_Test {
 		public static class A2 {
 			public A2(String x){}
 		}
-		@RestMethod
+		@RestOp
 		public void c(Value<A2> r) {}
-		@RestMethod
+		@RestOp
 		public A2 d() {return null;}
 
 		@Response(
@@ -86,36 +86,36 @@ public class Swagger_Response_Test {
 		public static class A3 {
 			public A3(String x){}
 		}
-		@RestMethod
+		@RestOp
 		public void e(Value<A3> r) {}
-		@RestMethod
+		@RestOp
 		public A3 f() {return null;}
 
 		@Response(code=100)
 		public static class A4 {}
-		@RestMethod
+		@RestOp
 		public void g(Value<A4> r) {}
-		@RestMethod
+		@RestOp
 		public A4 h() {return null;}
 
 		@Response(100)
 		public static class A5 {}
-		@RestMethod
+		@RestOp
 		public void i(Value<A5> r) {}
-		@RestMethod
+		@RestOp
 		public A5 j() {return null;}
 
 		@Response(headers=@ResponseHeader(name="foo",api=" type:'b' "))
 		public static class A6 {}
-		@RestMethod
+		@RestOp
 		public void k(Value<A6> r) {}
-		@RestMethod
+		@RestOp
 		public A6 l() {return null;}
 	}
 
 	@Test
 	public void a01_fromPojo() throws Exception {
-		Swagger s = getSwagger(A.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",200);
@@ -184,40 +184,40 @@ public class Swagger_Response_Test {
 
 		@Response(schema=@Schema(" type:'number' "))
 		public static class B1 {}
-		@RestMethod
+		@RestOp
 		public void a(Value<B1> r) {}
-		@RestMethod
+		@RestOp
 		public B1 b() {return null;}
 
 		@Response
 		public static class B2 {
 			public String f1;
 		}
-		@RestMethod
+		@RestOp
 		public void c(Value<B2> b) {}
-		@RestMethod
+		@RestOp
 		public B2 d() {return null;}
 
 		@Response
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod
+		@RestOp
 		public void e(Value<B3> b) {}
-		@RestMethod
+		@RestOp
 		public B3 f() {return null;}
 
 		@Response
 		public static class B4 {}
-		@RestMethod
+		@RestOp
 		public void g(Value<B4> b) {}
-		@RestMethod
+		@RestOp
 		public B4 h() {return null;}
 	}
 
 	@Test
 	public void b01_schemaFromPojo() throws Exception {
-		Swagger s = getSwagger(B.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",200);
@@ -252,24 +252,24 @@ public class Swagger_Response_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestMethod
+		@RestOp
 		public void a(Value<C1> r) {}
-		@RestMethod
+		@RestOp
 		public C1 b() {return null;}
 
 		@Response(examples={" foo:'b' "})
 		public static class C2 {
 			public C2(String x){}
 		}
-		@RestMethod
+		@RestOp
 		public void c(Value<C2> r) {}
-		@RestMethod
+		@RestOp
 		public C2 d() {return null;}
 	}
 
 	@Test
 	public void c01_exampleFromPojo() throws Exception {
-		Swagger sc = getSwagger(C.class);
+		org.apache.juneau.dto.swagger.Swagger sc = getSwagger(C.class);
 		ResponseInfo x;
 
 		x = sc.getResponseInfo("/a","get",200);
@@ -296,7 +296,7 @@ public class Swagger_Response_Test {
 			examples=" {foo:'a'} "
 		)
 		public static class D1 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void a() throws D1 {}
 
 		@Response(
@@ -309,7 +309,7 @@ public class Swagger_Response_Test {
 			}
 		)
 		public static class D2 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void b() throws D2 {}
 
 		@Response(
@@ -327,28 +327,28 @@ public class Swagger_Response_Test {
 			examples=" {foo:'a'} "
 		)
 		public static class D3 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void c() throws D3 {}
 
 		@Response(code=100)
 		public static class D4 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void d() throws D4 {}
 
 		@Response(code=100)
 		public static class D5 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void e() throws D5 {}
 
 		@Response(headers=@ResponseHeader(name="foo", api=" {type:'number'} "))
 		public static class D6 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void f() throws D6 {}
 	}
 
 	@Test
 	public void d01_fromThrowable() throws Exception {
-		Swagger s = getSwagger(D.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(D.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",500);
@@ -387,13 +387,13 @@ public class Swagger_Response_Test {
 
 		@Response(schema=@Schema(" type:'number' "))
 		public static class E1 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void a() throws E1 {}
 	}
 
 	@Test
 	public void e01_schemaFromThrowable() throws Exception {
-		Swagger s = getSwagger(E.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(E.class);
 
 		ResponseInfo x = s.getResponseInfo("/a","get",500);
 		assertObject(x.getSchema()).json().is("{type:'number'}");
@@ -408,18 +408,18 @@ public class Swagger_Response_Test {
 
 		@Response(example={" {f1:'b'} "})
 		public static class F1 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void a() throws F1 {}
 
 		@Response(examples={" foo:'b' "})
 		public static class F2 extends Throwable {}
-		@RestMethod
+		@RestOp
 		public void b() throws F2 {}
 	}
 
 	@Test
 	public void f01_exampeFromThrowable() throws Exception {
-		Swagger s = getSwagger(F.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",500);

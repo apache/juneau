@@ -26,13 +26,13 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Resolves method parameters annotated with {@link ResponseHeader} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters annotated with {@link ResponseHeader} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value must be of type {@link Value} that accepts a value that is then set via
  * <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>)</c>.
  */
-public class ResponseHeaderParam implements RestParam {
+public class ResponseHeaderParam implements RestOperationParam {
 	final ResponsePartMeta meta;
 	final String name;
 	private final Type type;
@@ -79,7 +79,7 @@ public class ResponseHeaderParam implements RestParam {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(final RestCall call) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {

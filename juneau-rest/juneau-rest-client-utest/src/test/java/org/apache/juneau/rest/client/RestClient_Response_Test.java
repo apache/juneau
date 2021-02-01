@@ -56,7 +56,7 @@ public class RestClient_Response_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean getBean() {
 			return bean;
 		}
@@ -147,7 +147,7 @@ public class RestClient_Response_Test {
 
 	@Rest
 	public static class C extends BasicRestObject {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String n = req.getHeader("Check");
 			String v = req.getHeaders().getString(n);
@@ -226,7 +226,7 @@ public class RestClient_Response_Test {
 
 	@Rest
 	public static class D extends BasicRestObject {
-		@RestMethod
+		@RestOp
 		public ABean postBean(@Body ABean bean) {
 			return bean;
 		}

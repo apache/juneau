@@ -23,9 +23,9 @@ public class SwitchingProtocols_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public SwitchingProtocols getA1() { return new SwitchingProtocols(); }
-		@RestMethod public SwitchingProtocols getA2() { return new SwitchingProtocols("foo"); }
-		@RestMethod public SwitchingProtocols getA3() { return new SwitchingProtocols().header("Foo","bar"); }
+		@RestOp public SwitchingProtocols getA1() { return new SwitchingProtocols(); }
+		@RestOp public SwitchingProtocols getA2() { return new SwitchingProtocols("foo"); }
+		@RestOp public SwitchingProtocols getA3() { return new SwitchingProtocols().header("Foo","bar"); }
 	}
 
 	@Test

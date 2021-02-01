@@ -17,7 +17,7 @@ package org.apache.juneau.rest;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(
+ * 	<ja>@RestOp</ja>(
  *
  * 		<jc>// No serializers are defined method or inherited from the class.</jc>
  * 		serializers=None.<jk>class</jk>,

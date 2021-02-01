@@ -19,12 +19,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link Locale} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link Locale} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getLocale() getLocale}()</c>.
  */
-public class LocaleParam extends SimpleRestParam {
+public class LocaleParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

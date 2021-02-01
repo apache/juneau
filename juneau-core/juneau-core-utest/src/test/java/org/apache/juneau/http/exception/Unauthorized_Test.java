@@ -27,27 +27,27 @@ public class Unauthorized_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws Unauthorized {
 			throw new Unauthorized();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws Unauthorized {
 			throw new Unauthorized("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws Unauthorized {
 			throw new Unauthorized(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws Unauthorized {
 			throw new Unauthorized(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws Unauthorized {
 			throw new Unauthorized().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws Unauthorized {
 			throw new Unauthorized("foo");
 		}

@@ -35,7 +35,7 @@ public class ETag_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public StringReader get(@Header(name=HEADER,multi=true) String[] h) {
 			return new StringReader(h == null ? "null" : StringUtils.join(h, ','));
 		}

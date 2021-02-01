@@ -27,27 +27,27 @@ public class Gone_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws Gone {
 			throw new Gone();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws Gone {
 			throw new Gone("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws Gone {
 			throw new Gone(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws Gone {
 			throw new Gone(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws Gone {
 			throw new Gone().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws Gone {
 			throw new Gone("foo");
 		}

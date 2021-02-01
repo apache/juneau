@@ -30,7 +30,7 @@ public class BasicHttpRequestRetryHandler_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod
+		@RestOp
 		public Ok get() {
 			return Ok.OK;
 		}

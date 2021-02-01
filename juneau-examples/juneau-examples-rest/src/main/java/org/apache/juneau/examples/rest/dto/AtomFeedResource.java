@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.annotation.*;
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
 	encoders=GzipEncoder.class,
-	swagger=@ResourceSwagger(
+	swagger=@Swagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
 		version="2.0",
@@ -119,7 +119,7 @@ public class AtomFeedResource extends BasicRestServletJena {
 	 *
 	 * @return The sample ATOM feed.
 	 */
-	@RestMethod(
+	@RestOp(
 		summary="Get the sample ATOM feed"
 	)
 	public Feed get() {
@@ -132,7 +132,7 @@ public class AtomFeedResource extends BasicRestServletJena {
 	 * @param feed The new ATOM feed.
 	 * @return The updated ATOM feed.
 	 */
-	@RestMethod(
+	@RestOp(
 		summary="Overwrite the sample ATOM feed",
 		description="Replaces the feed with the specified content, and then mirrors it as the response."
 	)

@@ -27,27 +27,27 @@ public class PreconditionRequired_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws PreconditionRequired {
 			throw new PreconditionRequired();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws PreconditionRequired {
 			throw new PreconditionRequired("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws PreconditionRequired {
 			throw new PreconditionRequired(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws PreconditionRequired {
 			throw new PreconditionRequired(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws PreconditionRequired {
 			throw new PreconditionRequired().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws PreconditionRequired {
 			throw new PreconditionRequired("foo");
 		}

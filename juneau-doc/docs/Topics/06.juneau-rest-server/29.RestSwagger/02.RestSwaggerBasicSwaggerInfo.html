@@ -31,7 +31,7 @@ Basic Swagger Info
 		path=<js>"/petstore"</js>,
 		title=<js>"Petstore application"</js>,
 		...
-		swagger=@ResourceSwagger(<js>"$F{PetStoreResource.json}"</js>),
+		swagger=@Swagger(<js>"$F{PetStoreResource.json}"</js>),
 		...
 	)
 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
@@ -70,7 +70,7 @@ Basic Swagger Info
 	localized Swagger information.
 </p>
 <p>
-	The {@link oajr.vars.FileVar $F} variable simply expands to a string to fill the {@link oajr.annotation.ResourceSwagger#value() @ResourceSwagger(value)}
+	The {@link oajr.vars.FileVar $F} variable simply expands to a string to fill the {@link oajr.annotation.Swagger#value() @Swagger(value)}
 	annotation.  
 	You could equivalently embed JSON directly into your annotation like so:
 </p>
@@ -79,7 +79,7 @@ Basic Swagger Info
 		path=<js>"/petstore"</js>,
 		title=<js>"Petstore application"</js>,
 		...
-		swagger=<ja>@ResourceSwagger</ja>(
+		swagger=<ja>@Swagger</ja>(
 			<jc>// Raw Simplified JSON.</jc>
 			<jc>// Values are concatenated.
 			<js>"{"</js>,
@@ -100,7 +100,7 @@ Basic Swagger Info
 		path=<js>"/petstore"</js>,
 		title=<js>"Petstore application"</js>,
 		...
-		swagger=<ja>@ResourceSwagger</ja>(
+		swagger=<ja>@Swagger</ja>(
 			version=<js>"1.0.0"</js>,
 			title=<js>"Swagger Petstore"</js>,
 			termsOfService=<js>"You are on your own."</js>,
@@ -132,7 +132,7 @@ Basic Swagger Info
 		title=<js>"Petstore application"</js>,
 		messages=<js>"nls/MyMessages"</js>,
 		...
-		swagger=<ja>@ResourceSwagger</ja>(
+		swagger=<ja>@Swagger</ja>(
 			version=<js>"1.0.0"</js>,
 			title=<js>"$L{myTitle}"</js>,
 			termsOfService=<js>"$L{myTermsOfService}"</js>,

@@ -31,7 +31,7 @@ public class HasFormData_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(method=POST)
+		@RestOp(method=POST)
 		public String a(RestRequest req, @HasFormData("p1") boolean p1, @HasFormData("p2") Boolean p2) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+f.containsKey("p1")+"],p2=["+p2+","+f.containsKey("p2")+"]";

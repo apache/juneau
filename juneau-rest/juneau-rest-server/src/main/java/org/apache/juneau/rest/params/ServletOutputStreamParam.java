@@ -19,12 +19,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ServletOutputStream} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link ServletOutputStream} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#getOutputStream() getOutputStream}()</c>.
  */
-public class ServletOutputStreamParam extends SimpleRestParam {
+public class ServletOutputStreamParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

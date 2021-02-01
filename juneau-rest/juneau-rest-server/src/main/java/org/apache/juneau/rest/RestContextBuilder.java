@@ -704,7 +704,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod(clientVersion)} annotation.
+	 * <br>Used in conjunction with {@link RestOp#clientVersion() @RestOp(clientVersion)} annotation.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
@@ -1309,24 +1309,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST method context class.
-	 *
-	 * <p>
-	 * Allows you to extend the {@link RestMethodContext} class to modify how any of the methods are implemented.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_methodContextClass}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder methodContextClass(Class<? extends RestMethodContext> value) {
-		return set(REST_methodContextClass, value);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parser listener.
 	 *
 	 * <p>
@@ -1602,21 +1584,21 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST methods class.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST method context class.
 	 *
 	 * <p>
-	 * Allows you to extend the {@link RestMethods} class to modify how any of the methods are implemented.
+	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restMethodsClass}
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationContextClass}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder restMethodsClass(Class<? extends RestMethods> value) {
-		return set(REST_restMethodsClass, value);
+	public RestContextBuilder restOperationContextClass(Class<? extends RestOperationContext> value) {
+		return set(REST_restOperationContextClass, value);
 	}
 
 	/**
@@ -1628,7 +1610,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restParams}
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationParams}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
@@ -1636,8 +1618,26 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	@SuppressWarnings("unchecked")
-	public RestContextBuilder restParams(Class<? extends RestParam>...values) {
-		return prependTo(REST_restParams, values);
+	public RestContextBuilder restOperationParams(Class<? extends RestOperationParam>...values) {
+		return prependTo(REST_restOperationParams, values);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST methods class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationsClass}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder restOperationsClass(Class<? extends RestOperations> value) {
+		return set(REST_restOperationsClass, value);
 	}
 
 	/**

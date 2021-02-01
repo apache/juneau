@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * A parsed path pattern constructed from a {@link RestMethod#path() @RestMethod(path)} value.
+ * A parsed path pattern constructed from a {@link RestOp#path() @RestOp(path)} value.
  *
  * <p>
  * Handles aspects of matching and precedence ordering.

@@ -21,13 +21,13 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters and parameter types annotated with {@link Body} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link Body} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getBody() getBody}().{@link RequestBody#schema(HttpPartSchema) schema}(<jv>schema</jv>).{@link RequestBody#asType(Type,Type...) asType}(<jv>type</jv>)</c>.
  * with a {@link HttpPartSchema schema} derived from the {@link Body} annotation.
  */
-public class BodyParam implements RestParam {
+public class BodyParam implements RestOperationParam {
 
 	private final HttpPartSchema schema;
 	private final Type type;
@@ -54,7 +54,7 @@ public class BodyParam implements RestParam {
 		this.schema = HttpPartSchema.create(Body.class, paramInfo);
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getBody().schema(schema).asType(type);
 	}

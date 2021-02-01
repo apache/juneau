@@ -22,13 +22,13 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters and parameter types annotated with {@link Response} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link Response} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value must be of type {@link Value} that accepts a value that is then set via
  * <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>)</c>.
  */
-public class ResponseBeanParam implements RestParam {
+public class ResponseBeanParam implements RestOperationParam {
 	final ResponseBeanMeta meta;
 	private final Type type;
 
@@ -60,7 +60,7 @@ public class ResponseBeanParam implements RestParam {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(final RestCall call) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(new ValueListener() {

@@ -32,26 +32,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(aside={"a01a","a01b","INHERIT"})
 	public static class A1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
@@ -71,26 +71,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(aside={"INHERIT","b01a","b01b"})
 	public static class A2 extends A1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(aside={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
@@ -114,26 +114,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(footer={"a01a","a01b"})
 	public static class B1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
@@ -153,26 +153,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(footer={"b01a","INHERIT","b01b"})
 	public static class B2 extends B1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(footer={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
@@ -196,26 +196,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(header={"a01a","a01b"})
 	public static class C1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
@@ -235,26 +235,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(header={"b01a","b01b","INHERIT"})
 	public static class C2 extends C1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(header={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
@@ -278,56 +278,56 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(navlinks={"a01a","a01b"})
 	public static class D1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"INHERIT","[0]:a06a","[3]:a06b"})
 		public Object a06() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"[1]:a07a","[2]:a07b","INHERIT"})
 		public Object a07() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"[1]:a08a","[0]:a08b"})
 		public Object a08() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"INHERIT","foo[0]:a09a","bar[3]:a09b"})
 		public Object a09() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"foo[1]:a10a","bar[2]:a10b","INHERIT"})
 		public Object a10() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"foo[1]:a11a","bar[0]:a11b"})
 		public Object a11() {
 			return "OK";
@@ -353,56 +353,56 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(navlinks={"INHERIT","b01a","b01b"})
 	public static class D2 extends D1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"INHERIT","[0]:b06a","[3]:b06b"})
 		public Object b06() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"[1]:b07a","[2]:b07b","INHERIT"})
 		public Object b07() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"[1]:b08a","[0]:b08b"})
 		public Object b08() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"INHERIT","foo[0]:b09a","bar[3]:b09b"})
 		public Object b09() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"foo[1]:b10a","bar[2]:b10b","INHERIT"})
 		public Object b10() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(navlinks={"foo[1]:b11a","bar[0]:b11b"})
 		public Object b11() {
 			return "OK";
@@ -432,26 +432,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(navlinks={"NONE"},nav={"a01a","a01b"})
 	public static class E1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(nav={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(nav={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(nav={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(nav={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
@@ -471,26 +471,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(nav={"INHERIT","b01a","b01b"})
 	public static class E2 extends E1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(nav={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod(path="/b03")
+		@RestOp(path="/b03")
 		@HtmlDocConfig(nav={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod(path="/b04")
+		@RestOp(path="/b04")
 		@HtmlDocConfig(nav={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod(path="/b05")
+		@RestOp(path="/b05")
 		@HtmlDocConfig(nav={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
@@ -514,26 +514,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(script={"a01a","a01b"})
 	public static class F1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
@@ -553,26 +553,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(script={"b01a","b01b"})
 	public static class F2 extends F1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(script={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
@@ -596,26 +596,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(style={"a01a","a01b"},stylesheet="a01s",nowrap="false")
 	public static class G1 extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"a02a","a02b"},stylesheet="a02s")
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
@@ -635,26 +635,26 @@ public class HtmlDocConfig_Test {
 	@Rest
 	@HtmlDocConfig(style={"b01a","b01b"},stylesheet="b01s")
 	public static class G2 extends G1 {
-		@RestMethod
+		@RestOp
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"b02a","b02b"},stylesheet="b02s")
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod
+		@RestOp
 		@HtmlDocConfig(style={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";

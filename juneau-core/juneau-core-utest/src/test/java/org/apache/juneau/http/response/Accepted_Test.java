@@ -23,9 +23,9 @@ public class Accepted_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public Accepted getA1() { return new Accepted(); }
-		@RestMethod public Accepted getA2() { return new Accepted("foo"); }
-		@RestMethod public Accepted getA3() { return new Accepted().header("Foo","bar"); }
+		@RestOp public Accepted getA1() { return new Accepted(); }
+		@RestOp public Accepted getA2() { return new Accepted("foo"); }
+		@RestOp public Accepted getA3() { return new Accepted().header("Foo","bar"); }
 	}
 
 	@Test

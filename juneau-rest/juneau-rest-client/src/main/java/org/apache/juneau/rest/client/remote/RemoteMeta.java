@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Contains the meta-data about a REST proxy class.
  *
  * <p>
- * Captures the information in {@link org.apache.juneau.http.remote.Remote @Remote} and {@link org.apache.juneau.http.remote.RemoteMethod @RemoteMethod} annotations for
+ * Captures the information in {@link org.apache.juneau.http.remote.Remote @Remote} and {@link org.apache.juneau.http.remote.RemoteOp @RemoteOp} annotations for
  * caching and reuse.
  *
  * <ul class='seealso'>
@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
  */
 public class RemoteMeta {
 
-	private final Map<Method,RemoteMethodMeta> methods;
+	private final Map<Method,RemoteOperationMeta> operations;
 	private final HeaderSupplier headerSupplier = HeaderSupplier.create().resolving();
 
 	/**
@@ -76,21 +76,21 @@ public class RemoteMeta {
 		if (clientVersion != null)
 			headerSupplier.add(BasicStringHeader.of(versionHeader, clientVersion));
 
-		AMap<Method,RemoteMethodMeta> methods = AMap.create();
+		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		for (MethodInfo m : ci.getPublicMethods())
-			methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), "GET"));
+			operations.put(m.inner(), new RemoteOperationMeta(path, m.inner(), "GET"));
 
-		this.methods = methods.unmodifiable();
+		this.operations = operations.unmodifiable();
 	}
 
 	/**
-	 * Returns the metadata about the specified method on this resource proxy.
+	 * Returns the metadata about the specified operation on this resource proxy.
 	 *
 	 * @param m The method to look up.
 	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
 	 */
-	public RemoteMethodMeta getMethodMeta(Method m) {
-		return methods.get(m);
+	public RemoteOperationMeta getOperationMeta(Method m) {
+		return operations.get(m);
 	}
 
 	/**

@@ -64,7 +64,7 @@ Custom Serializers and Parsers
 		}
 		
 		<jd>/** GET request handler for list of all photos */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 			res.setPageTitle(<js>"Photo REST service"</js>);
 			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
@@ -72,7 +72,7 @@ Custom Serializers and Parsers
 		}
 		
 		<jd>/** GET request handler for single photo */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
+		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
 		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) int id) <jk>throws</jk> Exception {
 			Photo p = photos.get(id);
 			if (p == <jk>null</jk>)
@@ -81,14 +81,14 @@ Custom Serializers and Parsers
 		}
 		
 		<jd>/** PUT request handler */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
+		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
 		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			photos.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
 		
 		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
+		<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
 		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			<jk>int</jk> id = photos.size();
 			Photo p = <jk>new</jk> Photo(id, image);
@@ -97,7 +97,7 @@ Custom Serializers and Parsers
 		}
 		
 		<jd>/** DELETE request handler */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
+		<ja>@RestOp</ja>(method=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
 		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception {
 			Photo p = photos.remove(id);
 			if (p == <jk>null</jk>)
@@ -106,7 +106,7 @@ Custom Serializers and Parsers
 		}
 	
 		<jd>/** OPTIONS request handler */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
+		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> Swagger getOptions(RestRequest req) {
 			<jk>return</jk> req.getSwagger();
 		}

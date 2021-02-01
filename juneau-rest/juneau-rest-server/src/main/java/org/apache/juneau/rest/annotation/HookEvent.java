@@ -22,7 +22,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.Messages;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
@@ -91,7 +90,7 @@ public enum HookEvent {
 	START_CALL,
 
 	/**
-	 * Identifies a method that gets called immediately before the <ja>@RestMethod</ja> annotated method gets called.
+	 * Identifies a method that gets called immediately before the <ja>@RestOp</ja> annotated method gets called.
 	 *
 	 * <p>
 	 * At this point, the {@link RestRequest} object has been fully initialized, and all {@link RestGuard} and
@@ -208,7 +207,7 @@ public enum HookEvent {
 	PRE_CALL,
 
 	/**
-	 * Identifies a method that gets called immediately after the <ja>@RestMethod</ja> annotated method gets called.
+	 * Identifies a method that gets called immediately after the <ja>@RestOp</ja> annotated method gets called.
 	 *
 	 * <p>
 	 * At this point, the output object returned by the method call has been set on the response, but

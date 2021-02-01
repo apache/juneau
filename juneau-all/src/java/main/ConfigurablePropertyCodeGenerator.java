@@ -89,7 +89,7 @@ public class ConfigurablePropertyCodeGenerator {
 		RestClientBuilder.class,
 		MockRestClientBuilder.class,
 		RestContextBuilder.class,
-		RestMethodContextBuilder.class,
+		RestOperationContextBuilder.class,
 		SerializerBuilder.class,
 		SerializerGroupBuilder.class,
 		SimpleJsonParserBuilder.class,

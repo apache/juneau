@@ -98,7 +98,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jf'>{@link RestContext#REST_debug}
  * 	<li class='jf'>{@link RestContext#REST_debugOn}
  * 	<li class='ja'>{@link Rest#debug}
- * 	<li class='ja'>{@link RestMethod#debug}
+ * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
@@ -379,7 +379,7 @@ public class RestLogger {
 	 * @see RestContext#REST_debug
 	 * @see RestContext#REST_debugOn
 	 * @see Rest#debug()
-	 * @see RestMethod#debug()
+	 * @see RestOp#debug()
 	 */
 	protected boolean isDebug(HttpServletRequest req) {
 		return firstNonNull(castOrNull(req.getAttribute("Debug"), Boolean.class), false);

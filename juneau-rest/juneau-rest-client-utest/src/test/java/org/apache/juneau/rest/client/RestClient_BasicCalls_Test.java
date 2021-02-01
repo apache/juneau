@@ -53,39 +53,39 @@ public class RestClient_BasicCalls_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean getBean() {
 			return bean;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean postBean(@Body ABean b) {
 			return b;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean putBean(@Body ABean b) {
 			return b;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean patchBean(@Body ABean b) {
 			return b;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean deleteBean() {
 			return bean;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean optionsBean() {
 			return bean;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean headBean() {
 			return bean;
 		}
-		@RestMethod(path="/checkHeader")
+		@RestOp(path="/checkHeader")
 		public String[] postHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().get(req.getHeader("Check"));
 		}
-		@RestMethod(path="/",method="*")
+		@RestOp(path="/",method="*")
 		public Reader echoMethod(@Method String method) {
 			return new StringReader(method);
 		}

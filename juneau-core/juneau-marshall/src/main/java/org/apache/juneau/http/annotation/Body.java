@@ -32,12 +32,12 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of client-side <ja>@RemoteMethod</ja>-annotated interfaces.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of client-side <ja>@RemoteOp</ja>-annotated interfaces.
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
  *
  * <p>
  * On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
@@ -45,12 +45,12 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Used on parameter</jc>
- * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on class</jc>
- * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(Pet pet) {...}
  *
  * 	<ja>@Body</ja>
@@ -60,7 +60,7 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(RestRequest req) {
  * 		Pet pet = req.getBody().asType(Pet.<jk>class</jk>);
  * 		...
@@ -72,7 +72,7 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(Pet pet) {...}
  *
  * 	<ja>@Body</ja>(
@@ -89,9 +89,9 @@ import org.apache.juneau.jsonschema.*;
  * 	<li><ja>@Body</ja> annotation on parameter.
  * 	<li><ja>@Body</ja> annotation on parameter class.
  * 	<li><ja>@Body</ja> annotation on parent classes and interfaces.
- * 	<li><ja>@MethodSwagger(value)</ja> annotation.
+ * 	<li><ja>@OpSwagger(value)</ja> annotation.
  * 	<li>Localized resource bundle property <js>"[method-name].produces"</js>.
- * 	<li><ja>@ResourceSwagger(value)</ja> annotation.
+ * 	<li><ja>@Swagger(value)</ja> annotation.
  * 	<li>Localized classpath resource file <js>"[enclosing-class].[simple-class-name]_[locale].json"</js> (if it's an inner or member class).
  * 	<li>Default classpath resource file <js>"[enclosing-class].[simple-class-name].json"</js> (if it's an inner or member class).
  * 	<li>Localized classpath resource file <js>"[simple-class-name]_[locale].json"</js>.
@@ -184,14 +184,14 @@ public @interface Body {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
 	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
@@ -245,7 +245,7 @@ public @interface Body {
 	 * There are several other options for defining this example:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Defining an <js>"example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+	 * 		Defining an <js>"example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@Swagger</ja>(value)</code>/<code><ja>@OpSwagger</ja>(value)</code>).
 	 * 	<li>
 	 * 		Defining an <js>"example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
 	 * 	<li>
@@ -424,14 +424,14 @@ public @interface Body {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
 	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
@@ -494,7 +494,7 @@ public @interface Body {
 	 * The following are completely equivalent ways of defining the swagger description of the body:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(
 	 * 			description=<js>"Pet object to add to the store"</js>,
@@ -505,7 +505,7 @@ public @interface Body {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>({
 	 * 			<js>"description: 'Pet object to add to the store',"</js>,
@@ -516,7 +516,7 @@ public @interface Body {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(<js>"$L{petObjectSwagger}"</js>) Pet input
 	 * 	) {...}

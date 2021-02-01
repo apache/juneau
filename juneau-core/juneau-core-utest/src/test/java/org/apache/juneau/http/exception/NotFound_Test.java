@@ -27,27 +27,27 @@ public class NotFound_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws NotFound {
 			throw new NotFound();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws NotFound {
 			throw new NotFound("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws NotFound {
 			throw new NotFound(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws NotFound {
 			throw new NotFound(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws NotFound {
 			throw new NotFound().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws NotFound {
 			throw new NotFound("foo");
 		}

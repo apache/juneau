@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Class used for defining method-level matchers using the {@link RestMethod#matchers() @RestMethod(matchers)} annotation.
+ * Class used for defining method-level matchers using the {@link RestOp#matchers() @RestOp(matchers)} annotation.
  *
  * <p>
  * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
@@ -29,19 +29,19 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * When multiple matchers are specified on a method, only one matcher is required to match.
- * This is opposite from the {@link RestMethod#guards() @RestMethod(guards)} annotation, where all guards are required to match in order to
+ * This is opposite from the {@link RestOp#guards() @RestOp(guards)} annotation, where all guards are required to match in order to
  * execute the method.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
  *
- * 		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
+ * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
  * 		<jk>public</jk> Object doGetWithDNT() {
  * 			<jc>// Handle request with Do-Not-Track specified</jc>
  * 		}
  *
- * 		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foo"</js>)
+ * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foo"</js>)
  * 		<jk>public</jk> Object doGetWithoutDNT() {
  * 			<jc>// Handle request without Do-Not-Track specified</jc>
  * 		}

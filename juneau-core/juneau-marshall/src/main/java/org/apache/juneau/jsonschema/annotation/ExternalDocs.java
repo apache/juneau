@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Normal</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 		swagger=<ja>@Swagger</ja>(
  * 			externalDocs=<ja>@ExternalDocs</ja>(
  * 				description=<js>"Apache Juneau"</js>,
  * 				url=<js>"http://juneau.apache.org"</js>
@@ -40,7 +40,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 		swagger=<ja>@Swagger</ja>(
  * 			contact=<ja>@ExternalDocs</ja>({
  * 				<js>"description:'Apache Juneau',"</js>,
  * 				<js>"url:'http://juneau.apache.org'"</js>,
@@ -104,7 +104,7 @@ public @interface ExternalDocs {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(
 	 * 				description=<js>"Find out more about Juneau"</js>,
 	 * 				url=<js>"http://juneau.apache.org"</js>
@@ -115,7 +115,7 @@ public @interface ExternalDocs {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>({
 	 * 				<js>"description: 'Find out more about Juneau',"</js>,
 	 * 				<js>"url: 'http://juneau.apache.org'"</js>
@@ -126,7 +126,7 @@ public @interface ExternalDocs {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(<js>"$L{externalDocsSwagger}"</js>)
 	 * 		)
 	 * 	)

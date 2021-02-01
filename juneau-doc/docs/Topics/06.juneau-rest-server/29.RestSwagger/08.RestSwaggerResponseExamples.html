@@ -72,7 +72,7 @@ Response Examples
 	<li>
 		{@link oaj.http.annotation.Response#examples() @Response(examples)} annotation.
 	<li>
-		Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <c><ja>@ResourceSwagger</ja>(value)</c>/<c><ja>@MethodSwagger</ja>(value)</c>).
+		Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <c><ja>@Swagger</ja>(value)</c>/<c><ja>@OpSwagger</ja>(value)</c>).
 	<li>
 		Defining an <js>"examples"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
 	<li>
@@ -80,7 +80,7 @@ Response Examples
 </ul>
 
 <p>
-	The {@link oaj.http.annotation.Response#example @Response(example)} annotation can be used on either your <ja>@RestMethod</ja>-annotated
+	The {@link oaj.http.annotation.Response#example @Response(example)} annotation can be used on either your <ja>@RestOp</ja>-annotated
 	method or return class to define the example of the body.
 </p>	
 <p class='bpcode w800'>
@@ -167,11 +167,11 @@ Response Examples
 	The example above shows one of each:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>,
 		path=<js>"/user/login"</js>,
 		summary=<js>"Logs user into the system"</js>,
-		swagger=<ja>@MethodSwagger</ja>(
+		swagger=<ja>@OpSwagger</ja>(
 			tags=<js>"user"</js>
 		)
 	)

@@ -61,7 +61,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String put(@Body String in) {
 			return in;
 		}
@@ -90,7 +90,7 @@ public class Header_Accept_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Accept headers on servlet annotation are picked up
-	// when @RestMethod.parsers/serializers annotations are used.
+	// when @RestOp.parsers/serializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -98,7 +98,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class B {
-		@RestMethod(serializers=S3.class)
+		@RestOp(serializers=S3.class)
 		public String put(@Body String in) {
 			return in;
 		}
@@ -120,7 +120,7 @@ public class Header_Accept_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Accept headers on servlet annotation are picked up
-	// when @RestMethod.addParsers/addSerializers annotations are used.
+	// when @RestOp.addParsers/addSerializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -128,7 +128,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class C {
-		@RestMethod(serializers={S3.class,Inherit.class})
+		@RestOp(serializers={S3.class,Inherit.class})
 		public String put(@Body String in) {
 			return in;
 		}
@@ -171,7 +171,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class D {
-		@RestMethod
+		@RestOp
 		public String put(@Body String in) {
 			return in;
 		}
@@ -200,7 +200,7 @@ public class Header_Accept_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Accept headers on method annotation are picked up
-	// when @RestMethod.parsers/serializers annotations are used.
+	// when @RestOp.parsers/serializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -208,7 +208,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class E {
-		@RestMethod(defaultRequestHeaders={"Accept: text/s3"}, serializers=S3.class)
+		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers=S3.class)
 		public String put(@Body String in) {
 			return in;
 		}
@@ -237,7 +237,7 @@ public class Header_Accept_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Accept headers on method annotation are picked up
-	// 	when @RestMethod.addParsers/addSerializers annotations are used.
+	// 	when @RestOp.addParsers/addSerializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -245,7 +245,7 @@ public class Header_Accept_Test {
 		serializers={S1.class,S2.class}
 	)
 	public static class F {
-		@RestMethod(defaultRequestHeaders={"Accept: text/s3"}, serializers={Inherit.class, S3.class})
+		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers={Inherit.class, S3.class})
 		public String put(@Body String in) {
 			return in;
 		}

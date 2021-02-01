@@ -75,7 +75,7 @@ public class HelloWorldResource extends BasicRestObject {
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestMethod(method=GET, path="/*", summary="Responds with \"Hello world!\"")
+	@RestOp(method=GET, path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		String message = this.message;
 		if (messageProvider != null && messageProvider.isPresent())

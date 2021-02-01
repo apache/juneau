@@ -25,13 +25,13 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters and parameter types annotated with {@link Query} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link Query} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getQuery() getQuery}().{@link RequestQuery#get(HttpPartParserSession,HttpPartSchema,String,Type,Type...) get}(<jv>parserSession<jv>, <jv>schema</jv>, <jv>name</jv>, <jv>type</jv>)</c>
  * with a {@link HttpPartSchema schema} derived from the {@link Query} annotation.
  */
-public class QueryParam implements RestParam {
+public class QueryParam implements RestOperationParam {
 	private final boolean multi;
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
@@ -89,7 +89,7 @@ public class QueryParam implements RestParam {
 		return false;
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());

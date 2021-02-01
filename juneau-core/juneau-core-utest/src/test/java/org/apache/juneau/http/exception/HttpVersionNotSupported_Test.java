@@ -27,27 +27,27 @@ public class HttpVersionNotSupported_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws HttpVersionNotSupported {
 			throw new HttpVersionNotSupported();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws HttpVersionNotSupported {
 			throw new HttpVersionNotSupported("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws HttpVersionNotSupported {
 			throw new HttpVersionNotSupported(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws HttpVersionNotSupported {
 			throw new HttpVersionNotSupported(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws HttpVersionNotSupported {
 			throw new HttpVersionNotSupported().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws HttpVersionNotSupported {
 			throw new HttpVersionNotSupported("foo");
 		}

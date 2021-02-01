@@ -54,7 +54,7 @@
 		path=<js>"/grandchild"</js>
 	)
 	<jk>public class</jk> GrandchildResource {
-		<ja>@RestMethod</ja>(
+		<ja>@RestOp</ja>(
 			path=<js>"/"</js>
 		)
 		<jk>public</jk> String sayHello() {
@@ -120,7 +120,7 @@
 	)
 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 
-		<ja>@RestMethod</ja>(
+		<ja>@RestOp</ja>(
 			path=<js>"/{baz}"</js>
 		)
 		<jk>public void</jk> String doX(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyPojo baz) {

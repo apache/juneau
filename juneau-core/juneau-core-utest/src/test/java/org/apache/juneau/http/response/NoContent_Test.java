@@ -23,9 +23,9 @@ public class NoContent_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public NoContent getA1() { return new NoContent(); }
-		@RestMethod public NoContent getA2() { return new NoContent("foo"); }
-		@RestMethod public NoContent getA3() { return new NoContent().header("Foo","bar"); }
+		@RestOp public NoContent getA1() { return new NoContent(); }
+		@RestOp public NoContent getA2() { return new NoContent("foo"); }
+		@RestOp public NoContent getA3() { return new NoContent().header("Foo","bar"); }
 	}
 
 	@Test

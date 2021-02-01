@@ -19,12 +19,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link ResourceBundle} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link ResourceBundle} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getMessages() getMessages}()</c>.
  */
-public class ResourceBundleParam extends SimpleRestParam {
+public class ResourceBundleParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

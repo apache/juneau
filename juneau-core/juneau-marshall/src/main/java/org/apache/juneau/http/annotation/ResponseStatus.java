@@ -29,18 +29,18 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments of server-side <ja>@RestOp</ja>-annotated methods.
  * 	<li>Methods and return types of server-side and client-side <ja>@Response</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments of server-side <ja>@RestMethod</ja>-annotated methods</h5>
+ * <h5 class='topic'>Arguments of server-side <ja>@RestOp</ja>-annotated methods</h5>
  *
  * <p>
  * On server-side REST, this annotation can be applied to method parameters to identify them as an HTTP response value.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>
+ * 	<ja>@RestOp</ja>
  * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet, <ja>@ResponseStatus</ja> Value&lt;Integer&gt; status) {
  * 		<jsm>addPet</jsm>(pet);
  * 		status.set(200);
@@ -58,7 +58,7 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>
+ * 	<ja>@RestOp</ja>
  * 	<jk>public</jk> Success addPet() {
  * 		<jsm>addPet</jsm>(pet);
  * 		<jk>return new</jk> Success();

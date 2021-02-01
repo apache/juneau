@@ -23,7 +23,7 @@ Responses
 	The <c>200</c> response is determined by the return type on the method, in this case a collection of <c>Pet</c> objects:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>,
 		path=<js>"/pet"</js>,
 		summary=<js>"All pets in the store"</js>,
@@ -46,7 +46,7 @@ Responses
 </p>
 <ul>
 	<li>{@link oaj.http.annotation.Response @Response} annotated classes, methods, and parameters.
-	<li>{@link oajr.annotation.Rest#swagger() @Rest(swagger)} / {@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
+	<li>{@link oajr.annotation.Rest#swagger() @Rest(swagger)} / {@link oajr.annotation.RestOp#swagger() @RestOp(swagger)} annotations.
 </ul>
 
 <ul class='seealso'>

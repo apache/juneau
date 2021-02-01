@@ -20,12 +20,12 @@ RequestFormData
 	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public</jk> Object myMethod(RequestFormData query) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public</jk> Object myMethod(RequestFormData formData) {
 
 		<jc>// Get query parameters converted to various types.</jc>

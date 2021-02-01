@@ -34,7 +34,7 @@ public class RestClient_Response_Headers_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod
+		@RestOp
 		public String getEcho(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String c = req.getHeader("Check");
 			String[] h = req.getHeaders().get(c);

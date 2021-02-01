@@ -23,9 +23,9 @@ public class NonAuthoritativeInformation_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public NonAuthoritiveInformation getA1() { return new NonAuthoritiveInformation(); }
-		@RestMethod public NonAuthoritiveInformation getA2() { return new NonAuthoritiveInformation("foo"); }
-		@RestMethod public NonAuthoritiveInformation getA3() { return new NonAuthoritiveInformation().header("Foo","bar"); }
+		@RestOp public NonAuthoritiveInformation getA1() { return new NonAuthoritiveInformation(); }
+		@RestOp public NonAuthoritiveInformation getA2() { return new NonAuthoritiveInformation("foo"); }
+		@RestOp public NonAuthoritiveInformation getA3() { return new NonAuthoritiveInformation().header("Foo","bar"); }
 	}
 
 	@Test

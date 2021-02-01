@@ -38,23 +38,23 @@ public class Path_Test {
 
 	@Rest
 	public static class A  {
-		@RestMethod(method=GET, path="/")
+		@RestOp(method=GET, path="/")
 		public void a(RestResponse res) {
 			res.setOutput(GET);
 		}
-		@RestMethod(method=GET, path="/a")
+		@RestOp(method=GET, path="/a")
 		public String b() {
 			return "GET /a";
 		}
-		@RestMethod(method=GET, path="/a/{foo}")
+		@RestOp(method=GET, path="/a/{foo}")
 		public String c(RestResponse res, @Path("foo") String foo) {
 			return "GET /a " + foo;
 		}
-		@RestMethod(method=GET, path="/a/{foo}/{bar}")
+		@RestOp(method=GET, path="/a/{foo}/{bar}")
 		public String d(RestResponse res, @Path("foo") String foo, @Path("bar") String bar) {
 			return "GET /a " + foo + "," + bar;
 		}
-		@RestMethod(method=GET, path="/a/{foo}/{bar}/*")
+		@RestOp(method=GET, path="/a/{foo}/{bar}/*")
 		public String e(@Path("foo") String foo, @Path("bar") int bar, @Path("/*") String remainder) {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
@@ -109,35 +109,35 @@ public class Path_Test {
 
 	@Rest
 	public static class B  {
-		@RestMethod(method=GET, path="/a/{x}/foo")
+		@RestOp(method=GET, path="/a/{x}/foo")
 		public String a(@Path("x") int x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/b/{x}/foo")
+		@RestOp(method=GET, path="/b/{x}/foo")
 		public String b(@Path("x") short x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/c/{x}/foo")
+		@RestOp(method=GET, path="/c/{x}/foo")
 		public String c(@Path("x") long x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/d/{x}/foo")
+		@RestOp(method=GET, path="/d/{x}/foo")
 		public String d(@Path("x") char x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/e/{x}/foo")
+		@RestOp(method=GET, path="/e/{x}/foo")
 		public String e(@Path("x") float x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/f/{x}/foo")
+		@RestOp(method=GET, path="/f/{x}/foo")
 		public String f(@Path("x") double x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/g/{x}/foo")
+		@RestOp(method=GET, path="/g/{x}/foo")
 		public String g(@Path("x") byte x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/h/{x}/foo")
+		@RestOp(method=GET, path="/h/{x}/foo")
 		public String h(@Path("x") boolean x) {
 			return String.valueOf(x);
 		}
@@ -210,35 +210,35 @@ public class Path_Test {
 
 	@Rest
 	public static class C  {
-		@RestMethod(method=GET, path="/a/{x}/foo")
+		@RestOp(method=GET, path="/a/{x}/foo")
 		public String a(@Path("x") Integer x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/b/{x}/foo")
+		@RestOp(method=GET, path="/b/{x}/foo")
 		public String b(@Path("x") Short x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/c/{x}/foo")
+		@RestOp(method=GET, path="/c/{x}/foo")
 		public String c(@Path("x") Long x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/d/{x}/foo")
+		@RestOp(method=GET, path="/d/{x}/foo")
 		public String d(@Path("x") Character x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/e/{x}/foo")
+		@RestOp(method=GET, path="/e/{x}/foo")
 		public String e(@Path("x") Float x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/f/{x}/foo")
+		@RestOp(method=GET, path="/f/{x}/foo")
 		public String f(@Path("x") Double x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/g/{x}/foo")
+		@RestOp(method=GET, path="/g/{x}/foo")
 		public String g(@Path("x") Byte x) {
 			return String.valueOf(x);
 		}
-		@RestMethod(method=GET, path="/h/{x}/foo")
+		@RestOp(method=GET, path="/h/{x}/foo")
 		public String h(@Path("x") Boolean x) {
 			return String.valueOf(x);
 		}
@@ -312,7 +312,7 @@ public class Path_Test {
 	@Rest
 	public static class D {
 		// Object with forString(String) method
-		@RestMethod(method=GET, path="/a/{uuid}")
+		@RestOp(method=GET, path="/a/{uuid}")
 		public UUID a(RestResponse res, @Path("uuid") UUID uuid) {
 			return uuid;
 		}
@@ -334,23 +334,23 @@ public class Path_Test {
 
 	@Rest
 	public static class E  {
-		@RestMethod(method=GET, path="/x/{foo}/{bar}")
+		@RestOp(method=GET, path="/x/{foo}/{bar}")
 		public Object a(@Path String foo, @Path String bar) {
 			return OMap.of("m", "normal1", "foo", foo, "bar", bar);
 		}
-		@RestMethod(method=GET, path="/x/{foo}/x/{bar}/x")
+		@RestOp(method=GET, path="/x/{foo}/x/{bar}/x")
 		public Object b(@Path String foo, @Path String bar) {
 			return OMap.of("m", "normal2", "foo", foo, "bar", bar);
 		}
-		@RestMethod(method=GET, path="/y/{0}/{1}")
+		@RestOp(method=GET, path="/y/{0}/{1}")
 		public Object c(@Path String foo, @Path String bar) {
 			return OMap.of("m", "numbers1", "0", foo, "1", bar);
 		}
-		@RestMethod(method=GET, path="/y/{0}/y/{1}/y")
+		@RestOp(method=GET, path="/y/{0}/y/{1}/y")
 		public Object d(@Path String foo, @Path String bar) {
 			return OMap.of("m", "numbers2", "0", foo, "1", bar);
 		}
-		@RestMethod(method=GET, path="/z/{1}/z/{0}/z")
+		@RestOp(method=GET, path="/z/{1}/z/{0}/z")
 		public Object e(@Path String foo, @Path String bar) {
 			return OMap.of("m", "numbers3", "0", foo, "1", bar);
 		}
@@ -382,27 +382,27 @@ public class Path_Test {
 
 	@Rest(path="/f/{a}/{b}")
 	public static class F  {
-		@RestMethod(method=GET, path="/")
+		@RestOp(method=GET, path="/")
 		public String a(RequestPath path) {
 			return format("a: {0}", path);
 		}
-		@RestMethod(method=GET, path="/*")
+		@RestOp(method=GET, path="/*")
 		public String b(RequestPath path) {
 			return format("b: {0}", path);
 		}
-		@RestMethod(method=GET, path="/fc")
+		@RestOp(method=GET, path="/fc")
 		public String c(RequestPath path) {
 			return format("c: {0}", path);
 		}
-		@RestMethod(method=GET, path="/fd/{c}/{d}")
+		@RestOp(method=GET, path="/fd/{c}/{d}")
 		public String d(RequestPath path) {
 			return format("d: {0}", path);
 		}
-		@RestMethod(method=GET, path="/fe/{a}/{b}")
+		@RestOp(method=GET, path="/fe/{a}/{b}")
 		public String e(RequestPath path) {
 			return format("e: {0}", path);
 		}
-		@RestMethod(method=GET, path="/ff/{c}/{d}/*")
+		@RestOp(method=GET, path="/ff/{c}/{d}/*")
 		public String f(RequestPath path) {
 			return format("f: {0}", path);
 		}
@@ -745,22 +745,22 @@ public class Path_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class J {
-		@RestMethod(method=GET,path="/a/{f1}")
+		@RestOp(method=GET,path="/a/{f1}")
 		public Object a(@Path("f1") Optional<Integer> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(method=GET,path="/b/{f1}")
+		@RestOp(method=GET,path="/b/{f1}")
 		public Object b(@Path("f1") Optional<ABean> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(method=GET,path="/c/{f1}")
+		@RestOp(method=GET,path="/c/{f1}")
 		public Object c(@Path("f1") Optional<List<ABean>> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(method=GET,path="/d/{f1}")
+		@RestOp(method=GET,path="/d/{f1}")
 		public Object d(@Path("f1") List<Optional<ABean>> f1) throws Exception {
 			return f1;
 		}
@@ -797,11 +797,11 @@ public class Path_Test {
 
 	@Rest(path="/k2")
 	public static class K2 {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public String a(@Path(n="k1",r=false) String k1) {
 			return k1 == null ? "nil" : k1;
 		}
-		@RestMethod(path="/foo/{bar}")
+		@RestOp(path="/foo/{bar}")
 		public String b(@Path(n="k1",r=false) String k1, @Path(n="bar",r=false) String bar) {
 			return (k1 == null ? "nil" : k1) + "," + (bar == null ? "nil" : bar);
 		}
@@ -839,11 +839,11 @@ public class Path_Test {
 
 	@Rest(path="/l2")
 	public static class L2 {
-		@RestMethod(path={"/","/{foo}"})
+		@RestOp(path={"/","/{foo}"})
 		public String a(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
 			return "1," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}
-		@RestMethod(path={"/foo","/foo/{foo}"})
+		@RestOp(path={"/foo","/foo/{foo}"})
 		public String b(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
 			return "2," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}

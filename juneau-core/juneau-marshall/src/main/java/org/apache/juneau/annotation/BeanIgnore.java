@@ -28,7 +28,7 @@ import org.apache.juneau.*;
  * 	<li>Classes - Forces bean-like classes to be treated as non-beans.
  * 	<li>Methods - Forces getters/setters to be ignored.
  * 	<li>Fields - Forces bean fields to be ignored.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <ul class='seealso'>

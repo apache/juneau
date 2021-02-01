@@ -23,7 +23,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Contact;
@@ -113,11 +113,11 @@ public class SwaggerProviderSession {
 					)
 				);
 
-			ResourceSwagger r = rr.swagger();
+			org.apache.juneau.rest.annotation.Swagger r = rr.swagger();
 
-			omSwagger.append(parseMap(r.value(), "@ResourceSwagger(value) on class {0}", c));
+			omSwagger.append(parseMap(r.value(), "@Swagger(value) on class {0}", c));
 
-			if (! ResourceSwaggerAnnotation.empty(r)) {
+			if (! SwaggerAnnotation.empty(r)) {
 				OMap info = omSwagger.getMap("info", true);
 
 				info
@@ -128,13 +128,13 @@ public class SwaggerProviderSession {
 					.appendSkipEmpty("contact",
 						merge(
 							info.getMap("contact"),
-							toMap(r.contact(), "@ResourceSwagger(contact) on class {0}", c)
+							toMap(r.contact(), "@Swagger(contact) on class {0}", c)
 						)
 					)
 					.appendSkipEmpty("license",
 						merge(
 							info.getMap("license"),
-							toMap(r.license(), "@ResourceSwagger(license) on class {0}", c)
+							toMap(r.license(), "@Swagger(license) on class {0}", c)
 						)
 					);
 			}
@@ -143,13 +143,13 @@ public class SwaggerProviderSession {
 				.appendSkipEmpty("externalDocs",
 					merge(
 						omSwagger.getMap("externalDocs"),
-						toMap(r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
+						toMap(r.externalDocs(), "@Swagger(externalDocs) on class {0}", c)
 					)
 				)
 				.appendSkipEmpty("tags",
 					merge(
 						omSwagger.getList("tags"),
-						toList(r.tags(), "@ResourceSwagger(tags) on class {0}", c)
+						toList(r.tags(), "@Swagger(tags) on class {0}", c)
 					)
 				);
 		}
@@ -205,23 +205,23 @@ public class SwaggerProviderSession {
 		for (String defId : definitions.keySet())
 			js.addBeanDef(defId, new OMap(definitions.getMap(defId)));
 
-		// Iterate through all the @RestMethod methods.
-		for (RestMethodContext sm : context.getMethodContexts()) {
+		// Iterate through all the @RestOp methods.
+		for (RestOperationContext sm : context.getMethodContexts()) {
 
 			BeanSession bs = sm.createBeanSession();
 
 			Method m = sm.method;
 			MethodInfo mi = MethodInfo.of(m);
-			RestMethod rm = mi.getLastAnnotation(RestMethod.class);
+			RestOp rm = mi.getLastAnnotation(RestOp.class);
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
 			OMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
-			// Add @RestMethod(swagger)
-			MethodSwagger ms = rm.swagger();
+			// Add @RestOp(swagger)
+			OpSwagger ms = rm.swagger();
 
-			op.append(parseMap(ms.value(), "@MethodSwagger(value) on class {0} method {1}", c, m));
+			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendSkipEmpty("operationId",
 				firstNonEmpty(
 					resolve(ms.operationId()),
@@ -254,44 +254,44 @@ public class SwaggerProviderSession {
 			op.appendSkipEmpty("tags",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
-					parseListOrCdl(ms.tags(), "@MethodSwagger(tags) on class {0} method {1}", c, m)
+					parseListOrCdl(ms.tags(), "@OpSwagger(tags) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("schemes",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
-					parseListOrCdl(ms.schemes(), "@MethodSwagger(schemes) on class {0} method {1}", c, m)
+					parseListOrCdl(ms.schemes(), "@OpSwagger(schemes) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("consumes",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
-					parseListOrCdl(ms.consumes(), "@MethodSwagger(consumes) on class {0} method {1}", c, m)
+					parseListOrCdl(ms.consumes(), "@OpSwagger(consumes) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("produces",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
-					parseListOrCdl(ms.produces(), "@MethodSwagger(produces) on class {0} method {1}", c, m)
+					parseListOrCdl(ms.produces(), "@OpSwagger(produces) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("parameters",
 				merge(
 					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
-					parseList(ms.parameters(), "@MethodSwagger(parameters) on class {0} method {1}", c, m)
+					parseList(ms.parameters(), "@OpSwagger(parameters) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("responses",
 				merge(
 					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
-					parseMap(ms.responses(), "@MethodSwagger(responses) on class {0} method {1}", c, m)
+					parseMap(ms.responses(), "@OpSwagger(responses) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("externalDocs",
 				merge(
 					op.getMap("externalDocs"),
 					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
-					toMap(ms.externalDocs(), "@MethodSwagger(externalDocs) on class {0} method {1}", c, m)
+					toMap(ms.externalDocs(), "@OpSwagger(externalDocs) on class {0} method {1}", c, m)
 				)
 			);
 
@@ -793,7 +793,7 @@ public class SwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private void addBodyExamples(RestMethodContext sm, OMap piri, boolean response, Type type, Locale locale) throws Exception {
+	private void addBodyExamples(RestOperationContext sm, OMap piri, boolean response, Type type, Locale locale) throws Exception {
 
 		String sex = piri.getString("example");
 
@@ -849,7 +849,7 @@ public class SwaggerProviderSession {
 			piri.put(examplesKey, examples);
 	}
 
-	private void addParamExample(RestMethodContext sm, OMap piri, RestParamType in, Type type) throws Exception {
+	private void addParamExample(RestOperationContext sm, OMap piri, RestParamType in, Type type) throws Exception {
 
 		String s = piri.getString("example");
 

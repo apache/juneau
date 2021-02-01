@@ -55,7 +55,7 @@ BasicRestServlet
 		 * <ja>@param</ja> req The HTTP request.
 		 * <ja>@return</ja> A bean containing the contents for the OPTIONS page.
 		 */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 			
 			summary=<js>"Swagger documentation"</js>,
 			description=<js>"Swagger documentation for this resource."</js>,
@@ -139,7 +139,7 @@ BasicRestServlet
 			<jc>// Default page header contents.</jc>
 			header={
 				<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>, <jc>// Use @Rest(title)</jc>
-				<js>"&lt;h2&gt;$RS{methodSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @Rest(description)</jc>
+				<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
 				<js>"$C{REST/header}"</js> <jc>// Extra header HTML defined in external config file.</jc>
 			},
 			

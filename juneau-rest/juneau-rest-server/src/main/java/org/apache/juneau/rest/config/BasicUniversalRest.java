@@ -78,7 +78,7 @@ import org.apache.juneau.xml.*;
 	// Default page header contents.
 	header={
 		"<h1>$RS{title}</h1>",  // Use @Rest(title)
-		"<h2>$RS{methodSummary,description}</h2>", // Use either @RestMethod(summary) or @Rest(description)
+		"<h2>$RS{operationSummary,description}</h2>", // Use either @RestOp(summary) or @Rest(description)
 		"$C{REST/header}"  // Extra header HTML defined in external config file.
 	},
 

@@ -37,7 +37,7 @@ public class RestClient_Config_Context_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod(path="/echoBody")
+		@RestOp(path="/echoBody")
 		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getBody().getReader();
 		}

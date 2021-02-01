@@ -14,7 +14,7 @@ package org.apache.juneau.rest.springboot;
 
 import java.util.*;
 
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
@@ -155,7 +155,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @Rest
-public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalRest, BasicRestMethods {
+public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalRest, BasicRestOperations {
 	private static final long serialVersionUID = 1L;
 
 	//-----------------------------------------------------------------------------------------------------------------

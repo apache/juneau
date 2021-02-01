@@ -35,19 +35,19 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
  *
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a variable
+ * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a variable
  * in a URL path pattern.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+ * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(
  * 			<ja>@Path</ja>(<js>"foo"</js>) String foo,
  * 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
@@ -106,7 +106,7 @@ public @interface Path {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Comma-delimited list</jc>
-	 * 	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
+	 * 	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
 	 * 			name=<js>"status"</js>,
@@ -116,7 +116,7 @@ public @interface Path {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// JSON array</jc>
-	 * 	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
+	 * 	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
 	 * 			name=<js>"status"</js>,
@@ -789,7 +789,7 @@ public @interface Path {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
+	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> OMap allPathParameters) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
@@ -798,7 +798,7 @@ public @interface Path {
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @Path("*")</jc>
-	 * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}"</js>)
+	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod/{foo}/{bar}"</js>)
 	 * 		String myProxyMethod1(<ja>@Path</ja> Map&lt;String,Object&gt; allPathParameters);
 	 * 	}
 	 * 		</p>
@@ -924,7 +924,7 @@ public @interface Path {
 	 * 	<ja>@Rest</ja>(path="/child")
 	 * 	<jk>public class</jk> Child {
 	 *
-	 * 		<ja>@RestMethod</ja>(path="/")
+	 * 		<ja>@RestOp</ja>(path="/")
 	 * 		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"p1"</js>,required=<jk>false</jk>) String p1) {
 	 * 			<jc>// p1 will be null when accessed via "/child"</jc>
 	 *			<jc>// p1 will be non-null when accessed via "/parent/p1/child".</jc>
@@ -1066,14 +1066,14 @@ public @interface Path {
 	 * <p>
 	 * The following are completely equivalent ways of defining a path entry:
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(
+	 * 	<ja>@RestOp</ja>(
 	 * 		method=<js>"GET"</js>,
 	 * 		path=<js>"/pet/{petId}"</js>
 	 * 	)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) { ... }
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(
+	 * 	<ja>@RestOp</ja>(
 	 * 		method=<js>"GET"</js>,
 	 * 		path=<js>"/pet/{petId}"</js>
 	 * 	)

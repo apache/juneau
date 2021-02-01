@@ -39,7 +39,7 @@ MockRestClient
 		<ja>@Rest</ja>
 		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicJsonRest {
 
-			<ja>@RestMethod</ja>
+			<ja>@RestOp</ja>
 			<jk>public</jk> MyBean putEcho(<ja>@Body</ja> MyBean <jv>bean</jv>) {
 				<jk>return</jk> <jv>bean</jv>;
 			}
@@ -154,7 +154,7 @@ MockRestClient
 <p class='bpcode w800'>
 	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
 	<jk>public</jk> class A {
-		<ja>@RestMethod</ja>
+		<ja>@RestOp</ja>
 		<jk>public</jk> String get() {
 			<jk>return</jk> <js>"OK"</js>;
 		}
@@ -192,7 +192,7 @@ MockRestClient
 	<ja>@Remote</ja>
 	<jk>public interface</jk> MyRemoteInterface {
 	
-		<ja>@RemoteMethod</ja>(method=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+		<ja>@RemoteOp</ja>(method=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> <jv>id</jv>);
 	}
 
@@ -200,7 +200,7 @@ MockRestClient
 	<ja>@Rest</ja>
 	<jk>public class</jk> MyRest {
 	
-		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
+		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String <jv>id</jv>) {
 			<jk>return</jk> <jv>id</jv>;
 		}

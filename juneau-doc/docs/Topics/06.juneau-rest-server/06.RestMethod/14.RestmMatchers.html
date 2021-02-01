@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-@RestMethod(matchers)
+@RestOp(matchers)
 
 <p>
 	{@link oajr.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
@@ -23,13 +23,13 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// GET method that gets invoked for administrators</jc>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
 	<jk>public</jk> Object doGetForAdmin() {
 		...
 	}
 
 	<jc>// GET method that gets invoked for everyone else</jc>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public</jk> Object doGetForEveryoneElse() {
 		...
 	}
@@ -64,7 +64,7 @@
 </ul>
 
 <ul class='seealso'>
-	<li class='ja'>{@link oajr.annotation.RestMethod#matchers RestMethod(matchers)}
+	<li class='ja'>{@link oajr.annotation.RestOp#matchers RestOp(matchers)}
 	<li class='jc'>{@link oajr.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link oajr.matchers.UrlEncodedFormMatcher}
 </ul>

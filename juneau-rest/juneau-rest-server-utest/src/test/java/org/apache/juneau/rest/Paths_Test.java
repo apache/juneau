@@ -47,7 +47,7 @@ public class Paths_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(method=GET,path="/*")
+		@RestOp(method=GET,path="/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
@@ -195,7 +195,7 @@ public class Paths_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B {
-		@RestMethod(method=GET, path="/subpath/*")
+		@RestOp(method=GET, path="/subpath/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
@@ -347,7 +347,7 @@ public class Paths_Test {
 
 	@Rest(path="/a")
 	public static class C1 {
-		@RestMethod(method=GET,path="/*")
+		@RestOp(method=GET,path="/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
@@ -499,7 +499,7 @@ public class Paths_Test {
 
 	@Rest(path="/a")
 	public static class D1 {
-		@RestMethod(method=GET, path="/subpath/*")
+		@RestOp(method=GET, path="/subpath/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}

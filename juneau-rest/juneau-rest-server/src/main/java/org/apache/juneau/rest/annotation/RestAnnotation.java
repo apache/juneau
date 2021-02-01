@@ -94,13 +94,13 @@ public class RestAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends SwaggerProvider> swaggerProvider=SwaggerProvider.Null.class;
-		Class<? extends RestParam>[] restParams = new Class[0];
+		Class<? extends RestOperationParam>[] restOperationParams = new Class[0];
 		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
-		Class<? extends RestMethodContext> methodContextClass = RestMethodContext.Null.class;
+		Class<? extends RestOperationContext> restOperationContextClass = RestOperationContext.Null.class;
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
-		Class<? extends RestMethods> restMethodsClass = RestMethods.Null.class;
+		Class<? extends RestOperations> restOperationsClass = RestOperations.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
-		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
+		Swagger swagger = SwaggerAnnotation.DEFAULT;
 		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
 		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, produces={}, title={};
 
@@ -407,17 +407,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#methodContextClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder methodContextClass(Class<? extends RestMethodContext> value) {
-			this.methodContextClass = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#parsers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -506,24 +495,35 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#restMethodsClass()} property on this annotation.
+		 * Sets the {@link Rest#restOperationContextClass()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder restMethodsClass(Class<? extends RestMethods> value) {
-			this.restMethodsClass = value;
+		public Builder restOperationContextClass(Class<? extends RestOperationContext> value) {
+			this.restOperationContextClass = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Rest#restParams()} property on this annotation.
+		 * Sets the {@link Rest#restOperationParams()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder restParams(Class<? extends RestParam>...value) {
-			this.restParams = value;
+		public Builder restOperationParams(Class<? extends RestOperationParam>...value) {
+			this.restOperationParams = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#restOperationsClass()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder restOperationsClass(Class<? extends RestOperations> value) {
+			this.restOperationsClass = value;
 			return this;
 		}
 
@@ -588,7 +588,7 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder swagger(ResourceSwagger value) {
+		public Builder swagger(Swagger value) {
 			this.swagger = value;
 			return this;
 		}
@@ -695,13 +695,13 @@ public class RestAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
-		private final Class<? extends RestParam>[] restParams;
+		private final Class<? extends RestOperationParam>[] restOperationParams;
 		private final Class<? extends BeanFactory> beanFactory;
-		private final Class<? extends RestMethodContext> methodContextClass;
+		private final Class<? extends RestOperationContext> restOperationContextClass;
 		private final Class<? extends RestChildren> restChildrenClass;
-		private final Class<? extends RestMethods> restMethodsClass;
+		private final Class<? extends RestOperations> restOperationsClass;
 		private final Class<?>[] children, parsers, serializers;
-		private final ResourceSwagger swagger;
+		private final Swagger swagger;
 		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
 		private final String[] consumes, description, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
 
@@ -733,10 +733,6 @@ public class RestAnnotation {
 			this.guards = copyOf(b.guards);
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
-			this.methodContextClass = b.methodContextClass;
-			this.restChildrenClass = b.restChildrenClass;
-			this.restMethodsClass = b.restMethodsClass;
-			this.restParams = copyOf(b.restParams);
 			this.parsers = copyOf(b.parsers);
 			this.partParser = b.partParser;
 			this.partSerializer = b.partSerializer;
@@ -744,6 +740,10 @@ public class RestAnnotation {
 			this.produces = copyOf(b.produces);
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
 			this.responseHandlers = copyOf(b.responseHandlers);
+			this.restChildrenClass = b.restChildrenClass;
+			this.restOperationContextClass = b.restOperationContextClass;
+			this.restOperationsClass = b.restOperationsClass;
+			this.restOperationParams = copyOf(b.restOperationParams);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
 			this.serializers = copyOf(b.serializers);
@@ -890,11 +890,6 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestMethodContext> methodContextClass() {
-			return methodContextClass;
-		}
-
-		@Override /* Rest */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
@@ -935,13 +930,18 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestMethods> restMethodsClass() {
-			return restMethodsClass;
+		public Class<? extends RestOperationContext> restOperationContextClass() {
+			return restOperationContextClass;
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestParam>[] restParams() {
-			return restParams;
+		public Class<? extends RestOperationParam>[] restOperationParams() {
+			return restOperationParams;
+		}
+
+		@Override /* Rest */
+		public Class<? extends RestOperations> restOperationsClass() {
+			return restOperationsClass;
 		}
 
 		@Override /* Rest */
@@ -970,7 +970,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public ResourceSwagger swagger() {
+		public Swagger swagger() {
 			return swagger;
 		}
 
@@ -1041,7 +1041,7 @@ public class RestAnnotation {
 			psb.prependTo(REST_converters, a.converters());
 			psb.prependTo(REST_guards, reverse(a.guards()));
 			psb.prependTo(REST_children, a.children());
-			psb.prependTo(REST_restParams, a.restParams());
+			psb.prependTo(REST_restOperationParams, a.restOperationParams());
 			psb.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
 			psb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
 			psb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
@@ -1055,9 +1055,9 @@ public class RestAnnotation {
 			psb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
 			psb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
 			psb.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
-			psb.setIf(a.methodContextClass() != RestMethodContext.Null.class, REST_methodContextClass, a.methodContextClass());
+			psb.setIf(a.restOperationContextClass() != RestOperationContext.Null.class, REST_restOperationContextClass, a.restOperationContextClass());
 			psb.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
-			psb.setIf(a.restMethodsClass() != RestMethods.Null.class, REST_restMethodsClass, a.restMethodsClass());
+			psb.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
 			psb.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
 			psb.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
 			psb.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));

@@ -29,7 +29,7 @@ public class RestContext_ThreadLocals_Test {
 	@SuppressWarnings("serial")
 	@Rest(path="/a")
 	public static class A extends BasicRestServlet {
-		@RestMethod
+		@RestOp
 		public void a() throws Exception {
 			getResponse().getWriter().append(getRequest().getQuery("foo"));
 		}

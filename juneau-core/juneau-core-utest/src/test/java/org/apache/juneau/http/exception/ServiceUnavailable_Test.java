@@ -27,27 +27,27 @@ public class ServiceUnavailable_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws ServiceUnavailable {
 			throw new ServiceUnavailable();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws ServiceUnavailable {
 			throw new ServiceUnavailable("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws ServiceUnavailable {
 			throw new ServiceUnavailable(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws ServiceUnavailable {
 			throw new ServiceUnavailable(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws ServiceUnavailable {
 			throw new ServiceUnavailable().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws ServiceUnavailable {
 			throw new ServiceUnavailable("foo");
 		}

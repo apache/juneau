@@ -27,27 +27,27 @@ public class RequestHeaderFieldsTooLarge_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws RequestHeaderFieldsTooLarge {
 			throw new RequestHeaderFieldsTooLarge();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws RequestHeaderFieldsTooLarge {
 			throw new RequestHeaderFieldsTooLarge("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws RequestHeaderFieldsTooLarge {
 			throw new RequestHeaderFieldsTooLarge(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws RequestHeaderFieldsTooLarge {
 			throw new RequestHeaderFieldsTooLarge(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws RequestHeaderFieldsTooLarge {
 			throw new RequestHeaderFieldsTooLarge().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws RequestHeaderFieldsTooLarge {
 			throw new RequestHeaderFieldsTooLarge("foo");
 		}

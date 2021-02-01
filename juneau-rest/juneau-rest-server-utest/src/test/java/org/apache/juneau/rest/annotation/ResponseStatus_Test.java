@@ -25,7 +25,7 @@ public class ResponseStatus_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void a(@ResponseStatus Value<Integer> status) {
 			status.set(202);
 		}

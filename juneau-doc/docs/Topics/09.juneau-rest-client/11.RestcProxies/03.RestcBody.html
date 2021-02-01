@@ -17,7 +17,7 @@
 @Body
 
 <p>
-	The {@link oaj.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	The {@link oaj.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
 	to denote that they are the HTTP body of the request.
 </p>
 <ul class='javatree'>
@@ -34,7 +34,7 @@
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 
-		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+		<ja>@RemoteOp</ja>(path=<js>"/pets"</js>)
 		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>);
 	}
 </p>
@@ -43,7 +43,7 @@
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 
-		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+		<ja>@RemoteOp</ja>(path=<js>"/pets"</js>)
 		String addPet(Pet <jv>pet</jv>);
 	}
 
@@ -76,7 +76,7 @@
 </p>
 
 <p class='bpcode w800'>
-	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	<ja>@RemoteOp</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
 			serializer=OpenApiSerializer.<jk>class</jk>,
@@ -100,7 +100,7 @@
 <p class='bpcode w800'>
 	<jc>// Same as above but using free-form schema.</jc>
 	<jc>// Format is simplified-JSON (outer {} brackets are optional).</jc>
-	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	<ja>@RemoteOp</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
 			serializer=OpenApiSerializer.<jk>class</jk>,

@@ -13,7 +13,7 @@
 package org.apache.juneau.http.remote;
 
 /**
- * Possible values for the {@link RemoteMethod#returns() @RemoteMethod(returns)} annotation.
+ * Possible values for the {@link RemoteOp#returns() @RemoteOp(returns)} annotation.
  */
 public enum RemoteReturn {
 

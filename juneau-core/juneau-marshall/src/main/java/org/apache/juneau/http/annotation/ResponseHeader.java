@@ -32,11 +32,11 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments of server-side <ja>@RestOp</ja>-annotated methods.
  * 	<li>Methods and return types of server-side and client-side <ja>@Response</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments of server-side <ja>@RestMethod</ja>-annotated methods</h5>
+ * <h5 class='topic'>Arguments of server-side <ja>@RestOp</ja>-annotated methods</h5>
  *
  * <p>
  * On server-side REST, this annotation can be applied to method parameters to identify them as an HTTP response header.
@@ -48,14 +48,14 @@ import org.apache.juneau.oapi.*;
  *
  * <p class='bcode w800'>
  * 	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
- * 	<ja>@RestMethod</ja>(...)
+ * 	<ja>@RestOp</ja>(...)
  * 	<jk>public void</jk> login(RestResponse res) {
  * 		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
  * 		...
  * 	}
  *
  *	<jc>// Example #2 - Use on parameter.</jc>
- * 	<ja>@RestMethod</ja>(...)
+ * 	<ja>@RestOp</ja>(...)
  * 	<jk>public void</jk> login(
  * 			<ja>@ResponseHeader</ja>(
  * 				name=<js>"X-Rate-Limit"</js>,
@@ -71,7 +71,7 @@ import org.apache.juneau.oapi.*;
  * 	}
  *
  *	<jc>// Example #3 - Use on type.</jc>
- * 	<ja>@RestMethod</ja>(...)
+ * 	<ja>@RestOp</ja>(...)
  * 	<jk>public void</jk> login(Value&lt;RateLimit&gt; rateLimit) {
  * 		rateLimit.set(new RateLimit(1000));
  * 		...

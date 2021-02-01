@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Normal</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 		swagger=<ja>@Swagger</ja>(
  * 			contact=<ja>@Contact</ja>(
  * 				name=<js>"Juneau Development Team"</js>,
  * 				email=<js>"dev@juneau.apache.org"</js>,
@@ -41,7 +41,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 		swagger=<ja>@Swagger</ja>(
  * 			contact=<ja>@Contact</ja>({
  * 				<js>"name:'Juneau Development Team',"</js>,
  * 				<js>"email:'dev@juneau.apache.org',"</js>,
@@ -120,7 +120,7 @@ public @interface Contact {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			contact=<ja>@Contact</ja>(
 	 * 				name=<js>"Juneau Development Team"</js>,
 	 * 				email=<js>"dev@juneau.apache.org"</js>,
@@ -132,7 +132,7 @@ public @interface Contact {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			contact=<ja>@Contact</ja>({
 	 * 				<js>"name: 'Juneau Development Team',"</js>,
 	 * 				<js>"email: 'dev@juneau.apache.org',"</js>,
@@ -144,7 +144,7 @@ public @interface Contact {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			contact=<ja>@Contact</ja>(<js>"$L{contactSwagger}"</js>)
 	 * 	)
 	 * </p>

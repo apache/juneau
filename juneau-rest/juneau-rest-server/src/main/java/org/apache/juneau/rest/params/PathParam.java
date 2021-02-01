@@ -27,13 +27,13 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
 
 /**
- * Resolves method parameters and parameter types annotated with {@link Path} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link Path} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getPathMatch() getPathMatch}().{@link RequestPath#get(HttpPartParserSession,HttpPartSchema,String,Type,Type...) get}(<jv>parserSession<jv>, <jv>schema</jv>, <jv>name</jv>, <jv>type</jv>)</c>
  * with a {@link HttpPartSchema schema} derived from the {@link Path} annotation.
  */
-public class PathParam implements RestParam {
+public class PathParam implements RestOperationParam {
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
 	private final String name;
@@ -99,7 +99,7 @@ public class PathParam implements RestParam {
 		throw new ParameterException(paramInfo, "@Path used without name or value");
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());

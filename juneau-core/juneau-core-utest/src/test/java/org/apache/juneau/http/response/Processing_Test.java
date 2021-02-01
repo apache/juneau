@@ -23,9 +23,9 @@ public class Processing_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public Processing getA1() { return new Processing(); }
-		@RestMethod public Processing getA2() { return new Processing("foo"); }
-		@RestMethod public Processing getA3() { return new Processing().header("Foo","bar"); }
+		@RestOp public Processing getA1() { return new Processing(); }
+		@RestOp public Processing getA2() { return new Processing("foo"); }
+		@RestOp public Processing getA3() { return new Processing().header("Foo","bar"); }
 	}
 
 	@Test

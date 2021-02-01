@@ -32,15 +32,15 @@ public class ResponseHeader_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void a(Value<A1> h) {
 			h.set(new A1());
 		}
-		@RestMethod
+		@RestOp
 		public void b(@ResponseHeader(name="Foo") Value<String> h) {
 			h.set("foo");
 		}
-		@RestMethod
+		@RestOp
 		public void c(@ResponseHeader(name="Bar") Value<A1> h) {
 			h.set(new A1());
 		}
@@ -82,7 +82,7 @@ public class ResponseHeader_Test {
 			type="string"
 		)
 		public static class B1 {}
-		@RestMethod
+		@RestOp
 		public void a(Value<B1> h) {}
 
 		@ResponseHeader(
@@ -93,7 +93,7 @@ public class ResponseHeader_Test {
 			}
 		)
 		public static class B2 {}
-		@RestMethod
+		@RestOp
 		public void b(Value<B2> h) {}
 
 		@ResponseHeader(
@@ -106,27 +106,27 @@ public class ResponseHeader_Test {
 			type="string"
 		)
 		public static class B3 {}
-		@RestMethod
+		@RestOp
 		public void c(Value<B3> h) {}
 
 		@ResponseHeader(name="H", code=100)
 		public static class B4 {}
-		@RestMethod
+		@RestOp
 		public void d(Value<B4> h) {}
 
 		@ResponseHeader(name="H", code={100,101})
 		public static class B5 {}
-		@RestMethod
+		@RestOp
 		public void e(Value<B5> h) {}
 
 		@ResponseHeader(name="H", description="a")
 		public static class B6 {}
-		@RestMethod
+		@RestOp
 		public void f(Value<B6> h) {}
 
 		@ResponseHeader("H")
 		public static class B7 {}
-		@RestMethod
+		@RestOp
 		public void g(Value<B7> h) {}
 	}
 
@@ -134,7 +134,7 @@ public class ResponseHeader_Test {
 	@Test
 	public void b01_swagger_onPojo() throws Exception {
 		HeaderInfo x;
-		Swagger s = getSwagger(B.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
 
 		x = s.getResponseInfo("/a","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());
@@ -170,7 +170,7 @@ public class ResponseHeader_Test {
 	public static class C {
 
 		public static class C1 {}
-		@RestMethod
+		@RestOp
 		public void a(
 			@ResponseHeader(
 				name="H",
@@ -179,7 +179,7 @@ public class ResponseHeader_Test {
 			) Value<C1> h) {}
 
 		public static class C2 {}
-		@RestMethod
+		@RestOp
 		public void b(
 			@ResponseHeader(
 				name="H",
@@ -190,7 +190,7 @@ public class ResponseHeader_Test {
 			) Value<C2> h) {}
 
 		public static class C3 {}
-		@RestMethod
+		@RestOp
 		public void c(
 			@ResponseHeader(
 				name="H",
@@ -203,26 +203,26 @@ public class ResponseHeader_Test {
 			) Value<C3> h) {}
 
 		public static class C4 {}
-		@RestMethod
+		@RestOp
 		public void d(@ResponseHeader(name="H", code=100) Value<C4> h) {}
 
 		public static class C5 {}
-		@RestMethod
+		@RestOp
 		public void e(@ResponseHeader(name="H", code={100,101}) Value<C5> h) {}
 
 		public static class C6 {}
-		@RestMethod
+		@RestOp
 		public void f(@ResponseHeader(name="H", description="a") Value<C6> h) {}
 
 		public static class C7 {}
-		@RestMethod
+		@RestOp
 		public void g(@ResponseHeader("H") Value<C7> h) {}
 	}
 
 	@Test
 	public void c01_swagger_onMethodParameters() throws Exception {
 		HeaderInfo x;
-		Swagger sc = getSwagger(C.class);
+		org.apache.juneau.dto.swagger.Swagger sc = getSwagger(C.class);
 
 		x = sc.getResponseInfo("/a","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());

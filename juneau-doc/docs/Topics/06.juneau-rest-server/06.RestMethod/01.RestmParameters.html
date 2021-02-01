@@ -86,7 +86,7 @@ Java Method Parameters
 				</ul>
 			<li><b>Other:</b>
 				<ul>
-					<li class='jc'>{@link oaj.http.HttpMethod} - The method name matched (when using <c><ja>@RestMethod</ja>(method=<js>"*"</js>)</c>)
+					<li class='jc'>{@link oaj.http.HttpMethod} - The method name matched (when using <c><ja>@RestOp</ja>(method=<js>"*"</js>)</c>)
 					<li class='jc'>{@link oajr.RestLogger} - Logger with additional features.
 					<li class='jc'>{@link oajr.RestContext} - The resource read-only context.
 					<li class='jc'>{@link oaj.parser.Parser} - The parser matching the request content type.
@@ -115,7 +115,7 @@ Java Method Parameters
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
 	<jk>public</jk> String doGetExample1(
 		RestRequest req,
 		RestResponse res,

@@ -56,7 +56,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String getA(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -64,31 +64,31 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface A1 {
-		@RemoteMethod(path="a") String getX1(@Query("x") int b);
-		@RemoteMethod(path="a") String getX2(@Query("x") float b);
-		@RemoteMethod(path="a") String getX3(@Query("x") Bean b);
-		@RemoteMethod(path="a") String getX4(@Query("*") Bean b);
-		@RemoteMethod(path="a") String getX5(@Query Bean b);
-		@RemoteMethod(path="a") String getX6(@Query("x") Bean[] b);
-		@RemoteMethod(path="a") String getX7(@Query(n="x",cf="uon") Bean[] b);
-		@RemoteMethod(path="a") String getX8(@Query("x") List<Bean> b);
-		@RemoteMethod(path="a") String getX9(@Query(n="x",cf="uon") List<Bean> b);
-		@RemoteMethod(path="a") String getX10(@Query("x") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getX11(@Query("*") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getX12(@Query Map<String,Bean> b);
-		@RemoteMethod(path="a") String getX13(@Query(n="x",cf="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getX14(@Query(f="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getX15(@Query("*") Reader b);
-		@RemoteMethod(path="a") String getX16(@Query Reader b);
-		@RemoteMethod(path="a") String getX17(@Query("*") InputStream b);
-		@RemoteMethod(path="a") String getX18(@Query InputStream b);
-		@RemoteMethod(path="a") String getX19(@Query("*") NameValuePairSupplier b);
-		@RemoteMethod(path="a") String getX20(@Query NameValuePairSupplier b);
-		@RemoteMethod(path="a") String getX21(@Query NameValuePair b);
-		@RemoteMethod(path="a") String getX22(@Query NameValuePair[] b);
-		@RemoteMethod(path="a") String getX23(@Query BasicNameValuePair[] b);
-		@RemoteMethod(path="a") String getX24(@Query String b);
-		@RemoteMethod(path="a") String getX25(@Query List<NameValuePair> b);
+		@RemoteOp(path="a") String getX1(@Query("x") int b);
+		@RemoteOp(path="a") String getX2(@Query("x") float b);
+		@RemoteOp(path="a") String getX3(@Query("x") Bean b);
+		@RemoteOp(path="a") String getX4(@Query("*") Bean b);
+		@RemoteOp(path="a") String getX5(@Query Bean b);
+		@RemoteOp(path="a") String getX6(@Query("x") Bean[] b);
+		@RemoteOp(path="a") String getX7(@Query(n="x",cf="uon") Bean[] b);
+		@RemoteOp(path="a") String getX8(@Query("x") List<Bean> b);
+		@RemoteOp(path="a") String getX9(@Query(n="x",cf="uon") List<Bean> b);
+		@RemoteOp(path="a") String getX10(@Query("x") Map<String,Bean> b);
+		@RemoteOp(path="a") String getX11(@Query("*") Map<String,Bean> b);
+		@RemoteOp(path="a") String getX12(@Query Map<String,Bean> b);
+		@RemoteOp(path="a") String getX13(@Query(n="x",cf="uon") Map<String,Bean> b);
+		@RemoteOp(path="a") String getX14(@Query(f="uon") Map<String,Bean> b);
+		@RemoteOp(path="a") String getX15(@Query("*") Reader b);
+		@RemoteOp(path="a") String getX16(@Query Reader b);
+		@RemoteOp(path="a") String getX17(@Query("*") InputStream b);
+		@RemoteOp(path="a") String getX18(@Query InputStream b);
+		@RemoteOp(path="a") String getX19(@Query("*") NameValuePairSupplier b);
+		@RemoteOp(path="a") String getX20(@Query NameValuePairSupplier b);
+		@RemoteOp(path="a") String getX21(@Query NameValuePair b);
+		@RemoteOp(path="a") String getX22(@Query NameValuePair[] b);
+		@RemoteOp(path="a") String getX23(@Query BasicNameValuePair[] b);
+		@RemoteOp(path="a") String getX24(@Query String b);
+		@RemoteOp(path="a") String getX25(@Query List<NameValuePair> b);
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class B {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -136,10 +136,10 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface B1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",df="foo") String b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",df="foo",aev=true) String b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",df="") String b);
-		@RemoteMethod(path="/") String getX4(@Query(n="x",df="",aev=true) String b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",df="foo") String b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",df="foo",aev=true) String b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",df="") String b);
+		@RemoteOp(path="/") String getX4(@Query(n="x",df="",aev=true) String b);
 	}
 
 	@Test
@@ -161,11 +161,11 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod
+		@RestOp
 		public String getA(@Query("*") OMap m) {
 			return m.toString();
 		}
-		@RestMethod
+		@RestOp
 		public Reader getB(RestRequest req) {
 			return new StringReader(req.getQueryString());
 		}
@@ -173,20 +173,20 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface C1 {
-		@RemoteMethod(path="/a") String getX1(@Query(n="x") String...b);
-		@RemoteMethod(path="/b") String getX2(@Query(n="x") String...b);
-		@RemoteMethod(path="/a") String getX3(@Query(n="x",cf="csv") String...b);
-		@RemoteMethod(path="/b") String getX4(@Query(n="x",cf="csv") String...b);
-		@RemoteMethod(path="/a") String getX5(@Query(n="x",cf="ssv") String...b);
-		@RemoteMethod(path="/b") String getX6(@Query(n="x",cf="ssv") String...b);
-		@RemoteMethod(path="/a") String getX7(@Query(n="x",cf="tsv") String...b);
-		@RemoteMethod(path="/b") String getX8(@Query(n="x",cf="tsv") String...b);
-		@RemoteMethod(path="/a") String getX9(@Query(n="x",cf="pipes") String...b);
-		@RemoteMethod(path="/b") String getX10(@Query(n="x",cf="pipes") String...b);
-		@RemoteMethod(path="/a") String getX11(@Query(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteMethod(path="/b") String getX12(@Query(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
-		@RemoteMethod(path="/a") String getX13(@Query(n="x",cf="uon") String...b);
-		@RemoteMethod(path="/b") String getX14(@Query(n="x",cf="uon") String...b);
+		@RemoteOp(path="/a") String getX1(@Query(n="x") String...b);
+		@RemoteOp(path="/b") String getX2(@Query(n="x") String...b);
+		@RemoteOp(path="/a") String getX3(@Query(n="x",cf="csv") String...b);
+		@RemoteOp(path="/b") String getX4(@Query(n="x",cf="csv") String...b);
+		@RemoteOp(path="/a") String getX5(@Query(n="x",cf="ssv") String...b);
+		@RemoteOp(path="/b") String getX6(@Query(n="x",cf="ssv") String...b);
+		@RemoteOp(path="/a") String getX7(@Query(n="x",cf="tsv") String...b);
+		@RemoteOp(path="/b") String getX8(@Query(n="x",cf="tsv") String...b);
+		@RemoteOp(path="/a") String getX9(@Query(n="x",cf="pipes") String...b);
+		@RemoteOp(path="/b") String getX10(@Query(n="x",cf="pipes") String...b);
+		@RemoteOp(path="/a") String getX11(@Query(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/b") String getX12(@Query(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
+		@RemoteOp(path="/a") String getX13(@Query(n="x",cf="uon") String...b);
+		@RemoteOp(path="/b") String getX14(@Query(n="x",cf="uon") String...b);
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class D {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -222,48 +222,48 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface D1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",min="1",max="10") int b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",min="1",max="10",emin=false,emax=false) int b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",min="1",max="10",emin=true,emax=true) int b);
-		@RemoteMethod(path="/") String getX4(@Query(n="x",min="1",max="10") short b);
-		@RemoteMethod(path="/") String getX5(@Query(n="x",min="1",max="10",emin=false,emax=false) short b);
-		@RemoteMethod(path="/") String getX6(@Query(n="x",min="1",max="10",emin=true,emax=true) short b);
-		@RemoteMethod(path="/") String getX7(@Query(n="x",min="1",max="10") long b);
-		@RemoteMethod(path="/") String getX8(@Query(n="x",min="1",max="10",emin=false,emax=false) long b);
-		@RemoteMethod(path="/") String getX9(@Query(n="x",min="1",max="10",emin=true,emax=true) long b);
-		@RemoteMethod(path="/") String getX10(@Query(n="x",min="1",max="10") float b);
-		@RemoteMethod(path="/") String getX11(@Query(n="x",min="1",max="10",emin=false,emax=false) float b);
-		@RemoteMethod(path="/") String getX12(@Query(n="x",min="1",max="10",emin=true,emax=true) float b);
-		@RemoteMethod(path="/") String getX13(@Query(n="x",min="1",max="10") double b);
-		@RemoteMethod(path="/") String getX14(@Query(n="x",min="1",max="10",emin=false,emax=false) double b);
-		@RemoteMethod(path="/") String getX15(@Query(n="x",min="1",max="10",emin=true,emax=true) double b);
-		@RemoteMethod(path="/") String getX16(@Query(n="x",min="1",max="10") byte b);
-		@RemoteMethod(path="/") String getX17(@Query(n="x",min="1",max="10",emin=false,emax=false) byte b);
-		@RemoteMethod(path="/") String getX18(@Query(n="x",min="1",max="10",emin=true,emax=true) byte b);
-		@RemoteMethod(path="/") String getX19(@Query(n="x",min="1",max="10") AtomicInteger b);
-		@RemoteMethod(path="/") String getX20(@Query(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
-		@RemoteMethod(path="/") String getX21(@Query(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
-		@RemoteMethod(path="/") String getX22(@Query(n="x",min="1",max="10") BigDecimal b);
-		@RemoteMethod(path="/") String getX23(@Query(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
-		@RemoteMethod(path="/") String getX24(@Query(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
-		@RemoteMethod(path="/") String getX25(@Query(n="x",min="1",max="10") Integer b);
-		@RemoteMethod(path="/") String getX26(@Query(n="x",min="1",max="10",emin=false,emax=false) Integer b);
-		@RemoteMethod(path="/") String getX27(@Query(n="x",min="1",max="10",emin=true,emax=true) Integer b);
-		@RemoteMethod(path="/") String getX28(@Query(n="x",min="1",max="10") Short b);
-		@RemoteMethod(path="/") String getX29(@Query(n="x",min="1",max="10",emin=false,emax=false) Short b);
-		@RemoteMethod(path="/") String getX30(@Query(n="x",min="1",max="10",emin=true,emax=true) Short b);
-		@RemoteMethod(path="/") String getX31(@Query(n="x",min="1",max="10") Long b);
-		@RemoteMethod(path="/") String getX32(@Query(n="x",min="1",max="10",emin=false,emax=false) Long b);
-		@RemoteMethod(path="/") String getX33(@Query(n="x",min="1",max="10",emin=true,emax=true) Long b);
-		@RemoteMethod(path="/") String getX34(@Query(n="x",min="1",max="10") Float b);
-		@RemoteMethod(path="/") String getX35(@Query(n="x",min="1",max="10",emin=false,emax=false) Float b);
-		@RemoteMethod(path="/") String getX36(@Query(n="x",min="1",max="10",emin=true,emax=true) Float b);
-		@RemoteMethod(path="/") String getX37(@Query(n="x",min="1",max="10") Double b);
-		@RemoteMethod(path="/") String getX38(@Query(n="x",min="1",max="10",emin=false,emax=false) Double b);
-		@RemoteMethod(path="/") String getX39(@Query(n="x",min="1",max="10",emin=true,emax=true) Double b);
-		@RemoteMethod(path="/") String getX40(@Query(n="x",min="1",max="10") Byte b);
-		@RemoteMethod(path="/") String getX41(@Query(n="x",min="1",max="10",emin=false,emax=false) Byte b);
-		@RemoteMethod(path="/") String getX42(@Query(n="x",min="1",max="10",emin=true,emax=true) Byte b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",min="1",max="10") int b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",min="1",max="10",emin=false,emax=false) int b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",min="1",max="10",emin=true,emax=true) int b);
+		@RemoteOp(path="/") String getX4(@Query(n="x",min="1",max="10") short b);
+		@RemoteOp(path="/") String getX5(@Query(n="x",min="1",max="10",emin=false,emax=false) short b);
+		@RemoteOp(path="/") String getX6(@Query(n="x",min="1",max="10",emin=true,emax=true) short b);
+		@RemoteOp(path="/") String getX7(@Query(n="x",min="1",max="10") long b);
+		@RemoteOp(path="/") String getX8(@Query(n="x",min="1",max="10",emin=false,emax=false) long b);
+		@RemoteOp(path="/") String getX9(@Query(n="x",min="1",max="10",emin=true,emax=true) long b);
+		@RemoteOp(path="/") String getX10(@Query(n="x",min="1",max="10") float b);
+		@RemoteOp(path="/") String getX11(@Query(n="x",min="1",max="10",emin=false,emax=false) float b);
+		@RemoteOp(path="/") String getX12(@Query(n="x",min="1",max="10",emin=true,emax=true) float b);
+		@RemoteOp(path="/") String getX13(@Query(n="x",min="1",max="10") double b);
+		@RemoteOp(path="/") String getX14(@Query(n="x",min="1",max="10",emin=false,emax=false) double b);
+		@RemoteOp(path="/") String getX15(@Query(n="x",min="1",max="10",emin=true,emax=true) double b);
+		@RemoteOp(path="/") String getX16(@Query(n="x",min="1",max="10") byte b);
+		@RemoteOp(path="/") String getX17(@Query(n="x",min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteOp(path="/") String getX18(@Query(n="x",min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteOp(path="/") String getX19(@Query(n="x",min="1",max="10") AtomicInteger b);
+		@RemoteOp(path="/") String getX20(@Query(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteOp(path="/") String getX21(@Query(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteOp(path="/") String getX22(@Query(n="x",min="1",max="10") BigDecimal b);
+		@RemoteOp(path="/") String getX23(@Query(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteOp(path="/") String getX24(@Query(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteOp(path="/") String getX25(@Query(n="x",min="1",max="10") Integer b);
+		@RemoteOp(path="/") String getX26(@Query(n="x",min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteOp(path="/") String getX27(@Query(n="x",min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteOp(path="/") String getX28(@Query(n="x",min="1",max="10") Short b);
+		@RemoteOp(path="/") String getX29(@Query(n="x",min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteOp(path="/") String getX30(@Query(n="x",min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteOp(path="/") String getX31(@Query(n="x",min="1",max="10") Long b);
+		@RemoteOp(path="/") String getX32(@Query(n="x",min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteOp(path="/") String getX33(@Query(n="x",min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteOp(path="/") String getX34(@Query(n="x",min="1",max="10") Float b);
+		@RemoteOp(path="/") String getX35(@Query(n="x",min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteOp(path="/") String getX36(@Query(n="x",min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteOp(path="/") String getX37(@Query(n="x",min="1",max="10") Double b);
+		@RemoteOp(path="/") String getX38(@Query(n="x",min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteOp(path="/") String getX39(@Query(n="x",min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteOp(path="/") String getX40(@Query(n="x",min="1",max="10") Byte b);
+		@RemoteOp(path="/") String getX41(@Query(n="x",min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteOp(path="/") String getX42(@Query(n="x",min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	@Test
@@ -463,7 +463,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class E {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -471,12 +471,12 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface E1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",cf="pipes",mini=1,maxi=2) String...b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",cf="pipes",ui=false) String...b);
-		@RemoteMethod(path="/") String getX4(@Query(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
-		@RemoteMethod(path="/") String getX5(@Query(n="x",cf="pipes",ui=true) String...b);
-		@RemoteMethod(path="/") String getX6(@Query(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",cf="pipes",mini=1,maxi=2) String...b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",cf="pipes",ui=false) String...b);
+		@RemoteOp(path="/") String getX4(@Query(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteOp(path="/") String getX5(@Query(n="x",cf="pipes",ui=true) String...b);
+		@RemoteOp(path="/") String getX6(@Query(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	@Test
@@ -506,7 +506,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class F {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -514,12 +514,12 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface F1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",minl=2,maxl=3) String b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",e={"foo"}) String b);
-		@RemoteMethod(path="/") String getX4(@Query(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
-		@RemoteMethod(path="/") String getX5(@Query(n="x",p="foo\\d{1,3}") String b);
-		@RemoteMethod(path="/") String getX6(@Query(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",minl=2,maxl=3) String b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",e={"foo"}) String b);
+		@RemoteOp(path="/") String getX4(@Query(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteOp(path="/") String getX5(@Query(n="x",p="foo\\d{1,3}") String b);
+		@RemoteOp(path="/") String getX6(@Query(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	@Test
@@ -555,7 +555,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class G {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -563,20 +563,20 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface G1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",mo="2") int b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",mo="2") short b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",mo="2") long b);
-		@RemoteMethod(path="/") String getX4(@Query(n="x",mo="2") float b);
-		@RemoteMethod(path="/") String getX5(@Query(n="x",mo="2") double b);
-		@RemoteMethod(path="/") String getX6(@Query(n="x",mo="2") byte b);
-		@RemoteMethod(path="/") String getX7(@Query(n="x",mo="2") AtomicInteger b);
-		@RemoteMethod(path="/") String getX8(@Query(n="x",mo="2") BigDecimal b);
-		@RemoteMethod(path="/") String getX9(@Query(n="x",mo="2") Integer b);
-		@RemoteMethod(path="/") String getX10(@Query(n="x",mo="2") Short b);
-		@RemoteMethod(path="/") String getX11(@Query(n="x",mo="2") Long b);
-		@RemoteMethod(path="/") String getX12(@Query(n="x",mo="2") Float b);
-		@RemoteMethod(path="/") String getX13(@Query(n="x",mo="2") Double b);
-		@RemoteMethod(path="/") String getX14(@Query(n="x",mo="2") Byte b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",mo="2") int b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",mo="2") short b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",mo="2") long b);
+		@RemoteOp(path="/") String getX4(@Query(n="x",mo="2") float b);
+		@RemoteOp(path="/") String getX5(@Query(n="x",mo="2") double b);
+		@RemoteOp(path="/") String getX6(@Query(n="x",mo="2") byte b);
+		@RemoteOp(path="/") String getX7(@Query(n="x",mo="2") AtomicInteger b);
+		@RemoteOp(path="/") String getX8(@Query(n="x",mo="2") BigDecimal b);
+		@RemoteOp(path="/") String getX9(@Query(n="x",mo="2") Integer b);
+		@RemoteOp(path="/") String getX10(@Query(n="x",mo="2") Short b);
+		@RemoteOp(path="/") String getX11(@Query(n="x",mo="2") Long b);
+		@RemoteOp(path="/") String getX12(@Query(n="x",mo="2") Float b);
+		@RemoteOp(path="/") String getX13(@Query(n="x",mo="2") Double b);
+		@RemoteOp(path="/") String getX14(@Query(n="x",mo="2") Byte b);
 	}
 
 	@Test
@@ -618,7 +618,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class H {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -626,9 +626,9 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface H1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x") String b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",r=false) String b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",r=true) String b);
+		@RemoteOp(path="/") String getX1(@Query(n="x") String b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",r=false) String b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",r=true) String b);
 	}
 
 	@Test
@@ -646,7 +646,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class I {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -654,9 +654,9 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface I1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",aev=true) String b);
-		@RemoteMethod(path="/") String getX2(@Query(n="x",aev=true,sie=false) String b);
-		@RemoteMethod(path="/") String getX3(@Query(n="x",sie=true) String b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",aev=true) String b);
+		@RemoteOp(path="/") String getX2(@Query(n="x",aev=true,sie=false) String b);
+		@RemoteOp(path="/") String getX3(@Query(n="x",sie=true) String b);
 	}
 
 	@Test
@@ -673,7 +673,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class J {
-		@RestMethod
+		@RestOp
 		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
@@ -681,7 +681,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote
 	public static interface J1 {
-		@RemoteMethod(path="/") String getX1(@Query(n="x",serializer=XPartSerializer.class) String b);
+		@RemoteOp(path="/") String getX1(@Query(n="x",serializer=XPartSerializer.class) String b);
 	}
 
 	@Test
@@ -696,7 +696,7 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class K {
-		@RestMethod
+		@RestOp
 		public String get(RestRequest req) throws Exception {
 			return req.getQuery().toString(true);
 		}
@@ -708,8 +708,8 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K1 {
-		@RemoteMethod(path="/") String getX1(@Request K1b rb);
-		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K1b rb);
+		@RemoteOp(path="/") String getX1(@Request K1b rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K1b rb);
 	}
 
 	public static interface K1a {
@@ -753,8 +753,8 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K2 {
-		@RemoteMethod(path="/") String getX1(@Request K2a rb);
-		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K2a rb);
+		@RemoteOp(path="/") String getX1(@Request K2a rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -791,8 +791,8 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K3 {
-		@RemoteMethod(path="/") String getX1(@Request K3a rb);
-		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K3a rb);
+		@RemoteOp(path="/") String getX1(@Request K3a rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -881,8 +881,8 @@ public class Remote_QueryAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K6 {
-		@RemoteMethod(path="/") String getX1(@Request K6a rb);
-		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K6a rb);
+		@RemoteOp(path="/") String getX1(@Request K6a rb);
+		@RemoteOp(path="/") String getX2(@Request(serializer=XSerializer.class) K6a rb);
 	}
 
 	public static class K6a {

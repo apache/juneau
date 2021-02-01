@@ -21,10 +21,10 @@ Parameters
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Operations.2.png'> 
 <p>
 	Parameter information can be defined in a couple of ways.  The typical way is through annotations on parameters
-	being passed to your <ja>@RestMethod</ja>-annotated method, like so:
+	being passed to your <ja>@RestOp</ja>-annotated method, like so:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		...
 	)
 	<jk>public</jk> Collection&lt;Pet&gt; getPets(
@@ -70,11 +70,11 @@ Parameters
 </p>
 <h5 class='figure'>PetStoreResource.getPets()</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>,
 		path=<js>"/pet"</js>,
 		summary=<js>"All pets in the store"</js>,
-		swagger=<ja>@MethodSwagger</ja>(
+		swagger=<ja>@OpSwagger</ja>(
 			tags=<js>"pet"</js>,
 			parameters={
 				Queryable.<jsf>SWAGGER_PARAMS</jsf>
@@ -132,9 +132,9 @@ Parameters
 	The definition of this method is shown here:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		summary=<js>"Add a new pet to the store"</js>,
-		swagger=<ja>@MethodSwagger</ja>(
+		swagger=<ja>@OpSwagger</ja>(
 			tags=<js>"pet"</js>
 		)
 	)

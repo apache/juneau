@@ -73,7 +73,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	// REST methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/",
 		summary="List of available remote interfaces",
@@ -86,7 +86,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return l;
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/{javaInterface}",
 		summary="List of available methods on interface",
@@ -105,7 +105,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return l;
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/{javaInterface}/{javaMethod}",
 		summary="Form entry for interface method call",
@@ -153,12 +153,12 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return div(form().id("form").action("request:/").method(POST).children(t));
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=POST,
 		path="/{javaInterface}/{javaMethod}",
 		summary="Invoke an interface method",
 		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",
-		swagger=@MethodSwagger(
+		swagger=@OpSwagger(
 			parameters= {
 				"{",
 					"in: 'body',",

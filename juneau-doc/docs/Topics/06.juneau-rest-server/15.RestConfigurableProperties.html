@@ -69,12 +69,12 @@ Configurable Properties
 	Properties can also be overridden at the Java method level:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestMethod#properties() RestMethod(properties)} 
+	<li class='ja'>{@link oajr.annotation.RestOp#properties() RestOp(properties)} 
 	<li class='jc'>{@link oajr.RequestProperties} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// GET method with method-level properties</jc>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>, path=<js>"/*"</js>,
 		properties={
 			<jc>// Bean properties should be sorted alphabetically.</jc>
@@ -92,7 +92,6 @@ Configurable Properties
 </p>
 <ul class='seealso'>
 	<li class='ja'>{@link oajr.annotation.Rest#flags() Rest(flags)} - Shorthand for boolean properties.
-	<li class='ja'>{@link oajr.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
+	<li class='ja'>{@link oajr.annotation.RestOp#flags() RestOp(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link oajr.RestContextProperties} 
-	<li class='jc'>{@link oajr.RestMethodProperties} 
 </ul>

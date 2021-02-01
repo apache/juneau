@@ -23,9 +23,9 @@ public class UseProxy_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public UseProxy getA1() { return new UseProxy(); }
-		@RestMethod public UseProxy getA2() { return new UseProxy("foo"); }
-		@RestMethod public UseProxy getA3() { return new UseProxy().header("Foo","bar"); }
+		@RestOp public UseProxy getA1() { return new UseProxy(); }
+		@RestOp public UseProxy getA2() { return new UseProxy("foo"); }
+		@RestOp public UseProxy getA3() { return new UseProxy().header("Foo","bar"); }
 	}
 
 	@Test

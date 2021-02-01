@@ -62,7 +62,7 @@ import org.apache.juneau.rest.reshandlers.*;
  * 	)
  * 	<jk>public class</jk> Example <jk>extends</jk> RestServlet {
  *
- * 		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+ * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
  * 		<jk>public</jk> Foo test1() {
  * 			<jk>return new</jk> Foo(<js>"123"</js>);
  * 		}

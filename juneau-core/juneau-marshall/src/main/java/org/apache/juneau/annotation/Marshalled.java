@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <p>
@@ -113,7 +113,7 @@ public @interface Marshalled {
 	 * 	<jk>public class</jk> B {...}
 	 *
 	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<ja>@Marshalled</ja>(on=<js>"B"</js>, example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public void</jk> doFoo() {...}
 	 * </p>

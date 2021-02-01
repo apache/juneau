@@ -27,27 +27,27 @@ public class TooManyRequests_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws TooManyRequests {
 			throw new TooManyRequests();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws TooManyRequests {
 			throw new TooManyRequests("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws TooManyRequests {
 			throw new TooManyRequests(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws TooManyRequests {
 			throw new TooManyRequests(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws TooManyRequests {
 			throw new TooManyRequests().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws TooManyRequests {
 			throw new TooManyRequests("foo");
 		}

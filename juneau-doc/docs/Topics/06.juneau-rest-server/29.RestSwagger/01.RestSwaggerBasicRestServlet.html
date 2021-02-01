@@ -45,7 +45,7 @@ BasicRestServlet
 		 * <ja>@param</ja> req The HTTP request.
 		 * <ja>@return</ja> A bean containing the contents for the OPTIONS page.
 		 */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 			
 			summary=<js>"Swagger documentation"</js>,
 			description=<js>"Swagger documentation for this resource."</js>,
@@ -88,5 +88,5 @@ BasicRestServlet
 </p>
 <p>
 	Note that to have your resource create Swagger UI, you must either extend from {@link oajr.BasicRestServlet} or provide
-	your own <ja>@RestMethod</ja>-annotated method that returns a {@link oaj.dto.swagger.Swagger} object and a {@link oaj.dto.swagger.ui.SwaggerUI} swap.
+	your own <ja>@RestOp</ja>-annotated method that returns a {@link oaj.dto.swagger.Swagger} object and a {@link oaj.dto.swagger.ui.SwaggerUI} swap.
 </p>

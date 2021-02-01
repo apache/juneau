@@ -27,7 +27,7 @@ import org.apache.juneau.*;
  * <ul>
  * 	<li>Classes that should be treated as URIs when serialized.
  * 	<li>Methods/fields whose values should be treated as URIs when serialized.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <p>

@@ -13,16 +13,16 @@
  ***************************************************************************************************************************/
  -->
 
-@RestMethod
+@RestOp
 
 <p>
 	REST Java methods are identified on REST servlets using the 
-	{@link oajr.annotation.RestMethod @RestMethod} annotation. 
+	{@link oajr.annotation.RestOp @RestOp} annotation. 
 	The annotation allows the framework to identify the available REST methods through reflection.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
 	<jk>public</jk> String sayHello() {
 		<jk>return</jk> <js>"Hello world!"</js>;
 	}
@@ -52,33 +52,33 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Method="GET", path="/foo"</jc>
-	<ja>@RestMethod</ja>
+	<ja>@RestOp</ja>
 	<jk>public</jk> String getFoo() {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Method="DELETE", path="/foo"</jc>
-	<ja>@RestMethod</ja>
+	<ja>@RestOp</ja>
 	<jk>public</jk> String deleteFoo() {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Method="GET", path="/foo"</jc>
 	<jc>// "GET" is default</jc>
-	<ja>@RestMethod</ja>
+	<ja>@RestOp</ja>
 	<jk>public</jk> String foo() {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Method="GET", path="/"</jc>
-	<ja>@RestMethod</ja>(path=<js>"/"</js>)
+	<ja>@RestOp</ja>(path=<js>"/"</js>)
 	<jk>public</jk> String foo() {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Method="GET", path="/"</jc>
-	<ja>@RestMethod</ja>
+	<ja>@RestOp</ja>
 	<jk>public</jk> String get() {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Method="POST", path="/"</jc>
-	<ja>@RestMethod</ja>
+	<ja>@RestOp</ja>
 	<jk>public</jk> String post() {...}
 </p>
 

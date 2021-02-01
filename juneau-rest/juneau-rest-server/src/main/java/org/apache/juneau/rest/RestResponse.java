@@ -47,7 +47,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+ * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		res.setOutput(<js>"Simple string response"</js>);
  * 	}
@@ -61,7 +61,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	private HttpServletResponse inner;
 	private final RestRequest request;
-	private RestMethodContext restJavaMethod;
+	private RestOperationContext opContext;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private ServletOutputStream sos;
@@ -96,8 +96,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm) throws NotAcceptable, IOException {
-		this.restJavaMethod = rjm;
+	final void init(RestOperationContext roc) throws NotAcceptable, IOException {
+		this.opContext = roc;
 
 		if (request.isDebug())
 			setDebug();
@@ -106,11 +106,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		String h = request.getHeader("accept-charset");
 		String charset = null;
 		if (h == null)
-			charset = rjm.defaultCharset;
+			charset = roc.defaultCharset;
 		else for (StringRange r : StringRanges.of(h).getRanges()) {
 			if (r.getQValue() > 0) {
 				if (r.getName().equals("*"))
-					charset = rjm.defaultCharset;
+					charset = roc.defaultCharset;
 				else if (Charset.isSupported(r.getName()))
 					charset = r.getName();
 				if (charset != null)
@@ -120,14 +120,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 		for (Header e : request.getContext().defaultResponseHeaders)
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
-		for (Header e : rjm.defaultResponseHeaders)
+		for (Header e : roc.defaultResponseHeaders)
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
 		super.setCharacterEncoding(charset);
 
-		this.responseMeta = rjm.responseMeta;
+		this.responseMeta = roc.responseMeta;
 	}
 
 	/**
@@ -140,7 +140,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The serializer group for the response.
 	 */
 	public SerializerGroup getSerializers() {
-		return restJavaMethod == null ? SerializerGroup.EMPTY : restJavaMethod.serializers;
+		return opContext == null ? SerializerGroup.EMPTY : opContext.serializers;
 	}
 
 	/**
@@ -149,7 +149,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return restJavaMethod == null ? Collections.<MediaType>emptyList() : restJavaMethod.supportedAcceptTypes;
+		return opContext == null ? Collections.<MediaType>emptyList() : opContext.supportedAcceptTypes;
 	}
 
 	/**
@@ -159,7 +159,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<String> getSupportedEncodings() {
-		return restJavaMethod == null ? Collections.<String>emptyList() : restJavaMethod.encoders.getSupportedEncodings();
+		return opContext == null ? Collections.<String>emptyList() : opContext.encoders.getSupportedEncodings();
 	}
 
 	/**
@@ -173,7 +173,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(..., path=<js>"/example2/{personId}"</js>)
+	 * 	<ja>@RestOp</ja>(..., path=<js>"/example2/{personId}"</js>)
 	 * 	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
 	 * 		Person p = getPersonById(personId);
 	 * 		res.setOutput(p);
@@ -285,7 +285,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
-			EncoderGroup encoders = restJavaMethod == null ? EncoderGroup.DEFAULT : restJavaMethod.encoders;
+			EncoderGroup encoders = opContext == null ? EncoderGroup.DEFAULT : opContext.encoders;
 
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {

@@ -16,7 +16,7 @@
 Operations
 
 <p>
-	<ja>@RestMethod</ja>-annotated methods automatically get rendered as Swagger operations:
+	<ja>@RestOp</ja>-annotated methods automatically get rendered as Swagger operations:
 </p>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Operations.1.png'>
 <p>
@@ -24,11 +24,11 @@ Operations
 </p>
 <h5 class='figure'>PetStoreResource.getPets()</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>,
 		path=<js>"/pet"</js>,
 		summary=<js>"All pets in the store"</js>,
-		swagger=<ja>@MethodSwagger</ja>(
+		swagger=<ja>@OpSwagger</ja>(
 			tags=<js>"pet"</js>,
 			...
 		),
@@ -43,7 +43,7 @@ Operations
 </p>
 <h5 class='figure'>PetStoreResource.findPetsByTag()</h5>
 <p class='bpcode w800'>	
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>,
 		path=<js>"/pet/findByTags"</js>,
 		summary=<js>"Finds Pets by tags"</js>,

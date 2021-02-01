@@ -60,61 +60,61 @@ public class Remote_BodyAnnotation_Test {
 
 	@Rest(parsers=JsonParser.class)
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String postX1(@Body int b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return String.valueOf(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX2(@Body float b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return String.valueOf(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX3(@Body Bean b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX4(@Body Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX5(@Body List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX6(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX7(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("text/plain",ct);
 			return IOUtils.read(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX8(@Body InputStream b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("application/octet-stream",ct);
 			return IOUtils.read(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX9(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertTrue(ct.startsWith("text/plain"));
 			return IOUtils.read(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX10(@Body Reader b, @Header("Content-Type") String ct) throws IOException {
 			assertEquals("application/x-www-form-urlencoded",ct);
 			return IOUtils.read(b);
@@ -156,61 +156,61 @@ public class Remote_BodyAnnotation_Test {
 
 	@Rest
 	public static class B implements BasicOpenApiRest {
-		@RestMethod
+		@RestOp
 		public Object postX1(@Body int b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return b;
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX2(@Body float b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return b;
 		}
 
-		@RestMethod
+		@RestOp
 		public String postX3(@Body Bean b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX4(@Body Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX5(@Body List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX6(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX7(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/plain",ct);
 			return b;
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX8(@Body InputStream b, @Header("Content-Type") String ct) {
 			assertEquals("application/octet-stream",ct);
 			return b;
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX9(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/plain",ct);
 			return b;
 		}
 
-		@RestMethod
+		@RestOp
 		public Object postX10(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("application/x-www-form-urlencoded",ct);
 			return b;
@@ -251,47 +251,47 @@ public class Remote_BodyAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod
+		@RestOp
 		public Reader postX1(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX2(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX3(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX5(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX6(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX7(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX8(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX9(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
-		@RestMethod
+		@RestOp
 		public Reader postX10(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;

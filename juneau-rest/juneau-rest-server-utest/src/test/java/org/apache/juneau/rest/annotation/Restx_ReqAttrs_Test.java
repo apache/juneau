@@ -38,12 +38,12 @@ public class Restx_ReqAttrs_Test {
 
 	@Rest
 	public static class A2 extends A1 {
-		@RestMethod
+		@RestOp
 		public OMap a(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
-		@RestMethod(defaultRequestAttributes={"p4:v4a","p5:v5"})
+		@RestOp(defaultRequestAttributes={"p4:v4a","p5:v5"})
 		public OMap b(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.

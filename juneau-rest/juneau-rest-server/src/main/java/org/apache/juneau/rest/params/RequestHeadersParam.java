@@ -17,12 +17,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link RequestHeaders} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link RequestHeaders} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getHeaders() getHeaders}()</c>.
  */
-public class RequestHeadersParam extends SimpleRestParam {
+public class RequestHeadersParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

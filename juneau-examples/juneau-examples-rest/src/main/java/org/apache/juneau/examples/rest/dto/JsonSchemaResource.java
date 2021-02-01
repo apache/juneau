@@ -34,7 +34,7 @@ import org.apache.juneau.rest.widget.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
-	swagger=@ResourceSwagger(
+	swagger=@Swagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
 		version="2.0",
@@ -94,7 +94,7 @@ public class JsonSchemaResource extends BasicRestServletJena {
 	 *
 	 * @return The JSON-Schema document.
 	 */
-	@RestMethod(
+	@RestOp(
 		summary="Get the JSON-Schema document"
 	)
 	public JsonSchema get() {
@@ -107,7 +107,7 @@ public class JsonSchemaResource extends BasicRestServletJena {
 	 * @param schema The new schema document.
 	 * @return The updated schema document.
 	 */
-	@RestMethod(
+	@RestOp(
 		summary="Overwrite the JSON-Schema document",
 		description="Replaces the schema document with the specified content, and then mirrors it as the response."
 	)

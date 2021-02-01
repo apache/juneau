@@ -28,20 +28,20 @@ public class Restx_Path_Test {
 
 	@Rest(path="/p0", children={A1.class})
 	public static class A  {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public String a(RestContext c) {
 			return "A-" + c.getFullPath();
 		}
 	}
 	@Rest(path="/p1", children={A2.class})
 	public static class A1 {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public String a(RestContext c) {
 			return "A01-" + c.getFullPath();
 		}
 	}
 	public static class A2a  {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public String a(RestContext c) {
 			return "A02a-" + c.getFullPath();
 		}
@@ -65,35 +65,35 @@ public class Restx_Path_Test {
 
 	@Rest
 	public static class B {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public String a() {
 			return "a";
 		}
-		@RestMethod(path="/*")
+		@RestOp(path="/*")
 		public String b() {
 			return "b";
 		}
-		@RestMethod(path="/foo")
+		@RestOp(path="/foo")
 		public String c() {
 			return "c";
 		}
-		@RestMethod(path="/foo/*")
+		@RestOp(path="/foo/*")
 		public String d() {
 			return "d";
 		}
-		@RestMethod(path="/{id}")
+		@RestOp(path="/{id}")
 		public String e() {
 			return "e";
 		}
-		@RestMethod(path="/{id}/*")
+		@RestOp(path="/{id}/*")
 		public String f() {
 			return "f";
 		}
-		@RestMethod(path="/{id}/foo")
+		@RestOp(path="/{id}/foo")
 		public String g() {
 			return "g";
 		}
-		@RestMethod(path="/{id}/foo/*")
+		@RestOp(path="/{id}/foo/*")
 		public String h() {
 			return "h";
 		}
@@ -125,7 +125,7 @@ public class Restx_Path_Test {
 
 	@Rest
 	public static class C1 {
-		@RestMethod(path="/foo")
+		@RestOp(path="/foo")
 		public String a() {
 			return "a";
 		}
@@ -133,7 +133,7 @@ public class Restx_Path_Test {
 
 	@Rest
 	public static class C2 extends C1 {
-		@RestMethod(path="/foo")
+		@RestOp(path="/foo")
 		public String b() {  // Overrides method on parent.
 			return "b";
 		}

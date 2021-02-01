@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// A response object thats a hex-encoded string</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>{
+ * 		swagger=<ja>@Swagger</ja>{
  * 			tags={
  * 				<ja>@Tag</ja>(
  * 					name=<js>"utility"</js>,
@@ -43,7 +43,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>{
+ * 		swagger=<ja>@Swagger</ja>{
  * 			tags={
  * 				<ja>@Tag</ja>({
  * 					<js>"name:'utility',"</js>,
@@ -111,7 +111,7 @@ public @interface Tag {
 	 * The following are completely equivalent ways of defining the swagger description of the resource tags:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@ResourceSwagger</ja>(
+	 * 	<ja>@Swagger</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,
@@ -126,7 +126,7 @@ public @interface Tag {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@ResourceSwagger</ja>(
+	 * 	<ja>@Swagger</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,
@@ -144,7 +144,7 @@ public @interface Tag {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@ResourceSwagger</ja>(
+	 * 	<ja>@Swagger</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,

@@ -48,7 +48,7 @@ public class Swagger_Path_Test {
 				return "a";
 			}
 		}
-		@RestMethod(method=GET,path="/a/{P}")
+		@RestOp(method=GET,path="/a/{P}")
 		public void a(A1 f) {}
 
 		@Path(
@@ -67,7 +67,7 @@ public class Swagger_Path_Test {
 				return "b";
 			}
 		}
-		@RestMethod(method=GET,path="/b/{P}")
+		@RestOp(method=GET,path="/b/{P}")
 		public void b(A2 f) {}
 
 		@Path(
@@ -90,7 +90,7 @@ public class Swagger_Path_Test {
 				return "c";
 			}
 		}
-		@RestMethod(method=GET,path="/c/{P}")
+		@RestOp(method=GET,path="/c/{P}")
 		public void c(A3 f) {}
 
 
@@ -101,7 +101,7 @@ public class Swagger_Path_Test {
 				return "d";
 			}
 		}
-		@RestMethod(method=GET,path="/d/{P}")
+		@RestOp(method=GET,path="/d/{P}")
 		public void d(A4 f) {}
 
 		@Path(n="P",e={" ['a','b'] "})
@@ -111,13 +111,13 @@ public class Swagger_Path_Test {
 				return "e";
 			}
 		}
-		@RestMethod(method=GET,path="/e/{P}")
+		@RestOp(method=GET,path="/e/{P}")
 		public void e(A5 f) {}
 	}
 
 	@Test
 	public void a01_fromPojo() throws Exception {
-		Swagger s = getSwagger(A.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
@@ -158,32 +158,32 @@ public class Swagger_Path_Test {
 
 		@Path(n="P")
 		public static class B1 {}
-		@RestMethod(method=GET,path="/a/{P}")
+		@RestOp(method=GET,path="/a/{P}")
 		public void a(B1 f) {}
 
 		@Path("P")
 		public static class B2 {
 			public String f1;
 		}
-		@RestMethod(method=GET,path="/b/{P}")
+		@RestOp(method=GET,path="/b/{P}")
 		public void b(B2 b) {}
 
 		@Path("P")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(method=GET,path="/c/{P}")
+		@RestOp(method=GET,path="/c/{P}")
 		public void c(B3 b) {}
 
 		@Path("P")
 		public static class B4 {}
-		@RestMethod(method=GET,path="/d/{P}")
+		@RestOp(method=GET,path="/d/{P}")
 		public void d(B4 b) {}
 	}
 
 	@Test
 	public void b01_schemaFromPojo() throws Exception {
-		Swagger s = getSwagger(B.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
@@ -206,13 +206,13 @@ public class Swagger_Path_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestMethod(method=GET,path="/a/{P}")
+		@RestOp(method=GET,path="/a/{P}")
 		public void a(C1 f) {}
 	}
 
 	@Test
 	public void c01_exampleFromPojo() throws Exception {
-		Swagger s = getSwagger(C.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
 
 		ParameterInfo x = s.getParameterInfo("/a/{P}","get","path","P");
 		assertEquals("{f1:'a'}", x.getExample());
@@ -221,14 +221,14 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class D {
 
-		@RestMethod(method=GET,path="/a/{P}")
+		@RestOp(method=GET,path="/a/{P}")
 		public void a(@Path(
 			n="P",
 			d="a",
 			t="string"
 		) String h) {}
 
-		@RestMethod(method=GET,path="/b/{P}")
+		@RestOp(method=GET,path="/b/{P}")
 		public void b(@Path(
 			n="P",
 			api={
@@ -237,7 +237,7 @@ public class Swagger_Path_Test {
 			}
 		) String h) {}
 
-		@RestMethod(method=GET,path="/c/{P}")
+		@RestOp(method=GET,path="/c/{P}")
 		public void c(@Path(
 			n="P",
 			api={
@@ -248,16 +248,16 @@ public class Swagger_Path_Test {
 			t="string"
 		) String h) {}
 
-		@RestMethod(method=GET,path="/d/{P}")
+		@RestOp(method=GET,path="/d/{P}")
 		public void d(@Path("P") String h) {}
 
-		@RestMethod(method=GET,path="/e/{P}")
+		@RestOp(method=GET,path="/e/{P}")
 		public void e(@Path(n="P",e={" ['a','b'] "}) String h) {}
 	}
 
 	@Test
 	public void d01_fromParameter() throws Exception {
-		Swagger s = getSwagger(D.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(D.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
@@ -282,35 +282,35 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class E {
 
-		@RestMethod(method=GET,path="/a/{P}")
+		@RestOp(method=GET,path="/a/{P}")
 		public void a(@Path("P") String h) {}
 
 		public static class E2 {
 			public String f1;
 		}
-		@RestMethod(method=GET,path="/b/{P}")
+		@RestOp(method=GET,path="/b/{P}")
 		public void b(@Path("P") E2 b) {}
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(method=GET,path="/c/{P}")
+		@RestOp(method=GET,path="/c/{P}")
 		public void c(@Path("P") E3 b) {}
 
 		public static class E4 {}
-		@RestMethod(method=GET,path="/d/{P}")
+		@RestOp(method=GET,path="/d/{P}")
 		public void d(@Path("P") E4 b) {}
 
-		@RestMethod(method=GET,path="/e/{P}")
+		@RestOp(method=GET,path="/e/{P}")
 		public void e(@Path("P") Integer b) {}
 
-		@RestMethod(method=GET,path="/f/{P}")
+		@RestOp(method=GET,path="/f/{P}")
 		public void f(@Path("P") Boolean b) {}
 	}
 
 	@Test
 	public void d01_schemaFromParameter() throws Exception {
-		Swagger s = getSwagger(E.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(E.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
@@ -335,13 +335,13 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class F {
 
-		@RestMethod(method=GET,path="/a/{P}")
+		@RestOp(method=GET,path="/a/{P}")
 		public void a(@Path(n="P",ex="{f1:'b'}") String h) {}
 	}
 
 	@Test
 	public void f01_exampleFromParameter() throws Exception {
-		Swagger s = getSwagger(F.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
 
 		ParameterInfo x = s.getParameterInfo("/a/{P}","get","path","P");
 		assertEquals("{f1:'b'}", x.getExample());

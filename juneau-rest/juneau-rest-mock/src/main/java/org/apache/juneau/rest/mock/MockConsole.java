@@ -32,7 +32,7 @@ import org.apache.juneau.rest.client.*;
  * 	<jc>// A simple REST API that echos a posted bean.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRest {
- * 		<ja>@RestMethod</ja>(path=<js>"/bean"</js>)
+ * 		<ja>@RestOp</ja>(path=<js>"/bean"</js>)
  * 		<jk>public</jk> Bean postBean(<ja>@Body</ja> Bean b) {
  * 			<jk>return</jk> b;
  * 		}

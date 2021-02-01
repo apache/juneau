@@ -23,7 +23,7 @@ Converters
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oajr.annotation.Rest#converters() Rest(converters)} 
-	<li class='ja'>{@link oajr.annotation.RestMethod#converters() RestMethod(converters)} 
+	<li class='ja'>{@link oajr.annotation.RestOp#converters() RestOp(converters)} 
 	<li class='jm'>{@link oajr.RestContextBuilder#converters(Class...)} 
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -41,7 +41,7 @@ Converters
 	<jc>// GET person request handler.</jc>
 	<jc>// Traversable conversion enabled to allow nodes in returned POJO tree to be addressed.</jc>
 	<jc>// Queryable conversion enabled to allow returned POJO to be searched/viewed/sorted.</jc>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>,
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
 	)
@@ -58,7 +58,7 @@ Converters
 </p>
 <p class='bpcode w800'>
 	<jd>/**
-	 * Converter for enablement of PojoRest support on response objects returned by a @RestMethod method.
+	 * Converter for enablement of PojoRest support on response objects returned by a @RestOp method.
 	 * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path information.
 	 */</jd>
 	<jk>public class</jk> Traversable <jk>implements</jk> RestConverter {

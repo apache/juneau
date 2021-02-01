@@ -41,7 +41,7 @@ public class Swagger_Query_Test {
 		public static class A1 {
 			public A1(String x) {}
 		}
-		@RestMethod
+		@RestOp
 		public void a(A1 q) {}
 
 		@Query(
@@ -54,7 +54,7 @@ public class Swagger_Query_Test {
 		public static class A2 {
 			public A2(String x) {}
 		}
-		@RestMethod
+		@RestOp
 		public void b(A2 q) {}
 
 		@Query(
@@ -69,18 +69,18 @@ public class Swagger_Query_Test {
 		public static class A3 {
 			public A3(String x) {}
 		}
-		@RestMethod
+		@RestOp
 		public void c(A3 q) {}
 
 		@Query("Q")
 		public static class A4 {}
-		@RestMethod
+		@RestOp
 		public void d(A4 q) {}
 	}
 
 	@Test
 	public void a01_fromPojo() throws Exception {
-		Swagger s = getSwagger(A.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","query","Q");
@@ -107,32 +107,32 @@ public class Swagger_Query_Test {
 
 		@Query(n="Q")
 		public static class B1 {}
-		@RestMethod
+		@RestOp
 		public void a(B1 q) {}
 
 		@Query("Q")
 		public static class B2 {
 			public String f1;
 		}
-		@RestMethod
+		@RestOp
 		public void b(B2 q) {}
 
 		@Query("Q")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod
+		@RestOp
 		public void c(B3 q) {}
 
 		@Query("Q")
 		public static class B4 {}
-		@RestMethod
+		@RestOp
 		public void d(B4 q) {}
 	}
 
 	@Test
 	public void b01_schemaFromPojo() throws Exception {
-		Swagger s = getSwagger(B.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","query","Q");
@@ -155,13 +155,13 @@ public class Swagger_Query_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestMethod
+		@RestOp
 		public void a(C1 q) {}
 	}
 
 	@Test
 	public void c01_exampleFromPojo() throws Exception {
-		Swagger s = getSwagger(C.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(C.class);
 
 		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
 		assertEquals("{f1:'a'}", x.getExample());
@@ -170,7 +170,7 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class D {
 
-		@RestMethod
+		@RestOp
 		public void a(
 			@Query(
 				n="Q",
@@ -179,7 +179,7 @@ public class Swagger_Query_Test {
 			)
 			String q) {}
 
-		@RestMethod
+		@RestOp
 		public void b(
 			@Query(
 				n="Q",
@@ -190,7 +190,7 @@ public class Swagger_Query_Test {
 			)
 			String q) {}
 
-		@RestMethod
+		@RestOp
 		public void c(
 			@Query(
 				n="Q",
@@ -203,13 +203,13 @@ public class Swagger_Query_Test {
 			)
 			String q) {}
 
-		@RestMethod
+		@RestOp
 		public void d(@Query("Q") String q) {}
 	}
 
 	@Test
 	public void d01_fromParameter() throws Exception {
-		Swagger s = getSwagger(D.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(D.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","query","Q");
@@ -238,13 +238,13 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class E {
 
-		@RestMethod
+		@RestOp
 		public void a(@Query("Q") String q) {}
 	}
 
 	@Test
 	public void e01_schemaFromParameter() throws Exception {
-		Swagger s = getSwagger(E.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(E.class);
 
 		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
 		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
@@ -257,13 +257,13 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class F {
 
-		@RestMethod
+		@RestOp
 		public void a(@Query(n="Q",ex={"a","b"}) String q) {}
 	}
 
 	@Test
 	public void f01_exampleFromParameter() throws Exception {
-		Swagger s = getSwagger(F.class);
+		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
 
 		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
 		assertEquals("a\nb", x.getExample());

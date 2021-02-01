@@ -31,10 +31,10 @@ Logging / Debugging
 		</ul>
 	</li>
 	<li class='ja'>
-		{@link oajr.annotation.RestMethod}
+		{@link oajr.annotation.RestOp}
 		<ul>
-			<li class='jm'>{@link oajr.annotation.RestMethod#logging() logging()} - Class-level logging configuration.
-			<li class='jm'>{@link oajr.annotation.RestMethod#debug() debug()} - Enable debug mode.
+			<li class='jm'>{@link oajr.annotation.RestOp#logging() logging()} - Class-level logging configuration.
+			<li class='jm'>{@link oajr.annotation.RestOp#debug() debug()} - Enable debug mode.
 		</ul>
 	</li>
 	<li class='jc'>
@@ -45,7 +45,7 @@ Logging / Debugging
 		</ul>
 	</li>
 	<li class='ja'>
-		{@link oajr.annotation.Logging} - Annotation for {@link oajr.annotation.Rest#logging() @Rest(logging)} and {@link oajr.annotation.RestMethod#logging() @RestMethod(logging)}
+		{@link oajr.annotation.Logging} - Annotation for {@link oajr.annotation.Rest#logging() @Rest(logging)} and {@link oajr.annotation.RestOp#logging() @RestOp(logging)}
 		<ul>
 			<li class='jm'>{@link oajr.annotation.Logging#level() level()} - The logging level.
 			<li class='jm'>{@link oajr.annotation.Logging#rules() rules()} - The logging rules.
@@ -93,8 +93,8 @@ Logging / Debugging
 	)
 	<jk>public static class</jk> MyRestClass {
 
-		<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
-		<jk>public</jk> String myRestMethod(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+		<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
+		<jk>public</jk> String myRestOp(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 			res.setStatus(500);
 			res.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
 			res.setException(<jk>new</jk> StringIndexOutOfBoundsException());  <jc>// Could also throw.</jc>
@@ -119,7 +119,7 @@ Logging / Debugging
 <p class='bpcode'>
 	WARNING: [500] HTTP POST /foo
 	java.lang.StringIndexOutOfBoundsException
-		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestMethod(RestResourceLoggingTest.java:672)
+		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestOp(RestResourceLoggingTest.java:672)
 		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -170,7 +170,7 @@ Logging / Debugging
 	46 6F 6F
 	=== END ===================================================================
 	java.lang.StringIndexOutOfBoundsException
-		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestMethod(RestResourceLoggingTest.java:672)
+		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestOp(RestResourceLoggingTest.java:672)
 		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -303,8 +303,8 @@ Logging / Debugging
 	)
 	<jk>public static class</jk> MyRestClass {
 
-		<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
-		<jk>public</jk> String myRestMethod(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+		<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
+		<jk>public</jk> String myRestOp(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 			res.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
 		
 			// Equivalent to throwing an exception. 
@@ -333,7 +333,7 @@ Logging / Debugging
 	Jul 11, 2019 3:38:48 PM org.apache.juneau.rest.BasicRestCallLogger log
 	WARNING: [500,9b85cc96.1] HTTP POST /foo
 	java.lang.StringIndexOutOfBoundsException
-		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestMethod(RestResourceLoggingTest.java:671)
+		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestOp(RestResourceLoggingTest.java:671)
 		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

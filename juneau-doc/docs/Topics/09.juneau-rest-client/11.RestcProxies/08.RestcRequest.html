@@ -16,7 +16,7 @@
 @Request
 
 <p>
-	The {@link oaj.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteMethod</ja>-annotated method 
+	The {@link oaj.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteOp</ja>-annotated method 
 	to identify it as a bean for setting HTTP parts through a bean-like interface.
 </p>
 
@@ -33,7 +33,7 @@
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 
-		<ja>@RemoteMethod</ja>
+		<ja>@RemoteOp</ja>
 		String postPet(CreatePetRequest <jv>bean</jv>);
 	}
 </p>

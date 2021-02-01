@@ -31,7 +31,7 @@ Parsers
 		{@link oajr.annotation.Rest#parsers() Rest(parsers)} 
 		- Annotation on resource Java class.
 	<li class='ja'>
-		{@link oajr.annotation.RestMethod#parsers() RestMethod(parsers)} 
+		{@link oajr.annotation.RestOp#parsers() RestOp(parsers)} 
 		- Annotation on resource Java method.
 	<li class='jm'>
 		{@link oajr.RestContextBuilder#parsers(Class[])} 
@@ -65,7 +65,7 @@ Parsers
 		}
 
 		<jc>// Override at the method level.</jc>
-		<ja>@RestMethod</ja>(parsers={HtmlParser.<jk>class</jk>})
+		<ja>@RestOp</ja>(parsers={HtmlParser.<jk>class</jk>})
 		<jk>public</jk> Object myMethod(<ja>@Body</ja> MyPojo myPojo) {
 			<jc>// Do something with your parsed POJO.</jc>
 		}

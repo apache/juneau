@@ -23,9 +23,9 @@ public class EarlyHints_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public EarlyHints getA1() { return new EarlyHints(); }
-		@RestMethod public EarlyHints getA2() { return new EarlyHints("foo"); }
-		@RestMethod public EarlyHints getA3() { return new EarlyHints().header("Foo","bar"); }
+		@RestOp public EarlyHints getA1() { return new EarlyHints(); }
+		@RestOp public EarlyHints getA2() { return new EarlyHints("foo"); }
+		@RestOp public EarlyHints getA3() { return new EarlyHints().header("Foo","bar"); }
 	}
 
 	@Test

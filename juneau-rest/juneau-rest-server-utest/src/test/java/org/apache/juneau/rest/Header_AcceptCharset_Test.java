@@ -36,7 +36,7 @@ public class Header_AcceptCharset_Test {
 
 	@Rest(defaultCharset="utf-8",serializers=PlainTextSerializer.class)
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String a() {
 			return "foo";
 		}
@@ -65,7 +65,7 @@ public class Header_AcceptCharset_Test {
 	@Rest(defaultCharset="utf-8")
 	public static class B {
 
-		@RestMethod(method=PUT, parsers=TestParser.class, serializers=TestSerializer.class)
+		@RestOp(method=PUT, parsers=TestParser.class, serializers=TestSerializer.class)
 		public String a(@Body String in) {
 			return in;
 		}

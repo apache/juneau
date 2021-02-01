@@ -26,7 +26,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest(roleGuard="foo")
 	public static class A1 {
-		@RestMethod
+		@RestOp
 		public String get() {
 			return "OK";
 		}
@@ -49,7 +49,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class A2 {
-		@RestMethod(roleGuard="foo")
+		@RestOp(roleGuard="foo")
 		public String get() {
 			return "OK";
 		}
@@ -72,7 +72,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest(roleGuard="foo")
 	public static class A3 {
-		@RestMethod(roleGuard="bar")
+		@RestOp(roleGuard="bar")
 		public String get() {
 			return "OK";
 		}
@@ -97,7 +97,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest(roleGuard="foo")
 	public static class A4a {
-		@RestMethod(roleGuard="bar")
+		@RestOp(roleGuard="bar")
 		public String get() {
 			return "OK";
 		}
@@ -106,7 +106,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="baz")
 	public static class A4b extends A4a {
 		@Override
-		@RestMethod(roleGuard="qux")
+		@RestOp(roleGuard="qux")
 		public String get() {
 			return "OK";
 		}
@@ -129,7 +129,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B1 {
-		@RestMethod
+		@RestOp
 		public String get() {
 			return "OK";
 		}
@@ -249,12 +249,12 @@ public class Restx_RoleGuard_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestMethod(roleGuard), multiple guards on method
+	// @RestOp(roleGuard), multiple guards on method
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class B2a {
-		@RestMethod(roleGuard="foo,bar")
+		@RestOp(roleGuard="foo,bar")
 		public String get() {
 			return "OK";
 		}
@@ -273,7 +273,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2b {
-		@RestMethod(roleGuard="foo | bar")
+		@RestOp(roleGuard="foo | bar")
 		public String get() {
 			return "OK";
 		}
@@ -292,7 +292,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2c {
-		@RestMethod(roleGuard="foo || bar")
+		@RestOp(roleGuard="foo || bar")
 		public String get() {
 			return "OK";
 		}
@@ -311,7 +311,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2d {
-		@RestMethod(roleGuard="foo & bar")
+		@RestOp(roleGuard="foo & bar")
 		public String get() {
 			return "OK";
 		}
@@ -330,7 +330,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2e {
-		@RestMethod(roleGuard="foo && bar")
+		@RestOp(roleGuard="foo && bar")
 		public String get() {
 			return "OK";
 		}
@@ -349,7 +349,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2f {
-		@RestMethod(roleGuard="(foo) && (bar)")
+		@RestOp(roleGuard="(foo) && (bar)")
 		public String get() {
 			return "OK";
 		}
@@ -368,7 +368,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2g {
-		@RestMethod(roleGuard="foo && (bar || baz)")
+		@RestOp(roleGuard="foo && (bar || baz)")
 		public String get() {
 			return "OK";
 		}
@@ -388,7 +388,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class B2h {
-		@RestMethod(roleGuard="foo || (bar && baz)")
+		@RestOp(roleGuard="foo || (bar && baz)")
 		public String get() {
 			return "OK";
 		}
@@ -411,7 +411,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest(rolesDeclared="foo,bar,baz")
 	public static class C1 {
-		@RestMethod
+		@RestOp
 		public String get() {
 			return "OK";
 		}
@@ -531,12 +531,12 @@ public class Restx_RoleGuard_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestMethod(roleGuard), pattern guards on method
+	// @RestOp(roleGuard), pattern guards on method
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class C2a {
-		@RestMethod(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -555,7 +555,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2b {
-		@RestMethod(roleGuard="fo* | *ar",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo* | *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -574,7 +574,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2c {
-		@RestMethod(roleGuard="fo* || *ar",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo* || *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -593,7 +593,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2d {
-		@RestMethod(roleGuard="fo* & *ar",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo* & *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -612,7 +612,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2e {
-		@RestMethod(roleGuard="fo* && *ar",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo* && *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -631,7 +631,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2f {
-		@RestMethod(roleGuard="(fo*) && (*ar)",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="(fo*) && (*ar)",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -650,7 +650,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2g {
-		@RestMethod(roleGuard="fo* && (*ar || *az)",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo* && (*ar || *az)",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -670,7 +670,7 @@ public class Restx_RoleGuard_Test {
 
 	@Rest
 	public static class C2h {
-		@RestMethod(roleGuard="fo* || (*ar && *az)",rolesDeclared="foo,bar,baz")
+		@RestOp(roleGuard="fo* || (*ar && *az)",rolesDeclared="foo,bar,baz")
 		public String get() {
 			return "OK";
 		}
@@ -688,12 +688,12 @@ public class Restx_RoleGuard_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestMethod(roleGuard), pattern guards on method but no roles defined
+	// @RestOp(roleGuard), pattern guards on method but no roles defined
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class D {
-		@RestMethod(roleGuard="fo*,*ar")
+		@RestOp(roleGuard="fo*,*ar")
 		public String get() {
 			return "OK";
 		}
@@ -710,12 +710,12 @@ public class Restx_RoleGuard_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestMethod(roleGuard), any role.
+	// @RestOp(roleGuard), any role.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(rolesDeclared="foo,bar,baz")
 	public static class E {
-		@RestMethod(roleGuard="*")
+		@RestOp(roleGuard="*")
 		public String get() {
 			return "OK";
 		}

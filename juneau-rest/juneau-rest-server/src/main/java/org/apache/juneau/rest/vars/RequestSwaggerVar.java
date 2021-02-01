@@ -41,8 +41,8 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"description"</js> - Value returned by {@link Info#getDescription()}
  * 	<li><js>"externalDocs"</js> - Value returned by {@link Swagger#getExternalDocs()}
  * 	<li><js>"license"</js> - Value returned by {@link Info#getLicense()}
- * 	<li><js>"methodDescription"</js> - Value returned by {@link Operation#getDescription()}
- * 	<li><js>"methodSummary"</js> - Value returned by {@link Operation#getSummary()}
+ * 	<li><js>"operationDescription"</js> - Value returned by {@link Operation#getDescription()}
+ * 	<li><js>"operationSummary"</js> - Value returned by {@link Operation#getSummary()}
  * 	<li><js>"siteName"</js> - Value returned by {@link Info#getSiteName()}
  * 	<li><js>"tags"</js> - Value returned by {@link Swagger#getTags()}
  * 	<li><js>"termsOfService"</js> - Value returned by {@link Info#getTermsOfService()}
@@ -109,10 +109,10 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			} else if (c == 'l') {
 				if ("license".equals(key))
 					return swagger.flatMap(Swagger::info).flatMap(Info::license).map(License::toString).orElse(null);
-			} else if (c == 'm') {
-				if ("methodDescription".equals(key))
+			} else if (c == 'o') {
+				if ("operationDescription".equals(key))
 					return methodSwagger.flatMap(Operation::description).orElse(null);
-				if ("methodSummary".equals(key))
+				if ("operationSummary".equals(key))
 					return methodSwagger.flatMap(Operation::summary).orElse(null);
 			} else if (c == 'r') {
 				if ("siteName".equals(key))

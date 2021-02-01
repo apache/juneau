@@ -31,7 +31,7 @@ Serializers
 		{@link oajr.annotation.Rest#serializers() Rest(serializers)} 
 		- Annotation on resource Java class.
 	<li class='ja'>
-		{@link oajr.annotation.RestMethod#serializers() RestMethod(serializers)} 
+		{@link oajr.annotation.RestOp#serializers() RestOp(serializers)} 
 		- Annotation on resource Java method.
 	<li class='jf'>
 		{@link oajr.RestContext#REST_serializers} 
@@ -65,7 +65,7 @@ Serializers
 		}
 
 		<jc>// Override at the method level.</jc>
-		<ja>@RestMethod</ja>(serializers={HtmlSerializer.<jk>class</jk>})
+		<ja>@RestOp</ja>(serializers={HtmlSerializer.<jk>class</jk>})
 		<jk>public</jk> MyPojo myMethod() {
 			<jc>// Return a POJO to be serialized.</jc>
 			<jk>return new</jk> MyPojo(); 

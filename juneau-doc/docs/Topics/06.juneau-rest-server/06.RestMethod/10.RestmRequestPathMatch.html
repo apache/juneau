@@ -20,12 +20,12 @@ RequestPathMatch
 	and remainder on the URL path.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestOp</ja>(...)
 	<jk>public</jk> Object myMethod(RequestPathMatch path) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
+	<ja>@RestOp</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
 	<jk>public void</jk> doGet(RequestPathMatch path) {
 		<jc>// Example URL:  /123/qux/true/quux</jc>
 	 	

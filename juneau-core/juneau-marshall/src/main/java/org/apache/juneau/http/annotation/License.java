@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Normal</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 		swagger=<ja>@Swagger</ja>(
  * 			license=<ja>@License</ja>(
  * 				name=<js>"Apache 2.0"</js>,
  * 				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
@@ -40,7 +40,7 @@ import java.lang.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 		swagger=<ja>@Swagger</ja>(
  * 			license=<ja>@License</ja>({
  * 				<js>"name:'Apache 2.0',"</js>,
  * 				<js>"url:'http://www.apache.org/licenses/LICENSE-2.0.html'"</js>
@@ -95,7 +95,7 @@ public @interface License {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			license=<ja>@License</ja>(
 	 * 				name=<js>"Apache 2.0"</js>,
 	 * 				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
@@ -106,7 +106,7 @@ public @interface License {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			license=<ja>@License</ja>({
 	 * 				<js>"name: 'Apache 2.0',"</js>,
 	 * 				<js>"url: 'http://www.apache.org/licenses/LICENSE-2.0.html'"</js>
@@ -117,7 +117,7 @@ public @interface License {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
 	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(<js>"$L{licenseSwagger}"</js>)
+	 * 		swagger=<ja>@Swagger</ja>(<js>"$L{licenseSwagger}"</js>)
 	 * 	)
 	 * </p>
 	 * <p class='bcode w800'>

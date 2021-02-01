@@ -26,7 +26,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters and parameter types annotated with {@link FormData} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link FormData} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getFormData() getFormData}().{@link RequestFormData#get(HttpPartParserSession,HttpPartSchema,String,Type,Type...) get}(<jv>parserSession<jv>, <jv>schema</jv>, <jv>name</jv>, <jv>type</jv>)</c>
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * If the {@link FormData#multi()} flag is set, then the data type can be a {@link Collection} or array.
  */
-public class FormDataParam implements RestParam {
+public class FormDataParam implements RestOperationParam {
 	private final boolean multi;
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
@@ -93,7 +93,7 @@ public class FormDataParam implements RestParam {
 		return false;
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());

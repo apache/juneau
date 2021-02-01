@@ -27,27 +27,27 @@ public class NotImplemented_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws NotImplemented {
 			throw new NotImplemented();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws NotImplemented {
 			throw new NotImplemented("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws NotImplemented {
 			throw new NotImplemented(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws NotImplemented {
 			throw new NotImplemented(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws NotImplemented {
 			throw new NotImplemented().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws NotImplemented {
 			throw new NotImplemented("foo");
 		}

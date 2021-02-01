@@ -50,17 +50,17 @@ public class Remote_CommonInterfaces_Test {
 	@Rest
 	public static class A1 implements A, BasicSimpleJsonRest {
 		@Override
-		@RestMethod
+		@RestOp
 		public String putX1(String b) {
 			return b;
 		}
 		@Override
-		@RestMethod
+		@RestOp
 		public String getX2(String b) {
 			return b;
 		}
 		@Override
-		@RestMethod
+		@RestOp
 		public String getX3(String b) {
 			return b;
 		}

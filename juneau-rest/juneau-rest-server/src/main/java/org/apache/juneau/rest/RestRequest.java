@@ -40,6 +40,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
@@ -98,7 +99,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	private HttpServletRequest inner;
 	private final RestContext context;
-	private Optional<RestMethodContext> methodContext = Optional.empty();
+	private Optional<RestOperationContext> opContext = Optional.empty();
 
 	private final String method;
 	private RequestBody body;
@@ -194,30 +195,30 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rmc) throws IOException {
-		this.methodContext = Optional.of(rmc);
-		this.javaMethod = rmc.method;
-		this.beanSession = rmc.createSession();
-		this.partParserSession = rmc.partParser.createPartSession(getParserSessionArgs());
-		this.partSerializerSession = rmc.partSerializer.createPartSession(getSerializerSessionArgs());
+	final void init(RestOperationContext roc) throws IOException {
+		this.opContext = Optional.of(roc);
+		this.javaMethod = roc.method;
+		this.beanSession = roc.createSession();
+		this.partParserSession = roc.partParser.createPartSession(getParserSessionArgs());
+		this.partSerializerSession = roc.partSerializer.createPartSession(getSerializerSessionArgs());
 		this.pathParams
 			.parser(partParserSession);
 		this.queryParams
-			.addDefault(rmc.defaultRequestQuery)
+			.addDefault(roc.defaultRequestQuery)
 			.parser(partParserSession);
 		this.headers
-			.addDefault(rmc.defaultRequestHeaders)
+			.addDefault(roc.defaultRequestHeaders)
 			.addDefault(context.defaultRequestHeaders)
 			.parser(partParserSession);
 		this.attrs = new RequestAttributes(this);
 		this.attrs
-			.addDefault(rmc.defaultRequestAttributes)
+			.addDefault(roc.defaultRequestAttributes)
 			.addDefault(context.defaultRequestAttributes);
 		this.body
-			.encoders(rmc.encoders)
-			.parsers(rmc.parsers)
+			.encoders(roc.encoders)
+			.parsers(roc.parsers)
 			.headers(headers)
-			.maxInput(rmc.maxInput);
+			.maxInput(roc.maxInput);
 
 		if (isDebug()) {
 			inner = CachingHttpServletRequest.wrap(inner);
@@ -251,7 +252,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
 	 *
 	 * 		<jc>// Get access to headers.</jc>
@@ -310,7 +311,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getProduces() {
-		return methodContext.flatMap(RestMethodContext::supportedAcceptTypes).orElse(emptyList());
+		return opContext.flatMap(RestOperationContext::supportedAcceptTypes).orElse(emptyList());
 	}
 
 	/**
@@ -319,7 +320,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getConsumes() {
-		return methodContext.flatMap(RestMethodContext::supportedContentTypes).orElse(emptyList());
+		return opContext.flatMap(RestOperationContext::supportedContentTypes).orElse(emptyList());
 	}
 
 	/**
@@ -333,7 +334,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public PropertyStore getPropertyStore() {
-		return methodContext.flatMap(RestMethodContext::propertyStore).orElse(PropertyStore.DEFAULT);
+		return opContext.flatMap(RestOperationContext::propertyStore).orElse(PropertyStore.DEFAULT);
 	}
 
 	/**
@@ -360,7 +361,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					charset = h.substring(i+9).trim();
 			}
 			if (charset == null)
-				charset = methodContext.flatMap(RestMethodContext::defaultCharset).orElse(null);
+				charset = opContext.flatMap(RestOperationContext::defaultCharset).orElse(null);
 			if (charset == null)
 				charset = "UTF-8";
 			if (! Charset.isSupported(charset))
@@ -424,7 +425,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
 	 *
 	 * 		<jc>// Get access to attributes.</jc>
@@ -497,7 +498,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
 	 * 		<jc>// Get access to query parameters on the URL.</jc>
@@ -561,7 +562,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest req) {
 	 *
 	 * 		<jc>// Get access to parsed form data parameters.</jc>
@@ -609,7 +610,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			formData.addDefault(methodContext.flatMap(RestMethodContext::defaultRequestFormData).orElse(new NameValuePair[0]));
+			formData.addDefault(opContext.flatMap(RestOperationContext::defaultRequestFormData).orElse(new NameValuePair[0]));
 			return formData;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
@@ -639,7 +640,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
+	 * 	<ja>@RestOp</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
 	 * 		<jc>// Get access to path data.</jc>
@@ -708,7 +709,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public void</jk> doPost2(RestRequest req) {
 	 *
 	 * 		<jc>// Convert body to a linked list of Person objects.</jc>
@@ -886,7 +887,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public</jk> List&lt;Tag&gt; getSwaggerTags(RestRequest req) {
 	 * 		<jk>return</jk> req.getSwagger().getTags();
 	 * 	}
@@ -924,7 +925,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
-		return methodContext.flatMap(RestMethodContext::serializers).orElse(SerializerGroup.EMPTY);
+		return opContext.flatMap(RestOperationContext::serializers).orElse(SerializerGroup.EMPTY);
 	}
 
 	/**
@@ -937,7 +938,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParsers() {
-		return methodContext.flatMap(RestMethodContext::parsers).orElse(ParserGroup.EMPTY);
+		return opContext.flatMap(RestOperationContext::parsers).orElse(ParserGroup.EMPTY);
 	}
 
 	/**
@@ -1000,7 +1001,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req, <ja>@Query</ja>(<js>"user"</js>) String user) {
 	 *
 	 * 		<jc>// Return a localized message.</jc>
@@ -1165,7 +1166,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req) {
 	 *
 	 * 		<jc>// Get var resolver session.</jc>
@@ -1245,7 +1246,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@RestOp</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
 	 * 		<jc>// Get config file.</jc>
@@ -1283,7 +1284,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+	 * 	<ja>@RestOp</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
 	 * 	<jk>public void</jk> myMethod(@Request MyRequest rb) {...}
 	 *
 	 * 	<jk>public interface</jk> MyRequest {
@@ -1442,7 +1443,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		return methodContext.isPresent() ? methodContext.get().getResponseBeanMeta(o) : context.getResponseBeanMeta(o);
+		return opContext.isPresent() ? opContext.get().getResponseBeanMeta(o) : context.getResponseBeanMeta(o);
 	}
 
 	/**
@@ -1452,7 +1453,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
-		return methodContext.isPresent() ? methodContext.get().getResponseHeaderMeta(o) : null;
+		return opContext.isPresent() ? opContext.get().getResponseHeaderMeta(o) : null;
 	}
 
 	/**
@@ -1462,16 +1463,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
 	 */
 	public ResponsePartMeta getResponseBodyMeta(Object o) {
-		return methodContext.isPresent() ? methodContext.get().getResponseBodyMeta(o) : null;
+		return opContext.isPresent() ? opContext.get().getResponseBodyMeta(o) : null;
 	}
 
 	/**
-	 * Returns access to the inner {@link RestMethodContext} of this method.
+	 * Returns access to the inner {@link RestOperationContext} of this method.
 	 *
-	 * @return The {@link RestMethodContext} of this method.  May be <jk>null</jk> if method has not yet been found.
+	 * @return The {@link RestOperationContext} of this method.  May be <jk>null</jk> if method has not yet been found.
 	 */
-	public Optional<RestMethodContext> getMethodContext() {
-		return methodContext;
+	public Optional<RestOperationContext> getMethodContext() {
+		return opContext;
 	}
 
 	/**
@@ -1481,14 +1482,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Optional<Operation> getMethodSwagger() {
 
-		if (! methodContext.isPresent())
+		if (! opContext.isPresent())
 			return Optional.empty();
 
 		Optional<Swagger> swagger = context.getSwagger(getLocale());
 		if (! swagger.isPresent())
 			return Optional.empty();
 
-		return swagger.get().operation(methodContext.get().getPathPattern(), getMethod().toLowerCase());
+		return swagger.get().operation(opContext.get().getPathPattern(), getMethod().toLowerCase());
 	}
 
 	/**

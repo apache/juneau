@@ -25,10 +25,10 @@ public class MovedPermanently_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public MovedPermanently getA1() { return new MovedPermanently(); }
-		@RestMethod public MovedPermanently getA2() { return new MovedPermanently("foo"); }
-		@RestMethod public MovedPermanently getA3() { return new MovedPermanently(URI.create("servlet:/foo")); }
-		@RestMethod public MovedPermanently getA4() { return new MovedPermanently().header("Foo","bar"); }
+		@RestOp public MovedPermanently getA1() { return new MovedPermanently(); }
+		@RestOp public MovedPermanently getA2() { return new MovedPermanently("foo"); }
+		@RestOp public MovedPermanently getA3() { return new MovedPermanently(URI.create("servlet:/foo")); }
+		@RestOp public MovedPermanently getA4() { return new MovedPermanently().header("Foo","bar"); }
 	}
 
 	@Test

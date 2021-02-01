@@ -62,7 +62,6 @@ public class RestAnnotation_Test {
 		.fileFinder(FileFinder.class)
 		.guards(RestGuard.class)
 		.maxInput("maxInput")
-		.methodContextClass(RestMethodContext.class)
 		.messages("messages")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
@@ -74,14 +73,15 @@ public class RestAnnotation_Test {
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseHandlers(ResponseHandler.class)
 		.restChildrenClass(RestChildren.class)
-		.restMethodsClass(RestMethods.class)
-		.restParams(RestParam.class)
+		.restOperationContextClass(RestOperationContext.class)
+		.restOperationParams(RestOperationParam.class)
+		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
 		.siteName("siteName")
 		.staticFiles(StaticFiles.class)
-		.swagger(ResourceSwaggerAnnotation.DEFAULT)
+		.swagger(SwaggerAnnotation.DEFAULT)
 		.swaggerProvider(SwaggerProvider.class)
 		.title("title")
 		.uriAuthority("uriAuthority")
@@ -116,7 +116,6 @@ public class RestAnnotation_Test {
 		.fileFinder(FileFinder.class)
 		.guards(RestGuard.class)
 		.maxInput("maxInput")
-		.methodContextClass(RestMethodContext.class)
 		.messages("messages")
 		.on("on")
 		.onClass(RestAnnotation_Test.class)
@@ -128,14 +127,15 @@ public class RestAnnotation_Test {
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseHandlers(ResponseHandler.class)
 		.restChildrenClass(RestChildren.class)
-		.restMethodsClass(RestMethods.class)
-		.restParams(RestParam.class)
+		.restOperationContextClass(RestOperationContext.class)
+		.restOperationParams(RestOperationParam.class)
+		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
 		.serializers(Serializer.class)
 		.siteName("siteName")
 		.staticFiles(StaticFiles.class)
-		.swagger(ResourceSwaggerAnnotation.DEFAULT)
+		.swagger(SwaggerAnnotation.DEFAULT)
 		.swaggerProvider(SwaggerProvider.class)
 		.title("title")
 		.uriAuthority("uriAuthority")
@@ -174,7 +174,6 @@ public class RestAnnotation_Test {
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
-				+ "methodContextClass:'org.apache.juneau.rest.RestMethodContext',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"'],"
 				+ "parsers:['org.apache.juneau.parser.Parser'],"
@@ -185,8 +184,9 @@ public class RestAnnotation_Test {
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
 				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
 				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
-				+ "restMethodsClass:'org.apache.juneau.rest.RestMethods',"
-				+ "restParams:['org.apache.juneau.rest.RestParam'],"
+				+ "restOperationContextClass:'org.apache.juneau.rest.RestOperationContext',"
+				+ "restOperationParams:['org.apache.juneau.rest.RestOperationParam'],"
+				+ "restOperationsClass:'org.apache.juneau.rest.RestOperations',"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
@@ -272,7 +272,6 @@ public class RestAnnotation_Test {
 		fileFinder=FileFinder.class,
 		guards=RestGuard.class,
 		maxInput="maxInput",
-		methodContextClass=RestMethodContext.class,
 		messages="messages",
 		on="on",
 		onClass=RestAnnotation_Test.class,
@@ -284,14 +283,15 @@ public class RestAnnotation_Test {
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseHandlers=ResponseHandler.class,
 		restChildrenClass=RestChildren.class,
-		restMethodsClass=RestMethods.class,
-		restParams=RestParam.class,
+		restOperationContextClass=RestOperationContext.class,
+		restOperationParams=RestOperationParam.class,
+		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
 		siteName="siteName",
 		staticFiles=StaticFiles.class,
-		swagger=@ResourceSwagger,
+		swagger=@Swagger,
 		swaggerProvider=SwaggerProvider.class,
 		title="title",
 		uriAuthority="uriAuthority",
@@ -328,7 +328,6 @@ public class RestAnnotation_Test {
 		fileFinder=FileFinder.class,
 		guards=RestGuard.class,
 		maxInput="maxInput",
-		methodContextClass=RestMethodContext.class,
 		messages="messages",
 		on="on",
 		onClass=RestAnnotation_Test.class,
@@ -340,14 +339,15 @@ public class RestAnnotation_Test {
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseHandlers=ResponseHandler.class,
 		restChildrenClass=RestChildren.class,
-		restMethodsClass=RestMethods.class,
-		restParams=RestParam.class,
+		restOperationContextClass=RestOperationContext.class,
+		restOperationParams=RestOperationParam.class,
+		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
 		siteName="siteName",
 		staticFiles=StaticFiles.class,
-		swagger=@ResourceSwagger,
+		swagger=@Swagger,
 		swaggerProvider=SwaggerProvider.class,
 		title="title",
 		uriAuthority="uriAuthority",

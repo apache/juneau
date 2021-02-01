@@ -95,23 +95,23 @@ public class Restx_Serializers_Test {
 
 	@Rest(serializers=SA.class)
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String a() {
 			return "test1";
 		}
-		@RestMethod(serializers=SB.class)
+		@RestOp(serializers=SB.class)
 		public String b() {
 			return "test2";
 		}
-		@RestMethod(serializers={SB.class,SC.class,Inherit.class})
+		@RestOp(serializers={SB.class,SC.class,Inherit.class})
 		public String c() {
 			return "test3";
 		}
-		@RestMethod(serializers={SD.class,Inherit.class})
+		@RestOp(serializers={SD.class,Inherit.class})
 		public String d() {
 			return "test4";
 		}
-		@RestMethod
+		@RestOp
 		public String e() {
 			return "test406";
 		}
@@ -199,17 +199,17 @@ public class Restx_Serializers_Test {
 
 	@Rest
 	public static class B2 extends B1 {
-		@RestMethod
+		@RestOp
 		public OList a(RestResponse res) {
 			// Should show ['text/s3','text/s4','text/s1','text/s2']
 			return OList.of(res.getSupportedMediaTypes());
 		}
-		@RestMethod(serializers=S5.class)
+		@RestOp(serializers=S5.class)
 		public OList b(RestResponse res) {
 			// Should show ['text/s5']
 			return OList.of(res.getSupportedMediaTypes());
 		}
-		@RestMethod(serializers={S5.class,Inherit.class})
+		@RestOp(serializers={S5.class,Inherit.class})
 		public OList c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
 			return OList.of(res.getSupportedMediaTypes());

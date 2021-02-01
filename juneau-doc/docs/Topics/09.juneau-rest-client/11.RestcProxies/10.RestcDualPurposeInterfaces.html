@@ -22,7 +22,7 @@ Dual-purpose (end-to-end) interfaces
 	at the same time, reducing the chances for compatibility mistakes.
 </p>
 <p>
-	What makes this possible is that method-level annotations such as <ja>@RestMethod</ja> and parameter-level annotations
+	What makes this possible is that method-level annotations such as <ja>@RestOp</ja> and parameter-level annotations
 	such as <ja>@Query</ja> are inherited from parent classes.  
 	This normally isn't possible, but the framework will spider up the parent hierarchy of classes to find method and parameter level
 	annotations defined on overridden methods.
@@ -35,10 +35,10 @@ Dual-purpose (end-to-end) interfaces
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 	
-		<ja>@RemoteMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
+		<ja>@RemoteOp</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
 		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable;
 	
-		<ja>@RemoteMethod</ja>(method=<jsf>DELETE</jsf>, path=<js>"/pet/{petId}"</js>)
+		<ja>@RemoteOp</ja>(method=<jsf>DELETE</jsf>, path=<js>"/pet/{petId}"</js>)
 		<jk>public</jk> Ok deletePet(
 			<ja>@Header</ja>(
 				name=<js>"api_key"</js>,
@@ -71,7 +71,7 @@ Dual-purpose (end-to-end) interfaces
 		...
 	
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
-		<ja>@RestMethod</ja>(
+		<ja>@RestOp</ja>(
 			method=<jsm>GET</jsm>,
 			path=<js>"/pet"</js>,
 			summary=<js>"All pets in the store"</js>,
@@ -82,7 +82,7 @@ Dual-purpose (end-to-end) interfaces
 		}
 	
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
-		<ja>@RestMethod</ja>(
+		<ja>@RestOp</ja>(
 			method=<jsf>DELETE</jsf>,
 			path=<js>"/pet/{petId}"</js>,
 			summary=<js>"Deletes a pet"</js>,
@@ -106,7 +106,7 @@ Dual-purpose (end-to-end) interfaces
 	}
 </p>	
 <p>
-	In the example above, we chose to add the <ja>@RestMethod</ja> annotation to the implementation class.  
+	In the example above, we chose to add the <ja>@RestOp</ja> annotation to the implementation class.  
 	However, they could have been added to the interface instead.  It's personal preference where you want to place
 	the annotations.
 </p>

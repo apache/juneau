@@ -17,12 +17,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method of type with {@link RequestPath} on {@link RestMethod}-annotated Java methods.
+ * Resolves method of type with {@link RequestPath} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getPathMatch() getPathMatch}()</c>.
  */
-public class RequestPathParam extends SimpleRestParam {
+public class RequestPathParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

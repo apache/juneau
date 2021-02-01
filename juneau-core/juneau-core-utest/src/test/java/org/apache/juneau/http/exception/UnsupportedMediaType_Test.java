@@ -27,27 +27,27 @@ public class UnsupportedMediaType_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws UnsupportedMediaType {
 			throw new UnsupportedMediaType();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws UnsupportedMediaType {
 			throw new UnsupportedMediaType("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws UnsupportedMediaType {
 			throw new UnsupportedMediaType(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws UnsupportedMediaType {
 			throw new UnsupportedMediaType(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws UnsupportedMediaType {
 			throw new UnsupportedMediaType().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws UnsupportedMediaType {
 			throw new UnsupportedMediaType("foo");
 		}

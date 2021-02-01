@@ -37,7 +37,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class A {
-		@RestMethod(method=PUT)
+		@RestOp(method=PUT)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -63,7 +63,7 @@ public class Header_ContentType_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Content-Type headers on servlet annotation are picked up
-	// when @RestMethod.parsers/serializers annotations are used.
+	// when @RestOp.parsers/serializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -71,7 +71,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class B {
-		@RestMethod(method=PUT, parsers=P3.class)
+		@RestOp(method=PUT, parsers=P3.class)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -106,7 +106,7 @@ public class Header_ContentType_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Content-Type headers on servlet annotation are picked up
-	// when @RestMethod.addParsers/addSerializers annotations are used.
+	// when @RestOp.addParsers/addSerializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -114,7 +114,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class C {
-		@RestMethod(method=PUT, parsers={P3.class,Inherit.class})
+		@RestOp(method=PUT, parsers={P3.class,Inherit.class})
 		public String a(@Body String in) {
 			return in;
 		}
@@ -138,7 +138,7 @@ public class Header_ContentType_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Content-Type headers on method annotation are picked up
-	// when @RestMethod.parsers/serializers annotations are used.
+	// when @RestOp.parsers/serializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -146,7 +146,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class D {
-		@RestMethod(method=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class)
+		@RestOp(method=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -179,7 +179,7 @@ public class Header_ContentType_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Content-Type headers on method annotation are picked up
-	// 	when @RestMethod.addParsers/addSerializers annotations are used.
+	// 	when @RestOp.addParsers/addSerializers annotations are used.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
@@ -187,7 +187,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class E {
-		@RestMethod(method=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
+		@RestOp(method=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
 		public String a(@Body String in) {
 			return in;
 		}

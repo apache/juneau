@@ -35,26 +35,26 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
  *
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a HTTP
+ * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a HTTP
  * request header.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+ * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
+ * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
  * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, <js>"ETag"</js>);
  * 		...
@@ -844,7 +844,7 @@ public @interface Header {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
+	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> OMap allHeaderParameters) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
@@ -853,7 +853,7 @@ public @interface Header {
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @Header("*")</jc>
-	 * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
 	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; allHeaderParameters);
 	 * 	}
 	 * 		</p>

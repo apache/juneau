@@ -27,7 +27,7 @@ Handling Form Posts
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> BasicRestServlet {
 	
 		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>)
+		<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
 			<jc>// Just mirror back the request</jc>
 			<jk>return</jk> input;
@@ -46,7 +46,7 @@ Handling Form Posts
 </p>	
 <p class='bpcode w800'>
 	<jd>/** POST request handler */</jd>
-	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>)
+	<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>)
 	<jk>public</jk> Object doPost(<ja>@FormData</ja>(<js>"aString"</js>) String aString, <ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> aNumber, <ja>@FormData</ja>(<js>"aDate"</js>) Calendar aDate) <jk>throws</jk> Exception {
 		...
 	}

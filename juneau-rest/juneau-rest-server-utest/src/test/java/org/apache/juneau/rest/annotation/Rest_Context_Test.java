@@ -30,7 +30,7 @@ public class Rest_Context_Test {
 
 	@Rest
 	public static class A1 {
-		@RestMethod
+		@RestOp
 		public String get(RestContext context) {
 			return context.getClass().getSimpleName();
 		}
@@ -83,7 +83,7 @@ public class Rest_Context_Test {
 
 	@Rest(contextClass=X2.class)
 	public static class A5 {
-		@RestMethod
+		@RestOp
 		public String get(RestContext context) {
 			return context.getClass().getSimpleName();
 		}

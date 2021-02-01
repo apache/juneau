@@ -23,7 +23,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link HasFormData} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters annotated with {@link HasFormData} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getFormData() getFormData}().{@link RequestFormData#containsKey(Object) containsKey}(<jv>name</jv>)</c>
@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The parameter type can be a <jk>boolean</jk> or anything convertible from a <jk>boolean</jk>.
  */
-public class HasFormDataParam implements RestParam {
+public class HasFormDataParam implements RestOperationParam {
 
 	private final String name;
 	private final Type type;
@@ -67,7 +67,7 @@ public class HasFormDataParam implements RestParam {
 		return n;
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		BeanSession bs = req.getBeanSession();

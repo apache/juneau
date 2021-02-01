@@ -19,12 +19,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link Writer} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link Writer} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestResponse() getRestResponse}().{@link RestResponse#getWriter() getWriter}()</c>.
  */
-public class WriterParam extends SimpleRestParam {
+public class WriterParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

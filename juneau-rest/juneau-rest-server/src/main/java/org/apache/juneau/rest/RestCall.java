@@ -40,7 +40,7 @@ public class RestCall {
 	private RestRequest rreq;
 	private RestResponse rres;
 	private RestContext context;
-	private RestMethodContext rmethod;
+	private RestOperationContext opContext;
 	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
@@ -114,9 +114,9 @@ public class RestCall {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall restMethodContext(RestMethodContext value) {
-		rmethod = value;
-		beanFactory.addBean(RestMethodContext.class, value);
+	public RestCall restOperationContext(RestOperationContext value) {
+		opContext = value;
+		beanFactory.addBean(RestOperationContext.class, value);
 		return this;
 	}
 
@@ -303,8 +303,8 @@ public class RestCall {
 	 *
 	 * @return The method context of this call.
 	 */
-	public RestMethodContext getRestMethodContext() {
-		return rmethod;
+	public RestOperationContext getRestOperationContext() {
+		return opContext;
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class RestCall {
 	 * @return The java method of this call, or <jk>null</jk> if it hasn't been determined yet.
 	 */
 	public Method getJavaMethod() {
-		return rmethod == null ? null : rmethod.method;
+		return opContext == null ? null : opContext.method;
 	}
 
 	/**

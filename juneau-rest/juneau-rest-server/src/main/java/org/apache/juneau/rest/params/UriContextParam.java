@@ -18,12 +18,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link UriContext} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link UriContext} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getUriContext() getUriContext}()</c>.
  */
-public class UriContextParam extends SimpleRestParam {
+public class UriContextParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

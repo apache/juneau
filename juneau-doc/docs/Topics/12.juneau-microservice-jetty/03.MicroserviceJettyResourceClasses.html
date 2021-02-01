@@ -79,7 +79,7 @@ Resource Classes
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
 	
-		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
+		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> String sayHello() {
 			<jk>return</jk> <js>"Hello world!"</js>;
 		}

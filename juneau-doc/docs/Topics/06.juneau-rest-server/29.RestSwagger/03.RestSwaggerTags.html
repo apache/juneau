@@ -23,7 +23,7 @@ Tags
 </p>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.4.png'>
 <p>
-	Tags are also defined in the <ja>@ResourceSwagger</ja> annotation
+	Tags are also defined in the <ja>@Swagger</ja> annotation
 </p>
 <h5 class='figure'>PetStoreResource.json</h5>
 <p class='bpcode w800'>
@@ -55,7 +55,7 @@ Tags
 </p>
 <h5 class='figure'>org.apache.juneau.examples.rest.petstore.PetStoreResource</h5>
 <p class='bpcode w800'>
-	swagger=<ja>@ResourceSwagger</ja>(
+	swagger=<ja>@Swagger</ja>(
 		...
 		tags={
 			<ja>@Tag</ja>(
@@ -82,16 +82,16 @@ Tags
 	),
 </p>
 <p>
-	Tags are associated with operations using the {@link oajr.annotation.MethodSwagger#tags() @MethodSwagger(tags)} annotation:
+	Tags are associated with operations using the {@link oajr.annotation.OpSwagger#tags() @OpSwagger(tags)} annotation:
 </p>
 
 <h5 class='figure'>GET /user operation</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestOp</ja>(
 		method=<jsf>GET</jsf>,
 		path=<js>"/user"</js>,
 		summary=<js>"Petstore users"</js>,
-		swagger=<ja>@MethodSwagger</ja>(
+		swagger=<ja>@OpSwagger</ja>(
 			tags=<js>"user"</js>
 		)
 	)

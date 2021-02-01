@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the HTTP
+ * Annotation that can be applied to a parameter of a {@link RestOp @RestOp} annotated method to identify it as the HTTP
  * method.
  *
  * <p>
@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<js>"*"</js>)
+ * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {
  * 		...
  * 	}
@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(method=<js>"*"</js>)
+ * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res) {
  * 		String method = req.getMethod();
  * 		...

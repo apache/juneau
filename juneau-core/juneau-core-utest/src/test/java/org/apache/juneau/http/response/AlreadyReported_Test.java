@@ -23,9 +23,9 @@ public class AlreadyReported_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public AlreadyReported getA1() { return new AlreadyReported(); }
-		@RestMethod public AlreadyReported getA2() { return new AlreadyReported("foo"); }
-		@RestMethod public AlreadyReported getA3() { return new AlreadyReported().header("Foo","bar"); }
+		@RestOp public AlreadyReported getA1() { return new AlreadyReported(); }
+		@RestOp public AlreadyReported getA2() { return new AlreadyReported("foo"); }
+		@RestOp public AlreadyReported getA3() { return new AlreadyReported().header("Foo","bar"); }
 	}
 
 	@Test

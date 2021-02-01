@@ -17,7 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.IOException;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -37,11 +37,11 @@ public class Nls_Test {
 		messages="NlsTest"
 	)
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String a() {
 			return null;
 		}
-		@RestMethod(
+		@RestOp(
 			defaultRequestAttributes={"TestProperty:$L{key2}"}
 		)
 		public String b() {
@@ -76,7 +76,7 @@ public class Nls_Test {
 
 	@Rest(title="test")
 	public static class B {
-		@RestMethod(description="foo")
+		@RestOp(description="foo")
 		public Swagger options(RestRequest req) {
 			// Should get to the options page without errors
 			return req.getSwagger().orElse(null);
@@ -95,7 +95,7 @@ public class Nls_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod
+		@RestOp
 		public String a(RestRequest req) {
 			// Missing resource bundle should cause {!!x} string.
 			return req.getMessage("bad", 1, 2, 3);

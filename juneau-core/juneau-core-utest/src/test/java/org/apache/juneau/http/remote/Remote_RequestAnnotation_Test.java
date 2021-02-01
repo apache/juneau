@@ -38,7 +38,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
 				"body",IOUtils.read(r),
@@ -71,7 +71,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Remote
 	public static interface A2 {
-		@RemoteMethod(path="/{x}") String post(A1 req);
+		@RemoteOp(path="/{x}") String post(A1 req);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Rest
 	public static class B {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
 				"body",IOUtils.read(r),
@@ -127,7 +127,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Remote
 	public static interface B3 {
-		@RemoteMethod(path="/{x}") String post(B1 req);
+		@RemoteOp(path="/{x}") String post(B1 req);
 	}
 
 	@Test
@@ -143,7 +143,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
 				"body",IOUtils.read(r),
@@ -183,7 +183,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Remote
 	public static interface C3 {
-		@RemoteMethod(path="/{x}") String post(C1 req);
+		@RemoteOp(path="/{x}") String post(C1 req);
 	}
 
 	@Test
@@ -199,7 +199,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Rest
 	public static class D {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
 				"body",IOUtils.read(r),
@@ -231,7 +231,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Remote
 	public static interface D2 {
-		@RemoteMethod(path="/{x}") String post(@Request D1 req);
+		@RemoteOp(path="/{x}") String post(@Request D1 req);
 	}
 
 	@Test
@@ -247,7 +247,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Rest
 	public static class E {
-		@RestMethod(path="/{x}")
+		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
 				"body",IOUtils.read(r),
@@ -280,7 +280,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Remote
 	public static interface E2 {
-		@RemoteMethod(path="/{x}") String post(E1 req);
+		@RemoteOp(path="/{x}") String post(E1 req);
 	}
 
 	@Test

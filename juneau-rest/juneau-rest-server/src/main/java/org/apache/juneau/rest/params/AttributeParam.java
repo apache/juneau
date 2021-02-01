@@ -21,12 +21,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters annotated with {@link Attr} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters annotated with {@link Attr} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String,Type,Type...) get}(<jv>name</jv>,<jv>type</jv>)</c>.
  */
-public class AttributeParam implements RestParam {
+public class AttributeParam implements RestOperationParam {
 
 	private final String name;
 	private final Type type;
@@ -64,7 +64,7 @@ public class AttributeParam implements RestParam {
 		return n;
 	}
 
-	@Override /* RestMethodParam */
+	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		return call.getRestRequest().getAttributes().get(name, type);
 	}

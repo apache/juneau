@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
  * An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
  * a drop-down menu item for rendering all other supported content types in plain text:
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(
+ * 	<ja>@RestOp</ja>(
  * 		method=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>
  * 	)

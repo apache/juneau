@@ -25,10 +25,10 @@ public class PermanentRedirect_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod public PermanentRedirect getA1() { return new PermanentRedirect(); }
-		@RestMethod public PermanentRedirect getA2() { return new PermanentRedirect("foo"); }
-		@RestMethod public PermanentRedirect getA3() { return new PermanentRedirect(URI.create("servlet:/foo")); }
-		@RestMethod public PermanentRedirect getA4() { return new PermanentRedirect().header("Foo","bar"); }
+		@RestOp public PermanentRedirect getA1() { return new PermanentRedirect(); }
+		@RestOp public PermanentRedirect getA2() { return new PermanentRedirect("foo"); }
+		@RestOp public PermanentRedirect getA3() { return new PermanentRedirect(URI.create("servlet:/foo")); }
+		@RestOp public PermanentRedirect getA4() { return new PermanentRedirect().header("Foo","bar"); }
 	}
 
 	@Test

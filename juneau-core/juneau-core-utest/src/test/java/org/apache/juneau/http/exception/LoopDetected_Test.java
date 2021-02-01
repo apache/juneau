@@ -27,27 +27,27 @@ public class LoopDetected_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public void getF1() throws LoopDetected {
 			throw new LoopDetected();
 		}
-		@RestMethod
+		@RestOp
 		public void getF2() throws LoopDetected {
 			throw new LoopDetected("foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF3() throws LoopDetected {
 			throw new LoopDetected(new RuntimeException("baz"));
 		}
-		@RestMethod
+		@RestOp
 		public void getF4() throws LoopDetected {
 			throw new LoopDetected(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF5() throws LoopDetected {
 			throw new LoopDetected().header("Foo", "bar");
 		}
-		@RestMethod
+		@RestOp
 		public void getF6() throws LoopDetected {
 			throw new LoopDetected("foo");
 		}

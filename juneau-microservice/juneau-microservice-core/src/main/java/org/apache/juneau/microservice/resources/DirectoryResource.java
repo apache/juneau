@@ -114,7 +114,7 @@ public class DirectoryResource extends BasicRestServlet {
 		allowUploads = c.getBoolean(DIRECTORY_RESOURCE_allowUploads, false);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=GET,
 		path="/*",
 		summary="View information on file or directory",
@@ -131,7 +131,7 @@ public class DirectoryResource extends BasicRestServlet {
 		return new FileResource(dir, path, true);
 	}
 
-	@RestMethod(
+	@RestOp(
 		method="VIEW",
 		path="/*",
 		summary="View contents of file",
@@ -149,7 +149,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
-	@RestMethod(
+	@RestOp(
 		method="DOWNLOAD",
 		path="/*",
 		summary="Download file",
@@ -167,7 +167,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=DELETE,
 		path="/*",
 		summary="Delete file",
@@ -178,7 +178,7 @@ public class DirectoryResource extends BasicRestServlet {
 		return new RedirectToRoot();
 	}
 
-	@RestMethod(
+	@RestOp(
 		method=PUT,
 		path="/*",
 		summary="Add or replace file",

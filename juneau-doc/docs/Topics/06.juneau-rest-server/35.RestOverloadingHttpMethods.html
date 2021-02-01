@@ -23,7 +23,7 @@ Overloading HTTP Methods
 	For example, the URL <l>"/sample/foo?method=BAR"</l> will cause the following method to be invoked...
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<js>"BAR"</js>)
+	<ja>@RestOp</ja>(method=<js>"BAR"</js>)
 	<jk>public void</jk> doBar(RestRequest req, RestResponse res) {
 		<jc>// Handle BAR requests</jc>
 	}

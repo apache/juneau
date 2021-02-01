@@ -63,27 +63,27 @@ public class RestClient_Config_RestClient_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean getBean() {
 			return bean;
 		}
-		@RestMethod(path="/bean")
+		@RestOp(path="/bean")
 		public ABean postBean(@Body ABean b) {
 			return b;
 		}
-		@RestMethod(path="/echo/*")
+		@RestOp(path="/echo/*")
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
 		}
-		@RestMethod(path="/echoBody")
+		@RestOp(path="/echoBody")
 		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getBody().getReader();
 		}
-		@RestMethod(path="/ok")
+		@RestOp(path="/ok")
 		public Ok getOk() {
 			return Ok.OK;
 		}
-		@RestMethod(path="/checkHeader")
+		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().get(req.getHeader("Check"));
 		}
@@ -442,7 +442,7 @@ public class RestClient_Config_RestClient_Test {
 
 	@Rest(partSerializer=A12a.class,partParser=A12b.class)
 	public static class A12 extends BasicRestObject {
-		@RestMethod(path="/")
+		@RestOp(path="/")
 		public Ok get(@Header(name="Foo",multi=true) ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);
 			assertObject(req.getHeaders().getAll("Foo",String[].class)).json().is("['x{f:1}','x{f:1}']");

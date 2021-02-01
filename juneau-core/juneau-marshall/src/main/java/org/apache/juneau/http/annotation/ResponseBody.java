@@ -46,7 +46,7 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>
+ * 	<ja>@RestOp</ja>
  * 	<jk>public</jk> AddPetSuccess addPet() {
  * 		<jsm>addPet</jsm>(pet);
  * 		<jk>return new</jk> AddPetSuccess(...);

@@ -24,14 +24,14 @@
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
 	<jk>public void</jk> doPost(RestRequest req) {
 		<jk>boolean</jk> p1 = req.hasFormData(<js>"p1"</js>);
 		...

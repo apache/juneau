@@ -41,7 +41,7 @@ public class Rest_Encoders_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String put(@Body String in) {
 			return in;
 		}
@@ -67,7 +67,7 @@ public class Rest_Encoders_Test {
 
 	@Rest(encoders=MyEncoder.class)
 	public static class B {
-		@RestMethod
+		@RestOp
 		public String put(@Body String in) {
 			return in;
 		}

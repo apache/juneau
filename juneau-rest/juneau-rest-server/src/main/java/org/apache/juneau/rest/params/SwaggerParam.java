@@ -12,18 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.params;
 
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link Swagger} on {@link RestMethod}-annotated Java methods.
+ * Resolves method parameters of type {@link Swagger} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getSwagger() getSwagger}()</c>.
  */
-public class SwaggerParam extends SimpleRestParam {
+public class SwaggerParam extends SimpleRestOperationParam {
 
 	/**
 	 * Static creator.

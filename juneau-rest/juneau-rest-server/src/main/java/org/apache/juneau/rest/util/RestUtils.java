@@ -450,7 +450,7 @@ public final class RestUtils {
 	}
 
 	/**
-	 * Normalizes the {@link RestMethod#path()} value.
+	 * Normalizes the {@link RestOp#path()} value.
 	 *
 	 * @param path The path to normalize.
 	 * @return The normalized path.

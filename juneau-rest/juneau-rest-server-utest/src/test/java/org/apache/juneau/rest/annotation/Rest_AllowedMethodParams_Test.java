@@ -26,24 +26,24 @@ public class Rest_AllowedMethodParams_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
-		@RestMethod
+		@RestOp
 		public String get() {
 			return "GET";
 		}
-		@RestMethod
+		@RestOp
 		public String put() {
 			return "PUT";
 		}
-		@RestMethod
+		@RestOp
 		public String head() {
 			// Note that HTTP client is going to ignore this body.
 			return "HEAD";
 		}
-		@RestMethod
+		@RestOp
 		public String options() {
 			return "OPTIONS";
 		}
-		@RestMethod(method="foo",path="/")
+		@RestOp(method="foo",path="/")
 		public String foo() {
 			return "FOO";
 		}
