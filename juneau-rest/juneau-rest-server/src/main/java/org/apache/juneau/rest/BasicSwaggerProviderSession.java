@@ -45,7 +45,7 @@ import org.apache.juneau.svl.*;
 /**
  * A single session of generating a Swagger document.
  */
-public class SwaggerProviderSession {
+public class BasicSwaggerProviderSession {
 
 	private final RestContext context;
 	private final Class<?> c;
@@ -68,7 +68,7 @@ public class SwaggerProviderSession {
 	 * @param vr The variable resolver to use for resolving variables in the swagger.
 	 * @param js The JSON-schema generator to use for stuff like examples.
 	 */
-	public SwaggerProviderSession(RestContext context, Locale locale, FileFinder ff, Messages messages, VarResolverSession vr, JsonSchemaGeneratorSession js) {
+	public BasicSwaggerProviderSession(RestContext context, Locale locale, FileFinder ff, Messages messages, VarResolverSession vr, JsonSchemaGeneratorSession js) {
 		this.context = context;
 		this.c = context.getResourceClass();
 		this.rci = ClassInfo.of(c);

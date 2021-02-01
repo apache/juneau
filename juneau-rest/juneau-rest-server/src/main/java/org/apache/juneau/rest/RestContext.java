@@ -3009,7 +3009,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_swaggerProvider REST_swaggerProvider}
 	 * 	<li><b>Name:</b>  <js>"RestContext.swaggerProvider.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.SwaggerProvider}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.SwaggerProvider}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicSwaggerProvider}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -4506,7 +4506,7 @@ public class RestContext extends BeanContext {
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean factory registered in this context.
-	 * 	<li>Instantiates a default {@link SwaggerProvider}.
+	 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -4519,7 +4519,14 @@ public class RestContext extends BeanContext {
 	 * @throws Exception If info provider could not be instantiated.
 	 */
 	protected SwaggerProvider createSwaggerProvider(Object resource, BeanFactory beanFactory) throws Exception {
-		SwaggerProvider x = beanFactory.getBean(SwaggerProvider.class).orElse(null);
+
+		SwaggerProvider x = null;
+
+		if (resource instanceof SwaggerProvider)
+			x = (SwaggerProvider)resource;
+
+		if (x == null)
+			x = beanFactory.getBean(SwaggerProvider.class).orElse(null);
 
 		Object o = getProperty(REST_swaggerProvider);
 		if (o instanceof SwaggerProvider)

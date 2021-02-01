@@ -93,7 +93,7 @@ public class RestAnnotation {
 		Class<? extends RestContext> contextClass = RestContext.Null.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
-		Class<? extends SwaggerProvider> swaggerProvider=SwaggerProvider.Null.class;
+		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Null.class;
 		Class<? extends RestOperationParam>[] restOperationParams = new Class[0];
 		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
 		Class<? extends RestOperationContext> restOperationContextClass = RestOperationContext.Null.class;

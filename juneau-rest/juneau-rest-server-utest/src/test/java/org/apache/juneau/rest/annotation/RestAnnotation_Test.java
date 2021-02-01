@@ -82,7 +82,7 @@ public class RestAnnotation_Test {
 		.siteName("siteName")
 		.staticFiles(StaticFiles.class)
 		.swagger(SwaggerAnnotation.DEFAULT)
-		.swaggerProvider(SwaggerProvider.class)
+		.swaggerProvider(BasicSwaggerProvider.class)
 		.title("title")
 		.uriAuthority("uriAuthority")
 		.uriContext("uriContext")
@@ -136,7 +136,7 @@ public class RestAnnotation_Test {
 		.siteName("siteName")
 		.staticFiles(StaticFiles.class)
 		.swagger(SwaggerAnnotation.DEFAULT)
-		.swaggerProvider(SwaggerProvider.class)
+		.swaggerProvider(BasicSwaggerProvider.class)
 		.title("title")
 		.uriAuthority("uriAuthority")
 		.uriContext("uriContext")
@@ -193,7 +193,7 @@ public class RestAnnotation_Test {
 				+ "siteName:'siteName',"
 				+ "staticFiles:'org.apache.juneau.rest.StaticFiles',"
 				+ "swagger:{contact:{email:'',name:'',url:'',value:[]},description:[],externalDocs:{description:[],url:'',value:[]},license:{name:'',url:'',value:[]},tags:[],termsOfService:[],title:[],value:[],version:''},"
-				+ "swaggerProvider:'org.apache.juneau.rest.SwaggerProvider',"
+				+ "swaggerProvider:'org.apache.juneau.rest.BasicSwaggerProvider',"
 				+ "title:['title'],"
 				+ "uriAuthority:'uriAuthority',"
 				+ "uriContext:'uriContext',"
@@ -292,7 +292,7 @@ public class RestAnnotation_Test {
 		siteName="siteName",
 		staticFiles=StaticFiles.class,
 		swagger=@Swagger,
-		swaggerProvider=SwaggerProvider.class,
+		swaggerProvider=BasicSwaggerProvider.class,
 		title="title",
 		uriAuthority="uriAuthority",
 		uriContext="uriContext",
@@ -348,7 +348,7 @@ public class RestAnnotation_Test {
 		siteName="siteName",
 		staticFiles=StaticFiles.class,
 		swagger=@Swagger,
-		swaggerProvider=SwaggerProvider.class,
+		swaggerProvider=BasicSwaggerProvider.class,
 		title="title",
 		uriAuthority="uriAuthority",
 		uriContext="uriContext",

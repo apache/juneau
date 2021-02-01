@@ -35,12 +35,16 @@ public class SwaggerProviderBuilder {
 
 	/**
 	 * Creates a new {@link SwaggerProvider} object from this builder.
+	 * 
+	 * <p>
+	 * Instantiates an instance of the {@link #implClass(Class) implementation class} or
+	 * else {@link BasicSwaggerProvider} if implementation class was not specified.
 	 *
 	 * @return A new {@link SwaggerProvider} object.
 	 */
 	public SwaggerProvider build() {
 		try {
-			Class<? extends SwaggerProvider> ic = implClass == null ? SwaggerProvider.class : implClass;
+			Class<? extends SwaggerProvider> ic = (implClass == null || implClass == SwaggerProvider.class) ? BasicSwaggerProvider.class : implClass;
 			return BeanFactory.of(beanFactory).addBean(SwaggerProviderBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);

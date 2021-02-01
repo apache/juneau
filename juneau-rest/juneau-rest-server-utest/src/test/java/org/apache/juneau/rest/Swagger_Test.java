@@ -23,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Tag;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -1614,7 +1613,6 @@ public class Swagger_Test {
 
 	@Test
 	public void l02_query_example_swaggerOnClass() throws Exception {
-		System.err.println(getSwagger(new L2()));
 		assertEquals("{id:2}", getSwagger(new L2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 		assertEquals("{id:2}", getSwaggerWithFile(new L2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
@@ -2347,8 +2345,6 @@ public class Swagger_Test {
 		org.apache.juneau.dto.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getBody().asString(), org.apache.juneau.dto.swagger.Swagger.class);
 		Operation o = s.getOperation("/", "get");
 		ParameterInfo pi = o.getParameter("body", null);
-
-		SimpleJson.DEFAULT_READABLE.println(s);
 
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", pi.getExamples().get("application/json+simple"));
 		ResponseInfo ri = o.getResponse("200");

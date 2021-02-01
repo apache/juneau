@@ -1138,26 +1138,7 @@ public @interface Rest {
 	/**
 	 * Configuration property:  Swagger provider.
 	 *
-	 * <p>
-	 * Class used to retrieve swagger information about a resource.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default info provider if not specified is {@link SwaggerProvider}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link SwaggerProvider} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
+	 * TODO
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_swaggerProvider}

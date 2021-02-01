@@ -83,7 +83,6 @@ public class Swagger_Body_Test {
 	@Test
 	public void a01_fromPojo() throws Exception {
 		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
-		System.err.println(s);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);

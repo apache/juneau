@@ -2050,7 +2050,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link SwaggerProvider}.
+	 * 	<br>The default is {@link BasicSwaggerProvider}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -2070,7 +2070,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link SwaggerProvider}.
+	 * 	<br>The default is {@link BasicSwaggerProvider}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter

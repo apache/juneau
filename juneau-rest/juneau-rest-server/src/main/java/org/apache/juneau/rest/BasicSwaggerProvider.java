@@ -12,42 +12,60 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.svl.*;
 
 /**
- * Interface for retrieving Swagger on a REST resource.
+ * Basic implementation of a {@link SwaggerProvider}.
+ * 
+ * TODO
  */
-public interface SwaggerProvider {
+public class BasicSwaggerProvider implements SwaggerProvider {
+
+	private final VarResolver vr;
+	private final JsonSchemaGenerator js;
+	private final Messages messages;
+	private final FileFinder fileFinder;
 
 	/**
-	 * Represents no SwaggerProvider.
+	 * Constructor.
 	 *
-	 * <p>
-	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link BasicSwaggerProvider} if not specified at any level.
+	 * @param builder The builder containing the settings for this Swagger provider.
 	 */
-	public abstract class Null implements SwaggerProvider {};
-
-	/**
-	 * Creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static SwaggerProviderBuilder create() {
-		return new SwaggerProviderBuilder();
+	public BasicSwaggerProvider(SwaggerProviderBuilder builder) {
+		BeanFactory bf = builder.beanFactory;
+		this.vr = firstNonNull(builder.varResolver, bf.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
+		this.js = firstNonNull(builder.jsonSchemaGenerator, bf.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
+		this.messages = builder.messages;
+		this.fileFinder = builder.fileFinder;
 	}
 
 	/**
-	 * Returns the Swagger associated with the specified {@link Rest}-annotated class.
+	 * Returns the Swagger associated with the specified context of a {@link Rest}-annotated class.
+	 *
+	 * <p>
+	 * Subclasses can override this to provide their own method for generating Swagger.
 	 *
 	 * @param context The context of the {@link Rest}-annotated class.
 	 * @param locale The request locale.
-	 * @return A new {@link Swagger} DTO object.
+	 * @return A new {@link Swagger} object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
-	public Swagger getSwagger(RestContext context, Locale locale) throws Exception;
+	@Override /* SwaggerProvider */
+	public Swagger getSwagger(RestContext context, Locale locale) throws Exception {
 
+		Class<?> c = context.getResourceClass();
+		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create().cp(c,null,false).build();
+		Messages mb = messages != null ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
+		VarResolverSession vrs = vr.createSession().bean(Messages.class, mb);
+		BasicSwaggerProviderSession session = new BasicSwaggerProviderSession(context, locale, ff, messages, vrs, js.createSession());
+
+		return session.getSwagger();
+	}
 }
