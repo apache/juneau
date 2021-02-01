@@ -13,6 +13,8 @@
 package org.apache.juneau.rest.logging;
 
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -22,11 +24,12 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Builder class for {@link RestLogger} objects.
+ * Builder class for {@link BasicRestLogger} objects.
  */
 public class RestLoggerBuilder {
 
@@ -37,33 +40,56 @@ public class RestLoggerBuilder {
 	Predicate<HttpServletRequest> enabledTest;
 	RestLoggingDetail requestDetail, responseDetail;
 	Level level;
+	BeanFactory beanFactory;
+	Class<? extends RestLogger> implClass;
 
 	/**
-	 * Create a new {@link RestLogger} using this builder.
+	 * Creates a new {@link RestLogger} object from this builder.
 	 *
-	 * @return A new {@link RestLogger}
+	 * <p>
+	 * Instantiates an instance of the {@link #implClass(Class) implementation class} or
+	 * else {@link BasicRestLogger} if implementation class was not specified.
+	 *
+	 * @return A new {@link RestLogger} object.
 	 */
 	public RestLogger build() {
-		return new RestLogger(this);
+		try {
+			Class<? extends RestLogger> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
+			return BeanFactory.of(beanFactory).addBeans(RestLoggerBuilder.class, this).createBean(ic);
+		} catch (Exception e) {
+			throw toHttpException(e, InternalServerError.class);
+		}
 	}
 
 	/**
-	 * Create a new subclass of {@link RestLogger} using this builder.
+	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
 	 *
-	 * <p>
-	 * The subclass must have a public constructor that optionally takes in a {@link RestLoggerBuilder} (or subclass) object.
-	 *
-	 * @param c The subclass to instantiate.
-	 * @param <T> The subclass to instantiate.
-	 * @return A new subclass of {@link RestLogger}
-	 * @throws ExecutableException If constructor invocation threw an exception.
+	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
 	 */
-	public <T extends RestLogger> T build(Class<T> c) throws ExecutableException {
-		return ClassInfo
-			.of(c)
-			.getOptionalPublicConstructorFuzzy(this)
-			.orElseThrow(()->new ExecutableException(c.getName() + "(RestCallLoggerBuilder)"))
-			.invoke(this);
+	protected Class<? extends RestLogger> getDefaultImplClass() {
+		return BasicRestLogger.class;
+	}
+
+	/**
+	 * Specifies the bean factory to use for instantiating the {@link RestLogger} object.
+	 *
+	 * @param value The new value for this setting.
+	 * @return  This object (for method chaining).
+	 */
+	public RestLoggerBuilder beanFactory(BeanFactory value) {
+		this.beanFactory = value;
+		return this;
+	}
+
+	/**
+	 * Specifies a subclass of {@link RestLogger} to create when the {@link #build()} method is called.
+	 *
+	 * @param value The new value for this setting.
+	 * @return  This object (for method chaining).
+	 */
+	public RestLoggerBuilder implClass(Class<? extends RestLogger> value) {
+		this.implClass = value;
+		return this;
 	}
 
 	/**
@@ -78,7 +104,7 @@ public class RestLoggerBuilder {
 	 * </ol>
 	 *
 	 * <p>
-	 * The {@link RestLogger#getLogger()} method can also be overridden to provide different logic.
+	 * The {@link BasicRestLogger#getLogger()} method can also be overridden to provide different logic.
 	 *
 	 * @param value
 	 * 	The logger to use for logging the request.
@@ -104,7 +130,7 @@ public class RestLoggerBuilder {
 	 * </ol>
 	 *
 	 * <p>
-	 * The {@link RestLogger#getLogger()} method can also be overridden to provide different logic.
+	 * The {@link BasicRestLogger#getLogger()} method can also be overridden to provide different logic.
 	 *
 	 * @param value
 	 * 	The logger to use for logging the request.

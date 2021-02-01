@@ -47,7 +47,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
-public class BasicTestRestLogger extends RestLogger {
+public class BasicTestRestLogger extends BasicRestLogger {
 
 	/**
 	 * Constructor.
@@ -59,9 +59,9 @@ public class BasicTestRestLogger extends RestLogger {
 	}
 
 	private static RestLoggerBuilder builder() {
-		return create()
+		return RestLogger.create()
 			.normalRules(  // Rules when debugging is not enabled.
-				createRule()  // Log 500+ errors with status-line and header information.
+				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
 					.statusFilter(x -> x >= 400)
 					.level(SEVERE)
 					.requestDetail(HEADER)
@@ -70,7 +70,7 @@ public class BasicTestRestLogger extends RestLogger {
 					.enabledTest(x -> ! isNoLog(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build(),
-				createRule()  // Log 400-500 errors with just status-line information.
+				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
 					.statusFilter(x -> x >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -81,7 +81,7 @@ public class BasicTestRestLogger extends RestLogger {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				createRule()  // Log everything with full details.
+				RestLoggerRule.create()  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)

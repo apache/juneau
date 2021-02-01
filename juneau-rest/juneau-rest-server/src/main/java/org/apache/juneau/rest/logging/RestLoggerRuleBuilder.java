@@ -24,7 +24,7 @@ import org.apache.juneau.rest.*;
  * Builder for {@link RestLoggerRule} objects.
  *
  * <p>
- * See the {@link RestLogger} for usage.
+ * See the {@link BasicRestLogger} for usage.
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_callLogger}

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logging;
 
-import java.util.function.*;
-
 import org.apache.juneau.rest.*;
 
 /**
@@ -23,12 +21,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
-public class BasicDisabledRestLogger extends RestLogger {
-
-	/**
-	 * Returns a builder with the settings used by this logger.
-	 */
-	public static final Supplier<RestLoggerBuilder> SETTINGS = ()->create().disabled();
+public class BasicDisabledRestLogger extends BasicRestLogger {
 
 	/**
 	 * Constructor.
@@ -36,6 +29,6 @@ public class BasicDisabledRestLogger extends RestLogger {
 	 * @param context The context of the resource object.
 	 */
 	public BasicDisabledRestLogger(RestContext context) {
-		super(create().disabled());
+		super(RestLogger.create().disabled());
 	}
 }

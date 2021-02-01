@@ -3925,14 +3925,18 @@ public class RestContext extends BeanContext {
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
 
-		if (x == null)
-			x = getInstanceProperty(REST_callLogger, RestLogger.class, null, beanFactory);
+		Object o = getProperty(REST_callLogger);
+		if (o instanceof RestLogger)
+			x = (RestLogger)o;
 
 		if (x == null)
 			x = beanFactory.getBean(RestLogger.class).orElse(null);
 
-		if (x == null)
-			x = getInstanceProperty(REST_callLoggerDefault, RestLogger.class, null, beanFactory);
+		if (x == null) {
+			o = getProperty(REST_callLoggerDefault);
+			if (o instanceof RestLogger)
+				x = (RestLogger)o;
+		}
 
 		if (x == null)
 			x = createCallLoggerBuilder(resource, beanFactory).build();
@@ -3959,18 +3963,36 @@ public class RestContext extends BeanContext {
 	 * @return The call logger builder for this REST resource.
 	 * @throws Exception If call logger builder could not be instantiated.
 	 */
+	@SuppressWarnings("unchecked")
 	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		Class<? extends RestLogger> c = null;
+
+		Object o = getProperty(REST_callLogger);
+		if (o instanceof Class)
+			c = (Class<? extends RestLogger>)o;
+
+		if (c == null) {
+			o = getProperty(REST_callLoggerDefault);
+			if (o instanceof Class)
+				c = (Class<? extends RestLogger>)o;
+		}
+
+		if (c == null)
+			c = BasicRestLogger.class;
 
 		RestLoggerBuilder x = RestLogger
 			.create()
+			.beanFactory(beanFactory)
+			.implClass(c)
 			.normalRules(  // Rules when debugging is not enabled.
-				RestLogger.createRule()  // Log 500+ errors with status-line and header information.
+				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
 					.statusFilter(a -> a >= 500)
 					.level(SEVERE)
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)
 					.build(),
-				RestLogger.createRule()  // Log 400-500 errors with just status-line information.
+				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
 					.statusFilter(a -> a >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -3978,7 +4000,7 @@ public class RestContext extends BeanContext {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				RestLogger.createRule()  // Log everything with full details.
+				RestLoggerRule.create()  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)

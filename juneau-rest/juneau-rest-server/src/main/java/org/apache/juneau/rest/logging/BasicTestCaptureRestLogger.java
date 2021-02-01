@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logging;
 
+import static java.util.logging.Level.*;
+import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
+
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
@@ -62,7 +65,7 @@ import org.apache.juneau.assertions.*;
  * }
  * </p>
  */
-public class BasicTestCaptureRestLogger extends RestLogger {
+public class BasicTestCaptureRestLogger extends BasicRestLogger {
 
 	private AtomicReference<LogRecord> lastRecord = new AtomicReference<>();
 
@@ -81,7 +84,33 @@ public class BasicTestCaptureRestLogger extends RestLogger {
 	 * Uses the same settings as {@link BasicRestLogger}.
 	 */
 	public BasicTestCaptureRestLogger() {
-		super(BasicRestLogger.SETTINGS.get());
+		super(builder());
+	}
+
+	private static RestLoggerBuilder builder() {
+		return RestLogger.create()
+			.normalRules(  // Rules when debugging is not enabled.
+				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
+					.statusFilter(x -> x >= 500)
+					.level(SEVERE)
+					.requestDetail(HEADER)
+					.responseDetail(HEADER)
+					.build(),
+				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
+					.statusFilter(x -> x >= 400)
+					.level(WARNING)
+					.requestDetail(STATUS_LINE)
+					.responseDetail(STATUS_LINE)
+					.build()
+			)
+			.debugRules(  // Rules when debugging is enabled.
+				RestLoggerRule.create()  // Log everything with full details.
+					.level(SEVERE)
+					.requestDetail(ENTITY)
+					.responseDetail(ENTITY)
+					.build()
+			)
+		;
 	}
 
 	@Override

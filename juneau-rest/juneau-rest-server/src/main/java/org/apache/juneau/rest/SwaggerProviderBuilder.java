@@ -73,6 +73,17 @@ public class SwaggerProviderBuilder {
 	}
 
 	/**
+	 * Specifies a subclass of {@link SwaggerProvider} to create when the {@link #build()} method is called.
+	 *
+	 * @param value The new value for this setting.
+	 * @return  This object (for method chaining).
+	 */
+	public SwaggerProviderBuilder implClass(Class<? extends SwaggerProvider> value) {
+		this.implClass = value;
+		return this;
+	}
+
+	/**
 	 * Specifies the variable resolver to use for the {@link SwaggerProvider} object.
 	 *
 	 * @param value The new value for this setting.
@@ -113,17 +124,6 @@ public class SwaggerProviderBuilder {
 	 */
 	public SwaggerProviderBuilder fileFinder(FileFinder value) {
 		this.fileFinder = value;
-		return this;
-	}
-
-	/**
-	 * Specifies a subclass of {@link SwaggerProvider} to create when the {@link #build()} method is called.
-	 *
-	 * @param value The new value for this setting.
-	 * @return  This object (for method chaining).
-	 */
-	public SwaggerProviderBuilder implClass(Class<? extends SwaggerProvider> value) {
-		this.implClass = value;
 		return this;
 	}
 }
