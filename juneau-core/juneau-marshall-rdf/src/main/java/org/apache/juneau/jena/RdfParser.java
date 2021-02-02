@@ -357,13 +357,17 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RdfParser", new DefaultFilteringOMap()
-				.a("trimWhitespace", trimWhitespace)
-				.a("looseCollections", looseCollections)
-				.a("rdfLanguage", rdfLanguage)
-				.a("juneauNs", juneauNs)
-				.a("juneauBpNs", juneauBpNs)
-				.a("collectionFormat", collectionFormat)
+			.a(
+				"RdfParser",
+				OMap
+					.create()
+					.filtered()
+					.a("trimWhitespace", trimWhitespace)
+					.a("looseCollections", looseCollections)
+					.a("rdfLanguage", rdfLanguage)
+					.a("juneauNs", juneauNs)
+					.a("juneauBpNs", juneauBpNs)
+					.a("collectionFormat", collectionFormat)
 			);
 	}
 }

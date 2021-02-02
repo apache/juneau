@@ -871,13 +871,17 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlSerializer", new DefaultFilteringOMap()
-				.a("uriAnchorText", uriAnchorText)
-				.a("detectLabelParameters", detectLabelParameters)
-				.a("detectLinksInStrings", detectLinksInStrings)
-				.a("labelParameter", labelParameter)
-				.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
-				.a("addBeanTypes", addBeanTypes)
+			.a(
+				"HtmlSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("uriAnchorText", uriAnchorText)
+					.a("detectLabelParameters", detectLabelParameters)
+					.a("detectLinksInStrings", detectLinksInStrings)
+					.a("labelParameter", labelParameter)
+					.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
+					.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

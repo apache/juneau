@@ -167,7 +167,11 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("PlainTextSerializer", new DefaultFilteringOMap()
+			.a(
+				"PlainTextSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

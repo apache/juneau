@@ -474,7 +474,11 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonSchemaGeneratorSession", new DefaultFilteringOMap()
+			.a(
+				"JsonSchemaGeneratorSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

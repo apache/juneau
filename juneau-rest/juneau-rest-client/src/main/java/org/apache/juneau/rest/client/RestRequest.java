@@ -3456,15 +3456,19 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RestCall", new DefaultFilteringOMap()
-				.a("client", client)
-				.a("hasInput", hasInput)
-				.a("ignoreErrors", ignoreErrors)
-				.a("interceptors", interceptors)
-				.a("partSerializer", partSerializer)
-				.a("requestBodySchema", requestBodySchema)
-				.a("response", response)
-				.a("serializer", serializer)
+			.a(
+				"RestCall",
+				OMap
+					.create()
+					.filtered()
+					.a("client", client)
+					.a("hasInput", hasInput)
+					.a("ignoreErrors", ignoreErrors)
+					.a("interceptors", interceptors)
+					.a("partSerializer", partSerializer)
+					.a("requestBodySchema", requestBodySchema)
+					.a("response", response)
+					.a("serializer", serializer)
 			);
 	}
 }

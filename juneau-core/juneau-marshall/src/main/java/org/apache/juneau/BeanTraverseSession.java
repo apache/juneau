@@ -352,7 +352,11 @@ public class BeanTraverseSession extends BeanSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("BeanTraverseSession", new DefaultFilteringOMap()
+			.a(
+				"BeanTraverseSession", 
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

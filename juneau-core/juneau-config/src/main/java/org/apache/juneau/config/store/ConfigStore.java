@@ -215,7 +215,11 @@ public abstract class ConfigStore extends Context implements Closeable {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ConfigStore", new DefaultFilteringOMap()
+			.a(
+				"ConfigStore",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

@@ -887,7 +887,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlSerializerSession", new DefaultFilteringOMap()
-		);
+			.a(
+				"HtmlSerializerSession",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

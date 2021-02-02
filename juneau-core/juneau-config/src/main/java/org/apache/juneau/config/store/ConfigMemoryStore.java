@@ -125,7 +125,11 @@ public class ConfigMemoryStore extends ConfigStore {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ConfigMemoryStore", new DefaultFilteringOMap()
+			.a(
+				"ConfigMemoryStore",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

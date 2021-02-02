@@ -131,6 +131,11 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider, HtmlCommo
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlParser", new DefaultFilteringOMap());
+			.a(
+				"HtmlParser",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

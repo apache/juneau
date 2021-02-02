@@ -111,7 +111,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				o = convertToType(o, sType);
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
-					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
+					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 					for (int i = 0; i < length; i++) {
 						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
 						ClassMeta<?> vt = sType.getValueType();
@@ -220,7 +220,11 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("MsgPackParserSession", new DefaultFilteringOMap()
+			.a(
+				"MsgPackParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

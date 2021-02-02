@@ -59,7 +59,11 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlSchemaSerializerSession", new DefaultFilteringOMap()
-		);
+			.a(
+				"HtmlSchemaSerializerSession",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

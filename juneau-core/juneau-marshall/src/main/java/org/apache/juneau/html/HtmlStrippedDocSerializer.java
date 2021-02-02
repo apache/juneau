@@ -126,7 +126,11 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlStrippedDocSerializer", new DefaultFilteringOMap()
+			.a(
+				"HtmlStrippedDocSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

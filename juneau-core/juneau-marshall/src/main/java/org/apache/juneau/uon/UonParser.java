@@ -371,9 +371,13 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UonParser", new DefaultFilteringOMap()
-				.a("decoding", decoding)
-				.a("validateEnd", validateEnd)
+			.a(
+				"UonParser",
+				OMap
+					.create()
+					.filtered()
+					.a("decoding", decoding)
+					.a("validateEnd", validateEnd)
 			);
 	}
 }

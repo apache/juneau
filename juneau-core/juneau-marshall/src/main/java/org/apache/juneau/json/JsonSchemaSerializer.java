@@ -204,8 +204,12 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonSchemaSerializer", new DefaultFilteringOMap()
-				.a("generator", generator)
+			.a(
+				"JsonSchemaSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("generator", generator)
 			);
 	}
 }

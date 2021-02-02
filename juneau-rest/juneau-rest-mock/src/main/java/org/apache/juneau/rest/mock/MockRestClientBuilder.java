@@ -209,6 +209,13 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public MockRestClientBuilder debug() {
+		header("Debug", true);
+		super.debug();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public MockRestClient build() {
 		return build(MockRestClient.class);
 	}
@@ -259,12 +266,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public MockRestClientBuilder debug() {
-		super.debug();
 		return this;
 	}
 

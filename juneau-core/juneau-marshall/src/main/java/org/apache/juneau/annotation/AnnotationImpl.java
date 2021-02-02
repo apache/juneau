@@ -75,9 +75,12 @@ public class AnnotationImpl implements Annotation {
 	}
 
 	/**
-	 * Returns the contents of this annotation as a map.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
-	 * @return The contents of this annotation as a map.
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
 		OMap om = OMap.create();

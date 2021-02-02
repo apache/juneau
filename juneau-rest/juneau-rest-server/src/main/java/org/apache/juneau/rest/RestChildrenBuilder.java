@@ -38,11 +38,20 @@ public class RestChildrenBuilder {
 	 */
 	public RestChildren build() {
 		try {
-			Class<? extends RestChildren> ic = firstNonNull(implClass, RestChildren.class);
-			return BeanFactory.of(beanFactory).addBean(RestChildrenBuilder.class, this).createBean(ic);
+			Class<? extends RestChildren> ic = firstNonNull(implClass, getDefaultImplClass());
+			return BeanFactory.of(beanFactory).addBeans(RestChildrenBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
+	}
+
+	/**
+	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
+	 *
+	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
+	 */
+	protected Class<? extends RestChildren> getDefaultImplClass() {
+		return RestChildren.class;
 	}
 
 	/**

@@ -505,10 +505,14 @@ public class ConfigFileStore extends ConfigStore {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ConfigFileStore", new DefaultFilteringOMap()
-				.a("charset", charset)
-				.a("extensions", extensions)
-				.a("updateOnWrite", updateOnWrite)
+			.a(
+				"ConfigFileStore",
+				OMap
+					.create()
+					.filtered()
+					.a("charset", charset)
+					.a("extensions", extensions)
+					.a("updateOnWrite", updateOnWrite)
 			);
 	}
 }

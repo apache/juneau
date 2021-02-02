@@ -18,7 +18,6 @@ import static org.apache.juneau.parser.ReaderParser.*;
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -120,9 +119,13 @@ public abstract class ReaderParserSession extends ParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ReaderParserSession", new DefaultFilteringOMap()
-				.a("fileCharset", fileCharset)
-				.a("streamCharset", streamCharset)
+			.a(
+				"ReaderParserSession",
+				OMap
+					.create()
+					.filtered()
+					.a("fileCharset", fileCharset)
+					.a("streamCharset", streamCharset)
 			);
 	}
 }

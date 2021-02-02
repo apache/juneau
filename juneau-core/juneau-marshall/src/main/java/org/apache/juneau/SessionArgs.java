@@ -179,13 +179,18 @@ public class SessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the properties defined on this object as a simple map for debugging purposes.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
-	 * @return A new map containing the properties defined on this object.
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
-		return new DefaultFilteringOMap()
-			.append("SessionArgs", new DefaultFilteringOMap()
+		return OMap
+			.create()
+			.filtered()
+			.append("SessionArgs", OMap.create().filtered()
 				.append("properties", properties)
 			);
 	}

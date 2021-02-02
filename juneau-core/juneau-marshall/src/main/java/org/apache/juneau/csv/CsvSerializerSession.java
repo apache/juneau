@@ -110,7 +110,11 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("CsvSerializerSession", new DefaultFilteringOMap()
-		);
+			.a(
+				"CsvSerializerSession", 
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

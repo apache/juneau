@@ -213,11 +213,11 @@ public final class HtmlParserSession extends XmlParserSession {
 
 			if (typeName.equals("object")) {
 				if (sType.isObject()) {
-					o = parseIntoMap(r, (Map)new OMap(this), sType.getKeyType(), sType.getValueType(),
+					o = parseIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(),
 						pMeta);
 				} else if (sType.isMap()) {
 					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer)
-						: new OMap(this)), sType.getKeyType(), sType.getValueType(), pMeta);
+						: newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (builder != null) {
 					BeanMap m = toBeanMap(builder.create(this, eType));
 					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
@@ -465,7 +465,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l)
-					: new OMap(this));
+					: newGenericMap(elementType));
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
@@ -788,7 +788,11 @@ public final class HtmlParserSession extends XmlParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlParserSession", new DefaultFilteringOMap()
+			.a(
+				"HtmlParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

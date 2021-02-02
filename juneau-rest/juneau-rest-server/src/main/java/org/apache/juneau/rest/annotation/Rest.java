@@ -330,6 +330,17 @@ public @interface Rest {
 	String debug() default "";
 
 	/**
+	 * Debug enablement bean.
+	 *
+	 * TODO
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_debugEnablement}
+	 * </ul>
+	 */
+	Class<? extends DebugEnablement> debugEnablement() default DebugEnablement.Null.class;
+
+	/**
 	 * Enable debug mode on specified classes/methods.
 	 *
 	 * <p>

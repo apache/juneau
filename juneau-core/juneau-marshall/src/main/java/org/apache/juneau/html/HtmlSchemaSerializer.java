@@ -167,8 +167,12 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlSchemaSerializer", new DefaultFilteringOMap()
-				.a("generator", generator)
+			.a(
+				"HtmlSchemaSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("generator", generator)
 			);
 	}
 }

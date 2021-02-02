@@ -206,9 +206,13 @@ public abstract class ReaderParser extends Parser {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ReaderParser", new DefaultFilteringOMap()
-				.a("fileCharset", fileCharset)
-				.a("streamCharset", streamCharset)
+			.a(
+				"ReaderParser",
+				OMap
+					.create()
+					.filtered()
+					.a("fileCharset", fileCharset)
+					.a("streamCharset", streamCharset)
 			);
 	}
 }

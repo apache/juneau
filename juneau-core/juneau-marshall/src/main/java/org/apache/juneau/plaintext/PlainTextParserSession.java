@@ -54,7 +54,11 @@ public class PlainTextParserSession extends ReaderParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("PlainTextParserSession", new DefaultFilteringOMap()
+			.a(
+				"PlainTextParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

@@ -665,13 +665,17 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("XmlSerializer", new DefaultFilteringOMap()
-				.a("autoDetectNamespaces", autoDetectNamespaces)
-				.a("enableNamespaces", enableNamespaces)
-				.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-				.a("defaultNamespace", defaultNamespace)
-				.a("namespaces", namespaces)
-				.a("addBeanTypes", addBeanTypes)
+			.a(
+				"XmlSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("autoDetectNamespaces", autoDetectNamespaces)
+					.a("enableNamespaces", enableNamespaces)
+					.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+					.a("defaultNamespace", defaultNamespace)
+					.a("namespaces", namespaces)
+					.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

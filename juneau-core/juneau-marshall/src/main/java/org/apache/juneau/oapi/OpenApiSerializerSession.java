@@ -424,7 +424,11 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("OpenApiSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"OpenApiSerializerSession",
+				OMap
+					.create()
+					.filtered()
 		);
 	}
 }

@@ -196,7 +196,11 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("OpenApiSerializer", new DefaultFilteringOMap()
+			.a(
+				"OpenApiSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

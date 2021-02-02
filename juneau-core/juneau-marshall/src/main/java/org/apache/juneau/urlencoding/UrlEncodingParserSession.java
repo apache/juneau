@@ -114,7 +114,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			else
 				o = cast(m, null, eType);
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new OMap(this));
+			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType, m);
 		} else if (builder != null) {
 			BeanMap m = toBeanMap(builder.create(this, eType));
@@ -410,7 +410,11 @@ public class UrlEncodingParserSession extends UonParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UrlEncodingParserSession", new DefaultFilteringOMap()
+			.a(
+				"UrlEncodingParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

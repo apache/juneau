@@ -361,7 +361,11 @@ public class OpenApiParserSession extends UonParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("OpenApiParserSession", new DefaultFilteringOMap()
+			.a(
+				"OpenApiParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

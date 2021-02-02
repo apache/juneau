@@ -100,6 +100,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	private transient BeanSession session;
 	private Map<String,Object> inner;
 	private transient PojoRest pojoRest;
+	private transient Predicate<Object> valueFilter = x -> true;
 
 	/**
 	 * An empty read-only OMap.
@@ -577,6 +578,44 @@ public class OMap extends LinkedHashMap<String,Object> {
 	public OMap appendIfNotExists(String key, Object value) {
 		if (! containsKey(key))
 			put(key, value);
+		return this;
+	}
+
+	/**
+	 * Enables filtering based on default values.
+	 * 
+	 * <p>
+	 * Any of the following types will be ignored when set as values in this map:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li><jk>false</jk>
+	 * 	<li><c>-1</c> (any Number type)
+	 * 	<li>Empty arrays/collections/maps.
+	 * </ul>
+	 * @return This object (for method chaining).
+	 */
+	public OMap filtered() {
+		return filtered(x -> ! (
+			x == null
+			|| (x instanceof Boolean && x.equals(false))
+			|| (x instanceof Number && ((Number)x).intValue() == -1)
+			|| (x.getClass().isArray() && Array.getLength(x) == 0)
+			|| (x instanceof Map && ((Map<?,?>)x).isEmpty())
+			|| (x instanceof Collection && ((Collection<?>)x).isEmpty())
+		));
+	}
+
+	/**
+	 * Enables filtering based on a predicate test.
+	 * 
+	 * <p>
+	 * If the predicate evaluates to <jk>false</jk> on values added to this map, the entry will be skipped.
+	 * 
+	 * @param value The value tester predicate. 
+	 * @return This object (for method chaining).
+	 */
+	public OMap filtered(Predicate<Object> value) {
+		valueFilter = value;
 		return this;
 	}
 
@@ -1556,6 +1595,13 @@ public class OMap extends LinkedHashMap<String,Object> {
 	//------------------------------------------------------------------------------------------------------------------
 	// Other methods.
 	//------------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public Object put(String key, Object value) {
+		if (valueFilter.test(value))
+			super.put(key, value);
+		return null;
+	}
 
 	/**
 	 * Returns the {@link BeanSession} currently associated with this map.

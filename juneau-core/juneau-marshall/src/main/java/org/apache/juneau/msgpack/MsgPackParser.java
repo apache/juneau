@@ -163,6 +163,11 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("MsgPackParser", new DefaultFilteringOMap());
+			.a(
+				"MsgPackParser",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

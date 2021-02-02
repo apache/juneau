@@ -226,7 +226,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '(') {
@@ -869,8 +869,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UonParserSession", new DefaultFilteringOMap()
-				.a("decoding", decoding)
+			.a(
+				"UonParserSession",
+				OMap
+					.create()
+					.filtered()
+					.a("decoding", decoding)
 			);
 	}
 }

@@ -72,7 +72,11 @@ public class SimpleJsonParser extends JsonParser {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("SimpleJsonSerializer", new DefaultFilteringOMap()
+			.a(
+				"SimpleJsonSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

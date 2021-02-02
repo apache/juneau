@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
-import static org.apache.juneau.Enablement.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static java.util.Arrays.*;
@@ -968,6 +967,35 @@ public class RestContext extends BeanContext {
 	 * This setting is inherited from parent contexts.
 	 */
 	public static final String REST_debugDefault = PREFIX + ".debugDefault.s";
+
+	/**
+	 * Configuration property:  Debug enablement bean.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debugEnablement REST_debugEnablement}
+	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.DebugEnablement}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicDebugEnablement}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#debugEnablement()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugEnablement(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugEnablement(DebugEnablement)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The default value for the {@link #REST_debug} setting.
+	 * <p>
+	 * This setting is inherited from parent contexts.
+	 */
+	public static final String REST_debugEnablement = PREFIX + ".debugEnablement.o";
 
 	/**
 	 * Configuration property:  Debug mode on specified classes/methods.
@@ -3323,7 +3351,6 @@ public class RestContext extends BeanContext {
 	private final boolean
 		allowBodyParam,
 		renderResponseStackTraces;
-	private final Enablement debug;
 	private final String
 		clientVersionHeader,
 		uriAuthority,
@@ -3379,10 +3406,9 @@ public class RestContext extends BeanContext {
 	private final FileFinder fileFinder;
 	private final StaticFiles staticFiles;
 	private final RestLogger callLogger;
+	private final DebugEnablement debugEnablement;
 
 	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
-
-	private final DebugEnablementMap debugEnablementMap;
 
 	// Gets set when postInitChildFirst() gets called.
 	private final AtomicBoolean initialized = new AtomicBoolean(false);
@@ -3434,7 +3460,6 @@ public class RestContext extends BeanContext {
 			Object r = getResource();
 
 			parentContext = builder.parentContext;
-			ClassInfo rci = ClassInfo.ofProxy(r);
 
 			rootBeanFactory = createBeanFactory(r);
 
@@ -3504,9 +3529,7 @@ public class RestContext extends BeanContext {
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
-			debugEnablementMap = createDebugEnablement(r).build();
-
-			debug = debugEnablementMap.find(rci.inner(), Enablement.class).orElse(Enablement.NEVER);
+			debugEnablement = createDebugEnablement(r, beanFactory);
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
@@ -4866,40 +4889,92 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Instantiates the debug enablement map builder for this REST object.
+	 * Instantiates the debug enablement bean for this REST object.
 	 *
 	 * @param resource The REST resource object.
-	 * @return The default response headers for this REST object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The debug enablement bean for this REST object.
+	 * @throws Exception If bean could not be created.
 	 */
-	protected DebugEnablementMapBuilder createDebugEnablement(Object resource) {
+	protected DebugEnablement createDebugEnablement(Object resource, BeanFactory beanFactory) throws Exception {
+		DebugEnablement x = null;
 
-		ClassInfo rci = ClassInfo.ofProxy(resource);
+		if (resource instanceof DebugEnablement)
+			x = (DebugEnablement)resource;
 
-		DebugEnablementMapBuilder deb = DebugEnablementMap.create();
-		for (String s : split(getStringProperty(REST_debugOn, ""))) {
-			s = s.trim();
-			if (! s.isEmpty()) {
-				int i = s.indexOf('=');
-				if (i == -1)
-					deb.append(s.trim(), Enablement.ALWAYS);
-				else
-					deb.append(s.substring(0, i).trim(), Enablement.fromString(s.substring(i+1).trim()));
-			}
-		}
+		Object o = getProperty(REST_debugEnablement);
+		if (o instanceof DebugEnablement)
+			x = (DebugEnablement)o;
 
-		Enablement defaultDebug = getInstanceProperty(REST_debugDefault, Enablement.class, null);
+		if (x == null)
+			x = beanFactory.getBean(DebugEnablement.class).orElse(null);
+
+		if (x == null)
+			x = createDebugEnablementBuilder(resource, beanFactory).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(DebugEnablement.class, x)
+			.beanCreateMethodFinder(DebugEnablement.class, resource)
+			.find("createDebugEnablement")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the debug enablement bean builder for this REST object.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The debug enablement bean builder for this REST object.
+	 * @throws Exception If bean builder could not be created.
+	 */
+	@SuppressWarnings("unchecked")
+	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		Class<? extends DebugEnablement> c = null;
+
+		Object o = getProperty(REST_debugEnablement);
+		if (o instanceof Class)
+			c = (Class<? extends DebugEnablement>)o;
+
+		if (c == null)
+			c = BasicDebugEnablement.class;
+
+		DebugEnablementBuilder x = DebugEnablement
+			.create()
+			.beanFactory(beanFactory)
+			.implClass(c);
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(DebugEnablementBuilder.class, x)
+			.beanCreateMethodFinder(DebugEnablementBuilder.class, resource)
+			.find("createDebugEnablement")
+			.withDefault(x)
+			.run();
+
+		Enablement defaultDebug = getInstanceProperty(REST_debug, Enablement.class, getInstanceProperty(REST_debugDefault, Enablement.class, null));
 		if (defaultDebug == null)
 			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
+		x.defaultEnable(defaultDebug);
 
-		Enablement de = getInstanceProperty(REST_debug, Enablement.class, defaultDebug);
-		if (de != null)
-			deb.append(rci.getFullName(), de);
-		for (MethodInfo mi : rci.getPublicMethods())
+		for (Map.Entry<String,String> e : splitMap(getStringProperty(REST_debugOn, ""), true).entrySet()) {
+			String k = e.getKey(), v = e.getValue();
+			if (v.isEmpty())
+				v = "ALWAYS";
+			if (! k.isEmpty())
+				x.enable(Enablement.fromString(v), k);
+		}
+
+		for (MethodInfo mi : ClassInfo.ofProxy(resource).getPublicMethods())
 			for (RestOp a : mi.getAnnotations(RestOp.class))
 				if (a != null && ! a.debug().isEmpty())
-					deb.append(mi.getFullName(), Enablement.fromString(a.debug()));
+					x.enable(Enablement.fromString(a.debug()), mi.getFullName());
 
-		return deb;
+		return x;
 	}
 
 	/**
@@ -5583,18 +5658,6 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the debug setting on this context for the specified method.
-	 *
-	 * @param method The java method.
-	 * @return The debug setting on this context or the debug value of the servlet context if not specified for this method.
-	 */
-	public Enablement getDebug(Method method) {
-		if (method == null)
-			return null;
-		return debugEnablementMap.find(method).orElse(debug);
-	}
-
-	/**
 	 * Returns the name of the client version header name used by this resource.
 	 *
 	 * <ul class='seealso'>
@@ -6118,8 +6181,7 @@ public class RestContext extends BeanContext {
 				return;
 			}
 
-			if (isDebug(call))
-				call.debug(true);
+			call.debug(isDebug(call));
 
 			startCall(call);
 
@@ -6154,19 +6216,16 @@ public class RestContext extends BeanContext {
 	}
 
 	private boolean isDebug(RestCall call) {
-		Enablement e = null;
-		RestOperationContext mc = call.getRestOperationContext();
-		if (mc != null)
-			e = mc.getDebug();
-		if (e == null)
-			e = getDebug();
-		if (e == ALWAYS)
-			return true;
-		if (e == NEVER)
-			return false;
-		if (e == CONDITIONAL)
-			return "true".equalsIgnoreCase(call.getRequest().getHeader("X-Debug"));
-		return false;
+		return debugEnablement.isDebug(this, call.getRequest());
+	}
+
+	/**
+	 * Returns the debug enablement bean for this context.
+	 *
+	 * @return The debug enablement bean for this context.
+	 */
+	public DebugEnablement getDebugEnablement() {
+		return debugEnablement;
 	}
 
 	/**
@@ -6514,10 +6573,6 @@ public class RestContext extends BeanContext {
 		return rbm;
 	}
 
-	Enablement getDebug() {
-		return debug;
-	}
-
 	/**
 	 * Clear any request state information on this context.
 	 * This should always be called in a finally block in the RestServlet.
@@ -6533,31 +6588,35 @@ public class RestContext extends BeanContext {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RestContext", new DefaultFilteringOMap()
-				.a("allowBodyParam", allowBodyParam)
-				.a("allowedMethodHeader", allowedMethodHeaders)
-				.a("allowedMethodParams", allowedMethodParams)
-				.a("allowedHeaderParams", allowedHeaderParams)
-				.a("beanFactory", beanFactory)
-				.a("clientVersionHeader", clientVersionHeader)
-				.a("consumes", consumes)
-				.a("defaultRequestHeaders", defaultRequestHeaders)
-				.a("defaultResponseHeaders", defaultResponseHeaders)
-				.a("fileFinder", fileFinder)
-				.a("opParams", opParams)
-				.a("parsers", parsers)
-				.a("partParser", partParser)
-				.a("partSerializer", partSerializer)
-				.a("produces", produces)
-				.a("renderResponseStackTraces", renderResponseStackTraces)
-				.a("responseHandlers", responseHandlers)
-				.a("serializers", serializers)
-				.a("staticFiles", staticFiles)
-				.a("swaggerProvider", swaggerProvider)
-				.a("uriAuthority", uriAuthority)
-				.a("uriContext", uriContext)
-				.a("uriRelativity", uriRelativity)
-				.a("uriResolution", uriResolution)
+			.a(
+				"RestContext",
+				OMap
+					.create()
+					.filtered()
+					.a("allowBodyParam", allowBodyParam)
+					.a("allowedMethodHeader", allowedMethodHeaders)
+					.a("allowedMethodParams", allowedMethodParams)
+					.a("allowedHeaderParams", allowedHeaderParams)
+					.a("beanFactory", beanFactory)
+					.a("clientVersionHeader", clientVersionHeader)
+					.a("consumes", consumes)
+					.a("defaultRequestHeaders", defaultRequestHeaders)
+					.a("defaultResponseHeaders", defaultResponseHeaders)
+					.a("fileFinder", fileFinder)
+					.a("opParams", opParams)
+					.a("parsers", parsers)
+					.a("partParser", partParser)
+					.a("partSerializer", partSerializer)
+					.a("produces", produces)
+					.a("renderResponseStackTraces", renderResponseStackTraces)
+					.a("responseHandlers", responseHandlers)
+					.a("serializers", serializers)
+					.a("staticFiles", staticFiles)
+					.a("swaggerProvider", swaggerProvider)
+					.a("uriAuthority", uriAuthority)
+					.a("uriContext", uriContext)
+					.a("uriRelativity", uriRelativity)
+					.a("uriResolution", uriResolution)
 			);
 	}
 

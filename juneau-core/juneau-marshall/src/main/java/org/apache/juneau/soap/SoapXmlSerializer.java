@@ -164,8 +164,12 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("SoapXmlSerializer", new DefaultFilteringOMap()
-				.a("soapAction", soapAction)
+			.a(
+				"SoapXmlSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("soapAction", soapAction)
 			);
 	}
 }

@@ -473,12 +473,16 @@ public abstract class WriterSerializer extends Serializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("WriterSerializer", new DefaultFilteringOMap()
-				.a("fileCharset", fileCharset)
-				.a("maxIndent", maxIndent)
-				.a("quoteChar", quoteChar)
-				.a("streamCharset", streamCharset)
-				.a("useWhitespace", useWhitespace)
+			.a(
+				"WriterSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("fileCharset", fileCharset)
+					.a("maxIndent", maxIndent)
+					.a("quoteChar", quoteChar)
+					.a("streamCharset", streamCharset)
+					.a("useWhitespace", useWhitespace)
 			);
 	}
 }

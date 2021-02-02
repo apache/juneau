@@ -456,17 +456,18 @@ public class ReflectionMap<V> {
 			return classMatches(simpleName, fullName, c);
 		}
 
-		public OMap asMap() {
-			return OMap.of(
-				"simpleName", simpleName,
-				"fullName", fullName,
-				"value", value
-			);
+		public OMap toMap() {
+			return OMap
+				.create()
+				.filtered()
+				.a("simpleName", simpleName)
+				.a("fullName", fullName)
+				.a("value", value);
 		}
 
 		@Override
 		public String toString() {
-			return asMap().toString();
+			return toMap().toString();
 		}
 	}
 
@@ -519,19 +520,20 @@ public class ReflectionMap<V> {
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
-		public OMap asMap() {
-			return OMap.of(
-				"simpleClassName", simpleClassName,
-				"fullClassName", fullClassName,
-				"methodName", methodName,
-				"args", args,
-				"value", value
-			);
+		public OMap toMap() {
+			return OMap
+				.create()
+				.filtered()
+				.a("simpleClassName", simpleClassName)
+				.a("fullClassName", fullClassName)
+				.a("methodName", methodName)
+				.a("args", args)
+				.a("value", value);
 		}
 
 		@Override
 		public String toString() {
-			return asMap().toString();
+			return toMap().toString();
 		}
 	}
 
@@ -557,18 +559,19 @@ public class ReflectionMap<V> {
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
-		public OMap asMap() {
-			return OMap.of(
-				"simpleClassName", simpleClassName,
-				"fullClassName", fullClassName,
-				"args", args,
-				"value", value
-			);
+		public OMap toMap() {
+			return OMap
+				.create()
+				.filtered()
+				.a("simpleClassName", simpleClassName)
+				.a("fullClassName", fullClassName)
+				.a("args", args)
+				.a("value", value);
 		}
 
 		@Override
 		public String toString() {
-			return asMap().toString();
+			return toMap().toString();
 		}
 	}
 
@@ -594,18 +597,19 @@ public class ReflectionMap<V> {
 				&& (isEquals(f.getName(), fieldName));
 		}
 
-		public OMap asMap() {
-			return OMap.of(
-				"simpleClassName", simpleClassName,
-				"fullClassName", fullClassName,
-				"fieldName", fieldName,
-				"value", value
-			);
+		public OMap toMap() {
+			return OMap
+				.create()
+				.filtered()
+				.a("simpleClassName", simpleClassName)
+				.a("fullClassName", fullClassName)
+				.a("fieldName", fieldName)
+				.a("value", value);
 		}
 
 		@Override
 		public String toString() {
-			return asMap().toString();
+			return toMap().toString();
 		}
 	}
 
@@ -657,13 +661,26 @@ public class ReflectionMap<V> {
 		return false;
 	}
 
+	/**
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
+	 *
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
+	 */
+	public OMap toMap() {
+		return OMap
+			.create()
+			.filtered()
+			.a("classEntries", classEntries)
+			.a("methodEntries", methodEntries)
+			.a("fieldEntries", fieldEntries)
+			.a("constructorEntries", constructorEntries);
+	}
+
 	@Override /* Object */
 	public String toString() {
-		return OMap.of(
-			"classEntries", classEntries,
-			"methodEntries", methodEntries,
-			"fieldEntries", fieldEntries,
-			"constructorEntries", constructorEntries
-		).toString();
+		return toMap().toString();
 	}
 }

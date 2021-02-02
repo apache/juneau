@@ -101,7 +101,11 @@ public abstract class InputStreamParserSession extends ParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("InputStreamParserSession", new DefaultFilteringOMap()
+			.a(
+				"InputStreamParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

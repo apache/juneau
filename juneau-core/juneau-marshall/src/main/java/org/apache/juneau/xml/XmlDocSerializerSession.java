@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -60,7 +59,11 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("XmlDocSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"XmlDocSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

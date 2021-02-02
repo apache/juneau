@@ -298,6 +298,11 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonParser", new DefaultFilteringOMap());
+			.a(
+				"JsonParser",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

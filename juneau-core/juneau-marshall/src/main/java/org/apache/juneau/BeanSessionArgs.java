@@ -109,8 +109,12 @@ public class BeanSessionArgs extends SessionArgs {
 	@Override /* SessionArgs */
 	public OMap toMap() {
 		return super.toMap()
-			.a("BeanSessionArgs", new DefaultFilteringOMap()
-				.a("schema", schema)
+			.a(
+				"BeanSessionArgs", 
+				OMap
+					.create()
+					.filtered()
+					.a("schema", schema)
 			);
 	}
 }

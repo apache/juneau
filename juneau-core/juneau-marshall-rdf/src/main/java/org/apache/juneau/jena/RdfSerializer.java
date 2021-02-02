@@ -584,18 +584,22 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RdfSerializer", new DefaultFilteringOMap()
-				.a("addLiteralTypes", addLiteralTypes)
-				.a("addRootProperty", addRootProperty)
-				.a("useXmlNamespaces", useXmlNamespaces)
-				.a("looseCollections", looseCollections)
-				.a("autoDetectNamespaces", autoDetectNamespaces)
-				.a("rdfLanguage", rdfLanguage)
-				.a("juneauNs", juneauNs)
-				.a("juneauBpNs", juneauBpNs)
-				.a("collectionFormat", collectionFormat)
-				.a("namespaces", namespaces)
-				.a("addBeanTypes", addBeanTypes)
+			.a(
+				"RdfSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("addLiteralTypes", addLiteralTypes)
+					.a("addRootProperty", addRootProperty)
+					.a("useXmlNamespaces", useXmlNamespaces)
+					.a("looseCollections", looseCollections)
+					.a("autoDetectNamespaces", autoDetectNamespaces)
+					.a("rdfLanguage", rdfLanguage)
+					.a("juneauNs", juneauNs)
+					.a("juneauBpNs", juneauBpNs)
+					.a("collectionFormat", collectionFormat)
+					.a("namespaces", namespaces)
+					.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

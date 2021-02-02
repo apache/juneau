@@ -1015,10 +1015,14 @@ public abstract class ParserSession extends BeanSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ParserSession", new DefaultFilteringOMap()
-				.a("javaMethod", javaMethod)
-				.a("listener", listener)
-				.a("outer", outer)
+			.a(
+				"ParserSession",
+				OMap
+					.create()
+					.filtered()
+					.a("javaMethod", javaMethod)
+					.a("listener", listener)
+					.a("outer", outer)
 			);
 	}
 }

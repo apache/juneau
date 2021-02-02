@@ -151,7 +151,11 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("PlainTextParser", new DefaultFilteringOMap()
+			.a(
+				"PlainTextParser",
+				OMap
+					.create()
+					.filtered()
 		);
 	}
 }

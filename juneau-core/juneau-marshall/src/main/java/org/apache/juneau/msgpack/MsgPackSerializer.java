@@ -211,8 +211,12 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("MsgPackSerializer", new DefaultFilteringOMap()
-				.a("addBeanTypes", addBeanTypes)
+			.a(
+				"MsgPackSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

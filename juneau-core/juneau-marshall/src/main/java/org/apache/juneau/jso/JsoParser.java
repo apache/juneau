@@ -124,7 +124,11 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsoParser", new DefaultFilteringOMap()
+			.a(
+				"JsoParser",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

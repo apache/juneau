@@ -356,7 +356,7 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.isChar()) {
 			o = parseCharacter(getElementText(r));
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (wrapperAttr != null)
 				o = new OMap(this).a(wrapperAttr, m);
@@ -822,7 +822,11 @@ public class XmlParserSession extends ReaderParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("XmlParserSession", new DefaultFilteringOMap()
+			.a(
+				"XmlParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

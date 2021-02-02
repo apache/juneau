@@ -329,7 +329,11 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"JsonSerializerSession",
+				OMap
+					.create()
+					.filtered()
 		);
 	}
 }

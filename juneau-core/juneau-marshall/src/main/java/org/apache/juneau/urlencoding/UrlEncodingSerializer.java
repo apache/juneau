@@ -394,8 +394,12 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UrlEncodingSerializer", new DefaultFilteringOMap()
-				.a("expandedParams", expandedParams)
+			.a(
+				"UrlEncodingSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("expandedParams", expandedParams)
 			);
 	}
 }

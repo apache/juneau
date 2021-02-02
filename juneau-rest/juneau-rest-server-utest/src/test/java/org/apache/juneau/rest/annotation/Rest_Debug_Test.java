@@ -86,7 +86,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void a01_debugDefault() throws Exception {
 		RestClient a1 = MockRestClient.buildSimpleJson(A1.class);
-		RestClient a1d = MockRestClient.create(A1.class).simpleJson().header("X-Debug", true).build();
+		RestClient a1d = MockRestClient.create(A1.class).simpleJson().debug().build();
 
 		a1.get("/a").run().assertBody().is("false");
 		assertNotLogged();
@@ -161,7 +161,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void a01a_debugDefault() throws Exception {
 		RestClient a1a = MockRestClient.buildSimpleJson(A1a.class);
-		RestClient a1ad = MockRestClient.create(A1a.class).simpleJson().header("X-Debug", true).build();
+		RestClient a1ad = MockRestClient.create(A1a.class).simpleJson().debug().build();
 
 		a1a.get("/a").run().assertBody().is("false");
 		assertNotLogged();
@@ -240,7 +240,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void a02_debugTrue() throws Exception {
 		RestClient a2 = MockRestClient.buildSimpleJson(A2.class);
-		RestClient a2d = MockRestClient.create(A2.class).simpleJson().header("X-Debug", true).build();
+		RestClient a2d = MockRestClient.create(A2.class).simpleJson().debug().build();
 
 		a2.get("/a").run().assertBody().is("true");
 		assertLogged();
@@ -319,7 +319,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void a03_restDebugFalse() throws Exception {
 		RestClient a3 = MockRestClient.buildSimpleJson(A3.class);
-		RestClient a3d = MockRestClient.create(A3.class).simpleJson().header("X-Debug", true).build();
+		RestClient a3d = MockRestClient.create(A3.class).simpleJson().debug().build();
 
 		a3.get("/a").run().assertBody().is("false");
 		assertNotLogged();
@@ -398,7 +398,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void a04_debugPerRequest() throws Exception {
 		RestClient a4 = MockRestClient.buildSimpleJson(A4.class);
-		RestClient a4d = MockRestClient.create(A4.class).simpleJson().header("X-Debug", true).build();
+		RestClient a4d = MockRestClient.create(A4.class).simpleJson().debug().build();
 
 		a4.get("/a").run().assertBody().is("false");
 		assertNotLogged();
@@ -446,7 +446,7 @@ public class Rest_Debug_Test {
 			+ "C1.b1=false,C1.b2=false,C1.b3=FALSE,C1.b4=FALSE,C1.b5=FALSE,C1.b6=FALSE,"
 			+ " C1.c1 , C1.c2 = true , C1.c3 = TRUE , C1.c4 = TRUE , C1.c5 = TRUE , C1.c6 = TRUE , "
 			+ "C1.d1=conditional,C1.d2=conditional,C1.d3=CONDITIONAL,C1.d4=CONDITIONAL,C1.d5=CONDITIONAL,C1.d6=CONDITIONAL,"
-			+ "C1.e1=foo,C1.e2=,C1.e3=foo,C1.e4=foo,C1.e5=foo,C1.e6=foo,"
+			+ "C1.e1=foo,C1.e2,C1.e3=foo,C1.e4=foo,C1.e5=foo,C1.e6=foo,"
 	)
 	public static class C1 implements BasicUniversalRest {
 
@@ -617,7 +617,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void c01_debugDefault() throws Exception {
 		RestClient c1 = MockRestClient.buildSimpleJson(C1.class);
-		RestClient c1d = MockRestClient.create(C1.class).simpleJson().header("X-Debug", true).build();
+		RestClient c1d = MockRestClient.create(C1.class).simpleJson().debug().build();
 
 		c1.get("/a1").run().assertBody().is("false");
 		assertNotLogged();
@@ -715,8 +715,8 @@ public class Rest_Debug_Test {
 		assertNotLogged();
 		c1d.get("/e1").run().assertBody().is("true");
 		assertLogged("[200] HTTP GET /e1");
-		c1.get("/e2").run().assertBody().is("false");
-		assertNotLogged();
+		c1.get("/e2").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /e2");
 		c1d.get("/e2").run().assertBody().is("true");
 		assertLogged("[200] HTTP GET /e2");
 		c1.get("/e3").run().assertBody().is("false");
@@ -951,7 +951,7 @@ public class Rest_Debug_Test {
 	@Test
 	public void c02_debugTrue() throws Exception {
 		RestClient c2 = MockRestClient.buildSimpleJson(C2.class);
-		RestClient c2d = MockRestClient.create(C2.class).simpleJson().header("X-Debug", true).build();
+		RestClient c2d = MockRestClient.create(C2.class).simpleJson().debug().build();
 
 		c2.get("/a1").run().assertBody().is("true");
 		assertLogged();

@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
-import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -709,7 +708,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 	final Map<Integer,AtomicInteger> statusCodes = new ConcurrentHashMap<>();
 
-	final Enablement debug;
 	final int hierarchyDepth;
 
 	/**
@@ -814,7 +812,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 			this.priority = getIntegerProperty(RESTOP_priority, 0);
 
-			this.debug = context.getDebug(method);
 			this.callLogger = context.getCallLogger();
 		} catch (ServletException e) {
 			throw e;
@@ -1745,18 +1742,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		call.logger(callLogger);
 
-		if (debug == ALWAYS) {
-			call.debug(true);
-		} else if (debug == NEVER) {
-			call.debug(false);
-		} else if (debug == CONDITIONAL) {
-			boolean b = "true".equalsIgnoreCase(req.getHeader("X-Debug"));
-			if (b) {
-				call.debug(true);
-			} else {
-				call.debug(false);
-			}
-		}
+		call.debug(context.getDebugEnablement().isDebug(this, call.getRequest()));
 
 		Object[] args = new Object[opParams.length];
 		for (int i = 0; i < opParams.length; i++) {
@@ -1921,8 +1907,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		return jsonSchemaGenerator;
 	}
 
-	Enablement getDebug() {
-		return debug;
+	/**
+	 * Returns the underlying Java method that this context belongs to.
+	 *
+	 * @return The underlying Java method that this context belongs to.
+	 */
+	public Method getJavaMethod() {
+		return method;
 	}
 
 	Optional<List<MediaType>> supportedAcceptTypes() {
@@ -1986,7 +1977,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RestOperationContext", new DefaultFilteringOMap()
+			.a(
+				"RestOperationContext",
+				OMap
+				.create()
+				.filtered()
 				.a("defaultRequestFormData", defaultRequestFormData)
 				.a("defaultRequestHeaders", defaultRequestHeaders)
 				.a("defaultRequestQuery", defaultRequestQuery)

@@ -297,7 +297,11 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UrlEncodingSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"UrlEncodingSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

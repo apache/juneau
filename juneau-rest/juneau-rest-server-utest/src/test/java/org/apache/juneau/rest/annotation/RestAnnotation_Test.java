@@ -50,6 +50,7 @@ public class RestAnnotation_Test {
 		.contextClass(RestContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
+		.debugEnablement(DebugEnablement.class)
 		.debugOn("debugOn")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
@@ -104,6 +105,7 @@ public class RestAnnotation_Test {
 		.contextClass(RestContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
+		.debugEnablement(DebugEnablement.class)
 		.debugOn("debugOn")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
@@ -160,6 +162,7 @@ public class RestAnnotation_Test {
 				+ "contextClass:'org.apache.juneau.rest.RestContext',"
 				+ "converters:['org.apache.juneau.rest.RestConverter'],"
 				+ "debug:'debug',"
+				+ "debugEnablement:'org.apache.juneau.rest.DebugEnablement',"
 				+ "debugOn:'debugOn',"
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
@@ -260,6 +263,7 @@ public class RestAnnotation_Test {
 		contextClass=RestContext.class,
 		converters=RestConverter.class,
 		debug="debug",
+		debugEnablement=DebugEnablement.class,
 		debugOn="debugOn",
 		defaultAccept="defaultAccept",
 		defaultCharset="defaultCharset",
@@ -316,6 +320,7 @@ public class RestAnnotation_Test {
 		contextClass=RestContext.class,
 		converters=RestConverter.class,
 		debug="debug",
+		debugEnablement=DebugEnablement.class,
 		debugOn="debugOn",
 		defaultAccept="defaultAccept",
 		defaultCharset="defaultCharset",

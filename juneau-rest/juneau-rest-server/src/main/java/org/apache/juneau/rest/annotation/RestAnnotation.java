@@ -99,6 +99,7 @@ public class RestAnnotation {
 		Class<? extends RestOperationContext> restOperationContextClass = RestOperationContext.Null.class;
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
 		Class<? extends RestOperations> restOperationsClass = RestOperations.Null.class;
+		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Null.class;
 		Class<?>[] children={}, parsers={}, serializers={};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
 		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
@@ -260,6 +261,17 @@ public class RestAnnotation {
 		 */
 		public Builder debug(String value) {
 			this.debug = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#debugEnablement()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
+			this.debugEnablement = value;
 			return this;
 		}
 
@@ -700,6 +712,7 @@ public class RestAnnotation {
 		private final Class<? extends RestOperationContext> restOperationContextClass;
 		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends RestOperations> restOperationsClass;
+		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<?>[] children, parsers, serializers;
 		private final Swagger swagger;
 		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
@@ -720,6 +733,7 @@ public class RestAnnotation {
 			this.contextClass = b.contextClass;
 			this.converters = copyOf(b.converters);
 			this.debug = b.debug;
+			this.debugEnablement = b.debugEnablement;
 			this.debugOn = b.debugOn;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
@@ -822,6 +836,11 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String debug() {
 			return debug;
+		}
+
+		@Override /* Rest */
+		public Class<? extends DebugEnablement> debugEnablement() {
+			return debugEnablement;
 		}
 
 		@Override /* Rest */
@@ -1058,6 +1077,7 @@ public class RestAnnotation {
 			psb.setIf(a.restOperationContextClass() != RestOperationContext.Null.class, REST_restOperationContextClass, a.restOperationContextClass());
 			psb.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
 			psb.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
+			psb.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
 			psb.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
 			psb.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
 			psb.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));

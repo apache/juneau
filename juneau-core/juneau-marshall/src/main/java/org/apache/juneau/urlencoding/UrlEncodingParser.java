@@ -222,8 +222,12 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UrlEncodingParser", new DefaultFilteringOMap()
-				.a("expandedParams", expandedParams)
+			.a(
+				"UrlEncodingParser",
+				OMap
+					.create()
+					.filtered()
+					.a("expandedParams", expandedParams)
 			);
 	}
 }

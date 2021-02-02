@@ -923,15 +923,24 @@ public abstract class Context {
 	}
 
 	/**
-	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
-	 * @return A new map containing the properties defined on this context.
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
-		return new DefaultFilteringOMap()
-			.a("Context", new DefaultFilteringOMap()
-				.a("identityCode", identityCode)
-				.a("propertyStore", System.identityHashCode(propertyStore))
+		return OMap
+			.create()
+			.filtered()
+			.a(
+				"Context", 
+				OMap
+					.create()
+					.filtered()
+					.a("identityCode", identityCode)
+					.a("propertyStore", System.identityHashCode(propertyStore))
 			);
 	}
 }

@@ -122,7 +122,11 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("OutputStreamSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"OutputStreamSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

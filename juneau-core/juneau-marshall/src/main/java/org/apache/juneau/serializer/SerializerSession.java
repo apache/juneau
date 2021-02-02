@@ -819,8 +819,12 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("SerializerSession", new DefaultFilteringOMap()
-				.a("uriResolver", uriResolver)
+			.a(
+				"SerializerSession",
+				OMap
+					.create()
+					.filtered()
+					.a("uriResolver", uriResolver)
 			);
 	}
 }

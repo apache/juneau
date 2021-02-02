@@ -349,7 +349,11 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UonSerializerSession", new DefaultFilteringOMap()
-		);
+			.a(
+				"UonSerializerSession",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

@@ -120,6 +120,11 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("CsvSerializer", new DefaultFilteringOMap());
+			.a(
+				"CsvSerializer", 
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

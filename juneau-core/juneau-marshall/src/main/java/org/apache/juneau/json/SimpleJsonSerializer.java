@@ -110,7 +110,11 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("SimpleJsonSerializer", new DefaultFilteringOMap()
+			.a(
+				"SimpleJsonSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

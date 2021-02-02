@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshall.*;
 
@@ -103,7 +102,11 @@ public class UrlPath {
 	 * @return This object converted to a map.
 	 */
 	public OMap toMap() {
-		return new DefaultFilteringOMap().append("raw", path).append("parts", parts);
+		return OMap
+			.create()
+			.filtered()
+			.a("raw", path)
+			.a("parts", parts);
 	}
 
 	@Override /* Object */

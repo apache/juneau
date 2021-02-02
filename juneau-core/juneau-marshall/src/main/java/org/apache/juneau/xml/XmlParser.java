@@ -392,12 +392,16 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("XmlParser", new DefaultFilteringOMap()
-				.a("validating", validating)
-				.a("preserveRootElement", preserveRootElement)
-				.a("reporter", reporter)
-				.a("resolver", resolver)
-				.a("eventAllocator", eventAllocator)
+			.a(
+				"XmlParser",
+				OMap
+					.create()
+					.filtered()
+					.a("validating", validating)
+					.a("preserveRootElement", preserveRootElement)
+					.a("reporter", reporter)
+					.a("resolver", resolver)
+					.a("eventAllocator", eventAllocator)
 			);
 	}
 }

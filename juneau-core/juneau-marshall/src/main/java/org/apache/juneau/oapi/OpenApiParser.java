@@ -174,7 +174,11 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("OpenApiParser", new DefaultFilteringOMap()
+			.a(
+				"OpenApiParser",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

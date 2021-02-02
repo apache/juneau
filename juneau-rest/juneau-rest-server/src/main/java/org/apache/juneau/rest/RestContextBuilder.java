@@ -183,14 +183,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			PropertyStore ps = getPropertyStore();
-			Class<? extends RestContext> c = ps.getClassProperty(REST_contextClass, RestContext.class, RestContext.class);
-			BeanFactory bf = BeanFactory.of(beanFactory, resource.get());
-			bf.addBean(RestContextBuilder.class, this);
-			return bf.createBean(c);
+			Class<? extends RestContext> c = getPropertyStore().getClassProperty(REST_contextClass, RestContext.class, getDefaultImplClass());
+			return BeanFactory.of(beanFactory, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
+	}
+
+	/**
+	 * Specifies the default implementation class if not specified via {@link #REST_contextClass}.
+	 *
+	 * @return The default implementation class if not specified via {@link #REST_contextClass}.
+	 */
+	protected Class<? extends RestContext> getDefaultImplClass() {
+		return RestContext.class;
 	}
 
 	/**
@@ -806,6 +812,32 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder debugDefault(Enablement value) {
 		return set(REST_debugDefault, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug enablement bean.
+	 *
+	 * TODO
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugEnablement(Class<? extends DebugEnablement> value) {
+		return set(REST_debugEnablement, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug enablement bean.
+	 *
+	 * TODO
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder debugEnablement(DebugEnablement value) {
+		return set(REST_debugEnablement, value);
 	}
 
 	/**

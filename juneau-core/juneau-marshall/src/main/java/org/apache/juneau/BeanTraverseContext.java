@@ -350,11 +350,15 @@ public abstract class BeanTraverseContext extends BeanContext {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("BeanTraverseContext", new DefaultFilteringOMap()
-				.a("detectRecursions", detectRecursions)
-				.a("maxDepth", maxDepth)
-				.a("ignoreRecursions", ignoreRecursions)
-				.a("initialDepth", initialDepth)
+			.a(
+				"BeanTraverseContext", 
+				OMap
+					.create()
+					.filtered()
+					.a("detectRecursions", detectRecursions)
+					.a("maxDepth", maxDepth)
+					.a("ignoreRecursions", ignoreRecursions)
+					.a("initialDepth", initialDepth)
 			);
 	}
 }

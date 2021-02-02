@@ -112,7 +112,11 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlSchemaDocSerializer", new DefaultFilteringOMap()
+			.a(
+				"HtmlSchemaDocSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

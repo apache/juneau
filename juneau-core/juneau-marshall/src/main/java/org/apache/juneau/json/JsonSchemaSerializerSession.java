@@ -89,7 +89,11 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonSchemaSerializerSession", new DefaultFilteringOMap()
-		);
+			.a(
+				"JsonSchemaSerializerSession",
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

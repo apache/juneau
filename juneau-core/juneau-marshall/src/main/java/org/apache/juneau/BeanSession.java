@@ -503,7 +503,7 @@ public class BeanSession extends Session {
 			if (to.isMap()) {
 				try {
 					if (from.isMap()) {
-						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : new OMap(this);
+						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
 						ClassMeta keyType = to.getKeyType(), valueType = to.getValueType();
 						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet()) {
 							Object k = e.getKey();
@@ -1153,6 +1153,18 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Creates either an {@link OMap} or {@link AMap} depending on whether the key type is 
+	 * String or something else.
+	 * 
+	 * @param mapMeta The metadata of the map to create.
+	 * @return A new map.
+	 */
+	protected Map newGenericMap(ClassMeta mapMeta) {
+		ClassMeta<?> k = mapMeta.getKeyType();
+		return (k == null || k.isString()) ? new OMap(this) : new AMap();
+	}
+
+	/**
 	 * Logs a warning message.
 	 *
 	 * @param msg The warning message.
@@ -1490,8 +1502,12 @@ public class BeanSession extends Session {
 	public OMap toMap() {
 		return super.toMap()
 			.a("Context", ctx.toMap())
-			.a("BeanSession", new DefaultFilteringOMap()
-				.a("schema", schema)
+			.a(
+				"BeanSession", 
+				OMap
+					.create()
+					.filtered()
+					.a("schema", schema)
 			);
 	}
 }

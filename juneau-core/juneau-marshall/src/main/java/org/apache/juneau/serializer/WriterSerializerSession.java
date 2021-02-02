@@ -17,7 +17,6 @@ import static org.apache.juneau.serializer.WriterSerializer.*;
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -149,7 +148,11 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("WriterSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"WriterSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

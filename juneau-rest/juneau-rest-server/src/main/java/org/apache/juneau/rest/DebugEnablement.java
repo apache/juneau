@@ -10,67 +10,54 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.rest;
 
-import java.lang.reflect.*;
-import java.util.*;
+import javax.servlet.http.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * Subclass of {@link OMap} that avoids adding common default values.
+ * Interface used for selectively turning on debug per request.
  */
-public class DefaultFilteringOMap extends OMap {
-
-	private static final long serialVersionUID = 1L;
+public interface DebugEnablement {
 
 	/**
-	 * Constructor.
+	 * Represents no DebugEnablement.
+	 */
+	public abstract class Null implements DebugEnablement {};
+
+	/**
+	 * Creator.
 	 *
-	 * @param m
-	 * 	The object map to copy from.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new builder for this object.
 	 */
-	public DefaultFilteringOMap(OMap m) {
-		super();
-		append(m);
+	public static DebugEnablementBuilder create() {
+		return new DebugEnablementBuilder();
 	}
 
 	/**
-	 * Constructor.
-	 */
-	public DefaultFilteringOMap() {
-		super();
-	}
-
-	@Override /* OMap */
-	public OMap append(String key, Object value) {
-		if (! shouldSkip(value))
-			super.append(key, value);
-		return this;
-	}
-
-	@Override /* OMap */
-	public OMap a(String key, Object value) {
-		if (! shouldSkip(value))
-			super.a(key, value);
-		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified value should be skipped.
+	 * Returns <jk>true</jk> if debug is enabled on the specified class and request.
+	 * 
+	 * <p>
+	 * This enables debug mode on requests once the matched class is found and before the
+	 * Java method is found.
 	 *
-	 * @param value The value to check.
-	 * @return <jk>true</jk> if the specified value should be skipped.
+	 * @param context The context of the {@link Rest}-annotated class.
+	 * @param req The HTTP request.
+	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
-	protected boolean shouldSkip(Object value) {
-		return
-			value == null
-			|| (value instanceof Boolean && value.equals(false))
-			|| (value instanceof Number && ((Number)value).intValue() == -1)
-			|| (value.getClass().isArray() && Array.getLength(value) == 0)
-			|| (value instanceof Map && ((Map<?,?>)value).isEmpty())
-			|| (value instanceof Collection && ((Collection<?>)value).isEmpty());
+	public boolean isDebug(RestContext context, HttpServletRequest req);
 
-	}
+	/**
+	 * Returns <jk>true</jk> if debug is enabled on the specified method and request.
+	 *
+	 * <p>
+	 * This enables debug mode after the Java method is found and allows you to enable
+	 * debug on individual Java methods instead of the entire class.
+	 * 
+	 * @param context The context of the {@link RestOp}-annotated method.
+	 * @param req The HTTP request.
+	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
+	 */
+	public boolean isDebug(RestOperationContext context, HttpServletRequest req);
 }

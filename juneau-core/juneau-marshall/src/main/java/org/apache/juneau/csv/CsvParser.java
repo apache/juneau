@@ -117,6 +117,11 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommo
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("CsvParser", new DefaultFilteringOMap());
+			.a(
+				"CsvParser", 
+				OMap
+					.create()
+					.filtered()
+			);
 	}
 }

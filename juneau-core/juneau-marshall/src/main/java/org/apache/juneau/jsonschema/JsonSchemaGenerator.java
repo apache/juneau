@@ -497,14 +497,18 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonSchemaGenerator", new DefaultFilteringOMap()
-				.a("useBeanDefs", useBeanDefs)
-				.a("allowNestedExamples", allowNestedExamples)
-				.a("allowNestedDescriptions", allowNestedDescriptions)
-				.a("beanDefMapper", beanDefMapper)
-				.a("addExamplesTo", addExamplesTo)
-				.a("addDescriptionsTo", addDescriptionsTo)
-				.a("ignoreTypes", ignoreTypes)
+			.a(
+				"JsonSchemaGenerator",
+				OMap
+					.create()
+					.filtered()
+					.a("useBeanDefs", useBeanDefs)
+					.a("allowNestedExamples", allowNestedExamples)
+					.a("allowNestedDescriptions", allowNestedDescriptions)
+					.a("beanDefMapper", beanDefMapper)
+					.a("addExamplesTo", addExamplesTo)
+					.a("addDescriptionsTo", addDescriptionsTo)
+					.a("ignoreTypes", ignoreTypes)
 			);
 	}
 }

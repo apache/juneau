@@ -852,7 +852,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("XmlSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"XmlSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

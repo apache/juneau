@@ -136,8 +136,12 @@ public abstract class InputStreamParser extends Parser {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("InputStreamParser", new DefaultFilteringOMap()
-				.a("binaryFormat", binaryFormat)
+			.a(
+				"InputStreamParser",
+				OMap
+					.create()
+					.filtered()
+					.a("binaryFormat", binaryFormat)
 			);
 	}
 }

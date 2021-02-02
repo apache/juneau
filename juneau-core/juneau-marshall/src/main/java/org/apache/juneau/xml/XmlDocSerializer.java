@@ -80,7 +80,11 @@ public class XmlDocSerializer extends XmlSerializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("XmlDocSerializer", new DefaultFilteringOMap()
+			.a(
+				"XmlDocSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

@@ -3791,17 +3791,21 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RestClient", new DefaultFilteringOMap()
-				.a("errorCodes", errorCodes)
-				.a("executorService", executorService)
-				.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-				.a("headers", headers)
-				.a("interceptors", interceptors)
-				.a("keepHttpClientOpen", keepHttpClientOpen)
-				.a("partParser", partParser)
-				.a("partSerializer", partSerializer)
-				.a("query", query)
-				.a("rootUri", rootUri)
+			.a(
+				"RestClient",
+				OMap
+					.create()
+					.filtered()
+					.a("errorCodes", errorCodes)
+					.a("executorService", executorService)
+					.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+					.a("headers", headers)
+					.a("interceptors", interceptors)
+					.a("keepHttpClientOpen", keepHttpClientOpen)
+					.a("partParser", partParser)
+					.a("partSerializer", partSerializer)
+					.a("query", query)
+					.a("rootUri", rootUri)
 			);
 	}
 }

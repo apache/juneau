@@ -334,15 +334,20 @@ public class BeanFactory {
 	}
 
 	/**
-	 * Returns the contents of this bean factory as a readable map of values.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
-	 * @return The contents of this bean factory as a readable map of values.
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
-		return OMap.create()
+		return OMap
+			.create()
+			.filtered()
 			.a("beanMap", beanMap.keySet().stream().map(x -> x.getSimpleName()).collect(Collectors.toList()))
-			.appendSkipNull("outer", ObjectUtils.identity(outer))
-			.appendSkipNull("parent", parent.orElse(null));
+			.a("outer", ObjectUtils.identity(outer))
+			.a("parent", parent.orElse(null));
 	}
 
 	@Override /* Object */

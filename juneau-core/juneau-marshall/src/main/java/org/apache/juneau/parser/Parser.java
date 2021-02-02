@@ -1000,13 +1000,17 @@ public abstract class Parser extends BeanContext {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("Parser", new DefaultFilteringOMap()
-				.a("autoCloseStreams", autoCloseStreams)
-				.a("debugOutputLines", debugOutputLines)
-				.a("listener", listener)
-				.a("strict", strict)
-				.a("trimStrings", trimStrings)
-				.a("unbuffered", unbuffered)
+			.a(
+				"Parser",
+				OMap
+					.create()
+					.filtered()
+					.a("autoCloseStreams", autoCloseStreams)
+					.a("debugOutputLines", debugOutputLines)
+					.a("listener", listener)
+					.a("strict", strict)
+					.a("trimStrings", trimStrings)
+					.a("unbuffered", unbuffered)
 			);
 	}
 }

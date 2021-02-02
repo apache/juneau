@@ -14,7 +14,6 @@ package org.apache.juneau.jso;
 
 import java.io.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
@@ -57,7 +56,11 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsoSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"JsoSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

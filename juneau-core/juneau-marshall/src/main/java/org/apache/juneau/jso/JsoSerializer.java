@@ -126,7 +126,11 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsoSerializer", new DefaultFilteringOMap()
+			.a(
+				"JsoSerializer",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

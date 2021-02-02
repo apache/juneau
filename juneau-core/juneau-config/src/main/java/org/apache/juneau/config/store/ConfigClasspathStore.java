@@ -142,7 +142,11 @@ public class ConfigClasspathStore extends ConfigStore {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ConfigClasspathStore", new DefaultFilteringOMap()
+			.a(
+				"ConfigClasspathStore",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

@@ -175,9 +175,13 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	@Override /* SessionArgs */
 	public OMap toMap() {
 		return super.toMap()
-			.a("ParserSessionArgs", new DefaultFilteringOMap()
-				.a("javaMethod", javaMethod)
-				.a("outer", outer)
+			.a(
+				"ParserSessionArgs",
+				OMap
+					.create()
+					.filtered()
+					.a("javaMethod", javaMethod)
+					.a("outer", outer)
 			);
 	}
 }

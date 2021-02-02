@@ -1797,15 +1797,12 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
-	 * Returns the values in this config map as a map of maps.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
 	 * <p>
-	 * This is considered a snapshot copy of the config map.
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
 	 *
-	 * <p>
-	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.
-	 *
-	 * @return A copy of this config as a map of maps.
+	 * @return A new map containing this bean's properties.
 	 */
 	@Override /* Context */
 	public OMap toMap() {

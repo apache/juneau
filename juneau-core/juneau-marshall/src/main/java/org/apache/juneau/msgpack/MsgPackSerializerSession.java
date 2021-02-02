@@ -251,7 +251,11 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("MsgPackSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"MsgPackSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

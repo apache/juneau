@@ -502,10 +502,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonSerializer", new DefaultFilteringOMap()
-				.a("simpleMode", simpleMode)
-				.a("escapeSolidus", escapeSolidus)
-				.a("addBeanTypes", addBeanTypes)
+			.a(
+				"JsonSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("simpleMode", simpleMode)
+					.a("escapeSolidus", escapeSolidus)
+					.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

@@ -303,7 +303,7 @@ public class RdfParserSession extends ReaderParserSession {
 			Resource r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, eType.getKeyType(), eType.getValueType(), pMeta);
 		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
 			if (sType.isArray() || sType.isArgs())
@@ -342,7 +342,7 @@ public class RdfParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, decodeString(getValue(n, outer)));
 		} else if (n.isResource()) {
 			Resource r = n.asResource();
-			Map m = new OMap(this);
+			Map m = newGenericMap(sType);
 			parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((OMap)m, pMeta, eType);
@@ -581,7 +581,11 @@ public class RdfParserSession extends ReaderParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RdfParserSession", new DefaultFilteringOMap()
+			.a(
+				"RdfParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

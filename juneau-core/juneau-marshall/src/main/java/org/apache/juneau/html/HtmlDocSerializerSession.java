@@ -17,7 +17,6 @@ import static org.apache.juneau.html.HtmlDocSerializer.*;
 import java.io.IOException;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -279,17 +278,21 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlDocSerializerSession", new DefaultFilteringOMap()
-				.a("aside", aside)
-				.a("head", head)
-				.a("header", header)
-				.a("footer", footer)
-				.a("nav", nav)
-				.a("navlinks", navlinks)
-				.a("script", script)
-				.a("style", style)
-				.a("stylesheet", stylesheet)
-				.a("varResolver", getVarResolver())
+			.a(
+				"HtmlDocSerializerSession",
+				OMap
+					.create()
+					.filtered()
+					.a("aside", aside)
+					.a("head", head)
+					.a("header", header)
+					.a("footer", footer)
+					.a("nav", nav)
+					.a("navlinks", navlinks)
+					.a("script", script)
+					.a("style", style)
+					.a("stylesheet", stylesheet)
+					.a("varResolver", getVarResolver())
 			);
 	}
 }

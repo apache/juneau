@@ -400,12 +400,15 @@ public abstract class Session {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
-	 * @return A new map containing the properties defined on this context.
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
-		return new DefaultFilteringOMap();
+		return OMap.create().filtered();
 	}
 
 	@Override /* Object */

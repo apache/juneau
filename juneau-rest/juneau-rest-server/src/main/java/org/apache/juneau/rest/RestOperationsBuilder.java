@@ -39,11 +39,20 @@ public class RestOperationsBuilder  {
 	 */
 	public RestOperations build() {
 		try {
-			Class<? extends RestOperations> ic = firstNonNull(implClass, RestOperations.class);
-			return BeanFactory.of(beanFactory).addBean(RestOperationsBuilder.class, this).createBean(ic);
+			Class<? extends RestOperations> ic = firstNonNull(implClass, getDefaultImplClass());
+			return BeanFactory.of(beanFactory).addBeans(RestOperationsBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
+	}
+
+	/**
+	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
+	 *
+	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
+	 */
+	protected Class<? extends RestOperations> getDefaultImplClass() {
+		return RestOperations.class;
 	}
 
 	/**

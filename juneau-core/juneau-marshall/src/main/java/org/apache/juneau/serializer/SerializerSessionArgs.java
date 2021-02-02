@@ -221,9 +221,13 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	@Override /* SessionArgs */
 	public OMap toMap() {
 		return super.toMap()
-			.a("SerializerSessionArgs", new DefaultFilteringOMap()
-				.a("javaMethod", javaMethod)
-				.a("resolver", resolver)
+			.a(
+				"SerializerSessionArgs",
+				OMap
+					.create()
+					.filtered()
+					.a("javaMethod", javaMethod)
+					.a("resolver", resolver)
 			);
 	}
 }

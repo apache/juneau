@@ -984,20 +984,24 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("HtmlDocSerializer", new DefaultFilteringOMap()
-				.a("header", header)
-				.a("nav", nav)
-				.a("navlinks", navlinks)
-				.a("aside", aside)
-				.a("asideFloat", asideFloat)
-				.a("footer", footer)
-				.a("style", style)
-				.a("head", head)
-				.a("stylesheet", stylesheet)
-				.a("nowrap", nowrap)
-				.a("template", template)
-				.a("noResultsMessage", noResultsMessage)
-				.a("widgets", widgets.keySet())
+			.a(
+				"HtmlDocSerializer", 
+				OMap
+					.create()
+					.filtered()
+					.a("header", header)
+					.a("nav", nav)
+					.a("navlinks", navlinks)
+					.a("aside", aside)
+					.a("asideFloat", asideFloat)
+					.a("footer", footer)
+					.a("style", style)
+					.a("head", head)
+					.a("stylesheet", stylesheet)
+					.a("nowrap", nowrap)
+					.a("template", template)
+					.a("noResultsMessage", noResultsMessage)
+					.a("widgets", widgets.keySet())
 			);
 	}
 }

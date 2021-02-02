@@ -587,7 +587,11 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("RdfSerializerSession", new DefaultFilteringOMap()
+			.a(
+				"RdfSerializerSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

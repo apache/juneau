@@ -273,13 +273,17 @@ public class BasicFileFinder implements FileFinder {
 	}
 
 	/**
-	 * Returns the settings in this finder as a serializable map for debugging purposes.
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
 	 *
-	 * @return The settings in this finder as a serializable map
+	 * <p>
+	 * Use <c>SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>thisBean</jv>)</c> to dump the contents of this bean to the console.
+	 *
+	 * @return A new map containing this bean's properties.
 	 */
 	public OMap toMap() {
 		return OMap
 			.create()
+			.filtered()
 			.a("class", getClass().getSimpleName())
 			.a("roots", roots)
 			.a("cachingLimit", cachingLimit)

@@ -55,7 +55,11 @@ public class JsoParserSession extends InputStreamParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsoParserSession", new DefaultFilteringOMap()
+			.a(
+				"JsoParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

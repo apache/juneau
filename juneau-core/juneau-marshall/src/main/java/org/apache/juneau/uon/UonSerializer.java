@@ -542,10 +542,14 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()
-			.a("UonSerializer", new DefaultFilteringOMap()
-				.a("encoding", encoding)
-				.a("addBeanTypes", addBeanTypes)
-				.a("paramFormat", paramFormat)
+			.a(
+				"UonSerializer",
+				OMap
+					.create()
+					.filtered()
+					.a("encoding", encoding)
+					.a("addBeanTypes", addBeanTypes)
+					.a("paramFormat", paramFormat)
 			);
 	}
 }

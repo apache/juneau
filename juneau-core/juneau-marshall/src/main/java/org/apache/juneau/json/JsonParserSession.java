@@ -178,7 +178,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
@@ -828,7 +828,11 @@ public final class JsonParserSession extends ReaderParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("JsonParserSession", new DefaultFilteringOMap()
+			.a(
+				"JsonParserSession",
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }

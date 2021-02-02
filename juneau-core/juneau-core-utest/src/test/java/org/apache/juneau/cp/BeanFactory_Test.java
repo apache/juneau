@@ -410,6 +410,6 @@ public class BeanFactory_Test {
 		BeanFactory bf2 = BeanFactory.of(bf, null);
 		assertObject(bf2.beanCreateMethodFinder(E.class, x).find("createA1").run()).exists();
 
-		assertString(bf2.toString()).is("{beanMap:[],parent:{beanMap:['A']}}");
+		assertString(bf2.toString()).is("{parent:{beanMap:['A']}}");
 	}
 }

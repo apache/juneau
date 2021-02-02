@@ -61,7 +61,11 @@ public final class CsvParserSession extends ReaderParserSession {
 	@Override /* Session */
 	public OMap toMap() {
 		return super.toMap()
-			.a("CsvParserSession", new DefaultFilteringOMap()
+			.a(
+				"CsvParserSession", 
+				OMap
+					.create()
+					.filtered()
 			);
 	}
 }
