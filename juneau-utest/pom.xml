@@ -19,12 +19,12 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-core</artifactId>
+		<artifactId>juneau</artifactId>
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-core-utest</artifactId>
-	<name>juneau/core/core-utest</name>
+	<artifactId>juneau-utest</artifactId>
+	<name>juneau/utest</name>
 	<description>Apache Juneau Core API Unit Tests</description>
 	<packaging>bundle</packaging>
 

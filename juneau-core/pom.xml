@@ -33,6 +33,5 @@
 		<module>juneau-marshall-rdf</module>
 		<module>juneau-dto</module>
 		<module>juneau-config</module>
-		<module>juneau-core-utest</module>
 	</modules>
 </project>
