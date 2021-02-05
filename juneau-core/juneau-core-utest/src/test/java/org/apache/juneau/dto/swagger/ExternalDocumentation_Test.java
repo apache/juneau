@@ -72,17 +72,17 @@ public class ExternalDocumentation_Test {
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 
 		t
 			.set("description", new StringBuilder("foo"))
 			.set("url", new StringBuilder("bar"))
 			.set("$ref", new StringBuilder("baz"));
 
-		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 
 		assertObject(t.get("description", String.class)).isType(String.class).is("foo");
-		assertObject(t.get("url", URI.class)).isType(URI.class).string().is("bar");
+		assertObject(t.get("url", URI.class)).isType(URI.class).asString().is("bar");
 		assertObject(t.get("$ref", String.class)).isType(String.class).is("baz");
 
 		t.set("null", null).set(null, "null");
@@ -90,7 +90,7 @@ public class ExternalDocumentation_Test {
 		assertObject(t.get(null, Object.class)).isNull();
 		assertObject(t.get("foo", Object.class)).isNull();
 
-		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).json().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class ExternalDocumentation_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("description", "foo")
@@ -107,20 +107,20 @@ public class ExternalDocumentation_Test {
 			.set("$ref", "baz")
 			.copy();
 
-		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		ExternalDocumentation t = new ExternalDocumentation();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("description", "foo")
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertObject(t.keySet()).json().is("['description','url','$ref']");
+		assertObject(t.keySet()).asJson().is("['description','url','$ref']");
 	}
 }

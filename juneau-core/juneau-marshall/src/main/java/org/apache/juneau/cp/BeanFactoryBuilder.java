@@ -10,59 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.mstat;
+package org.apache.juneau.cp;
 
-import java.util.*;
+public class BeanFactoryBuilder {
 
-/**
- * Stack trace utility methods.
- */
-public class ExceptionHasher {
-
-	private final String stopClass;
-
-	/**
-	 * TODO
-	 *
-	 * @param stopClass TODO
-	 */
-	public ExceptionHasher(Class<?> stopClass) {
-		this.stopClass = stopClass == null ? null : stopClass.getName();
-	}
-
-	/**
-	 * Calculates a 16-bit hash for the specified throwable based on it's stack trace.
-	 *
-	 * @param t The throwable to calculate the stack trace on.
-	 * @return A calculated hash.
-	 */
-	public int hash(Throwable t) {
-		int i = 0;
-		while (t != null) {
-			for (StackTraceElement e : t.getStackTrace()) {
-				if (e.getClassName().equals(stopClass))
-					break;
-				if (e.getClassName().indexOf('$') == -1)
-					i ^= e.hashCode();
-			}
-			t = t.getCause();
-		}
-		return i;
-	}
-
-	/**
-	 * TODO
-	 *
-	 * @param t TODO
-	 * @return TODO
-	 */
-	public List<StackTraceElement> getStackTrace(Throwable t) {
-		List<StackTraceElement> l = new ArrayList<>();
-		for (StackTraceElement e : t.getStackTrace()) {
-			if (e.getClassName().equals(stopClass))
-				break;
-			l.add(e);
-		}
-		return Collections.unmodifiableList(l);
-	}
+	// TODO
 }

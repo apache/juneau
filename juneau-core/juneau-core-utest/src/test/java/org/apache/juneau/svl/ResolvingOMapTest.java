@@ -34,13 +34,13 @@ public class ResolvingOMapTest {
 		assertEquals(m.get("foo"), "1");
 
 		m.put("foo", new String[]{"$X{a}"});
-		assertObject(m.get("foo")).json().is("['1']");
+		assertObject(m.get("foo")).asJson().is("['1']");
 
 		m.put("foo", AList.of("$X{a}"));
-		assertObject(m.get("foo")).json().is("['1']");
+		assertObject(m.get("foo")).asJson().is("['1']");
 
 		m.put("foo", AMap.of("k1","$X{a}"));
-		assertObject(m.get("foo")).json().is("{k1:'1'}");
+		assertObject(m.get("foo")).asJson().is("{k1:'1'}");
 	}
 
 	public static class XVar extends MapVar {
@@ -61,13 +61,13 @@ public class ResolvingOMapTest {
 		assertNull(m.get("foo"));
 
 		m.put("foo", new String[]{null});
-		assertObject(m.get("foo")).json().is("[null]");
+		assertObject(m.get("foo")).asJson().is("[null]");
 
 		m.put("foo", AList.<String>create().a((String)null));
-		assertObject(m.get("foo")).json().is("[null]");
+		assertObject(m.get("foo")).asJson().is("[null]");
 
 		m.put("foo", AMap.of("k1",null));
-		assertObject(m.get("foo")).json().is("{k1:null}");
+		assertObject(m.get("foo")).asJson().is("{k1:null}");
 	}
 
 	//====================================================================================================
@@ -79,16 +79,16 @@ public class ResolvingOMapTest {
 		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
-		assertObject(m.get("foo")).json().is("'ONE'");
+		assertObject(m.get("foo")).asJson().is("'ONE'");
 
 		m.put("foo", new Object[]{FooEnum.ONE});
-		assertObject(m.get("foo")).json().is("['ONE']");
+		assertObject(m.get("foo")).asJson().is("['ONE']");
 
 		m.put("foo", AList.of(FooEnum.ONE));
-		assertObject(m.get("foo")).json().is("['ONE']");
+		assertObject(m.get("foo")).asJson().is("['ONE']");
 
 		m.put("foo", AMap.of(FooEnum.ONE,FooEnum.ONE));
-		assertObject(m.get("foo")).json().is("{ONE:'ONE'}");
+		assertObject(m.get("foo")).asJson().is("{ONE:'ONE'}");
 	}
 
 	public static enum FooEnum {
@@ -111,12 +111,12 @@ public class ResolvingOMapTest {
 		assertEquals(m.get("foo"), "1");
 
 		m3.put("foo", new String[]{"$X{a}"});
-		assertObject(m.get("foo")).json().is("['1']");
+		assertObject(m.get("foo")).asJson().is("['1']");
 
 		m3.put("foo", AList.of("$X{a}"));
-		assertObject(m.get("foo")).json().is("['1']");
+		assertObject(m.get("foo")).asJson().is("['1']");
 
 		m3.put("foo", AMap.of("k1","$X{a}"));
-		assertObject(m.get("foo")).json().is("{k1:'1'}");
+		assertObject(m.get("foo")).asJson().is("{k1:'1'}");
 	}
 }

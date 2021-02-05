@@ -39,19 +39,19 @@ public class MultiIterableTest {
 		MultiIterable mi = new MultiIterable(l1.iterator(),l2.iterator());
 		mi.append(l3.iterator());
 
-		assertObject(mi.iterator()).json().is("['a','b','c']");
+		assertObject(mi.iterator()).asJson().is("['a','b','c']");
 
 		mi = new MultiIterable(l1.iterator());
-		assertObject(mi.iterator()).json().is("[]");
+		assertObject(mi.iterator()).asJson().is("[]");
 
 		mi = new MultiIterable(l2.iterator(), l1.iterator());
-		assertObject(mi.iterator()).json().is("['a','b']");
+		assertObject(mi.iterator()).asJson().is("['a','b']");
 
 		mi = new MultiIterable(l2.iterator(), l1.iterator(), l3.iterator());
-		assertObject(mi.iterator()).json().is("['a','b','c']");
+		assertObject(mi.iterator()).asJson().is("['a','b','c']");
 
 		mi = new MultiIterable();
-		assertObject(mi.iterator()).json().is("[]");
+		assertObject(mi.iterator()).asJson().is("[]");
 
 		assertThrown(()->new MultiIterable().append(null)).isType(IllegalArgumentException.class);
 

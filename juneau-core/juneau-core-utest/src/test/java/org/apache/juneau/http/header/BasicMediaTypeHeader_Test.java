@@ -89,8 +89,8 @@ public class BasicMediaTypeHeader_Test {
 
 	@Test
 	public void a05_getSubTypes() throws Exception {
-		assertObject(ContentType.of("text/foo+bar").getSubTypes()).json().is("['foo','bar']");
-		assertObject(new ContentType((String)null).getSubTypes()).json().is("['*']");
+		assertObject(ContentType.of("text/foo+bar").getSubTypes()).asJson().is("['foo','bar']");
+		assertObject(new ContentType((String)null).getSubTypes()).asJson().is("['*']");
 	}
 
 	@Test
@@ -108,8 +108,8 @@ public class BasicMediaTypeHeader_Test {
 
 	@Test
 	public void a08_getParameters() throws Exception {
-		assertObject(ContentType.of("text/foo;x=1;y=2").getParameters()).json().is("['x=1','y=2']");
-		assertObject(new ContentType((String)null).getParameters()).json().is("[]");
+		assertObject(ContentType.of("text/foo;x=1;y=2").getParameters()).asJson().is("['x=1','y=2']");
+		assertObject(new ContentType((String)null).getParameters()).asJson().is("[]");
 	}
 
 	@Test

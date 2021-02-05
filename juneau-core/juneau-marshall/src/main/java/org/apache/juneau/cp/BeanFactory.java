@@ -217,29 +217,52 @@ public class BeanFactory {
 
 		Supplier<String> msg = null;
 
+		MethodInfo matchedCreator = null;
+		int matchedCreatorParams = -1;
+
 		for (MethodInfo m : ci.getPublicMethods()) {
+
 			if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(c) && (!m.hasAnnotation(BeanIgnore.class))) {
 				String n = m.getSimpleName();
 				if (isOneOf(n, "create","getInstance")) {
 					List<ClassInfo> missing = getMissingParamTypes(m.getParamTypes());
-					if (missing.isEmpty())
-						return m.invoke(null, getParams(m.getParamTypes()));
-					msg = ()-> "Static creator found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+					if (missing.isEmpty()) {
+						if (m.getParamCount() > matchedCreatorParams) {
+							matchedCreatorParams = m.getParamCount();
+							matchedCreator = m;
+						}
+					} else {
+						msg = ()-> "Static creator found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+					}
 				}
 			}
 		}
+
+		if (matchedCreator != null)
+			return matchedCreator.invoke(null, getParams(matchedCreator.getParamTypes()));
 
 		if (ci.isInterface())
 			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is an interface");
 		if (ci.isAbstract())
 			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is abstract");
 
+		ConstructorInfo matchedConstructor = null;
+		int matchedConstructorParams = -1;
+
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
 			List<ClassInfo> missing = getMissingParamTypes(cc.getParamTypes());
-			if (missing.isEmpty())
-				return cc.invoke(getParams(cc.getParamTypes()));
-			msg = ()-> "Public constructor found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+			if (missing.isEmpty()) {
+				if (cc.getParamCount() > matchedConstructorParams) {
+					matchedConstructorParams = cc.getParamCount();
+					matchedConstructor = cc;
+				}
+			} else {
+				msg = ()-> "Public constructor found but could not find prerequisites: " + missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(","));
+			}
 		}
+
+		if (matchedConstructor != null)
+			return matchedConstructor.invoke(getParams(matchedConstructor.getParamTypes()));
 
 		if (msg == null)
 			msg = () -> "Public constructor or creator not found";

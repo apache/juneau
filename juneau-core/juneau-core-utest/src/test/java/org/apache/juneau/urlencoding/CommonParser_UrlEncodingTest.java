@@ -177,6 +177,6 @@ public class CommonParser_UrlEncodingTest {
 
 		String in =  "0=foo&1=bar";
 		l = p.parse(in, LinkedList.class, String.class);
-		assertObject(l).json().is("['foo','bar']");
+		assertObject(l).asJson().is("['foo','bar']");
 	}
 }

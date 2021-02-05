@@ -47,6 +47,11 @@ public class CollectionAssertion_Test {
 		assertThrown(()->assertCollection(x1).isNotEmpty()).is("Collection was empty.");
 		assertCollection(x2).isNotEmpty();
 
+		assertCollection(x2).contains("a");
+		assertThrown(()->assertCollection(x2).contains("z")).is("Collection did not contain expected value.\n\tContents: ['a','b']\n\tExpected: z");
+
+		assertCollection(x1).doesNotContain("a");
+		assertThrown(()->assertCollection(x2).doesNotContain("a")).is("Collection contained unexpected value.\n\tContents: ['a','b']\n\tUnexpected: a");
 	}
 
 	@Test

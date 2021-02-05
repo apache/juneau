@@ -66,7 +66,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertObject(a).sameAs(a2);
+		assertObject(a).isSameJsonAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Explicit sequence
@@ -94,7 +94,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertObject(a).sameAs(a2);
+		assertObject(a).isSameJsonAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Bag
@@ -122,7 +122,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertObject(a).sameAs(a2);
+		assertObject(a).isSameJsonAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// List
@@ -152,7 +152,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertObject(a).sameAs(a2);
+		assertObject(a).isSameJsonAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Multi-properties
@@ -174,7 +174,7 @@ public class RdfTest {
 		// Note - Must specify collection format on parser for it to be able to understand this layout.
 		p = RdfParser.create().xml().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
 		a2 = p.parse(rdfXml, A.class);
-		assertObject(a).sameAs(a2);
+		assertObject(a).isSameJsonAs(a2);
 	}
 
 	@Rdf(prefix="a", namespace="http://ns/")
@@ -269,7 +269,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		b2 = p.parse(rdfXml, B.class);
-		assertObject(b).sameAsSorted(b2);
+		assertObject(b).isSameSortedAs(b2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Default is Bag - Should only affect DEFAULT properties.
@@ -340,7 +340,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		b2 = p.parse(rdfXml, B.class);
-		assertObject(b).sameAsSorted(b2);
+		assertObject(b).isSameSortedAs(b2);
 	}
 
 	@Rdf(prefix="b", namespace="http://ns/")
@@ -503,7 +503,7 @@ public class RdfTest {
 		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		c2 = p.parse(rdfXml, C.class);
-		assertObject(c).sameAsSorted(c2);
+		assertObject(c).isSameSortedAs(c2);
 	}
 
 	@Rdf(collectionFormat=RdfCollectionFormat.BAG)

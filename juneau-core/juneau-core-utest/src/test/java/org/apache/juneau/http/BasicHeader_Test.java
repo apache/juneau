@@ -52,9 +52,9 @@ public class BasicHeader_Test {
 	public void a02_of() {
 		BasicHeader x;
 		x = header("Foo","bar");
-		assertObject(x).json().is("'Foo: bar'");
+		assertObject(x).asJson().is("'Foo: bar'");
 		x = header("Foo",()->"bar");
-		assertObject(x).json().is("'Foo: bar'");
+		assertObject(x).asJson().is("'Foo: bar'");
 	}
 
 	@Test
@@ -79,15 +79,15 @@ public class BasicHeader_Test {
 		};
 		SerializedNameValuePair x9 = SerializedNameValuePair.of("X9",()->"9");
 
-		assertObject(BasicHeader.cast(x1)).isType(Header.class).json().is("'X1: 1'");
-		assertObject(BasicHeader.cast(x2)).isType(Header.class).json().is("'X2: 2'");
-		assertObject(BasicHeader.cast(x3)).isType(Header.class).json().is("'X3: 3'");
-		assertObject(BasicHeader.cast(x4)).isType(Header.class).json().is("'X4: 4'");
-		assertObject(BasicHeader.cast(x5)).isType(Header.class).json().is("'X5: 5'");
-		assertObject(BasicHeader.cast(x6)).isType(Header.class).json().is("'X6: 6'");
-		assertObject(BasicHeader.cast(x7)).isType(Header.class).json().is("'X7: 7'");
-		assertObject(BasicHeader.cast(x8)).isType(Header.class).json().is("'X8: 8'");
-		assertObject(BasicHeader.cast(x9)).isType(Header.class).json().is("'X9: 9'");
+		assertObject(BasicHeader.cast(x1)).isType(Header.class).asJson().is("'X1: 1'");
+		assertObject(BasicHeader.cast(x2)).isType(Header.class).asJson().is("'X2: 2'");
+		assertObject(BasicHeader.cast(x3)).isType(Header.class).asJson().is("'X3: 3'");
+		assertObject(BasicHeader.cast(x4)).isType(Header.class).asJson().is("'X4: 4'");
+		assertObject(BasicHeader.cast(x5)).isType(Header.class).asJson().is("'X5: 5'");
+		assertObject(BasicHeader.cast(x6)).isType(Header.class).asJson().is("'X6: 6'");
+		assertObject(BasicHeader.cast(x7)).isType(Header.class).asJson().is("'X7: 7'");
+		assertObject(BasicHeader.cast(x8)).isType(Header.class).asJson().is("'X8: 8'");
+		assertObject(BasicHeader.cast(x9)).isType(Header.class).asJson().is("'X9: 9'");
 
 		assertThrown(()->BasicHeader.cast("X")).is("Object of type java.lang.String could not be converted to a Header.");
 		assertThrown(()->BasicHeader.cast(null)).is("Object of type null could not be converted to a Header.");

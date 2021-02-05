@@ -31,96 +31,96 @@ public class BasicHttpEntity_Test {
 		assertNull(x.getContentEncoding());
 
 		x = of("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(new StringReader("foo"));
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = of("foo".getBytes());
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(new ByteArrayInputStream("foo".getBytes()));
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = of(null);
-		assertStream(x.getContent()).string().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
 		assertFalse(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(f);
-		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 
 		x = of(()->"foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(()->new StringReader("foo"));
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = of(()->"foo".getBytes());
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(()->new ByteArrayInputStream("foo".getBytes()));
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = of(()->null);
-		assertStream(x.getContent()).string().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
 		assertFalse(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(()->f);
-		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 
 		x = of("foo").cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of(new StringReader("foo")).cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of("foo".getBytes()).cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of(new ByteArrayInputStream("foo".getBytes())).cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of(null).cache();
-		assertStream(x.getContent()).string().doesNotExist();
-		assertStream(x.getContent()).string().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
 		x = of(f).cache();
-		assertStream(x.getContent()).string().isEmpty();
-		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
@@ -171,7 +171,7 @@ public class BasicHttpEntity_Test {
 	@Test
 	public void a05_asBytes() throws Exception {
 		BasicHttpEntity x1 = of(new StringReader("foo"));
-		assertBytes(x1.asBytes()).spacedHex().is("66 6F 6F");
+		assertBytes(x1.asBytes()).asSpacedHex().is("66 6F 6F");
 		BasicHttpEntity x2 = of((String)null);
 		assertBytes(x2.asBytes()).doesNotExist();
 	}
@@ -187,7 +187,7 @@ public class BasicHttpEntity_Test {
 	@Test
 	public void a07_assertBytes() throws Exception {
 		BasicHttpEntity x1 = of(new StringReader("foo"));
-		x1.assertBytes().spacedHex().is("66 6F 6F");
+		x1.assertBytes().asSpacedHex().is("66 6F 6F");
 		BasicHttpEntity x2 = of((String)null);
 		x2.assertBytes().doesNotExist();
 	}

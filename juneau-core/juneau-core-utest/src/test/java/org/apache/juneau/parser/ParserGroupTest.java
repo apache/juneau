@@ -74,15 +74,15 @@ public class ParserGroupTest {
 
 		gb = ParserGroup.create().append(P1.class, P2.class);
 		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).json().is("['text/1','text/2','text/2a']");
+		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
 
 		gb = g.builder().append(P3.class, P4.class);
 		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).json().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
 		gb = g.builder().append(P5.class);
 		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).json().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}
 
 	public static class P1 extends JsonParser {

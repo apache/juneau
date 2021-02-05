@@ -55,7 +55,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 	 * @param context The context of the resource object.
 	 */
 	public BasicTestRestLogger(RestContext context) {
-		super(builder().logger(context.getLogger()).stackTraceStore(context.getStackTraceStore()));
+		super(builder().logger(context.getLogger()).thrownStore(context.getThrownStore()));
 	}
 
 	private static RestLoggerBuilder builder() {

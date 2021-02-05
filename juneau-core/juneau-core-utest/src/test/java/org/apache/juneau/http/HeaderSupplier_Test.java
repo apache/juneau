@@ -28,25 +28,25 @@ public class HeaderSupplier_Test {
 	public void a01_basic() {
 		HeaderSupplier x = HeaderSupplier.of();
 
-		assertObject(x.iterator()).json().is("[]");
+		assertObject(x.iterator()).asJson().is("[]");
 		x.add(header("Foo","bar"));
-		assertObject(x.iterator()).json().is("['Foo: bar']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar']");
 		x.add(header("Foo","baz"));
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 		x.add(HeaderSupplier.of());
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 		x.add(HeaderSupplier.of(header("Foo","qux")));
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux']");
 		x.add(HeaderSupplier.of(header("Foo","q2x"), header("Foo","q3x")));
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x']");
 		x.add(HeaderSupplier.of(HeaderSupplier.of(header("Foo","q4x"),header("Foo","q5x"))));
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
 		x.add((Header)null);
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
 		x.add((HeaderSupplier)null);
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
 
-		assertObject(new HeaderSupplier.Null().iterator()).json().is("[]");
+		assertObject(new HeaderSupplier.Null().iterator()).asJson().is("[]");
 	}
 
 	@Test
@@ -54,13 +54,13 @@ public class HeaderSupplier_Test {
 		HeaderSupplier x;
 
 		x = HeaderSupplier.of(header("Foo","bar"), header("Foo","baz"), null);
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 
 		x = HeaderSupplier.of(AList.of(header("Foo","bar"), header("Foo","baz"), null));
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 
 		x = HeaderSupplier.ofPairs("Foo","bar","Foo","baz");
-		assertObject(x.iterator()).json().is("['Foo: bar','Foo: baz']");
+		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 
 		assertThrown(()->HeaderSupplier.ofPairs("Foo")).is("Odd number of parameters passed into HeaderSupplier.ofPairs()");
 
@@ -96,8 +96,8 @@ public class HeaderSupplier_Test {
 			.create()
 			.add("X1","1")
 			.add(HeaderSupplier.ofPairs("X2","2"));
-		assertObject(x.toArray()).json().is("['X1: 1','X2: 2']");
-		assertObject(x.toArray(new Header[0])).json().is("['X1: 1','X2: 2']");
+		assertObject(x.toArray()).asJson().is("['X1: 1','X2: 2']");
+		assertObject(x.toArray(new Header[0])).asJson().is("['X1: 1','X2: 2']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

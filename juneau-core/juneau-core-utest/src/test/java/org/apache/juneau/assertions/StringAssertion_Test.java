@@ -50,32 +50,32 @@ public class StringAssertion_Test {
 		assertString("foobar").uc().is("FOOBAR").is("foobar");
 		assertString(empty()).uc().isNull();
 
-		assertString("foo\nbar\nbaz").isEqualLines("foo","bar","baz");
-		assertThrown(()->assertString(empty()).isEqualLines((String[])null)).is("Parameter 'lines' cannot be null.");
-		assertThrown(()->assertString(empty()).isEqualLines((String)null)).is("Text differed at position -1.\n\tExpect=[]\n\tActual=[null]");
-		assertThrown(()->assertString("foo\nbar\nbaz").javaStrings().isEqualLines("foo","bar","bar")).stderr().is("Text differed at position 10.\n\tExpect=[foo\\nbar\\nbar]\n\tActual=[foo\\nbar\\nbaz]");
+		assertString("foo\nbar\nbaz").isEqualLinesTo("foo","bar","baz");
+		assertThrown(()->assertString(empty()).isEqualLinesTo((String[])null)).is("Parameter 'lines' cannot be null.");
+		assertThrown(()->assertString(empty()).isEqualLinesTo((String)null)).is("Text differed at position -1.\n\tExpect=[]\n\tActual=[null]");
+		assertThrown(()->assertString("foo\nbar\nbaz").javaStrings().isEqualLinesTo("foo","bar","bar")).stderr().is("Text differed at position 10.\n\tExpect=[foo\\nbar\\nbar]\n\tActual=[foo\\nbar\\nbaz]");
 
-		assertString("foo\nbar\nbaz").isEqualSortedLines("bar","foo","baz");
-		assertThrown(()->assertString(empty()).isEqualSortedLines((String[])null)).is("Parameter 'lines' cannot be null.");
-		assertString("").isEqualSortedLines((String)null);
-		assertThrown(()->assertString(empty()).isEqualSortedLines()).is("Value was null.");
-		assertThrown(()->assertString("foo\nbar\nbaz").isEqualSortedLines("bar","foo","bar")).stderr().is("Expected text had different values at line 2.\n\tExpect=[bar]\n\tActual=[baz]");
-		assertThrown(()->assertString("foo\nbar\nbaz").isEqualSortedLines("bar","foo")).stderr().is("Expected text had different numbers of lines.\n\tExpect=[2]\n\tActual=[3]");
-		assertThrown(()->assertString(empty()).isEqualSortedLines("foo")).stderr().is("Value was null.");
-		assertThrown(()->assertString("foo").isEqualSortedLines((String)null)).stderr().is("Expected text had different values at line 1.\n\tExpect=[]\n\tActual=[foo]");
+		assertString("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo","baz");
+		assertThrown(()->assertString(empty()).isEqualSortedLinesTo((String[])null)).is("Parameter 'lines' cannot be null.");
+		assertString("").isEqualSortedLinesTo((String)null);
+		assertThrown(()->assertString(empty()).isEqualSortedLinesTo()).is("Value was null.");
+		assertThrown(()->assertString("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo","bar")).stderr().is("Expected text had different values at line 2.\n\tExpect=[bar]\n\tActual=[baz]");
+		assertThrown(()->assertString("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo")).stderr().is("Expected text had different numbers of lines.\n\tExpect=[2]\n\tActual=[3]");
+		assertThrown(()->assertString(empty()).isEqualSortedLinesTo("foo")).stderr().is("Value was null.");
+		assertThrown(()->assertString("foo").isEqualSortedLinesTo((String)null)).stderr().is("Expected text had different values at line 1.\n\tExpect=[]\n\tActual=[foo]");
 
-		assertString("foo\nbar\nbaz").isEqualLines("foo","bar","baz");
+		assertString("foo\nbar\nbaz").isEqualLinesTo("foo","bar","baz");
 
-		assertString("foobar").isEqualIc("FOOBAR");
-		assertString(empty()).isEqualIc(null);
-		assertThrown(()->assertString("foobar").isEqualIc("FOOBAZ")).stderr().is("Text differed at position 5.\n\tExpect=[FOOBAZ]\n\tActual=[foobar]");
-		assertThrown(()->assertString(empty()).isEqualIc("FOOBAZ")).stderr().is("Text differed at position 0.\n\tExpect=[FOOBAZ]\n\tActual=[null]");
-		assertThrown(()->assertString("foobar").isEqualIc(null)).stderr().is("Text differed at position 0.\n\tExpect=[null]\n\tActual=[foobar]");
+		assertString("foobar").isEqualIgnoreCaseTo("FOOBAR");
+		assertString(empty()).isEqualIgnoreCaseTo(null);
+		assertThrown(()->assertString("foobar").isEqualIgnoreCaseTo("FOOBAZ")).stderr().is("Text differed at position 5.\n\tExpect=[FOOBAZ]\n\tActual=[foobar]");
+		assertThrown(()->assertString(empty()).isEqualIgnoreCaseTo("FOOBAZ")).stderr().is("Text differed at position 0.\n\tExpect=[FOOBAZ]\n\tActual=[null]");
+		assertThrown(()->assertString("foobar").isEqualIgnoreCaseTo(null)).stderr().is("Text differed at position 0.\n\tExpect=[null]\n\tActual=[foobar]");
 
 		assertString("foobar").doesNotEqual("foobaz");
 		assertThrown(()->assertString("foobar").doesNotEqual("foobar")).stderr().is("Text equaled unexpected.\n\tText=[foobar]");
 
-		assertThrown(()->assertString("foobar").isEqual("foobaz")).stderr().is("Text differed at position 5.\n\tExpect=[foobaz]\n\tActual=[foobar]");
+		assertThrown(()->assertString("foobar").isEqualTo("foobaz")).stderr().is("Text differed at position 5.\n\tExpect=[foobaz]\n\tActual=[foobar]");
 
 		assertString("foobar").isNot("foobaz");
 		assertThrown(()->assertString("foobar").isNot("foobar")).is("Text equaled unexpected.\n\tText=[foobar]");
@@ -125,6 +125,12 @@ public class StringAssertion_Test {
 		assertThrown(()->assertString("foo").doesNotMatch("fo+")).is("Text matched unexpected pattern.\n\tPattern=[fo+]\n\tText=[foo]");
 		assertString(empty()).doesNotMatch("fo+");
 		assertThrown(()->assertString("").doesNotMatch((String)null)).is("Parameter 'regex' cannot be null.");
+
+		assertString("foo").startsWith("fo");
+		assertThrown(()->assertString("foo").startsWith("x")).stderr().is("Text did not start with expected string.\n\tString=[x]\n\tText=[foo]");
+
+		assertString("foo").endsWith("oo");
+		assertThrown(()->assertString("foo").endsWith("x")).stderr().is("Text did not end with expected string.\n\tString=[x]\n\tText=[foo]");
 	}
 
 	@Test

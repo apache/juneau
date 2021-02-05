@@ -165,7 +165,7 @@ public class AnnotationsTest {
 		bm = session.newBeanMap(A.class).load("{publicField:123}");
 		assertNotNull("F1", bm);
 		assertNotNull("F2", bm.getBean());
-		assertObject(bm.getBean()).json().is("{publicField:123}");
+		assertObject(bm.getBean()).asJson().is("{publicField:123}");
 	}
 
 	public static class A {

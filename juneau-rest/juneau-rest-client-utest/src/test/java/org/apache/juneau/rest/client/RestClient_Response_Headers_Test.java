@@ -117,32 +117,32 @@ public class RestClient_Response_Headers_Test {
 		assertEquals(123, m1.get().intValue());
 
 		List<Integer> l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class);
-		assertObject(l).json().is("[1,2]");
+		assertObject(l).asJson().is("[1,2]");
 
 		Mutable<Integer> m2 = Mutable.create();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m2,LinkedList.class,Integer.class);
-		assertObject(m2.get()).json().is("[1,2]");
+		assertObject(m2.get()).asJson().is("[1,2]");
 
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
 		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
 
 		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(cm1);
-		assertObject(l).json().is("[1,2]");
+		assertObject(l).asJson().is("[1,2]");
 
 		Mutable<LinkedList<Integer>> m3 = Mutable.create();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m3,cm1);
-		assertObject(m3.get()).json().is("[1,2]");
+		assertObject(m3.get()).asJson().is("[1,2]");
 
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1)).contains("Invalid number");
 
 		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asOptional(LinkedList.class,Integer.class);
-		assertObject(o1.get()).json().is("[1,2]");
+		assertObject(o1.get()).asJson().is("[1,2]");
 		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").asOptional(LinkedList.class,Integer.class);
 		assertFalse(o1.isPresent());
 
 		Mutable<Optional<List<Integer>>> m4 = Mutable.create();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asOptional(m4,LinkedList.class,Integer.class);
-		assertObject(m4.get().get()).json().is("[1,2]");
+		assertObject(m4.get().get()).asJson().is("[1,2]");
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").asOptional(m4,LinkedList.class,Integer.class);
 		assertFalse(m4.get().isPresent());
 

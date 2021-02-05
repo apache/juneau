@@ -58,7 +58,7 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a01_Body() throws Exception {
-		assertObject(body().build().annotationType()).json().contains("Body");
+		assertObject(body().build().annotationType()).asJson().contains("Body");
 
 		assertTrue(BodyAnnotation.empty(A1.class.getAnnotation(Body.class)));
 		assertTrue(BodyAnnotation.empty(A2.class.getAnnotation(Body.class)));
@@ -82,7 +82,7 @@ public class AnnotationUtils_Test {
 	public void a02_Contact() throws Exception {
 		X1 x1 = A1.class.getAnnotation(X1.class);
 
-		assertObject(contact().build().annotationType()).json().contains("Contact");
+		assertObject(contact().build().annotationType()).asJson().contains("Contact");
 
 		assertTrue(ContactAnnotation.empty(x1.contact()));
 		assertTrue(ContactAnnotation.empty(contact().build()));
@@ -99,7 +99,7 @@ public class AnnotationUtils_Test {
 		Field f1 = A1.class.getField("f1");
 		Field f2 = A2.class.getField("f1");
 
-		assertObject(formData().build().annotationType()).json().contains("FormData");
+		assertObject(formData().build().annotationType()).asJson().contains("FormData");
 
 		assertTrue(FormDataAnnotation.empty(f1.getAnnotation(FormData.class)));
 		assertTrue(FormDataAnnotation.empty(f2.getAnnotation(FormData.class)));
@@ -160,11 +160,11 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a04_HasFormData() throws Exception {
-		assertObject(hasFormData().build().annotationType()).json().contains("HasFormData");
+		assertObject(hasFormData().build().annotationType()).asJson().contains("HasFormData");
 
-		assertObject(hasFormData().n("foo").build().n()).json().is("'foo'");
-		assertObject(hasFormData().name("foo").build().name()).json().is("'foo'");
-		assertObject(hasFormData().value("foo").build().value()).json().is("'foo'");
+		assertObject(hasFormData().n("foo").build().n()).asJson().is("'foo'");
+		assertObject(hasFormData().name("foo").build().name()).asJson().is("'foo'");
+		assertObject(hasFormData().value("foo").build().value()).asJson().is("'foo'");
 	}
 
 	@Test
@@ -172,7 +172,7 @@ public class AnnotationUtils_Test {
 		Field f1 = A1.class.getField("f1");
 		Field f2 = A2.class.getField("f1");
 
-		assertObject(query().build().annotationType()).json().contains("Query");
+		assertObject(query().build().annotationType()).asJson().contains("Query");
 
 		assertTrue(QueryAnnotation.empty(f1.getAnnotation(Query.class)));
 		assertTrue(QueryAnnotation.empty(f2.getAnnotation(Query.class)));
@@ -233,11 +233,11 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a06_HasQuery() throws Exception {
-		assertObject(hasQuery().build().annotationType()).json().contains("HasQuery");
+		assertObject(hasQuery().build().annotationType()).asJson().contains("HasQuery");
 
-		assertObject(hasQuery().n("foo").build().n()).json().is("'foo'");
-		assertObject(hasQuery().name("foo").build().name()).json().is("'foo'");
-		assertObject(hasQuery().value("foo").build().value()).json().is("'foo'");
+		assertObject(hasQuery().n("foo").build().n()).asJson().is("'foo'");
+		assertObject(hasQuery().name("foo").build().name()).asJson().is("'foo'");
+		assertObject(hasQuery().value("foo").build().value()).asJson().is("'foo'");
 	}
 
 	@Test
@@ -245,7 +245,7 @@ public class AnnotationUtils_Test {
 		Field f1 = A1.class.getField("f1");
 		Field f2 = A2.class.getField("f1");
 
-		assertObject(header().build().annotationType()).json().contains("Header");
+		assertObject(header().build().annotationType()).asJson().contains("Header");
 
 		assertTrue(HeaderAnnotation.empty(f1.getAnnotation(Header.class)));
 		assertTrue(HeaderAnnotation.empty(f2.getAnnotation(Header.class)));
@@ -308,7 +308,7 @@ public class AnnotationUtils_Test {
 	public void a08_License() throws Exception {
 		X1 x = A1.class.getAnnotation(X1.class);
 
-		assertObject(license().build().annotationType()).json().contains("License");
+		assertObject(license().build().annotationType()).asJson().contains("License");
 
 		assertTrue(LicenseAnnotation.empty(x.license()));
 		assertTrue(LicenseAnnotation.empty((License)null));
@@ -324,7 +324,7 @@ public class AnnotationUtils_Test {
 		Field f1 = A1.class.getField("f1");
 		Field f2 = A2.class.getField("f1");
 
-		assertObject(path().build().annotationType()).json().contains("Path");
+		assertObject(path().build().annotationType()).asJson().contains("Path");
 
 		assertTrue(PathAnnotation.empty(f1.getAnnotation(Path.class)));
 		assertTrue(PathAnnotation.empty(f2.getAnnotation(Path.class)));
@@ -380,15 +380,15 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a10_Request() throws Exception {
-		assertObject(request().build().annotationType()).json().contains("Request");
+		assertObject(request().build().annotationType()).asJson().contains("Request");
 
-		assertObject(request().parser(OpenApiParser.class).build().parser()).json().is("'org.apache.juneau.oapi.OpenApiParser'");
-		assertObject(request().serializer(OpenApiSerializer.class).build().serializer()).json().is("'org.apache.juneau.oapi.OpenApiSerializer'");
+		assertObject(request().parser(OpenApiParser.class).build().parser()).asJson().is("'org.apache.juneau.oapi.OpenApiParser'");
+		assertObject(request().serializer(OpenApiSerializer.class).build().serializer()).asJson().is("'org.apache.juneau.oapi.OpenApiSerializer'");
 	}
 
 	@Test
 	public void a11_Response() throws Exception {
-		assertObject(response().build().annotationType()).json().contains("Response");
+		assertObject(response().build().annotationType()).asJson().contains("Response");
 
 		assertTrue(ResponseAnnotation.empty(A1.class.getAnnotation(Response.class)));
 		assertTrue(ResponseAnnotation.empty(A2.class.getAnnotation(Response.class)));
@@ -412,12 +412,12 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a12_ResponseBody() throws Exception {
-		assertObject(responseBody().build().annotationType()).json().contains("ResponseBody");
+		assertObject(responseBody().build().annotationType()).asJson().contains("ResponseBody");
 	}
 
 	@Test
 	public void a13_ResponseHeader() throws Exception {
-		assertObject(responseHeader().build().annotationType()).json().contains("ResponseHeader");
+		assertObject(responseHeader().build().annotationType()).asJson().contains("ResponseHeader");
 
 		assertTrue(ResponseHeaderAnnotation.empty(A1.class.getAnnotation(ResponseHeader.class)));
 		assertTrue(ResponseHeaderAnnotation.empty(A2.class.getAnnotation(ResponseHeader.class)));
@@ -469,24 +469,24 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a14_ResponseStatus() throws Exception {
-		assertObject(responseStatus().build().annotationType()).json().contains("ResponseStatus");
+		assertObject(responseStatus().build().annotationType()).asJson().contains("ResponseStatus");
 	}
 
 	@Test
 	public void a15_Tag() throws Exception {
-		assertObject(tag().build().annotationType()).json().contains("Tag");
+		assertObject(tag().build().annotationType()).asJson().contains("Tag");
 
-		assertObject(tag().description(a("foo")).build().description()).json().is("['foo']");
-		assertObject(tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url()).json().is("'foo'");
-		assertObject(tag().name("foo").build().name()).json().is("'foo'");
-		assertObject(tag().value(a("foo")).build().value()).json().is("['foo']");
+		assertObject(tag().description(a("foo")).build().description()).asJson().is("['foo']");
+		assertObject(tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url()).asJson().is("'foo'");
+		assertObject(tag().name("foo").build().name()).asJson().is("'foo'");
+		assertObject(tag().value(a("foo")).build().value()).asJson().is("['foo']");
 	}
 
 	@Test
 	public void a16_ExternalDocs() throws Exception {
 		X1 x = A1.class.getAnnotation(X1.class);
 
-		assertObject(externalDocs().build().annotationType()).json().contains("ExternalDocs");
+		assertObject(externalDocs().build().annotationType()).asJson().contains("ExternalDocs");
 
 		assertTrue(ExternalDocsAnnotation.empty(x.externalDocs()));
 		assertTrue(ExternalDocsAnnotation.empty((ExternalDocs)null));
@@ -500,7 +500,7 @@ public class AnnotationUtils_Test {
 	public void a17_Schema() throws Exception {
 		X1 x = A1.class.getAnnotation(X1.class);
 
-		assertObject(schema().build().annotationType()).json().contains("Schema");
+		assertObject(schema().build().annotationType()).asJson().contains("Schema");
 
 		assertTrue(SchemaAnnotation.empty(x.schema()));
 		assertTrue(SchemaAnnotation.empty((Schema)null));
@@ -568,7 +568,7 @@ public class AnnotationUtils_Test {
 	public void a18_SubItems() throws Exception {
 		X1 x = A1.class.getAnnotation(X1.class);
 
-		assertObject(subItems().build().annotationType()).json().contains("SubItems");
+		assertObject(subItems().build().annotationType()).asJson().contains("SubItems");
 
 		assertTrue(SubItemsAnnotation.empty(x.subItems()));
 		assertTrue(SubItemsAnnotation.empty((SubItems)null));
@@ -614,7 +614,7 @@ public class AnnotationUtils_Test {
 	public void a19_Items() throws Exception {
 		X1 x = A1.class.getAnnotation(X1.class);
 
-		assertObject(items().build().annotationType()).json().contains("Items");
+		assertObject(items().build().annotationType()).asJson().contains("Items");
 
 		assertTrue(ItemsAnnotation.empty(x.items()));
 		assertTrue(ItemsAnnotation.empty((Items)null));

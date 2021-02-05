@@ -28,25 +28,25 @@ public class NameValuePairSupplier_Test {
 	public void a01_basic() {
 		NameValuePairSupplier x = NameValuePairSupplier.of();
 
-		assertObject(x.iterator()).json().is("[]");
+		assertObject(x.iterator()).asJson().is("[]");
 		x.add(pair("Foo","bar"));
-		assertObject(x.iterator()).json().is("['Foo=bar']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar']");
 		x.add(pair("Foo","baz"));
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 		x.add(NameValuePairSupplier.of());
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 		x.add(NameValuePairSupplier.of(pair("Foo","qux")));
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux']");
 		x.add(NameValuePairSupplier.of(pair("Foo","q2x"), pair("Foo","q3x")));
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x']");
 		x.add(NameValuePairSupplier.of(NameValuePairSupplier.of(pair("Foo","q4x"),pair("Foo","q5x"))));
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 		x.add((Header)null);
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 		x.add((NameValuePairSupplier)null);
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 
-		assertObject(new NameValuePairSupplier.Null().iterator()).json().is("[]");
+		assertObject(new NameValuePairSupplier.Null().iterator()).asJson().is("[]");
 	}
 
 	@Test
@@ -54,13 +54,13 @@ public class NameValuePairSupplier_Test {
 		NameValuePairSupplier x;
 
 		x = NameValuePairSupplier.of(pair("Foo","bar"), pair("Foo","baz"), null);
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
 		x = NameValuePairSupplier.of(AList.of(pair("Foo","bar"), pair("Foo","baz"), null));
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
 		x = NameValuePairSupplier.ofPairs("Foo","bar","Foo","baz");
-		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz']");
+		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
 		assertThrown(()->NameValuePairSupplier.ofPairs("Foo")).is("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
 
@@ -96,8 +96,8 @@ public class NameValuePairSupplier_Test {
 			.create()
 			.add("X1","1")
 			.add(NameValuePairSupplier.ofPairs("X2","2"));
-		assertObject(x.toArray()).json().is("['X1=1','X2=2']");
-		assertObject(x.toArray(new NameValuePair[0])).json().is("['X1=1','X2=2']");
+		assertObject(x.toArray()).asJson().is("['X1=1','X2=2']");
+		assertObject(x.toArray(new NameValuePair[0])).asJson().is("['X1=1','X2=2']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

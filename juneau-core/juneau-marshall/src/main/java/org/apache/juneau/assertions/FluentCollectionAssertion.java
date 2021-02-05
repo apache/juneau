@@ -77,7 +77,7 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 		for (Object o : this.value)
 			if (eq(o, value))
 				return returns();
-		throw error("Collection did not contain expected value.\nContents: {0}\nExpect:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+		throw error("Collection did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", SimpleJson.DEFAULT.toString(this.value), value);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		for (Object o : this.value)
 			if (eq(o, value))
-				throw error("Collection contained unexpected value.\nContents: {0}\nUnexpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+				throw error("Collection contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", SimpleJson.DEFAULT.toString(this.value), value);
 		return returns();
 	}
 

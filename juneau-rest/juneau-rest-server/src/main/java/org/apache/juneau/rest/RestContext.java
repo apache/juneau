@@ -3377,7 +3377,6 @@ public class RestContext extends BeanContext {
 	private final VarResolver varResolver;
 	private final RestOperations restOperations;
 	private final RestChildren restChildren;
-	private final StackTraceStore stackTraceStore;
 	private final Logger logger;
 	private final SwaggerProvider swaggerProvider;
 	private final HttpException initException;
@@ -3386,7 +3385,8 @@ public class RestContext extends BeanContext {
 	private final BeanFactory beanFactory;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
-	private final ConcurrentHashMap<String,MethodExecStats> methodExecStats = new ConcurrentHashMap<>();
+	private final MethodExecStore methodExecStore;
+	private final ThrownStore thrownStore;
 	private final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
 	private final Instant startTime;
 	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
@@ -3474,8 +3474,11 @@ public class RestContext extends BeanContext {
 			logger = createLogger(r, beanFactory);
 			beanFactory.addBean(Logger.class, logger);
 
-			stackTraceStore = createStackTraceStore(r, beanFactory);
-			beanFactory.addBean(StackTraceStore.class, stackTraceStore);
+			thrownStore = createThrownStore(r, beanFactory);
+			beanFactory.addBean(ThrownStore.class, thrownStore);
+
+			methodExecStore = createMethodExecStore(r, beanFactory, thrownStore);
+			beanFactory.addBean(MethodExecStore.class, methodExecStore);
 
 			varResolver = createVarResolver(r, beanFactory);
 			beanFactory.addBean(VarResolver.class, varResolver);
@@ -4030,7 +4033,7 @@ public class RestContext extends BeanContext {
 					.build()
 			)
 			.logger(getLogger())
-			.stackTraceStore(getStackTraceStore());
+			.thrownStore(getThrownStore());
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -4774,12 +4777,12 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Instantiates the stack trace store for this REST resource.
+	 * Instantiates the thrown exception store for this REST resource.
 	 *
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for a static or non-static <c>createStackTraceStore()</> method that returns <c>{@link StackTraceStore}</c> on the
+	 * 	<li>Looks for a static or non-static <c>createThrownStore()</> method that returns <c>{@link ThrownStore}</c> on the
 	 * 		resource class with any of the following arguments:
 	 * 		<ul>
 	 * 			<li>{@link RestContext}
@@ -4787,7 +4790,7 @@ public class RestContext extends BeanContext {
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean factory registered in this context.
-	 * 	<li>Returns {@link StackTraceStore#GLOBAL}.
+	 * 	<li>Returns {@link ThrownStore#GLOBAL}.
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
@@ -4795,18 +4798,98 @@ public class RestContext extends BeanContext {
 	 * @return The stack trace store for this REST resource.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected StackTraceStore createStackTraceStore(Object resource, BeanFactory beanFactory) throws Exception {
+	protected ThrownStore createThrownStore(Object resource, BeanFactory beanFactory) throws Exception {
 
-		StackTraceStore x = beanFactory.getBean(StackTraceStore.class).orElse(null);
+		ThrownStore x = beanFactory.getBean(ThrownStore.class).orElse(null);
 
 		if (x == null)
-			x = StackTraceStore.GLOBAL;
+			x = createThrownStoreBuilder(resource, beanFactory).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
-			.addBean(StackTraceStore.class, x)
-			.beanCreateMethodFinder(StackTraceStore.class, resource)
-			.find("createStackTraceStore")
+			.addBean(ThrownStore.class, x)
+			.beanCreateMethodFinder(ThrownStore.class, resource)
+			.find("createThrownStore")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the thrown exception store builder for this REST resource.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @return The stack trace store for this REST resource.
+	 * @throws Exception If stack trace store could not be instantiated.
+	 */
+	protected ThrownStoreBuilder createThrownStoreBuilder(Object resource, BeanFactory beanFactory) throws Exception {
+
+		ThrownStoreBuilder x = ThrownStore
+			.create()
+			.parent(parentContext == null ? null : parentContext.thrownStore)
+			.beanFactory(beanFactory);
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(ThrownStoreBuilder.class, x)
+			.beanCreateMethodFinder(ThrownStoreBuilder.class, resource)
+			.find("createThrownStore")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the method execution statistics store for this REST resource.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param thrownStore The thrown exception stats store.
+	 * @return The stack trace store for this REST resource.
+	 * @throws Exception If stack trace store could not be instantiated.
+	 */
+	protected MethodExecStore createMethodExecStore(Object resource, BeanFactory beanFactory, ThrownStore thrownStore) throws Exception {
+
+		MethodExecStore x = beanFactory.getBean(MethodExecStore.class).orElse(null);
+
+		if (x == null)
+			x = createMethodExecStoreBuilder(resource, beanFactory, thrownStore).build();
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(MethodExecStore.class, x)
+			.beanCreateMethodFinder(MethodExecStore.class, resource)
+			.find("cxreateMethodExecStore")
+			.withDefault(x)
+			.run();
+
+		return x;
+	}
+
+	/**
+	 * Instantiates the method execution statistics store for this REST resource.
+	 *
+	 * @param resource The REST resource object.
+	 * @param beanFactory The bean factory to use for retrieving and creating beans.
+	 * @param thrownStore The thrown exception stats store.
+	 * @return The stack trace store for this REST resource.
+	 * @throws Exception If stack trace store could not be instantiated.
+	 */
+	protected MethodExecStoreBuilder createMethodExecStoreBuilder(Object resource, BeanFactory beanFactory, ThrownStore thrownStore) throws Exception {
+
+		MethodExecStoreBuilder x = MethodExecStore
+			.create()
+			.thrownStore(thrownStore)
+			.beanFactory(beanFactory);
+
+		x = BeanFactory
+			.of(beanFactory, resource)
+			.addBean(MethodExecStoreBuilder.class, x)
+			.beanCreateMethodFinder(MethodExecStoreBuilder.class, resource)
+			.find("createMethodExecStore")
 			.withDefault(x)
 			.run();
 
@@ -5378,13 +5461,7 @@ public class RestContext extends BeanContext {
 	 * @return The cached time-stats object.
 	 */
 	protected MethodExecStats getMethodExecStats(Method m) {
-		String n = MethodInfo.of(m).getSimpleName();
-		MethodExecStats ts = methodExecStats.get(n);
-		if (ts == null) {
-			methodExecStats.putIfAbsent(n, new MethodExecStats(m));
-			ts = methodExecStats.get(n);
-		}
-		return ts;
+		return this.methodExecStore.getStats(m);
 	}
 
 	/**
@@ -5720,8 +5797,8 @@ public class RestContext extends BeanContext {
 	 * 	The stack trace database for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public StackTraceStore getStackTraceStore() {
-		return stackTraceStore;
+	public ThrownStore getThrownStore() {
+		return thrownStore;
 	}
 
 	/**
@@ -5947,7 +6024,7 @@ public class RestContext extends BeanContext {
 	 * @return A list of timing statistics ordered by average execution time descending.
 	 */
 	public List<MethodExecStats> getMethodExecStats() {
-		return methodExecStats.values().stream().sorted().collect(Collectors.toList());
+		return methodExecStore.getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(Collectors.toList());
 	}
 
 	/**

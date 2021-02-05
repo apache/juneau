@@ -20,7 +20,7 @@ import static java.util.Optional.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class FluentIntegerAssertion_Test {
+public class IntegerAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
@@ -96,6 +96,8 @@ public class FluentIntegerAssertion_Test {
 		assertInteger(3).isBetween(1,3);
 		assertThrown(()->assertInteger(2).isBetween(1,1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
 		assertThrown(()->assertInteger(2).isBetween(3,3)).is("Value was not greater than or equals to expected.\n\tExpect=[3]\n\tActual=[2]");
+
+		assertInteger(2).isNot("2");
 	}
 
 	@Test

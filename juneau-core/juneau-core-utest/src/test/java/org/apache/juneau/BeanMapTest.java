@@ -1162,7 +1162,7 @@ public class BeanMapTest {
 		m.put("f2", 2);
 		m.put("f3", 3);
 
-		assertObject(m).jsonSorted().is("{f1:1,f2:2,f3:0}");
+		assertObject(m).asJsonSorted().is("{f1:1,f2:2,f3:0}");
 	}
 
 	public static class Q1 {}
@@ -1891,8 +1891,8 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyOrder() throws Exception {
-		assertObject(new V2()).json().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
-		assertObject(new V3()).json().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
+		assertObject(new V2()).asJson().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
+		assertObject(new V3()).asJson().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
 
 	public static class V {
@@ -1938,8 +1938,8 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanMethodOrder() throws Exception {
-		assertObject(new W2()).jsonSorted().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
-		assertObject(new W3()).jsonSorted().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
+		assertObject(new W2()).asJsonSorted().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
+		assertObject(new W3()).asJsonSorted().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
 
 	public static class W {
@@ -2076,7 +2076,7 @@ public class BeanMapTest {
 		BeanMap<AA> bm = BeanContext.DEFAULT.createSession().toBeanMap(aa);
 
 		bm.put("a", AList.of("x"));
-		assertObject(aa.a).json().is("['x']");
+		assertObject(aa.a).asJson().is("['x']");
 	}
 
 	public static class AA {

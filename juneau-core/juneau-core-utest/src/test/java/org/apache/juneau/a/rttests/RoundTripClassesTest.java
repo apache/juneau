@@ -40,14 +40,14 @@ public class RoundTripClassesTest extends RoundTripTest {
 
 		o = new Class[]{String.class};
 		o = roundTrip(o);
-		assertObject(o).json().is("['java.lang.String']");
+		assertObject(o).asJson().is("['java.lang.String']");
 
 		o = AList.of(String.class, Integer.class);
 		o = roundTrip(o);
-		assertObject(o).json().is("['java.lang.String','java.lang.Integer']");
+		assertObject(o).asJson().is("['java.lang.String','java.lang.Integer']");
 
 		o = AMap.of(String.class,String.class);
 		o = roundTrip(o);
-		assertObject(o).json().is("{'java.lang.String':'java.lang.String'}");
+		assertObject(o).asJson().is("{'java.lang.String':'java.lang.String'}");
 	}
 }

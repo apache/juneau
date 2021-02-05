@@ -33,7 +33,7 @@ public class IgnoredClassesTest {
 		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 		// Files should be rendered as strings.
 		File f = new File("C:/temp");
-		assertObject(f).json().is("'C:\\\\temp'");
+		assertObject(f).asJson().is("'C:\\\\temp'");
 	}
 
 	//====================================================================================================

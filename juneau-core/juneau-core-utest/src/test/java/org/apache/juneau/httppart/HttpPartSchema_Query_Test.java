@@ -97,7 +97,7 @@ public class HttpPartSchema_Query_Test {
 		assertTrue(s.isUniqueItems());
 		assertTrue(s.isRequired());
 		assertTrue(s.isSkipIfEmpty());
-		assertObject(s.getEnum()).json().is("['e1','e2','e3']");
+		assertObject(s.getEnum()).asJson().is("['e1','e2','e3']");
 		assertEquals("c1\nc2", s.getDefault());
 	}
 
@@ -154,7 +154,7 @@ public class HttpPartSchema_Query_Test {
 		assertTrue(s.isUniqueItems());
 		assertTrue(s.isRequired());
 		assertTrue(s.isSkipIfEmpty());
-		assertObject(s.getEnum()).json().is("['e1','e2','e3']");
+		assertObject(s.getEnum()).asJson().is("['e1','e2','e3']");
 		assertEquals("c1\nc2", s.getDefault());
 	}
 
@@ -211,7 +211,7 @@ public class HttpPartSchema_Query_Test {
 		assertFalse(s.isUniqueItems());
 		assertFalse(s.isRequired());
 		assertFalse(s.isSkipIfEmpty());
-		assertObject(s.getEnum()).json().is("['e4','e5','e6']");
+		assertObject(s.getEnum()).asJson().is("['e4','e5','e6']");
 		assertEquals("c3\nc4", s.getDefault());
 	}
 
@@ -312,7 +312,7 @@ public class HttpPartSchema_Query_Test {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e1','e2']");
+		assertObject(items.getEnum()).asJson().is("['e1','e2']");
 		assertEquals("c1\nc2", items.getDefault());
 
 		items = items.getItems();
@@ -330,7 +330,7 @@ public class HttpPartSchema_Query_Test {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e3','e4']");
+		assertObject(items.getEnum()).asJson().is("['e3','e4']");
 		assertEquals("c3\nc4", items.getDefault());
 
 		items = items.getItems();
@@ -348,7 +348,7 @@ public class HttpPartSchema_Query_Test {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e5','e6']");
+		assertObject(items.getEnum()).asJson().is("['e5','e6']");
 		assertEquals("c5\nc6", items.getDefault());
 
 		items = items.getItems();
@@ -366,7 +366,7 @@ public class HttpPartSchema_Query_Test {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e7','e8']");
+		assertObject(items.getEnum()).asJson().is("['e7','e8']");
 		assertEquals("c7\nc8", items.getDefault());
 	}
 

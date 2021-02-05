@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 
@@ -48,6 +49,8 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public FluentArrayAssertion(Assertion creator, Object contents, R returns) {
 		super(creator, contents, returns);
+		if (contents != null && ! contents.getClass().isArray())
+			throw new BasicAssertionError("Object was not an array.  Actual=''{0}''", contents.getClass());
 		this.value = contents;
 	}
 
@@ -103,7 +106,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 		for (int i = 0; i < Array.getLength(this.value); i++)
 			if (eq(Array.get(this.value, i), value))
 				return returns();
-		throw error("Array did not contain expected value.\nContents: {0}\nExpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+		throw error("Array did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", SimpleJson.DEFAULT.toString(this.value), value);
 	}
 
 	/**
@@ -117,7 +120,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		for (int i = 0; i < Array.getLength(this.value); i++)
 			if (eq(Array.get(this.value, i), value))
-				throw error("Array contain unexpected value.\nContents: {0}\nUnexpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+				throw error("Array contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", SimpleJson.DEFAULT.toString(this.value), value);
 		return returns();
 	}
 

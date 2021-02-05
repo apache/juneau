@@ -43,7 +43,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 	public void simple() throws Exception {
 		A a = A.create().f1(1).build();
 		a = roundTrip(a, A.class);
-		assertObject(a).json().is("{f1:1}");
+		assertObject(a).asJson().is("{f1:1}");
 	}
 
 	public static class A {
@@ -80,7 +80,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 	public void simple_usingConfig() throws Exception {
 		Ac a = Ac.create().f1(1).build();
 		a = roundTrip(a, Ac.class);
-		assertObject(a).json().is("{f1:1}");
+		assertObject(a).asJson().is("{f1:1}");
 	}
 
 	@Bean(on="Dummy1", findFluentSetters=true)
@@ -125,7 +125,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 	public void beanPropertyBuilder_simple() throws Exception {
 		A2 a = A2.create().f1(A.create().f1(1).build()).build();
 		a = roundTrip(a, A2.class);
-		assertObject(a).json().is("{f1:{f1:1}}");
+		assertObject(a).asJson().is("{f1:{f1:1}}");
 	}
 
 	public static class A2 {
@@ -180,7 +180,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 			.f9(singletonMap("foo", singletonList(new A[]{A.create().f1(9).build()})))
 			.build();
 		a = roundTrip(a, A3.class);
-		assertObject(a).json().is("{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}");
+		assertObject(a).asJson().is("{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}");
 	}
 
 	@Bean(sort=true)

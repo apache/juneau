@@ -45,7 +45,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public void testBasic() throws Exception {
 		A t = new A().init();
 		t = roundTrip(t);
-		assertObject(t).json().is("{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}");
+		assertObject(t).asJson().is("{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}");
 	}
 
 	public static class A {
@@ -131,7 +131,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			assertTrue(toString(r).contains("X-2"));
 		}
 		t = roundTrip(t);
-		assertObject(t).json().is("{b1:'X1',b2:'X-2'}");
+		assertObject(t).asJson().is("{b1:'X1',b2:'X-2'}");
 	}
 
 	public static class B {
@@ -184,7 +184,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public void testOrdering() throws Exception {
 		C t = new C().init();
 		t = roundTrip(t);
-		assertObject(t).json().is("{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}");
+		assertObject(t).asJson().is("{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}");
 	}
 
 	public static class C {

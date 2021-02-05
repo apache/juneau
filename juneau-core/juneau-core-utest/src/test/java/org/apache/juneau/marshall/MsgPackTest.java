@@ -52,6 +52,6 @@ public class MsgPackTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read(fromHex("81A3666F6FA3626172"), Map.class, String.class, String.class);
-		assertObject(o).json().is("{foo:'bar'}");
+		assertObject(o).asJson().is("{foo:'bar'}");
 	}
 }

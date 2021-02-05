@@ -12,23 +12,25 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
+import static java.util.Optional.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.utils.*;
 
 /**
- * Basic timing information.
+ * Method execution statistics.
  *
  * Keeps track of number of starts/finishes on tasks and keeps an average run time.
  */
-@Bean(properties="method,runs,running,errors,minTime,maxTime,avgTime,totalTime,exceptions")
-public class MethodExecStats implements Comparable<MethodExecStats> {
+public class MethodExecStats {
 
-	private String method;
+	private final long guid;
+	private final Method method;
+	private final ThrownStore thrownStore;
+
 	private volatile int minTime = -1, maxTime;
 
 	private AtomicInteger
@@ -39,54 +41,75 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	private AtomicLong
 		totalTime = new AtomicLong();
 
-	private ExceptionStore stackTraceDb;
-
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param method Arbitrary label.  Should be kept to less than 50 characters.
-	 * @param stackTraceStopClass Don't calculate stack traces when this class is encountered.
+	 * @return A new builder for this object.
 	 */
-	public MethodExecStats(Method method, Class<?> stackTraceStopClass) {
-		this.method = method.getDeclaringClass().getSimpleName() + "." + method.getName();
-		this.stackTraceDb = new ExceptionStore(-1, stackTraceStopClass);
+	public static MethodExecStatsBuilder create() {
+		return new MethodExecStatsBuilder();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param method Arbitrary label.  Should be kept to less than 50 characters.
+	 * @param builder The builder for this object.
 	 */
-	public MethodExecStats(Method method) {
-		this(method, MethodInvoker.class);
+	public MethodExecStats(MethodExecStatsBuilder builder) {
+		this.guid = new Random().nextLong();
+		this.method = builder.method;
+		this.thrownStore = ofNullable(builder.thrownStore).orElseGet(ThrownStore::new);
 	}
 
 	/**
 	 * Call when task is started.
+	 *
+	 * @return This object (for method chaining).
 	 */
-	public void started() {
+	public MethodExecStats started() {
 		starts.incrementAndGet();
+		return this;
 	}
 
 	/**
 	 * Call when task is finished.
+	 *
 	 * @param nanoTime The execution time of the task in nanoseconds.
+	 * @return This object (for method chaining).
 	 */
-	public void finished(long nanoTime) {
+	public MethodExecStats finished(long nanoTime) {
 		finishes.incrementAndGet();
 		int milliTime = (int)(nanoTime/1_000_000);
 		totalTime.addAndGet(nanoTime);
 		minTime = minTime == -1 ? milliTime : Math.min(minTime, milliTime);
 		maxTime = Math.max(maxTime, milliTime);
+		return this;
 	}
 
 	/**
 	 * Call when an error occurs.
+	 *
 	 * @param e The exception thrown.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
 	 */
-	public void error(Throwable e) {
+	public MethodExecStats error(Throwable e) {
 		errors.incrementAndGet();
-		stackTraceDb.add(e);
+		thrownStore.add(e);
+		return this;
+	}
+
+	/**
+	 * Returns a globally unique ID for this object.
+	 *
+	 * <p>
+	 * A random long generated during the creation of this object.
+	 * Allows this object to be differentiated from other similar objects in multi-node environments so that
+	 * statistics can be reliably stored in a centralized location.
+	 *
+	 * @return The globally unique ID for this object.
+	 */
+	public long getGuid() {
+		return guid;
 	}
 
 	/**
@@ -94,7 +117,7 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	 *
 	 * @return The method name of these stats.
 	 */
-	public String getMethod() {
+	public Method getMethod() {
 		return method;
 	}
 
@@ -149,7 +172,7 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	 * @return The average execution time in milliseconds.
 	 */
 	public int getAvgTime() {
-		int runs = getRuns();
+		int runs = finishes.get();
 		return runs == 0 ? 0 : (int)(getTotalTime() / runs);
 	}
 
@@ -167,17 +190,12 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	 *
 	 * @return Information on all stack traces of all exceptions encountered.
 	 */
-	public List<ExceptionStats> getExceptions() {
-		return stackTraceDb.getClonedStats();
+	public ThrownStore getThrownStore() {
+		return thrownStore;
 	}
 
 	@Override /* Object */
 	public String toString() {
 		return SimpleJson.DEFAULT.toString(this);
-	}
-
-	@Override /* Comparable */
-	public int compareTo(MethodExecStats o) {
-		return Long.compare(o.getTotalTime(), getTotalTime());
 	}
 }

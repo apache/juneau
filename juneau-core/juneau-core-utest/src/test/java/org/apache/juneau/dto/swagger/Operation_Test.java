@@ -38,25 +38,25 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.tags(ASet.of("foo","bar"));
-		assertObject(t.tags()).isType(Set.class).json().is("['foo','bar']");
+		assertObject(t.tags()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t.tags("bar","baz");
-		assertObject(t.tags()).isType(Set.class).json().is("['bar','baz']");
+		assertObject(t.tags()).isType(Set.class).asJson().is("['bar','baz']");
 
 		t.tags(ASet.of());
-		assertObject(t.tags()).isType(Set.class).json().is("[]");
+		assertObject(t.tags()).isType(Set.class).asJson().is("[]");
 
 		t.tags((Collection<String>)null);
 		assertObject(t.tags()).isNull();
 
 		t.addTags(ASet.of("foo","bar"));
-		assertObject(t.tags()).isType(Set.class).json().is("['foo','bar']");
+		assertObject(t.tags()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t.addTags(ASet.of());
-		assertObject(t.tags()).isType(Set.class).json().is("['foo','bar']");;
+		assertObject(t.tags()).isType(Set.class).asJson().is("['foo','bar']");;
 
 		t.addTags(null);
-		assertObject(t.tags()).isType(Set.class).json().is("['foo','bar']");
+		assertObject(t.tags()).isType(Set.class).asJson().is("['foo','bar']");
 
 	}
 
@@ -96,10 +96,10 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).json().is("{url:'foo'}");
+		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
 
 		t.externalDocs("{url:'bar'}");
-		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).json().is("{url:'bar'}");
+		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'bar'}");
 
 		t.externalDocs((String)null);
 		assertObject(t.externalDocs()).isNull();
@@ -127,22 +127,22 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.consumes(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.consumes()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.consumes(ASet.of());
-		assertObject(t.consumes()).isType(Set.class).json().is("[]");
+		assertObject(t.consumes()).isType(Set.class).asJson().is("[]");
 
 		t.consumes((Collection<MediaType>)null);
 		assertObject(t.consumes()).isNull();
 
 		t.addConsumes(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.consumes()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addConsumes(ASet.of());
-		assertObject(t.consumes()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addConsumes(null);
-		assertObject(t.consumes()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 	}
 
 	/**
@@ -153,22 +153,22 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.produces(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.produces()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.produces(ASet.of());
-		assertObject(t.produces()).isType(Set.class).json().is("[]");
+		assertObject(t.produces()).isType(Set.class).asJson().is("[]");
 
 		t.produces((Collection<MediaType>)null);
 		assertObject(t.produces()).isNull();
 
 		t.addProduces(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.produces()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addProduces(ASet.of());
-		assertObject(t.produces()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addProduces(null);
-		assertObject(t.produces()).isType(Set.class).json().is("['text/foo']");
+		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 	}
 
 	/**
@@ -179,22 +179,22 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.parameters(ASet.of(parameterInfo("foo","bar")));
-		assertObject(t.parameters()).isType(List.class).json().is("[{'in':'foo',name:'bar'}]");
+		assertObject(t.parameters()).isType(List.class).asJson().is("[{'in':'foo',name:'bar'}]");
 
 		t.parameters(ASet.of());
-		assertObject(t.parameters()).isType(List.class).json().is("[]");
+		assertObject(t.parameters()).isType(List.class).asJson().is("[]");
 
 		t.parameters((Collection<ParameterInfo>)null);
 		assertObject(t.parameters()).isNull();
 
 		t.addParameters(ASet.of(parameterInfo("foo","bar")));
-		assertObject(t.parameters()).isType(List.class).json().is("[{'in':'foo',name:'bar'}]");;
+		assertObject(t.parameters()).isType(List.class).asJson().is("[{'in':'foo',name:'bar'}]");;
 
 		t.addParameters(ASet.of());
-		assertObject(t.parameters()).isType(List.class).json().is("[{'in':'foo',name:'bar'}]");
+		assertObject(t.parameters()).isType(List.class).asJson().is("[{'in':'foo',name:'bar'}]");
 
 		t.addParameters(null);
-		assertObject(t.parameters()).isType(List.class).json().is("[{'in':'foo',name:'bar'}]");
+		assertObject(t.parameters()).isType(List.class).asJson().is("[{'in':'foo',name:'bar'}]");
 	}
 
 	/**
@@ -205,22 +205,22 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.responses(AMap.of("123",responseInfo("bar")));
-		assertObject(t.responses()).isType(Map.class).json().is("{'123':{description:'bar'}}");
+		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.responses(AMap.create());
-		assertObject(t.responses()).isType(Map.class).json().is("{}");
+		assertObject(t.responses()).isType(Map.class).asJson().is("{}");
 
 		t.responses((Map<String,ResponseInfo>)null);
 		assertObject(t.responses()).isNull();
 
 		t.addResponses(AMap.of("123",responseInfo("bar")));
-		assertObject(t.responses()).isType(Map.class).json().is("{'123':{description:'bar'}}");
+		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.addResponses(AMap.create());
-		assertObject(t.responses()).isType(Map.class).json().is("{'123':{description:'bar'}}");
+		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.addResponses(null);
-		assertObject(t.responses()).isType(Map.class).json().is("{'123':{description:'bar'}}");
+		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 	}
 
 	/**
@@ -231,22 +231,22 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.schemes(ASet.of("foo"));
-		assertObject(t.schemes()).isType(Set.class).json().is("['foo']");
+		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo']");
 
 		t.schemes(ASet.of());
-		assertObject(t.schemes()).isType(Set.class).json().is("[]");
+		assertObject(t.schemes()).isType(Set.class).asJson().is("[]");
 
 		t.schemes((Set<String>)null);
 		assertObject(t.schemes()).isNull();
 
 		t.addSchemes(ASet.of("foo"));
-		assertObject(t.schemes()).isType(Set.class).json().is("['foo']");
+		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo']");
 
 		t.addSchemes(ASet.of());
-		assertObject(t.schemes()).isType(Set.class).json().is("['foo']");
+		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo']");
 
 		t.addSchemes(null);
-		assertObject(t.schemes()).isType(Set.class).json().is("['foo']");
+		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo']");
 	}
 
 	/**
@@ -257,22 +257,22 @@ public class Operation_Test {
 		Operation t = new Operation();
 
 		t.security(AList.of(AMap.of("foo",AList.of("bar"))));
-		assertObject(t.security()).isType(List.class).json().is("[{foo:['bar']}]");
+		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.security(AList.of());
-		assertObject(t.security()).isType(List.class).json().is("[]");
+		assertObject(t.security()).isType(List.class).asJson().is("[]");
 
 		t.security((List<Map<String,List<String>>>)null);
 		assertObject(t.security()).isNull();
 
 		t.addSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
-		assertObject(t.security()).isType(List.class).json().is("[{foo:['bar']}]");
+		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.addSecurity(ASet.of());
-		assertObject(t.security()).isType(List.class).json().is("[{foo:['bar']}]");
+		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.addSecurity(null);
-		assertObject(t.security()).isType(List.class).json().is("[{foo:['bar']}]");
+		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class Operation_Test {
 			.set("tags", ASet.of("k"))
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
 		t
 			.set("consumes", "['text/a']")
@@ -331,7 +331,7 @@ public class Operation_Test {
 			.set("tags", "['k']")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
 		t
 			.set("consumes", new StringBuilder("['text/a']"))
@@ -348,7 +348,7 @@ public class Operation_Test {
 			.set("tags", new StringBuilder("['k']"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
 		assertString(t.get("consumes", String.class)).is("['text/a']");
 		assertString(t.get("deprecated", String.class)).is("true");
@@ -389,7 +389,7 @@ public class Operation_Test {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Operation.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, Operation.class)).asJson().is(s);
 	}
 
 	@Test
@@ -398,7 +398,7 @@ public class Operation_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("consumes", ASet.of(MediaType.of("text/a")))
@@ -416,14 +416,14 @@ public class Operation_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		Operation t = new Operation();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("consumes", ASet.of(MediaType.of("text/a")))
@@ -440,7 +440,7 @@ public class Operation_Test {
 			.set("tags", ASet.of("k"))
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is(
+		assertObject(t.keySet()).asJson().is(
 			"['consumes','deprecated','description','externalDocs','operationId','parameters','produces','responses','schemes','security','summary','tags','$ref']"
 		);
 	}

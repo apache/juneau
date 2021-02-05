@@ -31,12 +31,12 @@ public class MediaType_Test {
 		Set<MediaType> x = new TreeSet<>();
 		x.add(MediaType.of("text/foo"));
 		x.add(MediaType.of("text/bar"));
-		assertObject(x).json().is("['text/bar','text/foo']");
+		assertObject(x).asJson().is("['text/bar','text/foo']");
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
 		assertString(x2.getType()).isEmpty();
 		assertString(x2.getSubType()).is("*");
-		assertObject(x2.getSubTypes()).json().is("['*']");
+		assertObject(x2.getSubTypes()).asJson().is("['*']");
 		assertTrue(x2.isMetaSubtype());
 
 		MediaType x3 = MediaType.of("text/foo+bar");

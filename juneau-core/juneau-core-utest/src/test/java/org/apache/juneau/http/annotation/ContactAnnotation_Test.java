@@ -42,7 +42,7 @@ public class ContactAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "email:'email',"
 				+ "name:'name',"

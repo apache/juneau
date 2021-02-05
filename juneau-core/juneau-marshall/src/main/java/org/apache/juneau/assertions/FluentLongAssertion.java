@@ -61,7 +61,8 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<R> {
 	 *
 	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> integer() {
+	@Override
+	public FluentIntegerAssertion<R> asInteger() {
 		return new FluentIntegerAssertion<>(this, value == null ? null : value.intValue(), returns());
 	}
 

@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.time.*;
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
@@ -69,7 +72,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).instanceOf(MyBean.<jk>class</jk>);
+	 * 	<jsm>assertObject<jsm>(myPojo).isType(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param parent The value to check against.
@@ -90,13 +93,13 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).serialized(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object>&lt;foo>bar&lt;/foo>&lt;baz>qux&lt;/baz>&lt;/object>"</js>);
+	 * 	<jsm>assertObject<jsm>(myPojo).asString(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object>&lt;foo>bar&lt;/foo>&lt;baz>qux&lt;/baz>&lt;/object>"</js>);
 	 * </p>
 	 *
 	 * @param ws The serializer to use to convert the object to text.
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> serialized(WriterSerializer ws) {
+	public FluentStringAssertion<R> asString(WriterSerializer ws) {
 		try {
 			String s = ws.serialize(this.value);
 			return new FluentStringAssertion<>(this, s, returns());
@@ -111,12 +114,12 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).string().is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject<jsm>(myPojo).asString().is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> string() {
+	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(this, value == null ? null : value.toString(), returns());
 	}
 
@@ -126,13 +129,13 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).string(<jv>x</jv>-><jv>x</jv>.toString()).is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject<jsm>(myPojo).asString(<jv>x</jv>-><jv>x</jv>.toString()).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param function The conversion function.
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> string(Function<Object,String> function) {
+	public FluentStringAssertion<R> asString(Function<Object,String> function) {
 		return new FluentStringAssertion<>(this, function.apply(value), returns());
 	}
 
@@ -142,7 +145,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).string(MyBean.<jk>class</jk>,<jv>x</jv>-><jv>x</jv>.myBeanMethod()).is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject<jsm>(myPojo).asString(MyBean.<jk>class</jk>,<jv>x</jv>-><jv>x</jv>.myBeanMethod()).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param c The class of the object being converted.
@@ -151,7 +154,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> FluentStringAssertion<R> string(Class<T> c, Function<T,String> function) {
+	public <T> FluentStringAssertion<R> asString(Class<T> c, Function<T,String> function) {
 		return new FluentStringAssertion<>(this, function.apply((T)value), returns());
 	}
 
@@ -161,13 +164,13 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).json().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * 	<jsm>assertObject<jsm>(myPojo).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> json() {
-		return serialized(JSON);
+	public FluentStringAssertion<R> asJson() {
+		return asString(JSON);
 	}
 
 	/**
@@ -176,13 +179,13 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).jsonSorted().is(<js>"{baz:'qux',foo:'bar'}"</js>);
+	 * 	<jsm>assertObject<jsm>(myPojo).asJsonSorted().is(<js>"{baz:'qux',foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> jsonSorted() {
-		return serialized(JSON_SORTED);
+	public FluentStringAssertion<R> asJsonSorted() {
+		return asString(JSON_SORTED);
 	}
 
 	/**
@@ -192,8 +195,8 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R sameAs(Object o) throws AssertionError {
-		return sameAsSerialized(o, JSON);
+	public R isSameJsonAs(Object o) throws AssertionError {
+		return isSameSerializedAs(o, JSON);
 	}
 
 	/**
@@ -206,8 +209,8 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R sameAsSorted(Object o) {
-		return sameAsSerialized(o, JSON_SORTED);
+	public R isSameSortedAs(Object o) {
+		return isSameSerializedAs(o, JSON_SORTED);
 	}
 
 	/**
@@ -218,7 +221,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R sameAsSerialized(Object o, WriterSerializer serializer) {
+	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
 		try {
 			String s1 = serializer.serialize(this.value);
 			String s2 = serializer.serialize(o);
@@ -273,6 +276,19 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		if (this.value == null || this.value.equals(equivalent(value)))
 			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
+	}
+
+	/**
+	 * Asserts that the specified object is the same object as this object.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSameObjectAs(Object value) throws AssertionError {
+		if (this.value == value)
+			return returns();
+		throw error("Not the same value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 	}
 
 	/**
@@ -413,6 +429,124 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 */
 	protected Object equivalent(Object o) {
 		return o;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T cast(Class<T> c) throws AssertionError {
+		Object o = value;
+		if (value == null || c.isInstance(value))
+			return (T)o;
+		throw new BasicAssertionError("Object was not type ''{0}''.  Actual=''{1}''", c, o.getClass());
+	}
+
+	/**
+	 * Converts this object assertion into an array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an array.
+	 */
+	public FluentArrayAssertion<R> asArray() throws AssertionError {
+		return new FluentArrayAssertion<>(this, value, returns());
+	}
+
+	/**
+	 * Converts this object assertion into a boolean assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a boolean.
+	 */
+	public FluentBooleanAssertion<R> asBoolean() {
+		return new FluentBooleanAssertion<>(this, cast(Boolean.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a byte array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a byte array.
+	 */
+	public FluentByteArrayAssertion<R> asByteArray() {
+		return new FluentByteArrayAssertion<>(this, cast(byte[].class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a collection assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a collection.
+	 */
+	public FluentCollectionAssertion<R> asCollection() {
+		return new FluentCollectionAssertion<>(this, cast(Collection.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a comparable object assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an instance of {@link Comparable}.
+	 */
+	public FluentComparableAssertion<R> asComparable() {
+		return new FluentComparableAssertion<>(this, cast(Comparable.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a date assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a date.
+	 */
+	public FluentDateAssertion<R> asDate() {
+		return new FluentDateAssertion<>(this, cast(Date.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into an integer assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an integer.
+	 */
+	public FluentIntegerAssertion<R> asInteger() {
+		return new FluentIntegerAssertion<>(this, cast(Integer.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a list assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a list.
+	 */
+	public FluentListAssertion<R> asList() {
+		return new FluentListAssertion<>(this, cast(List.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a long assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a long.
+	 */
+	public FluentLongAssertion<R> asLong() {
+		return new FluentLongAssertion<>(this, cast(Long.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a map assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a map.
+	 */
+	public FluentMapAssertion<R> asMap() {
+		return new FluentMapAssertion<>(this, cast(Map.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a zoned-datetime assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a zoned-datetime.
+	 */
+	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
+		return new FluentZonedDateTimeAssertion<>(this, cast(ZonedDateTime.class), returns());
 	}
 
 	// <FluentSetters>

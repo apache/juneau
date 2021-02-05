@@ -86,7 +86,7 @@ public class HttpPartSchema_Path_Test {
 		assertEquals(2, s.getMinLength().longValue());
 		assertTrue(s.isExclusiveMaximum());
 		assertTrue(s.isExclusiveMinimum());
-		assertObject(s.getEnum()).json().is("['e1','e2','e3']");
+		assertObject(s.getEnum()).asJson().is("['e1','e2','e3']");
 	}
 
 	public static class A03 {
@@ -131,7 +131,7 @@ public class HttpPartSchema_Path_Test {
 		assertEquals(2, s.getMinLength().longValue());
 		assertTrue(s.isExclusiveMaximum());
 		assertTrue(s.isExclusiveMinimum());
-		assertObject(s.getEnum()).json().is("['e1','e2','e3']");
+		assertObject(s.getEnum()).asJson().is("['e1','e2','e3']");
 	}
 
 	public static class A04 {
@@ -176,7 +176,7 @@ public class HttpPartSchema_Path_Test {
 		assertEquals(6, s.getMinLength().longValue());
 		assertFalse(s.isExclusiveMaximum());
 		assertFalse(s.isExclusiveMinimum());
-		assertObject(s.getEnum()).json().is("['e4','e5','e6']");
+		assertObject(s.getEnum()).asJson().is("['e4','e5','e6']");
 	}
 
 	@Path(
@@ -276,7 +276,7 @@ public class HttpPartSchema_Path_Test {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e1','e2']");
+		assertObject(items.getEnum()).asJson().is("['e1','e2']");
 		assertEquals("c1\nc2", items.getDefault());
 
 		items = items.getItems();
@@ -294,7 +294,7 @@ public class HttpPartSchema_Path_Test {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e3','e4']");
+		assertObject(items.getEnum()).asJson().is("['e3','e4']");
 		assertEquals("c3\nc4", items.getDefault());
 
 		items = items.getItems();
@@ -312,7 +312,7 @@ public class HttpPartSchema_Path_Test {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e5','e6']");
+		assertObject(items.getEnum()).asJson().is("['e5','e6']");
 		assertEquals("c5\nc6", items.getDefault());
 
 		items = items.getItems();
@@ -330,7 +330,7 @@ public class HttpPartSchema_Path_Test {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e7','e8']");
+		assertObject(items.getEnum()).asJson().is("['e7','e8']");
 		assertEquals("c7\nc8", items.getDefault());
 	}
 

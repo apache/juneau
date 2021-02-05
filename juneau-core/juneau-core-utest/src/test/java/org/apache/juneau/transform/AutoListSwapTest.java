@@ -71,12 +71,12 @@ public class AutoListSwapTest {
 
 	@Test
 	public void a01_swap_toList() throws Exception {
-		assertObject(find(A01.class).swap(null, new A01())).json().is("['foo']");
+		assertObject(find(A01.class).swap(null, new A01())).asJson().is("['foo']");
 	}
 
 	@Test
 	public void a02_swap_toOList() throws Exception {
-		assertObject(find(A02.class).swap(null, new A02())).json().is("['foo']");
+		assertObject(find(A02.class).swap(null, new A02())).asJson().is("['foo']");
 	}
 
 	@Test(expected = SerializeException.class)
@@ -98,7 +98,7 @@ public class AutoListSwapTest {
 			return STRINGLIST;
 		}
 		public static B01 fromList(List<String> o) {
-			assertObject(o).json().is("['foo']");
+			assertObject(o).asJson().is("['foo']");
 			return new B01();
 		}
 	}
@@ -107,7 +107,7 @@ public class AutoListSwapTest {
 			return OLIST;
 		}
 		public static B02 fromOList(OList o) {
-			assertObject(o).json().is("['foo']");
+			assertObject(o).asJson().is("['foo']");
 			return new B02();
 		}
 	}
@@ -116,7 +116,7 @@ public class AutoListSwapTest {
 			return STRINGLIST;
 		}
 		public static B03 create(List<String> o) {
-			assertObject(o).json().is("['foo']");
+			assertObject(o).asJson().is("['foo']");
 			return new B03();
 		}
 	}
@@ -153,7 +153,7 @@ public class AutoListSwapTest {
 	public static class C01 {
 		public C01() {}
 		public C01(List<String> o) {
-			assertObject(o).json().is("['foo']");
+			assertObject(o).asJson().is("['foo']");
 		}
 		public List<String> toList() {
 			return STRINGLIST;

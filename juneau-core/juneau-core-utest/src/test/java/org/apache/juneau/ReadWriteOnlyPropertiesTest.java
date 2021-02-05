@@ -48,7 +48,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void a01_beanpOnPrimitiveFields_serializer() throws Exception {
-		assertObject(A.create()).json().is("{f1:1}");
+		assertObject(A.create()).asJson().is("{f1:1}");
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b01_beanAnnotation_serializer() throws Exception {
-		assertObject(B.create()).json().is("{f1:1}");
+		assertObject(B.create()).asJson().is("{f1:1}");
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b01_beanAnnotation_serializer_usingConfig() throws Exception {
-		assertObject(B.create()).json().is("{f1:1}");
+		assertObject(B.create()).asJson().is("{f1:1}");
 	}
 
 	@Test
@@ -237,7 +237,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d01_beanAnnotation_bproAll_serializer() throws Exception {
-		assertObject(D.create()).json().is("{f1:1,f2:2}");
+		assertObject(D.create()).asJson().is("{f1:1,f2:2}");
 	}
 
 	@Test
@@ -264,7 +264,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d03_beanAnnotation_bproAll_serializer_usingConfig() throws Exception {
-		assertObject(Dc.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DcConfig.class).build()).is("{f1:1,f2:2}");
+		assertObject(Dc.create()).asString(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DcConfig.class).build()).is("{f1:1,f2:2}");
 	}
 
 	@Test
@@ -293,7 +293,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e01_beanAnnotation_bpwoAll_serializer() throws Exception {
-		assertObject(E.create()).json().is("{}");
+		assertObject(E.create()).asJson().is("{}");
 	}
 
 	@Test
@@ -320,7 +320,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() throws Exception {
-		assertObject(E.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(EcConfig.class).build()).is("{}");
+		assertObject(E.create()).asString(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(EcConfig.class).build()).is("{}");
 	}
 
 	@Test

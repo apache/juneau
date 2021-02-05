@@ -75,7 +75,7 @@ public class BasicStringRangeArrayHeader_Test {
 
 	@Test
 	public void a03_getRanges() throws Exception {
-		assertObject(of(HEADER,"foo,bar").getRanges()).json().is("['foo','bar']");
+		assertObject(of(HEADER,"foo,bar").getRanges()).asJson().is("['foo','bar']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

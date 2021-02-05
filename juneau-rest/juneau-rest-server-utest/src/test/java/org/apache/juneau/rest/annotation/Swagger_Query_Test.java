@@ -136,16 +136,16 @@ public class Swagger_Query_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","query","Q");
-		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
+		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
 
 		x = s.getParameterInfo("/b","get","query","Q");
-		assertObject(x).json().is("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","get","query","Q");
-		assertObject(x).json().is("{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","query","Q");
-		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
+		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
 	}
 
 	@Rest
@@ -247,7 +247,7 @@ public class Swagger_Query_Test {
 		org.apache.juneau.dto.swagger.Swagger s = getSwagger(E.class);
 
 		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
-		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
+		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

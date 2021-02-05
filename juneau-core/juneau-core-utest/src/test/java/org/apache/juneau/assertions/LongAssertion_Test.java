@@ -19,7 +19,7 @@ import static java.util.Optional.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class FluentLongAssertion_Test {
+public class LongAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
@@ -45,8 +45,8 @@ public class FluentLongAssertion_Test {
 		assertThrown(()->assertLong(1l).isGreaterThan(2l)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
 		assertThrown(()->assertLong(1l).isGreaterThan(1l)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
 
-		assertLong(2l).integer().isGreaterThan(1);
-		assertLong(empty()).integer().isNull();
+		assertLong(2l).asInteger().isGreaterThan(1);
+		assertLong(empty()).asInteger().isNull();
 
 		assertThrown(()->assertLong(empty()).isGt(1l)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isGt(null)).is("Parameter 'value' cannot be null.");
@@ -98,6 +98,8 @@ public class FluentLongAssertion_Test {
 		assertLong(3l).isBetween(1,3);
 		assertThrown(()->assertLong(2l).isBetween(1,1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
 		assertThrown(()->assertLong(2l).isBetween(3,3)).is("Value was not greater than or equals to expected.\n\tExpect=[3]\n\tActual=[2]");
+
+		assertLong(2l).isNot("2");
 	}
 
 	@Test

@@ -75,10 +75,10 @@ public class Info_Test {
 		Info t = new Info();
 
 		t.contact(contact("foo"));
-		assertObject(t.contact()).json().is("{name:'foo'}");
+		assertObject(t.contact()).asJson().is("{name:'foo'}");
 
 		t.contact("{name:'foo'}");
-		assertObject(t.contact()).isType(Contact.class).json().is("{name:'foo'}");
+		assertObject(t.contact()).isType(Contact.class).asJson().is("{name:'foo'}");
 
 		t.contact((String)null);
 		assertObject(t.contact()).isNull();
@@ -92,10 +92,10 @@ public class Info_Test {
 		Info t = new Info();
 
 		t.license(license("foo"));
-		assertObject(t.license()).isType(License.class).json().is("{name:'foo'}");
+		assertObject(t.license()).isType(License.class).asJson().is("{name:'foo'}");
 
 		t.license("{name:'foo'}");
-		assertObject(t.license()).isType(License.class).json().is("{name:'foo'}");
+		assertObject(t.license()).isType(License.class).asJson().is("{name:'foo'}");
 
 		t.license((String)null);
 		assertObject(t.license()).isNull();
@@ -131,7 +131,7 @@ public class Info_Test {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		t
 			.set("contact", "{name:'a'}")
@@ -142,7 +142,7 @@ public class Info_Test {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		t
 			.set("contact", new StringBuilder("{name:'a'}"))
@@ -153,7 +153,7 @@ public class Info_Test {
 			.set("version", new StringBuilder("f"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		assertString(t.get("contact", String.class)).is("{name:'a'}");
 		assertString(t.get("description", String.class)).is("b");
@@ -177,7 +177,7 @@ public class Info_Test {
 		assertObject(t.get("foo", Object.class)).isNull();
 
 		String s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Info.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, Info.class)).asJson().is(s);
 	}
 
 	@Test
@@ -186,7 +186,7 @@ public class Info_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("contact", contact("a"))
@@ -198,14 +198,14 @@ public class Info_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		Info t = new Info();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("contact", contact("a"))
@@ -216,6 +216,6 @@ public class Info_Test {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is("['contact','description','license','termsOfService','title','version','$ref']");
+		assertObject(t.keySet()).asJson().is("['contact','description','license','termsOfService','title','version','$ref']");
 	}
 }

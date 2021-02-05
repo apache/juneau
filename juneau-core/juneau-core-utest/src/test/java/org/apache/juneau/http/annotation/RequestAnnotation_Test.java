@@ -47,7 +47,7 @@ public class RequestAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -92,8 +92,8 @@ public class RequestAnnotation_Test {
 		Request c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
 		Request c2 = RequestAnnotation.create("a").on("b").build();
 
-		assertObject(c1).json().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).json().contains("on:['a','b']");
+		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().contains("on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

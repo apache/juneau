@@ -55,25 +55,25 @@ public class ByteArrayAssertion_Test {
 		assertBytes(x1).item(0).doesNotExist();
 		assertBytes(x2).item(0).exists();
 
-		assertBytes(empty()).string().isNull();
-		assertBytes(x1).string().is("");
-		assertBytes(x2).string().is("ab");
-		assertThrown(()->assertBytes(x2).string().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[ab]");
+		assertBytes(empty()).asString().isNull();
+		assertBytes(x1).asString().is("");
+		assertBytes(x2).asString().is("ab");
+		assertThrown(()->assertBytes(x2).asString().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[ab]");
 
-		assertBytes(empty()).base64().isNull();
-		assertBytes(x1).base64().is("");
-		assertBytes(x2).base64().is("YWI=");
-		assertThrown(()->assertBytes(x2).base64().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[YWI=]");
+		assertBytes(empty()).asBase64().isNull();
+		assertBytes(x1).asBase64().is("");
+		assertBytes(x2).asBase64().is("YWI=");
+		assertThrown(()->assertBytes(x2).asBase64().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[YWI=]");
 
-		assertBytes(empty()).hex().isNull();
-		assertBytes(x1).hex().is("");
-		assertBytes(x2).hex().is("6162");
-		assertThrown(()->assertBytes(x2).hex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[6162]");
+		assertBytes(empty()).asHex().isNull();
+		assertBytes(x1).asHex().is("");
+		assertBytes(x2).asHex().is("6162");
+		assertThrown(()->assertBytes(x2).asHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[6162]");
 
-		assertBytes(empty()).spacedHex().isNull();
-		assertBytes(x1).spacedHex().is("");
-		assertBytes(x2).spacedHex().is("61 62");
-		assertThrown(()->assertBytes(x2).spacedHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[61 62]");
+		assertBytes(empty()).asSpacedHex().isNull();
+		assertBytes(x1).asSpacedHex().is("");
+		assertBytes(x2).asSpacedHex().is("61 62");
+		assertThrown(()->assertBytes(x2).asSpacedHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[61 62]");
 	}
 
 	@Test

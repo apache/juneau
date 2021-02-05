@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.mstat.*;
 
 /**
  * Builder class for {@link BasicRestLogger} objects.
@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
 public class RestLoggerBuilder {
 
 	Logger logger;
-	StackTraceStore stackTraceDatabase;
+	ThrownStore thrownStore;
 	List<RestLoggerRule> normalRules = AList.create(), debugRules = AList.create();
 	Enablement enabled;
 	Predicate<HttpServletRequest> enabledTest;
@@ -142,15 +142,15 @@ public class RestLoggerBuilder {
 	}
 
 	/**
-	 * Specifies the stack trace store to use for getting stack trace information (hash IDs and occurrence counts).
+	 * Specifies the thrown exception store to use for getting stack trace information (hash IDs and occurrence counts).
 	 *
 	 * @param value
 	 * 	The stack trace store.
 	 * 	<br>If <jk>null</jk>, stack trace information will not be logged.
 	 * @return This object (for method chaining).
 	 */
-	public RestLoggerBuilder stackTraceStore(StackTraceStore value) {
-		this.stackTraceDatabase = value;
+	public RestLoggerBuilder thrownStore(ThrownStore value) {
+		this.thrownStore = value;
 		return this;
 	}
 

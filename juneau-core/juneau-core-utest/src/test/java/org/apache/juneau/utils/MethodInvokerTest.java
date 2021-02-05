@@ -24,62 +24,69 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class MethodInvokerTest {
 
+	private MethodExecStore store = MethodExecStore
+		.create()
+		.thrownStore(
+			ThrownStore.create().ignoreClasses(MethodInvokerTest.class).build()
+		)
+		.build();
+
 	public static class A {
 		public int foo() { return 0; }
 		public int bar() { throw new RuntimeException("bar"); }
 		public void baz(int x) { }
 	}
 
+	private MethodInvoker create(Method m) {
+		return new MethodInvoker(m, store.getStats(m));
+	}
+
 	@Test
 	public void testBasic() throws Exception {
 		Method m = A.class.getMethod("foo");
 
-		MethodExecStats mes = new MethodExecStats(m);
-		MethodInvoker mi = new MethodInvoker(m, mes);
+		MethodInvoker mi = create(m);
 
 		A a = new A();
 		mi.invoke(a);
 		mi.invoke(a);
 		mi.invoke(a);
 
-		assertObject(mes).json().matchesSimple("{method:'A.foo',runs:3,running:0,errors:0,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[]}");
+		assertBean(mi.getStats()).fields("runs","errors").asJson().is("{runs:3,errors:0}");
 	}
 
 	@Test
 	public void testException() throws Exception {
 		Method m = A.class.getMethod("bar");
 
-		MethodExecStats mes = new MethodExecStats(m);
-		MethodInvoker mi = new MethodInvoker(m, mes);
+		MethodInvoker mi = create(m);
 
 		A a = new A();
 		assertThrown(()->mi.invoke(a)).exists();
 		assertThrown(()->mi.invoke(a)).exists();
 		assertThrown(()->mi.invoke(a)).exists();
 
-		assertObject(mes).json().matchesSimple("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
+		assertBean(mi.getStats()).fields("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
 
 	@Test
 	public void testIllegalArgument() throws Exception {
 		Method m = A.class.getMethod("baz", int.class);
 
-		MethodExecStats mes = new MethodExecStats(m);
-		MethodInvoker mi = new MethodInvoker(m, mes);
+		MethodInvoker mi = create(m);
 
 		A a = new A();
 		assertThrown(()->mi.invoke(a, "x")).exists();
 		assertThrown(()->mi.invoke(a)).exists();
 		assertThrown(()->mi.invoke(a, 1, "x")).exists();
 
-		assertObject(mes).json().matchesSimple("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
+		assertBean(mi.getStats()).fields("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
 
 	@Test
 	public void testOtherMethods() throws Exception {
 		Method m = A.class.getMethod("foo");
-		MethodExecStats mes = new MethodExecStats(m);
-		MethodInvoker mi = new MethodInvoker(m, mes);
+		MethodInvoker mi = create(m);
 
 		assertEquals(m, mi.inner().inner());
 		assertEquals("A", mi.getDeclaringClass().getSimpleName());

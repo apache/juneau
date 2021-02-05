@@ -69,15 +69,15 @@ public class EncoderGroupTest {
 
 		gb = EncoderGroup.create().append(E1.class, E2.class);
 		g = gb.build();
-		assertObject(g.getSupportedEncodings()).json().is("['E1','E2','E2a']");
+		assertObject(g.getSupportedEncodings()).asJson().is("['E1','E2','E2a']");
 
 		gb = g.builder().append(E3.class, E4.class);
 		g = gb.build();
-		assertObject(g.getSupportedEncodings()).json().is("['E3','E4','E4a','E1','E2','E2a']");
+		assertObject(g.getSupportedEncodings()).asJson().is("['E3','E4','E4a','E1','E2','E2a']");
 
 		gb = g.builder().append(E5.class);
 		g = gb.build();
-		assertObject(g.getSupportedEncodings()).json().is("['E5','E3','E4','E4a','E1','E2','E2a']");
+		assertObject(g.getSupportedEncodings()).asJson().is("['E5','E3','E4','E4a','E1','E2','E2a']");
 	}
 
 	public static class E1 extends GzipEncoder {

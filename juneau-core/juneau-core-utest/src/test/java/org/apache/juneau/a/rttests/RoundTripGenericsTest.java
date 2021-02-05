@@ -46,14 +46,14 @@ public class RoundTripGenericsTest extends RoundTripTest {
 		// During parsing, these become OMaps.
 		Pair pair = new Pair<>(new Source().init(), new Target().init());
 		pair = roundTrip(pair);
-		assertObject(pair).jsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertObject(pair).asJsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
 		assertEquals("OMap", pair.getS().getClass().getSimpleName());
 		assertEquals("OMap", pair.getT().getClass().getSimpleName());
 
 		// If you specify a concrete class, the type variables become bound and
 		// the property types correctly resolve.
 		pair = roundTrip(pair, RealPair.class);
-		assertObject(pair).jsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertObject(pair).asJsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
 		assertEquals("Source", pair.getS().getClass().getSimpleName());
 		assertEquals("Target", pair.getT().getClass().getSimpleName());
 	}

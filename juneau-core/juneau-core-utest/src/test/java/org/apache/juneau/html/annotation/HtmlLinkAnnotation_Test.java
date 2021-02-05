@@ -42,7 +42,7 @@ public class HtmlLinkAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "nameProperty:'a',"
 				+ "on:['b'],"
@@ -87,8 +87,8 @@ public class HtmlLinkAnnotation_Test {
 		HtmlLink c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
 		HtmlLink c2 = HtmlLinkAnnotation.create("a").on("b").build();
 
-		assertObject(c1).json().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).json().contains("on:['a','b']");
+		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().contains("on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

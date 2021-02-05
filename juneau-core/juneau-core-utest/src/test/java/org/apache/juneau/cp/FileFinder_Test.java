@@ -38,7 +38,7 @@ public class FileFinder_Test {
 			.create()
 			.build();
 
-		assertStream(x.getStream("files/test1a")).string().doesNotExist();
+		assertStream(x.getStream("files/test1a")).asString().doesNotExist();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,12 +55,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("files/test1/"+p)).string().contains("[home:/files/test1/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/"+p)).string().contains("[home:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/dir/"+p)).string().contains("[home:/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/"+p+" / ")).string().contains("[home:/files/test1/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).string().contains("[home:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).string().contains("[home:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/"+p)).asString().contains("[home:/files/test1/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/"+p)).asString().contains("[home:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/dir/"+p)).asString().contains("[home:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/"+p+" / ")).asString().contains("[home:/files/test1/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).asString().contains("[home:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).asString().contains("[home:/files/test1/dir/dir/"+p+"]");
 		}
 
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/test1/%2E%2E/test1/_a.txt","files/bad.txt",null,"",".","..","%2E","%2E%2E","j.class","k.properties"};
@@ -80,12 +80,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("test1/"+p)).string().contains("[home:/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p)).string().contains("[home:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p)).string().contains("[home:/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream("/test1/"+p+"/")).string().contains("[home:/files/test1/"+p+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/")).string().contains("[home:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/")).string().contains("[home:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p)).asString().contains("[home:/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p)).asString().contains("[home:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p)).asString().contains("[home:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("/test1/"+p+"/")).asString().contains("[home:/files/test1/"+p+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/")).asString().contains("[home:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/")).asString().contains("[home:/files/test1/dir/dir/"+p+"]");
 		}
 
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
@@ -109,26 +109,26 @@ public class FileFinder_Test {
 		for (int i = 0; i < patterns.length; i++) {
 			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
 
-			assertStream(x.getStream("test1/"+p,null)).string().contains("[home:/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p,null)).string().contains("[home:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,null)).string().contains("[home:/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream("/test1/"+p+"/",null)).string().contains("[home:/files/test1/"+p+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",null)).string().contains("[home:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).string().contains("[home:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p,null)).asString().contains("[home:/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p,null)).asString().contains("[home:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,null)).asString().contains("[home:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("/test1/"+p+"/",null)).asString().contains("[home:/files/test1/"+p+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",null)).asString().contains("[home:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).asString().contains("[home:/files/test1/dir/dir/"+p+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPANESE)).string().contains("[home:/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).string().contains("[home:/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).string().contains("[home:/files/test1/dir/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).string().contains("[home:/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).string().contains("[home:/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).string().contains("[home:/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/"+p,JAPANESE)).asString().contains("[home:/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).asString().contains("[home:/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).asString().contains("[home:/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).asString().contains("[home:/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).asString().contains("[home:/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).asString().contains("[home:/files/test1/dir/dir/"+p_ja+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPAN)).string().contains("[home:/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPAN)).string().contains("[home:/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).string().contains("[home:/files/test1/dir/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).string().contains("[home:/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).string().contains("[home:/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).string().contains("[home:/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/"+p,JAPAN)).asString().contains("[home:/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPAN)).asString().contains("[home:/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).asString().contains("[home:/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).asString().contains("[home:/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).asString().contains("[home:/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).asString().contains("[home:/files/test1/dir/dir/"+p_ja_JP+"]");
 		}
 
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","k.properties"};
@@ -147,26 +147,26 @@ public class FileFinder_Test {
 			.dir("files/test2")
 			.build();
 
-		assertStream(x.getStream("a.txt", null)).string().contains("[home:/files/test2/a.txt]");
-		assertStream(x.getStream("a.txt", JAPANESE)).string().contains("[home:/files/test2/ja/a.txt]");
-		assertStream(x.getStream("a.txt", JAPAN)).string().contains("[home:/files/test2/ja/JP/a.txt]");
-		assertStream(x.getStream("/a.txt/", null)).string().contains("[home:/files/test2/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPANESE)).string().contains("[home:/files/test2/ja/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPAN)).string().contains("[home:/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("a.txt", null)).asString().contains("[home:/files/test2/a.txt]");
+		assertStream(x.getStream("a.txt", JAPANESE)).asString().contains("[home:/files/test2/ja/a.txt]");
+		assertStream(x.getStream("a.txt", JAPAN)).asString().contains("[home:/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("/a.txt/", null)).asString().contains("[home:/files/test2/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPANESE)).asString().contains("[home:/files/test2/ja/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPAN)).asString().contains("[home:/files/test2/ja/JP/a.txt]");
 
-		assertStream(x.getStream("dir/a.txt", null)).string().contains("[home:/files/test2/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPANESE)).string().contains("[home:/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPAN)).string().contains("[home:/files/test2/ja/JP/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", null)).string().contains("[home:/files/test2/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).string().contains("[home:/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPAN)).string().contains("[home:/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", null)).asString().contains("[home:/files/test2/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPANESE)).asString().contains("[home:/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPAN)).asString().contains("[home:/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", null)).asString().contains("[home:/files/test2/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).asString().contains("[home:/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPAN)).asString().contains("[home:/files/test2/ja/JP/dir/a.txt]");
 
-		assertStream(x.getStream("dir/dir/a.txt", null)).string().contains("[home:/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).string().contains("[home:/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).string().contains("[home:/files/test2/ja/JP/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", null)).string().contains("[home:/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).string().contains("[home:/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).string().contains("[home:/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", null)).asString().contains("[home:/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).asString().contains("[home:/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).asString().contains("[home:/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", null)).asString().contains("[home:/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).asString().contains("[home:/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).asString().contains("[home:/files/test2/ja/JP/dir/dir/a.txt]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -183,12 +183,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("files/test1/"+p)).string().contains("[cp:/files/test1/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/"+p)).string().contains("[cp:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/dir/"+p)).string().contains("[cp:/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/"+p+" / ")).string().contains("[cp:/files/test1/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).string().contains("[cp:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).string().contains("[cp:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/"+p)).asString().contains("[cp:/files/test1/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/"+p)).asString().contains("[cp:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/dir/"+p)).asString().contains("[cp:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/"+p+" / ")).asString().contains("[cp:/files/test1/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).asString().contains("[cp:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).asString().contains("[cp:/files/test1/dir/dir/"+p+"]");
 		}
 
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..","LocalizedFileStore_Test.class"};
@@ -208,12 +208,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("test1/"+p)).string().contains("[cp:/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p)).string().contains("[cp:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p)).string().contains("[cp:/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / test1/"+p+" / ")).string().contains("[cp:/files/test1/"+p+"]");
-			assertStream(x.getStream(" / test1/dir/"+p+" / ")).string().contains("[cp:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / test1/dir/dir/"+p+" / ")).string().contains("[cp:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p)).asString().contains("[cp:/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p)).asString().contains("[cp:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p)).asString().contains("[cp:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / test1/"+p+" / ")).asString().contains("[cp:/files/test1/"+p+"]");
+			assertStream(x.getStream(" / test1/dir/"+p+" / ")).asString().contains("[cp:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / test1/dir/dir/"+p+" / ")).asString().contains("[cp:/files/test1/dir/dir/"+p+"]");
 		}
 
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
@@ -238,26 +238,26 @@ public class FileFinder_Test {
 		for (int i = 0; i < patterns.length; i++) {
 			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
 
-			assertStream(x.getStream("test1/"+p,null)).string().contains("[cp:/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p,null)).string().contains("[cp:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,null)).string().contains("[cp:/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream("/test1/"+p+"/",null)).string().contains("[cp:/files/test1/"+p+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",null)).string().contains("[cp:/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).string().contains("[cp:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p,null)).asString().contains("[cp:/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p,null)).asString().contains("[cp:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,null)).asString().contains("[cp:/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("/test1/"+p+"/",null)).asString().contains("[cp:/files/test1/"+p+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",null)).asString().contains("[cp:/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).asString().contains("[cp:/files/test1/dir/dir/"+p+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPANESE)).string().contains("[cp:/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).string().contains("[cp:/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).string().contains("[cp:/files/test1/dir/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).string().contains("[cp:/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).string().contains("[cp:/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).string().contains("[cp:/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/"+p,JAPANESE)).asString().contains("[cp:/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).asString().contains("[cp:/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).asString().contains("[cp:/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).asString().contains("[cp:/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).asString().contains("[cp:/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).asString().contains("[cp:/files/test1/dir/dir/"+p_ja+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPAN)).string().contains("[cp:/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPAN)).string().contains("[cp:/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).string().contains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).string().contains("[cp:/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).string().contains("[cp:/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).string().contains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/"+p,JAPAN)).asString().contains("[cp:/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPAN)).asString().contains("[cp:/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).asString().contains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).asString().contains("[cp:/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).asString().contains("[cp:/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).asString().contains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]");
 		}
 
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
@@ -277,26 +277,26 @@ public class FileFinder_Test {
 			.cp(FileFinder_Test.class, "/files/test2", false)
 			.build();
 
-		assertStream(x.getStream("a.txt", null)).string().contains("[cp:/files/test2/a.txt]");
-		assertStream(x.getStream("a.txt", JAPANESE)).string().contains("[cp:/files/test2/ja/a.txt]");
-		assertStream(x.getStream("a.txt", JAPAN)).string().contains("[cp:/files/test2/ja/JP/a.txt]");
-		assertStream(x.getStream("/a.txt/", null)).string().contains("[cp:/files/test2/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPANESE)).string().contains("[cp:/files/test2/ja/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPAN)).string().contains("[cp:/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("a.txt", null)).asString().contains("[cp:/files/test2/a.txt]");
+		assertStream(x.getStream("a.txt", JAPANESE)).asString().contains("[cp:/files/test2/ja/a.txt]");
+		assertStream(x.getStream("a.txt", JAPAN)).asString().contains("[cp:/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("/a.txt/", null)).asString().contains("[cp:/files/test2/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPANESE)).asString().contains("[cp:/files/test2/ja/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPAN)).asString().contains("[cp:/files/test2/ja/JP/a.txt]");
 
-		assertStream(x.getStream("dir/a.txt", null)).string().contains("[cp:/files/test2/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPANESE)).string().contains("[cp:/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPAN)).string().contains("[cp:/files/test2/ja/JP/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", null)).string().contains("[cp:/files/test2/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).string().contains("[cp:/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPAN)).string().contains("[cp:/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", null)).asString().contains("[cp:/files/test2/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPANESE)).asString().contains("[cp:/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPAN)).asString().contains("[cp:/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", null)).asString().contains("[cp:/files/test2/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).asString().contains("[cp:/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPAN)).asString().contains("[cp:/files/test2/ja/JP/dir/a.txt]");
 
-		assertStream(x.getStream("dir/dir/a.txt", null)).string().contains("[cp:/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).string().contains("[cp:/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).string().contains("[cp:/files/test2/ja/JP/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", null)).string().contains("[cp:/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).string().contains("[cp:/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).string().contains("[cp:/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", null)).asString().contains("[cp:/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).asString().contains("[cp:/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).asString().contains("[cp:/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", null)).asString().contains("[cp:/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).asString().contains("[cp:/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).asString().contains("[cp:/files/test2/ja/JP/dir/dir/a.txt]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -313,15 +313,15 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("files/test1/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
 		}
 
-		assertStream(x.getStream("_a.txt")).string().contains("[cp:/org/apache/juneau/cp/_a.txt]");
+		assertStream(x.getStream("_a.txt")).asString().contains("[cp:/org/apache/juneau/cp/_a.txt]");
 
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
 
@@ -340,12 +340,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("files/test1/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("files/test1/dir/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("files/test1/dir/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / files/test1/dir/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
 		}
 	}
 
@@ -359,12 +359,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("test1/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / test1/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream(" / test1/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / test1/dir/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / test1/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream(" / test1/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / test1/dir/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
 		}
 
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
@@ -384,12 +384,12 @@ public class FileFinder_Test {
 		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
 
 		for (String p : patterns) {
-			assertStream(x.getStream("test1/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream(" / test1/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream(" / test1/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream(" / test1/dir/dir/"+p+" / ")).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream(" / test1/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream(" / test1/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream(" / test1/dir/dir/"+p+" / ")).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
 		}
 	}
 
@@ -408,26 +408,26 @@ public class FileFinder_Test {
 		for (int i = 0; i < patterns.length; i++) {
 			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
 
-			assertStream(x.getStream("test1/"+p,null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p,null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream("/test1/"+p+"/",null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p,null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p,null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("/test1/"+p+"/",null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/"+p,JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/"+p,JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
 		}
 
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
@@ -454,26 +454,26 @@ public class FileFinder_Test {
 		for (int i = 0; i < patterns.length; i++) {
 			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
 
-			assertStream(x.getStream("test1/"+p,null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("test1/dir/"+p,null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
-			assertStream(x.getStream("/test1/"+p+"/",null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("test1/"+p,null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("test1/dir/"+p,null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
+			assertStream(x.getStream("/test1/"+p+"/",null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",null)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/"+p,JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]");
 
-			assertStream(x.getStream("test1/"+p,JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/"+p,JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
-			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/"+p,JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/"+p,JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("test1/dir/dir/"+p,JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/"+p+"/",JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/"+p+"/",JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]");
+			assertStream(x.getStream("/test1/dir/dir/"+p+"/",JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]");
 		}
 	}
 
@@ -484,26 +484,26 @@ public class FileFinder_Test {
 			.cp(FileFinder_Test.class, "files/test2", false)
 			.build();
 
-		assertStream(x.getStream("a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
-		assertStream(x.getStream("a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
-		assertStream(x.getStream("a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
-		assertStream(x.getStream("/a.txt/", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
+		assertStream(x.getStream("a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
+		assertStream(x.getStream("a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("/a.txt/", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
 
-		assertStream(x.getStream("dir/a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
 
-		assertStream(x.getStream("dir/dir/a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
 	}
 
 	@Test
@@ -513,26 +513,26 @@ public class FileFinder_Test {
 			.cp(FileFinder_Test2.class, "files/test2", true)
 			.build();
 
-		assertStream(x.getStream("a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
-		assertStream(x.getStream("a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
-		assertStream(x.getStream("a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
-		assertStream(x.getStream("/a.txt/", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
-		assertStream(x.getStream("/a.txt/", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
+		assertStream(x.getStream("a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
+		assertStream(x.getStream("a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("/a.txt/", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
+		assertStream(x.getStream("/a.txt/", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
 
-		assertStream(x.getStream("dir/a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("/dir/a.txt/", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("/dir/a.txt/", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
 
-		assertStream(x.getStream("dir/dir/a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("/dir/dir/a.txt/", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
 
 		x = FileFinder
 			.create()
@@ -585,17 +585,17 @@ public class FileFinder_Test {
 			.exclude()
 			.build();
 
-		assertStream(x.getStream("a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
-		assertStream(x.getStream("a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
-		assertStream(x.getStream("a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
+		assertStream(x.getStream("a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/a.txt]");
+		assertStream(x.getStream("a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/a.txt]");
+		assertStream(x.getStream("a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/a.txt]");
 
-		assertStream(x.getStream("dir/a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
-		assertStream(x.getStream("dir/a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/a.txt]");
+		assertStream(x.getStream("dir/a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/a.txt]");
 
-		assertStream(x.getStream("dir/dir/a.txt", null)).string().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
-		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).string().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", null)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPANESE)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
+		assertStream(x.getStream("dir/dir/a.txt", JAPAN)).asString().contains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -630,8 +630,8 @@ public class FileFinder_Test {
 			.caching(100_000_000)
 			.build();
 
-		assertStream(x.getStream("files/test1/_a.txt")).string().contains("[home:/files/test1/_a.txt]");
-		assertStream(x.getStream("files/test1/_a.txt")).string().contains("[home:/files/test1/_a.txt]");
+		assertStream(x.getStream("files/test1/_a.txt")).asString().contains("[home:/files/test1/_a.txt]");
+		assertStream(x.getStream("files/test1/_a.txt")).asString().contains("[home:/files/test1/_a.txt]");
 
 		x = FileFinder
 			.create()
@@ -639,8 +639,8 @@ public class FileFinder_Test {
 			.caching(1)
 			.build();
 
-		assertStream(x.getStream("files/test1/_a.txt")).string().contains("[home:/files/test1/_a.txt]");
-		assertStream(x.getStream("files/test1/_a.txt")).string().contains("[home:/files/test1/_a.txt]");
+		assertStream(x.getStream("files/test1/_a.txt")).asString().contains("[home:/files/test1/_a.txt]");
+		assertStream(x.getStream("files/test1/_a.txt")).asString().contains("[home:/files/test1/_a.txt]");
 
 		x = FileFinder
 			.create()
@@ -648,8 +648,8 @@ public class FileFinder_Test {
 			.caching(100_000_000)
 			.build();
 
-		assertStream(x.getStream("files/test1/_a.txt")).string().contains("[cp:/files/test1/_a.txt]");
-		assertStream(x.getStream("files/test1/_a.txt")).string().contains("[cp:/files/test1/_a.txt]");
+		assertStream(x.getStream("files/test1/_a.txt")).asString().contains("[cp:/files/test1/_a.txt]");
+		assertStream(x.getStream("files/test1/_a.txt")).asString().contains("[cp:/files/test1/_a.txt]");
 	}
 
 	@Test

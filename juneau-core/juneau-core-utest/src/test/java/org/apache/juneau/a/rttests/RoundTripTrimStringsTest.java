@@ -47,30 +47,30 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 		in = " foo bar ";
 		e = "foo bar";
 		a = p.parse(s2.serialize(in), String.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 		a = p2.parse(s.serialize(in), String.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 
 		in = OMap.ofJson("{' foo ': ' bar '}");
 		e = OMap.ofJson("{foo:'bar'}");
 		a = p.parse(s2.serialize(in), OMap.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 		a = p2.parse(s.serialize(in), OMap.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 
 		in = new OList("[' foo ', {' foo ': ' bar '}]");
 		e = new OList("['foo',{foo:'bar'}]");
 		a = p.parse(s2.serialize(in), OList.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 		a = p2.parse(s.serialize(in), OList.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 
 		in = new A().init1();
 		e = new A().init2();
 		a = p.parse(s2.serialize(in), A.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 		a = p2.parse(s.serialize(in), A.class);
-		assertObject(e).sameAs(a);
+		assertObject(e).isSameJsonAs(a);
 	}
 
 	public static class A {

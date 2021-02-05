@@ -53,10 +53,10 @@ public class ConfigBuilderTest {
 		assertFalse(f.exists());
 
 		cf.commit();
-		assertObject(cf.toMap()).json().is("{'':{},Test:{A:'a'}}");
+		assertObject(cf.toMap()).asJson().is("{'':{},Test:{A:'a'}}");
 
 		String NL = System.getProperty("line.separator");
 		cf = cf.load("[Test]"+NL+"A = b"+NL, true);
-		assertObject(cf.toMap()).json().is("{'':{},Test:{A:'b'}}");
+		assertObject(cf.toMap()).asJson().is("{'':{},Test:{A:'b'}}");
 	}
 }

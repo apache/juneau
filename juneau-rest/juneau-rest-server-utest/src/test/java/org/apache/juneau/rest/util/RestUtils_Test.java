@@ -227,7 +227,7 @@ public class RestUtils_Test {
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
 		m = parseQuery(s);
-		assertObject(m).json().is("{f1:null,f2:['abc','def']}");
+		assertObject(m).asJson().is("{f1:null,f2:['abc','def']}");
 	}
 
 	@Test

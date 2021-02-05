@@ -227,7 +227,7 @@ public class JsonParserTest {
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p.parse(r, OMap.class);
-		assertObject(x).json().is("{foo:'bar'}");
+		assertObject(x).asJson().is("{foo:'bar'}");
 		assertThrown(()->p.parse(r, OMap.class)).contains("Reader is closed");
 	}
 
@@ -243,15 +243,15 @@ public class JsonParserTest {
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p.parse(r, OMap.class);
-		assertObject(x).json().is("{foo:'bar'}");
+		assertObject(x).asJson().is("{foo:'bar'}");
 		x = p.parse(r, OMap.class);
-		assertObject(x).json().is("{baz:'qux'}");
+		assertObject(x).asJson().is("{baz:'qux'}");
 
 		r = reader("[123][456]");
 		x = p.parse(r, OList.class);
-		assertObject(x).json().is("[123]");
+		assertObject(x).asJson().is("[123]");
 		x = p.parse(r, OList.class);
-		assertObject(x).json().is("[456]");
+		assertObject(x).asJson().is("[456]");
 	}
 
 	private Reader reader(String in) {

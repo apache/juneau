@@ -64,7 +64,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a03_serializer_streaming() throws Exception {
-		of(ABean.get(),MsgPackSerializer.DEFAULT).assertBytes().spacedHex().is("82 A1 61 01 A1 62 A3 66 6F 6F");
+		of(ABean.get(),MsgPackSerializer.DEFAULT).assertBytes().asSpacedHex().is("82 A1 61 01 A1 62 A3 66 6F 6F");
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class SerializedHttpEntity_Test {
 	public void a05_writeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		of(new ByteArrayInputStream("foo".getBytes()), null).writeTo(baos);
-		assertBytes(baos.toByteArray()).string().is("foo");
+		assertBytes(baos.toByteArray()).asString().is("foo");
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a08_getContent() throws Exception {
-		assertStream(of(new StringReader("foo"),null).getContent()).string().is("foo");
+		assertStream(of(new StringReader("foo"),null).getContent()).asString().is("foo");
 
 		SerializedHttpEntity x = new SerializedHttpEntity("foo", null) {
 			@Override

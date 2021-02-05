@@ -52,6 +52,6 @@ public class HtmlTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read("<table><tr><td>foo</td><td>bar</td></tr></table>", Map.class, String.class, String.class);
-		assertObject(o).json().is("{foo:'bar'}");
+		assertObject(o).asJson().is("{foo:'bar'}");
 	}
 }

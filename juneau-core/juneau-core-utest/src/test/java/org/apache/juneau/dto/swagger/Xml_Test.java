@@ -116,7 +116,7 @@ public class Xml_Test {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		t
 			.set("attribute", "true")
@@ -126,7 +126,7 @@ public class Xml_Test {
 			.set("wrapped", "true")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		t
 			.set("attribute", new StringBuilder("true"))
@@ -136,7 +136,7 @@ public class Xml_Test {
 			.set("wrapped", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		assertString(t.get("attribute", String.class)).is("true");
 		assertString(t.get("name", String.class)).is("a");
@@ -158,7 +158,7 @@ public class Xml_Test {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Xml.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, Xml.class)).asJson().is(s);
 	}
 
 	@Test
@@ -167,7 +167,7 @@ public class Xml_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("attribute", true)
@@ -178,14 +178,14 @@ public class Xml_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		Xml t = new Xml();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("attribute", true)
@@ -195,6 +195,6 @@ public class Xml_Test {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is("['attribute','name','namespace','prefix','wrapped','$ref']");
+		assertObject(t.keySet()).asJson().is("['attribute','name','namespace','prefix','wrapped','$ref']");
 	}
 }

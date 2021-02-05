@@ -52,6 +52,6 @@ public class UonTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read("(foo=bar)", Map.class, String.class, String.class);
-		assertObject(o).json().is("{foo:'bar'}");
+		assertObject(o).asJson().is("{foo:'bar'}");
 	}
 }

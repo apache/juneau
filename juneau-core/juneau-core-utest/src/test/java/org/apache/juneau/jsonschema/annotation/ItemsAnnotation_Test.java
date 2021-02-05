@@ -102,7 +102,7 @@ public class ItemsAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "'$ref':'$ref',"
 				+ "_default:['default'],"

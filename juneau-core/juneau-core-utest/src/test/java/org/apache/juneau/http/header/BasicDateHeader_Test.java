@@ -73,19 +73,19 @@ public class BasicDateHeader_Test {
 
 	@Test
 	public void a02_asCalendar() throws Exception {
-		assertObject(of(HEADER,VALUE).asCalendar()).string(Calendar.class, x->calendarString(x)).is("1994-10-29T19:43:31Z");
+		assertObject(of(HEADER,VALUE).asCalendar()).asString(Calendar.class, x->calendarString(x)).is("1994-10-29T19:43:31Z");
 		assertObject(header(HEADER,null).asCalendar()).doesNotExist();
 	}
 
 	@Test
 	public void a03_asDate() throws Exception {
-		assertObject(of(HEADER,VALUE).asDate()).string().contains("1994");
+		assertObject(of(HEADER,VALUE).asDate()).asString().contains("1994");
 		assertObject(header(HEADER,null).asDate()).doesNotExist();
 	}
 
 	@Test
 	public void a04_assertZonedDateTime() throws Exception {
-		of(HEADER,VALUE).assertZonedDateTime().string().is("1994-10-29T19:43:31Z");
+		of(HEADER,VALUE).assertZonedDateTime().asString().is("1994-10-29T19:43:31Z");
 		header(HEADER,null).assertZonedDateTime().doesNotExist();
 	}
 

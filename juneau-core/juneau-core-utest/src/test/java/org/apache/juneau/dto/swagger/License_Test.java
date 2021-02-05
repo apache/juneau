@@ -49,13 +49,13 @@ public class License_Test {
 		License t = new License();
 
 		t.url(URI.create("foo"));
-		assertObject(t.url()).isType(URI.class).string().is("foo");
+		assertObject(t.url()).isType(URI.class).asString().is("foo");
 
 		t.url("bar");
-		assertObject(t.url()).isType(URI.class).string().is("bar");
+		assertObject(t.url()).isType(URI.class).asString().is("bar");
 
 		t.url(new URL("http://baz"));
-		assertObject(t.url()).isType(URI.class).string().is("http://baz");
+		assertObject(t.url()).isType(URI.class).asString().is("http://baz");
 
 		t.url((String)null);
 		assertObject(t.url()).isNull();
@@ -73,21 +73,21 @@ public class License_Test {
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
 
 		t
 			.set("name", "a")
 			.set("url", "b")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
 
 		t
 			.set("name", new StringBuilder("a"))
 			.set("url", new StringBuilder("b"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
 
 		assertString(t.get("name", String.class)).is("a");
 		assertString(t.get("url", String.class)).is("b");
@@ -103,7 +103,7 @@ public class License_Test {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'a',url:'b','$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, License.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, License.class)).asJson().is(s);
 	}
 
 	@Test
@@ -112,7 +112,7 @@ public class License_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("name", "a")
@@ -120,20 +120,20 @@ public class License_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		License t = new License();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is("['name','url','$ref']");
+		assertObject(t.keySet()).asJson().is("['name','url','$ref']");
 	}
 }

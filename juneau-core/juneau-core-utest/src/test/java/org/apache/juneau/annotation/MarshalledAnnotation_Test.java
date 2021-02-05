@@ -46,7 +46,7 @@ public class MarshalledAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "example:'example',"
 				+ "implClass:'"+CNAME+"$X1',"
@@ -91,8 +91,8 @@ public class MarshalledAnnotation_Test {
 		Marshalled c1 = MarshalledAnnotation.create(C1.class).on(C2.class).build();
 		Marshalled c2 = MarshalledAnnotation.create("a").on("b").build();
 
-		assertObject(c1).json().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).json().contains("on:['a','b']");
+		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().contains("on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

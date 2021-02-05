@@ -51,10 +51,10 @@ public class ResponseInfo_Test {
 		ResponseInfo t = new ResponseInfo();
 
 		t.schema(schemaInfo().title("foo"));
-		assertObject(t.schema()).isType(SchemaInfo.class).json().is("{title:'foo'}");
+		assertObject(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
 
 		t.schema("{title:'foo'}");
-		assertObject(t.schema()).isType(SchemaInfo.class).json().is("{title:'foo'}");
+		assertObject(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
 
 		t.schema((String)null);
 		assertObject(t.schema()).isNull();
@@ -68,25 +68,25 @@ public class ResponseInfo_Test {
 		ResponseInfo t = new ResponseInfo();
 
 		t.headers(AMap.of("foo",headerInfo("bar")));
-		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.headers(AMap.create());
-		assertObject(t.headers()).isType(Map.class).json().is("{}");
+		assertObject(t.headers()).isType(Map.class).asJson().is("{}");
 
 		t.headers((Map<String,HeaderInfo>)null);
 		assertObject(t.headers()).isNull();
 
 		t.addHeaders(AMap.of("foo",headerInfo("bar")));
-		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.addHeaders(AMap.create());
-		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.addHeaders(null);
-		assertObject(t.headers()).isType(Map.class).json().is("{foo:{type:'bar'}}");
+		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 	}
 
@@ -98,29 +98,29 @@ public class ResponseInfo_Test {
 		ResponseInfo t = new ResponseInfo();
 
 		t.examples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
+		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.examples(AMap.create());
-		assertObject(t.examples()).isType(Map.class).json().is("{}");
+		assertObject(t.examples()).isType(Map.class).asJson().is("{}");
 
 		t.examples((Map<String,Object>)null);
 		assertObject(t.examples()).isNull();
 
 		t.addExamples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
+		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(AMap.create());
-		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
+		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(null);
-		assertObject(t.examples()).isType(Map.class).json().is("{foo:'bar',baz:['qux']}");
+		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.examples(AMap.create());
 		t.example("text/a", "a");
 		t.example("text/b", null);
 		t.example(null, "c");
 
-		assertObject(t.examples()).json().is("{'text/a':'a','text/b':null,null:'c'}");
+		assertObject(t.examples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class ResponseInfo_Test {
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		t
 			.set("description", "a")
@@ -146,7 +146,7 @@ public class ResponseInfo_Test {
 			.set("schema", "{type:'d'}")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -155,7 +155,7 @@ public class ResponseInfo_Test {
 			.set("schema", new StringBuilder("{type:'d'}"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		assertString(t.get("description", String.class)).is("a");
 		assertString(t.get("examples", String.class)).is("{foo:'bar',baz:['qux']}");
@@ -176,7 +176,7 @@ public class ResponseInfo_Test {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, ResponseInfo.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, ResponseInfo.class)).asJson().is(s);
 	}
 
 	@Test
@@ -185,7 +185,7 @@ public class ResponseInfo_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("description", "a")
@@ -195,14 +195,14 @@ public class ResponseInfo_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		ResponseInfo t = new ResponseInfo();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("description", "a")
@@ -211,6 +211,6 @@ public class ResponseInfo_Test {
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is("['description','examples','headers','schema','$ref']");
+		assertObject(t.keySet()).asJson().is("['description','examples','headers','schema','$ref']");
 	}
 }

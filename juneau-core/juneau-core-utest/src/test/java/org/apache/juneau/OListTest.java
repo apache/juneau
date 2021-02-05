@@ -106,7 +106,7 @@ public class OListTest {
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObject(new OList(new StringReader("[1,2,3]"))).json().is("[1,2,3]");
+		assertObject(new OList(new StringReader("[1,2,3]"))).asJson().is("[1,2,3]");
 	}
 
 	//====================================================================================================
@@ -116,12 +116,12 @@ public class OListTest {
 	public void testGetMap() throws Exception {
 		OList l = new OList("[{1:'true',2:'false'}]");
 		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
-		assertObject(m2).json().is("{'1':true,'2':false}");
+		assertObject(m2).asJson().is("{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
 		m2 = l.get(0, Map.class, Integer.class, Boolean.class);
-		assertObject(m2).json().is("{'1':true,'2':false}");
+		assertObject(m2).asJson().is("{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 	}
@@ -133,11 +133,11 @@ public class OListTest {
 	public void testGetList() throws Exception {
 		OList l = new OList("[['123','456']]");
 		List<Integer> l2 = l.getList(0, Integer.class);
-		assertObject(l2).json().is("[123,456]");
+		assertObject(l2).asJson().is("[123,456]");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = l.get(0, List.class, Integer.class);
-		assertObject(l2).json().is("[123,456]");
+		assertObject(l2).asJson().is("[123,456]");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 	}
 }

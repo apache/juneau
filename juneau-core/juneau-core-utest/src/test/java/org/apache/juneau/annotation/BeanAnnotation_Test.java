@@ -82,7 +82,7 @@ public class BeanAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "example:'example',"
@@ -138,8 +138,8 @@ public class BeanAnnotation_Test {
 		Bean c1 = BeanAnnotation.create(C1.class).on(C2.class).build();
 		Bean c2 = BeanAnnotation.create("a").on("b").build();
 
-		assertObject(c1).json().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).json().contains("on:['a','b']");
+		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().contains("on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

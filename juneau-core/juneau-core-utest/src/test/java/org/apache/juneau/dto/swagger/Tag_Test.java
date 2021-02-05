@@ -62,10 +62,10 @@ public class Tag_Test {
 		Tag t = new Tag();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObject(t.externalDocs()).json().is("{url:'foo'}");
+		assertObject(t.externalDocs()).asJson().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).json().is("{url:'foo'}");;
+		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");;
 
 		t.externalDocs((String)null);
 		assertObject(t.externalDocs()).isNull();
@@ -84,7 +84,7 @@ public class Tag_Test {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		t
 			.set("description", "a")
@@ -92,7 +92,7 @@ public class Tag_Test {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -100,7 +100,7 @@ public class Tag_Test {
 			.set("name", new StringBuilder("c"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		assertString(t.get("description", String.class)).is("a");
 		assertString(t.get("externalDocs", String.class)).is("{url:'b'}");
@@ -118,7 +118,7 @@ public class Tag_Test {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Tag.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, Tag.class)).asJson().is(s);
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class Tag_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("description", "a")
@@ -136,14 +136,14 @@ public class Tag_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		Tag t = new Tag();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("description", "a")
@@ -151,6 +151,6 @@ public class Tag_Test {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is("['description','externalDocs','name','$ref']");
+		assertObject(t.keySet()).asJson().is("['description','externalDocs','name','$ref']");
 	}
 }

@@ -40,7 +40,7 @@ public class RestHookAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "on:['a'],"
 				+ "value:'INIT'"
@@ -82,7 +82,7 @@ public class RestHookAnnotation_Test {
 	public void c01_otherMethods() throws Exception {
 		RestHook c4 = RestHookAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c4).json().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertObject(c4).asJson().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

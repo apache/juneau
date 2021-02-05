@@ -125,7 +125,7 @@ public class Messages_Test {
 	@Test
 	public void a09_keySet_prefix() throws Exception {
 		Messages x = Messages.of(MessageBundleTest1.class);
-		assertObject(new TreeSet<>(x.keySet("xx"))).json().is("['xx','xx.','xx.foo']");
+		assertObject(new TreeSet<>(x.keySet("xx"))).asJson().is("['xx','xx.','xx.foo']");
 	}
 
 	@Test
@@ -155,7 +155,7 @@ public class Messages_Test {
 	@Test
 	public void a12_getKeys() throws Exception {
 		Messages x = Messages.of(Test2.class);
-		assertObject(x.getKeys()).json().is("['file','yyy']");
+		assertObject(x.getKeys()).asJson().is("['file','yyy']");
 	}
 
 	@Test

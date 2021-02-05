@@ -22,7 +22,7 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		String[] x1={}, x2={"foo"};
+		String[] x1={}, x2={"foo","bar"};
 
 		assertThrown(()->assertArray(null).exists()).is("Value was null.");
 		assertArray(x1).exists();
@@ -32,9 +32,9 @@ public class ArrayAssertion_Test {
 
 		assertThrown(()->assertArray(null).isSize(0)).is("Value was null.");
 		assertArray(x1).isSize(0);
-		assertThrown(()->assertArray(x1).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
-		assertArray(x2).isSize(1);
-		assertThrown(()->assertArray(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=1.");
+		assertThrown(()->assertArray(x1).isSize(2)).is("Array did not have the expected size.  Expect=2, Actual=0.");
+		assertArray(x2).isSize(2);
+		assertThrown(()->assertArray(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
 
 		assertThrown(()->assertArray(null).isEmpty()).is("Value was null.");
 		assertArray(x1).isEmpty();
@@ -47,6 +47,13 @@ public class ArrayAssertion_Test {
 		assertArray(null).item(0).doesNotExist();
 		assertArray(x1).item(0).doesNotExist();
 		assertArray(x2).item(0).exists();
+
+		assertArray(x2).contains("foo");
+		assertThrown(()->assertArray(x2).contains("z")).is("Array did not contain expected value.\n\tContents: ['foo','bar']\n\tExpected: z");
+
+		assertArray(x1).doesNotContain("foo");
+		assertThrown(()->assertArray(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: foo");
+		assertThrown(()->assertArray(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: bar");
 	}
 
 	@Test

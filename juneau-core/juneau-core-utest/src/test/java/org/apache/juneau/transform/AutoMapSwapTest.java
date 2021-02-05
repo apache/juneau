@@ -72,12 +72,12 @@ public class AutoMapSwapTest {
 
 	@Test
 	public void a01_swap_toMap() throws Exception {
-		assertObject(find(A01.class).swap(null, new A01())).json().is("{foo:'bar'}");
+		assertObject(find(A01.class).swap(null, new A01())).asJson().is("{foo:'bar'}");
 	}
 
 	@Test
 	public void a02_swap_toOMap() throws Exception {
-		assertObject(find(A02.class).swap(null, new A02())).json().is("{foo:'bar'}");
+		assertObject(find(A02.class).swap(null, new A02())).asJson().is("{foo:'bar'}");
 	}
 
 	@Test(expected = SerializeException.class)
@@ -99,7 +99,7 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 		public static B01 fromMap(Map<String,String> o) {
-			assertObject(o).json().is("{foo:'bar'}");
+			assertObject(o).asJson().is("{foo:'bar'}");
 			return new B01();
 		}
 	}
@@ -108,7 +108,7 @@ public class AutoMapSwapTest {
 			return OMAP;
 		}
 		public static B02 fromOMap(OMap o) {
-			assertObject(o).json().is("{foo:'bar'}");
+			assertObject(o).asJson().is("{foo:'bar'}");
 			return new B02();
 		}
 	}
@@ -117,7 +117,7 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 		public static B03 create(Map<String,String> o) {
-			assertObject(o).json().is("{foo:'bar'}");
+			assertObject(o).asJson().is("{foo:'bar'}");
 			return new B03();
 		}
 	}
@@ -154,7 +154,7 @@ public class AutoMapSwapTest {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertObject(o).json().is("{foo:'bar'}");
+			assertObject(o).asJson().is("{foo:'bar'}");
 		}
 		public Map<String,String> toMap() {
 			return STRINGMAP;

@@ -93,15 +93,15 @@ public class RestClient_Response_Body_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		client().build().post("/echo",bean).run().assertBody(ABean.class).json().is("{f:1}");
-		client().build().post("/echo",bean).run().assertBodyBytes().string().is("{f:1}");
+		client().build().post("/echo",bean).run().assertBody(ABean.class).asJson().is("{f:1}");
+		client().build().post("/echo",bean).run().assertBodyBytes().asString().is("{f:1}");
 	}
 
 	@Test
 	public void a02_overrideParser() throws Exception {
 		RestClient x = client().build();
 		ABean b = x.post("/echo",bean).run().getBody().parser(JsonParser.DEFAULT).as(ABean.class);
-		assertObject(b).json().is("{f:1}");
+		assertObject(b).asJson().is("{f:1}");
 		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).as(ABean.class)).contains("ParseError at [row,col]:[1,1]");
 		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertObject(ABean.class)).contains("ParseError at [row,col]:[1,1]");
 	}
@@ -110,7 +110,7 @@ public class RestClient_Response_Body_Test {
 	public void a03_asInputStream() throws Exception {
 		RestResponse r1 = client().build().get("/bean").run();
 		InputStream is = r1.getBody().asInputStream();
-		assertStream(is).string().is("{f:1}");
+		assertStream(is).asString().is("{f:1}");
 		assertThrown(()->r1.getBody().asInputStream()).contains("Response has already been consumed.");
 
 		// Non-repeatable entity.
@@ -124,7 +124,7 @@ public class RestClient_Response_Body_Test {
 		RestResponse r3 = x.get("/bean").run();
 		r3.getBody().asInputStream();
 		is = r3.getBody().asInputStream();
-		assertStream(is).string().is("{f:2}");
+		assertStream(is).asString().is("{f:2}");
 		is = x.get("/bean").run().getBody().asInputStream();
 		((EofSensorInputStream)is).abortConnection();
 
@@ -160,10 +160,10 @@ public class RestClient_Response_Body_Test {
 	@Test
 	public void a05_asBytes() throws Exception {
 		byte[] x = client().build().get("/bean").run().getBody().asBytes();
-		assertBytes(x).string().is("{f:1}");
+		assertBytes(x).asString().is("{f:1}");
 
-		x = client().build().get("/bean").run().getBody().cache().assertBytes().string().is("{f:1}").getBody().asBytes();
-		assertBytes(x).string().is("{f:1}");
+		x = client().build().get("/bean").run().getBody().cache().assertBytes().asString().is("{f:1}").getBody().asBytes();
+		assertBytes(x).asString().is("{f:1}");
 
 		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getBody().asBytes()).contains("foo");
 	}
@@ -172,7 +172,7 @@ public class RestClient_Response_Body_Test {
 	public void a06_pipeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		client().build().get("/bean").run().getBody().pipeTo(baos);
-		assertBytes(baos.toByteArray()).string().is("{f:1}");
+		assertBytes(baos.toByteArray()).asString().is("{f:1}");
 
 		StringWriter sw = new StringWriter();
 		client().build().get("/bean").run().getBody().pipeTo(sw);
@@ -210,18 +210,18 @@ public class RestClient_Response_Body_Test {
 	@Test
 	public void a07_asType() throws Exception {
 		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getBody().as(List.class,Integer.class);
-		assertObject(x1).json().is("[1,2]");
+		assertObject(x1).asJson().is("[1,2]");
 
 		Mutable<List<Integer>> x2 = mutable();
 		testClient().entity(stringEntity("[1,2]")).get().run().getBody().as(x2,List.class,Integer.class);
-		assertObject(x2.get()).json().is("[1,2]");
+		assertObject(x2.get()).asJson().is("[1,2]");
 
 		ABean x3 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(ABean.class);
-		assertObject(x3).json().is("{f:1}");
+		assertObject(x3).asJson().is("{f:1}");
 
 		Mutable<ABean> x4 = mutable();
 		testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(x4,ABean.class);
-		assertObject(x4.get()).json().is("{f:1}");
+		assertObject(x4.get()).asJson().is("{f:1}");
 
 		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(RestResponseBody.class);
 		assertTrue(x5 instanceof RestResponseBody);
@@ -236,28 +236,28 @@ public class RestClient_Response_Body_Test {
 
 		Mutable<ABean> x7 = mutable();
 		testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(x7,cm(ABean.class));
-		assertObject(x7.get()).json().is("{f:1}");
+		assertObject(x7.get()).asJson().is("{f:1}");
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(ABean.class);
-		assertObject(x8.get()).json().is("{f:1}");
+		assertObject(x8.get()).asJson().is("{f:1}");
 
 		Mutable<Future<ABean>> x9 = mutable();
 		testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(x9,ABean.class);
-		assertObject(x9.get().get()).json().is("{f:1}");
+		assertObject(x9.get().get()).asJson().is("{f:1}");
 
 		Future<ABean> x10 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(cm(ABean.class));
-		assertObject(x10.get()).json().is("{f:1}");
+		assertObject(x10.get()).asJson().is("{f:1}");
 
 		Mutable<Future<ABean>> x11 = mutable();
 		testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(x11,cm(ABean.class));
-		assertObject(x11.get().get()).json().is("{f:1}");
+		assertObject(x11.get().get()).asJson().is("{f:1}");
 
 		Future<List<Integer>> x12 = testClient().entity(stringEntity("[1,2]")).get().run().getBody().asFuture(List.class,Integer.class);
-		assertObject(x12.get()).json().is("[1,2]");
+		assertObject(x12.get()).asJson().is("[1,2]");
 
 		Mutable<Future<List<Integer>>> x13 = mutable();
 		testClient().entity(stringEntity("[1,2]")).get().run().getBody().asFuture(x13,List.class,Integer.class);
-		assertObject(x13.get().get()).json().is("[1,2]");
+		assertObject(x13.get().get()).asJson().is("[1,2]");
 
 		String x14 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asString();
 		assertString(x14).is("{f:1}");
@@ -344,11 +344,11 @@ public class RestClient_Response_Body_Test {
 			.getBody().getContentEncoding().assertString().is("identity");
 
 		InputStream x4 = testClient().entity(inputStreamEntity("foo")).get().run().getBody().asInputStream();
-		assertStream(x4).string().is("foo");
+		assertStream(x4).asString().is("foo");
 
 		ByteArrayOutputStream x5 = new ByteArrayOutputStream();
 		testClient().entity(inputStreamEntity("foo")).get().run().getBody().writeTo(x5);
-		assertBytes(x5.toByteArray()).string().is("foo");
+		assertBytes(x5.toByteArray()).asString().is("foo");
 
 		assertTrue(testClient().entity(inputStreamEntity("foo")).get().run().getBody().isStreaming());
 		assertFalse(testClient().entity(inputStreamEntity("foo")).get().run().getBody().cache().isStreaming());

@@ -136,16 +136,16 @@ public class Swagger_FormData_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/b","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 	}
 
 	@Rest
@@ -263,22 +263,22 @@ public class Swagger_FormData_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/b","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/e","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'integer',format:'int32'}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'integer',format:'int32'}");
 
 		x = s.getParameterInfo("/f","get","formData","F");
-		assertObject(x).json().is("{'in':'formData',name:'F',type:'boolean'}");
+		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'boolean'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

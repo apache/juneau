@@ -40,7 +40,7 @@ public class BeancAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "on:['on'],"
 				+ "properties:'properties'"
@@ -77,8 +77,8 @@ public class BeancAnnotation_Test {
 		Beanc c1 = BeancAnnotation.create("a").on("b").build();
 		Beanc c2 = BeancAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
-		assertObject(c1).json().contains("on:['a','b']");
-		assertObject(c2).json().contains("on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
+		assertObject(c1).asJson().contains("on:['a','b']");
+		assertObject(c2).asJson().contains("on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -40,7 +40,7 @@ public class ConfigTest extends RestTestcase {
 
 		Config cf = Config.create().memStore().build().load(m);
 
-		assertObject(cf.getSectionAsMap("Test")).json().is("{int1:'1',int2:'[1,2,3]',int3:'1',int4:'1',int5:'-1',boolean1:'true',boolean2:'[true,true]',testManifestEntry:'test-value'}");
+		assertObject(cf.getSectionAsMap("Test")).asJson().is("{int1:'1',int2:'[1,2,3]',int3:'1',int4:'1',int5:'-1',boolean1:'true',boolean2:'[true,true]',testManifestEntry:'test-value'}");
 
 		assertEquals("'1'", c.get(URL + "/Test%2Fint1/" + getName(String.class)).run().getBody().asString());
 		assertEquals("'[1,2,3]'", c.get(URL + "/Test%2Fint2/" + getName(String.class)).run().getBody().asString());

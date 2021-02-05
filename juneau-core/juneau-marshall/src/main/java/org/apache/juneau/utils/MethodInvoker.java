@@ -105,4 +105,13 @@ public class MethodInvoker {
 	public String getFullName() {
 		return m.getFullName();
 	}
+
+	/**
+	 * Returns the stats of this method invoker.
+	 *
+	 * @return The stats of this method invoker.
+	 */
+	public MethodExecStats getStats() {
+		return stats;
+	}
 }

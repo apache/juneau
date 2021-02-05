@@ -146,84 +146,84 @@ public class Swagger_RestOp_Parameters {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/accept","get","header","Accept");
-		assertObject(x).json().is("{'in':'header',name:'Accept',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Accept',type:'string'}");
 
 		x = s.getParameterInfo("/acceptCharset","get","header","Accept-Charset");
-		assertObject(x).json().is("{'in':'header',name:'Accept-Charset',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Accept-Charset',type:'string'}");
 
 		x = s.getParameterInfo("/acceptEncoding","get","header","Accept-Encoding");
-		assertObject(x).json().is("{'in':'header',name:'Accept-Encoding',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Accept-Encoding',type:'string'}");
 
 		x = s.getParameterInfo("/acceptLanguage","get","header","Accept-Language");
-		assertObject(x).json().is("{'in':'header',name:'Accept-Language',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Accept-Language',type:'string'}");
 
 		x = s.getParameterInfo("/authorization","get","header","Authorization");
-		assertObject(x).json().is("{'in':'header',name:'Authorization',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Authorization',type:'string'}");
 
 		x = s.getParameterInfo("/cacheControl","get","header","Cache-Control");
-		assertObject(x).json().is("{'in':'header',name:'Cache-Control',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Cache-Control',type:'string'}");
 
 		x = s.getParameterInfo("/connection","get","header","Connection");
-		assertObject(x).json().is("{'in':'header',name:'Connection',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Connection',type:'string'}");
 
 		x = s.getParameterInfo("/contentLength","get","header","Content-Length");
-		assertObject(x).json().is("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}");
 
 		x = s.getParameterInfo("/contentType","get","header","Content-Type");
-		assertObject(x).json().is("{'in':'header',name:'Content-Type',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Content-Type',type:'string'}");
 
 		x = s.getParameterInfo("/date","get","header","Date");
-		assertObject(x).json().is("{'in':'header',name:'Date',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Date',type:'string'}");
 
 		x = s.getParameterInfo("/expect","get","header","Expect");
-		assertObject(x).json().is("{'in':'header',name:'Expect',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Expect',type:'string'}");
 
 		x = s.getParameterInfo("/from","get","header","From");
-		assertObject(x).json().is("{'in':'header',name:'From',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'From',type:'string'}");
 
 		x = s.getParameterInfo("/host","get","header","Host");
-		assertObject(x).json().is("{'in':'header',name:'Host',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Host',type:'string'}");
 
 		x = s.getParameterInfo("/ifMatch","get","header","If-Match");
-		assertObject(x).json().is("{'in':'header',name:'If-Match',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'If-Match',type:'string'}");
 
 		x = s.getParameterInfo("/ifModifiedSince","get","header","If-Modified-Since");
-		assertObject(x).json().is("{'in':'header',name:'If-Modified-Since',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'If-Modified-Since',type:'string'}");
 
 		x = s.getParameterInfo("/ifNoneMatch","get","header","If-None-Match");
-		assertObject(x).json().is("{'in':'header',name:'If-None-Match',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'If-None-Match',type:'string'}");
 
 		x = s.getParameterInfo("/ifRange","get","header","If-Range");
-		assertObject(x).json().is("{'in':'header',name:'If-Range',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'If-Range',type:'string'}");
 
 		x = s.getParameterInfo("/ifUnmodifiedSince","get","header","If-Unmodified-Since");
-		assertObject(x).json().is("{'in':'header',name:'If-Unmodified-Since',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'If-Unmodified-Since',type:'string'}");
 
 		x = s.getParameterInfo("/maxForwards","get","header","Max-Forwards");
-		assertObject(x).json().is("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}");
 
 		x = s.getParameterInfo("/pragma","get","header","Pragma");
-		assertObject(x).json().is("{'in':'header',name:'Pragma',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Pragma',type:'string'}");
 
 		x = s.getParameterInfo("/proxyAuthorization","get","header","Proxy-Authorization");
-		assertObject(x).json().is("{'in':'header',name:'Proxy-Authorization',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Proxy-Authorization',type:'string'}");
 
 		x = s.getParameterInfo("/range","get","header","Range");
-		assertObject(x).json().is("{'in':'header',name:'Range',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Range',type:'string'}");
 
 		x = s.getParameterInfo("/referer","get","header","Referer");
-		assertObject(x).json().is("{'in':'header',name:'Referer',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Referer',type:'string'}");
 
 		x = s.getParameterInfo("/te","get","header","TE");
-		assertObject(x).json().is("{'in':'header',name:'TE',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'TE',type:'string'}");
 
 		x = s.getParameterInfo("/upgrade","get","header","Upgrade");
-		assertObject(x).json().is("{'in':'header',name:'Upgrade',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Upgrade',type:'string'}");
 
 		x = s.getParameterInfo("/userAgent","get","header","User-Agent");
-		assertObject(x).json().is("{'in':'header',name:'User-Agent',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'User-Agent',type:'string'}");
 
 		x = s.getParameterInfo("/warning","get","header","Warning");
-		assertObject(x).json().is("{'in':'header',name:'Warning',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'Warning',type:'string'}");
 	}
 }

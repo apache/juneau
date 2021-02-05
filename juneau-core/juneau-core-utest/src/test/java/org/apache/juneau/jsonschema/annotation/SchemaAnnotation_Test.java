@@ -156,7 +156,7 @@ public class SchemaAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "'$ref':'$ref',"
 				+ "_default:['default'],"
@@ -258,10 +258,10 @@ public class SchemaAnnotation_Test {
 		Schema c3 = SchemaAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		Schema c4 = SchemaAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c1).json().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).json().contains("on:['a','b']");
-		assertObject(c3).json().contains("on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertObject(c4).json().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().contains("on:['a','b']");
+		assertObject(c3).asJson().contains("on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
+		assertObject(c4).asJson().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

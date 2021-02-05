@@ -100,10 +100,10 @@ public class MockServletRequest_Test {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bing=qux");
 
 		assertEquals("bar=baz&bing=qux", req.getQueryString());
-		assertObject(req.getParameterMap()).json().is("{bar:['baz'],bing:['qux']}");
-		assertObject(req.getParameter("bar")).json().is("'baz'");
-		assertObject(req.getParameterNames()).json().is("['bar','bing']");
-		assertObject(req.getParameterValues("bar")).json().is("['baz']");
+		assertObject(req.getParameterMap()).asJson().is("{bar:['baz'],bing:['qux']}");
+		assertObject(req.getParameter("bar")).asJson().is("'baz'");
+		assertObject(req.getParameterNames()).asJson().is("['bar','bing']");
+		assertObject(req.getParameterValues("bar")).asJson().is("['baz']");
 	}
 
 	@Test
@@ -111,9 +111,9 @@ public class MockServletRequest_Test {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bar=bing");
 
 		assertEquals("bar=baz&bar=bing", req.getQueryString());
-		assertObject(req.getParameterMap()).json().is("{bar:['baz','bing']}");
-		assertObject(req.getParameter("bar")).json().is("'baz'");
-		assertObject(req.getParameterNames()).json().is("['bar']");
-		assertObject(req.getParameterValues("bar")).json().is("['baz','bing']");
+		assertObject(req.getParameterMap()).asJson().is("{bar:['baz','bing']}");
+		assertObject(req.getParameter("bar")).asJson().is("'baz'");
+		assertObject(req.getParameterNames()).asJson().is("['bar']");
+		assertObject(req.getParameterValues("bar")).asJson().is("['baz','bing']");
 	}
 }

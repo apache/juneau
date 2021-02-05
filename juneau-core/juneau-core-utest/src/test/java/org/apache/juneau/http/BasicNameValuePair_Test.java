@@ -51,9 +51,9 @@ public class BasicNameValuePair_Test {
 	public void a02_of() {
 		BasicNameValuePair x;
 		x = pair("Foo","bar");
-		assertObject(x).json().is("'Foo=bar'");
+		assertObject(x).asJson().is("'Foo=bar'");
 		x = pair("Foo",()->"bar");
-		assertObject(x).json().is("'Foo=bar'");
+		assertObject(x).asJson().is("'Foo=bar'");
 	}
 
 	@Test
@@ -77,14 +77,14 @@ public class BasicNameValuePair_Test {
 			}
 		};
 
-		assertObject(BasicNameValuePair.cast(x1)).isType(NameValuePair.class).json().is("'X1=1'");
-		assertObject(BasicNameValuePair.cast(x2)).isType(NameValuePair.class).json().is("'X2=2'");
-		assertObject(BasicNameValuePair.cast(x3)).isType(NameValuePair.class).json().is("'X3: 3'");
-		assertObject(BasicNameValuePair.cast(x4)).isType(NameValuePair.class).json().is("'X4: 4'");
-		assertObject(BasicNameValuePair.cast(x5)).isType(NameValuePair.class).json().is("'X5=5'");
-		assertObject(BasicNameValuePair.cast(x6)).isType(NameValuePair.class).json().is("{name:'X6',value:'6'}");
-		assertObject(BasicNameValuePair.cast(x7)).isType(NameValuePair.class).json().is("'X7=7'");
-		assertObject(BasicNameValuePair.cast(x8)).isType(NameValuePair.class).json().is("'X8: 8'");
+		assertObject(BasicNameValuePair.cast(x1)).isType(NameValuePair.class).asJson().is("'X1=1'");
+		assertObject(BasicNameValuePair.cast(x2)).isType(NameValuePair.class).asJson().is("'X2=2'");
+		assertObject(BasicNameValuePair.cast(x3)).isType(NameValuePair.class).asJson().is("'X3: 3'");
+		assertObject(BasicNameValuePair.cast(x4)).isType(NameValuePair.class).asJson().is("'X4: 4'");
+		assertObject(BasicNameValuePair.cast(x5)).isType(NameValuePair.class).asJson().is("'X5=5'");
+		assertObject(BasicNameValuePair.cast(x6)).isType(NameValuePair.class).asJson().is("{name:'X6',value:'6'}");
+		assertObject(BasicNameValuePair.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
+		assertObject(BasicNameValuePair.cast(x8)).isType(NameValuePair.class).asJson().is("'X8: 8'");
 
 		assertThrown(()->BasicNameValuePair.cast("X")).is("Object of type java.lang.String could not be converted to a NameValuePair.");
 		assertThrown(()->BasicNameValuePair.cast(null)).is("Object of type null could not be converted to a NameValuePair.");
@@ -105,7 +105,7 @@ public class BasicNameValuePair_Test {
 	@Test
 	public void a04_asHeader() {
 		BasicNameValuePair x = pair("X1","1");
-		assertObject(x.asHeader()).isType(Header.class).json().is("'X1: 1'");
+		assertObject(x.asHeader()).isType(Header.class).asJson().is("'X1: 1'");
 	}
 
 	@Test

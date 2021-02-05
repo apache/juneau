@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the byte array contains the string "foo".</jc>
- * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).hex().is(<js>"666F6F"</js>);
+ * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asHex().is(<js>"666F6F"</js>);
  * </p>
  */
 @FluentSetters(returns="ByteArrayAssertion")

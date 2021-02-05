@@ -34,64 +34,64 @@ public class BasicHttpResource_Test {
 		assertList(x.getHeaders()).isSize(0);
 
 		x = of("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(new StringReader("foo"));
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = of("foo".getBytes());
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(new ByteArrayInputStream("foo".getBytes()));
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = of(null);
-		assertStream(x.getContent()).string().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
 		assertFalse(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of(f);
-		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = of("foo").cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of(new StringReader("foo")).cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of("foo".getBytes()).cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of(new ByteArrayInputStream("foo".getBytes())).cache();
-		assertStream(x.getContent()).string().is("foo");
-		assertStream(x.getContent()).string().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
+		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = of(null).cache();
-		assertStream(x.getContent()).string().doesNotExist();
-		assertStream(x.getContent()).string().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
+		assertStream(x.getContent()).asString().doesNotExist();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
 		x = of(f).cache();
-		assertStream(x.getContent()).string().isEmpty();
-		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
+		assertStream(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
@@ -130,7 +130,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar")).doesNotExist();
 		assertObject(x.getLastHeader("Bar")).doesNotExist();
-		assertObject(x.getHeaders()).json().is("['Foo: bar','Foo: baz']");
+		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz']");
 	}
 
 	@Test
@@ -142,7 +142,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
 		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getHeaders()).json().is("[null,'Foo: bar','Foo: baz','null: bar','Bar: null',null]");
+		assertObject(x.getHeaders()).asJson().is("[null,'Foo: bar','Foo: baz','null: bar','Bar: null',null]");
 	}
 
 	@Test
@@ -154,7 +154,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
 		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getHeaders()).json().is("['Foo: bar','Foo: baz','null: bar','Bar: null',null]");
+		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null',null]");
 	}
 
 	@Test
@@ -166,7 +166,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
 		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getHeaders()).json().is("['Foo: bar','Foo: baz','null: bar','Bar: null',null]");
+		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null',null]");
 	}
 
 

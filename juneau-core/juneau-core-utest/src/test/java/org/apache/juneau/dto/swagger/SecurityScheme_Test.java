@@ -134,22 +134,22 @@ public class SecurityScheme_Test {
 		SecurityScheme t = new SecurityScheme();
 
 		t.scopes(AMap.of("foo","bar"));
-		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
+		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.scopes(AMap.create());
-		assertObject(t.scopes()).isType(Map.class).json().is("{}");
+		assertObject(t.scopes()).isType(Map.class).asJson().is("{}");
 
 		t.scopes((Map<String,String>)null);
 		assertObject(t.scopes()).isNull();
 
 		t.addScopes(AMap.of("foo","bar"));
-		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
+		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.addScopes(AMap.create());
-		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
+		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.addScopes(null);
-		assertObject(t.scopes()).isType(Map.class).json().is("{foo:'bar'}");
+		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class SecurityScheme_Test {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		t
 			.set("authorizationUrl", "a")
@@ -183,7 +183,7 @@ public class SecurityScheme_Test {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		t
 			.set("authorizationUrl", new StringBuilder("a"))
@@ -196,7 +196,7 @@ public class SecurityScheme_Test {
 			.set("type", new StringBuilder("g"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		assertString(t.get("authorizationUrl", String.class)).is("a");
 		assertString(t.get("description", String.class)).is("b");
@@ -224,7 +224,7 @@ public class SecurityScheme_Test {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, SecurityScheme.class)).json().is(s);
+		assertObject(JsonParser.DEFAULT.parse(s, SecurityScheme.class)).asJson().is(s);
 	}
 
 	@Test
@@ -233,7 +233,7 @@ public class SecurityScheme_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("authorizationUrl", "a")
@@ -247,14 +247,14 @@ public class SecurityScheme_Test {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		SecurityScheme t = new SecurityScheme();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("authorizationUrl", "a")
@@ -267,6 +267,6 @@ public class SecurityScheme_Test {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).json().is("['authorizationUrl','description','flow','in','name','scopes','tokenUrl','type','$ref']");
+		assertObject(t.keySet()).asJson().is("['authorizationUrl','description','flow','in','name','scopes','tokenUrl','type','$ref']");
 	}
 }

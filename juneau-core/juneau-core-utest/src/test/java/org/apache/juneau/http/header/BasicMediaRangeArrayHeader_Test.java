@@ -97,8 +97,8 @@ public class BasicMediaRangeArrayHeader_Test {
 
 	@Test
 	public void a05_getRanges() throws Exception {
-		assertObject(Accept.of("text/foo,text/bar").getRanges()).json().is("['text/foo','text/bar']");
-		assertObject(new Accept((String)null).getRanges()).json().is("[]");
+		assertObject(Accept.of("text/foo,text/bar").getRanges()).asJson().is("['text/foo','text/bar']");
+		assertObject(new Accept((String)null).getRanges()).asJson().is("[]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

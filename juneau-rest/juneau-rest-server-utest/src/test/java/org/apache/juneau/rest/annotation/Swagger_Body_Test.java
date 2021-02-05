@@ -87,24 +87,24 @@ public class Swagger_Body_Test {
 
 		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).json().is("true");
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getRequired()).asJson().is("true");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertEquals("'a'", x.getExample());
-		assertObject(x.getExamples()).json().is("{foo:'bar'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 
 		x = s.getParameterInfo("/b","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).json().is("true");
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getRequired()).asJson().is("true");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertEquals("'a'", x.getExample());
-		assertObject(x.getExamples()).json().is("{foo:'bar'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 
 		x = s.getParameterInfo("/c","get","body",null);
 		assertEquals("b\nc", x.getDescription());
-		assertObject(x.getRequired()).json().is("true");
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getRequired()).asJson().is("true");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertEquals("'b'", x.getExample());
-		assertObject(x.getExamples()).json().is("{foo:'baz'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'baz'}");
 	}
 
 	@Rest
@@ -141,16 +141,16 @@ public class Swagger_Body_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'b'}");
+		assertObject(x.getSchema()).asJson().is("{type:'b'}");
 
 		x = s.getParameterInfo("/b","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'object',properties:{f1:{type:'string'}}}");
+		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getParameterInfo("/c","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'array',items:{type:'string'}}");
+		assertObject(x.getSchema()).asJson().is("{type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 	}
 
 	@Rest
@@ -177,7 +177,7 @@ public class Swagger_Body_Test {
 		assertEquals("{f1:'b'}", x.getExample());
 
 		x = s.getParameterInfo("/b","get","body",null);
-		assertObject(x.getExamples()).json().is("{foo:'bar'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 	}
 
 	@Rest
@@ -239,24 +239,24 @@ public class Swagger_Body_Test {
 
 		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).json().is("true");
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getRequired()).asJson().is("true");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertEquals("a", x.getExample());
-		assertObject(x.getExamples()).json().is("{foo:'bar'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 
 		x = s.getParameterInfo("/b","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).json().is("true");
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getRequired()).asJson().is("true");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertEquals("a", x.getExample());
-		assertObject(x.getExamples()).json().is("{foo:'bar'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 
 		x = s.getParameterInfo("/c","get","body",null);
 		assertEquals("b\nc", x.getDescription());
-		assertObject(x.getRequired()).json().is("true");
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getRequired()).asJson().is("true");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertEquals("b", x.getExample());
-		assertObject(x.getExamples()).json().is("{foo:'baz'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'baz'}");
 	}
 
 	@Rest
@@ -295,22 +295,22 @@ public class Swagger_Body_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'b'}");
+		assertObject(x.getSchema()).asJson().is("{type:'b'}");
 
 		x = s.getParameterInfo("/b","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'object',properties:{f1:{type:'string'}}}");
+		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getParameterInfo("/c","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'array',items:{type:'string'}}");
+		assertObject(x.getSchema()).asJson().is("{type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 
 		x = s.getParameterInfo("/e","get","body",null);
-		assertObject(x.getSchema()).json().is("{format:'int32',type:'integer'}");
+		assertObject(x.getSchema()).asJson().is("{format:'int32',type:'integer'}");
 
 		x = s.getParameterInfo("/f","get","body",null);
-		assertObject(x.getSchema()).json().is("{type:'boolean'}");
+		assertObject(x.getSchema()).asJson().is("{type:'boolean'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -340,6 +340,6 @@ public class Swagger_Body_Test {
 		assertEquals("{f1:'b'}", x.getExample());
 
 		x = s.getParameterInfo("/b","get","body",null);
-		assertObject(x.getExamples()).json().is("{foo:'bar'}");
+		assertObject(x.getExamples()).asJson().is("{foo:'bar'}");
 	}
 }

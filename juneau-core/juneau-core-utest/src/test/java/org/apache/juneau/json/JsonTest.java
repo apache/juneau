@@ -102,7 +102,7 @@ public class JsonTest {
 		for (String attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
 			m.clear();
 			m.put(attr,1);
-			assertObject(m).json().is("{'"+attr+"':1}");
+			assertObject(m).asJson().is("{'"+attr+"':1}");
 		}
 	}
 

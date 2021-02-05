@@ -80,15 +80,15 @@ public class Swagger_Header_Test {
 
 		x = s.getParameterInfo("/a","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getType()).json().is("'string'");
+		assertObject(x.getType()).asJson().is("'string'");
 
 		x = s.getParameterInfo("/b","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getType()).json().is("'string'");
+		assertObject(x.getType()).asJson().is("'string'");
 
 		x = s.getParameterInfo("/c","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getType()).json().is("'string'");
+		assertObject(x.getType()).asJson().is("'string'");
 	}
 
 	@Rest
@@ -125,16 +125,16 @@ public class Swagger_Header_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/b","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -256,22 +256,22 @@ public class Swagger_Header_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/b","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/e","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'integer',format:'int32'}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'integer',format:'int32'}");
 
 		x = s.getParameterInfo("/f","get","header","H");
-		assertObject(x).json().is("{'in':'header',name:'H',type:'boolean'}");
+		assertObject(x).asJson().is("{'in':'header',name:'H',type:'boolean'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -101,7 +101,7 @@ public class AtomTest {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).sameAs(f2);
+		assertObject(f).isSameJsonAs(f2);
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class AtomTest {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).sameAs(f2);
+		assertObject(f).isSameJsonAs(f2);
 	}
 
 	@Test
@@ -191,7 +191,7 @@ public class AtomTest {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).sameAs(f2);
+		assertObject(f).isSameJsonAs(f2);
 	}
 
 	@Test
@@ -201,6 +201,6 @@ public class AtomTest {
 		Feed f = createFeed(), f2;
 		r = f.toString();
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).sameAs(f2);
+		assertObject(f).isSameJsonAs(f2);
 	}
 }

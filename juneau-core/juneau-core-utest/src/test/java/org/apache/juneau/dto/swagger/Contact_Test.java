@@ -87,7 +87,7 @@ public class Contact_Test {
 			.set("email", "baz")
 			.set("$ref", "qux");
 
-		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
 		t
 			.set("name", new StringBuilder("foo"))
@@ -95,10 +95,10 @@ public class Contact_Test {
 			.set("email", new StringBuilder("baz"))
 			.set("$ref", new StringBuilder("qux"));
 
-		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
 		assertObject(t.get("name", String.class)).isType(String.class).is("foo");
-		assertObject(t.get("url", URI.class)).isType(URI.class).string().is("bar");
+		assertObject(t.get("url", URI.class)).isType(URI.class).asString().is("bar");
 		assertObject(t.get("email", String.class)).isType(String.class).is("baz");
 		assertObject(t.get("$ref", String.class)).isType(String.class).is("qux");
 
@@ -107,7 +107,7 @@ public class Contact_Test {
 		assertObject(t.get(null, Object.class)).isNull();
 		assertObject(t.get("foo", Object.class)).isNull();
 
-		assertObject(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class)).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertObject(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class)).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class Contact_Test {
 
 		t = t.copy();
 
-		assertObject(t).json().is("{}");
+		assertObject(t).asJson().is("{}");
 
 		t
 			.set("name", "foo")
@@ -125,14 +125,14 @@ public class Contact_Test {
 			.set("$ref", "qux")
 			.copy();
 
-		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 
 	@Test
 	public void b03_keySet() throws Exception {
 		Contact t = new Contact();
 
-		assertObject(t.keySet()).json().is("[]");
+		assertObject(t.keySet()).asJson().is("[]");
 
 		t
 			.set("name", "foo")
@@ -140,6 +140,6 @@ public class Contact_Test {
 			.set("email", "baz")
 			.set("$ref", "qux");
 
-		assertObject(t.keySet()).json().is("['email','name','url','$ref']");
+		assertObject(t.keySet()).asJson().is("['email','name','url','$ref']");
 	}
 }

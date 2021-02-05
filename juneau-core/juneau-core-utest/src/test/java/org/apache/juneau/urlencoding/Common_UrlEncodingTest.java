@@ -40,13 +40,13 @@ public class Common_UrlEncodingTest {
 		String r = s.build().serialize(t1);
 		assertEquals("s2=s2", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 
 		s.keepNullProperties();
 		r = s.build().serialize(t1);
 		assertEquals("s1=null&s2=s2", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 	}
 
 	public static class A {
@@ -71,7 +71,7 @@ public class Common_UrlEncodingTest {
 		r = s.build().serialize(t1);
 		assertEquals("f1=()&f2=(f2a=null,f2b=(s2=s2))", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -103,7 +103,7 @@ public class Common_UrlEncodingTest {
 		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, C.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -135,7 +135,7 @@ public class Common_UrlEncodingTest {
 		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, D.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);

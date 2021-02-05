@@ -323,7 +323,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object get(Object property) {
 		String pName = stringify(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
-		if (p == null) 
+		if (p == null)
 			return meta.onReadProperty(this.bean, pName, null);
 		return p.get(this, pName);
 	}
@@ -449,6 +449,18 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	@Override /* Delegate */
 	public ClassMeta<T> getClassMeta() {
 		return this.meta.getClassMeta();
+	}
+
+	/**
+	 * Extracts the specified field values from this bean and returns it as a simple Map.
+	 *
+	 * @param fields The fields to extract.
+	 * @return
+	 * 	A new map with fields as key-value pairs.
+	 * 	<br>Note that modifying the values in this map will also modify the underlying bean.
+	 */
+	public Map<String,Object> getFields(String...fields) {
+		return new FilteredMap<>(null, this, fields);
 	}
 
 	/**

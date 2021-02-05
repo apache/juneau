@@ -42,7 +42,7 @@ public class BeanIgnoreAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).json().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "on:['a'],"
 				+ "onClass:['"+CNAME+"$X1']"
@@ -88,11 +88,11 @@ public class BeanIgnoreAnnotation_Test {
 		BeanIgnore c4 = BeanIgnoreAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 		BeanIgnore c5 = BeanIgnoreAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
-		assertObject(c1).json().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).json().contains("on:['a','b']");
-		assertObject(c3).json().contains("on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertObject(c4).json().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
-		assertObject(c5).json().contains("on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
+		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().contains("on:['a','b']");
+		assertObject(c3).asJson().contains("on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
+		assertObject(c4).asJson().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertObject(c5).asJson().contains("on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

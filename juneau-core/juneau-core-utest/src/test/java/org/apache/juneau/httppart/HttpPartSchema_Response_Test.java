@@ -137,7 +137,7 @@ public class HttpPartSchema_Response_Test {
 		assertTrue(s.isExclusiveMaximum());
 		assertTrue(s.isExclusiveMinimum());
 		assertTrue(s.isUniqueItems());
-		assertObject(s.getEnum()).json().is("['e1','e2']");
+		assertObject(s.getEnum()).asJson().is("['e1','e2']");
 		assertEquals("c1\nc2", s.getDefault());
 
 		HttpPartSchema items = s.getItems();
@@ -155,7 +155,7 @@ public class HttpPartSchema_Response_Test {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e3','e4']");
+		assertObject(items.getEnum()).asJson().is("['e3','e4']");
 		assertEquals("c3\nc4", items.getDefault());
 
 		items = items.getItems();
@@ -173,7 +173,7 @@ public class HttpPartSchema_Response_Test {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e5','e6']");
+		assertObject(items.getEnum()).asJson().is("['e5','e6']");
 		assertEquals("c5\nc6", items.getDefault());
 
 		items = items.getItems();
@@ -191,7 +191,7 @@ public class HttpPartSchema_Response_Test {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).json().is("['e7','e8']");
+		assertObject(items.getEnum()).asJson().is("['e7','e8']");
 		assertEquals("c7\nc8", items.getDefault());
 	}
 

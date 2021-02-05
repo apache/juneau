@@ -54,8 +54,8 @@ public class StringRanges_Test {
 
 	@Test
 	public void a03_getRanges() throws Exception {
-		assertObject(of("foo").getRanges()).json().is("['foo']");
-		assertObject(of(null).getRanges()).json().is("[]");
+		assertObject(of("foo").getRanges()).asJson().is("['foo']");
+		assertObject(of(null).getRanges()).asJson().is("[]");
 	}
 
 	@Test

@@ -37,7 +37,7 @@ public class Assertions {
 	 * @return A new {@link DateAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static DateAssertion assertDate(Date value) {
-		return new DateAssertion(value);
+		return DateAssertion.create(value);
 	}
 
 	/**
@@ -69,8 +69,8 @@ public class Assertions {
 	 * @param value The date being wrapped.
 	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ZonedDateTimeAssertion assertZonedDateTimeAssertion(ZonedDateTime value) {
-		return new ZonedDateTimeAssertion(value);
+	public static ZonedDateTimeAssertion assertZonedDateTime(ZonedDateTime value) {
+		return ZonedDateTimeAssertion.create(value);
 	}
 
 	/**
@@ -85,9 +85,9 @@ public class Assertions {
 	 * @param value The date being wrapped.
 	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ZonedDateTimeAssertion assertZonedDateTimeAssertion(Optional<ZonedDateTime> value) {
+	public static ZonedDateTimeAssertion assertZonedDateTime(Optional<ZonedDateTime> value) {
 		assertArgNotNull("value", value);
-		return new ZonedDateTimeAssertion(value.orElse(null));
+		return assertZonedDateTime(value.orElse(null));
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class Assertions {
 	 * @return A new {@link IntegerAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static IntegerAssertion assertInteger(Integer value) {
-		return new IntegerAssertion(value);
+		return IntegerAssertion.create(value);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class Assertions {
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static LongAssertion assertLong(Long value) {
-		return new LongAssertion(value);
+		return LongAssertion.create(value);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class Assertions {
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static ComparableAssertion assertComparable(Comparable<?> value) {
-		return new ComparableAssertion(value);
+		return ComparableAssertion.create(value);
 	}
 
 	/**
@@ -178,14 +178,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).instanceOf(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static ObjectAssertion assertObject(Object value) {
-		return new ObjectAssertion(value);
+		return ObjectAssertion.create(value);
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).instanceOf(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * @param value The object being wrapped.
@@ -203,6 +203,39 @@ public class Assertions {
 	public static ObjectAssertion assertObject(Optional<?> value) {
 		assertArgNotNull("value", value);
 		return assertObject(value.orElse(null));
+	}
+
+	/**
+	 * Used for assertion calls against Java beans.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>).isType(MyBean.<jk>class</jk>).fields(<js>"foo"</js>).asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static BeanAssertion assertBean(Object value) {
+		return BeanAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against Java beans.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>).isType(MyBean.<jk>class</jk>).fields(<js>"foo"</js>).asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static BeanAssertion assertBean(Optional<?> value) {
+		assertArgNotNull("value", value);
+		return assertBean(value.orElse(null));
 	}
 
 	/**
@@ -218,7 +251,7 @@ public class Assertions {
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static StringAssertion assertString(Object value) {
-		return new StringAssertion(value);
+		return StringAssertion.create(value);
 	}
 
 	/**
@@ -235,7 +268,7 @@ public class Assertions {
 	 */
 	public static StringAssertion assertString(Optional<?> value) {
 		assertArgNotNull("value", value);
-		return new StringAssertion(value.orElse(null));
+		return assertString(value.orElse(null));
 	}
 
 	/**
@@ -251,7 +284,7 @@ public class Assertions {
 	 * @return A new {@link BooleanAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static BooleanAssertion assertBoolean(Boolean value) {
-		return new BooleanAssertion(value);
+		return BooleanAssertion.create(value);
 	}
 
 	/**
@@ -284,7 +317,7 @@ public class Assertions {
 	 * @return A new {@link ThrowableAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static ThrowableAssertion assertThrowable(Throwable value) {
-		return new ThrowableAssertion(value);
+		return ThrowableAssertion.create(value);
 	}
 
 	/**
@@ -300,7 +333,7 @@ public class Assertions {
 	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static ArrayAssertion assertArray(Object value) {
-		return new ArrayAssertion(value);
+		return ArrayAssertion.create(value);
 	}
 
 	/**
@@ -316,7 +349,7 @@ public class Assertions {
 	 * @return A new {@link CollectionAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static CollectionAssertion assertCollection(Collection<?> value) {
-		return new CollectionAssertion(value);
+		return CollectionAssertion.create(value);
 	}
 
 	/**
@@ -332,7 +365,24 @@ public class Assertions {
 	 * @return A new {@link ListAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static ListAssertion assertList(List<?> value) {
-		return new ListAssertion(value);
+		return ListAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against maps.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified POJO is the specified type and contains the specified key.</jc>
+	 * 	<jsm>assertMap</jsm>(<jv>myMap</jv>).isType(HashMap.<jk>class</jk>).containsKey(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link MapAssertion} object.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static MapAssertion assertMap(Map value) {
+		return MapAssertion.create(value);
 	}
 
 	/**
@@ -365,7 +415,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the stream contains the string "foo".</jc>
-	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @param value The input stream being wrapped.
@@ -373,7 +423,7 @@ public class Assertions {
 	 * @throws IOException If thrown while reading contents from stream.
 	 */
 	public static ByteArrayAssertion assertStream(InputStream value) throws IOException {
-		return new ByteArrayAssertion(value == null ? null : IOUtils.readBytes(value));
+		return assertBytes(value == null ? null : IOUtils.readBytes(value));
 	}
 
 	/**
@@ -382,7 +432,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the stream contains the string "foo".</jc>
-	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @param value The input stream being wrapped.
@@ -400,14 +450,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @param value The byte array being wrapped.
 	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static ByteArrayAssertion assertBytes(byte[] value) {
-		return new ByteArrayAssertion(value);
+		return ByteArrayAssertion.create(value);
 	}
 
 	/**
@@ -416,7 +466,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @param value The byte array being wrapped.
@@ -441,7 +491,7 @@ public class Assertions {
 	 * @throws IOException If thrown while reading contents from reader.
 	 */
 	public static StringAssertion assertReader(Reader value) throws IOException {
-		return new StringAssertion(value == null ? null : IOUtils.read(value));
+		return assertString(value == null ? null : IOUtils.read(value));
 	}
 
 	/**

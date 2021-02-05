@@ -56,14 +56,14 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).string().is(<js>"foobar"</js>);
+	 * 	<jsm>assertBytes<jsm>(myByteArray).asString().is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
 	 */
 	@Override
-	public FluentStringAssertion<R> string() {
-		return string(IOUtils.UTF8);
+	public FluentStringAssertion<R> asString() {
+		return asString(IOUtils.UTF8);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * @param cs The charset to use to decode the string.
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> string(Charset cs) {
+	public FluentStringAssertion<R> asString(Charset cs) {
 		return new FluentStringAssertion<>(this, value == null ? null : new String(value, cs), returns());
 	}
 
@@ -93,7 +93,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 *
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringAssertion<R> base64() {
+	public FluentStringAssertion<R> asBase64() {
 		return new FluentStringAssertion<>(this, value == null ? null : base64Encode(value), returns());
 	}
 
@@ -103,12 +103,12 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertBytes<jsm>(myByteArray).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @return A new string consisting of hexadecimal characters.
 	 */
-	public FluentStringAssertion<R> hex() {
+	public FluentStringAssertion<R> asHex() {
 		return new FluentStringAssertion<>(this, value == null ? null : toHex(value), returns());
 	}
 
@@ -118,12 +118,12 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).spacedHex().is(<js>"66 6F 6F"</js>);
+	 * 	<jsm>assertBytes<jsm>(myByteArray).asSpacedHex().is(<js>"66 6F 6F"</js>);
 	 * </p>
 	 *
 	 * @return A new string consisting of hexadecimal characters.
 	 */
-	public FluentStringAssertion<R> spacedHex() {
+	public FluentStringAssertion<R> asSpacedHex() {
 		return new FluentStringAssertion<>(this, value == null ? null : toSpacedHex(value), returns());
 	}
 

@@ -30,12 +30,12 @@ public class SimpleMapTest {
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
-		assertObject(m).json().is("{a:'A',b:'B'}");
-		assertObject(m.keySet()).json().is("['a','b']");
+		assertObject(m).asJson().is("{a:'A',b:'B'}");
+		assertObject(m.keySet()).asJson().is("['a','b']");
 		m.put("a", "1");
-		assertObject(m).json().is("{a:'1',b:'B'}");
+		assertObject(m).asJson().is("{a:'1',b:'B'}");
 		m.entrySet().iterator().next().setValue("2");
-		assertObject(m).json().is("{a:'2',b:'B'}");
+		assertObject(m).asJson().is("{a:'2',b:'B'}");
 		assertThrown(()->m.put("c", "1")).isType(IllegalArgumentException.class);
 
 		assertNull(m.get("c"));

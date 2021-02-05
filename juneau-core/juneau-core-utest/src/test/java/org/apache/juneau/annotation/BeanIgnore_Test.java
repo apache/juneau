@@ -42,7 +42,7 @@ public class BeanIgnore_Test {
 
 	@Test
 	public void testBeanIgnoreOnProperties() throws Exception {
-		assertObject(new A()).json().is("{c:'c',a:'a'}");
+		assertObject(new A()).asJson().is("{c:'c',a:'a'}");
 	}
 
 	@BeanIgnore(on="Ac.getB")
@@ -65,7 +65,7 @@ public class BeanIgnore_Test {
 
 	@Test
 	public void testBeanIgnoreOnProperties_usingConfig() throws Exception {
-		assertObject(new Ac()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
+		assertObject(new Ac()).asString(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ public class BeanIgnore_Test {
 
 	@Test
 	public void testBeanIgnoreOnBean() throws Exception {
-		assertObject(new B()).json().is("{f2:2,f3:'xxx',f4:'xxx'}");
+		assertObject(new B()).asJson().is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 
 	@BeanIgnore(on="B1c")
@@ -119,7 +119,7 @@ public class BeanIgnore_Test {
 
 	@Test
 	public void testBeanIgnoreOnBean_usingConfig() throws Exception {
-		assertObject(new Bc()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
+		assertObject(new Bc()).asString(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 }
 

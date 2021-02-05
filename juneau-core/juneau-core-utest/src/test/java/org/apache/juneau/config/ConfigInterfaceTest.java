@@ -95,14 +95,14 @@ public class ConfigInterfaceTest {
 	public void testInt3dArray() throws Exception {
 		proxy.setInt3dArray(new int[][][]{{{1,2},null},null});
 		assertEquals("[[[1,2],null],null]", cf.get("A/int3dArray"));
-		assertObject(proxy.getInt3dArray()).json().is("[[[1,2],null],null]");
+		assertObject(proxy.getInt3dArray()).asJson().is("[[[1,2],null],null]");
 		assertObject(proxy.getInt3dArray()).isType(int[][][].class);
 	}
 
 	@Test
 	public void testInteger3dArray() throws Exception {
 		proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null});
-		assertObject(proxy.getInteger3dArray()).json().is("[[[1,null],null],null]");
+		assertObject(proxy.getInteger3dArray()).asJson().is("[[[1,null],null],null]");
 		assertEquals("[[[1,null],null],null]", cf.get("A/integer3dArray"));
 		assertObject(proxy.getInteger3dArray()[0][0][0]).isType(Integer.class);
 	}
@@ -110,14 +110,14 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testString3dArray() throws Exception {
 		proxy.setString3dArray(new String[][][]{{{"foo",null},null},null});
-		assertObject(proxy.getString3dArray()).json().is("[[['foo',null],null],null]");
+		assertObject(proxy.getString3dArray()).asJson().is("[[['foo',null],null],null]");
 		assertEquals("[[['foo',null],null],null]", cf.get("A/string3dArray"));
 	}
 
 	@Test
 	public void testIntegerList() throws Exception {
 		proxy.setIntegerList(AList.of(1,null));
-		assertObject(proxy.getIntegerList()).json().is("[1,null]");
+		assertObject(proxy.getIntegerList()).asJson().is("[1,null]");
 		assertEquals("[1,null]", cf.get("A/integerList"));
 		assertObject(proxy.getIntegerList().get(0)).isType(Integer.class);
 	}
@@ -125,7 +125,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testInteger3dList() throws Exception {
 		proxy.setInteger3dList(AList.of(AList.of(AList.of(1,null),null),null));
-		assertObject(proxy.getInteger3dList()).json().is("[[[1,null],null],null]");
+		assertObject(proxy.getInteger3dList()).asJson().is("[[[1,null],null],null]");
 		assertEquals("[[[1,null],null],null]", cf.get("A/integer3dList"));
 		assertObject(proxy.getInteger3dList().get(0).get(0).get(0)).isType(Integer.class);
 	}
@@ -133,7 +133,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testInteger1d3dList() throws Exception {
 		proxy.setInteger1d3dList(AList.of(new Integer[][][]{{{1,null},null},null},null));
-		assertObject(proxy.getInteger1d3dList()).json().is("[[[[1,null],null],null],null]");
+		assertObject(proxy.getInteger1d3dList()).asJson().is("[[[[1,null],null],null],null]");
 		assertEquals("[[[[1,null],null],null],null]", cf.get("A/integer1d3dList"));
 		assertObject(proxy.getInteger1d3dList().get(0)[0][0][0]).isType(Integer.class);
 	}
@@ -141,7 +141,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testInt1d3dList() throws Exception {
 		proxy.setInt1d3dList(AList.of(new int[][][]{{{1,2},null},null},null));
-		assertObject(proxy.getInt1d3dList()).json().is("[[[[1,2],null],null],null]");
+		assertObject(proxy.getInt1d3dList()).asJson().is("[[[[1,2],null],null],null]");
 		assertEquals("[[[[1,2],null],null],null]", cf.get("A/int1d3dList"));
 		assertObject(proxy.getInt1d3dList().get(0)).isType(int[][][].class);
 	}
@@ -149,7 +149,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testStringList() throws Exception {
 		proxy.setStringList(Arrays.asList("foo","bar",null));
-		assertObject(proxy.getStringList()).json().is("['foo','bar',null]");
+		assertObject(proxy.getStringList()).asJson().is("['foo','bar',null]");
 		assertEquals("['foo','bar',null]", cf.get("A/stringList"));
 	}
 
@@ -158,7 +158,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBean() throws Exception {
 		proxy.setBean(ABean.get());
-		assertObject(proxy.getBean()).json().is("{a:1,b:'foo'}");
+		assertObject(proxy.getBean()).asJson().is("{a:1,b:'foo'}");
 		assertEquals("{a:1,b:'foo'}", cf.get("A/bean"));
 		assertObject(proxy.getBean()).isType(ABean.class);
 	}
@@ -166,7 +166,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBean3dArray() throws Exception {
 		proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null});
-		assertObject(proxy.getBean3dArray()).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(proxy.getBean3dArray()).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertEquals("[[[{a:1,b:'foo'},null],null],null]", cf.get("A/bean3dArray"));
 		assertObject(proxy.getBean3dArray()[0][0][0]).isType(ABean.class);
 	}
@@ -174,7 +174,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBeanList() throws Exception {
 		proxy.setBeanList(Arrays.asList(ABean.get()));
-		assertObject(proxy.getBeanList()).json().is("[{a:1,b:'foo'}]");
+		assertObject(proxy.getBeanList()).asJson().is("[{a:1,b:'foo'}]");
 		assertEquals("[{a:1,b:'foo'}]", cf.get("A/beanList"));
 		assertObject(proxy.getBeanList().get(0)).isType(ABean.class);
 	}
@@ -182,7 +182,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBean1d3dList() throws Exception {
 		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
-		assertObject(proxy.getBean1d3dList()).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(proxy.getBean1d3dList()).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertEquals("[[[[{a:1,b:'foo'},null],null],null],null]", cf.get("A/bean1d3dList"));
 		assertObject(proxy.getBean1d3dList().get(0)[0][0][0]).isType(ABean.class);
 	}
@@ -190,7 +190,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBeanMap() throws Exception {
 		proxy.setBeanMap(AMap.of("foo",ABean.get()));
-		assertObject(proxy.getBeanMap()).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(proxy.getBeanMap()).asJson().is("{foo:{a:1,b:'foo'}}");
 		assertEquals("{foo:{a:1,b:'foo'}}", cf.get("A/beanMap"));
 		assertObject(proxy.getBeanMap().get("foo")).isType(ABean.class);
 	}
@@ -198,7 +198,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBeanListMap() throws Exception {
 		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(ABean.get())));
-		assertObject(proxy.getBeanListMap()).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(proxy.getBeanListMap()).asJson().is("{foo:[{a:1,b:'foo'}]}");
 		assertEquals("{foo:[{a:1,b:'foo'}]}", cf.get("A/beanListMap"));
 		assertObject(proxy.getBeanListMap().get("foo").get(0)).isType(ABean.class);
 	}
@@ -206,7 +206,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBean1d3dListMap() throws Exception {
 		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)));
-		assertObject(proxy.getBean1d3dListMap()).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(proxy.getBean1d3dListMap()).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", cf.get("A/bean1d3dListMap"));
 		assertObject(proxy.getBean1d3dListMap().get("foo").get(0)[0][0][0]).isType(ABean.class);
 	}
@@ -214,7 +214,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBeanListMapIntegerKeys() throws Exception {
 		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(ABean.get())));
-		assertObject(proxy.getBeanListMapIntegerKeys()).json().is("{'1':[{a:1,b:'foo'}]}");
+		assertObject(proxy.getBeanListMapIntegerKeys()).asJson().is("{'1':[{a:1,b:'foo'}]}");
 		assertEquals("{'1':[{a:1,b:'foo'}]}", cf.get("A/beanListMapIntegerKeys"));
 		assertObject(proxy.getBeanListMapIntegerKeys().get(1).get(0)).isType(ABean.class);
 	}
@@ -224,7 +224,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBean() throws Exception {
 		proxy.setTypedBean(TypedBeanImpl.get());
-		assertObject(proxy.getTypedBean()).json().is("{a:1,b:'foo'}");
+		assertObject(proxy.getTypedBean()).asJson().is("{a:1,b:'foo'}");
 		assertEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", cf.get("A/typedBean"));
 		assertObject(proxy.getTypedBean()).isType(TypedBeanImpl.class);
 	}
@@ -232,7 +232,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBean3dArray() throws Exception {
 		proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null});
-		assertObject(proxy.getTypedBean3dArray()).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(proxy.getTypedBean3dArray()).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", cf.get("A/typedBean3dArray"));
 		assertObject(proxy.getTypedBean3dArray()[0][0][0]).isType(TypedBeanImpl.class);
 	}
@@ -240,7 +240,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBeanList() throws Exception {
 		proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get()));
-		assertObject(proxy.getTypedBeanList()).json().is("[{a:1,b:'foo'}]");
+		assertObject(proxy.getTypedBeanList()).asJson().is("[{a:1,b:'foo'}]");
 		assertEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", cf.get("A/typedBeanList"));
 		assertObject(proxy.getTypedBeanList().get(0)).isType(TypedBeanImpl.class);
 	}
@@ -248,7 +248,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBean1d3dList() throws Exception {
 		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
-		assertObject(proxy.getTypedBean1d3dList()).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(proxy.getTypedBean1d3dList()).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", cf.get("A/typedBean1d3dList"));
 		assertObject(proxy.getTypedBean1d3dList().get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
@@ -256,7 +256,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBeanMap() throws Exception {
 		proxy.setTypedBeanMap(AMap.of("foo",TypedBeanImpl.get()));
-		assertObject(proxy.getTypedBeanMap()).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(proxy.getTypedBeanMap()).asJson().is("{foo:{a:1,b:'foo'}}");
 		assertEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", cf.get("A/typedBeanMap"));
 		assertObject(proxy.getTypedBeanMap().get("foo")).isType(TypedBeanImpl.class);
 	}
@@ -264,7 +264,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBeanListMap() throws Exception {
 		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
-		assertObject(proxy.getTypedBeanListMap()).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(proxy.getTypedBeanListMap()).asJson().is("{foo:[{a:1,b:'foo'}]}");
 		assertEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMap"));
 		assertObject(proxy.getTypedBeanListMap().get("foo").get(0)).isType(TypedBeanImpl.class);
 	}
@@ -272,7 +272,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBean1d3dListMap() throws Exception {
 		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
-		assertObject(proxy.getTypedBean1d3dListMap()).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(proxy.getTypedBean1d3dListMap()).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", cf.get("A/typedBean1d3dListMap"));
 		assertObject(proxy.getTypedBean1d3dListMap().get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
@@ -280,7 +280,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testTypedBeanListMapIntegerKeys() throws Exception {
 		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
-		assertObject(proxy.getTypedBeanListMapIntegerKeys()).json().is("{'1':[{a:1,b:'foo'}]}");
+		assertObject(proxy.getTypedBeanListMapIntegerKeys()).asJson().is("{'1':[{a:1,b:'foo'}]}");
 		assertEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMapIntegerKeys"));
 		assertObject(proxy.getTypedBeanListMapIntegerKeys().get(1).get(0)).isType(TypedBeanImpl.class);
 	}
@@ -290,7 +290,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testSwappedPojo() throws Exception {
 		proxy.setSwappedPojo(new SwappedPojo());
-		assertObject(proxy.getSwappedPojo()).json().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
+		assertObject(proxy.getSwappedPojo()).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/swappedPojo"));
 		assertObject(proxy.getSwappedPojo()).isType(SwappedPojo.class);
 	}
@@ -298,7 +298,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testSwappedPojo3dArray() throws Exception {
 		proxy.setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
-		assertObject(proxy.getSwappedPojo3dArray()).json().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
+		assertObject(proxy.getSwappedPojo3dArray()).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
 		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/swappedPojo3dArray"));
 		assertObject(proxy.getSwappedPojo3dArray()[0][0][0]).isType(SwappedPojo.class);
 	}
@@ -306,7 +306,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testSwappedPojoMap() throws Exception {
 		proxy.setSwappedPojoMap(AMap.of(new SwappedPojo(), new SwappedPojo()));
-		assertObject(proxy.getSwappedPojoMap()).json().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
+		assertObject(proxy.getSwappedPojoMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/swappedPojoMap"));
 		assertObject(proxy.getSwappedPojoMap().keySet().iterator().next()).isType(SwappedPojo.class);
 		assertObject(proxy.getSwappedPojoMap().values().iterator().next()).isType(SwappedPojo.class);
@@ -315,7 +315,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testSwappedPojo3dMap() throws Exception {
 		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
-		assertObject(proxy.getSwappedPojo3dMap()).json().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertObject(proxy.getSwappedPojo3dMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/swappedPojo3dMap"));
 		assertObject(proxy.getSwappedPojo3dMap().keySet().iterator().next()).isType(SwappedPojo.class);
 		assertObject(proxy.getSwappedPojo3dMap().values().iterator().next()[0][0][0]).isType(SwappedPojo.class);
@@ -326,7 +326,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testImplicitSwappedPojo() throws Exception {
 		proxy.setImplicitSwappedPojo(new ImplicitSwappedPojo());
-		assertObject(proxy.getImplicitSwappedPojo()).json().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
+		assertObject(proxy.getImplicitSwappedPojo()).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/implicitSwappedPojo"));
 		assertObject(proxy.getImplicitSwappedPojo()).isType(ImplicitSwappedPojo.class);
 	}
@@ -334,7 +334,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testImplicitSwappedPojo3dArray() throws Exception {
 		proxy.setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
-		assertObject(proxy.getImplicitSwappedPojo3dArray()).json().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
+		assertObject(proxy.getImplicitSwappedPojo3dArray()).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
 		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/implicitSwappedPojo3dArray"));
 		assertObject(proxy.getImplicitSwappedPojo3dArray()[0][0][0]).isType(ImplicitSwappedPojo.class);
 	}
@@ -342,7 +342,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testImplicitSwappedPojoMap() throws Exception {
 		proxy.setImplicitSwappedPojoMap(AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
-		assertObject(proxy.getImplicitSwappedPojoMap()).json().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
+		assertObject(proxy.getImplicitSwappedPojoMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/implicitSwappedPojoMap"));
 		assertObject(proxy.getImplicitSwappedPojoMap().keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
 		assertObject(proxy.getImplicitSwappedPojoMap().values().iterator().next()).isType(ImplicitSwappedPojo.class);
@@ -351,7 +351,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testImplicitSwappedPojo3dMap() throws Exception {
 		proxy.setImplicitSwappedPojo3dMap(AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
-		assertObject(proxy.getImplicitSwappedPojo3dMap()).json().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertObject(proxy.getImplicitSwappedPojo3dMap()).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/implicitSwappedPojo3dMap"));
 		assertObject(proxy.getImplicitSwappedPojo3dMap().keySet().iterator().next()).isType(ImplicitSwappedPojo.class);
 		assertObject(proxy.getImplicitSwappedPojo3dMap().values().iterator().next()[0][0][0]).isType(ImplicitSwappedPojo.class);
@@ -362,7 +362,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnum() throws Exception {
 		proxy.setEnum(TestEnum.TWO);
-		assertObject(proxy.getEnum()).json().is("'TWO'");
+		assertObject(proxy.getEnum()).asJson().is("'TWO'");
 		assertEquals("TWO", cf.get("A/enum"));
 		assertObject(proxy.getEnum()).isType(TestEnum.class);
 	}
@@ -370,7 +370,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnum3d() throws Exception {
 		proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
-		assertObject(proxy.getEnum3d()).json().is("[[['TWO',null],null],null]");
+		assertObject(proxy.getEnum3d()).asJson().is("[[['TWO',null],null],null]");
 		assertEquals("[[['TWO',null],null],null]", cf.get("A/enum3d"));
 		assertObject(proxy.getEnum3d()[0][0][0]).isType(TestEnum.class);
 	}
@@ -378,7 +378,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnumList() throws Exception {
 		proxy.setEnumList(AList.of(TestEnum.TWO,null));
-		assertObject(proxy.getEnumList()).json().is("['TWO',null]");
+		assertObject(proxy.getEnumList()).asJson().is("['TWO',null]");
 		assertEquals("['TWO',null]", cf.get("A/enumList"));
 		assertObject(proxy.getEnumList().get(0)).isType(TestEnum.class);
 	}
@@ -386,7 +386,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnum3dList() throws Exception {
 		proxy.setEnum3dList(AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null));
-		assertObject(proxy.getEnum3dList()).json().is("[[['TWO',null],null],null]");
+		assertObject(proxy.getEnum3dList()).asJson().is("[[['TWO',null],null],null]");
 		assertEquals("[[['TWO',null],null],null]", cf.get("A/enum3dList"));
 		assertObject(proxy.getEnum3dList().get(0).get(0).get(0)).isType(TestEnum.class);
 	}
@@ -394,7 +394,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnum1d3dList() throws Exception {
 		proxy.setEnum1d3dList(AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
-		assertObject(proxy.getEnum1d3dList()).json().is("[[[['TWO',null],null],null],null]");
+		assertObject(proxy.getEnum1d3dList()).asJson().is("[[[['TWO',null],null],null],null]");
 		assertEquals("[[[['TWO',null],null],null],null]", cf.get("A/enum1d3dList"));
 		assertObject(proxy.getEnum1d3dList().get(0)[0][0][0]).isType(TestEnum.class);
 	}
@@ -402,7 +402,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnumMap() throws Exception {
 		proxy.setEnumMap(AMap.of(TestEnum.ONE,TestEnum.TWO));
-		assertObject(proxy.getEnumMap()).json().is("{ONE:'TWO'}");
+		assertObject(proxy.getEnumMap()).asJson().is("{ONE:'TWO'}");
 		assertEquals("{ONE:'TWO'}", cf.get("A/enumMap"));
 		assertObject(proxy.getEnumMap().keySet().iterator().next()).isType(TestEnum.class);
 		assertObject(proxy.getEnumMap().values().iterator().next()).isType(TestEnum.class);
@@ -411,7 +411,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnum3dArrayMap() throws Exception {
 		proxy.setEnum3dArrayMap(AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
-		assertObject(proxy.getEnum3dArrayMap()).json().is("{ONE:[[['TWO',null],null],null]}");
+		assertObject(proxy.getEnum3dArrayMap()).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		assertEquals("{ONE:[[['TWO',null],null],null]}", cf.get("A/enum3dArrayMap"));
 		assertObject(proxy.getEnum3dArrayMap().keySet().iterator().next()).isType(TestEnum.class);
 		assertObject(proxy.getEnum3dArrayMap().values().iterator().next()[0][0][0]).isType(TestEnum.class);
@@ -420,7 +420,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testEnum1d3dListMap() throws Exception {
 		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
-		assertObject(proxy.getEnum1d3dListMap()).json().is("{ONE:[[[['TWO',null],null],null],null]}");
+		assertObject(proxy.getEnum1d3dListMap()).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 		assertEquals("{ONE:[[[['TWO',null],null],null],null]}", cf.get("A/enum1d3dListMap"));
 		assertObject(proxy.getEnum1d3dListMap().keySet().iterator().next()).isType(TestEnum.class);
 		assertObject(proxy.getEnum1d3dListMap().values().iterator().next().get(0)[0][0][0]).isType(TestEnum.class);

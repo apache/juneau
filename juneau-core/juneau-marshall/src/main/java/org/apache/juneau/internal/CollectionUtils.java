@@ -310,6 +310,38 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Creates a new list from the specified array.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
+	 */
+	@SafeVarargs
+	public static <T> AList<T> newList(T...val) {
+		return AList.of(val);
+	}
+
+	/**
+	 * Creates a new unmodifiable list from the specified collection.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> List<T> newUnmodifiableList(Collection<T> val) {
+		return Collections.unmodifiableList(newList(val));
+	}
+
+	/**
+	 * Creates a new unmodifiable list from the specified array.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
+	 */
+	@SafeVarargs
+	public static <T> List<T> newUnmodifiableList(T...val) {
+		return Collections.unmodifiableList(newList(val));
+	}
+
+	/**
 	 * Creates a new set from the specified collection.
 	 *
 	 * @param val The value to copy from.
@@ -317,6 +349,38 @@ public final class CollectionUtils {
 	 */
 	public static <T> ASet<T> newSet(Collection<T> val) {
 		return ASet.nullable(val);
+	}
+
+	/**
+	 * Creates a new set from the specified array.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 */
+	@SafeVarargs
+	public static <T> ASet<T> newSet(T...val) {
+		return ASet.of(val);
+	}
+
+	/**
+	 * Creates a new unmodifiable set from the specified collection.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> Set<T> newUnmodifiableSet(Collection<T> val) {
+		return Collections.unmodifiableSet(newSet(val));
+	}
+
+	/**
+	 * Creates a new unmodifiable set from the specified array.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 */
+	@SafeVarargs
+	public static <T> Set<T> newUnmodifiableSet(T...val) {
+		return Collections.unmodifiableSet(newSet(val));
 	}
 
 	/**
@@ -367,6 +431,16 @@ public final class CollectionUtils {
 		if (val == null)
 			return null;
 		return new LinkedHashMap<>(val);
+	}
+
+	/**
+	 * Creates a new unmodifiable map from the specified map.
+	 *
+	 * @param val The value to copy from.
+	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
+	 */
+	public static <K,V> Map<K,V> newUnmodifiableMap(Map<K,V> val) {
+		return Collections.unmodifiableMap(newMap(val));
 	}
 
 	/**

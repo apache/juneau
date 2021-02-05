@@ -353,7 +353,7 @@ public class ReflectionMapTest {
 
 	@Test
 	public void f01_cdl() {
-		assertObject(RM_F.find(F1.class, null)).json().is("1");
+		assertObject(RM_F.find(F1.class, null)).asJson().is("1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -376,13 +376,13 @@ public class ReflectionMapTest {
 
 	@Test
 	public void h01_splitNamesTest() throws Exception {
-		assertObject(ReflectionMap.splitNames("foo")).json().is("['foo']");
-		assertObject(ReflectionMap.splitNames(" foo ")).json().is("['foo']");
-		assertObject(ReflectionMap.splitNames("foo,bar")).json().is("['foo','bar']");
-		assertObject(ReflectionMap.splitNames(" foo , bar ")).json().is("['foo','bar']");
-		assertObject(ReflectionMap.splitNames("foo(),bar()")).json().is("['foo()','bar()']");
-		assertObject(ReflectionMap.splitNames(" foo() , bar() ")).json().is("['foo()','bar()']");
-		assertObject(ReflectionMap.splitNames("foo(bar,baz),bar(baz,qux)")).json().is("['foo(bar,baz)','bar(baz,qux)']");
-		assertObject(ReflectionMap.splitNames(" foo(bar,baz) , bar(baz,qux) ")).json().is("['foo(bar,baz)','bar(baz,qux)']");
+		assertObject(ReflectionMap.splitNames("foo")).asJson().is("['foo']");
+		assertObject(ReflectionMap.splitNames(" foo ")).asJson().is("['foo']");
+		assertObject(ReflectionMap.splitNames("foo,bar")).asJson().is("['foo','bar']");
+		assertObject(ReflectionMap.splitNames(" foo , bar ")).asJson().is("['foo','bar']");
+		assertObject(ReflectionMap.splitNames("foo(),bar()")).asJson().is("['foo()','bar()']");
+		assertObject(ReflectionMap.splitNames(" foo() , bar() ")).asJson().is("['foo()','bar()']");
+		assertObject(ReflectionMap.splitNames("foo(bar,baz),bar(baz,qux)")).asJson().is("['foo(bar,baz)','bar(baz,qux)']");
+		assertObject(ReflectionMap.splitNames(" foo(bar,baz) , bar(baz,qux) ")).asJson().is("['foo(bar,baz)','bar(baz,qux)']");
 	}
 }

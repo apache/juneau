@@ -151,7 +151,7 @@ public class RestClient_Body_Test {
 
 		BasicHttpEntity x12 = httpEntity("foo");
 		x12.assertString().is("foo");
-		x12.assertBytes().string().is("foo");
+		x12.assertBytes().asString().is("foo");
 	}
 
 	@Test
@@ -172,35 +172,35 @@ public class RestClient_Body_Test {
 			.assertStringHeader("X-Content-Length").doesNotExist()
 			.assertStringHeader("X-Content-Encoding").doesNotExist()
 			.assertStringHeader("X-Content-Type").is("application/json")
-			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
+			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x3 = SerializedHttpEntity.of(()->ABean.get(),js);
 		client().build().post("/",x3).run()
 			.assertStringHeader("X-Content-Length").doesNotExist()
 			.assertStringHeader("X-Content-Encoding").doesNotExist()
 			.assertStringHeader("X-Content-Type").is("application/json")
-			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
+			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x4 = serializedHttpEntity(new StringReader("{a:1,b:'foo'}"),null);
 		client().build().post("/",x4).run()
 			.assertStringHeader("X-Content-Length").doesNotExist()
 			.assertStringHeader("X-Content-Encoding").doesNotExist()
 			.assertStringHeader("X-Content-Type").doesNotExist()
-			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
+			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x5 = serializedHttpEntity(new ByteArrayInputStream("{a:1,b:'foo'}".getBytes()),null);
 		client().build().post("/",x5).run()
 			.assertStringHeader("X-Content-Length").doesNotExist()
 			.assertStringHeader("X-Content-Encoding").doesNotExist()
 			.assertStringHeader("X-Content-Type").doesNotExist()
-			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
+			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x6 = serializedHttpEntity(f,null);
 		client().build().post("/",x6).run()
 			.assertStringHeader("X-Content-Length").is("0")
 			.assertStringHeader("X-Content-Encoding").doesNotExist()
 			.assertStringHeader("X-Content-Type").doesNotExist()
-			.getBody().assertObject(ABean.class).json().is("{a:0}");
+			.getBody().assertObject(ABean.class).asJson().is("{a:0}");
 
 		InputStream x7 = new ByteArrayInputStream("foo".getBytes()) {
 			@Override
@@ -213,13 +213,13 @@ public class RestClient_Body_Test {
 		assertThrown(()->x8.getContent()).contains("bad");
 
 		SerializedHttpEntity x9 = serializedHttpEntity(new StringReader("foo"), null);
-		assertStream(x9.getContent()).string().is("foo");
+		assertStream(x9.getContent()).asString().is("foo");
 
 		SerializedHttpEntity x10 = serializedHttpEntity(new ByteArrayInputStream("foo".getBytes()), null);
-		assertStream(x10.getContent()).string().is("foo");
+		assertStream(x10.getContent()).asString().is("foo");
 
 		SerializedHttpEntity x11 = serializedHttpEntity(f, null);
-		assertStream(x11.getContent()).string().is("");
+		assertStream(x11.getContent()).asString().is("");
 
 		SerializedHttpEntity x12 = new SerializedHttpEntity(ABean.get(), null) {
 			@Override

@@ -124,33 +124,33 @@ public class Swagger_Path_Test {
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).json().is("['a','b']");
+		assertObject(x.getEnum()).asJson().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/a/a'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/a/a'}}");
 
 		x = s.getParameterInfo("/b/{P}","get","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).json().is("['a','b']");
+		assertObject(x.getEnum()).asJson().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/b/a'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/b/a'}}");
 
 		x = s.getParameterInfo("/c/{P}","get","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).json().is("['a','b']");
+		assertObject(x.getEnum()).asJson().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/c/a'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/c/a'}}");
 
 		x = s.getParameterInfo("/d/{P}","get","path","P");
 		assertEquals("P", x.getName());
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertObject(x.getEnum()).json().is("['a','b']");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}");
+		assertObject(x.getEnum()).asJson().is("['a','b']");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}");
 	}
 
 	@Rest
@@ -187,16 +187,16 @@ public class Swagger_Path_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/b/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 
 	@Rest
@@ -276,7 +276,7 @@ public class Swagger_Path_Test {
 		assertEquals("P", x.getName());
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertObject(x.getEnum()).json().is("['a','b']");
+		assertObject(x.getEnum()).asJson().is("['a','b']");
 	}
 
 	@Rest
@@ -314,22 +314,22 @@ public class Swagger_Path_Test {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/b/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'integer',required:true,format:'int32'}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'integer',required:true,format:'int32'}");
 
 		x = s.getParameterInfo("/f/{P}","get","path","P");
-		assertObject(x).json().is("{'in':'path',name:'P',type:'boolean',required:true}");
+		assertObject(x).asJson().is("{'in':'path',name:'P',type:'boolean',required:true}");
 	}
 
 	@Rest

@@ -29,10 +29,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.mstat.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Basic implementation of a {@link RestLogger} for logging HTTP requests.
@@ -96,7 +96,7 @@ public class BasicRestLogger implements RestLogger {
 	private static final RestLoggerRule DEFAULT_RULE = RestLoggerRule.create().build();
 
 	private final Logger logger;
-	private final StackTraceStore stackTraceStore;
+	private final ThrownStore thrownStore;
 	private final RestLoggerRule[] normalRules, debugRules;
 	private final Enablement enabled;
 	private final Predicate<HttpServletRequest> enabledTest;
@@ -110,7 +110,7 @@ public class BasicRestLogger implements RestLogger {
 	 */
 	public BasicRestLogger(RestLoggerBuilder builder) {
 		this.logger = firstNonNull(builder.logger, Logger.getLogger(getProperty(String.class, SP_logger, "global")));
-		this.stackTraceStore = builder.stackTraceDatabase;
+		this.thrownStore = builder.thrownStore;
 		this.normalRules = builder.normalRules.toArray(new RestLoggerRule[builder.normalRules.size()]);
 		this.debugRules = builder.debugRules.toArray(new RestLoggerRule[builder.debugRules.size()]);
 		this.enabled = firstNonNull(builder.enabled, getProperty(Enablement.class, SP_enabled, ALWAYS));
@@ -156,13 +156,13 @@ public class BasicRestLogger implements RestLogger {
 		if (reqd != STATUS_LINE || resd != STATUS_LINE)
 			sb.append("\n=== HTTP Call (incoming) ======================================================\n");
 
-		StackTraceInfo sti = getStackTraceInfo(e);
+		ThrownStats sti = getThrownStats(e);
 
 		sb.append('[').append(status);
 
 		if (sti != null) {
 			int count = sti.getCount();
-			sb.append(',').append(sti.getHash()).append('.').append(count);
+			sb.append(',').append(StringUtils.toHex8(sti.getHash())).append('.').append(count);
 			if (count > 1)
 				e = null;
 		}
@@ -350,11 +350,10 @@ public class BasicRestLogger implements RestLogger {
 		return castOrNull(req.getAttribute("ResponseBody"), byte[].class);
 	}
 
-	private StackTraceInfo getStackTraceInfo(Throwable e) {
-		if (e == null || stackTraceStore == null)
+	private ThrownStats getThrownStats(Throwable e) {
+		if (e == null || thrownStore == null)
 			return null;
-		stackTraceStore.add(e);
-		return stackTraceStore.getStackTraceInfo(e);
+		return thrownStore.getStats(e).orElse(null);
 	}
 
 	/**
@@ -365,7 +364,7 @@ public class BasicRestLogger implements RestLogger {
 	public OMap toMap() {
 		return OMap.create()
 			.a("logger", logger)
-			.a("stackTraceStore", stackTraceStore)
+			.a("thrownStore", thrownStore)
 			.a("enabled", enabled)
 			.a("level", level)
 			.a("requestDetail", requestDetail)

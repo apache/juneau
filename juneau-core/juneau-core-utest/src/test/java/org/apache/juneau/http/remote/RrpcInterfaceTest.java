@@ -557,89 +557,89 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setInt3dArray(int[][][] x) {
-					assertObject(x).json().is("[[[1,2],null],null]");
+					assertObject(x).asJson().is("[[[1,2],null],null]");
 				}
 
 				@Override
 				public void setInteger3dArray(Integer[][][] x) {
-					assertObject(x).json().is("[[[1,null],null],null]");
+					assertObject(x).asJson().is("[[[1,null],null],null]");
 				}
 
 				@Override
 				public void setString3dArray(String[][][] x) {
-					assertObject(x).json().is("[[['foo',null],null],null]");
+					assertObject(x).asJson().is("[[['foo',null],null],null]");
 				}
 
 				@Override
 				public void setIntegerList(List<Integer> x) {
-					assertObject(x).json().is("[1,null]");
+					assertObject(x).asJson().is("[1,null]");
 					assertObject(x.get(0)).isType(Integer.class);
 				}
 
 				@Override
 				public void setInteger3dList(List<List<List<Integer>>> x) {
-					assertObject(x).json().is("[[[1,null],null],null]");
+					assertObject(x).asJson().is("[[[1,null],null],null]");
 					assertObject(x.get(0).get(0).get(0)).isType(Integer.class);
 				}
 
 				@Override
 				public void setInteger1d3dList(List<Integer[][][]> x) {
-					assertObject(x).json().is("[[[[1,null],null],null],null]");
+					assertObject(x).asJson().is("[[[[1,null],null],null],null]");
 					assertObject(x.get(0)).isType(Integer[][][].class);
 					assertObject(x.get(0)[0][0][0]).isType(Integer.class);
 				}
 
 				@Override
 				public void setInt1d3dList(List<int[][][]> x) {
-					assertObject(x).json().is("[[[[1,2],null],null],null]");
+					assertObject(x).asJson().is("[[[[1,2],null],null],null]");
 					assertObject(x.get(0)).isType(int[][][].class);
 				}
 
 				@Override
 				public void setStringList(List<String> x) {
-					assertObject(x).json().is("['foo','bar',null]");
+					assertObject(x).asJson().is("['foo','bar',null]");
 				}
 
 				// Beans
 
 				@Override
 				public void setBean(ABean x) {
-					assertObject(x).json().is("{a:1,b:'foo'}");
+					assertObject(x).asJson().is("{a:1,b:'foo'}");
 				}
 
 				@Override
 				public void setBean3dArray(ABean[][][] x) {
-					assertObject(x).json().is("[[[{a:1,b:'foo'},null],null],null]");
+					assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 				}
 
 				@Override
 				public void setBeanList(List<ABean> x) {
-					assertObject(x).json().is("[{a:1,b:'foo'}]");
+					assertObject(x).asJson().is("[{a:1,b:'foo'}]");
 				}
 
 				@Override
 				public void setBean1d3dList(List<ABean[][][]> x) {
-					assertObject(x).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+					assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 				}
 
 				@Override
 				public void setBeanMap(Map<String,ABean> x) {
-					assertObject(x).json().is("{foo:{a:1,b:'foo'}}");
+					assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
 				}
 
 				@Override
 				public void setBeanListMap(Map<String,List<ABean>> x) {
-					assertObject(x).json().is("{foo:[{a:1,b:'foo'}]}");
+					assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
 				}
 
 				@Override
 				public void setBean1d3dListMap(Map<String,List<ABean[][][]>> x) {
-					assertObject(x).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+					assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 				}
 
 				@Override
 				public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x) {
-					assertObject(x).json().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+					assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
 					assertObject(x.keySet().iterator().next()).isType(Integer.class);
 				}
 
@@ -647,49 +647,49 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setTypedBean(TypedBean x) {
-					assertObject(x).json().is("{a:1,b:'foo'}");
+					assertObject(x).asJson().is("{a:1,b:'foo'}");
 					assertObject(x).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBean3dArray(TypedBean[][][] x) {
-					assertObject(x).json().is("[[[{a:1,b:'foo'},null],null],null]");
+					assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 					assertObject(x[0][0][0]).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanList(List<TypedBean> x) {
-					assertObject(x).json().is("[{a:1,b:'foo'}]");
+					assertObject(x).asJson().is("[{a:1,b:'foo'}]");
 					assertObject(x.get(0)).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBean1d3dList(List<TypedBean[][][]> x) {
-					assertObject(x).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+					assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 					assertObject(x.get(0)[0][0][0]).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanMap(Map<String,TypedBean> x) {
-					assertObject(x).json().is("{foo:{a:1,b:'foo'}}");
+					assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
 					assertObject(x.get("foo")).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanListMap(Map<String,List<TypedBean>> x) {
-					assertObject(x).json().is("{foo:[{a:1,b:'foo'}]}");
+					assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
 					assertObject(x.get("foo").get(0)).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x) {
-					assertObject(x).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+					assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 					assertObject(x.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x) {
-					assertObject(x).json().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+					assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
 					assertObject(x.get(1).get(0)).isType(TypedBeanImpl.class);
 				}
 
@@ -702,13 +702,13 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setSwappedPojo3dArray(SwappedPojo[][][] x) {
-					assertObject(x).json().is("[[['"+SWAP+"',null],null],null]");
+					assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertTrue(x[0][0][0].wasUnswapped);
 				}
 
 				@Override
 				public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x) {
-					assertObject(x).json().is("{'"+SWAP+"':'"+SWAP+"'}");
+					assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 					Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
@@ -716,7 +716,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x) {
-					assertObject(x).json().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+					assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
 					Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -731,13 +731,13 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x) {
-					assertObject(x).json().is("[[['"+SWAP+"',null],null],null]");
+					assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertTrue(x[0][0][0].wasUnswapped);
 				}
 
 				@Override
 				public void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x) {
-					assertObject(x).json().is("{'"+SWAP+"':'"+SWAP+"'}");
+					assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 					Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
@@ -745,7 +745,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x) {
-					assertObject(x).json().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+					assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
 					Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -760,30 +760,30 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setEnum3d(TestEnum[][][] x) {
-					assertObject(x).json().is("[[['TWO',null],null],null]");
+					assertObject(x).asJson().is("[[['TWO',null],null],null]");
 				}
 
 				@Override
 				public void setEnumList(List<TestEnum> x) {
-					assertObject(x).json().is("['TWO',null]");
+					assertObject(x).asJson().is("['TWO',null]");
 					assertObject(x.get(0)).isType(TestEnum.class);
 				}
 
 				@Override
 				public void setEnum3dList(List<List<List<TestEnum>>> x) {
-					assertObject(x).json().is("[[['TWO',null],null],null]");
+					assertObject(x).asJson().is("[[['TWO',null],null],null]");
 					assertObject(x.get(0).get(0).get(0)).isType(TestEnum.class);
 				}
 
 				@Override
 				public void setEnum1d3dList(List<TestEnum[][][]> x) {
-					assertObject(x).json().is("[[[['TWO',null],null],null],null]");
+					assertObject(x).asJson().is("[[[['TWO',null],null],null],null]");
 					assertObject(x.get(0)).isType(TestEnum[][][].class);
 				}
 
 				@Override
 				public void setEnumMap(Map<TestEnum,TestEnum> x) {
-					assertObject(x).json().is("{ONE:'TWO'}");
+					assertObject(x).asJson().is("{ONE:'TWO'}");
 					Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
 					assertObject(e.getKey()).isType(TestEnum.class);
 					assertObject(e.getValue()).isType(TestEnum.class);
@@ -791,7 +791,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x) {
-					assertObject(x).json().is("{ONE:[[['TWO',null],null],null]}");
+					assertObject(x).asJson().is("{ONE:[[['TWO',null],null],null]}");
 					Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
 					assertObject(e.getKey()).isType(TestEnum.class);
 					assertObject(e.getValue()).isType(TestEnum[][][].class);
@@ -799,7 +799,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x) {
-					assertObject(x).json().is("{ONE:[[[['TWO',null],null],null],null]}");
+					assertObject(x).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 					Map.Entry<TestEnum,List<TestEnum[][][]>> e = x.entrySet().iterator().next();
 					assertObject(e.getKey()).isType(TestEnum.class);
 					assertObject(e.getValue().get(0)).isType(TestEnum[][][].class);
@@ -811,107 +811,107 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setMultiParamsInts(int x1,int[][][] x2,int[][][] x2n,List<int[][][]> x3,List<int[][][]> x3n) {
-					assertObject((Object) x1).json().is("1");
-					assertObject(x2).json().is("[[[1,2],null],null]");
+					assertObject((Object) x1).asJson().is("1");
+					assertObject(x2).asJson().is("[[[1,2],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[[1,2],null],null],null]");
+					assertObject(x3).asJson().is("[[[[1,2],null],null],null]");
 					assertObject(x3.get(0)).isType(int[][][].class);
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsInteger(Integer x1,Integer x1n,Integer[][][] x2,Integer[][][] x2n,List<Integer[][][]> x3,List<Integer[][][]> x3n) {
-					assertObject(x1).json().is("1");
-					assertObject(x2).json().is("[[[1,null],null],null]");
+					assertObject(x1).asJson().is("1");
+					assertObject(x2).asJson().is("[[[1,null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[[1,null],null],null],null]");
+					assertObject(x3).asJson().is("[[[[1,null],null],null],null]");
 					assertObject(x3.get(0)).isType(Integer[][][].class);
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsFloat(float x1,float[][][] x2,float[][][] x2n,List<float[][][]> x3,List<float[][][]> x3n) {
-					assertObject((Object) x1).json().is("1.0");
-					assertObject(x2).json().is("[[[1.0,2.0],null],null]");
+					assertObject((Object) x1).asJson().is("1.0");
+					assertObject(x2).asJson().is("[[[1.0,2.0],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[[1.0,2.0],null],null],null]");
+					assertObject(x3).asJson().is("[[[[1.0,2.0],null],null],null]");
 					assertObject(x3.get(0)).isType(float[][][].class);
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsFloatObject(Float x1,Float x1n,Float[][][] x2,Float[][][] x2n,List<Float[][][]> x3,List<Float[][][]> x3n) {
-					assertObject(x1).json().is("1.0");
-					assertObject(x2).json().is("[[[1.0,null],null],null]");
+					assertObject(x1).asJson().is("1.0");
+					assertObject(x2).asJson().is("[[[1.0,null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[[1.0,null],null],null],null]");
+					assertObject(x3).asJson().is("[[[[1.0,null],null],null],null]");
 					assertObject(x3.get(0)).isType(Float[][][].class);
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsString(String x1,String[][][] x2,String[][][] x2n,List<String[][][]> x3,List<String[][][]> x3n) {
-					assertObject(x1).json().is("'foo'");
-					assertObject(x2).json().is("[[['foo',null],null],null]");
+					assertObject(x1).asJson().is("'foo'");
+					assertObject(x2).asJson().is("[[['foo',null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[['foo',null],null],null],null]");
+					assertObject(x3).asJson().is("[[[['foo',null],null],null],null]");
 					assertObject(x3.get(0)).isType(String[][][].class);
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsBean(ABean x1,ABean[][][] x2,ABean[][][] x2n,List<ABean[][][]> x3,List<ABean[][][]> x3n,Map<String,ABean> x4,Map<String,ABean> x4n,Map<String,List<ABean[][][]>> x5,Map<String,List<ABean[][][]>> x5n) {
-					assertObject(x1).json().is("{a:1,b:'foo'}");
-					assertObject(x2).json().is("[[[{a:1,b:'foo'},null],null],null]");
+					assertObject(x1).asJson().is("{a:1,b:'foo'}");
+					assertObject(x2).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+					assertObject(x3).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 					assertObject(x3.get(0)).isType(ABean[][][].class);
 					assertNull(x3n);
-					assertObject(x4).json().is("{foo:{a:1,b:'foo'}}");
+					assertObject(x4).asJson().is("{foo:{a:1,b:'foo'}}");
 					assertNull(x4n);
-					assertObject(x5).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+					assertObject(x5).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 					assertNull(x5n);
 				}
 
 				@Override
 				public void setMultiParamsSwappedPojo(SwappedPojo x1,SwappedPojo[][][] x2,SwappedPojo[][][] x2n,List<SwappedPojo[][][]> x3,List<SwappedPojo[][][]> x3n,Map<SwappedPojo,SwappedPojo> x4,Map<SwappedPojo,SwappedPojo> x4n,Map<SwappedPojo,List<SwappedPojo[][][]>> x5,Map<SwappedPojo,List<SwappedPojo[][][]>> x5n) {
-					assertObject(x1).json().is("'"+SWAP+"'");
-					assertObject(x2).json().is("[[['"+SWAP+"',null],null],null]");
+					assertObject(x1).asJson().is("'"+SWAP+"'");
+					assertObject(x2).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[['"+SWAP+"',null],null],null],null]");
+					assertObject(x3).asJson().is("[[[['"+SWAP+"',null],null],null],null]");
 					assertObject(x3.get(0)).isType(SwappedPojo[][][].class);
 					assertNull(x3n);
-					assertObject(x4).json().is("{'"+SWAP+"':'"+SWAP+"'}");
+					assertObject(x4).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 					assertNull(x4n);
-					assertObject(x5).json().is("{'"+SWAP+"':[[[['"+SWAP+"',null],null],null],null]}");
+					assertObject(x5).asJson().is("{'"+SWAP+"':[[[['"+SWAP+"',null],null],null],null]}");
 					assertNull(x5n);
 				}
 
 				@Override
 				public void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1,ImplicitSwappedPojo[][][] x2,ImplicitSwappedPojo[][][] x2n,List<ImplicitSwappedPojo[][][]> x3,List<ImplicitSwappedPojo[][][]> x3n,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n) {
-					assertObject(x1).json().is("'"+SWAP+"'");
-					assertObject(x2).json().is("[[['"+SWAP+"',null],null],null]");
+					assertObject(x1).asJson().is("'"+SWAP+"'");
+					assertObject(x2).asJson().is("[[['"+SWAP+"',null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[['"+SWAP+"',null],null],null],null]");
+					assertObject(x3).asJson().is("[[[['"+SWAP+"',null],null],null],null]");
 					assertObject(x3.get(0)).isType(ImplicitSwappedPojo[][][].class);
 					assertNull(x3n);
-					assertObject(x4).json().is("{'"+SWAP+"':'"+SWAP+"'}");
+					assertObject(x4).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 					assertNull(x4n);
-					assertObject(x5).json().is("{'"+SWAP+"':[[[['"+SWAP+"',null],null],null],null]}");
+					assertObject(x5).asJson().is("{'"+SWAP+"':[[[['"+SWAP+"',null],null],null],null]}");
 					assertNull(x5n);
 				}
 
 				@Override
 				public void setMultiParamsEnum(TestEnum x1,TestEnum[][][] x2,TestEnum[][][] x2n,List<TestEnum[][][]> x3,List<TestEnum[][][]> x3n,Map<TestEnum,TestEnum> x4,Map<TestEnum,TestEnum> x4n,Map<TestEnum,List<TestEnum[][][]>> x5,Map<TestEnum,List<TestEnum[][][]>> x5n) {
-					assertObject(x1).json().is("'TWO'");
-					assertObject(x2).json().is("[[['TWO',null],null],null]");
+					assertObject(x1).asJson().is("'TWO'");
+					assertObject(x2).asJson().is("[[['TWO',null],null],null]");
 					assertNull(x2n);
-					assertObject(x3).json().is("[[[['TWO',null],null],null],null]");
+					assertObject(x3).asJson().is("[[[['TWO',null],null],null],null]");
 					assertObject(x3.get(0)).isType(TestEnum[][][].class);
 					assertNull(x3n);
-					assertObject(x4).json().is("{ONE:'TWO'}");
+					assertObject(x4).asJson().is("{ONE:'TWO'}");
 					assertNull(x4n);
-					assertObject(x5).json().is("{ONE:[[[['TWO',null],null],null],null]}");
+					assertObject(x5).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 					assertNull(x5n);
 				}
 			};
@@ -977,50 +977,50 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void a09_returnInt3dArray() {
-		assertObject(proxy.returnInt3dArray()).json().is("[[[1,2],null],null]");
+		assertObject(proxy.returnInt3dArray()).asJson().is("[[[1,2],null],null]");
 	}
 
 	@Test
 	public void a10_returnInteger3dArray() {
-		assertObject(proxy.returnInteger3dArray()).json().is("[[[1,null],null],null]");
+		assertObject(proxy.returnInteger3dArray()).asJson().is("[[[1,null],null],null]");
 	}
 
 	@Test
 	public void a11_returnString3dArray() {
-		assertObject(proxy.returnString3dArray()).json().is("[[['foo','bar',null],null],null]");
+		assertObject(proxy.returnString3dArray()).asJson().is("[[['foo','bar',null],null],null]");
 	}
 
 	@Test
 	public void a12_returnIntegerList() {
 		List<Integer> x = proxy.returnIntegerList();
-		assertObject(x).json().is("[1,null]");
+		assertObject(x).asJson().is("[1,null]");
 		assertObject(x.get(0)).isType(Integer.class);
 	}
 
 	@Test
 	public void a13_returnInteger3dList() {
 		List<List<List<Integer>>> x = proxy.returnInteger3dList();
-		assertObject(x).json().is("[[[1,null],null],null]");
+		assertObject(x).asJson().is("[[[1,null],null],null]");
 		assertObject(x.get(0).get(0).get(0)).isType(Integer.class);
 	}
 
 	@Test
 	public void a14_returnInteger1d3dList() {
 		List<Integer[][][]> x = proxy.returnInteger1d3dList();
-		assertObject(x).json().is("[[[[1,null],null],null],null]");
+		assertObject(x).asJson().is("[[[[1,null],null],null],null]");
 		assertObject(x.get(0)[0][0][0]).isType(Integer.class);
 	}
 
 	@Test
 	public void a15_returnInt1d3dList() {
 		List<int[][][]> x = proxy.returnInt1d3dList();
-		assertObject(x).json().is("[[[[1,2],null],null],null]");
+		assertObject(x).asJson().is("[[[[1,2],null],null],null]");
 		assertObject(x.get(0)).isType(int[][][].class);
 	}
 
 	@Test
 	public void a16_returnStringList() {
-		assertObject(proxy.returnStringList()).json().is("['foo','bar',null]");
+		assertObject(proxy.returnStringList()).asJson().is("['foo','bar',null]");
 	}
 
 	// Beans
@@ -1028,49 +1028,49 @@ public class RrpcInterfaceTest {
 	@Test
 	public void b01_returnBean() {
 		ABean x = proxy.returnBean();
-		assertObject(x).json().is("{a:1,b:'foo'}");
+		assertObject(x).asJson().is("{a:1,b:'foo'}");
 		assertObject(x).isType(ABean.class);
 	}
 
 	@Test
 	public void b02_returnBean3dArray() {
 		ABean[][][] x = proxy.returnBean3dArray();
-		assertObject(x).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertObject(x[0][0][0]).isType(ABean.class);
 	}
 
 	@Test
 	public void b03_returnBeanList() {
 		List<ABean> x = proxy.returnBeanList();
-		assertObject(x).json().is("[{a:1,b:'foo'}]");
+		assertObject(x).asJson().is("[{a:1,b:'foo'}]");
 		assertObject(x.get(0)).isType(ABean.class);
 	}
 
 	@Test
 	public void b04_returnBean1d3dList() {
 		List<ABean[][][]> x = proxy.returnBean1d3dList();
-		assertObject(x).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertObject(x.get(0)[0][0][0]).isType(ABean.class);
 	}
 
 	@Test
 	public void b05_returnBeanMap() {
 		Map<String,ABean> x = proxy.returnBeanMap();
-		assertObject(x).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
 		assertObject(x.get("foo")).isType(ABean.class);
 	}
 
 	@Test
 	public void b06_returnBeanListMap() {
 		Map<String,List<ABean>> x = proxy.returnBeanListMap();
-		assertObject(x).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
 		assertObject(x.get("foo").get(0)).isType(ABean.class);
 	}
 
 	@Test
 	public void b07_returnBean1d3dListMap() {
 		Map<String,List<ABean[][][]>> x = proxy.returnBean1d3dListMap();
-		assertObject(x).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(x.get("foo").get(0)[0][0][0]).isType(ABean.class);
 	}
 
@@ -1078,7 +1078,7 @@ public class RrpcInterfaceTest {
 	public void b08_returnBeanListMapIntegerKeys() {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<ABean>> x = proxy.returnBeanListMapIntegerKeys();
-		assertObject(x).json().is("{'1':[{a:1,b:'foo'}]}");
+		assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");
 		assertObject(x.keySet().iterator().next()).isType(Integer.class);
 	}
 
@@ -1087,49 +1087,49 @@ public class RrpcInterfaceTest {
 	@Test
 	public void c01_returnTypedBean() {
 		TypedBean x = proxy.returnTypedBean();
-		assertObject(x).json().is("{a:1,b:'foo'}");
+		assertObject(x).asJson().is("{a:1,b:'foo'}");
 		assertObject(x).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c02_returnTypedBean3dArray() {
 		TypedBean[][][] x = proxy.returnTypedBean3dArray();
-		assertObject(x).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertObject(x[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c03_returnTypedBeanList() {
 		List<TypedBean> x = proxy.returnTypedBeanList();
-		assertObject(x).json().is("[{a:1,b:'foo'}]");
+		assertObject(x).asJson().is("[{a:1,b:'foo'}]");
 		assertObject(x.get(0)).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c04_returnTypedBean1d3dList() {
 		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
-		assertObject(x).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertObject(x.get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c05_returnTypedBeanMap() {
 		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
-		assertObject(x).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
 		assertObject(x.get("foo")).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c06_returnTypedBeanListMap() {
 		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
-		assertObject(x).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
 		assertObject(x.get("foo").get(0)).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c07_returnTypedBean1d3dListMap() {
 		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
-		assertObject(x).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(x.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
@@ -1137,7 +1137,7 @@ public class RrpcInterfaceTest {
 	public void c08_returnTypedBeanListMapIntegerKeys() {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
-		assertObject(x).json().is("{'1':[{a:1,b:'foo'}]}");
+		assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");
 		assertObject(x.get(1).get(0)).isType(TypedBeanImpl.class);
 	}
 
@@ -1146,21 +1146,21 @@ public class RrpcInterfaceTest {
 	@Test
 	public void d01_returnSwappedPojo() {
 		SwappedPojo x = proxy.returnSwappedPojo();
-		assertObject(x).json().is("'"+SWAP+"'");
+		assertObject(x).asJson().is("'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
 	public void d02_returnSwappedPojo3dArray() {
 		SwappedPojo[][][] x = proxy.returnSwappedPojo3dArray();
-		assertObject(x).json().is("[[['"+SWAP+"',null],null],null]");
+		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
 	public void d03_returnSwappedPojoMap() {
 		Map<SwappedPojo,SwappedPojo> x = proxy.returnSwappedPojoMap();
-		assertObject(x).json().is("{'"+SWAP+"':'"+SWAP+"'}");
+		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
@@ -1169,7 +1169,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void d04_returnSwappedPojo3dMap() {
 		Map<SwappedPojo,SwappedPojo[][][]> x = proxy.returnSwappedPojo3dMap();
-		assertObject(x).json().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
 		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -1180,21 +1180,21 @@ public class RrpcInterfaceTest {
 	@Test
 	public void e01_returnImplicitSwappedPojo() {
 		ImplicitSwappedPojo x = proxy.returnImplicitSwappedPojo();
-		assertObject(x).json().is("'"+SWAP+"'");
+		assertObject(x).asJson().is("'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
 	public void e02_returnImplicitSwappedPojo3dArray() {
 		ImplicitSwappedPojo[][][] x = proxy.returnImplicitSwappedPojo3dArray();
-		assertObject(x).json().is("[[['"+SWAP+"',null],null],null]");
+		assertObject(x).asJson().is("[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
 	public void e03_returnImplicitSwappedPojoMap() {
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = proxy.returnImplicitSwappedPojoMap();
-		assertObject(x).json().is("{'"+SWAP+"':'"+SWAP+"'}");
+		assertObject(x).asJson().is("{'"+SWAP+"':'"+SWAP+"'}");
 		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
@@ -1203,7 +1203,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void e04_returnImplicitSwappedPojo3dMap() {
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = proxy.returnImplicitSwappedPojo3dMap();
-		assertObject(x).json().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+		assertObject(x).asJson().is("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
 		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -1214,41 +1214,41 @@ public class RrpcInterfaceTest {
 	@Test
 	public void f01_returnEnum() {
 		TestEnum x = proxy.returnEnum();
-		assertObject(x).json().is("'TWO'");
+		assertObject(x).asJson().is("'TWO'");
 	}
 
 	@Test
 	public void f02_returnEnum3d() {
 		TestEnum[][][] x = proxy.returnEnum3d();
-		assertObject(x).json().is("[[['TWO',null],null],null]");
+		assertObject(x).asJson().is("[[['TWO',null],null],null]");
 		assertObject(x[0][0][0]).isType(TestEnum.class);
 	}
 
 	@Test
 	public void f03_returnEnumList() {
 		List<TestEnum> x = proxy.returnEnumList();
-		assertObject(x).json().is("['TWO',null]");
+		assertObject(x).asJson().is("['TWO',null]");
 		assertObject(x.get(0)).isType(TestEnum.class);
 	}
 
 	@Test
 	public void f04_returnEnum3dList() {
 		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
-		assertObject(x).json().is("[[['TWO',null],null],null]");
+		assertObject(x).asJson().is("[[['TWO',null],null],null]");
 		assertObject(x.get(0).get(0).get(0)).isType(TestEnum.class);
 	}
 
 	@Test
 	public void f05_returnEnum1d3dList() {
 		List<TestEnum[][][]> x = proxy.returnEnum1d3dList();
-		assertObject(x).json().is("[[[['TWO',null],null],null],null]");
+		assertObject(x).asJson().is("[[[['TWO',null],null],null],null]");
 		assertObject(x.get(0)).isType(TestEnum[][][].class);
 	}
 
 	@Test
 	public void f06_returnEnumMap() {
 		Map<TestEnum,TestEnum> x = proxy.returnEnumMap();
-		assertObject(x).json().is("{ONE:'TWO'}");
+		assertObject(x).asJson().is("{ONE:'TWO'}");
 		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
 		assertObject(e.getKey()).isType(TestEnum.class);
 		assertObject(e.getValue()).isType(TestEnum.class);
@@ -1257,7 +1257,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void f07_returnEnum3dArrayMap() {
 		Map<TestEnum,TestEnum[][][]> x = proxy.returnEnum3dArrayMap();
-		assertObject(x).json().is("{ONE:[[['TWO',null],null],null]}");
+		assertObject(x).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
 		assertObject(e.getKey()).isType(TestEnum.class);
 		assertObject(e.getValue()).isType(TestEnum[][][].class);
@@ -1266,7 +1266,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void f08_returnEnum1d3dListMap() {
 		Map<TestEnum,List<TestEnum[][][]>> x = proxy.returnEnum1d3dListMap();
-		assertObject(x).json().is("{ONE:[[[['TWO',null],null],null],null]}");
+		assertObject(x).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 		assertObject(x.get(TestEnum.ONE).get(0)).isType(TestEnum[][][].class);
 	}
 

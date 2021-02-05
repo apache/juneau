@@ -52,6 +52,6 @@ public class XmlTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read("<object><foo>bar</foo></object>", Map.class, String.class, String.class);
-		assertObject(o).json().is("{foo:'bar'}");
+		assertObject(o).asJson().is("{foo:'bar'}");
 	}
 }

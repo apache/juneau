@@ -234,14 +234,14 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void d01_response_assertBody() throws Exception {
-		client(D.class).build().post("/bean",bean).run().assertBody(ABean.class).json().is("{f:1}");
+		client(D.class).build().post("/bean",bean).run().assertBody(ABean.class).asJson().is("{f:1}");
 	}
 
 	@Test
 	public void d02_response_setEntity() throws Exception {
 		RestResponse x = client(D.class).build().post("/bean",bean).run();
 		x.setEntity(new StringEntity("{f:2}"));
-		x.assertBody(ABean.class).json().is("{f:2}");
+		x.assertBody(ABean.class).asJson().is("{f:2}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

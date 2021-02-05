@@ -43,7 +43,7 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 		A2 t1 = new A2(), t2;
 		t1.init();
 		t2 = roundTrip(t1, A2.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 
 		A3 t3 = new A3();
 		t3.init();
@@ -145,7 +145,7 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	public void testBeanInheritance2() throws Exception {
 		B1 t1 = new B1().init(), t2;
 		t2 = roundTrip(t1, B1.class);
-		assertObject(t1).sameAs(t2);
+		assertObject(t1).isSameJsonAs(t2);
 	}
 
 	public static class B1 extends B2 {

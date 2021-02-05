@@ -66,7 +66,7 @@ public class Accept_Test {
 		assertObject(new Accept((String)null).asMediaRanges()).isNotNull();
 		assertInteger(new Accept((String)null).match(AList.of(MediaType.JSON))).is(-1);
 		assertObject(new Accept((String)null).getRange(0)).isNull();
-		assertObject(new Accept(MediaType.JSON).getRange(0)).string().is("application/json");
+		assertObject(new Accept(MediaType.JSON).getRange(0)).asString().is("application/json");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

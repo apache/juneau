@@ -249,13 +249,13 @@ public class ConfigTest {
 	@Test
 	public void getStringArray1() throws Exception {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertObject(c.getStringArray("a1")).json().is("['1','2']");
-		assertObject(c.getStringArray("a2")).json().is("['2','3']");
-		assertObject(c.getStringArray("a3")).json().is("[]");
-		assertObject(c.getStringArray("S/b1")).json().is("['1']");
-		assertObject(c.getStringArray("S/b2")).json().is("[]");
-		assertObject(c.getStringArray("S/b3")).json().is("[]");
-		assertObject(c.getStringArray("T/c1")).json().is("[]");
+		assertObject(c.getStringArray("a1")).asJson().is("['1','2']");
+		assertObject(c.getStringArray("a2")).asJson().is("['2','3']");
+		assertObject(c.getStringArray("a3")).asJson().is("[]");
+		assertObject(c.getStringArray("S/b1")).asJson().is("['1']");
+		assertObject(c.getStringArray("S/b2")).asJson().is("[]");
+		assertObject(c.getStringArray("S/b3")).asJson().is("[]");
+		assertObject(c.getStringArray("T/c1")).asJson().is("[]");
 	}
 
 	//====================================================================================================
@@ -264,13 +264,13 @@ public class ConfigTest {
 	@Test
 	public void getStringArray2() throws Exception {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertObject(c.getStringArray("a1", new String[] {"foo"})).json().is("['1','2']");
-		assertObject(c.getStringArray("a2", new String[] {"foo"})).json().is("['2','3']");
-		assertObject(c.getStringArray("a3", new String[] {"foo"})).json().is("['foo']");
-		assertObject(c.getStringArray("S/b1", new String[] {"foo"})).json().is("['1']");
-		assertObject(c.getStringArray("S/b2", new String[] {"foo"})).json().is("['foo']");
-		assertObject(c.getStringArray("S/b3", new String[] {"foo"})).json().is("['foo']");
-		assertObject(c.getStringArray("T/c1", new String[] {"foo"})).json().is("['foo']");
+		assertObject(c.getStringArray("a1", new String[] {"foo"})).asJson().is("['1','2']");
+		assertObject(c.getStringArray("a2", new String[] {"foo"})).asJson().is("['2','3']");
+		assertObject(c.getStringArray("a3", new String[] {"foo"})).asJson().is("['foo']");
+		assertObject(c.getStringArray("S/b1", new String[] {"foo"})).asJson().is("['1']");
+		assertObject(c.getStringArray("S/b2", new String[] {"foo"})).asJson().is("['foo']");
+		assertObject(c.getStringArray("S/b3", new String[] {"foo"})).asJson().is("['foo']");
+		assertObject(c.getStringArray("T/c1", new String[] {"foo"})).asJson().is("['foo']");
 	}
 
 	//====================================================================================================
@@ -425,9 +425,9 @@ public class ConfigTest {
 	public void getBytes1() throws Exception {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertObject(c.getBytes("a1")).json().is("[102,111,111]");
-		assertObject(c.getBytes("a2")).json().is("[102,111,111]");
-		assertObject(c.getBytes("a3")).json().is("[]");
+		assertObject(c.getBytes("a1")).asJson().is("[102,111,111]");
+		assertObject(c.getBytes("a2")).asJson().is("[102,111,111]");
+		assertObject(c.getBytes("a3")).asJson().is("[]");
 		assertNull(null, c.getBytes("a4"));
 	}
 
@@ -438,10 +438,10 @@ public class ConfigTest {
 	public void getBytes2() throws Exception {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertObject(c.getBytes("a1", new byte[] {1})).json().is("[102,111,111]");
-		assertObject(c.getBytes("a2", new byte[] {1})).json().is("[102,111,111]");
-		assertObject(c.getBytes("a3", new byte[] {1})).json().is("[1]");
-		assertObject(c.getBytes("a4", new byte[] {1})).json().is("[1]");
+		assertObject(c.getBytes("a1", new byte[] {1})).asJson().is("[102,111,111]");
+		assertObject(c.getBytes("a2", new byte[] {1})).asJson().is("[102,111,111]");
+		assertObject(c.getBytes("a3", new byte[] {1})).asJson().is("[1]");
+		assertObject(c.getBytes("a4", new byte[] {1})).asJson().is("[1]");
 	}
 
 	//====================================================================================================
@@ -459,29 +459,29 @@ public class ConfigTest {
 			);
 
 		Map<String,Integer> a1 = c.getObject("a1", Map.class, String.class, Integer.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		List<Map<String,Integer>> a2a = c.getObject("a2", List.class, Map.class, String.class, Integer.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
 		List<ABean> a2b = c.getObject("a2", List.class, ABean.class);
-		assertObject(a2b).json().is("[{foo:'123'}]");
+		assertObject(a2b).asJson().is("[{foo:'123'}]");
 		assertObject(a2b.get(0)).isType(ABean.class);
 
 		Map<String,Integer> a3 = c.getObject("a3", Map.class, String.class, Integer.class);
 		assertNull(a3);
 
 		Map<String,Integer> a4a = c.getObject("a4", Map.class, String.class, Integer.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		ABean a4b = c.getObject("a4", ABean.class);
-		assertObject(a4b).json().is("{foo:'123'}");
+		assertObject(a4b).asJson().is("{foo:'123'}");
 		assertObject(a4b).isType(ABean.class);
 	}
 
@@ -500,29 +500,29 @@ public class ConfigTest {
 			);
 
 		Map<String,Integer> a1 = c.getObject("a1", UonParser.DEFAULT, Map.class, String.class, Integer.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		List<Map<String,Integer>> a2a = c.getObject("a2", UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
 		List<ABean> a2b = c.getObject("a2", UonParser.DEFAULT, List.class, ABean.class);
-		assertObject(a2b).json().is("[{foo:'123'}]");
+		assertObject(a2b).asJson().is("[{foo:'123'}]");
 		assertObject(a2b.get(0)).isType(ABean.class);
 
 		Map<String,Integer> a3 = c.getObject("a3", UonParser.DEFAULT, Map.class, String.class, Integer.class);
 		assertNull(a3);
 
 		Map<String,Integer> a4a = c.getObject("a4", UonParser.DEFAULT, Map.class, String.class, Integer.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		ABean a4b = c.getObject("a4", UonParser.DEFAULT, ABean.class);
-		assertObject(a4b).json().is("{foo:'123'}");
+		assertObject(a4b).asJson().is("{foo:'123'}");
 		assertObject(a4b).isType(ABean.class);
 	}
 
@@ -542,12 +542,12 @@ public class ConfigTest {
 			);
 
 		Map a1 = c.getObject("a1", Map.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		List a2a = c.getObject("a2", List.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(((Map)a2a.get(0)).keySet().iterator().next()).isType(String.class);
 		assertObject(((Map)a2a.get(0)).values().iterator().next()).isType(Integer.class);
 
@@ -555,12 +555,12 @@ public class ConfigTest {
 		assertNull(a3);
 
 		Map a4a = c.getObject("a4", Map.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		ABean a4b = c.getObject("a4", ABean.class);
-		assertObject(a4b).json().is("{foo:'123'}");
+		assertObject(a4b).asJson().is("{foo:'123'}");
 		assertObject(a4b).isType(ABean.class);
 	}
 
@@ -580,12 +580,12 @@ public class ConfigTest {
 		);
 
 		Map a1 = c.getObject("a1", UonParser.DEFAULT, Map.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		List a2a = c.getObject("a2", UonParser.DEFAULT, List.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(((Map)a2a.get(0)).keySet().iterator().next()).isType(String.class);
 		assertObject(((Map)a2a.get(0)).values().iterator().next()).isType(Integer.class);
 
@@ -593,12 +593,12 @@ public class ConfigTest {
 		assertNull(a3);
 
 		Map a4a = c.getObject("a4", UonParser.DEFAULT, Map.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		ABean a4b = c.getObject("a4", UonParser.DEFAULT, ABean.class);
-		assertObject(a4b).json().is("{foo:'123'}");
+		assertObject(a4b).asJson().is("{foo:'123'}");
 		assertObject(a4b).isType(ABean.class);
 	}
 
@@ -618,34 +618,34 @@ public class ConfigTest {
 		);
 
 		Map a1 = c.getObjectWithDefault("a1", new OMap(), Map.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		Map a1b = c.getObjectWithDefault("a1b", new OMap(), Map.class);
-		assertObject(a1b).json().is("{}");
+		assertObject(a1b).asJson().is("{}");
 
 		List a2a = c.getObjectWithDefault("a2", new OList(), List.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(((Map)a2a.get(0)).keySet().iterator().next()).isType(String.class);
 		assertObject(((Map)a2a.get(0)).values().iterator().next()).isType(Integer.class);
 
 		List a2b = c.getObjectWithDefault("a2b", new OList(), List.class);
-		assertObject(a2b).json().is("[]");
+		assertObject(a2b).asJson().is("[]");
 
 		Map a3 = c.getObjectWithDefault("a3", new OMap(), Map.class);
-		assertObject(a3).json().is("{}");
+		assertObject(a3).asJson().is("{}");
 
 		Map a4a = c.getObjectWithDefault("a4", new OMap(), Map.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		Map a4b = c.getObjectWithDefault("a4b", new OMap(), Map.class);
-		assertObject(a4b).json().is("{}");
+		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.getObjectWithDefault("a4c", new ABean().init(), ABean.class);
-		assertObject(a4c).json().is("{foo:'bar'}");
+		assertObject(a4c).asJson().is("{foo:'bar'}");
 		assertObject(a4c).isType(ABean.class);
 	}
 
@@ -665,34 +665,34 @@ public class ConfigTest {
 		);
 
 		Map a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new OMap(), Map.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		Map a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new OMap(), Map.class);
-		assertObject(a1b).json().is("{}");
+		assertObject(a1b).asJson().is("{}");
 
 		List a2a = c.getObjectWithDefault("a2", UonParser.DEFAULT, new OList(), List.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(((Map)a2a.get(0)).keySet().iterator().next()).isType(String.class);
 		assertObject(((Map)a2a.get(0)).values().iterator().next()).isType(Integer.class);
 
 		List a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new OList(), List.class);
-		assertObject(a2b).json().is("[]");
+		assertObject(a2b).asJson().is("[]");
 
 		Map a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new OMap(), Map.class);
-		assertObject(a3).json().is("{}");
+		assertObject(a3).asJson().is("{}");
 
 		Map a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new OMap(), Map.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		Map a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new OMap(), Map.class);
-		assertObject(a4b).json().is("{}");
+		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.getObjectWithDefault("a4c", UonParser.DEFAULT, new ABean().init(), ABean.class);
-		assertObject(a4c).json().is("{foo:'bar'}");
+		assertObject(a4c).asJson().is("{foo:'bar'}");
 		assertObject(a4c).isType(ABean.class);
 	}
 
@@ -711,34 +711,34 @@ public class ConfigTest {
 		);
 
 		Map<String,Integer> a1 = c.getObjectWithDefault("a1", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		Map<String,Integer> a1b = c.getObjectWithDefault("a1b", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a1b).json().is("{}");
+		assertObject(a1b).asJson().is("{}");
 
 		List<Map<String,Integer>> a2a = c.getObjectWithDefault("a2", new ArrayList<Map<String,Integer>>(), List.class, Map.class, String.class, Integer.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
 		List<ABean> a2b = c.getObjectWithDefault("a2b", new ArrayList<ABean>(), List.class, ABean.class);
-		assertObject(a2b).json().is("[]");
+		assertObject(a2b).asJson().is("[]");
 
 		Map<String,Object> a3 = c.getObjectWithDefault("a3", new OMap(), Map.class, String.class, Object.class);
-		assertObject(a3).json().is("{}");
+		assertObject(a3).asJson().is("{}");
 
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		Map<String,Integer> a4b = c.getObjectWithDefault("a4b", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a4b).json().is("{}");
+		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.getObjectWithDefault("a4c", new ABean().init(), ABean.class);
-		assertObject(a4c).json().is("{foo:'bar'}");
+		assertObject(a4c).asJson().is("{foo:'bar'}");
 		assertObject(a4c).isType(ABean.class);
 	}
 
@@ -757,34 +757,34 @@ public class ConfigTest {
 		);
 
 		Map<String,Integer> a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a1).json().is("{foo:123}");
+		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
 		Map<String,Integer> a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a1b).json().is("{}");
+		assertObject(a1b).asJson().is("{}");
 
 		List<Map<String,Integer>> a2a = c.getObjectWithDefault("a2", UonParser.DEFAULT, new ArrayList<Map<String,Integer>>(), List.class, Map.class, String.class, Integer.class);
-		assertObject(a2a).json().is("[{foo:123}]");
+		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
 		List<ABean> a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new ArrayList<ABean>(), List.class, ABean.class);
-		assertObject(a2b).json().is("[]");
+		assertObject(a2b).asJson().is("[]");
 
 		Map<String,Object> a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new OMap(), Map.class, String.class, Object.class);
-		assertObject(a3).json().is("{}");
+		assertObject(a3).asJson().is("{}");
 
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a4a).json().is("{foo:123}");
+		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
 		Map<String,Integer> a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
-		assertObject(a4b).json().is("{}");
+		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.getObjectWithDefault("a4c", UonParser.DEFAULT, new ABean().init(), ABean.class);
-		assertObject(a4c).json().is("{foo:'bar'}");
+		assertObject(a4c).asJson().is("{foo:'bar'}");
 		assertObject(a4c).isType(ABean.class);
 	}
 
@@ -795,9 +795,9 @@ public class ConfigTest {
 	public void getKeys() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 
-		assertObject(c.getKeys("")).json().is("['a1','a2']");
-		assertObject(c.getKeys("")).json().is("['a1','a2']");
-		assertObject(c.getKeys("S")).json().is("['b1','b2']");
+		assertObject(c.getKeys("")).asJson().is("['a1','a2']");
+		assertObject(c.getKeys("")).asJson().is("['a1','a2']");
+		assertObject(c.getKeys("S")).asJson().is("['b1','b2']");
 		assertTrue(c.getKeys("T").isEmpty());
 
 		assertThrown(()->c.getKeys(null)).is("Field 'section' cannot be null.");
@@ -813,15 +813,15 @@ public class ConfigTest {
 
 		Config c = init("foo=qux", "[S]", "foo=baz", "bar=baz");
 		c.writeProperties("S", a, true);
-		assertObject(a).json().is("{foo:'baz'}");
+		assertObject(a).asJson().is("{foo:'baz'}");
 		c.writeProperties("S", b, true);
-		assertObject(b).json().is("{foo:'baz'}");
+		assertObject(b).asJson().is("{foo:'baz'}");
 		assertThrown(()->c.writeProperties("S", a, false)).is("Unknown property 'bar' encountered in configuration section 'S'.");
 		assertThrown(()->c.writeProperties("S", b, false)).is("Unknown property 'bar' encountered in configuration section 'S'.");
 		c.writeProperties("", b, true);
-		assertObject(b).json().is("{foo:'qux'}");
+		assertObject(b).asJson().is("{foo:'qux'}");
 		c.writeProperties("", a, true);
-		assertObject(a).json().is("{foo:'qux'}");
+		assertObject(a).asJson().is("{foo:'qux'}");
 
 		assertThrown(()->c.writeProperties(null, a, true)).is("Field 'section' cannot be null.");
 	}
@@ -837,18 +837,18 @@ public class ConfigTest {
 		BBean b = null;
 
 		a = c.getSectionAsBean("", ABean.class);
-		assertObject(a).json().is("{foo:'qux'}");
+		assertObject(a).asJson().is("{foo:'qux'}");
 		a = c.getSectionAsBean("", ABean.class);
-		assertObject(a).json().is("{foo:'qux'}");
+		assertObject(a).asJson().is("{foo:'qux'}");
 		a = c.getSectionAsBean("S", ABean.class);
-		assertObject(a).json().is("{foo:'baz'}");
+		assertObject(a).asJson().is("{foo:'baz'}");
 
 		b = c.getSectionAsBean("", BBean.class);
-		assertObject(b).json().is("{foo:'qux'}");
+		assertObject(b).asJson().is("{foo:'qux'}");
 		b = c.getSectionAsBean("", BBean.class);
-		assertObject(b).json().is("{foo:'qux'}");
+		assertObject(b).asJson().is("{foo:'qux'}");
 		b = c.getSectionAsBean("S", BBean.class);
-		assertObject(b).json().is("{foo:'baz'}");
+		assertObject(b).asJson().is("{foo:'baz'}");
 
 		assertThrown(()->c.getSectionAsBean("T", ABean.class)).is("Unknown property 'bar' encountered in configuration section 'T'.");
 		assertThrown(()->c.getSectionAsBean("T", BBean.class)).is("Unknown property 'bar' encountered in configuration section 'T'.");
@@ -867,9 +867,9 @@ public class ConfigTest {
 		BBean b = null;
 
 		a = c.getSectionAsBean("T", ABean.class, true);
-		assertObject(a).json().is("{foo:'qux'}");
+		assertObject(a).asJson().is("{foo:'qux'}");
 		b = c.getSectionAsBean("T", BBean.class, true);
-		assertObject(b).json().is("{foo:'qux'}");
+		assertObject(b).asJson().is("{foo:'qux'}");
 
 		assertThrown(()->c.getSectionAsBean("T", ABean.class, false)).is("Unknown property 'bar' encountered in configuration section 'T'.");
 		assertThrown(()->c.getSectionAsBean("T", BBean.class, false)).is("Unknown property 'bar' encountered in configuration section 'T'.");
@@ -882,10 +882,10 @@ public class ConfigTest {
 	public void getSectionAsMap() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "[T]");
 
-		assertObject(c.getSectionAsMap("")).json().is("{a:'1'}");
-		assertObject(c.getSectionAsMap("")).json().is("{a:'1'}");
-		assertObject(c.getSectionAsMap("S")).json().is("{b:'2'}");
-		assertObject(c.getSectionAsMap("T")).json().is("{}");
+		assertObject(c.getSectionAsMap("")).asJson().is("{a:'1'}");
+		assertObject(c.getSectionAsMap("")).asJson().is("{a:'1'}");
+		assertObject(c.getSectionAsMap("S")).asJson().is("{b:'2'}");
+		assertObject(c.getSectionAsMap("T")).asJson().is("{}");
 		assertNull(c.getSectionAsMap("U"));
 
 		assertThrown(()->c.getSectionAsMap(null)).is("Field 'section' cannot be null.");
@@ -1191,7 +1191,7 @@ public class ConfigTest {
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("626172", cf.get("foo"));
-		assertObject(cf.getBytes("foo")).json().is("[98,97,114]");
+		assertObject(cf.getBytes("foo")).asJson().is("[98,97,114]");
 	}
 
 	//====================================================================================================
@@ -1203,7 +1203,7 @@ public class ConfigTest {
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("62 61 72", cf.get("foo"));
-		assertObject(cf.getBytes("foo")).json().is("[98,97,114]");
+		assertObject(cf.getBytes("foo")).asJson().is("[98,97,114]");
 	}
 
 	//====================================================================================================
@@ -1276,9 +1276,9 @@ public class ConfigTest {
 		cf.set("a3", 3);
 		cf.set("B/b1", 3);
 		cf.set("B/b3", 3);
-		assertObject(changes).json().is("[]");
+		assertObject(changes).asJson().is("[]");
 		cf.commit();
-		assertObject(changes).json().is("['a1=3','a3=3','B/b1=3','B/b3=3']");
+		assertObject(changes).asJson().is("['a1=3','a3=3','B/b1=3','B/b3=3']");
 
 		// Rollback.
 		changes.clear();
@@ -1286,10 +1286,10 @@ public class ConfigTest {
 		cf.set("a3", 3);
 		cf.set("B/b1", 3);
 		cf.set("B/b3", 3);
-		assertObject(changes).json().is("[]");
+		assertObject(changes).asJson().is("[]");
 		cf.rollback();
 		cf.commit();
-		assertObject(changes).json().is("[]");
+		assertObject(changes).asJson().is("[]");
 
 		// Overwrite
 		changes.clear();
@@ -1300,21 +1300,21 @@ public class ConfigTest {
 		cf.set("C/c1", "2");
 		cf.set("C/c2", "2");
 		cf.commit();
-		assertObject(changes).json().is("['a1=2','a2=2','B/b1=2','B/b2=2','C/c1=2','C/c2=2']");
+		assertObject(changes).asJson().is("['a1=2','a2=2','B/b1=2','B/b2=2','C/c1=2','C/c2=2']");
 
 		// Encoded
 		changes.clear();
 		cf.set("a4", "4", null, ConfigMod.ENCODED, null, null);
 		cf.set("B/b4", "4", null, ConfigMod.ENCODED, null, null);
 		cf.commit();
-		assertObject(changes).json().is("['a4={Wg==}','B/b4={Wg==}']");
+		assertObject(changes).asJson().is("['a4={Wg==}','B/b4={Wg==}']");
 
 		// Encoded overwrite
 		changes.clear();
 		cf.set("a4", "5");
 		cf.set("B/b4", "5");
 		cf.commit();
-		assertObject(changes).json().is("['a4={Ww==}','B/b4={Ww==}']");
+		assertObject(changes).asJson().is("['a4={Ww==}','B/b4={Ww==}']");
 
 		// Remove entries
 		changes.clear();
@@ -1324,32 +1324,32 @@ public class ConfigTest {
 		cf.remove("B/bx");
 		cf.remove("X/bx");
 		cf.commit();
-		assertObject(changes).json().is("['REMOVE_ENTRY(a4)','REMOVE_ENTRY(B/b4)']");
+		assertObject(changes).asJson().is("['REMOVE_ENTRY(a4)','REMOVE_ENTRY(B/b4)']");
 
 		// Add section
 		// Shouldn't trigger listener.
 		changes.clear();
 		cf.setSection("D", Arrays.asList("#comment"));
 		cf.commit();
-		assertObject(changes).json().is("[]");
+		assertObject(changes).asJson().is("[]");
 
 		// Add section with contents
 		changes.clear();
 		cf.setSection("E", null, AMap.of("e1","1","e2","2"));
 		cf.commit();
-		assertObject(changes).json().is("['E/e1=1','E/e2=2']");
+		assertObject(changes).asJson().is("['E/e1=1','E/e2=2']");
 
 		// Remove section
 		changes.clear();
 		cf.removeSection("E");
 		cf.commit();
-		assertObject(changes).json().is("['REMOVE_ENTRY(E/e1)','REMOVE_ENTRY(E/e2)']");
+		assertObject(changes).asJson().is("['REMOVE_ENTRY(E/e1)','REMOVE_ENTRY(E/e2)']");
 
 		// Remove non-existent section
 		changes.clear();
 		cf.removeSection("E");
 		cf.commit();
-		assertObject(changes).json().is("[]");
+		assertObject(changes).asJson().is("[]");
 	}
 
 	//====================================================================================================
@@ -1359,34 +1359,34 @@ public class ConfigTest {
 	@Test
 	public void testGetObjectArray() throws Exception {
 		Config cf = init("[A]", "a1=[1,2,3]");
-		assertObject(cf.getObject("A/a1", Integer[].class)).json().is("[1,2,3]");
-		assertObject(cf.getObjectWithDefault("A/a2", new Integer[]{4,5,6}, Integer[].class)).json().is("[4,5,6]");
-		assertObject(cf.getObjectWithDefault("B/a1", new Integer[]{7,8,9}, Integer[].class)).json().is("[7,8,9]");
+		assertObject(cf.getObject("A/a1", Integer[].class)).asJson().is("[1,2,3]");
+		assertObject(cf.getObjectWithDefault("A/a2", new Integer[]{4,5,6}, Integer[].class)).asJson().is("[4,5,6]");
+		assertObject(cf.getObjectWithDefault("B/a1", new Integer[]{7,8,9}, Integer[].class)).asJson().is("[7,8,9]");
 		assertNull(cf.getObject("B/a1", Integer[].class));
 
 		cf = init("[A]", "a1 = [1 ,\n\t2 ,\n\t3] ");
-		assertObject(cf.getObject("A/a1", Integer[].class)).json().is("[1,2,3]");
+		assertObject(cf.getObject("A/a1", Integer[].class)).asJson().is("[1,2,3]");
 
 		// We cannot cast primitive arrays to Object[], so the following throws exceptions.
-		assertObject(cf.getObject("A/a1", int[].class)).json().is("[1,2,3]");
+		assertObject(cf.getObject("A/a1", int[].class)).asJson().is("[1,2,3]");
 		assertEquals("int", cf.getObject("A/a1", int[].class).getClass().getComponentType().getSimpleName());
 		assertNull(cf.getObject("B/a1", int[].class));
 		assertEquals("int", cf.getObjectWithDefault("B/a1", new int[0], int[].class).getClass().getComponentType().getSimpleName());
 		assertNull(cf.getObject("A/a2", int[].class));
 		assertEquals("int", cf.getObjectWithDefault("A/a2", new int[0], int[].class).getClass().getComponentType().getSimpleName());
 
-		assertObject(cf.getObjectWithDefault("A/a1", new int[]{4}, int[].class)).json().is("[1,2,3]");
+		assertObject(cf.getObjectWithDefault("A/a1", new int[]{4}, int[].class)).asJson().is("[1,2,3]");
 		assertEquals("int", cf.getObjectWithDefault("A/a1", new int[]{4}, int[].class).getClass().getComponentType().getSimpleName());
-		assertObject(cf.getObjectWithDefault("B/a1", new int[]{4}, int[].class)).json().is("[4]");
+		assertObject(cf.getObjectWithDefault("B/a1", new int[]{4}, int[].class)).asJson().is("[4]");
 		assertEquals("int", cf.getObjectWithDefault("B/a1", new int[]{4}, int[].class).getClass().getComponentType().getSimpleName());
-		assertObject(cf.getObjectWithDefault("A/a2", new int[]{4}, int[].class)).json().is("[4]");
+		assertObject(cf.getObjectWithDefault("A/a2", new int[]{4}, int[].class)).asJson().is("[4]");
 		assertEquals("int", cf.getObjectWithDefault("A/a2", new int[]{4}, int[].class).getClass().getComponentType().getSimpleName());
 
 		System.setProperty("X", "[4,5,6]");
 		cf = init("x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "[A]", "a1=[1,2,3]");
-		assertObject(cf.getObjectWithDefault("x1", new int[]{9}, int[].class)).json().is("[1,2,3]");
-		assertObject(cf.getObjectWithDefault("x2", new int[]{9}, int[].class)).json().is("[4,5,6]");
-		assertObject(cf.getObjectWithDefault("x3", new int[]{9}, int[].class)).json().is("[9]");
+		assertObject(cf.getObjectWithDefault("x1", new int[]{9}, int[].class)).asJson().is("[1,2,3]");
+		assertObject(cf.getObjectWithDefault("x2", new int[]{9}, int[].class)).asJson().is("[4,5,6]");
+		assertObject(cf.getObjectWithDefault("x3", new int[]{9}, int[].class)).asJson().is("[9]");
 		System.clearProperty("X");
 	}
 
@@ -1397,19 +1397,19 @@ public class ConfigTest {
 	@Test
 	public void testGetStringArray() throws Exception {
 		Config cf = init("[A]", "a1=1,2,3");
-		assertObject(cf.getStringArray("A/a1")).json().is("['1','2','3']");
-		assertObject(cf.getStringArray("A/a2", new String[]{"4","5","6"})).json().is("['4','5','6']");
-		assertObject(cf.getStringArray("B/a1", new String[]{"7","8","9"})).json().is("['7','8','9']");
-		assertObject(cf.getStringArray("B/a1")).json().is("[]");
+		assertObject(cf.getStringArray("A/a1")).asJson().is("['1','2','3']");
+		assertObject(cf.getStringArray("A/a2", new String[]{"4","5","6"})).asJson().is("['4','5','6']");
+		assertObject(cf.getStringArray("B/a1", new String[]{"7","8","9"})).asJson().is("['7','8','9']");
+		assertObject(cf.getStringArray("B/a1")).asJson().is("[]");
 
 		cf = init("[A]", "a1 = 1 ,\n\t2 ,\n\t3 ");
-		assertObject(cf.getStringArray("A/a1")).json().is("['1','2','3']");
+		assertObject(cf.getStringArray("A/a1")).asJson().is("['1','2','3']");
 
 		System.setProperty("X", "4,5,6");
 		cf = init(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,$S{X}}", "[A]", "a1=1,2,3");
-		assertObject(cf.getStringArray("x1", new String[]{"9"})).json().is("['1','2','3']");
-		assertObject(cf.getStringArray("x2", new String[]{"9"})).json().is("['4','5','6']");
-		assertObject(cf.getStringArray("x3", new String[]{"9"})).json().is("['9']");
+		assertObject(cf.getStringArray("x1", new String[]{"9"})).asJson().is("['1','2','3']");
+		assertObject(cf.getStringArray("x2", new String[]{"9"})).asJson().is("['4','5','6']");
+		assertObject(cf.getStringArray("x3", new String[]{"9"})).asJson().is("['9']");
 
 		System.clearProperty("X");
 	}
@@ -1421,16 +1421,16 @@ public class ConfigTest {
 	public void testGetSectionMap() throws Exception {
 		Config cf = init("[A]", "a1=1", "", "[D]", "d1=$C{A/a1}","d2=$S{X}");
 
-		assertObject(cf.getSectionAsMap("A")).json().is("{a1:'1'}");
+		assertObject(cf.getSectionAsMap("A")).asJson().is("{a1:'1'}");
 		assertNull(cf.getSectionAsMap("B"));
-		assertObject(cf.getSectionAsMap("C")).json().is("null");
+		assertObject(cf.getSectionAsMap("C")).asJson().is("null");
 
 		OMap m = cf.getSectionAsMap("A");
-		assertObject(m).json().is("{a1:'1'}");
+		assertObject(m).asJson().is("{a1:'1'}");
 
 		System.setProperty("X", "x");
 		m = cf.getSectionAsMap("D");
-		assertObject(m).json().is("{d1:'1',d2:'x'}");
+		assertObject(m).asJson().is("{d1:'1',d2:'x'}");
 		System.clearProperty("X");
 	}
 
@@ -1569,10 +1569,10 @@ public class ConfigTest {
 	public void testGetCandidateSystemDefaultConfigNames() {
 
 		System.setProperty("juneau.configFile", "foo.txt");
-		assertObject(Config.getCandidateSystemDefaultConfigNames()).json().is("['foo.txt']");
+		assertObject(Config.getCandidateSystemDefaultConfigNames()).asJson().is("['foo.txt']");
 
 		System.clearProperty("juneau.configFile");
-		assertObject(Config.getCandidateSystemDefaultConfigNames()).json().is("['test.cfg','juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg','application.properties']");
+		assertObject(Config.getCandidateSystemDefaultConfigNames()).asJson().is("['test.cfg','juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg','application.properties']");
 	}
 
 	//====================================================================================================
