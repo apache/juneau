@@ -326,7 +326,7 @@ public class Items extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void addEnum(Collection<Object> value) {
-		_enum = addToSet(_enum, value);
+		_enum = setBuilder(_enum).sparse().addAll(value).build();
 	}
 
 	/**
@@ -359,7 +359,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items _enum(Object...value) {
-		setEnum(toSet(value, Object.class));
+		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 

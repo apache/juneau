@@ -14,7 +14,6 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.lang.annotation.*;
@@ -2477,6 +2476,12 @@ public final class ClassInfo {
 				typeMap.put(typeParameters[i], actualTypeArguments[i]);
 			}
 		}
+	}
+
+	private static <T> List<T> addIfNotNull(List<T> l, T o) {
+		if (o != null)
+			l.add(o);
+		return l;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

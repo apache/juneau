@@ -251,7 +251,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void addConsumes(Collection<MediaType> value) {
-		consumes = addToSet(consumes, value);
+		consumes = setBuilder(consumes).sparse().addAll(value).build();
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation consumes(MediaType...value) {
-		setConsumes(toSet(value, MediaType.class));
+		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -308,7 +308,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation consumes(String...value) {
-		setConsumes(toSet(value, MediaType.class));
+		setConsumes(setBuilder(MediaType.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -682,7 +682,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 */
 	public void addParameters(Collection<ParameterInfo> value) {
-		parameters = addToList(parameters, value);
+		parameters = listBuilder(parameters).sparse().addAll(value).build();
 	}
 
 	/**
@@ -708,7 +708,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation parameters(ParameterInfo...value) {
-		setParameters(toList(value, ParameterInfo.class));
+		setParameters(listBuilder(ParameterInfo.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -739,7 +739,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation parameters(String...value) {
-		setParameters(toList(value, ParameterInfo.class));
+		setParameters(listBuilder(ParameterInfo.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -785,7 +785,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 */
 	public void addProduces(Collection<MediaType> value) {
-		produces = addToSet(produces, value);
+		produces = setBuilder(produces).sparse().addAll(value).build();
 	}
 
 	/**
@@ -811,7 +811,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation produces(MediaType...value) {
-		setProduces(toSet(value, MediaType.class));
+		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -842,7 +842,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation produces(String...value) {
-		setProduces(toSet(value, MediaType.class));
+		setProduces(setBuilder(MediaType.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -919,7 +919,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 */
 	public void addResponses(Map<String,ResponseInfo> values) {
-		responses = addToMap(responses, values);
+		responses = mapBuilder(responses).sparse().addAll(values).build();
 	}
 
 	/**
@@ -977,7 +977,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation responses(String json) {
-		setResponses(toMap(json, String.class, ResponseInfo.class));
+		setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1029,7 +1029,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 */
 	public void addSchemes(Collection<String> value) {
-		schemes = addToSet(schemes, value);
+		schemes = setBuilder(schemes).sparse().addAll(value).build();
 	}
 
 	/**
@@ -1056,7 +1056,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation schemes(String...value) {
-		setSchemes(toSet(value, String.class));
+		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1118,7 +1118,7 @@ public class Operation extends SwaggerElement {
 	 * The new value for this property.
 	 */
 	public void addSecurity(Collection<Map<String,List<String>>> values) {
-		security = addToList(security, values);
+		security = listBuilder(security).sparse().addAll(values).build();
 	}
 
 	/**
@@ -1185,7 +1185,7 @@ public class Operation extends SwaggerElement {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation security(String value) {
-		setSecurity((Collection)toList(value, Map.class, String.class, List.class, String.class));
+		setSecurity((Collection)listBuilder(Map.class,String.class,List.class,String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1290,7 +1290,7 @@ public class Operation extends SwaggerElement {
 	 * 	The values to add to this property.
 	 */
 	public void addTags(Collection<String> value) {
-		tags = addToSet(tags, value);
+		tags = setBuilder(tags).sparse().addAll(value).build();
 	}
 
 	/**
@@ -1341,7 +1341,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation tags(String...value) {
-		setTags(toSet(value, String.class));
+		setTags(setBuilder(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1373,18 +1373,18 @@ public class Operation extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "consumes": return consumes(toList(value, MediaType.class));
+			case "consumes": return consumes(listBuilder(MediaType.class).sparse().addAny(value).build());
 			case "deprecated": return deprecated(toBoolean(value));
 			case "description": return description(stringify(value));
 			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
 			case "operationId": return operationId(stringify(value));
-			case "parameters": return parameters(toList(value, ParameterInfo.class));
-			case "produces": return produces(toList(value, MediaType.class));
-			case "responses": return responses(toMap(value, String.class, ResponseInfo.class));
-			case "schemes": return schemes(toList(value, String.class));
-			case "security": return security((List)toList(value, Map.class, String.class, List.class, String.class));
+			case "parameters": return parameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
+			case "produces": return produces(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "responses": return responses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "schemes": return schemes(listBuilder(String.class).sparse().addAny(value).build());
+			case "security": return security((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
 			case "summary": return summary(stringify(value));
-			case "tags": return tags(toList(value, String.class));
+			case "tags": return tags(listBuilder(String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;

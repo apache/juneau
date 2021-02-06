@@ -308,7 +308,7 @@ public class HeaderInfo_Test {
 		assertObject(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t._enum(new Object[0]);
-		assertObject(t._enum()).isType(Set.class).asJson().is("[]");
+		assertObject(t._enum()).isNull();
 
 		t._enum((Collection<Object>)null);
 		assertObject(t._enum()).isNull();
@@ -458,7 +458,7 @@ public class HeaderInfo_Test {
 		assertObject(t).asJson().is("{description:'d',type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref',example:'e'}");
 
 		assertObject(t.get("default", Object.class)).isType(StringBuilder.class).asString().is("a");
-		assertObject(t.get("enum", Object.class)).isType(Set.class).asString().is("['b']");
+		assertObject(t.get("enum", Object.class)).isType(Set.class).asJson().is("['b']");
 		assertObject(t.get("collectionFormat", Object.class)).isType(String.class).is("c");
 		assertObject(t.get("description", Object.class)).isType(String.class).is("d");
 		assertObject(t.get("example", Object.class)).isType(StringBuilder.class).asString().is("e");

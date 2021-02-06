@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -51,6 +50,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshall.*;
@@ -3526,9 +3526,9 @@ public class RestContext extends BeanContext {
 			uriRelativity = getProperty(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 
 			allowBodyParam = ! getBooleanProperty(REST_disableAllowBodyParam);
-			allowedHeaderParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedHeaderParams, "Accept,Content-Type"));
-			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
-			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
+			allowedHeaderParams = newCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedHeaderParams, "Accept,Content-Type"));
+			allowedMethodParams = newCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
+			allowedMethodHeaders = newCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
@@ -3578,6 +3578,19 @@ public class RestContext extends BeanContext {
 
 	private MethodInvoker toRestOperationInvoker(Method m) {
 		return new RestOperationInvoker(m, findHookMethodParams(m, getBeanFactory()), getMethodExecStats(m));
+	}
+
+	private Set<String> newCaseInsensitiveSet(String value) {
+		Set<String> s = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public boolean contains(Object v) {
+				return v == null ? false : super.contains(v);
+			}
+		};
+		for (String v : StringUtils.split(value))
+			s.add(v);
+		return Collections.unmodifiableSet(s);
 	}
 
 	/**

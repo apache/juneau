@@ -178,7 +178,7 @@ public class Swagger_Test {
 		assertObject(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
 
 		t.paths(AMap.create());
-		assertObject(t.paths()).isType(Map.class).asJson().is("{}");
+		assertObject(t.paths()).isNull();
 
 		t.paths((Map<String,OperationMap>)null);
 		assertObject(t.paths()).isNull();

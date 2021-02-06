@@ -473,7 +473,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme addScopes(Map<String,String> values) {
-		scopes = addToMap(scopes, values);
+		scopes = mapBuilder(scopes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -515,7 +515,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme scopes(String json) {
-		setScopes(toMap(json, String.class, String.class));
+		setScopes(mapBuilder(String.class,String.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -683,7 +683,7 @@ public class SecurityScheme extends SwaggerElement {
 			case "flow": return flow(stringify(value));
 			case "in": return in(stringify(value));
 			case "name": return name(stringify(value));
-			case "scopes": return scopes(toMap(value, String.class, String.class));
+			case "scopes": return scopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			case "tokenUrl": return tokenUrl(stringify(value));
 			case "type": return type(stringify(value));
 			default:

@@ -253,7 +253,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addAllOf(Collection<Object> values) {
-		allOf = addToSet(allOf, values);
+		allOf = setBuilder(allOf).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -288,7 +288,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo allOf(Object...value) {
-		setAllOf(toSet(value, Object.class));
+		setAllOf(setBuilder(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 
@@ -474,7 +474,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addEnum(Collection<Object> value) {
-		_enum = addToSet(_enum, value);
+		_enum = setBuilder(_enum).sparse().addAll(value).build();
 		return this;
 	}
 
@@ -496,7 +496,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo _enum(Object...value) {
-		setEnum(toSet(value, Object.class));
+		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 
@@ -1485,7 +1485,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addProperties(Map<String,SchemaInfo> values) {
-		properties = addToMap(properties, values);
+		properties = mapBuilder(properties).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1518,7 +1518,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo properties(String json) {
-		setProperties(toMap(json, String.class, SchemaInfo.class));
+		setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1678,7 +1678,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addRequired(Collection<String> value) {
-		required = addToSet(required, value);
+		required = setBuilder(required).sparse().addAny(value).build();
 		return this;
 	}
 
@@ -1711,7 +1711,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo required(String...value) {
-		setRequired(toSet(value, String.class));
+		setRequired(setBuilder(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -2017,10 +2017,10 @@ public class SchemaInfo extends SwaggerElement {
 			case "minProperties": return minProperties(toInteger(value));
 			case "multipleOf": return multipleOf(toNumber(value));
 			case "pattern": return pattern(stringify(value));
-			case "properties": return properties(toMap(value,String.class,SchemaInfo.class));
+			case "properties": return properties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
 			case "readOnly": return readOnly(toBoolean(value));
 			case "$ref": return ref(stringify(value));
-			case "required": return required(toList(value,String.class));
+			case "required": return required(listBuilder(String.class).sparse().addAny(value).build());
 			case "title": return title(stringify(value));
 			case "type": return type(stringify(value));
 			case "uniqueItems": return uniqueItems(toBoolean(value));

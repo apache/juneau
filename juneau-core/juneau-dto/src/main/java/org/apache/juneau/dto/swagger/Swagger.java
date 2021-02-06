@@ -269,7 +269,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addConsumes(Collection<MediaType> values) {
-		consumes = addToSet(consumes, values);
+		consumes = setBuilder(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -311,7 +311,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger consumes(MediaType...value) {
-		setConsumes(toSet(value, MediaType.class));
+		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -327,7 +327,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger consumes(String...value) {
-		setConsumes(toSet(value, MediaType.class));
+		setConsumes(setBuilder(MediaType.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -373,7 +373,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addDefinitions(Map<String,OMap> values) {
-		definitions = addToMap(definitions, values);
+		definitions = mapBuilder(definitions).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -388,7 +388,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger definition(String name, OMap schema) {
-		definitions = addToMap(definitions, name, schema);
+		definitions = mapBuilder(definitions).sparse().add(name, schema).build();
 		return this;
 	}
 
@@ -430,7 +430,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger definitions(String json) {
-		setDefinitions(toMap(json, String.class, OMap.class));
+		setDefinitions(mapBuilder(String.class,OMap.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -698,7 +698,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addParameters(Map<String,ParameterInfo> values) {
-		parameters = addToMap(parameters, values);
+		parameters = mapBuilder(parameters).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -713,7 +713,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger parameter(String name, ParameterInfo parameter) {
-		parameters = addToMap(parameters, name, parameter);
+		parameters = mapBuilder(parameters).sparse().add(name, parameter).build();
 		return this;
 	}
 
@@ -752,7 +752,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger parameters(String json) {
-		setParameters(toMap(json, String.class, ParameterInfo.class));
+		setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -783,7 +783,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Property value is required.
 	 */
 	public void setPaths(Map<String,OperationMap> value) {
-		paths = newSortedMap(value, PATH_COMPARATOR);
+		paths = mapBuilder(String.class,OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
 	}
 
 	/**
@@ -798,7 +798,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addPaths(Map<String,OperationMap> values) {
-		paths = addToSortedMap(paths, values, PATH_COMPARATOR);
+		paths = mapBuilder(paths).sparse().sorted(PATH_COMPARATOR).addAll(values).build();
 		return this;
 	}
 
@@ -862,9 +862,8 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to set on this property as JSON.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger paths(String json) {
-		setPaths(addToMap(new TreeMap(PATH_COMPARATOR), new Object[]{json}, String.class, Map.class, String.class, Operation.class));
+		setPaths(mapBuilder(String.class,OperationMap.class).sparse().sorted(PATH_COMPARATOR).addJson(json).build());
 		return this;
 	}
 
@@ -912,7 +911,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addProduces(Collection<MediaType> values) {
-		produces = addToSet(produces, values);
+		produces = setBuilder(produces).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -954,7 +953,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger produces(MediaType...value) {
-		setProduces(toSet(value, MediaType.class));
+		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -970,7 +969,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger produces(String...value) {
-		setProduces(toSet(value, MediaType.class));
+		setProduces(setBuilder(MediaType.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1016,7 +1015,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addResponses(Map<String,ResponseInfo> values) {
-		responses = addToMap(responses, values);
+		responses = mapBuilder(responses).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1031,7 +1030,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger response(String name, ResponseInfo response) {
-		responses = addToMap(responses, name, response);
+		responses = mapBuilder(responses).sparse().add(name, response).build();
 		return this;
 	}
 
@@ -1073,7 +1072,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger responses(String json) {
-		setResponses(toMap(json, String.class, ResponseInfo.class));
+		setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1133,7 +1132,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addSchemes(Collection<String> values) {
-		schemes = addToSet(schemes, values);
+		schemes = setBuilder(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1176,7 +1175,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger schemes(String...value) {
-		setSchemes(toSet(value, String.class));
+		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1222,7 +1221,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
-		security = addToList(security, values);
+		security = listBuilder(security).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1282,7 +1281,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger security(String json) {
-		setSecurity((List)toList(json, Map.class, String.class, List.class, String.class));
+		setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1328,7 +1327,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addSecurityDefinitions(Map<String,SecurityScheme> values) {
-		securityDefinitions = addToMap(securityDefinitions, values);
+		securityDefinitions = mapBuilder(securityDefinitions).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1343,7 +1342,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger securityDefinition(String name, SecurityScheme securityScheme) {
-		securityDefinitions = addToMap(securityDefinitions, name, securityScheme);
+		securityDefinitions = mapBuilder(securityDefinitions).sparse().add(name, securityScheme).build();
 		return this;
 	}
 
@@ -1385,7 +1384,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger securityDefinitions(String json) {
-		setSecurityDefinitions(toMap(json, String.class, SecurityScheme.class));
+		setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1497,7 +1496,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger addTags(Collection<Tag> values) {
-		tags = addToSet(tags, values);
+		tags = setBuilder(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1539,7 +1538,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger tags(String json) {
-		setTags(toSet(json, Tag.class));
+		setTags(setBuilder(Tag.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1700,20 +1699,20 @@ public class Swagger extends SwaggerElement {
 			return this;
 		switch (property) {
 			case "basePath": return basePath(stringify(value));
-			case "consumes": return consumes(toList(value, MediaType.class));
-			case "definitions": return definitions(toMap(value, String.class, OMap.class));
+			case "consumes": return consumes(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "definitions": return definitions(mapBuilder(String.class,OMap.class).sparse().addAny(value).build());
 			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
 			case "host": return host(stringify(value));
 			case "info": return info(toType(value, Info.class));
-			case "parameters": return parameters(toMap(value, String.class, ParameterInfo.class));
-			case "paths": return paths(toMap(value, String.class, OperationMap.class));
-			case "produces": return produces(toList(value, MediaType.class));
-			case "responses": return responses(toMap(value, String.class, ResponseInfo.class));
-			case "schemes": return schemes(toList(value, String.class));
-			case "security": return security((List)toList(value, Map.class, String.class, List.class, String.class));
-			case "securityDefinitions": return securityDefinitions(toMap(value, String.class, SecurityScheme.class));
+			case "parameters": return parameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());
+			case "paths": return paths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());
+			case "produces": return produces(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "responses": return responses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "schemes": return schemes(listBuilder(String.class).sparse().addAny(value).build());
+			case "security": return security((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
+			case "securityDefinitions": return securityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());
 			case "swagger": return swagger(stringify(value));
-			case "tags": return tags(toList(value, Tag.class));
+			case "tags": return tags(listBuilder(Tag.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;

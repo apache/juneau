@@ -277,7 +277,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo addExamples(Map<String,Object> values) {
-		examples = addToMap(examples, values);
+		examples = mapBuilder(examples).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -292,7 +292,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo example(String mimeType, Object example) {
-		examples = addToMap(examples, mimeType, example);
+		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
 		return this;
 	}
 
@@ -330,7 +330,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo examples(String value) {
-		setExamples(toMap(value, String.class, Object.class));
+		setExamples(mapBuilder(String.class,Object.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -373,7 +373,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo addHeaders(Map<String,HeaderInfo> values) {
-		headers = addToMap(headers, values);
+		headers = mapBuilder(headers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -432,7 +432,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo headers(String json) {
-		setHeaders(toMap(json, String.class, HeaderInfo.class));
+		setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -558,8 +558,8 @@ public class ResponseInfo extends SwaggerElement {
 		switch (property) {
 			case "description": return description(stringify(value));
 			case "example": return example(value);
-			case "examples": return examples(toMap(value, String.class, Object.class));
-			case "headers": return headers(toMap(value, String.class, HeaderInfo.class));
+			case "examples": return examples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
+			case "headers": return headers(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
 			case "schema": return schema(stringify(value));
 			default:
 				super.set(property, value);

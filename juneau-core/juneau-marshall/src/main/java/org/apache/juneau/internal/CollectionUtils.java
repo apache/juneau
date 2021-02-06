@@ -12,33 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
 
 /**
  * Utility methods for collections.
  */
 public final class CollectionUtils {
-
-	/**
-	 * Add a value to a list if the value is not null.
-	 *
-	 * @param l The list to add to.
-	 * @param o The element to add.
-	 * @return The same list.
-	 */
-	public static <T> List<T> addIfNotNull(List<T> l, T o) {
-		if (o != null)
-			l.add(o);
-		return l;
-	}
 
 	/**
 	 * Returns an iterable over the specified enumeration.
@@ -107,196 +87,13 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Adds a set of values to an existing list.
+	 * Creates a new list from the specified collection.
 	 *
-	 * @param appendTo
-	 * 	The list to append to.
-	 * 	<br>If <jk>null</jk>, a new {@link ArrayList} will be created.
-	 * @param values The values to add.
-	 * @param type The data type of the elements.
-	 * @param args The generic type arguments of the data type.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
+	 * @param val The value to copy from.
+	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> List<T> addToList(List<T> appendTo, Object[] values, Class<T> type, Type...args) {
-		if (values == null)
-			return appendTo;
-		try {
-			List<T> l = appendTo;
-			if (appendTo == null)
-				l = new ArrayList<>();
-			for (Object o : values) {
-				if (o != null) {
-					if (isJsonArray(o, false)) {
-						for (Object o2 : new OList(o.toString()))
-							l.add(toType(o2, type, args));
-					} else if (o instanceof Collection) {
-						for (Object o2 : (Collection<?>)o)
-							l.add(toType(o2, type, args));
-					} else if (o.getClass().isArray()) {
-						for (int i = 0; i < Array.getLength(o); i++)
-							l.add(toType(Array.get(o, i), type, args));
-					} else {
-						l.add(toType(o, type, args));
-					}
-				}
-			}
-			return l;
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * Adds a set of values to an existing set.
-	 *
-	 * @param appendTo
-	 * 	The set to append to.
-	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashSet} will be created.
-	 * @param values The values to add.
-	 * @param type The data type of the elements.
-	 * @param args The generic type arguments of the data type.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> Set<T> addToSet(Set<T> appendTo, Object[] values, Class<T> type, Type...args) {
-		if (values == null)
-			return appendTo;
-		try {
-			Set<T> l = appendTo;
-			if (appendTo == null)
-				l = new LinkedHashSet<>();
-			for (Object o : values) {
-				if (o != null) {
-					if (isJsonArray(o, false)) {
-						for (Object o2 : new OList(o.toString()))
-							l.add(toType(o2, type, args));
-					} else if (o instanceof Collection) {
-						for (Object o2 : (Collection<?>)o)
-							l.add(toType(o2, type, args));
-					} else if (o.getClass().isArray()) {
-						for (int i = 0; i < Array.getLength(o); i++)
-							l.add(toType(Array.get(o, i), type, args));
-					} else {
-						l.add(toType(o, type, args));
-					}
-				}
-			}
-			return l;
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * Creates a new list from the specified values.
-	 *
-	 * @param values The values to add.
-	 * @param type The data type of the elements.
-	 * @param args The generic type arguments of the data type.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> List<T> toList(Object[] values, Class<T> type, Type...args) {
-		return addToList(new ArrayList<T>(), values, type, args);
-	}
-
-	/**
-	 * Creates a new list from the specified values.
-	 *
-	 * @param value The value to add.
-	 * @param type The data type of the elements.
-	 * @param args The generic type arguments of the data type.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> List<T> toList(Object value, Class<T> type, Type...args) {
-		return addToList(new ArrayList<T>(), new Object[]{value}, type, args);
-	}
-
-	/**
-	 * Creates a new set from the specified values.
-	 *
-	 * @param values The values to add.
-	 * @param type The data type of the elements.
-	 * @param args The generic type arguments of the data type.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> Set<T> toSet(Object[] values, Class<T> type, Type...args) {
-		return addToSet(new LinkedHashSet<T>(), values, type, args);
-	}
-
-	/**
-	 * Creates a new set from the specified value.
-	 *
-	 * @param value The value to add.
-	 * @param type The data type of the elements.
-	 * @param args The generic type arguments of the data type.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> Set<T> toSet(Object value, Class<T> type, Type...args) {
-		return addToSet(new LinkedHashSet<T>(), new Object[]{value}, type, args);
-	}
-
-	/**
-	 * Adds a set of values to an existing map.
-	 *
-	 * @param appendTo
-	 * 	The map to append to.
-	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
-	 * @param values The values to add.
-	 * @param keyType The data type of the keys.
-	 * @param valueType The data type of the values.
-	 * @param valueTypeArgs The generic type arguments of the data type of the values.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <K,V> Map<K,V> addToMap(Map<K,V> appendTo, Object[] values, Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
-		if (values == null)
-			return appendTo;
-		try {
-			Map<K,V> m = appendTo;
-			if (m == null)
-				m = new LinkedHashMap<>();
-			for (Object o : values) {
-				if (o != null) {
-					if (isJsonObject(o, false)) {
-						for (Map.Entry<String,Object> e : OMap.ofJson(o.toString()).entrySet())
-							m.put(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
-					} else if (o instanceof Map) {
-						for (Map.Entry<Object,Object> e : ((Map<Object,Object>)o).entrySet())
-							m.put(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
-					} else {
-						throw new BasicRuntimeException("Invalid object type {0} passed to addToMap()", o.getClass().getName());
-					}
-				}
-			}
-			return m.isEmpty() ? null : m;
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * Creates a new map from the specified values.
-	 *
-	 * @param values The values to add.
-	 * @param keyType The data type of the keys.
-	 * @param valueType The data type of the values.
-	 * @param valueTypeArgs The generic type arguments of the data type of the values.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <K,V> Map<K,V> toMap(Object[] values, Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
-		return addToMap(new LinkedHashMap<>(), values, keyType, valueType, valueTypeArgs);
-	}
-
-	/**
-	 * Creates a new map from the specified value.
-	 *
-	 * @param values The values to add.
-	 * @param keyType The data type of the keys.
-	 * @param valueType The data type of the values.
-	 * @param valueTypeArgs The generic type arguments of the data type of the values.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static <K,V> Map<K,V> toMap(Object values, Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
-		return addToMap(new LinkedHashMap<>(), new Object[]{values}, keyType, valueType, valueTypeArgs);
+	public static <T> List<T> newList(Collection<T> val) {
+		return val == null ? null : new ArrayList<>(val);
 	}
 
 	/**
@@ -305,40 +102,8 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> AList<T> newList(Collection<T> val) {
-		return AList.nullable(val);
-	}
-
-	/**
-	 * Creates a new list from the specified array.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
-	 */
-	@SafeVarargs
-	public static <T> AList<T> newList(T...val) {
-		return AList.of(val);
-	}
-
-	/**
-	 * Creates a new unmodifiable list from the specified collection.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> List<T> newUnmodifiableList(Collection<T> val) {
-		return Collections.unmodifiableList(newList(val));
-	}
-
-	/**
-	 * Creates a new unmodifiable list from the specified array.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
-	 */
-	@SafeVarargs
-	public static <T> List<T> newUnmodifiableList(T...val) {
-		return Collections.unmodifiableList(newList(val));
+	public static <T> List<T> newList(List<T> val) {
+		return val == null ? null : new ArrayList<>(val);
 	}
 
 	/**
@@ -347,78 +112,18 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> ASet<T> newSet(Collection<T> val) {
-		return ASet.nullable(val);
+	public static <T> Set<T> newSet(Collection<T> val) {
+		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
 	/**
-	 * Creates a new set from the specified array.
+	 * Creates a new set from the specified collection.
 	 *
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	@SafeVarargs
-	public static <T> ASet<T> newSet(T...val) {
-		return ASet.of(val);
-	}
-
-	/**
-	 * Creates a new unmodifiable set from the specified collection.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> Set<T> newUnmodifiableSet(Collection<T> val) {
-		return Collections.unmodifiableSet(newSet(val));
-	}
-
-	/**
-	 * Creates a new unmodifiable set from the specified array.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> newUnmodifiableSet(T...val) {
-		return Collections.unmodifiableSet(newSet(val));
-	}
-
-	/**
-	 * Copies the specified values into an existing list.
-	 *
-	 * @param l
-	 * 	The list to add to.
-	 * 	<br>If <jk>null</jk>, a new {@link ArrayList} will be created.
-	 * @param val The values to add.
-	 * @return The list with values copied into it.
-	 */
-	public static <T> List<T> addToList(List<T> l, Collection<T> val) {
-		if (val != null) {
-			if (l == null)
-				l = new ArrayList<>(val);
-			else
-				l.addAll(val);
-		}
-		return l;
-	}
-
-	/**
-	 * Copies the specified values into an existing list.
-	 *
-	 * @param l
-	 * 	The list to add to.
-	 * 	<br>If <jk>null</jk>, a new {@link ArrayList} will be created.
-	 * @param val The values to add.
-	 * @return The list with values copied into it.
-	 */
-	public static <T> Set<T> addToSet(Set<T> l, Collection<T> val) {
-		if (val != null) {
-			if (l == null)
-				l = new LinkedHashSet<>(val);
-			else
-				l.addAll(val);
-		}
-		return l;
+	public static <T> Set<T> newSet(Set<T> val) {
+		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
 	/**
@@ -428,153 +133,73 @@ public final class CollectionUtils {
 	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
 	 */
 	public static <K,V> Map<K,V> newMap(Map<K,V> val) {
-		if (val == null)
-			return null;
-		return new LinkedHashMap<>(val);
+		return val == null ? null : new LinkedHashMap<>(val);
 	}
 
 	/**
-	 * Creates a new unmodifiable map from the specified map.
+	 * Instantiates a new builder on top of the specified map.
 	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
+	 * @param addTo The map to add to.
+	 * @return A new builder on top of the specified map.
 	 */
-	public static <K,V> Map<K,V> newUnmodifiableMap(Map<K,V> val) {
-		return Collections.unmodifiableMap(newMap(val));
+	public static <K,V> MapBuilder<K,V> mapBuilder(Map<K,V> addTo) {
+		return new MapBuilder<>(addTo);
 	}
 
 	/**
-	 * Copies the specified values into an existing map.
+	 * Instantiates a new builder of the specified map type.
 	 *
-	 * @param m
-	 * 	The map to add to.
-	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
-	 * @param val The values to add.
-	 * @return The list with values copied into it.
+	 * @param keyType The key type.
+	 * @param valueType The value type.
+	 * @param valueTypeArgs The value type args.
+	 * @return A new builder on top of the specified map.
 	 */
-	public static <K,V> Map<K,V> addToMap(Map<K,V> m, Map<K,V> val) {
-		if (val != null) {
-			if (m == null)
-				m = new LinkedHashMap<>(val);
-			else
-				m.putAll(val);
-		}
-		return m;
+	public static <K,V> MapBuilder<K,V> mapBuilder(Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
+		return new MapBuilder<>(keyType, valueType, valueTypeArgs);
 	}
 
 	/**
-	 * Adds a single entry into an existing map.
+	 * Instantiates a new builder on top of the specified list.
 	 *
-	 * @param m
-	 * 	The map to add to.
-	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
-	 * @param key The entry key.
-	 * @param value The entry value.
-	 * @return The list with values copied into it.
+	 * @param addTo The list to add to.
+	 * @return A new builder on top of the specified list.
 	 */
-	public static <K,V> Map<K,V> addToMap(Map<K,V> m, K key, V value) {
-		if (m == null)
-			m = new LinkedHashMap<>();
-		m.put(key, value);
-		return m;
+	public static <E> ListBuilder<E> listBuilder(List<E> addTo) {
+		return new ListBuilder<>(addTo);
 	}
 
 	/**
-	 * Creates a new map from the specified map.
+	 * Instantiates a new builder of the specified list type.
 	 *
-	 * @param val The value to copy from.
-	 * @param comparator The key comparator to use, or <jk>null</jk> to use natural ordering.
-	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
+	 * @param elementType The element type.
+	 * @param elementTypeArgs The element type args.
+	 * @return A new builder on top of the specified list.
 	 */
-	public static <K,V> Map<K,V> newSortedMap(Map<K,V> val, Comparator<K> comparator) {
-		if (val == null)
-			return null;
-		Map<K,V> m = new TreeMap<>(comparator);
-		m.putAll(val);
-		return m;
+	public static <E> ListBuilder<E> listBuilder(Class<E> elementType, Type...elementTypeArgs) {
+		return new ListBuilder<>(elementType, elementTypeArgs);
 	}
 
 	/**
-	 * Creates a case-insensitive ordered set out of the specified string values.
+	 * Instantiates a new builder on top of the specified set.
 	 *
-	 * @param values The values to populate the set with.
-	 * @return A new ordered set.
+	 * @param addTo The set to add to.
+	 * @return A new builder on top of the specified set.
 	 */
-	public static Set<String> newSortedCaseInsensitiveSet(String...values) {
-		Set<String> s = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public boolean contains(Object v) {
-				return v == null ? false : super.contains(v);
-			}
-		};
-		for (String v : values)
-			if (v != null)
-				s.add(v);
-		return s;
+	public static <E> SetBuilder<E> setBuilder(Set<E> addTo) {
+		return new SetBuilder<>(addTo);
 	}
 
 	/**
-	 * Creates a case-insensitive ordered set out of the specified string values.
+	 * Instantiates a new builder of the specified set.
 	 *
-	 * @param values
-	 * 	A comma-delimited list of the values to populate the set with.
-	 * @return A new ordered set.
+	 * @param elementType The element type.
+	 * @param elementTypeArgs The element type args.
+	 * @return A new builder on top of the specified set.
 	 */
-	public static Set<String> newSortedCaseInsensitiveSet(String values) {
-		return newSortedCaseInsensitiveSet(StringUtils.split(StringUtils.emptyIfNull(values)));
+	public static <E> SetBuilder<E> setBuilder(Class<E> elementType, Type...elementTypeArgs) {
+		return new SetBuilder<>(elementType, elementTypeArgs);
 	}
 
-	/**
-	 * Same as {@link #newSortedCaseInsensitiveSet(String)} but makes the set unmodifiable.
-	 *
-	 * @param values
-	 * 	A comma-delimited list of the values to populate the set with.
-	 * @return A new ordered set.
-	 */
-	public static Set<String> newUnmodifiableSortedCaseInsensitiveSet(String values) {
-		return Collections.unmodifiableSet(newSortedCaseInsensitiveSet(StringUtils.split(StringUtils.emptyIfNull(values))));
-	}
-
-	/**
-	 * Copies the specified values into an existing map.
-	 *
-	 * @param m
-	 * 	The map to add to.
-	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
-	 * @param val The values to add.
-	 * @param comparator The key comparator to use, or <jk>null</jk> to use natural ordering.
-	 * @return The list with values copied into it.
-	 */
-	public static <K,V> Map<K,V> addToSortedMap(Map<K,V> m, Map<K,V> val, Comparator<K> comparator) {
-		if (val != null) {
-			if (m == null) {
-				m = new TreeMap<>(comparator);
-				m.putAll(val);
-			} else {
-				m.putAll(val);
-			}
-		}
-		return m;
-	}
-
-	/**
-	 * Adds a single entry into an existing map.
-	 *
-	 * @param m
-	 * 	The map to add to.
-	 * 	<br>If <jk>null</jk>, a new {@link LinkedHashMap} will be created.
-	 * @param key The entry key.
-	 * @param value The entry value.
-	 * @param comparator The key comparator to use, or <jk>null</jk> to use natural ordering.
-	 * @return The list with values copied into it.
-	 */
-	public static <K,V> Map<K,V> addToSortedMap(Map<K,V> m, K key, V value, Comparator<K> comparator) {
-		if (m == null)
-			m = new TreeMap<>(comparator);
-		m.put(key, value);
-		return m;
-	}
 
 	/**
 	 * Simple passthrough to {@link Collections#emptySet()}

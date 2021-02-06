@@ -575,7 +575,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo addEnum(Collection<Object> value) {
-		_enum = addToSet(_enum, value);
+		_enum = setBuilder(_enum).sparse().addAll(value).build();
 		return this;
 	}
 
@@ -609,7 +609,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo _enum(Object...value) {
-		setEnum(toSet(value, Object.class));
+		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 
@@ -690,7 +690,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo addExamples(Map<String,String> values) {
-		examples = addToMap(examples, values);
+		examples = mapBuilder(examples).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -705,7 +705,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo example(String name, String value) {
-		examples = addToMap(examples, name, value);
+		examples = mapBuilder(examples).sparse().add(name, value).build();
 		return this;
 	}
 
@@ -738,7 +738,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo examples(String json) {
-		setExamples(toMap(json, String.class, String.class));
+		setExamples(mapBuilder(String.class,String.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1939,7 +1939,7 @@ public class ParameterInfo extends SwaggerElement {
 			case "description": return description(stringify(value));
 			case "enum": return _enum(value);
 			case "example": return example(stringify(value));
-			case "examples": return examples(toMap(value, String.class, String.class));
+			case "examples": return examples(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			case "exclusiveMaximum": return exclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum": return exclusiveMinimum(toBoolean(value));
 			case "format": return format(stringify(value));

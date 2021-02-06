@@ -53,7 +53,7 @@ public class ThrownStats implements Cloneable {
 		this.guid = new Random().nextLong();
 		this.thrownClass = builder.throwable.getClass();
 		this.firstMessage = builder.throwable.getMessage();
-		this.stackTrace = newUnmodifiableList(builder.stackTrace);
+		this.stackTrace = listBuilder(builder.stackTrace).copy().unmodifiable().build();
 		this.causedBy = ofNullable(builder.causedBy);
 		this.hash = builder.hash;
 		this.count = new AtomicInteger(0);
@@ -69,7 +69,7 @@ public class ThrownStats implements Cloneable {
 		this.guid = x.guid;
 		this.thrownClass = x.thrownClass;
 		this.firstMessage = x.firstMessage;
-		this.stackTrace = newUnmodifiableList(x.stackTrace);
+		this.stackTrace = listBuilder(x.stackTrace).copy().unmodifiable().build();
 		this.causedBy = Optional.ofNullable(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
 		this.hash = x.hash;
 		this.count = new AtomicInteger(x.count.get());

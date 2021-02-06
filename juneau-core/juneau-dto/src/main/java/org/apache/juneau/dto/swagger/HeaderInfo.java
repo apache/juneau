@@ -382,7 +382,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo addEnum(Collection<Object> value) {
-		_enum = addToSet(_enum, value);
+		_enum = setBuilder(_enum).sparse().addAll(value).build();
 		return this;
 	}
 
@@ -421,7 +421,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo _enum(Object...value) {
-		setEnum(toSet(value, Object.class));
+		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 
