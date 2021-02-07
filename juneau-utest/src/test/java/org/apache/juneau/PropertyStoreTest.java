@@ -78,11 +78,11 @@ public class PropertyStoreTest {
 		b.set("A.f6.s", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.s':'1','f2.s':'2','f3.s':'true','f4.s':'{foo:\\'bar\\'}','f5.s':'[1,2]'}}");
-		assertObject(ps.get2("A.f1.s")).isType(String.class);
-		assertObject(ps.get2("A.f2.s")).isType(String.class);
-		assertObject(ps.get2("A.f3.s")).isType(String.class);
-		assertObject(ps.get2("A.f4.s")).isType(String.class);
-		assertObject(ps.get2("A.f5.s")).isType(String.class);
+		assertObject(ps.get("A.f1.s")).isType(String.class);
+		assertObject(ps.get("A.f2.s")).isType(String.class);
+		assertObject(ps.get("A.f3.s")).isType(String.class);
+		assertObject(ps.get("A.f4.s")).isType(String.class);
+		assertObject(ps.get("A.f5.s")).isType(String.class);
 
 		b.clear();
 		b.set("A.f1", "1");
@@ -93,11 +93,11 @@ public class PropertyStoreTest {
 		b.set("A.f6", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{f1:'1',f2:'2',f3:'true',f4:'{foo:\\'bar\\'}',f5:'[1,2]'}}");
-		assertObject(ps.get2("A.f1")).isType(String.class);
-		assertObject(ps.get2("A.f2")).isType(String.class);
-		assertObject(ps.get2("A.f3")).isType(String.class);
-		assertObject(ps.get2("A.f4")).isType(String.class);
-		assertObject(ps.get2("A.f5")).isType(String.class);
+		assertObject(ps.get("A.f1")).isType(String.class);
+		assertObject(ps.get("A.f2")).isType(String.class);
+		assertObject(ps.get("A.f3")).isType(String.class);
+		assertObject(ps.get("A.f4")).isType(String.class);
+		assertObject(ps.get("A.f5")).isType(String.class);
 
 		b.set("A.f1", "x1");
 		b.set("A.f2", null);
@@ -123,10 +123,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.b", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.b':true,'f2.b':false,'f3.b':true,'f4.b':false}}");
-		assertObject(ps.get2("A.f1.b")).isType(Boolean.class);
-		assertObject(ps.get2("A.f2.b")).isType(Boolean.class);
-		assertObject(ps.get2("A.f3.b")).isType(Boolean.class);
-		assertObject(ps.get2("A.f4.b")).isType(Boolean.class);
+		assertObject(ps.get("A.f1.b")).isType(Boolean.class);
+		assertObject(ps.get("A.f2.b")).isType(Boolean.class);
+		assertObject(ps.get("A.f3.b")).isType(Boolean.class);
+		assertObject(ps.get("A.f4.b")).isType(Boolean.class);
 
 		// Test nulls
 		b.set("A.f2.b", null);
@@ -151,10 +151,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.i", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.i':123,'f2.i':123,'f3.i':123,'f4.i':-1}}");
-		assertObject(ps.get2("A.f1.i")).isType(Integer.class);
-		assertObject(ps.get2("A.f2.i")).isType(Integer.class);
-		assertObject(ps.get2("A.f3.i")).isType(Integer.class);
-		assertObject(ps.get2("A.f4.i")).isType(Integer.class);
+		assertObject(ps.get("A.f1.i")).isType(Integer.class);
+		assertObject(ps.get("A.f2.i")).isType(Integer.class);
+		assertObject(ps.get("A.f3.i")).isType(Integer.class);
+		assertObject(ps.get("A.f4.i")).isType(Integer.class);
 
 		// Test nulls
 		b.set("A.f2.i", null);
@@ -178,7 +178,7 @@ public class PropertyStoreTest {
 		b.set("A.f3.c", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.c':'java.lang.String','f2.c':'java.lang.Integer'}}");
-		assertObject(ps.get2("A.f1.c")).isType(Class.class);
+		assertObject(ps.get("A.f1.c")).isType(Class.class);
 
 		// Test nulls
 		b.set("A.f2.c", null);
@@ -203,10 +203,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.o", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':'java.lang.StringBuilder'}}");
-		assertObject(ps.get2("A.f1.o")).isType(Integer.class);
-		assertObject(ps.get2("A.f2.o")).isType(Boolean.class);
-		assertObject(ps.get2("A.f3.o")).isType(StringBuilder.class);
-		assertObject(ps.get2("A.f4.o")).isType(Class.class);
+		assertObject(ps.get("A.f1.o")).isType(Integer.class);
+		assertObject(ps.get("A.f2.o")).isType(Boolean.class);
+		assertObject(ps.get("A.f3.o")).isType(StringBuilder.class);
+		assertObject(ps.get("A.f4.o")).isType(Class.class);
 
 		// Test nulls
 		b.set("A.f2.o", null);
@@ -231,10 +231,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.ss", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.ss':['bar','foo'],'f2.ss':['123','ONE','true'],'f3.ss':['foo'],'f4.ss':['123','foo','true']}}");
-		assertObject(ps.get2("A.f1.ss")).isType(Set.class);
-		assertObject(ps.get2("A.f2.ss")).isType(Set.class);
-		assertObject(ps.get2("A.f3.ss")).isType(Set.class);
-		assertObject(ps.get2("A.f4.ss")).isType(Set.class);
+		assertObject(ps.get("A.f1.ss")).isType(Set.class);
+		assertObject(ps.get("A.f2.ss")).isType(Set.class);
+		assertObject(ps.get("A.f3.ss")).isType(Set.class);
+		assertObject(ps.get("A.f4.ss")).isType(Set.class);
 
 		b.clear();
 		b.set("A.f1.ss/add", "foo");
@@ -293,10 +293,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.si", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.si':[1,2,3],'f2.si':[123,456],'f3.si':[123],'f4.si':[1,2,3]}}");
-		assertObject(ps.get2("A.f1.si")).isType(Set.class);
-		assertObject(ps.get2("A.f2.si")).isType(Set.class);
-		assertObject(ps.get2("A.f3.si")).isType(Set.class);
-		assertObject(ps.get2("A.f4.si")).isType(Set.class);
+		assertObject(ps.get("A.f1.si")).isType(Set.class);
+		assertObject(ps.get("A.f2.si")).isType(Set.class);
+		assertObject(ps.get("A.f3.si")).isType(Set.class);
+		assertObject(ps.get("A.f4.si")).isType(Set.class);
 
 		b.clear();
 		b.set("A.f1.si/add", "123");
@@ -377,9 +377,9 @@ public class PropertyStoreTest {
 		b.set("A.f3.sc", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String'],'f2.sc':['java.lang.Integer','java.lang.String']}}");
-		assertObject(ps.get2("A.f1.sc")).isType(Set.class);
-		assertObject(ps.get2("A.f2.sc")).isType(Set.class);
-		assertObject(((Set<?>)ps.get2("A.f1.sc").get()).iterator().next()).isType(Class.class);
+		assertObject(ps.get("A.f1.sc")).isType(Set.class);
+		assertObject(ps.get("A.f2.sc")).isType(Set.class);
+		assertObject(((Set<?>)ps.get("A.f1.sc").get()).iterator().next()).isType(Class.class);
 
 		b.clear();
 		b.set("A.f1.sc/add", Integer.class);
@@ -437,10 +437,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.ls", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.ls':['foo','bar'],'f2.ls':['123','true','ONE'],'f3.ls':['foo'],'f4.ls':['foo','123','true']}}");
-		assertObject(ps.get2("A.f1.ls")).isType(List.class);
-		assertObject(ps.get2("A.f2.ls")).isType(List.class);
-		assertObject(ps.get2("A.f3.ls")).isType(List.class);
-		assertObject(ps.get2("A.f4.ls")).isType(List.class);
+		assertObject(ps.get("A.f1.ls")).isType(List.class);
+		assertObject(ps.get("A.f2.ls")).isType(List.class);
+		assertObject(ps.get("A.f3.ls")).isType(List.class);
+		assertObject(ps.get("A.f4.ls")).isType(List.class);
 
 		b.clear();
 		b.set("A.f1.ls/prepend", "foo");
@@ -501,10 +501,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.li", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.li':[1,2,3],'f2.li':[123,456],'f3.li':[123],'f4.li':[1,2,3]}}");
-		assertObject(ps.get2("A.f1.li")).isType(List.class);
-		assertObject(ps.get2("A.f2.li")).isType(List.class);
-		assertObject(ps.get2("A.f3.li")).isType(List.class);
-		assertObject(ps.get2("A.f4.li")).isType(List.class);
+		assertObject(ps.get("A.f1.li")).isType(List.class);
+		assertObject(ps.get("A.f2.li")).isType(List.class);
+		assertObject(ps.get("A.f3.li")).isType(List.class);
+		assertObject(ps.get("A.f4.li")).isType(List.class);
 
 		b.clear();
 		b.set("A.f1.li/prepend", "123");
@@ -603,8 +603,8 @@ public class PropertyStoreTest {
 		b.set("A.f3.lc", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.lc':['java.lang.String','java.lang.Integer'],'f2.lc':['java.lang.String','java.lang.Integer']}}");
-		assertObject(ps.get2("A.f1.lc")).isType(List.class);
-		assertObject(ps.get2("A.f2.lc")).isType(List.class);
+		assertObject(ps.get("A.f1.lc")).isType(List.class);
+		assertObject(ps.get("A.f2.lc")).isType(List.class);
 
 		b.clear();
 		b.set("A.f1.lc/prepend", Integer.class);
@@ -676,13 +676,13 @@ public class PropertyStoreTest {
 		b.set("A.f3.lo", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}");
-		assertObject(ps.get2("A.f1.lo")).isType(List.class);
-		assertObject(ps.get2("A.f2.lo")).isType(List.class);
-		assertObject(((List<?>)ps.get2("A.f1.lo").get()).get(0)).isType(Class.class);
-		assertObject(((List<?>)ps.get2("A.f2.lo").get()).get(0)).isType(Integer.class);
-		assertObject(((List<?>)ps.get2("A.f2.lo").get()).get(1)).isType(Boolean.class);
-		assertObject(((List<?>)ps.get2("A.f2.lo").get()).get(2)).isType(StringBuilder.class);
-		assertObject(((List<?>)ps.get2("A.f2.lo").get()).get(3)).isType(Class.class);
+		assertObject(ps.get("A.f1.lo")).isType(List.class);
+		assertObject(ps.get("A.f2.lo")).isType(List.class);
+		assertObject(((List<?>)ps.get("A.f1.lo").get()).get(0)).isType(Class.class);
+		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(0)).isType(Integer.class);
+		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(1)).isType(Boolean.class);
+		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(2)).isType(StringBuilder.class);
+		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(3)).isType(Class.class);
 
 		b.clear();
 		b.set("A.f1.lo/prepend", 1);
@@ -751,10 +751,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.sms", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.sms':{baz:'qux',foo:'bar'},'f2.sms':{bar:'true',baz:'ONE',foo:'123'},'f3.sms':{foo:'bar'},'f4.sms':{baz:'123',foo:'bar',qux:'true'}}}");
-		assertObject(ps.get2("A.f1.sms")).isType(Map.class);
-		assertObject(ps.get2("A.f2.sms")).isType(Map.class);
-		assertObject(ps.get2("A.f3.sms")).isType(Map.class);
-		assertObject(ps.get2("A.f4.sms")).isType(Map.class);
+		assertObject(ps.get("A.f1.sms")).isType(Map.class);
+		assertObject(ps.get("A.f2.sms")).isType(Map.class);
+		assertObject(ps.get("A.f3.sms")).isType(Map.class);
+		assertObject(ps.get("A.f4.sms")).isType(Map.class);
 
 		b.clear();
 		b.set("A.f1.sms/put", "{foo:'bar'}");
@@ -787,10 +787,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.smi", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.smi':{baz:2,foo:1},'f2.smi':{bar:456,foo:123},'f3.smi':{foo:123},'f4.smi':{baz:456,foo:123}}}");
-		assertObject(ps.get2("A.f1.smi")).isType(Map.class);
-		assertObject(ps.get2("A.f2.smi")).isType(Map.class);
-		assertObject(ps.get2("A.f3.smi")).isType(Map.class);
-		assertObject(ps.get2("A.f4.smi")).isType(Map.class);
+		assertObject(ps.get("A.f1.smi")).isType(Map.class);
+		assertObject(ps.get("A.f2.smi")).isType(Map.class);
+		assertObject(ps.get("A.f3.smi")).isType(Map.class);
+		assertObject(ps.get("A.f4.smi")).isType(Map.class);
 
 		b.clear();
 		b.set("A.f1.smi/put", "{foo:'123'}");
@@ -821,10 +821,10 @@ public class PropertyStoreTest {
 		b.set("A.f3.smc", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}");
-		assertObject(ps.get2("A.f1.smc")).isType(Map.class);
-		assertObject(ps.get2("A.f2.smc")).isType(Map.class);
-		assertObject(((Map<?,?>)ps.get2("A.f1.smc").get()).values().iterator().next()).isType(Class.class);
-		assertObject(((Map<?,?>)ps.get2("A.f2.smc").get()).values().iterator().next()).isType(Class.class);
+		assertObject(ps.get("A.f1.smc")).isType(Map.class);
+		assertObject(ps.get("A.f2.smc")).isType(Map.class);
+		assertObject(((Map<?,?>)ps.get("A.f1.smc").get()).values().iterator().next()).isType(Class.class);
+		assertObject(((Map<?,?>)ps.get("A.f2.smc").get()).values().iterator().next()).isType(Class.class);
 
 		b.clear();
 		b.set("A.f1.smc/put.foo", String.class);
@@ -854,10 +854,10 @@ public class PropertyStoreTest {
 		b.set("A.f5.smo", null);
 		ps = b.build();
 		assertObject(ps).asJson().is("{A:{'f1.smo':{baz:'2',foo:'1'},'f2.smo':{bar:'java.lang.StringBuilder',foo:123},'f3.smo':{foo:'123'},'f4.smo':{baz:456,foo:'123'}}}");
-		assertObject(ps.get2("A.f1.smo")).isType(Map.class);
-		assertObject(ps.get2("A.f2.smo")).isType(Map.class);
-		assertObject(ps.get2("A.f3.smo")).isType(Map.class);
-		assertObject(ps.get2("A.f4.smo")).isType(Map.class);
+		assertObject(ps.get("A.f1.smo")).isType(Map.class);
+		assertObject(ps.get("A.f2.smo")).isType(Map.class);
+		assertObject(ps.get("A.f3.smo")).isType(Map.class);
+		assertObject(ps.get("A.f4.smo")).isType(Map.class);
 
 		b.clear();
 		b.set("A.f1.smo/put", "{foo:'123'}");
@@ -1392,11 +1392,11 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1", "foo");
 		PropertyStore ps = PropertyStore.create().build();
-		assertString(ps.get2("A.f1")).is("foo");
+		assertString(ps.get("A.f1")).is("foo");
 
 		System.clearProperty("A.f1");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1")).isNull();
+		assertObject(ps.get("A.f1")).isNull();
 	}
 
 	@Test
@@ -1404,15 +1404,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.i", "1");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.i")).isType(Integer.class).is(1);
+		assertObject(ps.get("A.f1.i")).isType(Integer.class).is(1);
 
 		System.clearProperty("A.f1.i");
 		System.setProperty("A.f1", "1");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.i")).isType(Integer.class).is(1);
+		assertObject(ps.get("A.f1.i")).isType(Integer.class).is(1);
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.i")).isNull();
+		assertObject(ps.get("A.f1.i")).isNull();
 	}
 
 	@Test
@@ -1420,14 +1420,14 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.o", "123");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.o")).isType(String.class).is("123");
+		assertObject(ps.get("A.f1.o")).isType(String.class).is("123");
 
 		System.clearProperty("A.f1.o");
 		System.setProperty("A.f1", "123");
-		assertObject(ps.get2("A.f1.o")).isType(String.class).is("123");
+		assertObject(ps.get("A.f1.o")).isType(String.class).is("123");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.o")).isNull();
+		assertObject(ps.get("A.f1.o")).isNull();
 	}
 
 	@Test
@@ -1435,15 +1435,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.ss", "['foo','bar']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.ss")).asJson().is("['bar','foo']");
+		assertObject(ps.get("A.f1.ss")).asJson().is("['bar','foo']");
 
 		System.clearProperty("A.f1.ss");
 		System.setProperty("A.f1", "['foo','bar']");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.ss")).asJson().is("['bar','foo']");
+		assertObject(ps.get("A.f1.ss")).asJson().is("['bar','foo']");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.ss")).isNull();
+		assertObject(ps.get("A.f1.ss")).isNull();
 	}
 
 	@Test
@@ -1451,15 +1451,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.si", "['2','1']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.si")).asJson().is("[1,2]");
+		assertObject(ps.get("A.f1.si")).asJson().is("[1,2]");
 
 		System.clearProperty("A.f1.si");
 		System.setProperty("A.f1", "['2','1']");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.si")).asJson().is("[1,2]");
+		assertObject(ps.get("A.f1.si")).asJson().is("[1,2]");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.si")).isNull();
+		assertObject(ps.get("A.f1.si")).isNull();
 	}
 
 	@Test
@@ -1467,15 +1467,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.ls", "['foo','bar']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.ls")).asJson().is("['foo','bar']");
+		assertObject(ps.get("A.f1.ls")).asJson().is("['foo','bar']");
 
 		System.clearProperty("A.f1.ls");
 		System.setProperty("A.f1", "['foo','bar']");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.ls")).asJson().is("['foo','bar']");
+		assertObject(ps.get("A.f1.ls")).asJson().is("['foo','bar']");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.ls")).isNull();
+		assertObject(ps.get("A.f1.ls")).isNull();
 	}
 
 	@Test
@@ -1483,15 +1483,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.li", "['2','1']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.li")).asJson().is("[2,1]");
+		assertObject(ps.get("A.f1.li")).asJson().is("[2,1]");
 
 		System.clearProperty("A.f1.li");
 		System.setProperty("A.f1", "['2','1']");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.li")).asJson().is("[2,1]");
+		assertObject(ps.get("A.f1.li")).asJson().is("[2,1]");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.li")).isNull();
+		assertObject(ps.get("A.f1.li")).isNull();
 	}
 
 	@Test
@@ -1499,15 +1499,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.sms", "{foo:'bar',baz:null}");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.sms")).asJson().is("{foo:'bar'}");
+		assertObject(ps.get("A.f1.sms")).asJson().is("{foo:'bar'}");
 
 		System.clearProperty("A.f1.sms");
 		System.setProperty("A.f1", "{foo:'bar',baz:null}");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.sms")).asJson().is("{foo:'bar'}");
+		assertObject(ps.get("A.f1.sms")).asJson().is("{foo:'bar'}");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.sms")).isNull();
+		assertObject(ps.get("A.f1.sms")).isNull();
 	}
 
 	@Test
@@ -1515,15 +1515,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.smi", "{foo:'123',baz:null}");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.smi")).asJson().is("{foo:123}");
+		assertObject(ps.get("A.f1.smi")).asJson().is("{foo:123}");
 
 		System.clearProperty("A.f1.smi");
 		System.setProperty("A.f1", "{foo:'123',baz:null}");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.smi")).asJson().is("{foo:123}");
+		assertObject(ps.get("A.f1.smi")).asJson().is("{foo:123}");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.smi")).isNull();
+		assertObject(ps.get("A.f1.smi")).isNull();
 	}
 
 	@Test
@@ -1531,15 +1531,15 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.smo", "{foo:123,bar:'baz',qux:true,quux:null}");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
+		assertObject(ps.get("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
 
 		System.clearProperty("A.f1.smo");
 		System.setProperty("A.f1", "{foo:123,bar:'baz',qux:true,quux:null}");
 		ps = PropertyStore.create().build();
-		assertObject(ps.get2("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
+		assertObject(ps.get("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get2("A.f1.smo")).isNull();
+		assertObject(ps.get("A.f1.smo")).isNull();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1618,8 +1618,8 @@ public class PropertyStoreTest {
 	@Test
 	public void testGetNonExistent() {
 		PropertyStore b = PropertyStore.create().set("A.foo", "bar").build();
-		assertObject(b.get2("A.baz")).isNull();
-		assertObject(b.get2("B.foo")).isNull();
+		assertObject(b.get("A.baz")).isNull();
+		assertObject(b.get("B.foo")).isNull();
 	}
 
 	@Test

@@ -276,19 +276,7 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
-	@Deprecated
-	public Object get(String key) {
-		Property p = findProperty(key);
-		return p == null ? null : p.value;
-	}
-
-	/**
-	 * Returns the raw property value with the specified name.
-	 *
-	 * @param key The property name.
-	 * @return The property value, or <jk>null</jk> if it doesn't exist.
-	 */
-	public Optional<Object> get2(String key) {
+	public Optional<Object> get(String key) {
 		Property p = findProperty(key);
 		return Optional.ofNullable(p == null ? null : p.value);
 	}
