@@ -777,8 +777,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			jsonSchemaGenerator = createJsonSchemaGenerator(r, bf, ps);
 			bf.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
-			supportedAcceptTypes = ps.getList(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
-			supportedContentTypes = ps.getList(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
+			supportedAcceptTypes = ps.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes());
+			supportedContentTypes = ps.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes());
 
 			defaultRequestHeaders = createDefaultRequestHeaders(r, ps, bf, method, context).asArray();
 			defaultResponseHeaders = createDefaultResponseHeaders(r, ps, bf, method, context).asArray();

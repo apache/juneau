@@ -15,6 +15,7 @@ package org.apache.juneau.rest.mock;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
+import static java.util.Collections.*;
 
 import java.io.*;
 import java.net.*;
@@ -259,7 +260,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		this.restObject = restBeanCtx.getResource();
 		this.contextPath = ps.getString(MOCKRESTCLIENT_contextPath).orElse("");
 		this.servletPath = ps.getString(MOCKRESTCLIENT_servletPath).orElse("");
-		this.pathVars = ps.getMap(MOCKRESTCLIENT_pathVars, String.class);
+		this.pathVars = ps.getMap(MOCKRESTCLIENT_pathVars, String.class).orElse(emptyMap());
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
 		if (ccm instanceof MockHttpClientConnectionManager)

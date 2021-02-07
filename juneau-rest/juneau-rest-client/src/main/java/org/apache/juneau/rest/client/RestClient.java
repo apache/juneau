@@ -19,6 +19,7 @@ import static org.apache.juneau.http.HttpMethod.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
+import static java.util.Collections.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -2094,7 +2095,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
 
 		this.headers = HeaderSupplier.create();
-		for (Object o : ps.getList(RESTCLIENT_headers, Object.class)) {
+		for (Object o : ps.getList(RESTCLIENT_headers, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof HeaderSupplier)
 				headers.add((HeaderSupplier)o);
@@ -2103,7 +2104,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 
 		this.query = NameValuePairSupplier.create();
-		for (Object o : ps.getList(RESTCLIENT_query, Object.class)) {
+		for (Object o : ps.getList(RESTCLIENT_query, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof NameValuePairSupplier)
 				query.add((NameValuePairSupplier)o);
@@ -2112,7 +2113,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 
 		this.formData = NameValuePairSupplier.create();
-		for (Object o : ps.getList(RESTCLIENT_formData, Object.class)) {
+		for (Object o : ps.getList(RESTCLIENT_formData, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof NameValuePairSupplier)
 				formData.add((NameValuePairSupplier)o);

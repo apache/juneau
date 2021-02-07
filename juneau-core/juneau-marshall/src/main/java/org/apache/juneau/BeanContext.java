@@ -2084,7 +2084,7 @@ public class BeanContext extends Context implements MetaProvider {
 		ps = ps.subset(new String[]{"Context","BeanContext"});
 
 		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
-		for (Annotation a : ps.getList(BEAN_annotations, Annotation.class)) {
+		for (Annotation a : ps.getList(BEAN_annotations, Annotation.class).orElse(emptyList())) {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());
 
@@ -2149,7 +2149,7 @@ public class BeanContext extends Context implements MetaProvider {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
-		for (Object o : ps.getList(BEAN_swaps, Object.class)) {
+		for (Object o : ps.getList(BEAN_swaps, Object.class).orElse(emptyList())) {
 			if (o instanceof Class) {
 				ClassInfo ci = ClassInfo.of((Class<?>)o);
 				if (ci.isChildOf(PojoSwap.class))

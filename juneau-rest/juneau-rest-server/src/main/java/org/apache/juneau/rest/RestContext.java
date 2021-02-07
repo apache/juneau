@@ -3542,8 +3542,8 @@ public class RestContext extends BeanContext {
 
 			debugEnablement = createDebugEnablement(r, ps, bf);
 
-			consumes = ps.getList(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
-			produces = ps.getList(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
+			consumes = ps.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes());
+			produces = ps.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes());
 
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 			path = builder.getPath();
@@ -4527,7 +4527,7 @@ public class RestContext extends BeanContext {
 
 		RestOperationParamList x = RestOperationParamList.create();
 
-		for (Class<?> c : properties.getList(REST_restOperationParams, Class.class, AList.create()))
+		for (Class<?> c : properties.getList(REST_restOperationParams, Class.class).orElse(emptyList()))
 			x.append((Class<? extends RestOperationParam>)c);
 
 		x.append(

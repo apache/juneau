@@ -440,7 +440,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or never <jk>null</jk>.
+	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, never <jk>null</jk>.
 	 */
 	public <T> Optional<Set<T>> getSet(String key, Class<T> eType) {
 		Property p = findProperty(key);
@@ -452,24 +452,11 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>ArrayList</c>, never <jk>null</jk>.
 	 */
-	public <T> List<T> getList(String key, Class<T> eType) {
+	public <T> Optional<List<T>> getList(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_LIST : p.asList(eType);
-	}
-
-	/**
-	 * Returns the list property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @param def The default value if the property doesn't exist or is empty.
-	 * @return The property value as an unmodifiable <c>ArrayList</c>, or the default value if it doesn't exist or is empty.
-	 */
-	public <T> List<T> getList(String key, Class<T> eType, List<T> def) {
-		List<T> l = getList(key, eType);
-		return (l.isEmpty() ? def : l);
+		return Optional.ofNullable(p == null ? null : p.asList(eType));
 	}
 
 	/**
@@ -477,11 +464,11 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, never <jk>null</jk>.
 	 */
-	public <T> Map<String,T> getMap(String key, Class<T> eType) {
+	public <T> Optional<Map<String,T>> getMap(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_MAP : p.asMap(eType);
+		return Optional.ofNullable(p == null ? null : p.asMap(eType));
 	}
 
 	/**
