@@ -384,24 +384,13 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, def)</code>.
+	 * Shortcut for calling <code>get(key, String.<jk>class</jk>)</code>.
 	 *
 	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public final String getString(String key, String def) {
-		return get(key, String.class, def);
-	}
-
-	/**
-	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, <jk>null</jk>)</code>.
-	 *
-	 * @param key The property name.
-	 * @return The property value, or the <jk>null</jk> if it doesn't exist.
-	 */
-	public final String getString(String key) {
-		return getString(key, null);
+	public final Optional<String> getString(String key) {
+		return Optional.ofNullable(find(key, String.class));
 	}
 
 	/**
@@ -416,7 +405,7 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Same as {@link #getString(String, String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
+	 * Same as {@link #getString(String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
 	 *
 	 * @param key The property name.
 	 * @param def The default value.

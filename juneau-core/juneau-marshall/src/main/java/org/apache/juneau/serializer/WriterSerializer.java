@@ -340,7 +340,7 @@ public abstract class WriterSerializer extends Serializer {
 		super(ps, produces, accept);
 
 		maxIndent = ps.getInteger(WSERIALIZER_maxIndent).orElse(100);
-		quoteChar = ps.getString(WSERIALIZER_quoteChar, "\"").charAt(0);
+		quoteChar = ps.getString(WSERIALIZER_quoteChar).orElse("\"").charAt(0);
 		streamCharset = ps.get(WSERIALIZER_streamCharset, Charset.class).orElse(IOUtils.UTF8);
 		fileCharset = ps.get(WSERIALIZER_fileCharset, Charset.class).orElse(Charset.defaultCharset());
 		useWhitespace = ps.getBoolean(WSERIALIZER_useWhitespace).orElse(false);

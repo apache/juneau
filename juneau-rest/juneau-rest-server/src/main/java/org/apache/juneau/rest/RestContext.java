@@ -3528,8 +3528,8 @@ public class RestContext extends BeanContext {
 			opParams = createRestOperationParams(r, ps, bf).asArray();
 			hookMethodParams = createHookMethodParams(r, ps, bf).asArray();
 
-			uriContext = nullIfEmpty(ps.getString(REST_uriContext));
-			uriAuthority = nullIfEmpty(ps.getString(REST_uriAuthority));
+			uriContext = nullIfEmpty(ps.getString(REST_uriContext).orElse(null));
+			uriAuthority = nullIfEmpty(ps.getString(REST_uriAuthority).orElse(null));
 			uriResolution = ps.get(REST_uriResolution, UriResolution.class).orElse(UriResolution.ROOT_RELATIVE);
 			uriRelativity = ps.get(REST_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
 
@@ -3538,7 +3538,7 @@ public class RestContext extends BeanContext {
 			allowedMethodParams = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedMethodParams, "HEAD,OPTIONS"));
 			allowedMethodHeaders = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = ps.getBoolean(REST_renderResponseStackTraces).orElse(false);
-			clientVersionHeader = ps.getString(REST_clientVersionHeader, "X-Client-Version");
+			clientVersionHeader = ps.getString(REST_clientVersionHeader).orElse("X-Client-Version");
 
 			debugEnablement = createDebugEnablement(r, ps, bf);
 
@@ -5311,7 +5311,7 @@ public class RestContext extends BeanContext {
 			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
 		x.defaultEnable(defaultDebug);
 
-		for (Map.Entry<String,String> e : splitMap(properties.getString(REST_debugOn, ""), true).entrySet()) {
+		for (Map.Entry<String,String> e : splitMap(properties.getString(REST_debugOn).orElse(""), true).entrySet()) {
 			String k = e.getKey(), v = e.getValue();
 			if (v.isEmpty())
 				v = "ALWAYS";

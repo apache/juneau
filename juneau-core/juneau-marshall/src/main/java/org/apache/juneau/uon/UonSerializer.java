@@ -414,7 +414,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		encoding = ps.getBoolean(UON_encoding).orElse(false);
 		addBeanTypes = ps.getFirstBoolean(UON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 		paramFormat = ps.get(UON_paramFormat, ParamFormat.class).orElse(ParamFormat.UON);
-		quoteChar = ps.getString(WSERIALIZER_quoteChar, "'").charAt(0);
+		quoteChar = ps.getString(WSERIALIZER_quoteChar).orElse("'").charAt(0);
 	}
 
 	@Override /* Context */

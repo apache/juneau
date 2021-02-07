@@ -2042,7 +2042,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.keepHttpClientOpen = ps.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
 		this.errorCodes = ps.getInstance(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
 		this.executorServiceShutdownOnClose = ps.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
-		this.rootUri = StringUtils.nullIfEmpty(ps.getString(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
+		this.rootUri = StringUtils.nullIfEmpty(ps.getString(RESTCLIENT_rootUri).orElse("").replaceAll("\\/$", ""));
 		this.leakDetection = ps.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
 		this.ignoreErrors = ps.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);
 		this.logger = ps.getInstance(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));

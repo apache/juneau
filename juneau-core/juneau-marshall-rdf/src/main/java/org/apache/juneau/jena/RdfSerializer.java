@@ -295,7 +295,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 		useXmlNamespaces = ! ps.getBoolean(RDF_disableUseXmlNamespaces).orElse(false);
 		looseCollections = ps.getBoolean(RDF_looseCollections).orElse(false);
 		autoDetectNamespaces = ! ps.getBoolean(RDF_disableAutoDetectNamespaces).orElse(false);
-		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
+		rdfLanguage = ps.getString(RDF_language).orElse("RDF/XML-ABBREV");
 		juneauNs = ps.get(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
 		juneauBpNs = ps.get(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
 		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);

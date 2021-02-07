@@ -132,7 +132,7 @@ public class ContextCacheTest {
 
 		public A(PropertyStore ps) {
 			super(ps, true);
-			f1 = getPropertyStore().getString("A.f1", "xxx");
+			f1 = getPropertyStore().getString("A.f1").orElse("xxx");
 		}
 
 		@Override

@@ -446,7 +446,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public Config(PropertyStore ps) throws IOException {
 		super(ps, true);
 
-		name = ps.getString(CONFIG_name, "Configuration.cfg");
+		name = ps.getString(CONFIG_name).orElse("Configuration.cfg");
 		store = ps.getInstance(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
 		configMap.register(this);

@@ -238,7 +238,7 @@ public class ConfigFileStore extends ConfigStore {
 	protected ConfigFileStore(PropertyStore ps) {
 		super(ps);
 		try {
-			dir = new File(ps.getString(FILESTORE_directory, ".")).getCanonicalFile();
+			dir = new File(ps.getString(FILESTORE_directory).orElse(".")).getCanonicalFile();
 			dir.mkdirs();
 			charset = ps.get(FILESTORE_charset, Charset.class).orElse(Charset.defaultCharset());
 			updateOnWrite = ps.getBoolean(FILESTORE_enableUpdateOnWrite).orElse(false);
