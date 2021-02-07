@@ -378,7 +378,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final Boolean getBooleanProperty(String key, Boolean def) {
-		return getProperty(key, Boolean.class, def);
+		return propertyStore.getBooleanProperty(key, def);
 	}
 
 	/**
@@ -388,7 +388,7 @@ public abstract class Context {
 	 * @return The property value, or <jk>false</jk> if it doesn't exist.
 	 */
 	public final boolean getBooleanProperty(String key) {
-		return getBooleanProperty(key, false);
+		return propertyStore.getBooleanProperty(key);
 	}
 
 	/**
@@ -399,7 +399,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final Integer getIntegerProperty(String key, Integer def) {
-		return getProperty(key, Integer.class, def);
+		return propertyStore.getIntegerProperty(key, def);
 	}
 
 	/**
@@ -409,7 +409,7 @@ public abstract class Context {
 	 * @return The property value, or <c>-1</c> if it doesn't exist.
 	 */
 	public final int getIntegerProperty(String key) {
-		return getIntegerProperty(key, -1);
+		return propertyStore.getIntegerProperty(key);
 	}
 
 	/**
@@ -420,7 +420,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final Long getLongProperty(String key, Long def) {
-		return getProperty(key, Long.class, def);
+		return propertyStore.getLongProperty(key, def);
 	}
 
 	/**
@@ -430,7 +430,7 @@ public abstract class Context {
 	 * @return The property value, or <c>-1</c> if it doesn't exist.
 	 */
 	public final long getLongProperty(String key) {
-		return getLongProperty(key, -1l);
+		return propertyStore.getLongProperty(key);
 	}
 
 	/**
@@ -441,7 +441,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final String getStringProperty(String key, String def) {
-		return getProperty(key, String.class, def);
+		return propertyStore.getStringProperty(key, def);
 	}
 
 	/**
@@ -451,7 +451,7 @@ public abstract class Context {
 	 * @return The property value, or the <jk>null</jk> if it doesn't exist.
 	 */
 	public final String getStringProperty(String key) {
-		return getStringProperty(key, null);
+		return propertyStore.getStringProperty(key);
 	}
 
 	/**
@@ -462,7 +462,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final String[] getCdlProperty(String key, String def) {
-		return StringUtils.split(StringUtils.emptyIfNull(getProperty(key, String.class, def)));
+		return propertyStore.getCdlProperty(key, def);
 	}
 
 	/**
@@ -473,8 +473,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final String getStringPropertyWithNone(String key, String def) {
-		String s = getProperty(key, String.class, def);
-		return "NONE".equalsIgnoreCase(s) ? "" : s;
+		return propertyStore.getStringPropertyWithNone(key, def);
 	}
 
 	/**
@@ -497,7 +496,7 @@ public abstract class Context {
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
 	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type) {
-		return getClassProperty(key, type, null);
+		return propertyStore.getClassProperty(key, type);
 	}
 
 	/**
@@ -935,7 +934,7 @@ public abstract class Context {
 			.create()
 			.filtered()
 			.a(
-				"Context", 
+				"Context",
 				OMap
 					.create()
 					.filtered()

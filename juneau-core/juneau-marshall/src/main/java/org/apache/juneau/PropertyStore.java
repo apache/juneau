@@ -295,6 +295,113 @@ public final class PropertyStore {
 	}
 
 	/**
+	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, def)</code>.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final Boolean getBooleanProperty(String key, Boolean def) {
+		return getProperty(key, Boolean.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, <jk>false</jk>)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or <jk>false</jk> if it doesn't exist.
+	 */
+	public final boolean getBooleanProperty(String key) {
+		return getBooleanProperty(key, false);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, def)</code>.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final Integer getIntegerProperty(String key, Integer def) {
+		return getProperty(key, Integer.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, -1)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or <c>-1</c> if it doesn't exist.
+	 */
+	public final int getIntegerProperty(String key) {
+		return getIntegerProperty(key, -1);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, def)</code>.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final Long getLongProperty(String key, Long def) {
+		return getProperty(key, Long.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, -1)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or <c>-1</c> if it doesn't exist.
+	 */
+	public final long getLongProperty(String key) {
+		return getLongProperty(key, -1l);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, def)</code>.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final String getStringProperty(String key, String def) {
+		return getProperty(key, String.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, <jk>null</jk>)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or the <jk>null</jk> if it doesn't exist.
+	 */
+	public final String getStringProperty(String key) {
+		return getStringProperty(key, null);
+	}
+
+	/**
+	 * Returns a property as a parsed comma-delimited list of strings.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final String[] getCdlProperty(String key, String def) {
+		return StringUtils.split(StringUtils.emptyIfNull(getProperty(key, String.class, def)));
+	}
+
+	/**
+	 * Same as {@link #getStringProperty(String, String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final String getStringPropertyWithNone(String key, String def) {
+		String s = getProperty(key, String.class, def);
+		return "NONE".equalsIgnoreCase(s) ? "" : s;
+	}
+
+	/**
 	 * Returns the class property with the specified name.
 	 *
 	 * @param key The property name.
@@ -305,6 +412,17 @@ public final class PropertyStore {
 	public <T> Class<? extends T> getClassProperty(String key, Class<T> type, Class<? extends T> def) {
 		Property p = findProperty(key);
 		return p == null ? def : (Class<T>)p.as(Class.class);
+	}
+
+	/**
+	 * Returns the class property with the specified name.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return The property value, or <jk>null</jk> if it doesn't exist.
+	 */
+	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type) {
+		return getClassProperty(key, type, null);
 	}
 
 	/**
@@ -550,6 +668,17 @@ public final class PropertyStore {
 		if (type.isInstance(def))
 			return (T)def;
 		throw new ConfigException("Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return A new property instance, or an empty array if it doesn't exist.
+	 */
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type) {
+		return getInstanceArrayProperty(key, type, (T[])Array.newInstance(type, 0));
 	}
 
 	/**

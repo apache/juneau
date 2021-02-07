@@ -65,7 +65,6 @@ public class RestChildrenBuilder {
 		return this;
 	}
 
-
 	/**
 	 * Specifies a {@link RestChildren} implementation subclass to use.
 	 *
