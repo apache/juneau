@@ -934,8 +934,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		if (x.isEmpty())
 			x = beanFactory.getBean(RestGuardList.class).orElse(x);
 
-		Set<String> rolesDeclared = properties.getSet(REST_rolesDeclared, String.class, null);
-		Set<String> roleGuard = properties.getSet(REST_roleGuard, String.class, Collections.emptySet());
+		Set<String> rolesDeclared = properties.getSet(REST_rolesDeclared, String.class).orElse(null);
+		Set<String> roleGuard = properties.getSet(REST_roleGuard, String.class).orElse(Collections.emptySet());
 
 		for (String rg : roleGuard) {
 			try {

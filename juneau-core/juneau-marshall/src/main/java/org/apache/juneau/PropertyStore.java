@@ -440,49 +440,11 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or never <jk>null</jk>.
 	 */
-	public <T> Set<T> getSet(String key, Class<T> eType) {
+	public <T> Optional<Set<T>> getSet(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_SET : p.asSet(eType);
-	}
-
-	/**
-	 * Returns the set property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @param def The default value if the property doesn't exist or is empty.
-	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or the default value if it doesn't exist or is empty.
-	 */
-	public <T> Set<T> getSet(String key, Class<T> eType, Set<T> def) {
-		Set<T> l = getSet(key, eType);
-		return (l.isEmpty() ? def : l);
-	}
-
-	/**
-	 * Returns the class set property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
-	 */
-	@SuppressWarnings("rawtypes")
-	public Set<Class<?>> getClassSet(String key) {
-		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_SET : (Set)p.asSet(Class.class);
-	}
-
-	/**
-	 * Returns the class set property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
-	 */
-	@SuppressWarnings("rawtypes")
-	public <T> Set<Class<T>> getClassSet(String key, Class<T> eType) {
-		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_SET : (Set)p.asSet(Class.class);
+		return Optional.ofNullable(p == null ? null : p.asSet(eType));
 	}
 
 	/**
@@ -511,31 +473,6 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Returns the class list property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
-	 */
-	@SuppressWarnings("rawtypes")
-	public List<Class<?>> getClassList(String key) {
-		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_LIST : (List)p.asList(Class.class);
-	}
-
-	/**
-	 * Returns the class list property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
-	 */
-	@SuppressWarnings("rawtypes")
-	public <T> List<Class<T>> getClassList(String key, Class<T> eType) {
-		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_LIST : (List)p.asList(Class.class);
-	}
-
-	/**
 	 * Returns the map property with the specified name.
 	 *
 	 * @param key The property name.
@@ -545,31 +482,6 @@ public final class PropertyStore {
 	public <T> Map<String,T> getMap(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_MAP : p.asMap(eType);
-	}
-
-	/**
-	 * Returns the class map property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
-	 */
-	@SuppressWarnings("rawtypes")
-	public Map<String,Class<?>> getClassMap(String key) {
-		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_MAP : (Map)p.asMap(Class.class);
-	}
-
-	/**
-	 * Returns the class map property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
-	 */
-	@SuppressWarnings("rawtypes")
-	public <T> Map<String,Class<T>> getClassMap(String key, Class<T> eType) {
-		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_MAP : (Map)p.asMap(Class.class);
 	}
 
 	/**
