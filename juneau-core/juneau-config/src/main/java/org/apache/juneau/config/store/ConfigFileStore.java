@@ -242,7 +242,7 @@ public class ConfigFileStore extends ConfigStore {
 			dir.mkdirs();
 			charset = ps.get(FILESTORE_charset, Charset.class).orElse(Charset.defaultCharset());
 			updateOnWrite = ps.getBoolean(FILESTORE_enableUpdateOnWrite).orElse(false);
-			extensions = ps.getCdl(FILESTORE_extensions, "cfg");
+			extensions = ps.getCdl(FILESTORE_extensions).orElse(new String[]{"cfg"});
 			WatcherSensitivity ws = ps.get(FILESTORE_watcherSensitivity, WatcherSensitivity.class).orElse(WatcherSensitivity.MEDIUM);
 			watcher = ps.getBoolean(FILESTORE_enableWatcher).orElse(false) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)

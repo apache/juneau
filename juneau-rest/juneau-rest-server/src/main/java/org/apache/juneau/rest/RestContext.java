@@ -3534,9 +3534,9 @@ public class RestContext extends BeanContext {
 			uriRelativity = ps.get(REST_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
 
 			allowBodyParam = ! ps.getBoolean(REST_disableAllowBodyParam).orElse(false);
-			allowedHeaderParams = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedHeaderParams, "Accept,Content-Type"));
-			allowedMethodParams = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedMethodParams, "HEAD,OPTIONS"));
-			allowedMethodHeaders = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedMethodHeaders, ""));
+			allowedHeaderParams = newCaseInsensitiveSet(ps.getString(REST_allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse("Accept,Content-Type"));
+			allowedMethodParams = newCaseInsensitiveSet(ps.getString(REST_allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse("HEAD,OPTIONS"));
+			allowedMethodHeaders = newCaseInsensitiveSet(ps.getString(REST_allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			renderResponseStackTraces = ps.getBoolean(REST_renderResponseStackTraces).orElse(false);
 			clientVersionHeader = ps.getString(REST_clientVersionHeader).orElse("X-Client-Version");
 

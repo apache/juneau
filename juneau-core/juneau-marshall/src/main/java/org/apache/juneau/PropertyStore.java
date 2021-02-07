@@ -315,12 +315,6 @@ public final class PropertyStore {
 		return Optional.empty();
 	}
 
-	@Deprecated
-	private <T> T get(String key, Class<T> c, T def) {
-		Property p = findProperty(key);
-		return p == null ? def : p.as(c);
-	}
-
 	private <T> T find(String key, Class<T> c) {
 		Property p = findProperty(key);
 		return p == null ? null : p.as(c);
@@ -397,23 +391,13 @@ public final class PropertyStore {
 	 * Returns a property as a parsed comma-delimited list of strings.
 	 *
 	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public final String[] getCdl(String key, String def) {
-		return StringUtils.split(StringUtils.emptyIfNull(get(key, String.class, def)));
-	}
-
-	/**
-	 * Same as {@link #getString(String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
-	 *
-	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
-	 */
-	public final String getNoneableString(String key, String def) {
-		String s = get(key, String.class, def);
-		return "NONE".equalsIgnoreCase(s) ? "" : s;
+	public final Optional<String[]> getCdl(String key) {
+		String s = find(key, String.class);
+		if (s != null)
+			return Optional.of(StringUtils.split(s));
+		return Optional.empty();
 	}
 
 	/**
