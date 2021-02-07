@@ -405,7 +405,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @return The property value, or the default value if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
 	public <T> Optional<Class<? extends T>> getClass(String key, Class<T> type) {
 		Property p = findProperty(key);
@@ -417,24 +417,11 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value, or an empty array if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public <T> T[] getArray(String key, Class<T> eType) {
+	public <T> Optional<T[]> getArray(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return (T[]) (p == null ? Array.newInstance(eType, 0) : p.asArray(eType));
-	}
-
-	/**
-	 * Returns the array property value with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @param def The default value.
-	 * @return The property value, or an empty array if it doesn't exist.
-	 */
-	public <T> T[] getArray(String key, Class<T> eType, T[] def) {
-		Property p = findProperty(key);
-		return p == null ? def : p.asArray(eType);
+		return Optional.ofNullable(p == null ? null : p.asArray(eType));
 	}
 
 	/**

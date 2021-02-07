@@ -4246,7 +4246,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected SerializerGroupBuilder createSerializerGroupBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Object[] x = properties.getArray(REST_serializers, Object.class);
+		Object[] x = properties.getArray(REST_serializers, Object.class).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(Serializer[].class).orElse(null);
@@ -4341,7 +4341,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected ParserGroupBuilder createParserGroupBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Object[] x = properties.getArray(REST_parsers, Object.class);
+		Object[] x = properties.getArray(REST_parsers, Object.class).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(Parser[].class).orElse(null);
@@ -5576,7 +5576,7 @@ public class RestContext extends BeanContext {
 			.implClass(properties.getClass(REST_restChildrenClass, RestChildren.class).orElse(null));
 
 		// Initialize our child resources.
-		for (Object o : properties.getArray(REST_children, Object.class)) {
+		for (Object o : properties.getArray(REST_children, Object.class).orElse(new Object[0])) {
 			String path = null;
 
 			if (o instanceof RestChild) {

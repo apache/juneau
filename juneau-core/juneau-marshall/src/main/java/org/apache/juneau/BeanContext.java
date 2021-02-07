@@ -2139,7 +2139,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();
-		for (String s : ps.getArray(BEAN_notBeanPackages, String.class, DEFAULT_NOTBEAN_PACKAGES)) {
+		for (String s : ps.getArray(BEAN_notBeanPackages, String.class).orElse(DEFAULT_NOTBEAN_PACKAGES)) {
 			if (s.endsWith(".*"))
 				l2.add(s.substring(0, s.length()-2));
 			else

@@ -1103,7 +1103,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		SerializerGroup g = beanFactory.getBean(SerializerGroup.class).orElse(null);
 
 		if (g == null) {
-			Object[] x = ps.getArray(REST_serializers, Object.class);
+			Object[] x = ps.getArray(REST_serializers, Object.class).orElse(null);
 
 			if (x == null)
 				x = beanFactory.getBean(Serializer[].class).orElse(null);
@@ -1164,7 +1164,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		ParserGroup g = beanFactory.getBean(ParserGroup.class).orElse(null);
 
 		if (g == null) {
-			Object[] x = ps.getArray(REST_parsers, Object.class);
+			Object[] x = ps.getArray(REST_parsers, Object.class).orElse(null);
 
 			if (x == null)
 				x = beanFactory.getBean(Parser[].class).orElse(null);
@@ -1322,7 +1322,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		UrlPathMatcherList x = UrlPathMatcherList.create();
 		boolean dotAll = properties.getBoolean("RestOperationContext.dotAll.b").orElse(false);
 
-		for (String p : properties.getArray(RESTOP_path, String.class)) {
+		for (String p : properties.getArray(RESTOP_path, String.class).orElse(new String[0])) {
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
 			x.add(UrlPathMatcher.of(p));

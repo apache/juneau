@@ -763,17 +763,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public HtmlDocSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		style = ps.getArray(HTMLDOC_style, String.class);
-		stylesheet = ps.getArray(HTMLDOC_stylesheet, String.class);
-		script = ps.getArray(HTMLDOC_script, String.class);
-		head = ps.getArray(HTMLDOC_head, String.class);
-		header = ps.getArray(HTMLDOC_header, String.class);
-		nav = ps.getArray(HTMLDOC_nav, String.class);
-		aside = ps.getArray(HTMLDOC_aside, String.class);
+		style = ps.getArray(HTMLDOC_style, String.class).orElse(new String[0]);
+		stylesheet = ps.getArray(HTMLDOC_stylesheet, String.class).orElse(new String[0]);
+		script = ps.getArray(HTMLDOC_script, String.class).orElse(new String[0]);
+		head = ps.getArray(HTMLDOC_head, String.class).orElse(new String[0]);
+		header = ps.getArray(HTMLDOC_header, String.class).orElse(new String[0]);
+		nav = ps.getArray(HTMLDOC_nav, String.class).orElse(new String[0]);
+		aside = ps.getArray(HTMLDOC_aside, String.class).orElse(new String[0]);
 		asideFloat = ps.get(HTMLDOC_asideFloat, AsideFloat.class).orElse(AsideFloat.RIGHT);
-		footer = ps.getArray(HTMLDOC_footer, String.class);
+		footer = ps.getArray(HTMLDOC_footer, String.class).orElse(new String[0]);
 		nowrap = ps.getBoolean(HTMLDOC_nowrap).orElse(false);
-		navlinks = ps.getArray(HTMLDOC_navlinks, String.class);
+		navlinks = ps.getArray(HTMLDOC_navlinks, String.class).orElse(new String[0]);
 		noResultsMessage = ps.getString(HTMLDOC_noResultsMessage).orElse("<p>no results</p>");
 		template = ps.getInstance(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
 

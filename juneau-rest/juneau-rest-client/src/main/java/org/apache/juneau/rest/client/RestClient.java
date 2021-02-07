@@ -2053,7 +2053,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.logRequestsPredicate = ps.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class, LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		SerializerGroupBuilder sgb = SerializerGroup.create();
-		for (Object o : ps.getArray(RESTCLIENT_serializers, Object.class)) {
+		for (Object o : ps.getArray(RESTCLIENT_serializers, Object.class).orElse(new Object[0])) {
 			if (o instanceof Serializer) {
 				sgb.append((Serializer)o);  // Don't apply PropertyStore.
 			} else if (o instanceof Class) {
@@ -2068,7 +2068,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.serializers = sgb.build();
 
 		ParserGroupBuilder pgb = ParserGroup.create();
-		for (Object o : ps.getArray(RESTCLIENT_parsers, Object.class)) {
+		for (Object o : ps.getArray(RESTCLIENT_parsers, Object.class).orElse(new Object[0])) {
 			if (o instanceof Parser) {
 				pgb.append((Parser)o);  // Don't apply PropertyStore.
 			} else if (o instanceof Class) {
