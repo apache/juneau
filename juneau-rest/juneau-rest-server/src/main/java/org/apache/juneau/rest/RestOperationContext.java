@@ -1320,7 +1320,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	protected UrlPathMatcherList createPathMatchers(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
 		UrlPathMatcherList x = UrlPathMatcherList.create();
-		boolean dotAll = properties.getBoolean("RestOperationContext.dotAll.b", false);
+		boolean dotAll = properties.getBoolean("RestOperationContext.dotAll.b").orElse(false);
 
 		for (String p : properties.getArray(RESTOP_path, String.class)) {
 			if (dotAll && ! p.endsWith("/*"))

@@ -134,7 +134,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 				.build(),
 			"application/x-www-form-urlencoded"
 		);
-		expandedParams = ps.getBoolean(URLENC_expandedParams);
+		expandedParams = ps.getBoolean(URLENC_expandedParams).orElse(false);
 	}
 
 	@Override /* Context */

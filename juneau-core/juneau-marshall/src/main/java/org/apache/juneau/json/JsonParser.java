@@ -215,7 +215,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 */
 	public JsonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		validateEnd = ps.getBoolean(JSON_validateEnd);
+		validateEnd = ps.getBoolean(JSON_validateEnd).orElse(false);
 	}
 
 	@Override /* Context */

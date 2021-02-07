@@ -2039,16 +2039,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		super(ps);
 		this.httpClient = ps.getInstance(RESTCLIENT_httpClient, CloseableHttpClient.class);
 		this.connectionManager = ps.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class);
-		this.keepHttpClientOpen = ps.getBoolean(RESTCLIENT_keepHttpClientOpen);
+		this.keepHttpClientOpen = ps.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
 		this.errorCodes = ps.getInstance(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
-		this.executorServiceShutdownOnClose = ps.getBoolean(RESTCLIENT_executorServiceShutdownOnClose);
+		this.executorServiceShutdownOnClose = ps.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
 		this.rootUri = StringUtils.nullIfEmpty(ps.getString(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
-		this.leakDetection = ps.getBoolean(RESTCLIENT_leakDetection, isDebug());
-		this.ignoreErrors = ps.getBoolean(RESTCLIENT_ignoreErrors);
+		this.leakDetection = ps.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
+		this.ignoreErrors = ps.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);
 		this.logger = ps.getInstance(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));
 		this.logRequests = ps.getInstance(RESTCLIENT_logRequests, DetailLevel.class, isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
 		this.logRequestsLevel = ps.getInstance(RESTCLIENT_logRequestsLevel, Level.class, isDebug() ? Level.WARNING : Level.OFF);
-		this.logToConsole = ps.getBoolean(RESTCLIENT_logToConsole, isDebug());
+		this.logToConsole = ps.getBoolean(RESTCLIENT_logToConsole).orElse(isDebug());
 		this.console = ps.getInstance(RESTCLIENT_console, PrintStream.class, System.err);
 		this.logRequestsPredicate = ps.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class, LOG_REQUESTS_PREDICATE_DEFAULT);
 

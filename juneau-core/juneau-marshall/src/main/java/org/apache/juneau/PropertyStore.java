@@ -315,18 +315,15 @@ public final class PropertyStore {
 		return Optional.empty();
 	}
 
-	/**
-	 * Returns the property value with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param c The class to cast or convert the value to.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
-	 */
 	@Deprecated
 	private <T> T get(String key, Class<T> c, T def) {
 		Property p = findProperty(key);
 		return p == null ? def : p.as(c);
+	}
+
+	private <T> T find(String key, Class<T> c) {
+		Property p = findProperty(key);
+		return p == null ? null : p.as(c);
 	}
 
 	/**
@@ -345,21 +342,25 @@ public final class PropertyStore {
 	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, def)</code>.
 	 *
 	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public final Boolean getBoolean(String key, Boolean def) {
-		return get(key, Boolean.class, def);
+	public final Optional<Boolean> getBoolean(String key) {
+		return Optional.ofNullable(find(key, Boolean.class));
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, <jk>false</jk>)</code>.
+	 * Similar to {@link #getBoolean(String)} but looks for multiple keys and returns the value of the first one present.
 	 *
-	 * @param key The property name.
-	 * @return The property value, or <jk>false</jk> if it doesn't exist.
+	 * @param keys The property names.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public final boolean getBoolean(String key) {
-		return getBoolean(key, false);
+	public final Optional<Boolean> getFirstBoolean(String...keys) {
+		for (String k : keys) {
+			Boolean o = find(k, Boolean.class);
+			if (o != null)
+				return Optional.of(o);
+		}
+		return Optional.empty();
 	}
 
 	/**

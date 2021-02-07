@@ -273,8 +273,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 
 		maxDepth = ps.getInteger(BEANTRAVERSE_maxDepth, 100);
 		initialDepth = ps.getInteger(BEANTRAVERSE_initialDepth, 0);
-		ignoreRecursions = ps.getBoolean(BEANTRAVERSE_ignoreRecursions);
-		detectRecursions = ps.getBoolean(BEANTRAVERSE_detectRecursions, ignoreRecursions);
+		ignoreRecursions = ps.getBoolean(BEANTRAVERSE_ignoreRecursions).orElse(false);
+		detectRecursions = ps.getBoolean(BEANTRAVERSE_detectRecursions).orElse(ignoreRecursions);
 	}
 
 	@Override /* Context */

@@ -2110,22 +2110,22 @@ public class BeanContext extends Context implements MetaProvider {
 		}
 		this.annotations = rmb.build();
 
-		beansRequireDefaultConstructor = ps.getBoolean(BEAN_beansRequireDefaultConstructor);
-		beansRequireSerializable = ps.getBoolean(BEAN_beansRequireSerializable);
-		beansRequireSettersForGetters = ps.getBoolean(BEAN_beansRequireSettersForGetters);
-		beansRequireSomeProperties = ! ps.getBoolean(BEAN_disableBeansRequireSomeProperties);
-		beanMapPutReturnsOldValue = ps.getBoolean(BEAN_beanMapPutReturnsOldValue);
-		useEnumNames = ps.getBoolean(BEAN_useEnumNames);
-		useInterfaceProxies = ! ps.getBoolean(BEAN_disableInterfaceProxies);
-		ignoreUnknownBeanProperties = ps.getBoolean(BEAN_ignoreUnknownBeanProperties);
-		ignoreUnknownNullBeanProperties = ! ps.getBoolean(BEAN_disableIgnoreUnknownNullBeanProperties);
-		ignoreMissingSetters = ! ps.getBoolean(BEAN_disableIgnoreMissingSetters);
-		ignoreTransientFields = ! ps.getBoolean(BEAN_disableIgnoreTransientFields);
-		ignoreInvocationExceptionsOnGetters = ps.getBoolean(BEAN_ignoreInvocationExceptionsOnGetters);
-		ignoreInvocationExceptionsOnSetters = ps.getBoolean(BEAN_ignoreInvocationExceptionsOnSetters);
-		useJavaBeanIntrospector = ps.getBoolean(BEAN_useJavaBeanIntrospector);
-		sortProperties = ps.getBoolean(BEAN_sortProperties);
-		findFluentSetters = ps.getBoolean(BEAN_findFluentSetters);
+		beansRequireDefaultConstructor = ps.getBoolean(BEAN_beansRequireDefaultConstructor).orElse(false);
+		beansRequireSerializable = ps.getBoolean(BEAN_beansRequireSerializable).orElse(false);
+		beansRequireSettersForGetters = ps.getBoolean(BEAN_beansRequireSettersForGetters).orElse(false);
+		beansRequireSomeProperties = ! ps.getBoolean(BEAN_disableBeansRequireSomeProperties).orElse(false);
+		beanMapPutReturnsOldValue = ps.getBoolean(BEAN_beanMapPutReturnsOldValue).orElse(false);
+		useEnumNames = ps.getBoolean(BEAN_useEnumNames).orElse(false);
+		useInterfaceProxies = ! ps.getBoolean(BEAN_disableInterfaceProxies).orElse(false);
+		ignoreUnknownBeanProperties = ps.getBoolean(BEAN_ignoreUnknownBeanProperties).orElse(false);
+		ignoreUnknownNullBeanProperties = ! ps.getBoolean(BEAN_disableIgnoreUnknownNullBeanProperties).orElse(false);
+		ignoreMissingSetters = ! ps.getBoolean(BEAN_disableIgnoreMissingSetters).orElse(false);
+		ignoreTransientFields = ! ps.getBoolean(BEAN_disableIgnoreTransientFields).orElse(false);
+		ignoreInvocationExceptionsOnGetters = ps.getBoolean(BEAN_ignoreInvocationExceptionsOnGetters).orElse(false);
+		ignoreInvocationExceptionsOnSetters = ps.getBoolean(BEAN_ignoreInvocationExceptionsOnSetters).orElse(false);
+		useJavaBeanIntrospector = ps.getBoolean(BEAN_useJavaBeanIntrospector).orElse(false);
+		sortProperties = ps.getBoolean(BEAN_sortProperties).orElse(false);
+		findFluentSetters = ps.getBoolean(BEAN_findFluentSetters).orElse(false);
 		typePropertyName = ps.getString(BEAN_typePropertyName, "_type");
 
 		beanConstructorVisibility = ps.get(BEAN_beanConstructorVisibility, Visibility.class).orElse(PUBLIC);

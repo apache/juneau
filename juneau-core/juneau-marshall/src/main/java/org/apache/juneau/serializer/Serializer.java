@@ -826,14 +826,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	protected Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
 
-		addBeanTypes = ps.getBoolean(SERIALIZER_addBeanTypes);
-		keepNullProperties = ps.getBoolean(SERIALIZER_keepNullProperties);
-		trimEmptyCollections = ps.getBoolean(SERIALIZER_trimEmptyCollections);
-		trimEmptyMaps = ps.getBoolean(SERIALIZER_trimEmptyMaps);
-		trimStrings = ps.getBoolean(SERIALIZER_trimStrings);
-		sortCollections = ps.getBoolean(SERIALIZER_sortCollections);
-		sortMaps = ps.getBoolean(SERIALIZER_sortMaps);
-		addRootType = ps.getBoolean(SERIALIZER_addRootType);
+		addBeanTypes = ps.getBoolean(SERIALIZER_addBeanTypes).orElse(false);
+		keepNullProperties = ps.getBoolean(SERIALIZER_keepNullProperties).orElse(false);
+		trimEmptyCollections = ps.getBoolean(SERIALIZER_trimEmptyCollections).orElse(false);
+		trimEmptyMaps = ps.getBoolean(SERIALIZER_trimEmptyMaps).orElse(false);
+		trimStrings = ps.getBoolean(SERIALIZER_trimStrings).orElse(false);
+		sortCollections = ps.getBoolean(SERIALIZER_sortCollections).orElse(false);
+		sortMaps = ps.getBoolean(SERIALIZER_sortMaps).orElse(false);
+		addRootType = ps.getBoolean(SERIALIZER_addRootType).orElse(false);
 		uriContext = ps.get(SERIALIZER_uriContext, UriContext.class).orElse(UriContext.DEFAULT);
 		uriResolution = ps.get(SERIALIZER_uriResolution, UriResolution.class).orElse(UriResolution.NONE);
 		uriRelativity = ps.get(SERIALIZER_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);

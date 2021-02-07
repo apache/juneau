@@ -128,8 +128,8 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 */
 	public RdfParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		trimWhitespace = ps.getBoolean(RDF_trimWhitespace);
-		looseCollections = ps.getBoolean(RDF_looseCollections);
+		trimWhitespace = ps.getBoolean(RDF_trimWhitespace).orElse(false);
+		looseCollections = ps.getBoolean(RDF_looseCollections).orElse(false);
 		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
 		juneauNs = ps.getInstance(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
 		juneauBpNs = ps.getInstance(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);

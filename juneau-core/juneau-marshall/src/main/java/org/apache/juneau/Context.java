@@ -341,7 +341,7 @@ public abstract class Context {
 		propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
 		ps = propertyStore;
 		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
-		debug = ps.getBoolean(CONTEXT_debug);
+		debug = ps.getBoolean(CONTEXT_debug).orElse(false);
 		locale = ps.getInstance(CONTEXT_locale, Locale.class, Locale.getDefault());
 		timeZone = ps.getInstance(CONTEXT_timeZone, TimeZone.class);
 		mediaType = ps.getInstance(CONTEXT_mediaType, MediaType.class);

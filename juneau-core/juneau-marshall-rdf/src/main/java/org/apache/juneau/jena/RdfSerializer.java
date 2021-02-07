@@ -290,17 +290,17 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 */
 	public RdfSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		addLiteralTypes = ps.getBoolean(RDF_addLiteralTypes);
-		addRootProperty = ps.getBoolean(RDF_addRootProperty);
-		useXmlNamespaces = ! ps.getBoolean(RDF_disableUseXmlNamespaces);
-		looseCollections = ps.getBoolean(RDF_looseCollections);
-		autoDetectNamespaces = ! ps.getBoolean(RDF_disableAutoDetectNamespaces);
+		addLiteralTypes = ps.getBoolean(RDF_addLiteralTypes).orElse(false);
+		addRootProperty = ps.getBoolean(RDF_addRootProperty).orElse(false);
+		useXmlNamespaces = ! ps.getBoolean(RDF_disableUseXmlNamespaces).orElse(false);
+		looseCollections = ps.getBoolean(RDF_looseCollections).orElse(false);
+		autoDetectNamespaces = ! ps.getBoolean(RDF_disableAutoDetectNamespaces).orElse(false);
 		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
 		juneauNs = ps.get(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
 		juneauBpNs = ps.get(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
 		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
 		namespaces = ps.get(RDF_namespaces, Namespace[].class).orElse(new Namespace[0]);
-		addBeanTypes = ps.getBoolean(RDF_addBeanTypes, ps.getBoolean(SERIALIZER_addBeanTypes));
+		addBeanTypes = ps.getFirstBoolean(RDF_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 
 		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))

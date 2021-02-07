@@ -318,9 +318,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	public JsonSchemaGenerator(PropertyStore ps) {
 		super(ps.builder().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
 
-		useBeanDefs = ps.getBoolean(JSONSCHEMA_useBeanDefs);
-		allowNestedExamples = ps.getBoolean(JSONSCHEMA_allowNestedExamples);
-		allowNestedDescriptions = ps.getBoolean(JSONSCHEMA_allowNestedDescriptions);
+		useBeanDefs = ps.getBoolean(JSONSCHEMA_useBeanDefs).orElse(false);
+		allowNestedExamples = ps.getBoolean(JSONSCHEMA_allowNestedExamples).orElse(false);
+		allowNestedDescriptions = ps.getBoolean(JSONSCHEMA_allowNestedDescriptions).orElse(false);
 		beanDefMapper = ps.getInstance(JSONSCHEMA_beanDefMapper, BeanDefMapper.class, BasicBeanDefMapper.class);
 		addExamplesTo = TypeCategory.parse(ps.getString(JSONSCHEMA_addExamplesTo));
 		addDescriptionsTo = TypeCategory.parse(ps.getString(JSONSCHEMA_addDescriptionsTo));

@@ -172,7 +172,7 @@ public class ContextCacheTest {
 		public boolean f3;
 		public C(PropertyStore ps) {
 			super(ps);
-			f3 = getPropertyStore().getBoolean("C.f3.b");
+			f3 = getPropertyStore().getBoolean("C.f3.b").orElse(false);
 		}
 
 		@Override
