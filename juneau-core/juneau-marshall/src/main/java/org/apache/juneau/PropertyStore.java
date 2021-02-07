@@ -428,35 +428,11 @@ public final class PropertyStore {
 	 * Returns the class array property with the specified name.
 	 *
 	 * @param key The property name.
-	 * @return The property value, or an empty array if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public Class<?>[] getClass(String key) {
+	public Optional<Class<?>[]> getClassArray(String key) {
 		Property p = findProperty(key);
-		return p == null ? new Class[0] : p.as(Class[].class);
-	}
-
-	/**
-	 * Returns the class array property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or an empty array if it doesn't exist.
-	 */
-	public Class<?>[] getClassArray(String key, Class<?>[] def) {
-		Property p = findProperty(key);
-		return p == null ? def : p.as(Class[].class);
-	}
-
-	/**
-	 * Returns the class array property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param eType The class type of the elements in the property.
-	 * @return The property value, or an empty array if it doesn't exist.
-	 */
-	public <T> Class<T>[] getClassArray(String key, Class<T> eType) {
-		Property p = findProperty(key);
-		return p == null ? new Class[0] : p.as(Class[].class);
+		return Optional.ofNullable(p == null ? null : p.as(Class[].class));
 	}
 
 	/**

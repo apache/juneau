@@ -2133,7 +2133,7 @@ public class BeanContext extends Context implements MetaProvider {
 		beanMethodVisibility = ps.get(BEAN_beanMethodVisibility, Visibility.class).orElse(PUBLIC);
 		beanFieldVisibility = ps.get(BEAN_beanFieldVisibility, Visibility.class).orElse(PUBLIC);
 
-		notBeanClasses = ps.getClassArray(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
+		notBeanClasses = ps.getClassArray(BEAN_notBeanClasses).orElse(DEFAULT_NOTBEAN_CLASSES);
 
 		propertyNamer = ps.getInstance(BEAN_propertyNamer, PropertyNamer.class, BasicPropertyNamer.class);
 
@@ -2175,7 +2175,7 @@ public class BeanContext extends Context implements MetaProvider {
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
 
-		beanDictionaryClasses = AList.unmodifiable(ps.getClassArray(BEAN_beanDictionary, new Class[0]));
+		beanDictionaryClasses = AList.unmodifiable(ps.getClassArray(BEAN_beanDictionary).orElse(new Class[0]));
 		beanRegistry = new BeanRegistry(this, null);
 	}
 
