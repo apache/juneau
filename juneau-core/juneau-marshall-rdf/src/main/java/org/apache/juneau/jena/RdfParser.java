@@ -152,7 +152,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	private static String getConsumes(PropertyStore ps) {
-		String rdfLanguage = ps.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		String rdfLanguage = ps.get(RDF_language, String.class, "RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML":
 			case "RDF/XML-ABBREV": return "text/xml+rdf";

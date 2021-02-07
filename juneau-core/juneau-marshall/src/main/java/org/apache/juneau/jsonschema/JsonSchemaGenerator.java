@@ -326,7 +326,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		addDescriptionsTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addDescriptionsTo));
 
 		Set<Pattern> ignoreTypes = new LinkedHashSet<>();
-		for (String s : split(ps.getProperty(JSONSCHEMA_ignoreTypes, String.class, "")))
+		for (String s : split(ps.get(JSONSCHEMA_ignoreTypes, String.class, "")))
 			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
 		this.ignoreTypes = ignoreTypes;
 

@@ -2084,7 +2084,7 @@ public class BeanContext extends Context implements MetaProvider {
 		ps = ps.subset(new String[]{"Context","BeanContext"});
 
 		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
-		for (Annotation a : ps.getListProperty(BEAN_annotations, Annotation.class)) {
+		for (Annotation a : ps.getList(BEAN_annotations, Annotation.class)) {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());
 

@@ -3528,22 +3528,22 @@ public class RestContext extends BeanContext {
 			opParams = createRestOperationParams(r, ps, bf).asArray();
 			hookMethodParams = createHookMethodParams(r, ps, bf).asArray();
 
-			uriContext = nullIfEmpty(ps.getStringProperty(REST_uriContext));
-			uriAuthority = nullIfEmpty(ps.getStringProperty(REST_uriAuthority));
-			uriResolution = ps.getProperty(REST_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
-			uriRelativity = ps.getProperty(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+			uriContext = nullIfEmpty(ps.getString(REST_uriContext));
+			uriAuthority = nullIfEmpty(ps.getString(REST_uriAuthority));
+			uriResolution = ps.get(REST_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
+			uriRelativity = ps.get(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 
-			allowBodyParam = ! ps.getBooleanProperty(REST_disableAllowBodyParam);
-			allowedHeaderParams = newCaseInsensitiveSet(ps.getStringPropertyWithNone(REST_allowedHeaderParams, "Accept,Content-Type"));
-			allowedMethodParams = newCaseInsensitiveSet(ps.getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
-			allowedMethodHeaders = newCaseInsensitiveSet(ps.getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
-			renderResponseStackTraces = ps.getBooleanProperty(REST_renderResponseStackTraces);
-			clientVersionHeader = ps.getStringProperty(REST_clientVersionHeader, "X-Client-Version");
+			allowBodyParam = ! ps.getBoolean(REST_disableAllowBodyParam);
+			allowedHeaderParams = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedHeaderParams, "Accept,Content-Type"));
+			allowedMethodParams = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedMethodParams, "HEAD,OPTIONS"));
+			allowedMethodHeaders = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedMethodHeaders, ""));
+			renderResponseStackTraces = ps.getBoolean(REST_renderResponseStackTraces);
+			clientVersionHeader = ps.getString(REST_clientVersionHeader, "X-Client-Version");
 
 			debugEnablement = createDebugEnablement(r, ps, bf);
 
-			consumes = ps.getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
-			produces = ps.getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
+			consumes = ps.getList(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
+			produces = ps.getList(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 			path = builder.getPath();
@@ -3662,7 +3662,7 @@ public class RestContext extends BeanContext {
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
 
-		Object o = properties.getProperty(REST_beanFactory);
+		Object o = properties.get(REST_beanFactory);
 		if (o instanceof BeanFactory)
 			x = (BeanFactory)o;
 
@@ -3699,7 +3699,7 @@ public class RestContext extends BeanContext {
 
 		Class<? extends BeanFactory> c = null;
 
-		Object o = properties.getProperty(REST_beanFactory);
+		Object o = properties.get(REST_beanFactory);
 		if (o instanceof Class)
 			c = (Class<? extends BeanFactory>)o;
 
@@ -3792,7 +3792,7 @@ public class RestContext extends BeanContext {
 		if (resource instanceof FileFinder)
 			x = (FileFinder)resource;
 
-		Object o = properties.getProperty(REST_fileFinder);
+		Object o = properties.get(REST_fileFinder);
 		if (o instanceof FileFinder)
 			x = (FileFinder)o;
 
@@ -3800,7 +3800,7 @@ public class RestContext extends BeanContext {
 			x = beanFactory.getBean(FileFinder.class).orElse(null);
 
 		if (x == null) {
-			o = properties.getProperty(REST_fileFinderDefault);
+			o = properties.get(REST_fileFinderDefault);
 			if (o instanceof FileFinder)
 				x = (FileFinder)o;
 		}
@@ -3841,12 +3841,12 @@ public class RestContext extends BeanContext {
 
 		Class<? extends FileFinder> c = null;
 
-		Object o = properties.getProperty(REST_fileFinder);
+		Object o = properties.get(REST_fileFinder);
 		if (o instanceof Class)
 			c = (Class<? extends FileFinder>)o;
 
 		if (c == null) {
-			o = properties.getProperty(REST_fileFinderDefault);
+			o = properties.get(REST_fileFinderDefault);
 			if (o instanceof Class)
 				c = (Class<? extends FileFinder>)o;
 		}
@@ -3923,14 +3923,14 @@ public class RestContext extends BeanContext {
 		if (resource instanceof StaticFiles)
 			x = (StaticFiles)resource;
 
-		Object o = properties.getProperty(REST_staticFiles);
+		Object o = properties.get(REST_staticFiles);
 		if (o instanceof StaticFiles)
 			x = (StaticFiles)o;
 
 		if (x == null)
 			x = beanFactory.getBean(StaticFiles.class).orElse(null);
 
-		o = properties.getProperty(REST_staticFilesDefault);
+		o = properties.get(REST_staticFilesDefault);
 		if (o instanceof StaticFiles)
 			x = (StaticFiles)o;
 
@@ -3970,12 +3970,12 @@ public class RestContext extends BeanContext {
 
 		Class<? extends StaticFiles> c = null;
 
-		Object o = properties.getProperty(REST_staticFiles);
+		Object o = properties.get(REST_staticFiles);
 		if (o instanceof Class)
 			c = (Class<? extends StaticFiles>)o;
 
 		if (c == null) {
-			o = properties.getProperty(REST_staticFilesDefault);
+			o = properties.get(REST_staticFilesDefault);
 			if (o instanceof Class)
 				c = (Class<? extends StaticFiles>)o;
 		}
@@ -4056,7 +4056,7 @@ public class RestContext extends BeanContext {
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
 
-		Object o = properties.getProperty(REST_callLogger);
+		Object o = properties.get(REST_callLogger);
 		if (o instanceof RestLogger)
 			x = (RestLogger)o;
 
@@ -4064,7 +4064,7 @@ public class RestContext extends BeanContext {
 			x = beanFactory.getBean(RestLogger.class).orElse(null);
 
 		if (x == null) {
-			o = properties.getProperty(REST_callLoggerDefault);
+			o = properties.get(REST_callLoggerDefault);
 			if (o instanceof RestLogger)
 				x = (RestLogger)o;
 		}
@@ -4111,12 +4111,12 @@ public class RestContext extends BeanContext {
 
 		Class<? extends RestLogger> c = null;
 
-		Object o = properties.getProperty(REST_callLogger);
+		Object o = properties.get(REST_callLogger);
 		if (o instanceof Class)
 			c = (Class<? extends RestLogger>)o;
 
 		if (c == null) {
-			o = properties.getProperty(REST_callLoggerDefault);
+			o = properties.get(REST_callLoggerDefault);
 			if (o instanceof Class)
 				c = (Class<? extends RestLogger>)o;
 		}
@@ -4204,7 +4204,7 @@ public class RestContext extends BeanContext {
 
 		ResponseHandlerList x = ResponseHandlerList.create();
 
-		x.append(properties.getInstanceArrayProperty(REST_responseHandlers, ResponseHandler.class, new ResponseHandler[0], beanFactory));
+		x.append(properties.getInstanceArray(REST_responseHandlers, ResponseHandler.class, new ResponseHandler[0], beanFactory));
 
 		if (x.isEmpty())
 			x.append(beanFactory.getBean(ResponseHandlerList.class).orElse(null));
@@ -4291,7 +4291,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected SerializerGroupBuilder createSerializerGroupBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Object[] x = properties.getArrayProperty(REST_serializers, Object.class);
+		Object[] x = properties.getArray(REST_serializers, Object.class);
 
 		if (x == null)
 			x = beanFactory.getBean(Serializer[].class).orElse(null);
@@ -4386,7 +4386,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected ParserGroupBuilder createParserGroupBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Object[] x = properties.getArrayProperty(REST_parsers, Object.class);
+		Object[] x = properties.getArray(REST_parsers, Object.class);
 
 		if (x == null)
 			x = beanFactory.getBean(Parser[].class).orElse(null);
@@ -4456,7 +4456,7 @@ public class RestContext extends BeanContext {
 			x = (HttpPartSerializer)resource;
 
 		if (x == null)
-			x = properties.getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
+			x = properties.getInstance(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
@@ -4521,7 +4521,7 @@ public class RestContext extends BeanContext {
 			x = (HttpPartParser)resource;
 
 		if (x == null)
-			x = properties.getInstanceProperty(REST_partParser, HttpPartParser.class, null, beanFactory);
+			x = properties.getInstance(REST_partParser, HttpPartParser.class, null, beanFactory);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
@@ -4572,7 +4572,7 @@ public class RestContext extends BeanContext {
 
 		RestOperationParamList x = RestOperationParamList.create();
 
-		for (Class<?> c : properties.getListProperty(REST_restOperationParams, Class.class, AList.create()))
+		for (Class<?> c : properties.getList(REST_restOperationParams, Class.class, AList.create()))
 			x.append((Class<? extends RestOperationParam>)c);
 
 		x.append(
@@ -4856,7 +4856,7 @@ public class RestContext extends BeanContext {
 		if (x == null)
 			x = beanFactory.getBean(SwaggerProvider.class).orElse(null);
 
-		Object o = properties.getProperty(REST_swaggerProvider);
+		Object o = properties.get(REST_swaggerProvider);
 		if (o instanceof SwaggerProvider)
 			x = (SwaggerProvider)o;
 
@@ -4898,7 +4898,7 @@ public class RestContext extends BeanContext {
 	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
 
 		Class<? extends SwaggerProvider> c = null;
-		Object o = properties.getProperty(REST_swaggerProvider);
+		Object o = properties.get(REST_swaggerProvider);
 		if (o instanceof Class)
 			c = (Class<? extends SwaggerProvider>)o;
 
@@ -5210,7 +5210,7 @@ public class RestContext extends BeanContext {
 
 		HeaderList x = HeaderList.create();
 
-		x.appendUnique(properties.getInstanceArrayProperty(REST_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -5241,7 +5241,7 @@ public class RestContext extends BeanContext {
 
 		HeaderList x = HeaderList.create();
 
-		x.appendUnique(properties.getInstanceArrayProperty(REST_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -5272,7 +5272,7 @@ public class RestContext extends BeanContext {
 
 		NamedAttributeList x = NamedAttributeList.create();
 
-		x.appendUnique(properties.getInstanceArrayProperty(REST_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(REST_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -5305,7 +5305,7 @@ public class RestContext extends BeanContext {
 		if (resource instanceof DebugEnablement)
 			x = (DebugEnablement)resource;
 
-		Object o = properties.getProperty(REST_debugEnablement);
+		Object o = properties.get(REST_debugEnablement);
 		if (o instanceof DebugEnablement)
 			x = (DebugEnablement)o;
 
@@ -5345,7 +5345,7 @@ public class RestContext extends BeanContext {
 
 		Class<? extends DebugEnablement> c = null;
 
-		Object o = properties.getProperty(REST_debugEnablement);
+		Object o = properties.get(REST_debugEnablement);
 		if (o instanceof Class)
 			c = (Class<? extends DebugEnablement>)o;
 
@@ -5365,12 +5365,12 @@ public class RestContext extends BeanContext {
 			.withDefault(x)
 			.run();
 
-		Enablement defaultDebug = properties.getInstanceProperty(REST_debug, Enablement.class, properties.getInstanceProperty(REST_debugDefault, Enablement.class, null));
+		Enablement defaultDebug = properties.getInstance(REST_debug, Enablement.class, properties.getInstance(REST_debugDefault, Enablement.class, null));
 		if (defaultDebug == null)
 			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
 		x.defaultEnable(defaultDebug);
 
-		for (Map.Entry<String,String> e : splitMap(properties.getStringProperty(REST_debugOn, ""), true).entrySet()) {
+		for (Map.Entry<String,String> e : splitMap(properties.getString(REST_debugOn, ""), true).entrySet()) {
 			String k = e.getKey(), v = e.getValue();
 			if (v.isEmpty())
 				v = "ALWAYS";
@@ -5428,7 +5428,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected MessagesBuilder createMessagesBuilder(Object resource, PropertyStore properties) throws Exception {
 
-		Tuple2<Class<?>,String>[] mbl = properties.getInstanceArrayProperty(REST_messages, Tuple2.class);
+		Tuple2<Class<?>,String>[] mbl = properties.getInstanceArray(REST_messages, Tuple2.class);
 		MessagesBuilder x = null;
 
 		for (int i = mbl.length-1; i >= 0; i--) {
@@ -5513,7 +5513,7 @@ public class RestContext extends BeanContext {
 		RestOperationsBuilder x = RestOperations
 			.create()
 			.beanFactory(beanFactory)
-			.implClass(properties.getClassProperty(REST_restOperationsClass, null));
+			.implClass(properties.getClass(REST_restOperationsClass, null));
 
 		ClassInfo rci = ClassInfo.of(resource);
 
@@ -5537,7 +5537,7 @@ public class RestContext extends BeanContext {
 					RestOperationContext roc = RestOperationContext
 						.create(mi.inner(), this)
 						.beanFactory(beanFactory)
-						.implClass(properties.getClassProperty(REST_restOperationContextClass, RestOperationContext.class))
+						.implClass(properties.getClass(REST_restOperationContextClass, RestOperationContext.class))
 						.build();
 
 					String httpMethod = roc.getHttpMethod();
@@ -5632,7 +5632,7 @@ public class RestContext extends BeanContext {
 		RestChildrenBuilder x = RestChildren
 			.create()
 			.beanFactory(beanFactory)
-			.implClass(properties.getClassProperty(REST_restChildrenClass, RestChildren.class));
+			.implClass(properties.getClass(REST_restChildrenClass, RestChildren.class));
 
 		// Initialize our child resources.
 		for (Object o : getArrayProperty(REST_children, Object.class)) {

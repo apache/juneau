@@ -49,7 +49,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 			Class<? extends RestOperationContext> ic = implClass;
 			if (ic == null)
-				ic = ps.getClassProperty(RESTOP_contextClass, RestOperationContext.class, getDefaultImplClass());
+				ic = ps.getClass(RESTOP_contextClass, RestOperationContext.class, getDefaultImplClass());
 
 			return BeanFactory.of(beanFactory).addBean(RestOperationContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {

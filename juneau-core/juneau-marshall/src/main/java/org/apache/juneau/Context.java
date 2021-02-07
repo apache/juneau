@@ -355,7 +355,7 @@ public abstract class Context {
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Object getProperty(String key) {
-		return propertyStore.getProperty(key);
+		return propertyStore.get(key);
 	}
 
 	/**
@@ -367,7 +367,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final <T> T getProperty(String key, Class<T> c, T def) {
-		return propertyStore.getProperty(key, c, def);
+		return propertyStore.get(key, c, def);
 	}
 
 	/**
@@ -378,7 +378,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final Boolean getBooleanProperty(String key, Boolean def) {
-		return propertyStore.getBooleanProperty(key, def);
+		return propertyStore.getBoolean(key, def);
 	}
 
 	/**
@@ -388,7 +388,7 @@ public abstract class Context {
 	 * @return The property value, or <jk>false</jk> if it doesn't exist.
 	 */
 	public final boolean getBooleanProperty(String key) {
-		return propertyStore.getBooleanProperty(key);
+		return propertyStore.getBoolean(key);
 	}
 
 	/**
@@ -399,7 +399,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final Integer getIntegerProperty(String key, Integer def) {
-		return propertyStore.getIntegerProperty(key, def);
+		return propertyStore.getInteger(key, def);
 	}
 
 	/**
@@ -409,7 +409,7 @@ public abstract class Context {
 	 * @return The property value, or <c>-1</c> if it doesn't exist.
 	 */
 	public final int getIntegerProperty(String key) {
-		return propertyStore.getIntegerProperty(key);
+		return propertyStore.getInteger(key);
 	}
 
 	/**
@@ -420,7 +420,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final Long getLongProperty(String key, Long def) {
-		return propertyStore.getLongProperty(key, def);
+		return propertyStore.getLong(key, def);
 	}
 
 	/**
@@ -430,7 +430,7 @@ public abstract class Context {
 	 * @return The property value, or <c>-1</c> if it doesn't exist.
 	 */
 	public final long getLongProperty(String key) {
-		return propertyStore.getLongProperty(key);
+		return propertyStore.getLong(key);
 	}
 
 	/**
@@ -441,7 +441,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final String getStringProperty(String key, String def) {
-		return propertyStore.getStringProperty(key, def);
+		return propertyStore.getString(key, def);
 	}
 
 	/**
@@ -451,7 +451,7 @@ public abstract class Context {
 	 * @return The property value, or the <jk>null</jk> if it doesn't exist.
 	 */
 	public final String getStringProperty(String key) {
-		return propertyStore.getStringProperty(key);
+		return propertyStore.getString(key);
 	}
 
 	/**
@@ -462,7 +462,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final String[] getCdlProperty(String key, String def) {
-		return propertyStore.getCdlProperty(key, def);
+		return propertyStore.getCdl(key, def);
 	}
 
 	/**
@@ -473,7 +473,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final String getStringPropertyWithNone(String key, String def) {
-		return propertyStore.getStringPropertyWithNone(key, def);
+		return propertyStore.getNoneableString(key, def);
 	}
 
 	/**
@@ -485,7 +485,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type, Class<? extends T> def) {
-		return propertyStore.getClassProperty(key, type, def);
+		return propertyStore.getClass(key, type, def);
 	}
 
 	/**
@@ -496,7 +496,7 @@ public abstract class Context {
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
 	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type) {
-		return propertyStore.getClassProperty(key, type);
+		return propertyStore.getClass(key, type);
 	}
 
 	/**
@@ -507,7 +507,7 @@ public abstract class Context {
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
 	public final <T> T[] getArrayProperty(String key, Class<T> eType) {
-		return propertyStore.getArrayProperty(key, eType);
+		return propertyStore.getArray(key, eType);
 	}
 
 	/**
@@ -519,7 +519,7 @@ public abstract class Context {
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
 	public final <T> T[] getArrayProperty(String key, Class<T> eType, T[] def) {
-		return propertyStore.getArrayProperty(key, eType, def);
+		return propertyStore.getArray(key, eType, def);
 	}
 
 	/**
@@ -529,7 +529,7 @@ public abstract class Context {
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
 	public final Class<?>[] getClassArrayProperty(String key) {
-		return propertyStore.getClassArrayProperty(key);
+		return propertyStore.getClass(key);
 	}
 
 	/**
@@ -540,7 +540,7 @@ public abstract class Context {
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
 	public final Class<?>[] getClassArrayProperty(String key, Class<?>[] def) {
-		return propertyStore.getClassArrayProperty(key, def);
+		return propertyStore.getClassArray(key, def);
 	}
 
 	/**
@@ -551,7 +551,7 @@ public abstract class Context {
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
 	public final <T> Class<T>[] getClassArrayProperty(String key, Class<T> eType) {
-		return propertyStore.getClassArrayProperty(key, eType);
+		return propertyStore.getClassArray(key, eType);
 	}
 
 	/**
@@ -562,7 +562,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	public final <T> Set<T> getSetProperty(String key, Class<T> eType) {
-		return propertyStore.getSetProperty(key, eType);
+		return propertyStore.getSet(key, eType);
 	}
 
 	/**
@@ -574,7 +574,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or the default value if it doesn't exist or is empty.
 	 */
 	public final <T> Set<T> getSetProperty(String key, Class<T> eType, Set<T> def) {
-		return propertyStore.getSetProperty(key, eType, def);
+		return propertyStore.getSet(key, eType, def);
 	}
 
 	/**
@@ -584,7 +584,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	public final Set<Class<?>> getClassSetProperty(String key) {
-		return propertyStore.getClassSetProperty(key);
+		return propertyStore.getClassSet(key);
 	}
 
 	/**
@@ -595,7 +595,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	public final <T> Set<Class<T>> getClassSetProperty(String key, Class<T> eType) {
-		return propertyStore.getClassSetProperty(key, eType);
+		return propertyStore.getClassSet(key, eType);
 	}
 
 	/**
@@ -606,7 +606,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	public final <T> List<T> getListProperty(String key, Class<T> eType) {
-		return propertyStore.getListProperty(key, eType);
+		return propertyStore.getList(key, eType);
 	}
 
 	/**
@@ -618,7 +618,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or the default value if it doesn't exist or is empty.
 	 */
 	public final <T> List<T> getListProperty(String key, Class<T> eType, List<T> def) {
-		return propertyStore.getListProperty(key, eType, def);
+		return propertyStore.getList(key, eType, def);
 	}
 
 	/**
@@ -628,7 +628,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	public final List<Class<?>> getClassListProperty(String key) {
-		return propertyStore.getClassListProperty(key);
+		return propertyStore.getClassList(key);
 	}
 
 	/**
@@ -639,7 +639,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	public final <T> List<Class<T>> getClassListProperty(String key, Class<T> eType) {
-		return propertyStore.getClassListProperty(key, eType);
+		return propertyStore.getClassList(key, eType);
 	}
 
 	/**
@@ -650,7 +650,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	public final <T> Map<String,T> getMapProperty(String key, Class<T> eType) {
-		return propertyStore.getMapProperty(key, eType);
+		return propertyStore.getMap(key, eType);
 	}
 
 	/**
@@ -660,7 +660,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	public final Map<String,Class<?>> getClassMapProperty(String key) {
-		return propertyStore.getClassMapProperty(key);
+		return propertyStore.getClassMap(key);
 	}
 
 	/**
@@ -671,7 +671,7 @@ public abstract class Context {
 	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	public final <T> Map<String,Class<T>> getClassMapProperty(String key, Class<T> eType) {
-		return propertyStore.getClassMapProperty(key, eType);
+		return propertyStore.getClassMap(key, eType);
 	}
 
 	/**
@@ -689,7 +689,7 @@ public abstract class Context {
 	 * @return A new property instance.
 	 */
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
-		return propertyStore.getInstanceProperty(key, type, def);
+		return propertyStore.getInstance(key, type, def);
 	}
 
 	/**
@@ -719,7 +719,7 @@ public abstract class Context {
 	 * @return A new property instance.
 	 */
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def, BeanFactory beanFactory) {
-		return propertyStore.getInstanceProperty(key, type, def, beanFactory);
+		return propertyStore.getInstance(key, type, def, beanFactory);
 	}
 
 	/**
@@ -731,7 +731,7 @@ public abstract class Context {
 	 * @return A new property instance.
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
-		return propertyStore.getInstanceArrayProperty(key, type, def);
+		return propertyStore.getInstanceArray(key, type, def);
 	}
 
 	/**
@@ -743,7 +743,7 @@ public abstract class Context {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type) {
-		return propertyStore.getInstanceArrayProperty(key, type, (T[])Array.newInstance(type, 0));
+		return propertyStore.getInstanceArray(key, type, (T[])Array.newInstance(type, 0));
 	}
 
 	/**
@@ -756,7 +756,7 @@ public abstract class Context {
 	 * @return A new property instance.
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, BeanFactory beanFactory) {
-		return propertyStore.getInstanceArrayProperty(key, type, def, beanFactory);
+		return propertyStore.getInstanceArray(key, type, def, beanFactory);
 	}
 
 	/**
@@ -769,7 +769,7 @@ public abstract class Context {
 	 * @return The set of property keys, or an empty set if the group was not found.
 	 */
 	public Set<String> getPropertyKeys(String group) {
-		return propertyStore.getPropertyKeys(group);
+		return propertyStore.getKeys(group);
 	}
 
 	/**

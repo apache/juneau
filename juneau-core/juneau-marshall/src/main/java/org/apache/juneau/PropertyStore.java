@@ -276,7 +276,7 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
-	public Object getProperty(String key) {
+	public Object get(String key) {
 		Property p = findProperty(key);
 		return p == null ? null : p.value;
 	}
@@ -289,7 +289,7 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public <T> T getProperty(String key, Class<T> c, T def) {
+	public <T> T get(String key, Class<T> c, T def) {
 		Property p = findProperty(key);
 		return p == null ? def : p.as(c);
 	}
@@ -301,8 +301,8 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public final Boolean getBooleanProperty(String key, Boolean def) {
-		return getProperty(key, Boolean.class, def);
+	public final Boolean getBoolean(String key, Boolean def) {
+		return get(key, Boolean.class, def);
 	}
 
 	/**
@@ -311,8 +311,8 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or <jk>false</jk> if it doesn't exist.
 	 */
-	public final boolean getBooleanProperty(String key) {
-		return getBooleanProperty(key, false);
+	public final boolean getBoolean(String key) {
+		return getBoolean(key, false);
 	}
 
 	/**
@@ -322,8 +322,8 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public final Integer getIntegerProperty(String key, Integer def) {
-		return getProperty(key, Integer.class, def);
+	public final Integer getInteger(String key, Integer def) {
+		return get(key, Integer.class, def);
 	}
 
 	/**
@@ -332,8 +332,8 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or <c>-1</c> if it doesn't exist.
 	 */
-	public final int getIntegerProperty(String key) {
-		return getIntegerProperty(key, -1);
+	public final int getInteger(String key) {
+		return getInteger(key, -1);
 	}
 
 	/**
@@ -343,8 +343,8 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public final Long getLongProperty(String key, Long def) {
-		return getProperty(key, Long.class, def);
+	public final Long getLong(String key, Long def) {
+		return get(key, Long.class, def);
 	}
 
 	/**
@@ -353,8 +353,8 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or <c>-1</c> if it doesn't exist.
 	 */
-	public final long getLongProperty(String key) {
-		return getLongProperty(key, -1l);
+	public final long getLong(String key) {
+		return getLong(key, -1l);
 	}
 
 	/**
@@ -364,8 +364,8 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public final String getStringProperty(String key, String def) {
-		return getProperty(key, String.class, def);
+	public final String getString(String key, String def) {
+		return get(key, String.class, def);
 	}
 
 	/**
@@ -374,8 +374,8 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or the <jk>null</jk> if it doesn't exist.
 	 */
-	public final String getStringProperty(String key) {
-		return getStringProperty(key, null);
+	public final String getString(String key) {
+		return getString(key, null);
 	}
 
 	/**
@@ -385,19 +385,19 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public final String[] getCdlProperty(String key, String def) {
-		return StringUtils.split(StringUtils.emptyIfNull(getProperty(key, String.class, def)));
+	public final String[] getCdl(String key, String def) {
+		return StringUtils.split(StringUtils.emptyIfNull(get(key, String.class, def)));
 	}
 
 	/**
-	 * Same as {@link #getStringProperty(String, String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
+	 * Same as {@link #getString(String, String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
 	 *
 	 * @param key The property name.
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public final String getStringPropertyWithNone(String key, String def) {
-		String s = getProperty(key, String.class, def);
+	public final String getNoneableString(String key, String def) {
+		String s = get(key, String.class, def);
 		return "NONE".equalsIgnoreCase(s) ? "" : s;
 	}
 
@@ -409,7 +409,7 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public <T> Class<? extends T> getClassProperty(String key, Class<T> type, Class<? extends T> def) {
+	public <T> Class<? extends T> getClass(String key, Class<T> type, Class<? extends T> def) {
 		Property p = findProperty(key);
 		return p == null ? def : (Class<T>)p.as(Class.class);
 	}
@@ -421,8 +421,8 @@ public final class PropertyStore {
 	 * @param type The class type of the property.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type) {
-		return getClassProperty(key, type, null);
+	public final <T> Class<? extends T> getClass(String key, Class<T> type) {
+		return getClass(key, type, null);
 	}
 
 	/**
@@ -432,7 +432,7 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
-	public <T> T[] getArrayProperty(String key, Class<T> eType) {
+	public <T> T[] getArray(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return (T[]) (p == null ? Array.newInstance(eType, 0) : p.asArray(eType));
 	}
@@ -445,7 +445,7 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
-	public <T> T[] getArrayProperty(String key, Class<T> eType, T[] def) {
+	public <T> T[] getArray(String key, Class<T> eType, T[] def) {
 		Property p = findProperty(key);
 		return p == null ? def : p.asArray(eType);
 	}
@@ -456,7 +456,7 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
-	public Class<?>[] getClassArrayProperty(String key) {
+	public Class<?>[] getClass(String key) {
 		Property p = findProperty(key);
 		return p == null ? new Class[0] : p.as(Class[].class);
 	}
@@ -468,7 +468,7 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
-	public Class<?>[] getClassArrayProperty(String key, Class<?>[] def) {
+	public Class<?>[] getClassArray(String key, Class<?>[] def) {
 		Property p = findProperty(key);
 		return p == null ? def : p.as(Class[].class);
 	}
@@ -480,7 +480,7 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value, or an empty array if it doesn't exist.
 	 */
-	public <T> Class<T>[] getClassArrayProperty(String key, Class<T> eType) {
+	public <T> Class<T>[] getClassArray(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? new Class[0] : p.as(Class[].class);
 	}
@@ -492,7 +492,7 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
-	public <T> Set<T> getSetProperty(String key, Class<T> eType) {
+	public <T> Set<T> getSet(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_SET : p.asSet(eType);
 	}
@@ -505,8 +505,8 @@ public final class PropertyStore {
 	 * @param def The default value if the property doesn't exist or is empty.
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or the default value if it doesn't exist or is empty.
 	 */
-	public <T> Set<T> getSetProperty(String key, Class<T> eType, Set<T> def) {
-		Set<T> l = getSetProperty(key, eType);
+	public <T> Set<T> getSet(String key, Class<T> eType, Set<T> def) {
+		Set<T> l = getSet(key, eType);
 		return (l.isEmpty() ? def : l);
 	}
 
@@ -517,7 +517,7 @@ public final class PropertyStore {
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Set<Class<?>> getClassSetProperty(String key) {
+	public Set<Class<?>> getClassSet(String key) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_SET : (Set)p.asSet(Class.class);
 	}
@@ -530,7 +530,7 @@ public final class PropertyStore {
 	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
-	public <T> Set<Class<T>> getClassSetProperty(String key, Class<T> eType) {
+	public <T> Set<Class<T>> getClassSet(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_SET : (Set)p.asSet(Class.class);
 	}
@@ -542,7 +542,7 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
-	public <T> List<T> getListProperty(String key, Class<T> eType) {
+	public <T> List<T> getList(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_LIST : p.asList(eType);
 	}
@@ -555,8 +555,8 @@ public final class PropertyStore {
 	 * @param def The default value if the property doesn't exist or is empty.
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or the default value if it doesn't exist or is empty.
 	 */
-	public <T> List<T> getListProperty(String key, Class<T> eType, List<T> def) {
-		List<T> l = getListProperty(key, eType);
+	public <T> List<T> getList(String key, Class<T> eType, List<T> def) {
+		List<T> l = getList(key, eType);
 		return (l.isEmpty() ? def : l);
 	}
 
@@ -567,7 +567,7 @@ public final class PropertyStore {
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
-	public List<Class<?>> getClassListProperty(String key) {
+	public List<Class<?>> getClassList(String key) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_LIST : (List)p.asList(Class.class);
 	}
@@ -580,7 +580,7 @@ public final class PropertyStore {
 	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
-	public <T> List<Class<T>> getClassListProperty(String key, Class<T> eType) {
+	public <T> List<Class<T>> getClassList(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_LIST : (List)p.asList(Class.class);
 	}
@@ -592,7 +592,7 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
-	public <T> Map<String,T> getMapProperty(String key, Class<T> eType) {
+	public <T> Map<String,T> getMap(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_MAP : p.asMap(eType);
 	}
@@ -604,7 +604,7 @@ public final class PropertyStore {
 	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map<String,Class<?>> getClassMapProperty(String key) {
+	public Map<String,Class<?>> getClassMap(String key) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_MAP : (Map)p.asMap(Class.class);
 	}
@@ -617,7 +617,7 @@ public final class PropertyStore {
 	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
-	public <T> Map<String,Class<T>> getClassMapProperty(String key, Class<T> eType) {
+	public <T> Map<String,Class<T>> getClassMap(String key, Class<T> eType) {
 		Property p = findProperty(key);
 		return p == null ? Collections.EMPTY_MAP : (Map)p.asMap(Class.class);
 	}
@@ -636,8 +636,8 @@ public final class PropertyStore {
 	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
-		return getInstanceProperty(key, type, def, new BeanFactory());
+	public <T> T getInstance(String key, Class<T> type, Object def) {
+		return getInstance(key, type, def, new BeanFactory());
 	}
 
 	/**
@@ -651,7 +651,7 @@ public final class PropertyStore {
 	 * @param beanFactory The bean factory to use for instantiating the bean.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def, BeanFactory beanFactory) {
+	public <T> T getInstance(String key, Class<T> type, Object def, BeanFactory beanFactory) {
 		Assertions.assertArgNotNull("type", type);
 		Property p = findProperty(key);
 		if (p != null)
@@ -677,8 +677,8 @@ public final class PropertyStore {
 	 * @param type The class type of the property.
 	 * @return A new property instance, or an empty array if it doesn't exist.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type) {
-		return getInstanceArrayProperty(key, type, (T[])Array.newInstance(type, 0));
+	public <T> T[] getInstanceArray(String key, Class<T> type) {
+		return getInstanceArray(key, type, (T[])Array.newInstance(type, 0));
 	}
 
 	/**
@@ -689,8 +689,8 @@ public final class PropertyStore {
 	 * @param def The default object to return if the property doesn't exist.
 	 * @return A new property instance.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
-		return getInstanceArrayProperty(key, type, def, new BeanFactory());
+	public <T> T[] getInstanceArray(String key, Class<T> type, T[] def) {
+		return getInstanceArray(key, type, def, new BeanFactory());
 	}
 
 	/**
@@ -702,7 +702,7 @@ public final class PropertyStore {
 	 * @param beanFactory The bean factory to use for instantiating beans.
 	 * @return A new property instance.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, BeanFactory beanFactory) {
+	public <T> T[] getInstanceArray(String key, Class<T> type, T[] def, BeanFactory beanFactory) {
 		Property p = findProperty(key);
 		return p == null ? def : p.asInstanceArray(type, beanFactory);
 	}
@@ -716,7 +716,7 @@ public final class PropertyStore {
 	 * @param group The group name.
 	 * @return The set of property keys, or an empty set if the group was not found.
 	 */
-	public Set<String> getPropertyKeys(String group) {
+	public Set<String> getKeys(String group) {
 		if (group == null)
 			return Collections.EMPTY_SET;
 		PropertyGroup g = groups.get(group);

@@ -320,7 +320,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	private static String getProduces(PropertyStore ps) {
-		String rdfLanguage = ps.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		String rdfLanguage = ps.get(RDF_language, String.class, "RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML": return "text/xml+rdf+abbrev";
 			case "RDF/XML-ABBREV": return "text/xml+rdf";
