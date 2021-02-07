@@ -133,7 +133,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
 		juneauNs = ps.getInstance(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
 		juneauBpNs = ps.getInstance(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
-		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
+		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
 
 		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
@@ -152,7 +152,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	private static String getConsumes(PropertyStore ps) {
-		String rdfLanguage = ps.get(RDF_language, String.class, "RDF/XML-ABBREV");
+		String rdfLanguage = ps.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML":
 			case "RDF/XML-ABBREV": return "text/xml+rdf";

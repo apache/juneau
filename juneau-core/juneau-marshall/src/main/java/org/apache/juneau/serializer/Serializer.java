@@ -834,9 +834,9 @@ public abstract class Serializer extends BeanTraverseContext {
 		sortCollections = ps.getBoolean(SERIALIZER_sortCollections);
 		sortMaps = ps.getBoolean(SERIALIZER_sortMaps);
 		addRootType = ps.getBoolean(SERIALIZER_addRootType);
-		uriContext = ps.get(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
-		uriResolution = ps.get(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
-		uriRelativity = ps.get(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+		uriContext = ps.get(SERIALIZER_uriContext, UriContext.class).orElse(UriContext.DEFAULT);
+		uriResolution = ps.get(SERIALIZER_uriResolution, UriResolution.class).orElse(UriResolution.NONE);
+		uriRelativity = ps.get(SERIALIZER_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
 		listener = ps.getClass(SERIALIZER_listener, SerializerListener.class);
 
 		this.produces = MediaType.of(produces);

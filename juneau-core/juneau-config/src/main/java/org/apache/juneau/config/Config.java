@@ -461,7 +461,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			.build()
 			.createSession();
 		binaryLineLength = ps.getInteger(CONFIG_binaryLineLength);
-		binaryFormat = ps.get(CONFIG_binaryFormat, BinaryFormat.class, BinaryFormat.BASE64);
+		binaryFormat = ps.get(CONFIG_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.BASE64);
 		multiLineValuesOnSeparateLines = getBoolean(CONFIG_multiLineValuesOnSeparateLines, false);
 		readOnly = getBoolean(CONFIG_readOnly, false);
 	}

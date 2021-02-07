@@ -323,9 +323,22 @@ public final class PropertyStore {
 	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public <T> T get(String key, Class<T> c, T def) {
+	@Deprecated
+	private <T> T get(String key, Class<T> c, T def) {
 		Property p = findProperty(key);
 		return p == null ? def : p.as(c);
+	}
+
+	/**
+	 * Returns the property value with the specified name.
+	 *
+	 * @param key The property name.
+	 * @param c The class to cast or convert the value to.
+	 * @return The property value, never <jk>null</jk>
+	 */
+	public <T> Optional<T> get(String key, Class<T> c) {
+		Property p = findProperty(key);
+		return Optional.ofNullable(p == null ? null : p.as(c));
 	}
 
 	/**

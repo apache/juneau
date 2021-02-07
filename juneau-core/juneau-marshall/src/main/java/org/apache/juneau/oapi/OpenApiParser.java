@@ -75,8 +75,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	 */
 	public OpenApiParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		format = ps.get(OAPI_format, HttpPartFormat.class, HttpPartFormat.NO_FORMAT);
-		collectionFormat = ps.get(OAPI_collectionFormat, HttpPartCollectionFormat.class, HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+		format = ps.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
+		collectionFormat = ps.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}
 
 	@Override /* Context */

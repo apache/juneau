@@ -296,10 +296,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 		looseCollections = ps.getBoolean(RDF_looseCollections);
 		autoDetectNamespaces = ! ps.getBoolean(RDF_disableAutoDetectNamespaces);
 		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
-		juneauNs = ps.get(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
-		juneauBpNs = ps.get(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
-		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
-		namespaces = ps.get(RDF_namespaces, Namespace[].class, new Namespace[0]);
+		juneauNs = ps.get(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
+		juneauBpNs = ps.get(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
+		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
+		namespaces = ps.get(RDF_namespaces, Namespace[].class).orElse(new Namespace[0]);
 		addBeanTypes = ps.getBoolean(RDF_addBeanTypes, ps.getBoolean(SERIALIZER_addBeanTypes));
 
 		ASortedMap<String,Object> m = ASortedMap.create();
@@ -320,7 +320,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	private static String getProduces(PropertyStore ps) {
-		String rdfLanguage = ps.get(RDF_language, String.class, "RDF/XML-ABBREV");
+		String rdfLanguage = ps.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML": return "text/xml+rdf+abbrev";
 			case "RDF/XML-ABBREV": return "text/xml+rdf";

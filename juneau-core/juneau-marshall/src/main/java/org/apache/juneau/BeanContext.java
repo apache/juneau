@@ -2128,10 +2128,10 @@ public class BeanContext extends Context implements MetaProvider {
 		findFluentSetters = ps.getBoolean(BEAN_findFluentSetters);
 		typePropertyName = ps.getString(BEAN_typePropertyName, "_type");
 
-		beanConstructorVisibility = ps.get(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
-		beanClassVisibility = ps.get(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
-		beanMethodVisibility = ps.get(BEAN_beanMethodVisibility, Visibility.class, PUBLIC);
-		beanFieldVisibility = ps.get(BEAN_beanFieldVisibility, Visibility.class, PUBLIC);
+		beanConstructorVisibility = ps.get(BEAN_beanConstructorVisibility, Visibility.class).orElse(PUBLIC);
+		beanClassVisibility = ps.get(BEAN_beanClassVisibility, Visibility.class).orElse(PUBLIC);
+		beanMethodVisibility = ps.get(BEAN_beanMethodVisibility, Visibility.class).orElse(PUBLIC);
+		beanFieldVisibility = ps.get(BEAN_beanFieldVisibility, Visibility.class).orElse(PUBLIC);
 
 		notBeanClasses = ps.getClassArray(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
 

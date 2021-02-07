@@ -270,9 +270,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		try {
 			PropertyStoreBuilder psb = ps.builder();
 			Object restBean = ps.getInstance(MOCKRESTCLIENT_restBean, Object.class, null);
-			String contextPath = ps.get(MOCKRESTCLIENT_contextPath, String.class, null);
-			String servletPath = ps.get(MOCKRESTCLIENT_servletPath, String.class, null);
-			String rootUrl = ps.get(RESTCLIENT_rootUri, String.class, "http://localhost");
+			String contextPath = ps.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
+			String servletPath = ps.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
+			String rootUrl = ps.get(RESTCLIENT_rootUri, String.class).orElse("http://localhost");
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			if (! REST_CONTEXTS.containsKey(c)) {

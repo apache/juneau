@@ -3530,8 +3530,8 @@ public class RestContext extends BeanContext {
 
 			uriContext = nullIfEmpty(ps.getString(REST_uriContext));
 			uriAuthority = nullIfEmpty(ps.getString(REST_uriAuthority));
-			uriResolution = ps.get(REST_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
-			uriRelativity = ps.get(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+			uriResolution = ps.get(REST_uriResolution, UriResolution.class).orElse(UriResolution.ROOT_RELATIVE);
+			uriRelativity = ps.get(REST_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
 
 			allowBodyParam = ! ps.getBoolean(REST_disableAllowBodyParam);
 			allowedHeaderParams = newCaseInsensitiveSet(ps.getNoneableString(REST_allowedHeaderParams, "Accept,Content-Type"));

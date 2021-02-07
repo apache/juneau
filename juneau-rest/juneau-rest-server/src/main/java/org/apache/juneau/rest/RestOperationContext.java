@@ -794,16 +794,16 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			}
 			hierarchyDepth = _hierarchyDepth;
 
-			String _httpMethod = ps.get(RESTOP_httpMethod, String.class, null);
+			String _httpMethod = ps.get(RESTOP_httpMethod, String.class).orElse(null);
 			if (_httpMethod == null)
 				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
 			if ("METHOD".equals(_httpMethod))
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = ps.get(REST_defaultCharset, String.class, "utf-8");
+			defaultCharset = ps.get(REST_defaultCharset, String.class).orElse("utf-8");
 
-			maxInput = StringUtils.parseLongWithSuffix(ps.get(REST_maxInput, String.class, "100M"));
+			maxInput = StringUtils.parseLongWithSuffix(ps.get(REST_maxInput, String.class).orElse("100M"));
 
 			responseMeta = ResponseBeanMeta.create(mi, ps);
 
@@ -995,7 +995,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		if (x.isEmpty())
 			x = beanFactory.getBean(RestMatcherList.class).orElse(x);
 
-		String clientVersion = properties.get(RESTOP_clientVersion, String.class, null);
+		String clientVersion = properties.get(RESTOP_clientVersion, String.class).orElse(null);
 		if (clientVersion != null)
 			x.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 

@@ -90,8 +90,8 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			produces,
 			accept
 		);
-		format = ps.get(OAPI_format, HttpPartFormat.class, HttpPartFormat.NO_FORMAT);
-		collectionFormat = ps.get(OAPI_collectionFormat, HttpPartCollectionFormat.class, HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+		format = ps.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
+		collectionFormat = ps.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}
 
 	/**
