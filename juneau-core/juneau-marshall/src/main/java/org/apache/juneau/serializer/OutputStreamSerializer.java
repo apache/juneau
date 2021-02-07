@@ -122,7 +122,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	protected OutputStreamSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 
-		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
+		binaryFormat = ps.get(OSSERIALIZER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -643,6 +643,21 @@ public final class PropertyStore {
 	/**
 	 * Returns an instance of the specified class, string, or object property.
 	 *
+	 * <p>
+	 * If instantiating a class, assumes the class has a no-arg constructor.
+	 * Otherwise, throws a runtime exception.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return A new property instance or <jk>null</jk> if the property doesn't exist.
+	 */
+	public <T> T getInstance(String key, Class<T> type) {
+		return getInstance(key, type, null);
+	}
+
+	/**
+	 * Returns an instance of the specified class, string, or object property.
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def

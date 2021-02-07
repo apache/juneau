@@ -132,7 +132,7 @@ public class ContextCacheTest {
 
 		public A(PropertyStore ps) {
 			super(ps, true);
-			f1 = getStringProperty("A.f1", "xxx");
+			f1 = getPropertyStore().getString("A.f1", "xxx");
 		}
 
 		@Override
@@ -157,7 +157,7 @@ public class ContextCacheTest {
 
 		public B(PropertyStore ps) {
 			super(ps);
-			f2 = getIntegerProperty("B.f2.i");
+			f2 = getPropertyStore().getInteger("B.f2.i");
 
 		}
 
@@ -172,7 +172,7 @@ public class ContextCacheTest {
 		public boolean f3;
 		public C(PropertyStore ps) {
 			super(ps);
-			f3 = getBooleanProperty("C.f3.b");
+			f3 = getPropertyStore().getBoolean("C.f3.b");
 		}
 
 		@Override

@@ -135,7 +135,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 */
 	public MsgPackSerializer(PropertyStore ps) {
 		super(ps, "octal/msgpack", null);
-		this.addBeanTypes = getBooleanProperty(MSGPACK_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
+		this.addBeanTypes = ps.getBoolean(MSGPACK_addBeanTypes, ps.getBoolean(SERIALIZER_addBeanTypes));
 	}
 
 	@Override /* Context */

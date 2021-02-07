@@ -411,10 +411,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 */
 	public UonSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		encoding = getBooleanProperty(UON_encoding);
-		addBeanTypes = getBooleanProperty(UON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
-		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
-		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "'").charAt(0);
+		encoding = ps.getBoolean(UON_encoding);
+		addBeanTypes = ps.getBoolean(UON_addBeanTypes, ps.getBoolean(SERIALIZER_addBeanTypes));
+		paramFormat = ps.get(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
+		quoteChar = ps.getString(WSERIALIZER_quoteChar, "'").charAt(0);
 	}
 
 	@Override /* Context */

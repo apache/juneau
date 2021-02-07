@@ -106,7 +106,7 @@ public abstract class InputStreamParser extends Parser {
 	 */
 	protected InputStreamParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		binaryFormat = getProperty(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
+		binaryFormat = ps.get(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	@Override /* Parser */

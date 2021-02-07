@@ -252,11 +252,11 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 */
 	public XmlParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		validating = getBooleanProperty(XML_validating);
-		preserveRootElement = getBooleanProperty(XML_preserveRootElement);
-		reporter = getInstanceProperty(XML_reporter, XMLReporter.class);
-		resolver = getInstanceProperty(XML_resolver, XMLResolver.class);
-		eventAllocator = getInstanceProperty(XML_eventAllocator, XMLEventAllocator.class);
+		validating = ps.getBoolean(XML_validating);
+		preserveRootElement = ps.getBoolean(XML_preserveRootElement);
+		reporter = ps.getInstance(XML_reporter, XMLReporter.class);
+		resolver = ps.getInstance(XML_resolver, XMLResolver.class);
+		eventAllocator = ps.getInstance(XML_eventAllocator, XMLEventAllocator.class);
 	}
 
 	@Override /* Context */

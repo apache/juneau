@@ -257,8 +257,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 */
 	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		this.decoding = getBooleanProperty(UON_decoding);
-		this.validateEnd = getBooleanProperty(UON_validateEnd);
+		this.decoding = ps.getBoolean(UON_decoding);
+		this.validateEnd = ps.getBoolean(UON_validateEnd);
 	}
 
 	@Override /* Context */

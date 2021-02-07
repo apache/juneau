@@ -128,17 +128,17 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 */
 	public RdfParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		trimWhitespace = getBooleanProperty(RDF_trimWhitespace);
-		looseCollections = getBooleanProperty(RDF_looseCollections);
-		rdfLanguage = getStringProperty(RDF_language, "RDF/XML-ABBREV");
-		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
-		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
-		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
+		trimWhitespace = ps.getBoolean(RDF_trimWhitespace);
+		looseCollections = ps.getBoolean(RDF_looseCollections);
+		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
+		juneauNs = ps.getInstance(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
+		juneauBpNs = ps.getInstance(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
+		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 
 		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
-				m.put(k.substring(5), getProperty("RdfCommon." + k));
+				m.put(k.substring(5), ps.get("RdfCommon." + k));
 		jenaProperties = m.unmodifiable();
 	}
 

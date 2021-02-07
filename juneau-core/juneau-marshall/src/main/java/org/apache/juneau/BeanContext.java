@@ -2110,36 +2110,36 @@ public class BeanContext extends Context implements MetaProvider {
 		}
 		this.annotations = rmb.build();
 
-		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor);
-		beansRequireSerializable = getBooleanProperty(BEAN_beansRequireSerializable);
-		beansRequireSettersForGetters = getBooleanProperty(BEAN_beansRequireSettersForGetters);
-		beansRequireSomeProperties = ! getBooleanProperty(BEAN_disableBeansRequireSomeProperties);
-		beanMapPutReturnsOldValue = getBooleanProperty(BEAN_beanMapPutReturnsOldValue);
-		useEnumNames = getBooleanProperty(BEAN_useEnumNames);
-		useInterfaceProxies = ! getBooleanProperty(BEAN_disableInterfaceProxies);
-		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties);
-		ignoreUnknownNullBeanProperties = ! getBooleanProperty(BEAN_disableIgnoreUnknownNullBeanProperties);
-		ignoreMissingSetters = ! getBooleanProperty(BEAN_disableIgnoreMissingSetters);
-		ignoreTransientFields = ! getBooleanProperty(BEAN_disableIgnoreTransientFields);
-		ignoreInvocationExceptionsOnGetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnGetters);
-		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters);
-		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector);
-		sortProperties = getBooleanProperty(BEAN_sortProperties);
-		findFluentSetters = getBooleanProperty(BEAN_findFluentSetters);
-		typePropertyName = getStringProperty(BEAN_typePropertyName, "_type");
+		beansRequireDefaultConstructor = ps.getBoolean(BEAN_beansRequireDefaultConstructor);
+		beansRequireSerializable = ps.getBoolean(BEAN_beansRequireSerializable);
+		beansRequireSettersForGetters = ps.getBoolean(BEAN_beansRequireSettersForGetters);
+		beansRequireSomeProperties = ! ps.getBoolean(BEAN_disableBeansRequireSomeProperties);
+		beanMapPutReturnsOldValue = ps.getBoolean(BEAN_beanMapPutReturnsOldValue);
+		useEnumNames = ps.getBoolean(BEAN_useEnumNames);
+		useInterfaceProxies = ! ps.getBoolean(BEAN_disableInterfaceProxies);
+		ignoreUnknownBeanProperties = ps.getBoolean(BEAN_ignoreUnknownBeanProperties);
+		ignoreUnknownNullBeanProperties = ! ps.getBoolean(BEAN_disableIgnoreUnknownNullBeanProperties);
+		ignoreMissingSetters = ! ps.getBoolean(BEAN_disableIgnoreMissingSetters);
+		ignoreTransientFields = ! ps.getBoolean(BEAN_disableIgnoreTransientFields);
+		ignoreInvocationExceptionsOnGetters = ps.getBoolean(BEAN_ignoreInvocationExceptionsOnGetters);
+		ignoreInvocationExceptionsOnSetters = ps.getBoolean(BEAN_ignoreInvocationExceptionsOnSetters);
+		useJavaBeanIntrospector = ps.getBoolean(BEAN_useJavaBeanIntrospector);
+		sortProperties = ps.getBoolean(BEAN_sortProperties);
+		findFluentSetters = ps.getBoolean(BEAN_findFluentSetters);
+		typePropertyName = ps.getString(BEAN_typePropertyName, "_type");
 
-		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
-		beanClassVisibility = getProperty(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
-		beanMethodVisibility = getProperty(BEAN_beanMethodVisibility, Visibility.class, PUBLIC);
-		beanFieldVisibility = getProperty(BEAN_beanFieldVisibility, Visibility.class, PUBLIC);
+		beanConstructorVisibility = ps.get(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
+		beanClassVisibility = ps.get(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
+		beanMethodVisibility = ps.get(BEAN_beanMethodVisibility, Visibility.class, PUBLIC);
+		beanFieldVisibility = ps.get(BEAN_beanFieldVisibility, Visibility.class, PUBLIC);
 
-		notBeanClasses = getClassArrayProperty(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
+		notBeanClasses = ps.getClassArray(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
 
-		propertyNamer = getInstanceProperty(BEAN_propertyNamer, PropertyNamer.class, BasicPropertyNamer.class);
+		propertyNamer = ps.getInstance(BEAN_propertyNamer, PropertyNamer.class, BasicPropertyNamer.class);
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();
-		for (String s : getArrayProperty(BEAN_notBeanPackages, String.class, DEFAULT_NOTBEAN_PACKAGES)) {
+		for (String s : ps.getArray(BEAN_notBeanPackages, String.class, DEFAULT_NOTBEAN_PACKAGES)) {
 			if (s.endsWith(".*"))
 				l2.add(s.substring(0, s.length()-2));
 			else
@@ -2149,7 +2149,7 @@ public class BeanContext extends Context implements MetaProvider {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
-		for (Object o : getListProperty(BEAN_swaps, Object.class)) {
+		for (Object o : ps.getList(BEAN_swaps, Object.class)) {
 			if (o instanceof Class) {
 				ClassInfo ci = ClassInfo.of((Class<?>)o);
 				if (ci.isChildOf(PojoSwap.class))
@@ -2175,7 +2175,7 @@ public class BeanContext extends Context implements MetaProvider {
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
 
-		beanDictionaryClasses = AList.unmodifiable(getClassArrayProperty(BEAN_beanDictionary));
+		beanDictionaryClasses = AList.unmodifiable(ps.getClassArray(BEAN_beanDictionary, new Class[0]));
 		beanRegistry = new BeanRegistry(this, null);
 	}
 
@@ -3538,7 +3538,7 @@ public class BeanContext extends Context implements MetaProvider {
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"BeanContext", 
+				"BeanContext",
 				OMap
 					.create()
 					.filtered()

@@ -254,11 +254,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 */
 	public MockRestClient(PropertyStore ps) {
 		super(preInit(ps));
-		this.restBeanCtx = getInstanceProperty(MOCKRESTCLIENT_restBeanCtx, RestContext.class);
+		ps = getPropertyStore();
+		this.restBeanCtx = ps.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class);
 		this.restObject = restBeanCtx.getResource();
-		this.contextPath = getStringProperty(MOCKRESTCLIENT_contextPath, "");
-		this.servletPath = getStringProperty(MOCKRESTCLIENT_servletPath, "");
-		this.pathVars = getMapProperty(MOCKRESTCLIENT_pathVars, String.class);
+		this.contextPath = ps.getString(MOCKRESTCLIENT_contextPath, "");
+		this.servletPath = ps.getString(MOCKRESTCLIENT_servletPath, "");
+		this.pathVars = ps.getMap(MOCKRESTCLIENT_pathVars, String.class);
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
 		if (ccm instanceof MockHttpClientConnectionManager)

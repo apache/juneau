@@ -164,8 +164,8 @@ public abstract class ReaderParser extends Parser {
 	protected ReaderParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 
-		streamCharset = getProperty(RPARSER_streamCharset, Charset.class, IOUtils.UTF8);
-		fileCharset = getProperty(RPARSER_fileCharset, Charset.class, Charset.defaultCharset());
+		streamCharset = ps.get(RPARSER_streamCharset, Charset.class, IOUtils.UTF8);
+		fileCharset = ps.get(RPARSER_fileCharset, Charset.class, Charset.defaultCharset());
 	}
 
 	@Override /* Parser */

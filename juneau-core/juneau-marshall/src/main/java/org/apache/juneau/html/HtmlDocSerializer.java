@@ -763,22 +763,22 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public HtmlDocSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		style = getArrayProperty(HTMLDOC_style, String.class);
-		stylesheet = getArrayProperty(HTMLDOC_stylesheet, String.class);
-		script = getArrayProperty(HTMLDOC_script, String.class);
-		head = getArrayProperty(HTMLDOC_head, String.class);
-		header = getArrayProperty(HTMLDOC_header, String.class);
-		nav = getArrayProperty(HTMLDOC_nav, String.class);
-		aside = getArrayProperty(HTMLDOC_aside, String.class);
-		asideFloat = getProperty(HTMLDOC_asideFloat, AsideFloat.class, AsideFloat.RIGHT);
-		footer = getArrayProperty(HTMLDOC_footer, String.class);
-		nowrap = getBooleanProperty(HTMLDOC_nowrap);
-		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
-		noResultsMessage = getStringProperty(HTMLDOC_noResultsMessage, "<p>no results</p>");
-		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
+		style = ps.getArray(HTMLDOC_style, String.class);
+		stylesheet = ps.getArray(HTMLDOC_stylesheet, String.class);
+		script = ps.getArray(HTMLDOC_script, String.class);
+		head = ps.getArray(HTMLDOC_head, String.class);
+		header = ps.getArray(HTMLDOC_header, String.class);
+		nav = ps.getArray(HTMLDOC_nav, String.class);
+		aside = ps.getArray(HTMLDOC_aside, String.class);
+		asideFloat = ps.get(HTMLDOC_asideFloat, AsideFloat.class, AsideFloat.RIGHT);
+		footer = ps.getArray(HTMLDOC_footer, String.class);
+		nowrap = ps.getBoolean(HTMLDOC_nowrap);
+		navlinks = ps.getArray(HTMLDOC_navlinks, String.class);
+		noResultsMessage = ps.getString(HTMLDOC_noResultsMessage, "<p>no results</p>");
+		template = ps.getInstance(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
 
 		widgets = new HtmlWidgetMap();
-		widgets.append(getInstanceArrayProperty(HTMLDOC_widgets, HtmlWidget.class));
+		widgets.append(ps.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class));
 	}
 
 	@Override /* Context */
@@ -985,7 +985,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"HtmlDocSerializer", 
+				"HtmlDocSerializer",
 				OMap
 					.create()
 					.filtered()

@@ -378,9 +378,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public JsonSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 
-		simpleMode = getBooleanProperty(JSON_simpleMode);
-		escapeSolidus = getBooleanProperty(JSON_escapeSolidus);
-		addBeanTypes = getBooleanProperty(JSON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
+		simpleMode = ps.getBoolean(JSON_simpleMode);
+		escapeSolidus = ps.getBoolean(JSON_escapeSolidus);
+		addBeanTypes = ps.getBoolean(JSON_addBeanTypes, ps.getBoolean(SERIALIZER_addBeanTypes));
 	}
 
 	@Override /* Context */

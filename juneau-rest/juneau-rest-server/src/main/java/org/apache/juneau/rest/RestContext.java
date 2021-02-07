@@ -5635,7 +5635,7 @@ public class RestContext extends BeanContext {
 			.implClass(properties.getClass(REST_restChildrenClass, RestChildren.class));
 
 		// Initialize our child resources.
-		for (Object o : getArrayProperty(REST_children, Object.class)) {
+		for (Object o : properties.getArray(REST_children, Object.class)) {
 			String path = null;
 
 			if (o instanceof RestChild) {

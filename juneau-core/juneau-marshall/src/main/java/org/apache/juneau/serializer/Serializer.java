@@ -826,18 +826,18 @@ public abstract class Serializer extends BeanTraverseContext {
 	protected Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
 
-		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes);
-		keepNullProperties = getBooleanProperty(SERIALIZER_keepNullProperties);
-		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections);
-		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps);
-		trimStrings = getBooleanProperty(SERIALIZER_trimStrings);
-		sortCollections = getBooleanProperty(SERIALIZER_sortCollections);
-		sortMaps = getBooleanProperty(SERIALIZER_sortMaps);
-		addRootType = getBooleanProperty(SERIALIZER_addRootType);
-		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
-		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
-		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
-		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class);
+		addBeanTypes = ps.getBoolean(SERIALIZER_addBeanTypes);
+		keepNullProperties = ps.getBoolean(SERIALIZER_keepNullProperties);
+		trimEmptyCollections = ps.getBoolean(SERIALIZER_trimEmptyCollections);
+		trimEmptyMaps = ps.getBoolean(SERIALIZER_trimEmptyMaps);
+		trimStrings = ps.getBoolean(SERIALIZER_trimStrings);
+		sortCollections = ps.getBoolean(SERIALIZER_sortCollections);
+		sortMaps = ps.getBoolean(SERIALIZER_sortMaps);
+		addRootType = ps.getBoolean(SERIALIZER_addRootType);
+		uriContext = ps.get(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
+		uriResolution = ps.get(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
+		uriRelativity = ps.get(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+		listener = ps.getClass(SERIALIZER_listener, SerializerListener.class);
 
 		this.produces = MediaType.of(produces);
 		this.accept = accept == null ? MediaRanges.of(produces) : MediaRanges.of(accept);

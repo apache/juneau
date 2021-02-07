@@ -290,22 +290,22 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 */
 	public RdfSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		addLiteralTypes = getBooleanProperty(RDF_addLiteralTypes);
-		addRootProperty = getBooleanProperty(RDF_addRootProperty);
-		useXmlNamespaces = ! getBooleanProperty(RDF_disableUseXmlNamespaces);
-		looseCollections = getBooleanProperty(RDF_looseCollections);
-		autoDetectNamespaces = ! getBooleanProperty(RDF_disableAutoDetectNamespaces);
-		rdfLanguage = getStringProperty(RDF_language, "RDF/XML-ABBREV");
-		juneauNs = getProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
-		juneauBpNs = getProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
-		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
-		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
-		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
+		addLiteralTypes = ps.getBoolean(RDF_addLiteralTypes);
+		addRootProperty = ps.getBoolean(RDF_addRootProperty);
+		useXmlNamespaces = ! ps.getBoolean(RDF_disableUseXmlNamespaces);
+		looseCollections = ps.getBoolean(RDF_looseCollections);
+		autoDetectNamespaces = ! ps.getBoolean(RDF_disableAutoDetectNamespaces);
+		rdfLanguage = ps.getString(RDF_language, "RDF/XML-ABBREV");
+		juneauNs = ps.get(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
+		juneauBpNs = ps.get(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
+		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
+		namespaces = ps.get(RDF_namespaces, Namespace[].class, new Namespace[0]);
+		addBeanTypes = ps.getBoolean(RDF_addBeanTypes, ps.getBoolean(SERIALIZER_addBeanTypes));
 
 		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
-				m.put(k.substring(5), getProperty("RdfCommon." + k));
+				m.put(k.substring(5), ps.get("RdfCommon." + k));
 		jenaProperties = m.unmodifiable();
 	}
 

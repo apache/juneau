@@ -446,22 +446,22 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	public Config(PropertyStore ps) throws IOException {
 		super(ps, true);
 
-		name = getStringProperty(CONFIG_name, "Configuration.cfg");
-		store = getInstanceProperty(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
+		name = ps.getString(CONFIG_name, "Configuration.cfg");
+		store = ps.getInstance(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
 		configMap.register(this);
-		serializer = getInstanceProperty(CONFIG_serializer, WriterSerializer.class, SimpleJsonSerializer.DEFAULT);
-		parser = getInstanceProperty(CONFIG_parser, ReaderParser.class, JsonParser.DEFAULT);
+		serializer = ps.getInstance(CONFIG_serializer, WriterSerializer.class, SimpleJsonSerializer.DEFAULT);
+		parser = ps.getInstance(CONFIG_parser, ReaderParser.class, JsonParser.DEFAULT);
 		beanSession = parser.createBeanSession();
-		encoder = getInstanceProperty(CONFIG_encoder, ConfigEncoder.class, ConfigXorEncoder.INSTANCE);
-		varSession = getInstanceProperty(CONFIG_varResolver, VarResolver.class, VarResolver.DEFAULT)
+		encoder = ps.getInstance(CONFIG_encoder, ConfigEncoder.class, ConfigXorEncoder.INSTANCE);
+		varSession = ps.getInstance(CONFIG_varResolver, VarResolver.class, VarResolver.DEFAULT)
 			.builder()
 			.vars(ConfigVar.class)
 			.bean(Config.class, this)
 			.build()
 			.createSession();
-		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength);
-		binaryFormat = getProperty(CONFIG_binaryFormat, BinaryFormat.class, BinaryFormat.BASE64);
+		binaryLineLength = ps.getInteger(CONFIG_binaryLineLength);
+		binaryFormat = ps.get(CONFIG_binaryFormat, BinaryFormat.class, BinaryFormat.BASE64);
 		multiLineValuesOnSeparateLines = getBoolean(CONFIG_multiLineValuesOnSeparateLines, false);
 		readOnly = getBoolean(CONFIG_readOnly, false);
 	}

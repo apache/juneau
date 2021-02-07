@@ -271,10 +271,10 @@ public abstract class BeanTraverseContext extends BeanContext {
 	protected BeanTraverseContext(PropertyStore ps) {
 		super(ps);
 
-		maxDepth = getIntegerProperty(BEANTRAVERSE_maxDepth, 100);
-		initialDepth = getIntegerProperty(BEANTRAVERSE_initialDepth, 0);
-		ignoreRecursions = getBooleanProperty(BEANTRAVERSE_ignoreRecursions);
-		detectRecursions = getBooleanProperty(BEANTRAVERSE_detectRecursions, ignoreRecursions);
+		maxDepth = ps.getInteger(BEANTRAVERSE_maxDepth, 100);
+		initialDepth = ps.getInteger(BEANTRAVERSE_initialDepth, 0);
+		ignoreRecursions = ps.getBoolean(BEANTRAVERSE_ignoreRecursions);
+		detectRecursions = ps.getBoolean(BEANTRAVERSE_detectRecursions, ignoreRecursions);
 	}
 
 	@Override /* Context */
@@ -351,7 +351,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"BeanTraverseContext", 
+				"BeanTraverseContext",
 				OMap
 					.create()
 					.filtered()

@@ -134,10 +134,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
 				RestContext pc = parentContext.get();
-				set(REST_callLoggerDefault, pc.getProperty(REST_callLoggerDefault));
-				set(REST_debugDefault, pc.getProperty(REST_debugDefault));
-				set(REST_staticFilesDefault, pc.getProperty(REST_staticFilesDefault));
-				set(REST_fileFinderDefault, pc.getProperty(REST_fileFinderDefault));
+				PropertyStore pcps = pc.getPropertyStore();
+				set(REST_callLoggerDefault, pcps.get(REST_callLoggerDefault));
+				set(REST_debugDefault, pcps.get(REST_debugDefault));
+				set(REST_staticFilesDefault, pcps.get(REST_staticFilesDefault));
+				set(REST_fileFinderDefault, pcps.get(REST_fileFinderDefault));
 			}
 
 			beanFactory = createBeanFactory(parentContext, resource);

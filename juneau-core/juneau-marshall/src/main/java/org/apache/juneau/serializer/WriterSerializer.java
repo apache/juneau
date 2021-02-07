@@ -339,11 +339,11 @@ public abstract class WriterSerializer extends Serializer {
 	protected WriterSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 
-		maxIndent = getIntegerProperty(WSERIALIZER_maxIndent, 100);
-		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "\"").charAt(0);
-		streamCharset = getProperty(WSERIALIZER_streamCharset, Charset.class, IOUtils.UTF8);
-		fileCharset = getProperty(WSERIALIZER_fileCharset, Charset.class, Charset.defaultCharset());
-		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace);
+		maxIndent = ps.getInteger(WSERIALIZER_maxIndent, 100);
+		quoteChar = ps.getString(WSERIALIZER_quoteChar, "\"").charAt(0);
+		streamCharset = ps.get(WSERIALIZER_streamCharset, Charset.class, IOUtils.UTF8);
+		fileCharset = ps.get(WSERIALIZER_fileCharset, Charset.class, Charset.defaultCharset());
+		useWhitespace = ps.getBoolean(WSERIALIZER_useWhitespace);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
