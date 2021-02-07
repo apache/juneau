@@ -282,6 +282,40 @@ public final class PropertyStore {
 	}
 
 	/**
+	 * Returns the raw property value with the specified name if the property value type is the one specified.
+	 *
+	 * @param key The property name.
+	 * @param c The expected property type.
+	 * @return The property value, never <jk>null</jk>j.
+	 */
+	public <T> Optional<T> getIfType(String key, Class<T> c) {
+		Property p = findProperty(key);
+		if (p != null) {
+			Object o = p.value;
+			if (c.isInstance(o))
+				Optional.of((T)o);
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Returns the raw property value with the specified name if the property value is a class.
+	 *
+	 * @param key The property name.
+	 * @param c The expected property type.
+	 * @return The property value, never <jk>null</jk>j.
+	 */
+	public <T> Optional<Class<T>> getIfClass(String key, Class<T> c) {
+		Property p = findProperty(key);
+		if (p != null) {
+			Object o = p.value;
+			if (Class.class.isInstance(o))
+				return Optional.of((Class<T>)o);
+		}
+		return Optional.empty();
+	}
+
+	/**
 	 * Returns the property value with the specified name.
 	 *
 	 * @param key The property name.

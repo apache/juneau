@@ -3662,9 +3662,8 @@ public class RestContext extends BeanContext {
 		if (resource instanceof BeanFactory)
 			x = (BeanFactory)resource;
 
-		Object o = properties.get(REST_beanFactory);
-		if (o instanceof BeanFactory)
-			x = (BeanFactory)o;
+		if (x == null)
+			x = properties.getIfType(REST_beanFactory, BeanFactory.class).orElse(null);
 
 		if (x == null)
 			x = createBeanFactoryBuilder(resource, properties, parent).build();
@@ -3694,14 +3693,9 @@ public class RestContext extends BeanContext {
 	 * @return The bean factory builder for this REST resource.
 	 * @throws Exception If bean factory could not be instantiated.
 	 */
-	@SuppressWarnings("unchecked")
 	protected BeanFactoryBuilder createBeanFactoryBuilder(Object resource, PropertyStore properties, RestContext parent) throws Exception {
 
-		Class<? extends BeanFactory> c = null;
-
-		Object o = properties.get(REST_beanFactory);
-		if (o instanceof Class)
-			c = (Class<? extends BeanFactory>)o;
+		Class<? extends BeanFactory> c = properties.getIfClass(REST_beanFactory, BeanFactory.class).orElse(null);
 
 		BeanFactory root = parent == null ? null : parent.rootBeanFactory;
 
@@ -3792,18 +3786,14 @@ public class RestContext extends BeanContext {
 		if (resource instanceof FileFinder)
 			x = (FileFinder)resource;
 
-		Object o = properties.get(REST_fileFinder);
-		if (o instanceof FileFinder)
-			x = (FileFinder)o;
+		if (x == null)
+			x = properties.getIfType(REST_fileFinder, FileFinder.class).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(FileFinder.class).orElse(null);
 
-		if (x == null) {
-			o = properties.get(REST_fileFinderDefault);
-			if (o instanceof FileFinder)
-				x = (FileFinder)o;
-		}
+		if (x == null)
+			x = properties.getIfType(REST_fileFinderDefault, FileFinder.class).orElse(null);
 
 		if (x == null)
 			x = createFileFinderBuilder(resource, properties, beanFactory).build();
@@ -3836,23 +3826,12 @@ public class RestContext extends BeanContext {
 	 * @return The file finder builder for this REST resource.
 	 * @throws Exception If file finder builder could not be instantiated.
 	 */
-	@SuppressWarnings("unchecked")
 	protected FileFinderBuilder createFileFinderBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Class<? extends FileFinder> c = null;
-
-		Object o = properties.get(REST_fileFinder);
-		if (o instanceof Class)
-			c = (Class<? extends FileFinder>)o;
-
-		if (c == null) {
-			o = properties.get(REST_fileFinderDefault);
-			if (o instanceof Class)
-				c = (Class<? extends FileFinder>)o;
-		}
+		Class<? extends FileFinder> c = properties.getIfClass(REST_fileFinder, FileFinder.class).orElse(null);
 
 		if (c == null)
-			c = BasicFileFinder.class;
+			c = properties.getIfClass(REST_fileFinderDefault, FileFinder.class).orElse(null);
 
 		FileFinderBuilder x = FileFinder
 			.create()
@@ -3923,16 +3902,14 @@ public class RestContext extends BeanContext {
 		if (resource instanceof StaticFiles)
 			x = (StaticFiles)resource;
 
-		Object o = properties.get(REST_staticFiles);
-		if (o instanceof StaticFiles)
-			x = (StaticFiles)o;
+		if (x == null)
+			x = properties.getIfType(REST_staticFiles, StaticFiles.class).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(StaticFiles.class).orElse(null);
 
-		o = properties.get(REST_staticFilesDefault);
-		if (o instanceof StaticFiles)
-			x = (StaticFiles)o;
+		if (x == null)
+			x = properties.getIfType(REST_staticFilesDefault, StaticFiles.class).orElse(null);
 
 		if (x == null)
 			x = (StaticFiles)createStaticFilesBuilder(resource, properties, beanFactory).build();
@@ -3968,17 +3945,10 @@ public class RestContext extends BeanContext {
 	@SuppressWarnings("unchecked")
 	protected StaticFilesBuilder createStaticFilesBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Class<? extends StaticFiles> c = null;
+		Class<? extends StaticFiles> c = properties.getIfClass(REST_staticFiles, StaticFiles.class).orElse(null);
 
-		Object o = properties.get(REST_staticFiles);
-		if (o instanceof Class)
-			c = (Class<? extends StaticFiles>)o;
-
-		if (c == null) {
-			o = properties.get(REST_staticFilesDefault);
-			if (o instanceof Class)
-				c = (Class<? extends StaticFiles>)o;
-		}
+		if (c == null)
+			c = properties.getIfClass(REST_staticFilesDefault, StaticFiles.class).orElse(null);
 
 		StaticFilesBuilder x = StaticFiles
 			.create()
@@ -4056,18 +4026,14 @@ public class RestContext extends BeanContext {
 		if (resource instanceof RestLogger)
 			x = (RestLogger)resource;
 
-		Object o = properties.get(REST_callLogger);
-		if (o instanceof RestLogger)
-			x = (RestLogger)o;
+		if (x == null)
+			x = properties.getIfType(REST_callLogger, RestLogger.class).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(RestLogger.class).orElse(null);
 
-		if (x == null) {
-			o = properties.get(REST_callLoggerDefault);
-			if (o instanceof RestLogger)
-				x = (RestLogger)o;
-		}
+		if (x == null)
+			x = properties.getIfType(REST_callLoggerDefault, RestLogger.class).orElse(null);
 
 		if (x == null)
 			x = createCallLoggerBuilder(resource, properties, beanFactory, logger, thrownStore).build();
@@ -4106,23 +4072,12 @@ public class RestContext extends BeanContext {
 	 * @return The call logger builder for this REST resource.
 	 * @throws Exception If call logger builder could not be instantiated.
 	 */
-	@SuppressWarnings("unchecked")
 	protected RestLoggerBuilder createCallLoggerBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory, Logger logger, ThrownStore thrownStore) throws Exception {
 
-		Class<? extends RestLogger> c = null;
-
-		Object o = properties.get(REST_callLogger);
-		if (o instanceof Class)
-			c = (Class<? extends RestLogger>)o;
-
-		if (c == null) {
-			o = properties.get(REST_callLoggerDefault);
-			if (o instanceof Class)
-				c = (Class<? extends RestLogger>)o;
-		}
+		Class<? extends RestLogger> c = properties.getIfClass(REST_callLogger, RestLogger.class).orElse(null);
 
 		if (c == null)
-			c = BasicRestLogger.class;
+			c = properties.getIfClass(REST_callLoggerDefault, RestLogger.class).orElse(null);
 
 		RestLoggerBuilder x = RestLogger
 			.create()
@@ -4856,9 +4811,8 @@ public class RestContext extends BeanContext {
 		if (x == null)
 			x = beanFactory.getBean(SwaggerProvider.class).orElse(null);
 
-		Object o = properties.get(REST_swaggerProvider);
-		if (o instanceof SwaggerProvider)
-			x = (SwaggerProvider)o;
+		if (x == null)
+			 x = properties.getIfType(REST_swaggerProvider, SwaggerProvider.class).orElse(null);
 
 		if (x == null)
 			x = createSwaggerProviderBuilder(resource, properties, beanFactory, fileFinder, messages, varResolver).build();
@@ -4894,13 +4848,9 @@ public class RestContext extends BeanContext {
 	 * @return The REST API builder for this REST resource.
 	 * @throws Exception If REST API builder could not be instantiated.
 	 */
-	@SuppressWarnings("unchecked")
 	protected SwaggerProviderBuilder createSwaggerProviderBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory, FileFinder fileFinder, Messages messages, VarResolver varResolver) throws Exception {
 
-		Class<? extends SwaggerProvider> c = null;
-		Object o = properties.get(REST_swaggerProvider);
-		if (o instanceof Class)
-			c = (Class<? extends SwaggerProvider>)o;
+		Class<? extends SwaggerProvider> c = properties.getIfClass(REST_swaggerProvider, SwaggerProvider.class).orElse(null);
 
 		SwaggerProviderBuilder x = SwaggerProvider
 				.create()
@@ -5305,9 +5255,8 @@ public class RestContext extends BeanContext {
 		if (resource instanceof DebugEnablement)
 			x = (DebugEnablement)resource;
 
-		Object o = properties.get(REST_debugEnablement);
-		if (o instanceof DebugEnablement)
-			x = (DebugEnablement)o;
+		if (x == null)
+			x = properties.getIfType(REST_debugEnablement, DebugEnablement.class).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(DebugEnablement.class).orElse(null);
@@ -5340,17 +5289,9 @@ public class RestContext extends BeanContext {
 	 * @return The debug enablement bean builder for this REST object.
 	 * @throws Exception If bean builder could not be created.
 	 */
-	@SuppressWarnings("unchecked")
 	protected DebugEnablementBuilder createDebugEnablementBuilder(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Class<? extends DebugEnablement> c = null;
-
-		Object o = properties.get(REST_debugEnablement);
-		if (o instanceof Class)
-			c = (Class<? extends DebugEnablement>)o;
-
-		if (c == null)
-			c = BasicDebugEnablement.class;
+		Class<? extends DebugEnablement> c = properties.getIfClass(REST_debugEnablement, DebugEnablement.class).orElse(null);
 
 		DebugEnablementBuilder x = DebugEnablement
 			.create()
