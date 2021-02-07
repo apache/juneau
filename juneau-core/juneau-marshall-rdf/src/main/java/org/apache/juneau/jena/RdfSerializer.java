@@ -305,7 +305,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
-				m.put(k.substring(5), ps.get("RdfCommon." + k));
+				m.put(k.substring(5), ps.get2("RdfCommon." + k).orElse(null));
 		jenaProperties = m.unmodifiable();
 	}
 

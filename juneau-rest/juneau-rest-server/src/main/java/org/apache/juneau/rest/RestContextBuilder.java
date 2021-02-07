@@ -135,10 +135,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			if (parentContext.isPresent()) {
 				RestContext pc = parentContext.get();
 				PropertyStore pcps = pc.getPropertyStore();
-				set(REST_callLoggerDefault, pcps.get(REST_callLoggerDefault));
-				set(REST_debugDefault, pcps.get(REST_debugDefault));
-				set(REST_staticFilesDefault, pcps.get(REST_staticFilesDefault));
-				set(REST_fileFinderDefault, pcps.get(REST_fileFinderDefault));
+				set(REST_callLoggerDefault, pcps.get2(REST_callLoggerDefault).orElse(null));
+				set(REST_debugDefault, pcps.get2(REST_debugDefault).orElse(null));
+				set(REST_staticFilesDefault, pcps.get2(REST_staticFilesDefault).orElse(null));
+				set(REST_fileFinderDefault, pcps.get2(REST_fileFinderDefault).orElse(null));
 			}
 
 			beanFactory = createBeanFactory(parentContext, resource);
