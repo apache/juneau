@@ -57,7 +57,7 @@ public class VarResolverSession {
 	 */
 	public VarResolverSession(VarResolverContext context, BeanFactory beanFactory) {
 		this.context = context;
-		this.beanFactory = BeanFactory.of(beanFactory, null);
+		this.beanFactory = BeanFactory.of(beanFactory);
 	}
 
 	/**

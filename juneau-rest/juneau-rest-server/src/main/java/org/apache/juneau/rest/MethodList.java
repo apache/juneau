@@ -10,43 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.springboot;
+package org.apache.juneau.rest;
 
+import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.cp.BeanFactory;
-import org.springframework.context.*;
-
 /**
- * A bean factory that uses Spring bean resolution to find beans if they're not already in this factory.
+ * A simple list of {@link Method} objects.
  */
-public class SpringBeanFactory extends BeanFactory {
+public class MethodList extends ArrayList<Method> {
+	private static final long serialVersionUID = 1L;
 
-	private final Optional<ApplicationContext> appContext;
+	/**
+	 * Creator.
+	 *
+	 * @param methods The methods to add to this list.
+	 * @return A new list of methods.
+	 */
+	public static MethodList of(Collection<Method> methods) {
+		return new MethodList(methods);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public MethodList() {}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param appContext The Spring application context used to resolve beans.
-	 * @param parent The parent REST object bean factory.  Can be <jk>null</jk>.
-	 * @param resource The REST object.  Can be <jk>null</jk>.
+	 * @param methods The methods to add to this list.
 	 */
-	public SpringBeanFactory(Optional<ApplicationContext> appContext, Optional<BeanFactory> parent, Object resource) {
-		super(create().parent(parent.orElse(null)).outer(resource));
-		this.appContext = appContext;
+	public MethodList(Collection<Method> methods) {
+		super(methods);
 	}
 
-	@Override
-	public <T> Optional<T> getBean(Class<T> c) {
-		try {
-			Optional<T> o = super.getBean(c);
-			if (o.isPresent())
-				return o;
-			if (appContext.isPresent())
-				return Optional.ofNullable(appContext.get().getBean(c));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return Optional.empty();
-	}
 }

@@ -80,7 +80,7 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a05_builder_beanFactory() throws Exception {
-		BeanFactory bf = BeanFactory.create();
+		BeanFactory bf = BeanFactory.create().build();
 
 		assertThrown(()->MethodExecStore.create().beanFactory(bf).implClass(A5b.class).build()).contains("Public constructor found but could not find prerequisites: A5a");
 		assertObject(MethodExecStore.create().beanFactory(bf).implClass(A5c.class).build()).isType(A5c.class);
@@ -111,7 +111,7 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a06_builder_statsImplClass() throws Exception {
-		BeanFactory bf = BeanFactory.create();
+		BeanFactory bf = BeanFactory.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
 		assertThrown(()->MethodExecStore.create().beanFactory(bf).statsImplClass(A6b.class).build().getStats(m)).contains("Public constructor found but could not find prerequisites: A6a");
@@ -133,7 +133,7 @@ public class MethodExecStore_Test {
 		assertObject(store.getThrownStore()).isSameObjectAs(s);
 
 		ThrownStore s2 = ThrownStore.create().build();
-		BeanFactory bf = BeanFactory.create().addBean(ThrownStore.class, s2);
+		BeanFactory bf = BeanFactory.create().build().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create().beanFactory(bf).build();
 		assertObject(store.getThrownStore()).isSameObjectAs(s2);
 	}

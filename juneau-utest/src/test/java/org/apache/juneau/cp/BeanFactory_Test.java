@@ -352,7 +352,7 @@ public class BeanFactory_Test {
 
 	@Test
 	public void e01_beanCreateMethodFinder() throws Exception {
-		BeanFactory bf = BeanFactory.create();
+		BeanFactory bf = BeanFactory.create().build();
 		E1 x = new E1();
 
 		assertObject(bf.beanCreateMethodFinder(E.class, x).find("createA0").run()).doesNotExist();

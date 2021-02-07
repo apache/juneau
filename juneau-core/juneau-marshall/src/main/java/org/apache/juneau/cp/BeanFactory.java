@@ -43,21 +43,10 @@ public class BeanFactory {
 	/**
 	 * Static creator.
 	 *
-	 * @return A new {@link BeanFactory} object.
+	 * @return A new {@link BeanFactoryBuilder} object.
 	 */
-	public static BeanFactory create() {
-		return new BeanFactory();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
-	 * @param outer Outer bean context to use when instantiating local classes.  Can be <jk>null</jk>.
-	 * @return A new {@link BeanFactory} object.
-	 */
-	public static BeanFactory of(BeanFactory parent, Object outer) {
-		return new BeanFactory(parent, outer);
+	public static BeanFactoryBuilder create() {
+		return new BeanFactoryBuilder();
 	}
 
 	/**
@@ -67,35 +56,36 @@ public class BeanFactory {
 	 * @return A new {@link BeanFactory} object.
 	 */
 	public static BeanFactory of(BeanFactory parent) {
-		return new BeanFactory(parent, null);
+		return create().parent(parent).build();
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
+	 * @param outer The outer bean used when instantiating inner classes.  Can be <jk>null</jk>.
+	 * @return A new {@link BeanFactory} object.
+	 */
+	public static BeanFactory of(BeanFactory parent, Object outer) {
+		return create().parent(parent).outer(outer).build();
 	}
 
 	/**
 	 * Default constructor.
 	 */
 	public BeanFactory() {
-		this(Optional.empty(), Optional.empty());
+		this.parent = Optional.empty();
+		this.outer = Optional.empty();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
-	 * @param outer Outer bean context to use when instantiating local classes.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this bean.
 	 */
-	public BeanFactory(BeanFactory parent, Object outer) {
-		this(Optional.ofNullable(parent), Optional.ofNullable(outer));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param parent - Optional parent bean factory.
-	 * @param outer Outer bean context to use when instantiating local classes.
-	 */
-	public BeanFactory(Optional<BeanFactory> parent, Optional<Object> outer) {
-		this.parent = parent;
-		this.outer = outer;
+	public BeanFactory(BeanFactoryBuilder builder) {
+		this.parent = Optional.ofNullable(builder.parent);
+		this.outer = Optional.ofNullable(builder.outer);
 	}
 
 	/**

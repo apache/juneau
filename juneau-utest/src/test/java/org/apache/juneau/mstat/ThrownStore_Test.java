@@ -237,7 +237,7 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b05_builder_beanFactory() throws Exception {
-		BeanFactory bf = BeanFactory.create();
+		BeanFactory bf = BeanFactory.create().build();
 
 		assertThrown(()->ThrownStore.create().beanFactory(bf).implClass(B5b.class).build()).contains("Public constructor found but could not find prerequisites: B5a");
 		assertObject(ThrownStore.create().beanFactory(bf).implClass(B5c.class).build()).isType(B5c.class);
@@ -267,7 +267,7 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b06_statsImplClass() throws Exception {
-		BeanFactory bf = BeanFactory.create();
+		BeanFactory bf = BeanFactory.create().build();
 
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
