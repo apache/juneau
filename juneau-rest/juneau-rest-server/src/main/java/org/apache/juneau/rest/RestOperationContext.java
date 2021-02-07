@@ -809,7 +809,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 			opParams = context.findRestOperationParams(mi.inner(), bf);
 
-			this.priority = ps.getInteger(RESTOP_priority, 0);
+			this.priority = ps.getInteger(RESTOP_priority).orElse(0);
 
 			this.callLogger = context.getCallLogger();
 		} catch (ServletException e) {

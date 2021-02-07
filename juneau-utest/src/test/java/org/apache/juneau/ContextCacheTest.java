@@ -157,7 +157,7 @@ public class ContextCacheTest {
 
 		public B(PropertyStore ps) {
 			super(ps);
-			f2 = getPropertyStore().getInteger("B.f2.i");
+			f2 = getPropertyStore().getInteger("B.f2.i").orElse(-1);
 
 		}
 

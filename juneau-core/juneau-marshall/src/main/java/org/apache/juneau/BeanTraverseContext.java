@@ -271,8 +271,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	protected BeanTraverseContext(PropertyStore ps) {
 		super(ps);
 
-		maxDepth = ps.getInteger(BEANTRAVERSE_maxDepth, 100);
-		initialDepth = ps.getInteger(BEANTRAVERSE_initialDepth, 0);
+		maxDepth = ps.getInteger(BEANTRAVERSE_maxDepth).orElse(100);
+		initialDepth = ps.getInteger(BEANTRAVERSE_initialDepth).orElse(0);
 		ignoreRecursions = ps.getBoolean(BEANTRAVERSE_ignoreRecursions).orElse(false);
 		detectRecursions = ps.getBoolean(BEANTRAVERSE_detectRecursions).orElse(ignoreRecursions);
 	}

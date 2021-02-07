@@ -542,7 +542,7 @@ public abstract class Parser extends BeanContext {
 		trimStrings = ps.getBoolean(PARSER_trimStrings).orElse(false);
 		strict = ps.getBoolean(PARSER_strict).orElse(false);
 		autoCloseStreams = ps.getBoolean(PARSER_autoCloseStreams).orElse(false);
-		debugOutputLines = ps.getInteger(PARSER_debugOutputLines, 5);
+		debugOutputLines = ps.getInteger(PARSER_debugOutputLines).orElse(5);
 		unbuffered = ps.getBoolean(PARSER_unbuffered).orElse(false);
 		listener = ps.getClass(PARSER_listener, ParserListener.class);
 		this.consumes = new MediaType[consumes.length];

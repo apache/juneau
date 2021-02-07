@@ -339,7 +339,7 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, def)</code>.
+	 * Shortcut for calling <code>get(key, Boolean.<jk>class</jk>)</code>.
 	 *
 	 * @param key The property name.
 	 * @return The property value, never <jk>null</jk>.
@@ -364,45 +364,23 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, def)</code>.
+	 * Shortcut for calling <code>get(key, Integer.<jk>class</jk>)</code>.
 	 *
 	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public final Integer getInteger(String key, Integer def) {
-		return get(key, Integer.class, def);
+	public final Optional<Integer> getInteger(String key) {
+		return Optional.ofNullable(find(key, Integer.class));
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, -1)</code>.
+	 * Shortcut for calling <code>get(key, Long.<jk>class</jk>)</code>.
 	 *
 	 * @param key The property name.
-	 * @return The property value, or <c>-1</c> if it doesn't exist.
+	 * @return The property value, never <jk>null</jk>.
 	 */
-	public final int getInteger(String key) {
-		return getInteger(key, -1);
-	}
-
-	/**
-	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, def)</code>.
-	 *
-	 * @param key The property name.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
-	 */
-	public final Long getLong(String key, Long def) {
-		return get(key, Long.class, def);
-	}
-
-	/**
-	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, -1)</code>.
-	 *
-	 * @param key The property name.
-	 * @return The property value, or <c>-1</c> if it doesn't exist.
-	 */
-	public final long getLong(String key) {
-		return getLong(key, -1l);
+	public final Optional<Long> getLong(String key) {
+		return Optional.ofNullable(find(key, Long.class));
 	}
 
 	/**
