@@ -49,12 +49,21 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 			Class<? extends RestOperationContext> ic = implClass;
 			if (ic == null)
-				ic = ps.getClassProperty(RESTOP_contextClass, RestOperationContext.class, RestOperationContext.class);
+				ic = ps.getClassProperty(RESTOP_contextClass, RestOperationContext.class, getDefaultImplClass());
 
 			return BeanFactory.of(beanFactory).addBean(RestOperationContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
+	}
+
+	/**
+	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
+	 *
+	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
+	 */
+	protected Class<? extends RestOperationContext> getDefaultImplClass() {
+		return RestOperationContext.class;
 	}
 
 	RestOperationContextBuilder(java.lang.reflect.Method method, RestContext context) {
