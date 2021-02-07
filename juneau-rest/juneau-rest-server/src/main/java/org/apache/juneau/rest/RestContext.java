@@ -5454,7 +5454,7 @@ public class RestContext extends BeanContext {
 		RestOperationsBuilder x = RestOperations
 			.create()
 			.beanFactory(beanFactory)
-			.implClass(properties.getClass(REST_restOperationsClass, null));
+			.implClass(properties.getClass(REST_restOperationsClass, RestOperations.class).orElse(null));
 
 		ClassInfo rci = ClassInfo.of(resource);
 
@@ -5478,7 +5478,7 @@ public class RestContext extends BeanContext {
 					RestOperationContext roc = RestOperationContext
 						.create(mi.inner(), this)
 						.beanFactory(beanFactory)
-						.implClass(properties.getClass(REST_restOperationContextClass, RestOperationContext.class))
+						.implClass(properties.getClass(REST_restOperationContextClass, RestOperationContext.class).orElse(null))
 						.build();
 
 					String httpMethod = roc.getHttpMethod();
@@ -5573,7 +5573,7 @@ public class RestContext extends BeanContext {
 		RestChildrenBuilder x = RestChildren
 			.create()
 			.beanFactory(beanFactory)
-			.implClass(properties.getClass(REST_restChildrenClass, RestChildren.class));
+			.implClass(properties.getClass(REST_restChildrenClass, RestChildren.class).orElse(null));
 
 		// Initialize our child resources.
 		for (Object o : properties.getArray(REST_children, Object.class)) {

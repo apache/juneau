@@ -544,7 +544,7 @@ public abstract class Parser extends BeanContext {
 		autoCloseStreams = ps.getBoolean(PARSER_autoCloseStreams).orElse(false);
 		debugOutputLines = ps.getInteger(PARSER_debugOutputLines).orElse(5);
 		unbuffered = ps.getBoolean(PARSER_unbuffered).orElse(false);
-		listener = ps.getClass(PARSER_listener, ParserListener.class);
+		listener = ps.getClass(PARSER_listener, ParserListener.class).orElse(null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
 			this.consumes[i] = MediaType.of(consumes[i]);

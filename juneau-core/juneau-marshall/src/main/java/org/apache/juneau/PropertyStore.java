@@ -405,23 +405,11 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def The default value.
 	 * @return The property value, or the default value if it doesn't exist.
 	 */
-	public <T> Class<? extends T> getClass(String key, Class<T> type, Class<? extends T> def) {
+	public <T> Optional<Class<? extends T>> getClass(String key, Class<T> type) {
 		Property p = findProperty(key);
-		return p == null ? def : (Class<T>)p.as(Class.class);
-	}
-
-	/**
-	 * Returns the class property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @return The property value, or <jk>null</jk> if it doesn't exist.
-	 */
-	public final <T> Class<? extends T> getClass(String key, Class<T> type) {
-		return getClass(key, type, null);
+		return Optional.ofNullable(p == null ? null : (Class<T>)p.as(Class.class));
 	}
 
 	/**

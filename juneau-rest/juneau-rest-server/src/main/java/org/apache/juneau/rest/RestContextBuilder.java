@@ -184,7 +184,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			Class<? extends RestContext> c = getPropertyStore().getClass(REST_contextClass, RestContext.class, getDefaultImplClass());
+			Class<? extends RestContext> c = getPropertyStore().getClass(REST_contextClass, RestContext.class).orElse(getDefaultImplClass());
 			return BeanFactory.of(beanFactory, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
