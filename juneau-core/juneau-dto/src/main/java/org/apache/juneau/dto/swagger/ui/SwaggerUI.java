@@ -93,7 +93,8 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 		Session(BeanSession bs, Swagger swagger) {
 			this.swagger = swagger.copy();
-			this.resolveRefsMaxDepth = bs.getProperty(SWAGGERUI_resolveRefsMaxDepth, Integer.class, 1);
+			SessionProperties sp = bs.getSessionProperties();
+			this.resolveRefsMaxDepth = sp.getInteger(SWAGGERUI_resolveRefsMaxDepth).orElse(1);
 		}
 	}
 

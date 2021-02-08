@@ -70,9 +70,10 @@ public class Rest_RVars_Test {
 				return new WriterSerializerSession(args) {
 					@Override /* SerializerSession */
 					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+						SessionProperties sp = getSessionProperties();
 						out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
-							getProperty("A1"), getProperty("A2"), getProperty("B1"), getProperty("B2"), getProperty("C"),
-							getProperty("R1a"), getProperty("R1b"), getProperty("R2"), getProperty("R3"), getProperty("R4"), getProperty("R5"), getProperty("R6")));
+							sp.get("A1").orElse(null), sp.get("A2").orElse(null), sp.get("B1").orElse(null), sp.get("B2").orElse(null), sp.get("C").orElse(null),
+							sp.get("R1a").orElse(null), sp.get("R1b").orElse(null), sp.get("R2").orElse(null), sp.get("R3").orElse(null), sp.get("R4").orElse(null), sp.get("R5").orElse(null), sp.get("R6").orElse(null)));
 					}
 				};
 			}

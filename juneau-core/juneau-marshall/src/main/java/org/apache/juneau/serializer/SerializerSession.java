@@ -77,8 +77,9 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		super(ctx, args == null ? SerializerSessionArgs.DEFAULT : args);
 		this.ctx = ctx;
 		args = args == null ? SerializerSessionArgs.DEFAULT : args;
+		SessionProperties sp = getSessionProperties();
 		this.javaMethod = args.javaMethod;
-		this.uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), getProperty(SERIALIZER_uriContext, UriContext.class, ctx.getUriContext()));
+		this.uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), sp.get(SERIALIZER_uriContext, UriContext.class).orElse(ctx.getUriContext()));
 		this.listener = castOrCreate(SerializerListener.class, ctx.getListener());
 		this.vrs = args.resolver;
 	}

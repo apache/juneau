@@ -13,19 +13,15 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.Context.*;
 
-import java.lang.reflect.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -36,7 +32,7 @@ import org.apache.juneau.reflect.*;
  */
 public abstract class Session {
 
-	private final OMap properties;
+	private final SessionProperties properties;
 	private Map<String,Object> cache;
 	private List<String> warnings;                 // Any warnings encountered.
 
@@ -56,149 +52,20 @@ public abstract class Session {
 	 */
 	protected Session(Context ctx, SessionArgs args) {
 		this.ctx = ctx;
-		this.properties = args.properties == null ? OMap.EMPTY_MAP : args.properties;
-		debug = getProperty(CONTEXT_debug, Boolean.class, ctx.isDebug());
-		locale = getProperty(CONTEXT_locale, Locale.class, ctx.getDefaultLocale());
-		timeZone = getProperty(CONTEXT_timeZone, TimeZone.class, ctx.getDefaultTimeZone());
-		mediaType = getProperty(CONTEXT_mediaType, MediaType.class, ctx.getDefaultMediaType());
+		SessionProperties sp = this.properties = new SessionProperties(args.properties == null ? OMap.EMPTY_MAP : args.properties);
+		debug = sp.get(CONTEXT_debug, Boolean.class).orElse(ctx.isDebug());
+		locale = sp.get(CONTEXT_locale, Locale.class).orElse(ctx.getDefaultLocale());
+		timeZone = sp.get(CONTEXT_timeZone, TimeZone.class).orElse(ctx.getDefaultTimeZone());
+		mediaType = sp.get(CONTEXT_mediaType, MediaType.class).orElse(ctx.getDefaultMediaType());
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this session has the specified property defined.
+	 * Returns the session properties on this session.
 	 *
-	 * @param key The property key.
-	 * @return <jk>true</jk> if this session has the specified property defined.
+	 * @return The session properties on this session.  Never <jk>null</jk>.
 	 */
-	public final boolean hasProperty(String key) {
-		return properties != null && properties.containsKey(key);
-	}
-
-	/**
-	 * Returns the session property with the specified key.
-	 *
-	 * <p>
-	 * The returned type is the raw value of the property.
-	 *
-	 * @param key The property key.
-	 * @return The session property, or <jk>null</jk> if the property does not exist.
-	 */
-	public final Object getProperty(String key) {
-		if (properties == null)
-			return null;
-		return properties.get(key);
-	}
-
-	/**
-	 * Returns the session property with the specified key and type.
-	 *
-	 * @param key The property key.
-	 * @param type The type to convert the property to.
-	 * @param def The default value if the session property does not exist or is <jk>null</jk>.
-	 * @return The session property.
-	 */
-	@SuppressWarnings("unchecked")
-	public final <T> T getProperty(String key, Class<T> type, T def) {
-		if (properties == null)
-			return def;
-		Object o = properties.get(key);
-		if (o == null)
-			return def;
-		type = (Class<T>)ClassInfo.of(type).getWrapperIfPrimitive();
-		T t = properties.get(key, type);
-		return t == null ? def : t;
-	}
-
-	/**
-	 * Same as {@link #getProperty(String, Class, Object)} but allows for more than one default value.
-	 *
-	 * @param key The property key.
-	 * @param type The type to convert the property to.
-	 * @param def
-	 * 	The default values if the session property does not exist or is <jk>null</jk>.
-	 * 	The first non-null value is returned.
-	 * @return The session property.
-	 */
-	@SafeVarargs
-	public final <T> T getProperty(String key, Class<T> type, T...def) {
-		return getProperty(key, type, ObjectUtils.firstNonNull(def));
-	}
-
-	/**
-	 * Returns the session class property with the specified name.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def The default value.
-	 * @return The property value, or the default value if it doesn't exist.
-	 */
-	@SuppressWarnings("unchecked")
-	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type, Class<? extends T> def) {
-		return getProperty(key, Class.class, def);
-	}
-
-	/**
-	 * Returns an instantiation of the specified class property.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default instance or class to instantiate if the property doesn't exist.
-	 * @return A new property instance.
-	 */
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
-		return newInstance(type, getProperty(key), def);
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @return A new property instance.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
-		Object o = getProperty(key);
-		T[] t = null;
-		if (o == null)
-			t = def;
-		else if (o.getClass().isArray()) {
-			if (o.getClass().getComponentType() == type)
-				t = (T[])o;
-			else {
-				t = (T[])Array.newInstance(type, Array.getLength(o));
-				for (int i = 0; i < Array.getLength(o); i++)
-					t[i] = newInstance(type, Array.get(o, i), null);
-			}
-		} else if (o instanceof Collection) {
-			Collection<?> c = (Collection<?>)o;
-			t = (T[])Array.newInstance(type, c.size());
-			int i = 0;
-			for (Object o2 : c)
-				t[i++] = newInstance(type, o2, null);
-		}
-		if (t != null)
-			return t;
-		throw new ConfigException("Could not instantiate property ''{0}'' as type {1}", key, type);
-	}
-
-	/**
-	 * Returns the session properties.
-	 *
-	 * @return The session properties passed in through the constructor.
-	 */
-	protected OMap getProperties() {
+	public final SessionProperties getSessionProperties() {
 		return properties;
-	}
-
-	/**
-	 * Returns the session property keys.
-	 *
-	 * @return The session property keys passed in through the constructor.
-	 */
-	public Set<String> getPropertyKeys() {
-		return properties.keySet();
 	}
 
 	/**
@@ -208,25 +75,6 @@ public abstract class Session {
 	 */
 	public Context getContext() {
 		return ctx;
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> T newInstance(Class<T> type, Object o, Object def) {
-		T t = null;
-		if (o == null) {
-			if (def == null)
-				return null;
-			t = castOrCreate(type, def);
-		}
-		else if (type.isInstance(o))
-			t = (T)o;
-		else if (o.getClass() == Class.class)
-			t = castOrCreate(type, o);
-		else if (o.getClass() == String.class)
-			t = ClassUtils.fromString(type, o.toString());
-		if (t != null)
-			return t;
-		throw new ConfigException("Could not instantiate type ''{0}'' as type {1}", o, type);
 	}
 
 	/**

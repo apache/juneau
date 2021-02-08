@@ -17,6 +17,7 @@ import static org.apache.juneau.soap.SoapXmlSerializer.*;
 import java.io.IOException;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -47,7 +48,8 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	public SoapXmlSerializerSession(SoapXmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 
-		soapAction = getProperty(SOAPXML_SOAPAction, String.class, ctx.soapAction);
+		SessionProperties sp = getSessionProperties();
+		soapAction = sp.get(SOAPXML_SOAPAction, String.class).orElse(ctx.soapAction);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

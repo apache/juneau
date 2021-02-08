@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -60,9 +61,10 @@ public abstract class ParserSession extends BeanSession {
 		super(ctx, args == null ? ParserSessionArgs.DEFAULT : args);
 		args = args == null ? ParserSessionArgs.DEFAULT : args;
 		this.ctx = ctx;
+		SessionProperties sp = getSessionProperties();
 		javaMethod = args.javaMethod;
 		outer = args.outer;
-		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.getListener());
+		listener = sp.getInstance(PARSER_listener, ParserListener.class).orElseGet(()->ClassUtils.castOrCreate(ParserListener.class, ctx.getListener()));
 	}
 
 	/**

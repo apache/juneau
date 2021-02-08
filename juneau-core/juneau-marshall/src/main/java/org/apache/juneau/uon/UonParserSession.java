@@ -56,7 +56,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		decoding = getProperty(UON_decoding, boolean.class, ctx.isDecoding());
+		SessionProperties sp = getSessionProperties();
+		decoding = sp.get(UON_decoding, boolean.class).orElse(ctx.isDecoding());
 	}
 
 	/**

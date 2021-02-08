@@ -17,6 +17,7 @@ import static org.apache.juneau.serializer.WriterSerializer.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -56,9 +57,10 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		this.streamCharset = getProperty(WSERIALIZER_streamCharset, Charset.class, ctx.getStreamCharset());
-		this.fileCharset = getProperty(WSERIALIZER_fileCharset, Charset.class, ctx.getFileCharset());
-		this.useWhitespace = getProperty(WSERIALIZER_useWhitespace, Boolean.class, ctx.isUseWhitespace());
+		SessionProperties sp = getSessionProperties();
+		this.streamCharset = sp.get(WSERIALIZER_streamCharset, Charset.class).orElse(ctx.getStreamCharset());
+		this.fileCharset = sp.get(WSERIALIZER_fileCharset, Charset.class).orElse(ctx.getFileCharset());
+		this.useWhitespace = sp.getBoolean(WSERIALIZER_useWhitespace).orElse(ctx.isUseWhitespace());
 	}
 
 	/**

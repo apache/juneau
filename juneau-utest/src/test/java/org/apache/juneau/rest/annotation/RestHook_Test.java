@@ -92,7 +92,8 @@ public class RestHook_Test {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-					return (T)("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class));
+					SessionProperties sp = getSessionProperties();
+					return (T)("p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null));
 				}
 			};
 		}
@@ -167,13 +168,14 @@ public class RestHook_Test {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class));
+					SessionProperties sp = getSessionProperties();
+					out.getWriter().write("p1="+sp.get("p1").orElse(null)+",p2="+sp.get("p2").orElse(null)+",p3="+sp.get("p3").orElse(null)+",p4="+sp.get("p4").orElse(null)+",p5="+sp.get("p5").orElse(null));
 				}
 				@Override /* SerializerSession */
 				public Map<String,String> getResponseHeaders() {
-					OMap p = getProperties();
-					if (p.containsKey("Override-Content-Type"))
-						return AMap.of("Content-Type",p.getString("Override-Content-Type"));
+					SessionProperties sp = getSessionProperties();
+					if (sp.contains("Override-Content-Type"))
+						return AMap.of("Content-Type",sp.getString("Override-Content-Type").orElse(null));
 					return Collections.emptyMap();
 				}
 			};

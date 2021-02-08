@@ -3415,11 +3415,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return def;
 	}
 
-	@Override
-	public OMap getProperties() {
-		return super.getProperties();
-	}
-
 	@SuppressWarnings("unchecked")
 	private static Map<Object,Object> toMap(Object o) {
 		return (Map<Object,Object>)o;

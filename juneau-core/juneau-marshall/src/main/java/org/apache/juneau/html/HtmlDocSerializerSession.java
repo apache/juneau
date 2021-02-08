@@ -17,6 +17,7 @@ import static org.apache.juneau.html.HtmlDocSerializer.*;
 import java.io.IOException;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -53,20 +54,22 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		super(ctx, args);
 		this.ctx = ctx;
 
-		header = getProperty(HTMLDOC_header, String[].class, ctx.getHeader());
-		nav = getProperty(HTMLDOC_nav, String[].class, ctx.getNav());
-		aside = getProperty(HTMLDOC_aside, String[].class, ctx.getAside());
-		asideFloat = getProperty(HTMLDOC_asideFloat, AsideFloat.class, ctx.getAsideFloat());
-		footer = getProperty(HTMLDOC_footer, String[].class, ctx.getFooter());
-		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.getNavlinks());
+		SessionProperties sp = getSessionProperties();
+
+		header = sp.get(HTMLDOC_header, String[].class).orElse(ctx.getHeader());
+		nav = sp.get(HTMLDOC_nav, String[].class).orElse(ctx.getNav());
+		aside = sp.get(HTMLDOC_aside, String[].class).orElse(ctx.getAside());
+		asideFloat = sp.get(HTMLDOC_asideFloat, AsideFloat.class).orElse(ctx.getAsideFloat());
+		footer = sp.get(HTMLDOC_footer, String[].class).orElse(ctx.getFooter());
+		navlinks = sp.get(HTMLDOC_navlinks, String[].class).orElse(ctx.getNavlinks());
 
 		// These can contain dups after variable resolution, so de-dup them with hashsets.
-		style = ASet.of(getProperty(HTMLDOC_style, String[].class, ctx.getStyle()));
-		stylesheet = ASet.of(getProperty(HTMLDOC_stylesheet, String[].class, ctx.getStylesheet()));
-		script = ASet.of(getProperty(HTMLDOC_script, String[].class, ctx.getScript()));
+		style = ASet.of(sp.get(HTMLDOC_style, String[].class).orElse(ctx.getStyle()));
+		stylesheet = ASet.of(sp.get(HTMLDOC_stylesheet, String[].class).orElse(ctx.getStylesheet()));
+		script = ASet.of(sp.get(HTMLDOC_script, String[].class).orElse(ctx.getScript()));
 
-		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
-		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.isNowrap());
+		head = sp.get(HTMLDOC_head, String[].class).orElse(ctx.getHead());
+		nowrap = sp.get(HTMLDOC_nowrap, boolean.class).orElse(ctx.isNowrap());
 
 		addVarBean(HtmlWidgetMap.class, ctx.getWidgets());
 	}

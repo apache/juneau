@@ -18,6 +18,7 @@ import static org.apache.juneau.parser.ReaderParser.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -43,8 +44,9 @@ public abstract class ReaderParserSession extends ParserSession {
 	protected ReaderParserSession(ReaderParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		this.fileCharset = getProperty(RPARSER_fileCharset, Charset.class, ctx.getFileCharset());
-		this.streamCharset = getProperty(RPARSER_streamCharset, Charset.class, ctx.getStreamCharset());
+		SessionProperties sp = getSessionProperties();
+		this.fileCharset = sp.get(RPARSER_fileCharset, Charset.class).orElse(ctx.getFileCharset());
+		this.streamCharset = sp.get(RPARSER_streamCharset, Charset.class).orElse(ctx.getStreamCharset());
 	}
 
 	/**

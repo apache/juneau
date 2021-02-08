@@ -788,7 +788,7 @@ public class RestResponseBody implements HttpEntity {
 					ParserSessionArgs pArgs =
 						ParserSessionArgs
 							.create()
-							.properties(new OMap().inner(request.getProperties()))
+							.properties(new OMap().inner(request.getSessionProperties().asMap()))
 							.locale(response.getLocale())
 							.mediaType(mt)
 							.schema(schema);

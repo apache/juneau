@@ -59,8 +59,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected XmlSerializerSession(XmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, ctx.getNamespaces());
-		defaultNamespace = findDefaultNamespace(getInstanceProperty(XML_defaultNamespace, Namespace.class, ctx.getDefaultNamespace()));
+		SessionProperties sp = getSessionProperties();
+		namespaces = sp.getInstanceArray(XML_namespaces, Namespace.class).orElse(ctx.getNamespaces());
+		defaultNamespace = findDefaultNamespace(sp.getInstance(XML_defaultNamespace, Namespace.class).orElse(ctx.getDefaultNamespace()));
 	}
 
 	private Namespace findDefaultNamespace(Namespace n) {

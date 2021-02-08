@@ -57,7 +57,7 @@ public class Nls_Test {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-					out.getWriter().write(getProperty("TestProperty", String.class));
+					out.getWriter().write(getSessionProperties().getString("TestProperty").orElse(null));
 				}
 			};
 		}
