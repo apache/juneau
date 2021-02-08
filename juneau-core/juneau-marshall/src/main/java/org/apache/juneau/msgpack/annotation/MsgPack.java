@@ -39,7 +39,7 @@ import org.apache.juneau.msgpack.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(MsgPackAnnotation.Array.class)
-@PropertyStoreApply(MsgPackAnnotation.Apply.class)
+@ContextPropertiesApply(MsgPackAnnotation.Apply.class)
 public @interface MsgPack {
 
 	/**

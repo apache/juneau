@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 @Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface PropertyStoreApply {
+public @interface ContextPropertiesApply {
 
 	/**
 	 * Identifies the class used to push values from an annotation into a property store.

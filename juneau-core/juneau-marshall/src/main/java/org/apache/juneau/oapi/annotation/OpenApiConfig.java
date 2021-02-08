@@ -31,7 +31,7 @@ import org.apache.juneau.oapi.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(OpenApiConfigAnnotation.Apply.class)
+@ContextPropertiesApply(OpenApiConfigAnnotation.Apply.class)
 public @interface OpenApiConfig {
 
 	/**

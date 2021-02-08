@@ -41,7 +41,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanpAnnotation.Array.class)
-@PropertyStoreApply(BeanpAnnotation.Apply.class)
+@ContextPropertiesApply(BeanpAnnotation.Apply.class)
 public @interface Beanp {
 
 	/**

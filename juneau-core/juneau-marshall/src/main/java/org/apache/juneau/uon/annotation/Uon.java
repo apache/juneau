@@ -39,7 +39,7 @@ import org.apache.juneau.uon.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(UonAnnotation.Array.class)
-@PropertyStoreApply(UonAnnotation.Apply.class)
+@ContextPropertiesApply(UonAnnotation.Apply.class)
 public @interface Uon {
 
 	/**

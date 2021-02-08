@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(HtmlDocConfigAnnotation.Apply.class)
+@ContextPropertiesApply(HtmlDocConfigAnnotation.Apply.class)
 public @interface HtmlDocConfig {
 
 	/**

@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(MsgPackConfigAnnotation.Apply.class)
+@ContextPropertiesApply(MsgPackConfigAnnotation.Apply.class)
 public @interface MsgPackConfig {
 
 	/**

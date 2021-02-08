@@ -39,7 +39,7 @@ import org.apache.juneau.csv.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(CsvAnnotation.Array.class)
-@PropertyStoreApply(CsvAnnotation.Apply.class)
+@ContextPropertiesApply(CsvAnnotation.Apply.class)
 public @interface Csv {
 
 	/**

@@ -311,14 +311,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method or parent methods have any annotations annotated with {@link PropertyStoreApply}.
+	 * Returns <jk>true</jk> if this method or parent methods have any annotations annotated with {@link ContextPropertiesApply}.
 	 *
-	 * @return <jk>true</jk> if this method or parent methods have any annotations annotated with {@link PropertyStoreApply}.
+	 * @return <jk>true</jk> if this method or parent methods have any annotations annotated with {@link ContextPropertiesApply}.
 	 */
 	public boolean hasConfigAnnotations() {
 		for (Method m2 : getMatching())
 			for (Annotation a2 :  m2.getAnnotations())
-				if (a2.annotationType().getAnnotation(PropertyStoreApply.class) != null)
+				if (a2.annotationType().getAnnotation(ContextPropertiesApply.class) != null)
 					return true;
 		return false;
 	}

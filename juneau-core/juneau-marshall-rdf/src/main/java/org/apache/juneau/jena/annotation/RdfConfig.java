@@ -33,7 +33,7 @@ import org.apache.juneau.xml.annotation.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(RdfConfigAnnotation.Apply.class)
+@ContextPropertiesApply(RdfConfigAnnotation.Apply.class)
 public @interface RdfConfig {
 
 	/**

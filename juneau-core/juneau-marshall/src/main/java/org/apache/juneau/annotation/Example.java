@@ -63,7 +63,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ExampleAnnotation.Array.class)
-@PropertyStoreApply(ExampleAnnotation.Apply.class)
+@ContextPropertiesApply(ExampleAnnotation.Apply.class)
 public @interface Example {
 
 	/**

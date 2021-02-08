@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(JsonConfigAnnotation.Apply.class)
+@ContextPropertiesApply(JsonConfigAnnotation.Apply.class)
 public @interface JsonConfig {
 
 	/**

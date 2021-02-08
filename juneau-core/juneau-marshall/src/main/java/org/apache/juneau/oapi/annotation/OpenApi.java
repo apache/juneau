@@ -39,7 +39,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(OpenApiAnnotation.Array.class)
-@PropertyStoreApply(OpenApiAnnotation.Apply.class)
+@ContextPropertiesApply(OpenApiAnnotation.Apply.class)
 public @interface OpenApi {
 
 	/**

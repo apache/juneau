@@ -53,7 +53,7 @@ public class MethodInfoTest {
 	@Target({METHOD,TYPE})
 	@Retention(RUNTIME)
 	@Inherited
-	@PropertyStoreApply(AConfigApply.class)
+	@ContextPropertiesApply(AConfigApply.class)
 	public static @interface AConfig {
 		String value();
 	}

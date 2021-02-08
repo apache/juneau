@@ -42,7 +42,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(NamePropertyAnnotation.Array.class)
-@PropertyStoreApply(NamePropertyAnnotation.Apply.class)
+@ContextPropertiesApply(NamePropertyAnnotation.Apply.class)
 public @interface NameProperty {
 
 	/**

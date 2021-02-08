@@ -42,7 +42,7 @@ import org.apache.juneau.jena.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(RdfAnnotation.Array.class)
-@PropertyStoreApply(RdfAnnotation.Apply.class)
+@ContextPropertiesApply(RdfAnnotation.Apply.class)
 public @interface Rdf {
 
 	/**

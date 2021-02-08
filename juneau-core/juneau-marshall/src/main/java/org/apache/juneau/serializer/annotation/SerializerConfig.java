@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(SerializerConfigAnnotation.Apply.class)
+@ContextPropertiesApply(SerializerConfigAnnotation.Apply.class)
 public @interface SerializerConfig {
 
 	/**

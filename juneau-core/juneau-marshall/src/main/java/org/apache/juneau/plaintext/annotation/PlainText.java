@@ -39,7 +39,7 @@ import org.apache.juneau.plaintext.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(PlainTextAnnotation.Array.class)
-@PropertyStoreApply(PlainTextAnnotation.Apply.class)
+@ContextPropertiesApply(PlainTextAnnotation.Apply.class)
 public @interface PlainText {
 
 	/**

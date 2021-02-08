@@ -33,7 +33,7 @@ import org.apache.juneau.dto.swagger.*;
 @Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(RestOpAnnotation.Apply.class)
+@ContextPropertiesApply(RestOpAnnotation.Apply.class)
 @Repeatable(RestOpAnnotation.Array.class)
 public @interface RestOp {
 

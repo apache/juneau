@@ -39,7 +39,7 @@ import org.apache.juneau.soap.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(SoapXmlAnnotation.Array.class)
-@PropertyStoreApply(SoapXmlAnnotation.Apply.class)
+@ContextPropertiesApply(SoapXmlAnnotation.Apply.class)
 public @interface SoapXml {
 
 	/**

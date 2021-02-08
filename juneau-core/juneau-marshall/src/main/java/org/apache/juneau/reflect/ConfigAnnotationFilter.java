@@ -18,7 +18,7 @@ import java.util.function.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Filter used to accept only annotations that themselves have the {@link PropertyStoreApply} annotation.
+ * Filter used to accept only annotations that themselves have the {@link ContextPropertiesApply} annotation.
  */
 public class ConfigAnnotationFilter implements Predicate<AnnotationInfo<?>> {
 
@@ -29,6 +29,6 @@ public class ConfigAnnotationFilter implements Predicate<AnnotationInfo<?>> {
 
 	@Override
 	public boolean test(AnnotationInfo<? extends Annotation> t) {
-		return t.hasAnnotation(PropertyStoreApply.class);
+		return t.hasAnnotation(ContextPropertiesApply.class);
 	}
 }

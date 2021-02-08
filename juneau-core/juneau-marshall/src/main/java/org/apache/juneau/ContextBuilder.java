@@ -155,7 +155,7 @@ public abstract class ContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param al The list of all annotations annotated with {@link PropertyStoreApply}.
+	 * @param al The list of all annotations annotated with {@link ContextPropertiesApply}.
 	 * @param r The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
@@ -169,7 +169,7 @@ public abstract class ContextBuilder {
 	 * Applies any of the various <ja>@XConfig</ja> annotations on the specified class to this context.
 	 *
 	 * <p>
-	 * Any annotations found that themselves are annotated with {@link PropertyStoreApply} will be resolved and
+	 * Any annotations found that themselves are annotated with {@link ContextPropertiesApply} will be resolved and
 	 * applied as properties to this builder.  These annotations include:
 	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
@@ -230,7 +230,7 @@ public abstract class ContextBuilder {
 	 * Applies any of the various <ja>@XConfig</ja> annotations on the specified method to this context.
 	 *
 	 * <p>
-	 * Any annotations found that themselves are annotated with {@link PropertyStoreApply} will be resolved and
+	 * Any annotations found that themselves are annotated with {@link ContextPropertiesApply} will be resolved and
 	 * applied as properties to this builder.  These annotations include:
 	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}

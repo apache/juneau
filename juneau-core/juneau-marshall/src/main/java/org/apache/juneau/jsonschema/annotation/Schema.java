@@ -78,7 +78,7 @@ import org.apache.juneau.oapi.*;
 @Documented
 @Retention(RUNTIME)
 @Repeatable(SchemaAnnotation.Array.class)
-@PropertyStoreApply(SchemaAnnotation.Apply.class)
+@ContextPropertiesApply(SchemaAnnotation.Apply.class)
 public @interface Schema {
 
 	/**

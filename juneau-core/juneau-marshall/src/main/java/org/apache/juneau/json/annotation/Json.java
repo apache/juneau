@@ -42,7 +42,7 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(JsonAnnotation.Array.class)
-@PropertyStoreApply(JsonAnnotation.Apply.class)
+@ContextPropertiesApply(JsonAnnotation.Apply.class)
 public @interface Json {
 
 	/**

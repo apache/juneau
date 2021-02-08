@@ -43,7 +43,7 @@ import org.apache.juneau.rest.vars.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(RestAnnotation.Apply.class)
+@ContextPropertiesApply(RestAnnotation.Apply.class)
 @Repeatable(RestAnnotation.Array.class)
 public @interface Rest {
 

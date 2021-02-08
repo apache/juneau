@@ -168,7 +168,7 @@ public class AnnotationInfo<T extends Annotation> {
 	private Constructor<? extends ConfigApply<?>> configApplyConstructor;
 
 	/**
-	 * If this annotation has a {@link PropertyStoreApply} annotation, returns an instance of the specified {@link ConfigApply} class.
+	 * If this annotation has a {@link ContextPropertiesApply} annotation, returns an instance of the specified {@link ConfigApply} class.
 	 *
 	 * @param vrs Variable resolver passed to the {@link ConfigApply} object.
 	 * @return A new {@link ConfigApply} object.  Never <jk>null</jk>.
@@ -178,11 +178,11 @@ public class AnnotationInfo<T extends Annotation> {
 	public ConfigApply<Annotation> getConfigApply(VarResolverSession vrs) throws ExecutableException {
 		try {
 			if (configApplyConstructor == null) {
-				PropertyStoreApply psa = a.annotationType().getAnnotation(PropertyStoreApply.class);
-				if (psa == null)
+				ContextPropertiesApply cpa = a.annotationType().getAnnotation(ContextPropertiesApply.class);
+				if (cpa == null)
 					configApplyConstructor = ConfigApply.NoOp.class.getConstructor(Class.class, VarResolverSession.class);
 				else
-					configApplyConstructor = (Constructor<? extends ConfigApply<?>>)psa.value().getConstructor(Class.class, VarResolverSession.class);
+					configApplyConstructor = (Constructor<? extends ConfigApply<?>>)cpa.value().getConstructor(Class.class, VarResolverSession.class);
 				if (configApplyConstructor == null)
 					throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());
 			}

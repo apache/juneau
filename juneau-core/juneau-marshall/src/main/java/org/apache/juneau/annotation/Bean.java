@@ -41,7 +41,7 @@ import org.apache.juneau.transform.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanAnnotation.Array.class)
-@PropertyStoreApply(BeanAnnotation.Apply.class)
+@ContextPropertiesApply(BeanAnnotation.Apply.class)
 public @interface Bean {
 
 	/**

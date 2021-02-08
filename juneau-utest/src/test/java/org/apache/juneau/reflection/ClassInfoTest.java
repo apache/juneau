@@ -58,7 +58,7 @@ public class ClassInfoTest {
 	@Target(TYPE)
 	@Retention(RUNTIME)
 	@Inherited
-	@PropertyStoreApply(AConfigApply.class)
+	@ContextPropertiesApply(AConfigApply.class)
 	static @interface AConfig {
 		int value();
 	}
