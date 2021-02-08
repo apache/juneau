@@ -285,13 +285,13 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
-	public static final UonSerializer DEFAULT = new UonSerializer(PropertyStore.DEFAULT);
+	public static final UonSerializer DEFAULT = new UonSerializer(ContextProperties.DEFAULT);
 
 	/** Reusable instance of {@link UonSerializer.Readable}. */
-	public static final UonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final UonSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
 
 	/** Reusable instance of {@link UonSerializer.Encoding}. */
-	public static final UonSerializer DEFAULT_ENCODING = new Encoding(PropertyStore.DEFAULT);
+	public static final UonSerializer DEFAULT_ENCODING = new Encoding(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -306,10 +306,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore ps) {
-			super(ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
+		public Readable(ContextProperties cp) {
+			super(cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -321,10 +321,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Encoding(PropertyStore ps) {
-			super(ps.builder().setDefault(UON_encoding, true).build());
+		public Encoding(ContextProperties cp) {
+			super(cp.builder().setDefault(UON_encoding, true).build());
 		}
 	}
 
@@ -369,24 +369,24 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UonSerializer(PropertyStore ps) {
-		this(ps, "text/uon", (String)null);
+	public UonSerializer(ContextProperties cp) {
+		this(cp, "text/uon", (String)null);
 	}
 
 	/**
 	 * No-arg constructor.
 	 */
 	public UonSerializer() {
-		this(PropertyStore.DEFAULT, "text/uon", (String)null);
+		this(ContextProperties.DEFAULT, "text/uon", (String)null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -409,17 +409,17 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public UonSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
-		encoding = ps.getBoolean(UON_encoding).orElse(false);
-		addBeanTypes = ps.getFirstBoolean(UON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
-		paramFormat = ps.get(UON_paramFormat, ParamFormat.class).orElse(ParamFormat.UON);
-		quoteChar = ps.getString(WSERIALIZER_quoteChar).orElse("'").charAt(0);
+	public UonSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
+		encoding = cp.getBoolean(UON_encoding).orElse(false);
+		addBeanTypes = cp.getFirstBoolean(UON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+		paramFormat = cp.get(UON_paramFormat, ParamFormat.class).orElse(ParamFormat.UON);
+		quoteChar = cp.getString(WSERIALIZER_quoteChar).orElse("'").charAt(0);
 	}
 
 	@Override /* Context */
 	public UonSerializerBuilder builder() {
-		return new UonSerializerBuilder(getPropertyStore());
+		return new UonSerializerBuilder(getContextProperties());
 	}
 
 	/**

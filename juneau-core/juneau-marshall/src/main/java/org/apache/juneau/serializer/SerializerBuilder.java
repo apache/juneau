@@ -40,10 +40,10 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public SerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public SerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -572,7 +572,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public SerializerBuilder apply(PropertyStore copyFrom) {
+	public SerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

@@ -48,15 +48,15 @@ public class RequestBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
-		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.ps);
+		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp);
+		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp);
 	}
 
 	static class Builder {
 		HttpPartType partType;
 		HttpPartSchema schema;
 		Method getter;
-		PropertyStore ps = PropertyStore.DEFAULT;
+		ContextProperties cp = ContextProperties.DEFAULT;
 
 		Builder getter(Method value) {
 			getter = value;

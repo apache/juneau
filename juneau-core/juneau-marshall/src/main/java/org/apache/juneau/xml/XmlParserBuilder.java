@@ -44,10 +44,10 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public XmlParserBuilder(PropertyStore ps) {
-		super(ps);
+	public XmlParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -222,7 +222,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder apply(PropertyStore copyFrom) {
+	public XmlParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

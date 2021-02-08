@@ -219,7 +219,7 @@ public class ConfigFileStore extends ConfigStore {
 
 	@Override /* Context */
 	public ConfigFileStoreBuilder builder() {
-		return new ConfigFileStoreBuilder(getPropertyStore());
+		return new ConfigFileStoreBuilder(getContextProperties());
 	}
 
 	private final File dir;
@@ -233,18 +233,18 @@ public class ConfigFileStore extends ConfigStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The settings for this content store.
+	 * @param cp The settings for this content store.
 	 */
-	protected ConfigFileStore(PropertyStore ps) {
-		super(ps);
+	protected ConfigFileStore(ContextProperties cp) {
+		super(cp);
 		try {
-			dir = new File(ps.getString(FILESTORE_directory).orElse(".")).getCanonicalFile();
+			dir = new File(cp.getString(FILESTORE_directory).orElse(".")).getCanonicalFile();
 			dir.mkdirs();
-			charset = ps.get(FILESTORE_charset, Charset.class).orElse(Charset.defaultCharset());
-			updateOnWrite = ps.getBoolean(FILESTORE_enableUpdateOnWrite).orElse(false);
-			extensions = ps.getCdl(FILESTORE_extensions).orElse(new String[]{"cfg"});
-			WatcherSensitivity ws = ps.get(FILESTORE_watcherSensitivity, WatcherSensitivity.class).orElse(WatcherSensitivity.MEDIUM);
-			watcher = ps.getBoolean(FILESTORE_enableWatcher).orElse(false) ? new WatcherThread(dir, ws) : null;
+			charset = cp.get(FILESTORE_charset, Charset.class).orElse(Charset.defaultCharset());
+			updateOnWrite = cp.getBoolean(FILESTORE_enableUpdateOnWrite).orElse(false);
+			extensions = cp.getCdl(FILESTORE_extensions).orElse(new String[]{"cfg"});
+			WatcherSensitivity ws = cp.get(FILESTORE_watcherSensitivity, WatcherSensitivity.class).orElse(WatcherSensitivity.MEDIUM);
+			watcher = cp.getBoolean(FILESTORE_enableWatcher).orElse(false) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)
 				watcher.start();
 

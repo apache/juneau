@@ -139,7 +139,7 @@ public class ResponseBodyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link ResponseBody} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link ResponseBody} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<ResponseBody> {
 
@@ -154,13 +154,13 @@ public class ResponseBodyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseBody> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ResponseBody> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			ResponseBody a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

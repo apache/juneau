@@ -145,7 +145,7 @@ public class UonAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Uon} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Uon} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Uon> {
 
@@ -160,13 +160,13 @@ public class UonAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uon> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Uon> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Uon a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

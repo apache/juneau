@@ -342,22 +342,22 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer without namespaces. */
-	public static final XmlSerializer DEFAULT = new XmlSerializer(PropertyStore.DEFAULT);
+	public static final XmlSerializer DEFAULT = new XmlSerializer(ContextProperties.DEFAULT);
 
 	/** Default serializer without namespaces, with single quotes. */
-	public static final XmlSerializer DEFAULT_SQ = new Sq(PropertyStore.DEFAULT);
+	public static final XmlSerializer DEFAULT_SQ = new Sq(ContextProperties.DEFAULT);
 
 	/** Default serializer without namespaces, with single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(PropertyStore.DEFAULT);
+	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(ContextProperties.DEFAULT);
 
 	/** Default serializer, all default settings. */
-	public static final XmlSerializer DEFAULT_NS = new Ns(PropertyStore.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS = new Ns(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes. */
-	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(PropertyStore.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(PropertyStore.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -370,11 +370,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Sq(PropertyStore ps) {
+		public Sq(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
@@ -387,11 +387,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public SqReadable(PropertyStore ps) {
+		public SqReadable(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
@@ -405,11 +405,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Ns(PropertyStore ps) {
+		public Ns(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(XML_enableNamespaces, true)
 					.build(),
 				"text/xml",
@@ -424,11 +424,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public NsSq(PropertyStore ps) {
+		public NsSq(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(XML_enableNamespaces, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
@@ -442,11 +442,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public NsSqReadable(PropertyStore ps) {
+		public NsSqReadable(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(XML_enableNamespaces, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -478,17 +478,17 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public XmlSerializer(PropertyStore ps) {
-		this(ps, "text/xml", (String)null);
+	public XmlSerializer(ContextProperties cp) {
+		this(cp, "text/xml", (String)null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -511,19 +511,19 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public XmlSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
-		autoDetectNamespaces = ! ps.getBoolean(XML_disableAutoDetectNamespaces).orElse(false);
-		enableNamespaces = ps.getBoolean(XML_enableNamespaces).orElse(false);
-		addNamespaceUrlsToRoot = ps.getBoolean(XML_addNamespaceUrisToRoot).orElse(false);
-		defaultNamespace = ps.getInstance(XML_defaultNamespace, Namespace.class).orElse(DEFAULT_JUNEAU_NAMESPACE);
-		addBeanTypes = ps.getFirstBoolean(XML_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
-		namespaces = ps.getInstanceArray(XML_namespaces, Namespace.class).orElse(new Namespace[0]);
+	public XmlSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
+		autoDetectNamespaces = ! cp.getBoolean(XML_disableAutoDetectNamespaces).orElse(false);
+		enableNamespaces = cp.getBoolean(XML_enableNamespaces).orElse(false);
+		addNamespaceUrlsToRoot = cp.getBoolean(XML_addNamespaceUrisToRoot).orElse(false);
+		defaultNamespace = cp.getInstance(XML_defaultNamespace, Namespace.class).orElse(DEFAULT_JUNEAU_NAMESPACE);
+		addBeanTypes = cp.getFirstBoolean(XML_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+		namespaces = cp.getInstanceArray(XML_namespaces, Namespace.class).orElse(new Namespace[0]);
 	}
 
 	@Override /* Context */
 	public XmlSerializerBuilder builder() {
-		return new XmlSerializerBuilder(getPropertyStore());
+		return new XmlSerializerBuilder(getContextProperties());
 	}
 
 	/**

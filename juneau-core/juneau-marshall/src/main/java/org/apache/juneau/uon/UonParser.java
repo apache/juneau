@@ -143,10 +143,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
-	public static final UonParser DEFAULT = new UonParser(PropertyStore.DEFAULT);
+	public static final UonParser DEFAULT = new UonParser(ContextProperties.DEFAULT);
 
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
-	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(PropertyStore.DEFAULT);
+	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -159,10 +159,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Decoding(PropertyStore ps) {
-			super(ps.builder().setDefault(UON_decoding, true).build());
+		public Decoding(ContextProperties cp) {
+			super(cp.builder().setDefault(UON_decoding, true).build());
 		}
 	}
 
@@ -233,37 +233,37 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UonParser(PropertyStore ps) {
-		this(ps, "text/uon");
+	public UonParser(ContextProperties cp) {
+		this(cp, "text/uon");
 	}
 
 	/**
 	 * No-arg constructor.
 	 */
 	public UonParser() {
-		this(PropertyStore.DEFAULT, "text/uon");
+		this(ContextProperties.DEFAULT, "text/uon");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public UonParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
-		this.decoding = ps.getBoolean(UON_decoding).orElse(false);
-		this.validateEnd = ps.getBoolean(UON_validateEnd).orElse(false);
+	public UonParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
+		this.decoding = cp.getBoolean(UON_decoding).orElse(false);
+		this.validateEnd = cp.getBoolean(UON_validateEnd).orElse(false);
 	}
 
 	@Override /* Context */
 	public UonParserBuilder builder() {
-		return new UonParserBuilder(getPropertyStore());
+		return new UonParserBuilder(getContextProperties());
 	}
 
 	/**

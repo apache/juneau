@@ -1074,7 +1074,7 @@ public class QueryAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Query} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Query} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Query> {
 
@@ -1089,13 +1089,13 @@ public class QueryAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Query> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Query> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Query a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

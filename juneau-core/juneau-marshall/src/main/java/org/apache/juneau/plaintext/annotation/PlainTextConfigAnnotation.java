@@ -22,7 +22,7 @@ import org.apache.juneau.svl.*;
 public class PlainTextConfigAnnotation {
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link PlainTextConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<PlainTextConfig> {
 
@@ -37,7 +37,7 @@ public class PlainTextConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<PlainTextConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 		}
 	}
 }

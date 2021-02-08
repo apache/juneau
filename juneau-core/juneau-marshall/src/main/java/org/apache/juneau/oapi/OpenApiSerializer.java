@@ -44,7 +44,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OpenApiSerializer}, all default settings. */
-	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(PropertyStore.DEFAULT);
+	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -82,31 +82,31 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public OpenApiSerializer(PropertyStore ps, String produces, String accept) {
+	public OpenApiSerializer(ContextProperties cp, String produces, String accept) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(UON_encoding, false)
 				.build(),
 			produces,
 			accept
 		);
-		format = ps.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
-		collectionFormat = ps.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+		format = cp.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
+		collectionFormat = cp.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public OpenApiSerializer(PropertyStore ps) {
-		this(ps, "text/openapi", null);
+	public OpenApiSerializer(ContextProperties cp) {
+		this(cp, "text/openapi", null);
 	}
 
 	@Override /* Context */
 	public OpenApiSerializerBuilder builder() {
-		return new OpenApiSerializerBuilder(getPropertyStore());
+		return new OpenApiSerializerBuilder(getContextProperties());
 	}
 
 	/**

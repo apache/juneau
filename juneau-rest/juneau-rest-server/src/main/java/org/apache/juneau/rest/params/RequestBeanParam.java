@@ -33,12 +33,12 @@ public class RequestBeanParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @return A new {@link RequestBeanParam}, or <jk>null</jk> if the parameter is not annotated with {@link Request}.
 	 */
-	public static RequestBeanParam create(ParamInfo paramInfo, PropertyStore ps) {
+	public static RequestBeanParam create(ParamInfo paramInfo, ContextProperties cp) {
 		if (paramInfo.hasAnnotation(Request.class))
-			return new RequestBeanParam(paramInfo, ps);
+			return new RequestBeanParam(paramInfo, cp);
 		return null;
 	}
 
@@ -46,10 +46,10 @@ public class RequestBeanParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 */
-	protected RequestBeanParam(ParamInfo paramInfo, PropertyStore ps) {
-		this.meta = RequestBeanMeta.create(paramInfo, ps);
+	protected RequestBeanParam(ParamInfo paramInfo, ContextProperties cp) {
+		this.meta = RequestBeanMeta.create(paramInfo, cp);
 	}
 
 	@Override /* RestOperationParam */

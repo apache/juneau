@@ -1025,7 +1025,7 @@ public class RestAnnotation {
 	}
 
 	/**
-	 * Applies {@link Rest} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link Rest} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Rest> {
 
@@ -1040,55 +1040,55 @@ public class RestAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Rest> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Rest a = ai.getAnnotation();
 			ClassInfo c = ai.getClassOn();
 
-			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
-			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
-			psb.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
-			psb.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
-			psb.prependTo(REST_encoders, a.encoders());
-			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
-			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultRequestAttributes, x));
-			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(REST_defaultResponseHeaders, x));
-			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
-			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
-			psb.prependTo(REST_responseHandlers, a.responseHandlers());
-			psb.prependTo(REST_converters, a.converters());
-			psb.prependTo(REST_guards, reverse(a.guards()));
-			psb.prependTo(REST_children, a.children());
-			psb.prependTo(REST_restOperationParams, a.restOperationParams());
-			psb.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
-			psb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
-			psb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
-			psb.setIfNotEmpty(REST_uriRelativity, string(a.uriRelativity()));
-			psb.setIfNotEmpty(REST_uriResolution, string(a.uriResolution()));
-			psb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
-			psb.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
-			psb.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
-			psb.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
-			psb.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
-			psb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
-			psb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
-			psb.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
-			psb.setIf(a.restOperationContextClass() != RestOperationContext.Null.class, REST_restOperationContextClass, a.restOperationContextClass());
-			psb.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
-			psb.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
-			psb.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
-			psb.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
-			psb.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
-			psb.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
-			psb.setIfNotEmpty(REST_allowedMethodParams, string(a.allowedMethodParams()));
-			psb.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
-			psb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			psb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
-			psb.setIfNotEmpty(REST_debug, string(a.debug()));
-			psb.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
-			cdStream(a.rolesDeclared()).forEach(x -> psb.addTo(REST_rolesDeclared, x));
-			psb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
+			cpb.set(REST_serializers, merge(ConverterUtils.toType(cpb.peek(REST_serializers), Object[].class), a.serializers()));
+			cpb.set(REST_parsers, merge(ConverterUtils.toType(cpb.peek(REST_parsers), Object[].class), a.parsers()));
+			cpb.setIf(a.partSerializer() != HttpPartSerializer.Null.class, REST_partSerializer, a.partSerializer());
+			cpb.setIf(a.partParser() != HttpPartParser.Null.class, REST_partParser, a.partParser());
+			cpb.prependTo(REST_encoders, a.encoders());
+			cpb.setIfNotEmpty(REST_produces, stringList(a.produces()));
+			cpb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultRequestAttributes, x));
+			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultResponseHeaders, x));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
+			cpb.prependTo(REST_responseHandlers, a.responseHandlers());
+			cpb.prependTo(REST_converters, a.converters());
+			cpb.prependTo(REST_guards, reverse(a.guards()));
+			cpb.prependTo(REST_children, a.children());
+			cpb.prependTo(REST_restOperationParams, a.restOperationParams());
+			cpb.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
+			cpb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
+			cpb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));
+			cpb.setIfNotEmpty(REST_uriRelativity, string(a.uriRelativity()));
+			cpb.setIfNotEmpty(REST_uriResolution, string(a.uriResolution()));
+			cpb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
+			cpb.setIf(a.fileFinder() != FileFinder.Null.class, REST_fileFinder, a.fileFinder());
+			cpb.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
+			cpb.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
+			cpb.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
+			cpb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
+			cpb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
+			cpb.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
+			cpb.setIf(a.restOperationContextClass() != RestOperationContext.Null.class, REST_restOperationContextClass, a.restOperationContextClass());
+			cpb.setIf(a.restChildrenClass() != RestChildren.Null.class, REST_restChildrenClass, a.restChildrenClass());
+			cpb.setIf(a.restOperationsClass() != RestOperations.Null.class, REST_restOperationsClass, a.restOperationsClass());
+			cpb.setIf(a.debugEnablement() != DebugEnablement.Null.class, REST_debugEnablement, a.debugEnablement());
+			cpb.setIfNotEmpty(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
+			cpb.setIfNotEmpty(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
+			cpb.setIfNotEmpty(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
+			cpb.setIfNotEmpty(REST_allowedMethodParams, string(a.allowedMethodParams()));
+			cpb.setIfNotEmpty(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
+			cpb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
+			cpb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
+			cpb.setIfNotEmpty(REST_debug, string(a.debug()));
+			cpb.setIfNotEmpty(REST_debugOn, string(a.debugOn()));
+			cdStream(a.rolesDeclared()).forEach(x -> cpb.addTo(REST_rolesDeclared, x));
+			cpb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 		}
 
 		private String trimLeadingSlash(String value) {

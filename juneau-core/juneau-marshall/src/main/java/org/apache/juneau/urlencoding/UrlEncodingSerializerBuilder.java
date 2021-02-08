@@ -41,10 +41,10 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public UrlEncodingSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public UrlEncodingSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -94,7 +94,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingSerializerBuilder apply(PropertyStore copyFrom) {
+	public UrlEncodingSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

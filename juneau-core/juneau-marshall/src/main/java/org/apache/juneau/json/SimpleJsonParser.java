@@ -33,20 +33,20 @@ public class SimpleJsonParser extends JsonParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, Accept=application/json+simple. */
-	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(PropertyStore.DEFAULT);
+	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(ContextProperties.DEFAULT);
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public SimpleJsonParser(PropertyStore ps) {
-		super(ps, "application/json+simple", "text/json+simple", "application/json", "text/json");
+	public SimpleJsonParser(ContextProperties cp) {
+		super(cp, "application/json+simple", "text/json+simple", "application/json", "text/json");
 	}
 
 	@Override /* Context */
 	public SimpleJsonParserBuilder builder() {
-		return new SimpleJsonParserBuilder(getPropertyStore());
+		return new SimpleJsonParserBuilder(getContextProperties());
 	}
 
 	/**

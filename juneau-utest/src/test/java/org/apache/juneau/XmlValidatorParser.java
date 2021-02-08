@@ -30,7 +30,7 @@ import org.apache.juneau.xml.*;
 public class XmlValidatorParser extends XmlParser {
 
 	public XmlValidatorParser() {
-		super(PropertyStore.DEFAULT);
+		super(ContextProperties.DEFAULT);
 	}
 
 	@Override /* Parser */

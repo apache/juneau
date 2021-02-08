@@ -357,7 +357,7 @@ public class BodyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Body} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Body} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Body> {
 
@@ -372,13 +372,13 @@ public class BodyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Body> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Body> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Body a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

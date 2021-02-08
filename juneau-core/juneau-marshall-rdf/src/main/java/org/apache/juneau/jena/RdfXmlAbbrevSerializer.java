@@ -26,7 +26,7 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(PropertyStore.DEFAULT);
+	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public RdfXmlAbbrevSerializer(PropertyStore ps) {
+	public RdfXmlAbbrevSerializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_RDF_XML_ABBREV)
 				.build(),
 			"text/xml+rdf", "text/xml+rdf+abbrev,text/xml+rdf;q=0.9"

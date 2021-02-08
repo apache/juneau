@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
 public class ParserConfigAnnotation {
 
 	/**
-	 * Applies {@link ParserConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link ParserConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<ParserConfig> {
 
@@ -43,18 +43,18 @@ public class ParserConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ParserConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			ParserConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));
-			psb.setIfNotEmpty(PARSER_debugOutputLines, integer(a.debugOutputLines(), "debugOutputLines"));
-			psb.setIf(a.listener() != ParserListener.Null.class, PARSER_listener, a.listener());
-			psb.setIfNotEmpty(PARSER_strict, bool(a.strict()));
-			psb.setIfNotEmpty(PARSER_trimStrings, bool(a.trimStrings()));
-			psb.setIfNotEmpty(PARSER_unbuffered, bool(a.unbuffered()));
-			psb.setIfNotEmpty(ISPARSER_binaryFormat, string(a.binaryFormat()));
-			psb.setIfNotEmpty(RPARSER_fileCharset, charset(a.fileCharset()));
-			psb.setIfNotEmpty(RPARSER_streamCharset, charset(a.streamCharset()));
+			cpb.setIfNotEmpty(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));
+			cpb.setIfNotEmpty(PARSER_debugOutputLines, integer(a.debugOutputLines(), "debugOutputLines"));
+			cpb.setIf(a.listener() != ParserListener.Null.class, PARSER_listener, a.listener());
+			cpb.setIfNotEmpty(PARSER_strict, bool(a.strict()));
+			cpb.setIfNotEmpty(PARSER_trimStrings, bool(a.trimStrings()));
+			cpb.setIfNotEmpty(PARSER_unbuffered, bool(a.unbuffered()));
+			cpb.setIfNotEmpty(ISPARSER_binaryFormat, string(a.binaryFormat()));
+			cpb.setIfNotEmpty(RPARSER_fileCharset, charset(a.fileCharset()));
+			cpb.setIfNotEmpty(RPARSER_streamCharset, charset(a.streamCharset()));
 		}
 
 		private Object charset(String in) {

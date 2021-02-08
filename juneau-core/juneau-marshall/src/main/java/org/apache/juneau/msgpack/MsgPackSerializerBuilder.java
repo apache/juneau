@@ -37,10 +37,10 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public MsgPackSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public MsgPackSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -73,7 +73,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MsgPackSerializerBuilder apply(PropertyStore copyFrom) {
+	public MsgPackSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

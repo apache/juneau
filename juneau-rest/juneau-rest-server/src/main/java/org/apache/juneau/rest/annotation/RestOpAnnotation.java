@@ -613,7 +613,7 @@ public class RestOpAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestOp} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link RestOp} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<RestOp> {
 
@@ -628,43 +628,43 @@ public class RestOpAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestOp> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<RestOp> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			RestOp a = ai.getAnnotation();
 
-			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
-			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
-			psb.set(REST_encoders, merge(ConverterUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
-			psb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
-			psb.setIfNotEmpty(REST_produces, stringList(a.produces()));
-			psb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
-			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTOP_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> psb.appendTo(RESTOP_defaultResponseHeaders, x));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> psb.appendTo(RESTOP_defaultRequestAttributes, x));
-			stringStream(a.defaultQuery()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> psb.appendTo(RESTOP_defaultQuery, x));
-			stringStream(a.defaultFormData()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> psb.appendTo(RESTOP_defaultFormData, x));
-			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
-			psb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
-			psb.prependTo(REST_converters, a.converters());
-			psb.prependTo(REST_guards, reverse(a.guards()));
-			psb.prependTo(RESTOP_matchers, a.matchers());
-			psb.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
-			psb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			psb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
-			stringStream(a.path()).forEach(x -> psb.prependTo(RESTOP_path, x));
-			cdStream(a.rolesDeclared()).forEach(x -> psb.addTo(REST_rolesDeclared, x));
-			psb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-			psb.setIfNotEmpty(RESTOP_httpMethod, string(a.method()));
-			psb.setIf(a.priority() != 0, RESTOP_priority, a.priority());
-			psb.setIfNotEmpty(RESTOP_debug, string(a.debug()));
+			cpb.set(REST_serializers, merge(ConverterUtils.toType(cpb.peek(REST_serializers), Object[].class), a.serializers()));
+			cpb.set(REST_parsers, merge(ConverterUtils.toType(cpb.peek(REST_parsers), Object[].class), a.parsers()));
+			cpb.set(REST_encoders, merge(ConverterUtils.toType(cpb.peek(REST_encoders), Object[].class), a.encoders()));
+			cpb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
+			cpb.setIfNotEmpty(REST_produces, stringList(a.produces()));
+			cpb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
+			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
+			stringStream(a.defaultQuery()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
+			stringStream(a.defaultFormData()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultFormData, x));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
+			cpb.prependTo(REST_converters, a.converters());
+			cpb.prependTo(REST_guards, reverse(a.guards()));
+			cpb.prependTo(RESTOP_matchers, a.matchers());
+			cpb.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
+			cpb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
+			cpb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
+			stringStream(a.path()).forEach(x -> cpb.prependTo(RESTOP_path, x));
+			cdStream(a.rolesDeclared()).forEach(x -> cpb.addTo(REST_rolesDeclared, x));
+			cpb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
+			cpb.setIfNotEmpty(RESTOP_httpMethod, string(a.method()));
+			cpb.setIf(a.priority() != 0, RESTOP_priority, a.priority());
+			cpb.setIfNotEmpty(RESTOP_debug, string(a.debug()));
 
 			String v = StringUtils.trim(string(a.value()));
 			if (v != null) {
 				int i = v.indexOf(' ');
 				if (i == -1) {
-					psb.set(RESTOP_httpMethod, v);
+					cpb.set(RESTOP_httpMethod, v);
 				} else {
-					psb.set(RESTOP_httpMethod, v.substring(0, i).trim());
-					psb.prependTo(RESTOP_path,  v.substring(i).trim());
+					cpb.set(RESTOP_httpMethod, v.substring(0, i).trim());
+					cpb.prependTo(RESTOP_path,  v.substring(i).trim());
 				}
 			}
 		}

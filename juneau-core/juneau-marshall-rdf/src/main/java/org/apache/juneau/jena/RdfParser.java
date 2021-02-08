@@ -123,36 +123,36 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public RdfParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
-		trimWhitespace = ps.getBoolean(RDF_trimWhitespace).orElse(false);
-		looseCollections = ps.getBoolean(RDF_looseCollections).orElse(false);
-		rdfLanguage = ps.getString(RDF_language).orElse("RDF/XML-ABBREV");
-		juneauNs = ps.getInstance(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
-		juneauBpNs = ps.getInstance(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
-		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
+	public RdfParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
+		trimWhitespace = cp.getBoolean(RDF_trimWhitespace).orElse(false);
+		looseCollections = cp.getBoolean(RDF_looseCollections).orElse(false);
+		rdfLanguage = cp.getString(RDF_language).orElse("RDF/XML-ABBREV");
+		juneauNs = cp.getInstance(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
+		juneauBpNs = cp.getInstance(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
+		collectionFormat = cp.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
 
 		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
-				m.put(k.substring(5), ps.get("RdfCommon." + k).orElse(null));
+				m.put(k.substring(5), cp.get("RdfCommon." + k).orElse(null));
 		jenaProperties = m.unmodifiable();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public RdfParser(PropertyStore ps) {
-		this(ps, getConsumes(ps));
+	public RdfParser(ContextProperties cp) {
+		this(cp, getConsumes(cp));
 	}
 
-	private static String getConsumes(PropertyStore ps) {
-		String rdfLanguage = ps.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
+	private static String getConsumes(ContextProperties cp) {
+		String rdfLanguage = cp.get(RDF_language, String.class).orElse("RDF/XML-ABBREV");
 		switch(rdfLanguage) {
 			case "RDF/XML":
 			case "RDF/XML-ABBREV": return "text/xml+rdf";
@@ -168,7 +168,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 
 	@Override /* Context */
 	public RdfParserBuilder builder() {
-		return new RdfParserBuilder(getPropertyStore());
+		return new RdfParserBuilder(getContextProperties());
 	}
 
 	/**

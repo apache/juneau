@@ -26,7 +26,7 @@ import org.apache.juneau.xml.*;
 public class XmlConfigAnnotation {
 
 	/**
-	 * Applies {@link XmlConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link XmlConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<XmlConfig> {
 
@@ -41,20 +41,20 @@ public class XmlConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<XmlConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			XmlConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(XML_addBeanTypes, bool(a.addBeanTypes()));
-			psb.setIfNotEmpty(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
-			psb.setIfNotEmpty(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
-			psb.setIfNotEmpty(XML_defaultNamespace, string(a.defaultNamespace()));
-			psb.setIfNotEmpty(XML_enableNamespaces, bool(a.enableNamespaces()));
-			psb.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
-			psb.setIf(a.eventAllocator() != XmlEventAllocator.Null.class, XML_eventAllocator, a.eventAllocator());
-			psb.setIfNotEmpty(XML_preserveRootElement, bool(a.preserveRootElement()));
-			psb.setIf(a.reporter() != XmlReporter.Null.class, XML_reporter, a.reporter());
-			psb.setIf(a.resolver() != XmlResolver.Null.class, XML_resolver, a.resolver());
-			psb.setIfNotEmpty(XML_validating, bool(a.validating()));
+			cpb.setIfNotEmpty(XML_addBeanTypes, bool(a.addBeanTypes()));
+			cpb.setIfNotEmpty(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
+			cpb.setIfNotEmpty(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
+			cpb.setIfNotEmpty(XML_defaultNamespace, string(a.defaultNamespace()));
+			cpb.setIfNotEmpty(XML_enableNamespaces, bool(a.enableNamespaces()));
+			cpb.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
+			cpb.setIf(a.eventAllocator() != XmlEventAllocator.Null.class, XML_eventAllocator, a.eventAllocator());
+			cpb.setIfNotEmpty(XML_preserveRootElement, bool(a.preserveRootElement()));
+			cpb.setIf(a.reporter() != XmlReporter.Null.class, XML_reporter, a.reporter());
+			cpb.setIf(a.resolver() != XmlResolver.Null.class, XML_resolver, a.resolver());
+			cpb.setIfNotEmpty(XML_validating, bool(a.validating()));
 		}
 	}
 }

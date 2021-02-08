@@ -324,7 +324,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the {@link PropertyStore} for this request.
+	 * Returns the {@link ContextProperties} for this request.
 	 *
 	 * <p>
 	 * Consists of a read-only roll-up of all configuration properties defined on this method and class.
@@ -333,8 +333,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The property store for this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public PropertyStore getPropertyStore() {
-		return opContext.flatMap(RestOperationContext::propertyStore).orElse(PropertyStore.DEFAULT);
+	public ContextProperties getContextProperties() {
+		return opContext.flatMap(RestOperationContext::contextProperties).orElse(ContextProperties.DEFAULT);
 	}
 
 	/**
@@ -1321,7 +1321,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new request bean proxy for this REST request.
 	 */
 	public <T> T getRequest(Class<T> c) {
-		return getRequest(RequestBeanMeta.create(c, getContext().getPropertyStore()));
+		return getRequest(RequestBeanMeta.create(c, getContext().getContextProperties()));
 	}
 
 	/**

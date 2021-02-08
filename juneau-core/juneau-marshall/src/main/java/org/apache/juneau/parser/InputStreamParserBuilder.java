@@ -39,10 +39,10 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public InputStreamParserBuilder(PropertyStore ps) {
-		super(ps);
+	public InputStreamParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public InputStreamParserBuilder apply(PropertyStore copyFrom) {
+	public InputStreamParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

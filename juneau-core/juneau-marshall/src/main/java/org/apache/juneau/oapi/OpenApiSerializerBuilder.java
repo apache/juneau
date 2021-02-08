@@ -42,10 +42,10 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public OpenApiSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public OpenApiSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -200,7 +200,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OpenApiSerializerBuilder apply(PropertyStore copyFrom) {
+	public OpenApiSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

@@ -42,12 +42,12 @@ public class QueryParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @return A new {@link QueryParam}, or <jk>null</jk> if the parameter is not annotated with {@link Query}.
 	 */
-	public static QueryParam create(ParamInfo paramInfo, PropertyStore ps) {
+	public static QueryParam create(ParamInfo paramInfo, ContextProperties cp) {
 		if (paramInfo.hasAnnotation(Query.class) || paramInfo.getParameterType().hasAnnotation(Query.class))
-			return new QueryParam(paramInfo, ps);
+			return new QueryParam(paramInfo, cp);
 		return null;
 	}
 
@@ -55,13 +55,13 @@ public class QueryParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 */
-	protected QueryParam(ParamInfo paramInfo, PropertyStore ps) {
+	protected QueryParam(ParamInfo paramInfo, ContextProperties cp) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, ps);
+		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
 		this.multi = getMulti(paramInfo) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

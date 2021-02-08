@@ -17,7 +17,7 @@ import static org.apache.juneau.PropertyConverter.*;
 import java.util.*;
 
 /**
- * Represents possible property types of properties in a {@link PropertyStore}.
+ * Represents possible property types of properties in a {@link ContextProperties}.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public enum PropertyType {

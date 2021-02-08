@@ -63,7 +63,7 @@ public class ConfigClasspathStore extends ConfigStore {
 
 	@Override /* Context */
 	public ConfigClasspathStoreBuilder builder() {
-		return new ConfigClasspathStoreBuilder(getPropertyStore());
+		return new ConfigClasspathStoreBuilder(getContextProperties());
 	}
 
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
@@ -71,10 +71,10 @@ public class ConfigClasspathStore extends ConfigStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The settings for this content store.
+	 * @param cp The settings for this content store.
 	 */
-	protected ConfigClasspathStore(PropertyStore ps) {
-		super(ps);
+	protected ConfigClasspathStore(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ConfigStore */

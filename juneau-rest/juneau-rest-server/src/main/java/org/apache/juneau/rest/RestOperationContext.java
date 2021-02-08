@@ -727,13 +727,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws ServletException If context could not be created.
 	 */
 	public RestOperationContext(RestOperationContextBuilder builder) throws ServletException {
-		super(builder.getPropertyStore());
+		super(builder.getContextProperties());
 
 		try {
 			context = builder.restContext;
 			method = builder.restMethod;
 
-			PropertyStore ps = getPropertyStore();
+			ContextProperties cp = getContextProperties();
 
 			methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
 			mi = MethodInfo.of(method).accessible();
@@ -742,49 +742,49 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			BeanFactory bf = BeanFactory.of(context.rootBeanFactory, r)
 				.addBean(RestOperationContext.class, this)
 				.addBean(Method.class, method)
-				.addBean(PropertyStore.class, ps);
+				.addBean(ContextProperties.class, cp);
 			bf.addBean(BeanFactory.class, bf);
 
-			serializers = createSerializers(r, bf, ps);
+			serializers = createSerializers(r, bf, cp);
 			bf.addBean(SerializerGroup.class, serializers);
 
-			parsers = createParsers(r, bf, ps);
+			parsers = createParsers(r, bf, cp);
 			bf.addBean(ParserGroup.class, parsers);
 
-			partSerializer = createPartSerializer(r, bf, ps);
+			partSerializer = createPartSerializer(r, bf, cp);
 			bf.addBean(HttpPartSerializer.class, partSerializer);
 
-			partParser = createPartParser(r, bf, ps);
+			partParser = createPartParser(r, bf, cp);
 			bf.addBean(HttpPartParser.class, partParser);
 
-			converters = createConverters(r, ps, bf).asArray();
+			converters = createConverters(r, cp, bf).asArray();
 			bf.addBean(RestConverter[].class, converters);
 
-			guards = createGuards(r, ps, bf).asArray();
+			guards = createGuards(r, cp, bf).asArray();
 			bf.addBean(RestGuard[].class, guards);
 
-			RestMatcherList matchers = createMatchers(r, ps, bf);
+			RestMatcherList matchers = createMatchers(r, cp, bf);
  			requiredMatchers = matchers.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
 			optionalMatchers = matchers.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 
-			pathMatchers = createPathMatchers(r, ps, bf).asArray();
+			pathMatchers = createPathMatchers(r, cp, bf).asArray();
 			bf.addBean(UrlPathMatcher[].class, pathMatchers);
 			bf.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			encoders = createEncoders(r, ps, bf);
+			encoders = createEncoders(r, cp, bf);
 			bf.addBean(EncoderGroup.class, encoders);
 
-			jsonSchemaGenerator = createJsonSchemaGenerator(r, bf, ps);
+			jsonSchemaGenerator = createJsonSchemaGenerator(r, bf, cp);
 			bf.addBean(JsonSchemaGenerator.class, jsonSchemaGenerator);
 
-			supportedAcceptTypes = ps.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes());
-			supportedContentTypes = ps.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes());
+			supportedAcceptTypes = cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes());
+			supportedContentTypes = cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes());
 
-			defaultRequestHeaders = createDefaultRequestHeaders(r, ps, bf, method, context).asArray();
-			defaultResponseHeaders = createDefaultResponseHeaders(r, ps, bf, method, context).asArray();
-			defaultRequestQuery = createDefaultRequestQuery(r, ps, bf, method).asArray();
-			defaultRequestFormData = createDefaultRequestFormData(r, ps, bf, method).asArray();
-			defaultRequestAttributes = createDefaultRequestAttributes(r, ps, bf, method, context).asArray();
+			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bf, method, context).asArray();
+			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bf, method, context).asArray();
+			defaultRequestQuery = createDefaultRequestQuery(r, cp, bf, method).asArray();
+			defaultRequestFormData = createDefaultRequestFormData(r, cp, bf, method).asArray();
+			defaultRequestAttributes = createDefaultRequestAttributes(r, cp, bf, method, context).asArray();
 
 			int _hierarchyDepth = 0;
 			Class<?> sc = method.getDeclaringClass().getSuperclass();
@@ -794,22 +794,22 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			}
 			hierarchyDepth = _hierarchyDepth;
 
-			String _httpMethod = ps.get(RESTOP_httpMethod, String.class).orElse(null);
+			String _httpMethod = cp.get(RESTOP_httpMethod, String.class).orElse(null);
 			if (_httpMethod == null)
 				_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
 			if ("METHOD".equals(_httpMethod))
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = ps.get(REST_defaultCharset, String.class).orElse("utf-8");
+			defaultCharset = cp.get(REST_defaultCharset, String.class).orElse("utf-8");
 
-			maxInput = StringUtils.parseLongWithSuffix(ps.get(REST_maxInput, String.class).orElse("100M"));
+			maxInput = StringUtils.parseLongWithSuffix(cp.get(REST_maxInput, String.class).orElse("100M"));
 
-			responseMeta = ResponseBeanMeta.create(mi, ps);
+			responseMeta = ResponseBeanMeta.create(mi, cp);
 
 			opParams = context.findRestOperationParams(mi.inner(), bf);
 
-			this.priority = ps.getInteger(RESTOP_priority).orElse(0);
+			this.priority = cp.getInteger(RESTOP_priority).orElse(0);
 
 			this.callLogger = context.getCallLogger();
 		} catch (ServletException e) {
@@ -832,7 +832,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		Class<?> c = o.getClass();
 		ResponseBeanMeta rbm = responseBeanMetas.get(c);
 		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, serializers.getPropertyStore());
+			rbm = ResponseBeanMeta.create(c, serializers.getContextProperties());
 			if (rbm == null)
 				rbm = ResponseBeanMeta.NULL;
 			responseBeanMetas.put(c, rbm);
@@ -873,7 +873,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws Exception If result converters could not be instantiated.
 	 * @seealso #REST_converters
 	 */
-	protected RestConverterList createConverters(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
+	protected RestConverterList createConverters(Object resource, ContextProperties properties, BeanFactory beanFactory) throws Exception {
 
 		RestConverterList x = RestConverterList.create();
 
@@ -925,7 +925,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws Exception If guards could not be instantiated.
 	 * @seealso #REST_guards
 	 */
-	protected RestGuardList createGuards(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
+	protected RestGuardList createGuards(Object resource, ContextProperties properties, BeanFactory beanFactory) throws Exception {
 
 		RestGuardList x = RestGuardList.create();
 
@@ -986,7 +986,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws Exception If method matchers could not be instantiated.
 	 * @seealso #RESTMETHOD_matchers
 	 */
-	protected RestMatcherList createMatchers(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
+	protected RestMatcherList createMatchers(Object resource, ContextProperties properties, BeanFactory beanFactory) throws Exception {
 
 		RestMatcherList x = RestMatcherList.create();
 
@@ -1041,7 +1041,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws Exception If encoders could not be instantiated.
 	 * @seealso #REST_encoders
 	 */
-	protected EncoderGroup createEncoders(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
+	protected EncoderGroup createEncoders(Object resource, ContextProperties properties, BeanFactory beanFactory) throws Exception {
 
 		Encoder[] x = properties.getInstanceArray(REST_encoders, Encoder.class, beanFactory).orElse(null);
 
@@ -1093,17 +1093,17 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
-	 * @param ps The property store of this method.
+	 * @param properties The property store of this method.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
 	 * @seealso #REST_serializers
 	 */
-	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+	protected SerializerGroup createSerializers(Object resource, BeanFactory beanFactory, ContextProperties properties) throws Exception {
 
 		SerializerGroup g = beanFactory.getBean(SerializerGroup.class).orElse(null);
 
 		if (g == null) {
-			Object[] x = ps.getArray(REST_serializers, Object.class).orElse(null);
+			Object[] x = properties.getArray(REST_serializers, Object.class).orElse(null);
 
 			if (x == null)
 				x = beanFactory.getBean(Serializer[].class).orElse(null);
@@ -1114,7 +1114,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			g = SerializerGroup
 				.create()
 				.append(x)
-				.apply(ps)
+				.apply(properties)
 				.build();
 		}
 
@@ -1154,17 +1154,17 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
-	 * @param ps The property store of this method.
+	 * @param properties The property store of this method.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
 	 * @seealso #REST_parsers
 	 */
-	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+	protected ParserGroup createParsers(Object resource, BeanFactory beanFactory, ContextProperties properties) throws Exception {
 
 		ParserGroup g = beanFactory.getBean(ParserGroup.class).orElse(null);
 
 		if (g == null) {
-			Object[] x = ps.getArray(REST_parsers, Object.class).orElse(null);
+			Object[] x = properties.getArray(REST_parsers, Object.class).orElse(null);
 
 			if (x == null)
 				x = beanFactory.getBean(Parser[].class).orElse(null);
@@ -1175,7 +1175,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			g = ParserGroup
 				.create()
 				.append(x)
-				.apply(ps)
+				.apply(properties)
 				.build();
 		}
 
@@ -1216,12 +1216,12 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
-	 * @param ps The property store of this method.
+	 * @param properties The property store of this method.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
 	 * @seealso #REST_partSerializer
 	 */
-	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+	protected HttpPartSerializer createPartSerializer(Object resource, BeanFactory beanFactory, ContextProperties properties) throws Exception {
 
 		HttpPartSerializer x = null;
 
@@ -1229,13 +1229,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = (HttpPartSerializer)resource;
 
 		if (x == null)
-			x = ps.getInstance(REST_partSerializer, HttpPartSerializer.class, beanFactory).orElse(null);
+			x = properties.getInstance(REST_partSerializer, HttpPartSerializer.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
 
 		if (x == null)
-			x = new OpenApiSerializer(ps);
+			x = new OpenApiSerializer(properties);
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -1274,12 +1274,12 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
-	 * @param ps The property store of this method.
+	 * @param properties The property store of this method.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
 	 * @seealso #REST_partParser
 	 */
-	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+	protected HttpPartParser createPartParser(Object resource, BeanFactory beanFactory, ContextProperties properties) throws Exception {
 
 		HttpPartParser x = null;
 
@@ -1287,13 +1287,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = (HttpPartParser)resource;
 
 		if (x == null)
-			x = ps.getInstance(REST_partParser, HttpPartParser.class, beanFactory).orElse(null);
+			x = properties.getInstance(REST_partParser, HttpPartParser.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
 
 		if (x == null)
-			x = new OpenApiParser(ps);
+			x = new OpenApiParser(properties);
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -1317,7 +1317,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws Exception If parser could not be instantiated.
 	 * @seealso #RESTMETHOD_paths
 	 */
-	protected UrlPathMatcherList createPathMatchers(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
+	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, BeanFactory beanFactory) throws Exception {
 
 		UrlPathMatcherList x = UrlPathMatcherList.create();
 		boolean dotAll = properties.getBoolean("RestOperationContext.dotAll.b").orElse(false);
@@ -1351,11 +1351,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @param resource The REST resource object.
 	 * @param beanFactory The bean factory to use for retrieving and creating beans.
-	 * @param ps The property store of this method.
+	 * @param properties The property store of this method.
 	 * @return The JSON-schema generator for this method.
 	 * @throws Exception If schema generator could not be instantiated.
 	 */
-	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory, PropertyStore ps) throws Exception {
+	protected JsonSchemaGenerator createJsonSchemaGenerator(Object resource, BeanFactory beanFactory, ContextProperties properties) throws Exception {
 
 		JsonSchemaGenerator x = null;
 
@@ -1366,7 +1366,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = beanFactory.getBean(JsonSchemaGenerator.class).orElse(null);
 
 		if (x == null)
-			x = JsonSchemaGenerator.create().apply(ps).build();
+			x = JsonSchemaGenerator.create().apply(properties).build();
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -1391,7 +1391,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderList createDefaultRequestHeaders(Object resource, PropertyStore properties, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
+	protected HeaderList createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
 
 		HeaderList x = HeaderList.create();
 
@@ -1437,7 +1437,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderList createDefaultResponseHeaders(Object resource, PropertyStore properties, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
+	protected HeaderList createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
 
 		HeaderList x = HeaderList.create();
 
@@ -1467,7 +1467,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request attributes for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected NamedAttributeList createDefaultRequestAttributes(Object resource, PropertyStore properties, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
+	protected NamedAttributeList createDefaultRequestAttributes(Object resource, ContextProperties properties, BeanFactory beanFactory, Method method, RestContext context) throws Exception {
 		NamedAttributeList x = NamedAttributeList.create();
 
 		x.appendUnique(context.defaultRequestAttributes);
@@ -1495,7 +1495,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request query parameters for this method.
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
-	protected NameValuePairList createDefaultRequestQuery(Object resource, PropertyStore properties, BeanFactory beanFactory, Method method) throws Exception {
+	protected NameValuePairList createDefaultRequestQuery(Object resource, ContextProperties properties, BeanFactory beanFactory, Method method) throws Exception {
 
 		NameValuePairList x = NameValuePairList.create();
 
@@ -1539,7 +1539,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request form-data parameters for this method.
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
-	protected NameValuePairList createDefaultRequestFormData(Object resource, PropertyStore properties, BeanFactory beanFactory, Method method) throws Exception {
+	protected NameValuePairList createDefaultRequestFormData(Object resource, ContextProperties properties, BeanFactory beanFactory, Method method) throws Exception {
 
 		NameValuePairList x = NameValuePairList.create();
 
@@ -1582,7 +1582,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			ResponseHeader a = c.getAnnotation(ResponseHeader.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getContextProperties(), partSerializer);
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)
@@ -1603,7 +1603,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			ResponseBody a = c.getAnnotation(ResponseBody.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getContextProperties(), partSerializer);
 				pm = new ResponsePartMeta(BODY, schema, serializer);
 			}
 			if (pm == null)
@@ -1933,8 +1933,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		return Optional.of(supportedContentTypes);
 	}
 
-	Optional<PropertyStore> propertyStore() {
-		return Optional.of(getPropertyStore());
+	Optional<ContextProperties> contextProperties() {
+		return Optional.of(getContextProperties());
 	}
 
 	Optional<String> defaultCharset() {
@@ -1974,8 +1974,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		return out;
 	}
 
-	static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, PropertyStore ps, HttpPartSerializer _default) {
-		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, ps);
+	static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, ContextProperties cp, HttpPartSerializer _default) {
+		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, cp);
 		return hps == null ? _default : hps;
 	}
 

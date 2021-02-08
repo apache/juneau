@@ -47,7 +47,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
-		super(copyFrom.getPropertyStore());
+		super(copyFrom.getContextProperties());
 		this.parsers = AList.create().appendReverse(copyFrom.getParsers());
 	}
 
@@ -119,15 +119,15 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		List<Parser> l = new ArrayList<>();
 		for (Object p : parsers) {
 			Class<? extends Parser> c = null;
-			PropertyStore ps = getPropertyStore();
+			ContextProperties cp = getContextProperties();
 			if (p instanceof Class) {
 				c = (Class<? extends Parser>)p;
-				l.add(ContextCache.INSTANCE.create(c, ps));
+				l.add(ContextCache.INSTANCE.create(c, cp));
 			} else {
 				l.add((Parser)p);
 			}
 		}
-		return new ParserGroup(getPropertyStore(), ArrayUtils.toReverseArray(Parser.class, l));
+		return new ParserGroup(getContextProperties(), ArrayUtils.toReverseArray(Parser.class, l));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -391,7 +391,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ParserGroupBuilder apply(PropertyStore copyFrom) {
+	public ParserGroupBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

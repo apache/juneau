@@ -41,10 +41,10 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public JsonParserBuilder(PropertyStore ps) {
-		super(ps);
+	public JsonParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -94,7 +94,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonParserBuilder apply(PropertyStore copyFrom) {
+	public JsonParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

@@ -52,7 +52,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.DEFAULT);
+	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -65,17 +65,17 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public PlainTextSerializer(PropertyStore ps) {
-		this(ps, "text/plain", (String)null);
+	public PlainTextSerializer(ContextProperties cp) {
+		this(cp, "text/plain", (String)null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -98,14 +98,14 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public PlainTextSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
+	public PlainTextSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
 	}
 
 
 	@Override /* Context */
 	public PlainTextSerializerBuilder builder() {
-		return new PlainTextSerializerBuilder(getPropertyStore());
+		return new PlainTextSerializerBuilder(getContextProperties());
 	}
 
 	/**

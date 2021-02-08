@@ -167,7 +167,7 @@ public class JsonAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Json} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Json} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Json> {
 
@@ -182,13 +182,13 @@ public class JsonAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Json> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Json> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Json a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

@@ -67,11 +67,11 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	Initial configuration properties for this builder.
 	 */
-	protected MockRestClientBuilder(PropertyStore ps) {
-		super(ps);
+	protected MockRestClientBuilder(ContextProperties cp) {
+		super(cp);
 		connectionManager(new MockHttpClientConnectionManager());
 	}
 
@@ -246,7 +246,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MockRestClientBuilder apply(PropertyStore copyFrom) {
+	public MockRestClientBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

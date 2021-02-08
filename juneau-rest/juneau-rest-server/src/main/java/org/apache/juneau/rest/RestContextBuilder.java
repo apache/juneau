@@ -134,11 +134,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Pass-through default values.
 			if (parentContext.isPresent()) {
 				RestContext pc = parentContext.get();
-				PropertyStore pcps = pc.getPropertyStore();
-				set(REST_callLoggerDefault, pcps.get(REST_callLoggerDefault).orElse(null));
-				set(REST_debugDefault, pcps.get(REST_debugDefault).orElse(null));
-				set(REST_staticFilesDefault, pcps.get(REST_staticFilesDefault).orElse(null));
-				set(REST_fileFinderDefault, pcps.get(REST_fileFinderDefault).orElse(null));
+				ContextProperties pcp = pc.getContextProperties();
+				set(REST_callLoggerDefault, pcp.get(REST_callLoggerDefault).orElse(null));
+				set(REST_debugDefault, pcp.get(REST_debugDefault).orElse(null));
+				set(REST_staticFilesDefault, pcp.get(REST_staticFilesDefault).orElse(null));
+				set(REST_fileFinderDefault, pcp.get(REST_fileFinderDefault).orElse(null));
 			}
 
 			beanFactory = createBeanFactory(parentContext, resource);
@@ -184,7 +184,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			Class<? extends RestContext> c = getPropertyStore().getClass(REST_contextClass, RestContext.class).orElse(getDefaultImplClass());
+			Class<? extends RestContext> c = getContextProperties().getClass(REST_contextClass, RestContext.class).orElse(getDefaultImplClass());
 			return BeanFactory.of(beanFactory, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -354,12 +354,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Creates a new {@link PropertyStore} object initialized with the properties defined in this config.
+	 * Creates a new {@link ContextProperties} object initialized with the properties defined in this config.
 	 *
 	 * @return A new property store.
 	 */
-	protected PropertyStoreBuilder createPropertyStore() {
-		return PropertyStore.create();
+	protected ContextPropertiesBuilder createContextPropertiesBuilder() {
+		return ContextProperties.create();
 	}
 
 
@@ -2243,7 +2243,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder apply(PropertyStore copyFrom) {
+	public RestContextBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

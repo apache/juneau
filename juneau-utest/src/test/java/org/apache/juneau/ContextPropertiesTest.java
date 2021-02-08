@@ -26,10 +26,10 @@ import org.junit.*;
 
 
 /**
- * Test the PropertyStore class.
+ * Test the ContextProperties class.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class PropertyStoreTest {
+public class ContextPropertiesTest {
 
 	//====================================================================================================
 	// testBasic()
@@ -37,7 +37,7 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testBasic() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
 		b.set("B.f4.s", "4");
 		b.set("B.f3.s", "3");
@@ -53,7 +53,7 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testInvalidKeys() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		testError(b, "A.f1/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
 		testError(b, "A.f1/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
 		testError(b, "A.f1/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1' (String).");
@@ -68,21 +68,21 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.s", "1");
 		b.set("A.f2.s", 2);
 		b.set("A.f3.s", true);
 		b.set("A.f4.s", OMap.ofJson("{foo:'bar'}"));
 		b.set("A.f5.s", OList.ofJson("[1,2]"));
 		b.set("A.f6.s", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.s':'1','f2.s':'2','f3.s':'true','f4.s':'{foo:\\'bar\\'}','f5.s':'[1,2]'}}");
-		assertObject(ps.get("A.f1.s")).isType(String.class);
-		assertObject(ps.get("A.f2.s")).isType(String.class);
-		assertObject(ps.get("A.f3.s")).isType(String.class);
-		assertObject(ps.get("A.f4.s")).isType(String.class);
-		assertObject(ps.get("A.f5.s")).isType(String.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.s':'1','f2.s':'2','f3.s':'true','f4.s':'{foo:\\'bar\\'}','f5.s':'[1,2]'}}");
+		assertObject(cp.get("A.f1.s")).isType(String.class);
+		assertObject(cp.get("A.f2.s")).isType(String.class);
+		assertObject(cp.get("A.f3.s")).isType(String.class);
+		assertObject(cp.get("A.f4.s")).isType(String.class);
+		assertObject(cp.get("A.f5.s")).isType(String.class);
 
 		b.clear();
 		b.set("A.f1", "1");
@@ -91,13 +91,13 @@ public class PropertyStoreTest {
 		b.set("A.f4", OMap.ofJson("{foo:'bar'}"));
 		b.set("A.f5", OList.ofJson("[1,2]"));
 		b.set("A.f6", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{f1:'1',f2:'2',f3:'true',f4:'{foo:\\'bar\\'}',f5:'[1,2]'}}");
-		assertObject(ps.get("A.f1")).isType(String.class);
-		assertObject(ps.get("A.f2")).isType(String.class);
-		assertObject(ps.get("A.f3")).isType(String.class);
-		assertObject(ps.get("A.f4")).isType(String.class);
-		assertObject(ps.get("A.f5")).isType(String.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{f1:'1',f2:'2',f3:'true',f4:'{foo:\\'bar\\'}',f5:'[1,2]'}}");
+		assertObject(cp.get("A.f1")).isType(String.class);
+		assertObject(cp.get("A.f2")).isType(String.class);
+		assertObject(cp.get("A.f3")).isType(String.class);
+		assertObject(cp.get("A.f4")).isType(String.class);
+		assertObject(cp.get("A.f5")).isType(String.class);
 
 		b.set("A.f1", "x1");
 		b.set("A.f2", null);
@@ -114,19 +114,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testBoolean() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.b", "true");
 		b.set("A.f2.b", "false");
 		b.set("A.f3.b", new StringBuilder("true"));
 		b.set("A.f4.b", new StringBuilder("foo"));
 		b.set("A.f5.b", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.b':true,'f2.b':false,'f3.b':true,'f4.b':false}}");
-		assertObject(ps.get("A.f1.b")).isType(Boolean.class);
-		assertObject(ps.get("A.f2.b")).isType(Boolean.class);
-		assertObject(ps.get("A.f3.b")).isType(Boolean.class);
-		assertObject(ps.get("A.f4.b")).isType(Boolean.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.b':true,'f2.b':false,'f3.b':true,'f4.b':false}}");
+		assertObject(cp.get("A.f1.b")).isType(Boolean.class);
+		assertObject(cp.get("A.f2.b")).isType(Boolean.class);
+		assertObject(cp.get("A.f3.b")).isType(Boolean.class);
+		assertObject(cp.get("A.f4.b")).isType(Boolean.class);
 
 		// Test nulls
 		b.set("A.f2.b", null);
@@ -142,19 +142,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.i", 123);
 		b.set("A.f2.i", "123");
 		b.set("A.f3.i", new StringBuilder("123"));
 		b.set("A.f4.i", new StringBuilder("-1"));
 		b.set("A.f5.i", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.i':123,'f2.i':123,'f3.i':123,'f4.i':-1}}");
-		assertObject(ps.get("A.f1.i")).isType(Integer.class);
-		assertObject(ps.get("A.f2.i")).isType(Integer.class);
-		assertObject(ps.get("A.f3.i")).isType(Integer.class);
-		assertObject(ps.get("A.f4.i")).isType(Integer.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.i':123,'f2.i':123,'f3.i':123,'f4.i':-1}}");
+		assertObject(cp.get("A.f1.i")).isType(Integer.class);
+		assertObject(cp.get("A.f2.i")).isType(Integer.class);
+		assertObject(cp.get("A.f3.i")).isType(Integer.class);
+		assertObject(cp.get("A.f4.i")).isType(Integer.class);
 
 		// Test nulls
 		b.set("A.f2.i", null);
@@ -171,14 +171,14 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.c", String.class);
 		b.set("A.f2.c", Integer.class);
 		b.set("A.f3.c", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.c':'java.lang.String','f2.c':'java.lang.Integer'}}");
-		assertObject(ps.get("A.f1.c")).isType(Class.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.c':'java.lang.String','f2.c':'java.lang.Integer'}}");
+		assertObject(cp.get("A.f1.c")).isType(Class.class);
 
 		// Test nulls
 		b.set("A.f2.c", null);
@@ -194,19 +194,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testObject() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.o", 123);
 		b.set("A.f2.o", true);
 		b.set("A.f3.o", new StringBuilder("123"));
 		b.set("A.f4.o", StringBuilder.class);
 		b.set("A.f5.o", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':'java.lang.StringBuilder'}}");
-		assertObject(ps.get("A.f1.o")).isType(Integer.class);
-		assertObject(ps.get("A.f2.o")).isType(Boolean.class);
-		assertObject(ps.get("A.f3.o")).isType(StringBuilder.class);
-		assertObject(ps.get("A.f4.o")).isType(Class.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':'java.lang.StringBuilder'}}");
+		assertObject(cp.get("A.f1.o")).isType(Integer.class);
+		assertObject(cp.get("A.f2.o")).isType(Boolean.class);
+		assertObject(cp.get("A.f3.o")).isType(StringBuilder.class);
+		assertObject(cp.get("A.f4.o")).isType(Class.class);
 
 		// Test nulls
 		b.set("A.f2.o", null);
@@ -222,19 +222,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.ss", AList.of("foo", "bar", "bar", null));
 		b.set("A.f2.ss", AList.of(123, true, TestEnum.ONE, TestEnum.ONE, null));
 		b.set("A.f3.ss", AList.of(new StringBuilder("foo"), null));
 		b.set("A.f4.ss", "['foo',123,true]");
 		b.set("A.f5.ss", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.ss':['bar','foo'],'f2.ss':['123','ONE','true'],'f3.ss':['foo'],'f4.ss':['123','foo','true']}}");
-		assertObject(ps.get("A.f1.ss")).isType(Set.class);
-		assertObject(ps.get("A.f2.ss")).isType(Set.class);
-		assertObject(ps.get("A.f3.ss")).isType(Set.class);
-		assertObject(ps.get("A.f4.ss")).isType(Set.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.ss':['bar','foo'],'f2.ss':['123','ONE','true'],'f3.ss':['foo'],'f4.ss':['123','foo','true']}}");
+		assertObject(cp.get("A.f1.ss")).isType(Set.class);
+		assertObject(cp.get("A.f2.ss")).isType(Set.class);
+		assertObject(cp.get("A.f3.ss")).isType(Set.class);
+		assertObject(cp.get("A.f4.ss")).isType(Set.class);
 
 		b.clear();
 		b.set("A.f1.ss/add", "foo");
@@ -284,19 +284,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.si", AList.of(3, 2, 1, null));
 		b.set("A.f2.si", AList.of(123, "456", null));
 		b.set("A.f3.si", AList.of(new StringBuilder("123"), null));
 		b.set("A.f4.si", "[1,2,3]");
 		b.set("A.f5.si", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.si':[1,2,3],'f2.si':[123,456],'f3.si':[123],'f4.si':[1,2,3]}}");
-		assertObject(ps.get("A.f1.si")).isType(Set.class);
-		assertObject(ps.get("A.f2.si")).isType(Set.class);
-		assertObject(ps.get("A.f3.si")).isType(Set.class);
-		assertObject(ps.get("A.f4.si")).isType(Set.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.si':[1,2,3],'f2.si':[123,456],'f3.si':[123],'f4.si':[1,2,3]}}");
+		assertObject(cp.get("A.f1.si")).isType(Set.class);
+		assertObject(cp.get("A.f2.si")).isType(Set.class);
+		assertObject(cp.get("A.f3.si")).isType(Set.class);
+		assertObject(cp.get("A.f4.si")).isType(Set.class);
 
 		b.clear();
 		b.set("A.f1.si/add", "123");
@@ -370,16 +370,16 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.sc", AList.of(String.class, Integer.class, null));
 		b.set("A.f2.sc", AList.of(String.class, Integer.class, null));
 		b.set("A.f3.sc", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String'],'f2.sc':['java.lang.Integer','java.lang.String']}}");
-		assertObject(ps.get("A.f1.sc")).isType(Set.class);
-		assertObject(ps.get("A.f2.sc")).isType(Set.class);
-		assertObject(((Set<?>)ps.get("A.f1.sc").get()).iterator().next()).isType(Class.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String'],'f2.sc':['java.lang.Integer','java.lang.String']}}");
+		assertObject(cp.get("A.f1.sc")).isType(Set.class);
+		assertObject(cp.get("A.f2.sc")).isType(Set.class);
+		assertObject(((Set<?>)cp.get("A.f1.sc").get()).iterator().next()).isType(Class.class);
 
 		b.clear();
 		b.set("A.f1.sc/add", Integer.class);
@@ -428,19 +428,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.ls", AList.of("foo", "bar", "bar", null));
 		b.set("A.f2.ls", AList.of(123, true, TestEnum.ONE, TestEnum.ONE, null));
 		b.set("A.f3.ls", AList.of(new StringBuilder("foo"), null));
 		b.set("A.f4.ls", "['foo',123,true]");
 		b.set("A.f5.ls", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.ls':['foo','bar'],'f2.ls':['123','true','ONE'],'f3.ls':['foo'],'f4.ls':['foo','123','true']}}");
-		assertObject(ps.get("A.f1.ls")).isType(List.class);
-		assertObject(ps.get("A.f2.ls")).isType(List.class);
-		assertObject(ps.get("A.f3.ls")).isType(List.class);
-		assertObject(ps.get("A.f4.ls")).isType(List.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.ls':['foo','bar'],'f2.ls':['123','true','ONE'],'f3.ls':['foo'],'f4.ls':['foo','123','true']}}");
+		assertObject(cp.get("A.f1.ls")).isType(List.class);
+		assertObject(cp.get("A.f2.ls")).isType(List.class);
+		assertObject(cp.get("A.f3.ls")).isType(List.class);
+		assertObject(cp.get("A.f4.ls")).isType(List.class);
 
 		b.clear();
 		b.set("A.f1.ls/prepend", "foo");
@@ -492,19 +492,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.li", AList.of(1, 2, 3, null));
 		b.set("A.f2.li", AList.of(123, "456", null));
 		b.set("A.f3.li", AList.of(new StringBuilder("123"), null));
 		b.set("A.f4.li", "[1,2,3]");
 		b.set("A.f5.li", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.li':[1,2,3],'f2.li':[123,456],'f3.li':[123],'f4.li':[1,2,3]}}");
-		assertObject(ps.get("A.f1.li")).isType(List.class);
-		assertObject(ps.get("A.f2.li")).isType(List.class);
-		assertObject(ps.get("A.f3.li")).isType(List.class);
-		assertObject(ps.get("A.f4.li")).isType(List.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.li':[1,2,3],'f2.li':[123,456],'f3.li':[123],'f4.li':[1,2,3]}}");
+		assertObject(cp.get("A.f1.li")).isType(List.class);
+		assertObject(cp.get("A.f2.li")).isType(List.class);
+		assertObject(cp.get("A.f3.li")).isType(List.class);
+		assertObject(cp.get("A.f4.li")).isType(List.class);
 
 		b.clear();
 		b.set("A.f1.li/prepend", "123");
@@ -596,15 +596,15 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.lc", AList.of(String.class, Integer.class, null));
 		b.set("A.f2.lc", AList.of(String.class, Integer.class, null));
 		b.set("A.f3.lc", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.lc':['java.lang.String','java.lang.Integer'],'f2.lc':['java.lang.String','java.lang.Integer']}}");
-		assertObject(ps.get("A.f1.lc")).isType(List.class);
-		assertObject(ps.get("A.f2.lc")).isType(List.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.lc':['java.lang.String','java.lang.Integer'],'f2.lc':['java.lang.String','java.lang.Integer']}}");
+		assertObject(cp.get("A.f1.lc")).isType(List.class);
+		assertObject(cp.get("A.f2.lc")).isType(List.class);
 
 		b.clear();
 		b.set("A.f1.lc/prepend", Integer.class);
@@ -669,20 +669,20 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListObject() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.lo", AList.of(StringBuilder.class, null));
 		b.set("A.f2.lo", AList.of(123, true, new StringBuilder(123), StringBuilder.class, null));
 		b.set("A.f3.lo", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}");
-		assertObject(ps.get("A.f1.lo")).isType(List.class);
-		assertObject(ps.get("A.f2.lo")).isType(List.class);
-		assertObject(((List<?>)ps.get("A.f1.lo").get()).get(0)).isType(Class.class);
-		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(0)).isType(Integer.class);
-		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(1)).isType(Boolean.class);
-		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(2)).isType(StringBuilder.class);
-		assertObject(((List<?>)ps.get("A.f2.lo").get()).get(3)).isType(Class.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}");
+		assertObject(cp.get("A.f1.lo")).isType(List.class);
+		assertObject(cp.get("A.f2.lo")).isType(List.class);
+		assertObject(((List<?>)cp.get("A.f1.lo").get()).get(0)).isType(Class.class);
+		assertObject(((List<?>)cp.get("A.f2.lo").get()).get(0)).isType(Integer.class);
+		assertObject(((List<?>)cp.get("A.f2.lo").get()).get(1)).isType(Boolean.class);
+		assertObject(((List<?>)cp.get("A.f2.lo").get()).get(2)).isType(StringBuilder.class);
+		assertObject(((List<?>)cp.get("A.f2.lo").get()).get(3)).isType(Class.class);
 
 		b.clear();
 		b.set("A.f1.lo/prepend", 1);
@@ -742,19 +742,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.sms", AMap.of("foo","bar","baz","qux","quux",null,null,null));
 		b.set("A.f2.sms", AMap.of("foo",(Object)123,"bar",true,"baz",TestEnum.ONE,"qux",null));
 		b.set("A.f3.sms", AMap.of("foo",new StringBuilder("bar"),"baz",null));
 		b.set("A.f4.sms", "{foo:'bar',baz:123,qux:true}");
 		b.set("A.f5.sms", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.sms':{baz:'qux',foo:'bar'},'f2.sms':{bar:'true',baz:'ONE',foo:'123'},'f3.sms':{foo:'bar'},'f4.sms':{baz:'123',foo:'bar',qux:'true'}}}");
-		assertObject(ps.get("A.f1.sms")).isType(Map.class);
-		assertObject(ps.get("A.f2.sms")).isType(Map.class);
-		assertObject(ps.get("A.f3.sms")).isType(Map.class);
-		assertObject(ps.get("A.f4.sms")).isType(Map.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.sms':{baz:'qux',foo:'bar'},'f2.sms':{bar:'true',baz:'ONE',foo:'123'},'f3.sms':{foo:'bar'},'f4.sms':{baz:'123',foo:'bar',qux:'true'}}}");
+		assertObject(cp.get("A.f1.sms")).isType(Map.class);
+		assertObject(cp.get("A.f2.sms")).isType(Map.class);
+		assertObject(cp.get("A.f3.sms")).isType(Map.class);
+		assertObject(cp.get("A.f4.sms")).isType(Map.class);
 
 		b.clear();
 		b.set("A.f1.sms/put", "{foo:'bar'}");
@@ -778,19 +778,19 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.smi", AMap.of("foo","1","baz","2","quux",null,null,null));
 		b.set("A.f2.smi", AMap.of("foo",123,"bar","456","baz",null));
 		b.set("A.f3.smi", AMap.of("foo",new StringBuilder("123"),"baz",null));
 		b.set("A.f4.smi", "{foo:'123',baz:456,qux:null}");
 		b.set("A.f5.smi", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.smi':{baz:2,foo:1},'f2.smi':{bar:456,foo:123},'f3.smi':{foo:123},'f4.smi':{baz:456,foo:123}}}");
-		assertObject(ps.get("A.f1.smi")).isType(Map.class);
-		assertObject(ps.get("A.f2.smi")).isType(Map.class);
-		assertObject(ps.get("A.f3.smi")).isType(Map.class);
-		assertObject(ps.get("A.f4.smi")).isType(Map.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.smi':{baz:2,foo:1},'f2.smi':{bar:456,foo:123},'f3.smi':{foo:123},'f4.smi':{baz:456,foo:123}}}");
+		assertObject(cp.get("A.f1.smi")).isType(Map.class);
+		assertObject(cp.get("A.f2.smi")).isType(Map.class);
+		assertObject(cp.get("A.f3.smi")).isType(Map.class);
+		assertObject(cp.get("A.f4.smi")).isType(Map.class);
 
 		b.clear();
 		b.set("A.f1.smi/put", "{foo:'123'}");
@@ -814,17 +814,17 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = null;
 		b.set("A.f1.smc", AMap.of("foo",String.class,"baz",Integer.class,"quux",null,null,null));
 		b.set("A.f2.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null));
 		b.set("A.f3.smc", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}");
-		assertObject(ps.get("A.f1.smc")).isType(Map.class);
-		assertObject(ps.get("A.f2.smc")).isType(Map.class);
-		assertObject(((Map<?,?>)ps.get("A.f1.smc").get()).values().iterator().next()).isType(Class.class);
-		assertObject(((Map<?,?>)ps.get("A.f2.smc").get()).values().iterator().next()).isType(Class.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}");
+		assertObject(cp.get("A.f1.smc")).isType(Map.class);
+		assertObject(cp.get("A.f2.smc")).isType(Map.class);
+		assertObject(((Map<?,?>)cp.get("A.f1.smc").get()).values().iterator().next()).isType(Class.class);
+		assertObject(((Map<?,?>)cp.get("A.f2.smc").get()).values().iterator().next()).isType(Class.class);
 
 		b.clear();
 		b.set("A.f1.smc/put.foo", String.class);
@@ -844,20 +844,20 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapObject() throws Exception {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
-		PropertyStore ps = null;
+		ContextProperties cp = null;
 		b.set("A.f1.smo", AMap.of("foo","1","baz","2","quux",null,null,null));
 		b.set("A.f2.smo", AMap.of("foo",123,"bar",StringBuilder.class,"qux",null));
 		b.set("A.f3.smo", AMap.of("foo",new StringBuilder("123"),"baz",null));
 		b.set("A.f4.smo", "{foo:'123',baz:456,qux:null}");
 		b.set("A.f5.smo", null);
-		ps = b.build();
-		assertObject(ps).asJson().is("{A:{'f1.smo':{baz:'2',foo:'1'},'f2.smo':{bar:'java.lang.StringBuilder',foo:123},'f3.smo':{foo:'123'},'f4.smo':{baz:456,foo:'123'}}}");
-		assertObject(ps.get("A.f1.smo")).isType(Map.class);
-		assertObject(ps.get("A.f2.smo")).isType(Map.class);
-		assertObject(ps.get("A.f3.smo")).isType(Map.class);
-		assertObject(ps.get("A.f4.smo")).isType(Map.class);
+		cp = b.build();
+		assertObject(cp).asJson().is("{A:{'f1.smo':{baz:'2',foo:'1'},'f2.smo':{bar:'java.lang.StringBuilder',foo:123},'f3.smo':{foo:'123'},'f4.smo':{baz:456,foo:'123'}}}");
+		assertObject(cp.get("A.f1.smo")).isType(Map.class);
+		assertObject(cp.get("A.f2.smo")).isType(Map.class);
+		assertObject(cp.get("A.f3.smo")).isType(Map.class);
+		assertObject(cp.get("A.f4.smo")).isType(Map.class);
 
 		b.clear();
 		b.set("A.f1.smo/put", "{foo:'123'}");
@@ -885,8 +885,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testPropertyTypeStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1", "foo");
 		b2.set("A.f1", new StringBuilder("foo"));
@@ -898,12 +898,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1", new StringBuilder("foox"));
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1", "foo");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1", "bar");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -912,8 +912,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testPropertyTypeBooleanHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.b");
 		b2.set("A.f1.b", new StringBuilder("true"));
@@ -925,12 +925,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.b", new StringBuilder("false"));
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.b");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.b", false);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -939,8 +939,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testPropertyTypeIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.i", 1);
 		b2.set("A.f1.i", new StringBuilder("1"));
@@ -954,12 +954,12 @@ public class PropertyStoreTest {
 		testNotEquals(b1, b2);
 		assertTrue(b1.build() != b2.build());
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.i", 1);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.i", 2);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -968,8 +968,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.c", String.class);
 		b2.set("A.f1.c", String.class);
@@ -982,12 +982,12 @@ public class PropertyStoreTest {
 
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.c", String.class);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.c", Integer.class);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -996,8 +996,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testObjectHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.o", "foo");
 		b2.set("A.f1.o", "foo");
@@ -1009,12 +1009,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.o", TestEnum.TWO);
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.o", TestEnum.ONE);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.o", TestEnum.TWO);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1023,8 +1023,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.ss", AList.of("foo", "bar"));
 		b2.set("A.f1.ss", new String[]{"foo","bar"});
@@ -1040,12 +1040,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.ss", new String[]{"foox"});
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.ss", "['foo']");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.ss", "['bar']");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1054,8 +1054,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.si", AList.of("1", "2"));
 		b2.set("A.f1.si", new String[]{"1","2"});
@@ -1071,12 +1071,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.si", new String[]{"2"});
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.si", "['1']");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.si", "['2']");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1085,8 +1085,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.sc", AList.of(String.class, Integer.class));
 		b2.set("A.f1.sc", new Class<?>[]{Integer.class,String.class});
@@ -1102,12 +1102,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.sc", new Class[]{Integer.class});
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.sc", String.class);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.sc", Map.class);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1116,8 +1116,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.ls", AList.of("foo", "bar"));
 		b2.set("A.f1.ls", new String[]{"foo","bar"});
@@ -1139,12 +1139,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.ls", new String[]{"foox"});
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.ls", "['foo']");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.ls", "['bar']");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1153,8 +1153,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.li", AList.of("1", "2"));
 		b2.set("A.f1.li", new String[]{"1","2"});
@@ -1176,12 +1176,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.li", new String[]{"2"});
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.li", "['1']");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.li", "['2']");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1190,8 +1190,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.lc", AList.of(String.class, Integer.class));
 
@@ -1211,12 +1211,12 @@ public class PropertyStoreTest {
 		b2.set("A.f1.lc", new Class[]{Integer.class});
 		testNotEquals(b1, b2);
 
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.lc", String.class);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.lc", Map.class);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1225,8 +1225,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testListObjectHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.lo", AList.of("foo", 123, true, TestEnum.ONE));
 
@@ -1244,12 +1244,12 @@ public class PropertyStoreTest {
 		testNotEquals(b1, b2);
 
 		b1.set("A.f1.lo", "foo");
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.lo", "foo");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.lo", "bar");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1258,8 +1258,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.sms", AMap.of("foo","123","bar","true","baz",null,null,null));
 		b2.set("A.f1.sms", AMap.of("foo",123,"bar",true,"baz",null,null,null));
@@ -1275,12 +1275,12 @@ public class PropertyStoreTest {
 		testNotEquals(b1, b2);
 
 		b1.set("A.f1.sms", "{foo:'bar'}");
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.sms", "{foo:'bar'}");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.sms", "{foo:'baz'}");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1289,8 +1289,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.smi", AMap.of("foo",123,"bar",456,"baz",null,null,null));
 		b2.set("A.f1.smi", AMap.of("foo",123,"bar","456","baz",null,null,null));
@@ -1306,12 +1306,12 @@ public class PropertyStoreTest {
 		testNotEquals(b1, b2);
 
 		b1.set("A.f1.smi", "{foo:'123'}");
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.smi", "{foo:'123'}");
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.smi", "{foo:'456'}");
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1320,8 +1320,8 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testMapClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null,null,null));
 		b2.set("A.f1.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null,null,null));
@@ -1338,12 +1338,12 @@ public class PropertyStoreTest {
 
 		b1.clear();
 		b1.set("A.f1.smc/put.foo", Integer.class);
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.smc/put.foo", Integer.class);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.smc/put.foo", String.class);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1353,8 +1353,8 @@ public class PropertyStoreTest {
 	@Test
 	@Ignore // TODO - Fix me.
 	public void testMapObjectHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
-		PropertyStore ps = null;
+		ContextPropertiesBuilder b1 = ContextProperties.create(), b2 = ContextProperties.create();
+		ContextProperties cp = null;
 
 		b1.set("A.f1.smo", AMap.of("foo",TestEnum.ONE,"bar",TestEnum.TWO,"baz",null,null,null));
 		b2.set("A.f1.smo", AMap.of("foo",TestEnum.ONE,"bar",TestEnum.TWO,"baz",null,null,null));
@@ -1371,12 +1371,12 @@ public class PropertyStoreTest {
 
 		b1.clear();
 		b1.set("A.f1.smo/put.foo", TestEnum.ONE);
-		ps = b1.build();
+		cp = b1.build();
 		b1.set("A.f1.smo/put.foo", TestEnum.ONE);
-		assertTrue(ps == b1.build());
+		assertTrue(cp == b1.build());
 
 		b1.set("A.f1.smo/put.foo", TestEnum.TWO);
-		assertTrue(ps != b1.build());
+		assertTrue(cp != b1.build());
 
 		b1.clear();
 		b2.clear();
@@ -1391,155 +1391,155 @@ public class PropertyStoreTest {
 	public void testStringDefault() {
 
 		System.setProperty("A.f1", "foo");
-		PropertyStore ps = PropertyStore.create().build();
-		assertString(ps.get("A.f1")).is("foo");
+		ContextProperties cp = ContextProperties.create().build();
+		assertString(cp.get("A.f1")).is("foo");
 
 		System.clearProperty("A.f1");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1")).isNull();
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1")).isNull();
 	}
 
 	@Test
 	public void testIntegerDefault() {
 
 		System.setProperty("A.f1.i", "1");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.i")).isType(Integer.class).is(1);
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.i")).isType(Integer.class).is(1);
 
 		System.clearProperty("A.f1.i");
 		System.setProperty("A.f1", "1");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.i")).isType(Integer.class).is(1);
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.i")).isType(Integer.class).is(1);
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.i")).isNull();
+		assertObject(cp.get("A.f1.i")).isNull();
 	}
 
 	@Test
 	public void testObjectDefault() {
 
 		System.setProperty("A.f1.o", "123");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.o")).isType(String.class).is("123");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.o")).isType(String.class).is("123");
 
 		System.clearProperty("A.f1.o");
 		System.setProperty("A.f1", "123");
-		assertObject(ps.get("A.f1.o")).isType(String.class).is("123");
+		assertObject(cp.get("A.f1.o")).isType(String.class).is("123");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.o")).isNull();
+		assertObject(cp.get("A.f1.o")).isNull();
 	}
 
 	@Test
 	public void testSetStringDefault() {
 
 		System.setProperty("A.f1.ss", "['foo','bar']");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.ss")).asJson().is("['bar','foo']");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.ss")).asJson().is("['bar','foo']");
 
 		System.clearProperty("A.f1.ss");
 		System.setProperty("A.f1", "['foo','bar']");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.ss")).asJson().is("['bar','foo']");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.ss")).asJson().is("['bar','foo']");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.ss")).isNull();
+		assertObject(cp.get("A.f1.ss")).isNull();
 	}
 
 	@Test
 	public void testSetIntegerDefault() {
 
 		System.setProperty("A.f1.si", "['2','1']");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.si")).asJson().is("[1,2]");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.si")).asJson().is("[1,2]");
 
 		System.clearProperty("A.f1.si");
 		System.setProperty("A.f1", "['2','1']");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.si")).asJson().is("[1,2]");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.si")).asJson().is("[1,2]");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.si")).isNull();
+		assertObject(cp.get("A.f1.si")).isNull();
 	}
 
 	@Test
 	public void testListStringDefault() {
 
 		System.setProperty("A.f1.ls", "['foo','bar']");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.ls")).asJson().is("['foo','bar']");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.ls")).asJson().is("['foo','bar']");
 
 		System.clearProperty("A.f1.ls");
 		System.setProperty("A.f1", "['foo','bar']");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.ls")).asJson().is("['foo','bar']");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.ls")).asJson().is("['foo','bar']");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.ls")).isNull();
+		assertObject(cp.get("A.f1.ls")).isNull();
 	}
 
 	@Test
 	public void testListIntegerDefault() {
 
 		System.setProperty("A.f1.li", "['2','1']");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.li")).asJson().is("[2,1]");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.li")).asJson().is("[2,1]");
 
 		System.clearProperty("A.f1.li");
 		System.setProperty("A.f1", "['2','1']");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.li")).asJson().is("[2,1]");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.li")).asJson().is("[2,1]");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.li")).isNull();
+		assertObject(cp.get("A.f1.li")).isNull();
 	}
 
 	@Test
 	public void testMapStringDefault() {
 
 		System.setProperty("A.f1.sms", "{foo:'bar',baz:null}");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.sms")).asJson().is("{foo:'bar'}");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.sms")).asJson().is("{foo:'bar'}");
 
 		System.clearProperty("A.f1.sms");
 		System.setProperty("A.f1", "{foo:'bar',baz:null}");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.sms")).asJson().is("{foo:'bar'}");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.sms")).asJson().is("{foo:'bar'}");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.sms")).isNull();
+		assertObject(cp.get("A.f1.sms")).isNull();
 	}
 
 	@Test
 	public void testMapIntegerDefault() {
 
 		System.setProperty("A.f1.smi", "{foo:'123',baz:null}");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.smi")).asJson().is("{foo:123}");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.smi")).asJson().is("{foo:123}");
 
 		System.clearProperty("A.f1.smi");
 		System.setProperty("A.f1", "{foo:'123',baz:null}");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.smi")).asJson().is("{foo:123}");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.smi")).asJson().is("{foo:123}");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.smi")).isNull();
+		assertObject(cp.get("A.f1.smi")).isNull();
 	}
 
 	@Test
 	public void testMapObjectDefault() {
 
 		System.setProperty("A.f1.smo", "{foo:123,bar:'baz',qux:true,quux:null}");
-		PropertyStore ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
+		ContextProperties cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
 
 		System.clearProperty("A.f1.smo");
 		System.setProperty("A.f1", "{foo:123,bar:'baz',qux:true,quux:null}");
-		ps = PropertyStore.create().build();
-		assertObject(ps.get("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
+		cp = ContextProperties.create().build();
+		assertObject(cp.get("A.f1.smo")).asJson().is("{bar:'baz',foo:123,qux:true}");
 
 		System.clearProperty("A.f1");
-		assertObject(ps.get("A.f1.smo")).isNull();
+		assertObject(cp.get("A.f1.smo")).isNull();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1548,17 +1548,17 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testBuilderFromStore() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
 		b.set("A.foo", "bar");
-		PropertyStore ps1 = b.build();
-		b = ps1.builder();
+		ContextProperties cp = b.build();
+		b = cp.builder();
 		assertObject(b.build()).asJson().is("{A:{foo:'bar'}}");
 	}
 
 	@Test
 	public void testSet() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.set(OMap.of("A.foo", "bar"));
 		b.clear();
 		b.set(OMap.of("A.baz", "qux"));
@@ -1568,7 +1568,7 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testAdd() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.add(OMap.of("A.foo", "bar"));
 		b.add(OMap.of("A.baz", "qux"));
 		b.add(OMap.of("A.quux", null));
@@ -1578,14 +1578,14 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testRemoveNotExisting() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.removeFrom("A.foo.ls", "bar");
 		assertObject(b.build()).asJson().is("{}");
 	}
 
 	@Test
 	public void testAddToNull() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.appendTo("A.foo.ls", null);
 		b.prependTo("A.foo.ls", null);
 		assertObject(b.build()).asJson().is("{}");
@@ -1593,7 +1593,7 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testRemoveNull() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.removeFrom("A.foo.ss", null);
 		assertObject(b.build()).asJson().is("{}");
 		b.removeFrom("A.foo.ls", null);
@@ -1602,14 +1602,14 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testRemoveFromInvalidListOfObjects() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		assertThrown(()->b.removeFrom("A.foo.ss", "[xxx]")).contains("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).");
 		assertThrown(()->b.removeFrom("A.foo.ls", "[xxx]")).contains("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).");
 	}
 
 	@Test
 	public void testAddToInvalidMapOfObjects() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		assertThrown(()->b.putAllTo("A.foo.sms", "{xxx}")).contains("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>).");
 		assertThrown(()->b.putAllTo("A.foo.sms", "xxx")).is("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).");
 		assertThrown(()->b.putAllTo("A.foo.sms", new StringBuilder("foo"))).is("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).");
@@ -1617,63 +1617,63 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testGetNonExistent() {
-		PropertyStore b = PropertyStore.create().set("A.foo", "bar").build();
+		ContextProperties b = ContextProperties.create().set("A.foo", "bar").build();
 		assertObject(b.get("A.baz")).isNull();
 		assertObject(b.get("B.foo")).isNull();
 	}
 
 	@Test
 	public void testHashCodes() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.set("A.foo", "bar").set("B.foo", "bar");
-		PropertyStore ps = b.build();
+		ContextProperties cp = b.build();
 
-		assertEquals(ps.hashCode("A","B","C",null),ps.hashCode("A","B","C",null));
-		assertNotEquals(ps.hashCode("A"),ps.hashCode("B"));
-		assertNotEquals(ps.hashCode("A","B"),ps.hashCode("B","A"));
+		assertEquals(cp.hashCode("A","B","C",null),cp.hashCode("A","B","C",null));
+		assertNotEquals(cp.hashCode("A"),cp.hashCode("B"));
+		assertNotEquals(cp.hashCode("A","B"),cp.hashCode("B","A"));
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void testEquals() {
-		PropertyStoreBuilder b = PropertyStore.create();
-		PropertyStore ps = b.build();
-		assertFalse(ps.equals("foo"));
+		ContextPropertiesBuilder b = ContextProperties.create();
+		ContextProperties cp = b.build();
+		assertFalse(cp.equals("foo"));
 	}
 
 	@Test
 	public void testEqualsByGroups() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.set("A.foo", "bar").set("B.foo", "bar").set("D.foo", "bar");
-		PropertyStore ps1 = b.build();
+		ContextProperties cp1 = b.build();
 		b.remove("A.foo").set("C.foo", "bar").set("D.foo", "baz");
-		PropertyStore ps2 = b.build();
+		ContextProperties cp2 = b.build();
 
-		assertTrue(ps1.equals(ps1, null, null));
-		assertTrue(ps1.equals(ps2, null, null));
+		assertTrue(cp1.equals(cp1, null, null));
+		assertTrue(cp1.equals(cp2, null, null));
 
-		assertTrue(ps1.equals(ps2, "B"));
-		assertTrue(ps1.equals(ps2, "X"));
-		assertFalse(ps1.equals(ps2, "A"));
-		assertFalse(ps1.equals(ps2, "C"));
-		assertFalse(ps1.equals(ps2, "D"));
-		assertFalse(ps1.equals(ps2, "B", "D"));
+		assertTrue(cp1.equals(cp2, "B"));
+		assertTrue(cp1.equals(cp2, "X"));
+		assertFalse(cp1.equals(cp2, "A"));
+		assertFalse(cp1.equals(cp2, "C"));
+		assertFalse(cp1.equals(cp2, "D"));
+		assertFalse(cp1.equals(cp2, "B", "D"));
 	}
 
 	@Test
 	public void testKeySet() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.set("A.foo", "bar").set("B.foo", "bar").set("D.foo", "bar");
-		PropertyStore ps = b.build();
+		ContextProperties cp = b.build();
 
-		assertObject(ps.getKeys(null)).asJson().is("[]");
-		assertObject(ps.getKeys("A")).asJson().is("['foo']");
-		assertObject(ps.getKeys("C")).asJson().is("[]");
+		assertObject(cp.getKeys(null)).asJson().is("[]");
+		assertObject(cp.getKeys("A")).asJson().is("['foo']");
+		assertObject(cp.getKeys("C")).asJson().is("[]");
 	}
 
 	@Test
 	public void testToMutable() {
-		PropertyStoreBuilder b = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 		b.set("A.foo.s", "bar");
 		b.set("A.foo.b");
 		b.set("A.foo.i", 123);
@@ -1690,67 +1690,67 @@ public class PropertyStoreTest {
 		b.set("A.foo.smi", "{foo:123}");
 		b.set("A.foo.smc/put.foo", String.class);
 		b.set("A.foo.smo/put.foo", StringBuilder.class);
-		PropertyStore ps = b.build();
+		ContextProperties cp = b.build();
 
-		b = ps.builder();
-		ps = b.build();
+		b = cp.builder();
+		cp = b.build();
 
-		assertObject(ps).asJson().is("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.smc':{foo:'java.lang.String'},'foo.smi':{foo:123},'foo.smo':{foo:'java.lang.StringBuilder'},'foo.sms':{foo:'bar'},'foo.ss':['bar']}}");
+		assertObject(cp).asJson().is("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.smc':{foo:'java.lang.String'},'foo.smi':{foo:123},'foo.smo':{foo:'java.lang.StringBuilder'},'foo.sms':{foo:'bar'},'foo.ss':['bar']}}");
 	}
 
 	@Test
 	public void testToString() {
-		PropertyStore p = PropertyStore.create().build();
+		ContextProperties p = ContextProperties.create().build();
 		assertEquals("{}", p.toString());
 	}
 
 	@Test
 	public void testNoneOnList() {
-		PropertyStoreBuilder psb = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
-		psb.set("A.foo.ls", "['foo','bar']");
-		psb.set("A.foo.ls", "NONE");
-		assertEquals("{}", psb.build().toString());
+		b.set("A.foo.ls", "['foo','bar']");
+		b.set("A.foo.ls", "NONE");
+		assertEquals("{}", b.build().toString());
 	}
 
 	@Test
 	public void testNoneOnSet() {
-		PropertyStoreBuilder psb = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
-		psb.set("A.foo.ss", "['foo','bar']");
-		psb.set("A.foo.ss", "NONE");
-		assertEquals("{}", psb.build().toString());
+		b.set("A.foo.ss", "['foo','bar']");
+		b.set("A.foo.ss", "NONE");
+		assertEquals("{}", b.build().toString());
 	}
 
 	@Test
 	public void testInheritOnList() {
-		PropertyStoreBuilder psb = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
-		psb.set("A.foo.ls", "['foo','bar']");
-		psb.set("A.foo.ls", "['baz','INHERIT','qux']");
-		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", psb.build().toString());
+		b.set("A.foo.ls", "['foo','bar']");
+		b.set("A.foo.ls", "['baz','INHERIT','qux']");
+		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", b.build().toString());
 	}
 
 	@Test
 	public void testInheritOnSet() {
-		PropertyStoreBuilder psb = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
-		psb.set("A.foo.ls", "['foo','bar']");
-		psb.set("A.foo.ls", "['baz','INHERIT','qux']");
-		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", psb.build().toString());
+		b.set("A.foo.ls", "['foo','bar']");
+		b.set("A.foo.ls", "['baz','INHERIT','qux']");
+		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", b.build().toString());
 	}
 
 	@Test
 	public void testIndexedValuesOnList() {
-		PropertyStoreBuilder psb = PropertyStore.create();
+		ContextPropertiesBuilder b = ContextProperties.create();
 
-		psb.set("A.foo.ls", "['foo','bar']");
-		psb.set("A.foo.ls", new String[]{"INHERIT", "[0]:baz"});
-		assertEquals("{A:{'foo.ls':['baz','foo','bar']}}", psb.build().toString());
-		psb.set("A.foo.ls", new String[]{"INHERIT", "[1]:qux"});
-		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar']}}", psb.build().toString());
-		psb.set("A.foo.ls", new String[]{"INHERIT", "[10]:quux"});
-		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar','quux']}}", psb.build().toString());
+		b.set("A.foo.ls", "['foo','bar']");
+		b.set("A.foo.ls", new String[]{"INHERIT", "[0]:baz"});
+		assertEquals("{A:{'foo.ls':['baz','foo','bar']}}", b.build().toString());
+		b.set("A.foo.ls", new String[]{"INHERIT", "[1]:qux"});
+		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar']}}", b.build().toString());
+		b.set("A.foo.ls", new String[]{"INHERIT", "[10]:quux"});
+		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar','quux']}}", b.build().toString());
 	}
 
 	@Test
@@ -1765,17 +1765,17 @@ public class PropertyStoreTest {
 		Html html3 = A3.class.getAnnotation(Html.class);
 		Json json4 = A4.class.getAnnotation(Json.class);
 
-		PropertyStore
-			ps1 = PropertyStore.create().set("xxx", AList.of(html1)).build(),
-			ps1a = PropertyStore.create().set("xxx", AList.of(html1a)).build(),
-			ps2 = PropertyStore.create().set("xxx", AList.of(html2)).build(),
-			ps3 = PropertyStore.create().set("xxx", AList.of(html3)).build(),
-			ps4 = PropertyStore.create().set("xxx", AList.of(json4)).build();
+		ContextProperties
+			cp1 = ContextProperties.create().set("xxx", AList.of(html1)).build(),
+			cp1a = ContextProperties.create().set("xxx", AList.of(html1a)).build(),
+			cp2 = ContextProperties.create().set("xxx", AList.of(html2)).build(),
+			cp3 = ContextProperties.create().set("xxx", AList.of(html3)).build(),
+			cp4 = ContextProperties.create().set("xxx", AList.of(json4)).build();
 
-		assertTrue(ps1.equals(ps1a));
-		assertTrue(ps1.equals(ps2));
-		assertFalse(ps1.equals(ps3));
-		assertFalse(ps1.equals(ps4));
+		assertTrue(cp1.equals(cp1a));
+		assertTrue(cp1.equals(cp2));
+		assertFalse(cp1.equals(cp3));
+		assertFalse(cp1.equals(cp4));
 	}
 
 	@Html(on="foo")
@@ -1797,9 +1797,9 @@ public class PropertyStoreTest {
 			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class).build(),
 			s3 = HtmlSerializer.create().applyAnnotations(B1Config.class).build(),
 			s4 = HtmlSerializer.create().applyAnnotations(B2Config.class).build();
-		assertFalse(s1.getPropertyStore().equals(s2.getPropertyStore()));
-		assertFalse(s1.getPropertyStore().equals(s4.getPropertyStore()));
-		assertTrue(s2.getPropertyStore().equals(s3.getPropertyStore()));
+		assertFalse(s1.getContextProperties().equals(s2.getContextProperties()));
+		assertFalse(s1.getContextProperties().equals(s4.getContextProperties()));
+		assertTrue(s2.getContextProperties().equals(s3.getContextProperties()));
 	}
 
 	@Html(on="B1", format=HtmlFormat.XML)
@@ -1814,28 +1814,28 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testSetDefault() {
-		PropertyStoreBuilder psb = PropertyStore.create();
-		psb.setDefault("Foo", "1");
-		psb.setDefault("Foo", "2");
-		assertEquals("1", psb.peek("Foo"));
+		ContextPropertiesBuilder b = ContextProperties.create();
+		b.setDefault("Foo", "1");
+		b.setDefault("Foo", "2");
+		assertEquals("1", b.peek("Foo"));
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private void testError(PropertyStoreBuilder b, String key, Object val, String msg) {
+	private void testError(ContextPropertiesBuilder b, String key, Object val, String msg) {
 		assertThrown(()->b.set(key, val)).is(msg);
 	}
 
-	private void testEquals(PropertyStoreBuilder b1, PropertyStoreBuilder b2) {
+	private void testEquals(ContextPropertiesBuilder b1, ContextPropertiesBuilder b2) {
 		assertTrue(b1.build() == b2.build());
 	}
 
-	private void testNotEquals(PropertyStoreBuilder b1, PropertyStoreBuilder b2) {
-		PropertyStore p1 = b1.build(), p2 = b2.build();
-		assertTrue(p1 != p2);
-		assertTrue(p1.hashCode() != p2.hashCode());
+	private void testNotEquals(ContextPropertiesBuilder b1, ContextPropertiesBuilder b2) {
+		ContextProperties cp1 = b1.build(), cp2 = b2.build();
+		assertTrue(cp1 != cp2);
+		assertTrue(cp1.hashCode() != cp2.hashCode());
 	}
 
 	public static enum TestEnum {

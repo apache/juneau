@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
 public class SoapXmlConfigAnnotation {
 
 	/**
-	 * Applies {@link SoapXmlConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link SoapXmlConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<SoapXmlConfig> {
 
@@ -39,10 +39,10 @@ public class SoapXmlConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SoapXmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<SoapXmlConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			SoapXmlConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(SOAPXML_SOAPAction, string(a.soapAction()));
+			cpb.setIfNotEmpty(SOAPXML_SOAPAction, string(a.soapAction()));
 		}
 	}
 }

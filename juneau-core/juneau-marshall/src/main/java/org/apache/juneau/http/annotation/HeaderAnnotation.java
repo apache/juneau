@@ -1075,7 +1075,7 @@ public class HeaderAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Header} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Header} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Header> {
 
@@ -1090,13 +1090,13 @@ public class HeaderAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Header> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Header> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Header a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

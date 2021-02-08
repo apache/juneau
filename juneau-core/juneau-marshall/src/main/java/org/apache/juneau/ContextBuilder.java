@@ -46,25 +46,25 @@ import org.apache.juneau.xml.annotation.*;
 public abstract class ContextBuilder {
 
 	/** Contains all the modifiable settings for the implementation class. */
-	private final PropertyStoreBuilder psb;
+	private final ContextPropertiesBuilder cpb;
 
 	/**
 	 * Constructor.
 	 * Default settings.
 	 */
 	public ContextBuilder() {
-		this.psb = PropertyStore.create();
+		this.cpb = ContextProperties.create();
 	}
 
 	/**
 	 * Constructor that takes in an initial set of configuration properties.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public ContextBuilder(PropertyStore ps) {
-		if (ps == null)
-			ps = PropertyStore.DEFAULT;
-		this.psb = ps.builder();
+	public ContextBuilder(ContextProperties cp) {
+		if (cp == null)
+			cp = ContextProperties.DEFAULT;
+		this.cpb = cp.builder();
 	}
 
 	/**
@@ -74,22 +74,22 @@ public abstract class ContextBuilder {
 	 * Used in cases where multiple context builder are sharing the same property store builder.
 	 * <br>(e.g. <c>HtmlDocBuilder</c>)
 	 *
-	 * @param psb The property store builder to use.
+	 * @param cpb The property store builder to use.
 	 */
-	protected ContextBuilder(PropertyStoreBuilder psb) {
-		this.psb = psb;
+	protected ContextBuilder(ContextPropertiesBuilder cpb) {
+		this.cpb = cpb;
 	}
 
 	/**
 	 * Returns access to the inner property store builder.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link #ContextBuilder(PropertyStoreBuilder)} when builders share property store builders.
+	 * Used in conjunction with {@link #ContextBuilder(ContextPropertiesBuilder)} when builders share property store builders.
 	 *
 	 * @return The inner property store builder.
 	 */
-	protected PropertyStoreBuilder getPropertyStoreBuilder() {
-		return psb;
+	protected ContextPropertiesBuilder getContextPropertiesBuilder() {
+		return cpb;
 	}
 
 	/**
@@ -124,8 +124,8 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public ContextBuilder apply(PropertyStore copyFrom) {
-		this.psb.apply(copyFrom);
+	public ContextBuilder apply(ContextProperties copyFrom) {
+		this.cpb.apply(copyFrom);
 		return this;
 	}
 
@@ -161,7 +161,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		this.psb.applyAnnotations(al, r);
+		this.cpb.applyAnnotations(al, r);
 		return this;
 	}
 
@@ -302,16 +302,16 @@ public abstract class ContextBuilder {
 	 */
 
 	public <T extends Context> T build(Class<T> c) {
-		return ContextCache.INSTANCE.create(c, getPropertyStore());
+		return ContextCache.INSTANCE.create(c, getContextProperties());
 	}
 
 	/**
-	 * Returns a read-only snapshot of the current property store on this builder.
+	 * Returns a read-only snapshot of the current properties on this builder.
 	 *
 	 * @return A property store object.
 	 */
-	public PropertyStore getPropertyStore() {
-		return psb.build();
+	public ContextProperties getContextProperties() {
+		return cpb.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -591,7 +591,7 @@ public abstract class ContextBuilder {
 	 * <p>
 	 * Property values get 'normalized' when they get set.
 	 * For example, calling <c>set(<js>"BeanContext.debug.b"</js>, <js>"true"</js>)</c> will cause the property
-	 * value to be converted to a boolean.  This allows the underlying {@link PropertyStore} class to be comparable
+	 * value to be converted to a boolean.  This allows the underlying {@link ContextProperties} class to be comparable
 	 * and useful in determining whether a cached instance of a context object can be returned.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -626,7 +626,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * </ul>
 	 *
 	 * @param name The property name.
@@ -649,7 +649,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder set(String name, Object value) {
-		psb.set(name, value);
+		cpb.set(name, value);
 		return this;
 	}
 
@@ -662,7 +662,7 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder set(String name) {
 		Assertions.assertString(name).msg("Property ''{0}'' is not boolean.", name).endsWith(".b");
-		psb.set(name);
+		cpb.set(name);
 		return this;
 	}
 
@@ -674,7 +674,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder unset(String name) {
-		psb.unset(name);
+		cpb.unset(name);
 		return this;
 	}
 
@@ -690,7 +690,7 @@ public abstract class ContextBuilder {
 	 * 	<br><jk>null</jk> if not set.
 	 */
 	public Object peek(String key) {
-		return psb.peek(key);
+		return cpb.peek(key);
 	}
 
 	/**
@@ -710,7 +710,7 @@ public abstract class ContextBuilder {
 	 * @param <T> The type to convert to.
 	 */
 	public <T> T peek(Class<T> c, String key) {
-		return psb.peek(c, key);
+		return cpb.peek(c, key);
 	}
 
 	/**
@@ -741,7 +741,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -764,7 +764,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder set(Map<String,Object> properties) {
-		psb.set(properties);
+		cpb.set(properties);
 		return this;
 	}
 
@@ -796,7 +796,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -819,7 +819,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder add(Map<String,Object> properties) {
-		psb.add(properties);
+		cpb.add(properties);
 		return this;
 	}
 
@@ -853,7 +853,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -871,7 +871,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder addTo(String name, Object value) {
-		psb.addTo(name, value);
+		cpb.addTo(name, value);
 		return this;
 	}
 
@@ -906,7 +906,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -925,7 +925,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder appendTo(String name, Object value) {
-		psb.appendTo(name, value);
+		cpb.appendTo(name, value);
 		return this;
 	}
 
@@ -960,7 +960,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -979,7 +979,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder prependTo(String name, Object value) {
-		psb.prependTo(name, value);
+		cpb.prependTo(name, value);
 		return this;
 	}
 
@@ -1000,7 +1000,7 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -1020,7 +1020,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder putTo(String name, String key, Object value) {
-		psb.putTo(name, key, value);
+		cpb.putTo(name, key, value);
 		return this;
 	}
 
@@ -1041,7 +1041,7 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -1059,7 +1059,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder putAllTo(String name, Object value) {
-		psb.putAllTo(name, value);
+		cpb.putAllTo(name, value);
 		return this;
 	}
 
@@ -1082,7 +1082,7 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyStore}
+	 * 	<li class='jc'>{@link ContextProperties}
 	 * 	<li class='jm'>{@link #set(String, Object)}
 	 * </ul>
 	 *
@@ -1093,7 +1093,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder removeFrom(String name, Object value) {
-		psb.removeFrom(name, value);
+		cpb.removeFrom(name, value);
 		return this;
 	}
 

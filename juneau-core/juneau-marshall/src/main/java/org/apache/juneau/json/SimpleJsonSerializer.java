@@ -43,10 +43,10 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
-	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(PropertyStore.DEFAULT);
+	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -58,11 +58,11 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore ps) {
+		public Readable(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -74,11 +74,11 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public SimpleJsonSerializer(PropertyStore ps) {
+	public SimpleJsonSerializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(JSON_simpleMode, true)
 				.setDefault(WSERIALIZER_quoteChar, '\'')
 				.build(),
@@ -88,7 +88,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 
 	@Override /* Context */
 	public SimpleJsonSerializerBuilder builder() {
-		return new SimpleJsonSerializerBuilder(getPropertyStore());
+		return new SimpleJsonSerializerBuilder(getContextProperties());
 	}
 
 	/**

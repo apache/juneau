@@ -277,10 +277,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT = new JsonSerializer(PropertyStore.DEFAULT);
+	public static final JsonSerializer DEFAULT = new JsonSerializer(ContextProperties.DEFAULT);
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final JsonSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -293,11 +293,11 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore ps) {
+		public Readable(ContextProperties cp) {
 			super(
-				ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
+				cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -311,11 +311,11 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public ReadableSafe(PropertyStore ps) {
+		public ReadableSafe(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -342,17 +342,17 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public JsonSerializer(PropertyStore ps) {
-		this(ps, "application/json", "application/json,text/json");
+	public JsonSerializer(ContextProperties cp) {
+		this(cp, "application/json", "application/json,text/json");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -375,17 +375,17 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public JsonSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
+	public JsonSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
 
-		simpleMode = ps.getBoolean(JSON_simpleMode).orElse(false);
-		escapeSolidus = ps.getBoolean(JSON_escapeSolidus).orElse(false);
-		addBeanTypes = ps.getFirstBoolean(JSON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+		simpleMode = cp.getBoolean(JSON_simpleMode).orElse(false);
+		escapeSolidus = cp.getBoolean(JSON_escapeSolidus).orElse(false);
+		addBeanTypes = cp.getFirstBoolean(JSON_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 	}
 
 	@Override /* Context */
 	public JsonSerializerBuilder builder() {
-		return new JsonSerializerBuilder(getPropertyStore());
+		return new JsonSerializerBuilder(getContextProperties());
 	}
 
 	/**

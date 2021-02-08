@@ -611,13 +611,13 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlSerializer DEFAULT = new HtmlSerializer(PropertyStore.DEFAULT);
+	public static final HtmlSerializer DEFAULT = new HtmlSerializer(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes. */
-	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(PropertyStore.DEFAULT);
+	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(PropertyStore.DEFAULT);
+	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -630,11 +630,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Sq(PropertyStore ps) {
+		public Sq(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 			);
@@ -647,11 +647,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public SqReadable(PropertyStore ps) {
+		public SqReadable(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
@@ -679,17 +679,17 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public HtmlSerializer(PropertyStore ps) {
-		this(ps, "text/html", (String)null);
+	public HtmlSerializer(ContextProperties cp) {
+		this(cp, "text/html", (String)null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -713,19 +713,19 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public HtmlSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
-		uriAnchorText = ps.get(HTML_uriAnchorText, AnchorText.class).orElse(AnchorText.TO_STRING);
-		detectLabelParameters = ! ps.getBoolean(HTML_disableDetectLabelParameters).orElse(false);
-		detectLinksInStrings = ! ps.getBoolean(HTML_disableDetectLinksInStrings).orElse(false);
-		labelParameter = ps.getString(HTML_labelParameter).orElse("label");
-		addKeyValueTableHeaders = ps.getBoolean(HTML_addKeyValueTableHeaders).orElse(false);
-		addBeanTypes = ps.getFirstBoolean(HTML_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
+	public HtmlSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
+		uriAnchorText = cp.get(HTML_uriAnchorText, AnchorText.class).orElse(AnchorText.TO_STRING);
+		detectLabelParameters = ! cp.getBoolean(HTML_disableDetectLabelParameters).orElse(false);
+		detectLinksInStrings = ! cp.getBoolean(HTML_disableDetectLinksInStrings).orElse(false);
+		labelParameter = cp.getString(HTML_labelParameter).orElse("label");
+		addKeyValueTableHeaders = cp.getBoolean(HTML_addKeyValueTableHeaders).orElse(false);
+		addBeanTypes = cp.getFirstBoolean(HTML_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 	}
 
 	@Override /* Context */
 	public HtmlSerializerBuilder builder() {
-		return new HtmlSerializerBuilder(getPropertyStore());
+		return new HtmlSerializerBuilder(getContextProperties());
 	}
 
 	/**

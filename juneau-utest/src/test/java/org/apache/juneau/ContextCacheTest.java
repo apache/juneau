@@ -33,31 +33,31 @@ public class ContextCacheTest {
 	@Test
 	public void testBasic() {
 
-		PropertyStoreBuilder psb = PropertyStore.create();
-		PropertyStore ps = psb.build();
+		ContextPropertiesBuilder cpb = ContextProperties.create();
+		ContextProperties cp = cpb.build();
 
-		A a = ContextCache.INSTANCE.create(A.class, ps);
-		B b = ContextCache.INSTANCE.create(B.class, ps);
-		C c = ContextCache.INSTANCE.create(C.class, ps);
+		A a = ContextCache.INSTANCE.create(A.class, cp);
+		B b = ContextCache.INSTANCE.create(B.class, cp);
+		C c = ContextCache.INSTANCE.create(C.class, cp);
 
 		assertObject(a).asJson().is("{f1:'xxx'}");
 		assertObject(b).asJson().is("{f1:'xxx',f2:-1}");
 		assertObject(c).asJson().is("{f1:'xxx',f2:-1,f3:false}");
 
-		A a2 = ContextCache.INSTANCE.create(A.class, ps);
-		B b2 = ContextCache.INSTANCE.create(B.class, ps);
-		C c2 = ContextCache.INSTANCE.create(C.class, ps);
+		A a2 = ContextCache.INSTANCE.create(A.class, cp);
+		B b2 = ContextCache.INSTANCE.create(B.class, cp);
+		C c2 = ContextCache.INSTANCE.create(C.class, cp);
 
 		assertTrue(a == a2);
 		assertTrue(b == b2);
 		assertTrue(c == c2);
 
-		psb.set("A.f1", "foo");
-		ps = psb.build();
+		cpb.set("A.f1", "foo");
+		cp = cpb.build();
 
-		a2 = ContextCache.INSTANCE.create(A.class, ps);
-		b2 = ContextCache.INSTANCE.create(B.class, ps);
-		c2 = ContextCache.INSTANCE.create(C.class, ps);
+		a2 = ContextCache.INSTANCE.create(A.class, cp);
+		b2 = ContextCache.INSTANCE.create(B.class, cp);
+		c2 = ContextCache.INSTANCE.create(C.class, cp);
 
 		assertObject(a2).asJson().is("{f1:'foo'}");
 		assertObject(b2).asJson().is("{f1:'foo',f2:-1}");
@@ -69,11 +69,11 @@ public class ContextCacheTest {
 
 		a = a2; b = b2; c = c2;
 
-		ps = psb.set("B.f2.i", 123).build();
+		cp = cpb.set("B.f2.i", 123).build();
 
-		a2 = ContextCache.INSTANCE.create(A.class, ps);
-		b2 = ContextCache.INSTANCE.create(B.class, ps);
-		c2 = ContextCache.INSTANCE.create(C.class, ps);
+		a2 = ContextCache.INSTANCE.create(A.class, cp);
+		b2 = ContextCache.INSTANCE.create(B.class, cp);
+		c2 = ContextCache.INSTANCE.create(C.class, cp);
 
 		assertObject(a2).asJson().is("{f1:'foo'}");
 		assertObject(b2).asJson().is("{f1:'foo',f2:123}");
@@ -85,11 +85,11 @@ public class ContextCacheTest {
 
 		a = a2; b = b2; c = c2;
 
-		ps = psb.set("C.f3.b").build();
+		cp = cpb.set("C.f3.b").build();
 
-		a2 = ContextCache.INSTANCE.create(A.class, ps);
-		b2 = ContextCache.INSTANCE.create(B.class, ps);
-		c2 = ContextCache.INSTANCE.create(C.class, ps);
+		a2 = ContextCache.INSTANCE.create(A.class, cp);
+		b2 = ContextCache.INSTANCE.create(B.class, cp);
+		c2 = ContextCache.INSTANCE.create(C.class, cp);
 
 		assertObject(a2).asJson().is("{f1:'foo'}");
 		assertObject(b2).asJson().is("{f1:'foo',f2:123}");
@@ -101,11 +101,11 @@ public class ContextCacheTest {
 
 		a = a2; b = b2; c = c2;
 
-		ps = psb.set("D.bad.o", "xxx").build();
+		cp = cpb.set("D.bad.o", "xxx").build();
 
-		a2 = ContextCache.INSTANCE.create(A.class, ps);
-		b2 = ContextCache.INSTANCE.create(B.class, ps);
-		c2 = ContextCache.INSTANCE.create(C.class, ps);
+		a2 = ContextCache.INSTANCE.create(A.class, cp);
+		b2 = ContextCache.INSTANCE.create(B.class, cp);
+		c2 = ContextCache.INSTANCE.create(C.class, cp);
 
 		assertObject(a2).asJson().is("{f1:'foo'}");
 		assertObject(b2).asJson().is("{f1:'foo',f2:123}");
@@ -115,14 +115,14 @@ public class ContextCacheTest {
 		assertTrue(b == b2);
 		assertTrue(c == c2);
 
-		assertTrue(a.getPropertyStore() == a2.getPropertyStore());
-		assertTrue(b.getPropertyStore() == b2.getPropertyStore());
-		assertTrue(c.getPropertyStore() == c2.getPropertyStore());
+		assertTrue(a.getContextProperties() == a2.getContextProperties());
+		assertTrue(b.getContextProperties() == b2.getContextProperties());
+		assertTrue(c.getContextProperties() == c2.getContextProperties());
 
-		a2 = ContextCache.INSTANCE.create(A.class, a.getPropertyStore().builder().set("A.f1", "foo").build());
+		a2 = ContextCache.INSTANCE.create(A.class, a.getContextProperties().builder().set("A.f1", "foo").build());
 		assertTrue(a == a2);
 
-		a2 = ContextCache.INSTANCE.create(A.class, a.getPropertyStore().builder().set("A.f1", "bar").build());
+		a2 = ContextCache.INSTANCE.create(A.class, a.getContextProperties().builder().set("A.f1", "bar").build());
 		assertTrue(a != a2);
 	}
 
@@ -130,9 +130,9 @@ public class ContextCacheTest {
 	public static class A extends Context {
 		public final String f1;
 
-		public A(PropertyStore ps) {
-			super(ps, true);
-			f1 = getPropertyStore().getString("A.f1").orElse("xxx");
+		public A(ContextProperties cp) {
+			super(cp, true);
+			f1 = getContextProperties().getString("A.f1").orElse("xxx");
 		}
 
 		@Override
@@ -155,9 +155,9 @@ public class ContextCacheTest {
 	public static class B extends A {
 		public int f2;
 
-		public B(PropertyStore ps) {
-			super(ps);
-			f2 = getPropertyStore().getInteger("B.f2.i").orElse(-1);
+		public B(ContextProperties cp) {
+			super(cp);
+			f2 = getContextProperties().getInteger("B.f2.i").orElse(-1);
 
 		}
 
@@ -170,9 +170,9 @@ public class ContextCacheTest {
 	@ConfigurableContext
 	public static class C extends B {
 		public boolean f3;
-		public C(PropertyStore ps) {
-			super(ps);
-			f3 = getPropertyStore().getBoolean("C.f3.b").orElse(false);
+		public C(ContextProperties cp) {
+			super(cp);
+			f3 = getContextProperties().getBoolean("C.f3.b").orElse(false);
 		}
 
 		@Override
@@ -183,21 +183,21 @@ public class ContextCacheTest {
 
 	@Test
 	public void testBadConstructor() {
-		PropertyStoreBuilder psb = PropertyStore.create();
-		PropertyStore ps = psb.build();
-		assertThrown(()->ContextCache.INSTANCE.create(D1.class, ps)).is("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'");
-		assertThrown(()->ContextCache.INSTANCE.create(D2.class, ps)).is("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'");
+		ContextPropertiesBuilder cpb = ContextProperties.create();
+		ContextProperties cp = cpb.build();
+		assertThrown(()->ContextCache.INSTANCE.create(D1.class, cp)).is("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'");
+		assertThrown(()->ContextCache.INSTANCE.create(D2.class, cp)).is("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'");
 	}
 
 	public static class D1 extends A {
-		protected D1(PropertyStore ps) {
-			super(ps);
+		protected D1(ContextProperties cp) {
+			super(cp);
 		}
 	}
 
 	public static class D2 extends A {
-		public D2(PropertyStore ps) {
-			super(ps);
+		public D2(ContextProperties cp) {
+			super(cp);
 			throw new RuntimeException("Error!");
 		}
 	}

@@ -44,7 +44,7 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore.DEFAULT);
+	public static final JsoSerializer DEFAULT = new JsoSerializer(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -56,15 +56,15 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public JsoSerializer(PropertyStore ps) {
-		super(ps, "application/x-java-serialized-object", null);
+	public JsoSerializer(ContextProperties cp) {
+		super(cp, "application/x-java-serialized-object", null);
 	}
 
 	@Override /* Context */
 	public JsoSerializerBuilder builder() {
-		return new JsoSerializerBuilder(getPropertyStore());
+		return new JsoSerializerBuilder(getContextProperties());
 	}
 
 	/**

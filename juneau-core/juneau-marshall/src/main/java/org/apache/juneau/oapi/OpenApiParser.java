@@ -44,7 +44,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link OpenApiParser}. */
-	public static final OpenApiParser DEFAULT = new OpenApiParser(PropertyStore.DEFAULT);
+	public static final OpenApiParser DEFAULT = new OpenApiParser(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -59,29 +59,29 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public OpenApiParser(PropertyStore ps) {
-		this(ps, "text/openapi");
+	public OpenApiParser(ContextProperties cp) {
+		this(cp, "text/openapi");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public OpenApiParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
-		format = ps.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
-		collectionFormat = ps.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
+	public OpenApiParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
+		format = cp.get(OAPI_format, HttpPartFormat.class).orElse(HttpPartFormat.NO_FORMAT);
+		collectionFormat = cp.get(OAPI_collectionFormat, HttpPartCollectionFormat.class).orElse(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}
 
 	@Override /* Context */
 	public OpenApiParserBuilder builder() {
-		return new OpenApiParserBuilder(getPropertyStore());
+		return new OpenApiParserBuilder(getContextProperties());
 	}
 
 	/**

@@ -47,7 +47,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
-		super(copyFrom.getPropertyStore());
+		super(copyFrom.getContextProperties());
 		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
 	}
 
@@ -117,17 +117,17 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@SuppressWarnings("unchecked")
 	public SerializerGroup build() {
 		List<Serializer> l = new ArrayList<>();
-		PropertyStore ps = getPropertyStore();
+		ContextProperties cp = getContextProperties();
 		for (Object s : serializers) {
 			Class<? extends Serializer> c = null;
 			if (s instanceof Class) {
 				c = (Class<? extends Serializer>)s;
-				l.add(ContextCache.INSTANCE.create(c, ps));
+				l.add(ContextCache.INSTANCE.create(c, cp));
 			} else {
 				l.add((Serializer)s);
 			}
 		}
-		return new SerializerGroup(getPropertyStore(), ArrayUtils.toReverseArray(Serializer.class, l));
+		return new SerializerGroup(getContextProperties(), ArrayUtils.toReverseArray(Serializer.class, l));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -529,7 +529,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public SerializerGroupBuilder apply(PropertyStore copyFrom) {
+	public SerializerGroupBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

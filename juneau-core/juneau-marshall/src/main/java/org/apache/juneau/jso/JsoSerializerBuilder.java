@@ -37,10 +37,10 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public JsoSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public JsoSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -73,7 +73,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsoSerializerBuilder apply(PropertyStore copyFrom) {
+	public JsoSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

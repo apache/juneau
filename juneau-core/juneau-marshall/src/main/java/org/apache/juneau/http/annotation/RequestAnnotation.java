@@ -175,7 +175,7 @@ public class RequestAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Request} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Request} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Request> {
 
@@ -190,13 +190,13 @@ public class RequestAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Request> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Request> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Request a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

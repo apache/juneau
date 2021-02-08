@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.*;
 public class UrlEncodingConfigAnnotation {
 
 	/**
-	 * Applies {@link UrlEncodingConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link UrlEncodingConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<UrlEncodingConfig> {
 
@@ -38,12 +38,12 @@ public class UrlEncodingConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncodingConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<UrlEncodingConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			UrlEncodingConfig a = ai.getAnnotation();
 
 			if (! a.expandedParams().isEmpty()) {
-				psb.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
-				psb.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));
+				cpb.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
+				cpb.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));
 			}
 		}
 	}

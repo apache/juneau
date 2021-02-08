@@ -41,10 +41,10 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public HtmlParserBuilder(PropertyStore ps) {
-		super(ps);
+	public HtmlParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -77,7 +77,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlParserBuilder apply(PropertyStore copyFrom) {
+	public HtmlParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

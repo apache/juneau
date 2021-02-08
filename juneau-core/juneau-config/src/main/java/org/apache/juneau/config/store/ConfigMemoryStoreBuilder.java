@@ -35,15 +35,15 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public ConfigMemoryStoreBuilder(PropertyStore ps) {
-		super(ps);
+	public ConfigMemoryStoreBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
 	public ConfigMemoryStore build() {
-		return new ConfigMemoryStore(getPropertyStore());
+		return new ConfigMemoryStore(getContextProperties());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigMemoryStoreBuilder apply(PropertyStore copyFrom) {
+	public ConfigMemoryStoreBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

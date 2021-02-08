@@ -35,15 +35,15 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public ConfigClasspathStoreBuilder(PropertyStore ps) {
-		super(ps);
+	public ConfigClasspathStoreBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
 	public ConfigClasspathStore build() {
-		return new ConfigClasspathStore(getPropertyStore());
+		return new ConfigClasspathStore(getContextProperties());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigClasspathStoreBuilder apply(PropertyStore copyFrom) {
+	public ConfigClasspathStoreBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

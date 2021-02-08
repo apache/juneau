@@ -37,10 +37,10 @@ public class SimpleJsonSerializerBuilder extends JsonSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public SimpleJsonSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public SimpleJsonSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -73,7 +73,7 @@ public class SimpleJsonSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public SimpleJsonSerializerBuilder apply(PropertyStore copyFrom) {
+	public SimpleJsonSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

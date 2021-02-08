@@ -40,10 +40,10 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public ReaderParserBuilder(PropertyStore ps) {
-		super(ps);
+	public ReaderParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ReaderParserBuilder apply(PropertyStore copyFrom) {
+	public ReaderParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

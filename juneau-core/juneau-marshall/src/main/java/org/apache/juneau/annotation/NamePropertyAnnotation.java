@@ -121,7 +121,7 @@ public class NamePropertyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link NameProperty} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link NameProperty} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<NameProperty> {
 
@@ -136,13 +136,13 @@ public class NamePropertyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<NameProperty> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<NameProperty> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			NameProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

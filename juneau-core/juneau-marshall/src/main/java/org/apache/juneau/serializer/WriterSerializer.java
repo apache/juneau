@@ -293,7 +293,7 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	public static final String WSERIALIZER_useWhitespace = PREFIX + ".useWhitespace.b";
 
-	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "", "") {
+	static final WriterSerializer DEFAULT = new WriterSerializer(ContextProperties.create().build(), "", "") {
 		@Override
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -313,7 +313,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -336,14 +336,14 @@ public abstract class WriterSerializer extends Serializer {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	protected WriterSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
+	protected WriterSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
 
-		maxIndent = ps.getInteger(WSERIALIZER_maxIndent).orElse(100);
-		quoteChar = ps.getString(WSERIALIZER_quoteChar).orElse("\"").charAt(0);
-		streamCharset = ps.get(WSERIALIZER_streamCharset, Charset.class).orElse(IOUtils.UTF8);
-		fileCharset = ps.get(WSERIALIZER_fileCharset, Charset.class).orElse(Charset.defaultCharset());
-		useWhitespace = ps.getBoolean(WSERIALIZER_useWhitespace).orElse(false);
+		maxIndent = cp.getInteger(WSERIALIZER_maxIndent).orElse(100);
+		quoteChar = cp.getString(WSERIALIZER_quoteChar).orElse("\"").charAt(0);
+		streamCharset = cp.get(WSERIALIZER_streamCharset, Charset.class).orElse(IOUtils.UTF8);
+		fileCharset = cp.get(WSERIALIZER_fileCharset, Charset.class).orElse(Charset.defaultCharset());
+		useWhitespace = cp.getBoolean(WSERIALIZER_useWhitespace).orElse(false);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

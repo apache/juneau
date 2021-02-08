@@ -38,10 +38,10 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public HtmlStrippedDocSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public HtmlStrippedDocSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -74,7 +74,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlStrippedDocSerializerBuilder apply(PropertyStore copyFrom) {
+	public HtmlStrippedDocSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

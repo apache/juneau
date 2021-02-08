@@ -49,8 +49,8 @@ public class Nls_Test {
 		}
 	}
 	public static class A1 extends WriterSerializer {
-		public A1(PropertyStore ps) {
-			super(ps, "text/plain", null);
+		public A1(ContextProperties cp) {
+			super(cp, "text/plain", null);
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {

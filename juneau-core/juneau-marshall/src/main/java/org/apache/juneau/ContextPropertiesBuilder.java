@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-import org.apache.juneau.PropertyStore.*;
+import org.apache.juneau.ContextProperties.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -30,13 +30,13 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * A builder for {@link PropertyStore} objects.
+ * A builder for {@link ContextProperties} objects.
  */
-public class PropertyStoreBuilder {
+public class ContextPropertiesBuilder {
 
 	// Contains a cache of all created PropertyStore objects keyed by hashcode.
 	// Used to minimize memory consumption by reusing identical PropertyStores.
-	private static final Map<PropertyStore,PropertyStore> CACHE = new ConcurrentHashMap<>();
+	private static final Map<ContextProperties,ContextProperties> CACHE = new ConcurrentHashMap<>();
 
 	// Maps property suffixes (e.g. "lc") to PropertyType (e.g. LIST_CLASS)
 	static final Map<String,PropertyType> SUFFIX_MAP = new ConcurrentHashMap<>();
@@ -48,36 +48,36 @@ public class PropertyStoreBuilder {
 	private final Map<String,PropertyGroupBuilder> groups = new ConcurrentSkipListMap<>();
 
 	// Previously-created property store.
-	private volatile PropertyStore propertyStore;
+	private volatile ContextProperties properties;
 
 	// Called by PropertyStore.builder()
-	PropertyStoreBuilder(PropertyStore ps) {
-		apply(ps);
+	ContextPropertiesBuilder(ContextProperties cp) {
+		apply(cp);
 	}
 
 	// Called by PropertyStore.create()
-	PropertyStoreBuilder() {}
+	ContextPropertiesBuilder() {}
 
 	/**
-	 * Creates a new {@link PropertyStore} based on the values in this builder.
+	 * Creates a new {@link ContextProperties} based on the values in this builder.
 	 *
-	 * @return A new {@link PropertyStore} based on the values in this builder.
+	 * @return A new {@link ContextProperties} based on the values in this builder.
 	 */
-	public synchronized PropertyStore build() {
+	public synchronized ContextProperties build() {
 
 		// Reused the last one if we haven't change this builder.
-		if (propertyStore == null)
-			propertyStore = new PropertyStore(groups);
+		if (properties == null)
+			properties = new ContextProperties(groups);
 
-		PropertyStore ps = CACHE.get(propertyStore);
-		if (ps == null)
-			CACHE.put(propertyStore, propertyStore);
-		else if (! ps.equals(propertyStore))
-			throw new RuntimeException("Property store mismatch!  This shouldn't happen.  hashCode=["+propertyStore.hashCode()+"]\n---PS#1---\n" + ps.hashCodes() + "\n---PS#2---\n" + propertyStore.hashCodes());
+		ContextProperties cp = CACHE.get(properties);
+		if (cp == null)
+			CACHE.put(properties, properties);
+		else if (! cp.equals(properties))
+			throw new RuntimeException("Property store mismatch!  This shouldn't happen.  hashCode=["+properties.hashCode()+"]\n---PS#1---\n" + cp.hashCodes() + "\n---PS#2---\n" + properties.hashCodes());
 		else
-			propertyStore = ps;
+			properties = cp;
 
-		return propertyStore;
+		return properties;
 	}
 
 	/**
@@ -86,8 +86,8 @@ public class PropertyStoreBuilder {
 	 * @param copyFrom The property store to copy the values from.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder apply(PropertyStore copyFrom) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder apply(ContextProperties copyFrom) {
+		properties = null;
 
 		if (copyFrom != null)
 			for (Map.Entry<String,PropertyGroup> e : copyFrom.groups.entrySet()) {
@@ -110,7 +110,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	public PropertyStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
+	public ContextPropertiesBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
 		vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
@@ -142,8 +142,8 @@ public class PropertyStoreBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder set(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder set(String key, Object value) {
+		properties = null;
 
 		String g = group(key);
 
@@ -200,7 +200,7 @@ public class PropertyStoreBuilder {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder setIf(boolean flag, String key, Object value) {
+	public synchronized ContextPropertiesBuilder setIf(boolean flag, String key, Object value) {
 		if (flag)
 			set(key, value);
 		return this;
@@ -213,7 +213,7 @@ public class PropertyStoreBuilder {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder setIfNotEmpty(String key, Object value) {
+	public synchronized ContextPropertiesBuilder setIfNotEmpty(String key, Object value) {
 		return setIf(ObjectUtils.isNotEmpty(value), key, value);
 	}
 
@@ -226,7 +226,7 @@ public class PropertyStoreBuilder {
 	 * @param key The configuration property key (e.g <js>"BeanContext.foo.b"</js>).
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder set(String key) {
+	public synchronized ContextPropertiesBuilder set(String key) {
 		Assertions.assertString(key).msg("Property ''{0}'' is not a boolean.", key).endsWith(".b");
 		return set(key, true);
 	}
@@ -240,7 +240,7 @@ public class PropertyStoreBuilder {
 	 * @param key The configuration property key (e.g <js>"BeanContext.foo.b"</js>).
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder unset(String key) {
+	public synchronized ContextPropertiesBuilder unset(String key) {
 		return set(key, null);
 	}
 
@@ -258,8 +258,8 @@ public class PropertyStoreBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder setDefault(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder setDefault(String key, Object value) {
+		properties = null;
 
 		String g = group(key);
 
@@ -290,8 +290,8 @@ public class PropertyStoreBuilder {
 	 * @param key The property key.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder remove(String key) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder remove(String key) {
+		properties = null;
 		return set(key, null);
 	}
 
@@ -304,8 +304,8 @@ public class PropertyStoreBuilder {
 	 * @param newProperties The new properties to set.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder set(Map<String,Object> newProperties) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder set(Map<String,Object> newProperties) {
+		properties = null;
 		clear();
 		add(newProperties);
 		return this;
@@ -320,8 +320,8 @@ public class PropertyStoreBuilder {
 	 * @param newProperties The new properties to set.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder add(Map<String,Object> newProperties) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder add(Map<String,Object> newProperties) {
+		properties = null;
 
 		if (newProperties != null)
 			for (Map.Entry<String,Object> e : newProperties.entrySet())
@@ -341,8 +341,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder addTo(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder addTo(String key, Object value) {
+		properties = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
 
@@ -376,7 +376,7 @@ public class PropertyStoreBuilder {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder addToIf(boolean flag, String key, Object value) {
+	public synchronized ContextPropertiesBuilder addToIf(boolean flag, String key, Object value) {
 		if (flag)
 			addTo(key, value);
 		return this;
@@ -389,7 +389,7 @@ public class PropertyStoreBuilder {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder addToIfNotEmpty(String key, Object value) {
+	public synchronized ContextPropertiesBuilder addToIfNotEmpty(String key, Object value) {
 		return addToIf(ObjectUtils.isNotEmpty(value), key, value);
 	}
 
@@ -402,8 +402,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder putTo(String key, String mapKey, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder putTo(String key, String mapKey, Object value) {
+		properties = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
 
@@ -432,8 +432,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder putAllTo(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder putAllTo(String key, Object value) {
+		properties = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
 
@@ -465,8 +465,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET/LIST property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder appendTo(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder appendTo(String key, Object value) {
+		properties = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
 
@@ -495,7 +495,7 @@ public class PropertyStoreBuilder {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder appendToIf(boolean flag, String key, Object value) {
+	public synchronized ContextPropertiesBuilder appendToIf(boolean flag, String key, Object value) {
 		if (flag)
 			appendTo(key, value);
 		return this;
@@ -508,7 +508,7 @@ public class PropertyStoreBuilder {
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder appendToIfNotEmpty(String key, Object value) {
+	public synchronized ContextPropertiesBuilder appendToIfNotEmpty(String key, Object value) {
 		return appendToIf(ObjectUtils.isNotEmpty(value), key, value);
 	}
 
@@ -523,8 +523,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET/LIST property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder prependTo(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder prependTo(String key, Object value) {
+		properties = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
 
@@ -553,8 +553,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET or LIST property.
 	 */
-	public synchronized PropertyStoreBuilder removeFrom(String key, Object value) {
-		propertyStore = null;
+	public synchronized ContextPropertiesBuilder removeFrom(String key, Object value) {
+		properties = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
 
@@ -617,7 +617,7 @@ public class PropertyStoreBuilder {
 	 * Clears all entries in this property store.
 	 */
 	public synchronized void clear() {
-		propertyStore = null;
+		properties = null;
 		this.groups.clear();
 	}
 

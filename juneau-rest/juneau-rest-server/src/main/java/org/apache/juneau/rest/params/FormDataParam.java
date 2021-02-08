@@ -46,12 +46,12 @@ public class FormDataParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @return A new {@link FormDataParam}, or <jk>null</jk> if the parameter is not annotated with {@link FormData}.
 	 */
-	public static FormDataParam create(ParamInfo paramInfo, PropertyStore ps) {
+	public static FormDataParam create(ParamInfo paramInfo, ContextProperties cp) {
 		if (paramInfo.hasAnnotation(FormData.class) || paramInfo.getParameterType().hasAnnotation(FormData.class))
-			return new FormDataParam(paramInfo, ps);
+			return new FormDataParam(paramInfo, cp);
 		return null;
 	}
 
@@ -59,13 +59,13 @@ public class FormDataParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 */
-	protected FormDataParam(ParamInfo paramInfo, PropertyStore ps) {
+	protected FormDataParam(ParamInfo paramInfo, ContextProperties cp) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(FormData.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, ps);
+		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
 		this.multi = getMulti(paramInfo) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

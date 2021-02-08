@@ -41,10 +41,10 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public UonSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public UonSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -254,7 +254,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UonSerializerBuilder apply(PropertyStore copyFrom) {
+	public UonSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

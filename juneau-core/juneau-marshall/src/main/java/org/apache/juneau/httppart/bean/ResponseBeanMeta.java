@@ -35,22 +35,22 @@ public class ResponseBeanMeta {
 	/**
 	 * Represents a non-existent meta object.
 	 */
-	public static ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(PropertyStore.DEFAULT));
+	public static ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(ContextProperties.DEFAULT));
 
 	/**
 	 * Create metadata from specified class.
 	 *
 	 * @param t The class annotated with {@link Response}.
-	 * @param ps
+	 * @param cp
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(Type t, PropertyStore ps) {
+	public static ResponseBeanMeta create(Type t, ContextProperties cp) {
 		ClassInfo ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
 		if (! ci.hasAnnotation(Response.class))
 			return null;
-		Builder b = new Builder(ps);
+		Builder b = new Builder(cp);
 		b.apply(ci.innerType());
 		for (Response r : ci.getAnnotations(Response.class))
 			b.apply(r);
@@ -61,15 +61,15 @@ public class ResponseBeanMeta {
 	 * Create metadata from specified method return.
 	 *
 	 * @param m The method annotated with {@link Response}.
-	 * @param ps
+	 * @param cp
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(MethodInfo m, PropertyStore ps) {
+	public static ResponseBeanMeta create(MethodInfo m, ContextProperties cp) {
 		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)))
 			return null;
-		Builder b = new Builder(ps);
+		Builder b = new Builder(cp);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
 		for (Response r : m.getAnnotations(Response.class))
 			b.apply(r);
@@ -80,15 +80,15 @@ public class ResponseBeanMeta {
 	 * Create metadata from specified method parameter.
 	 *
 	 * @param mpi The method parameter.
-	 * @param ps
+	 * @param cp
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(ParamInfo mpi, PropertyStore ps) {
+	public static ResponseBeanMeta create(ParamInfo mpi, ContextProperties cp) {
 		if (! mpi.hasAnnotation(Response.class))
 			return null;
-		Builder b = new Builder(ps);
+		Builder b = new Builder(cp);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
 		for (Response r : mpi.getAnnotations(Response.class))
 			b.apply(r);
@@ -111,8 +111,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = castOrCreate(HttpPartSerializer.class, b.partSerializer, true, b.ps);
-		this.partParser = castOrCreate(HttpPartParser.class, b.partParser, true, b.ps);
+		this.partSerializer = castOrCreate(HttpPartSerializer.class, b.partSerializer, true, b.cp);
+		this.partParser = castOrCreate(HttpPartParser.class, b.partParser, true, b.cp);
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();
@@ -139,7 +139,7 @@ public class ResponseBeanMeta {
 	static class Builder {
 		ClassMeta<?> cm;
 		int code;
-		PropertyStore ps;
+		ContextProperties cp;
 		Class<? extends HttpPartSerializer> partSerializer;
 		Class<? extends HttpPartParser> partParser;
 		HttpPartSchemaBuilder schema = HttpPartSchema.create();
@@ -148,8 +148,8 @@ public class ResponseBeanMeta {
 		ResponseBeanPropertyMeta.Builder bodyMethod;
 		ResponseBeanPropertyMeta.Builder statusMethod;
 
-		Builder(PropertyStore ps) {
-			this.ps = ps;
+		Builder(ContextProperties cp) {
+			this.cp = cp;
 		}
 
 		Builder apply(Type t) {

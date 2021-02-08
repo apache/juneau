@@ -59,7 +59,7 @@ public class ConfigMemoryStore extends ConfigStore {
 
 	@Override /* Context */
 	public ConfigMemoryStoreBuilder builder() {
-		return new ConfigMemoryStoreBuilder(getPropertyStore());
+		return new ConfigMemoryStoreBuilder(getContextProperties());
 	}
 
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
@@ -67,10 +67,10 @@ public class ConfigMemoryStore extends ConfigStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The settings for this content store.
+	 * @param cp The settings for this content store.
 	 */
-	protected ConfigMemoryStore(PropertyStore ps) {
-		super(ps);
+	protected ConfigMemoryStore(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ConfigStore */

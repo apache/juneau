@@ -709,7 +709,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore.DEFAULT);
+	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -728,16 +728,16 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public HtmlDocSerializer(PropertyStore ps) {
-		this(ps, "text/html", (String)null);
+	public HtmlDocSerializer(ContextProperties cp) {
+		this(cp, "text/html", (String)null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -761,29 +761,29 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public HtmlDocSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
-		style = ps.getArray(HTMLDOC_style, String.class).orElse(new String[0]);
-		stylesheet = ps.getArray(HTMLDOC_stylesheet, String.class).orElse(new String[0]);
-		script = ps.getArray(HTMLDOC_script, String.class).orElse(new String[0]);
-		head = ps.getArray(HTMLDOC_head, String.class).orElse(new String[0]);
-		header = ps.getArray(HTMLDOC_header, String.class).orElse(new String[0]);
-		nav = ps.getArray(HTMLDOC_nav, String.class).orElse(new String[0]);
-		aside = ps.getArray(HTMLDOC_aside, String.class).orElse(new String[0]);
-		asideFloat = ps.get(HTMLDOC_asideFloat, AsideFloat.class).orElse(AsideFloat.RIGHT);
-		footer = ps.getArray(HTMLDOC_footer, String.class).orElse(new String[0]);
-		nowrap = ps.getBoolean(HTMLDOC_nowrap).orElse(false);
-		navlinks = ps.getArray(HTMLDOC_navlinks, String.class).orElse(new String[0]);
-		noResultsMessage = ps.getString(HTMLDOC_noResultsMessage).orElse("<p>no results</p>");
-		template = ps.getInstance(HTMLDOC_template, HtmlDocTemplate.class).orElseGet(BasicHtmlDocTemplate::new);
+	public HtmlDocSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
+		style = cp.getArray(HTMLDOC_style, String.class).orElse(new String[0]);
+		stylesheet = cp.getArray(HTMLDOC_stylesheet, String.class).orElse(new String[0]);
+		script = cp.getArray(HTMLDOC_script, String.class).orElse(new String[0]);
+		head = cp.getArray(HTMLDOC_head, String.class).orElse(new String[0]);
+		header = cp.getArray(HTMLDOC_header, String.class).orElse(new String[0]);
+		nav = cp.getArray(HTMLDOC_nav, String.class).orElse(new String[0]);
+		aside = cp.getArray(HTMLDOC_aside, String.class).orElse(new String[0]);
+		asideFloat = cp.get(HTMLDOC_asideFloat, AsideFloat.class).orElse(AsideFloat.RIGHT);
+		footer = cp.getArray(HTMLDOC_footer, String.class).orElse(new String[0]);
+		nowrap = cp.getBoolean(HTMLDOC_nowrap).orElse(false);
+		navlinks = cp.getArray(HTMLDOC_navlinks, String.class).orElse(new String[0]);
+		noResultsMessage = cp.getString(HTMLDOC_noResultsMessage).orElse("<p>no results</p>");
+		template = cp.getInstance(HTMLDOC_template, HtmlDocTemplate.class).orElseGet(BasicHtmlDocTemplate::new);
 
 		widgets = new HtmlWidgetMap();
-		widgets.append(ps.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class).orElse(new HtmlWidget[0]));
+		widgets.append(cp.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class).orElse(new HtmlWidget[0]));
 	}
 
 	@Override /* Context */
 	public HtmlDocSerializerBuilder builder() {
-		return new HtmlDocSerializerBuilder(getPropertyStore());
+		return new HtmlDocSerializerBuilder(getContextProperties());
 	}
 
 	/**

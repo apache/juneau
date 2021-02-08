@@ -62,8 +62,8 @@ public class Rest_RVars_Test {
 		}
 
 		public static class A1 extends WriterSerializer {
-			public A1(PropertyStore ps) {
-				super(ps, "text/plain", "*/*");
+			public A1(ContextProperties cp) {
+				super(cp, "text/plain", "*/*");
 			}
 			@Override /* Serializer */
 			public WriterSerializerSession createSession(SerializerSessionArgs args) {

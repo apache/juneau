@@ -37,7 +37,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final CsvParser DEFAULT = new CsvParser(PropertyStore.DEFAULT);
+	public static final CsvParser DEFAULT = new CsvParser(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -50,15 +50,15 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommo
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public CsvParser(PropertyStore ps) {
-		super(ps, "text/csv");
+	public CsvParser(ContextProperties cp) {
+		super(cp, "text/csv");
 	}
 
 	@Override /* Context */
 	public CsvParserBuilder builder() {
-		return new CsvParserBuilder(getPropertyStore());
+		return new CsvParserBuilder(getContextProperties());
 	}
 
 	/**

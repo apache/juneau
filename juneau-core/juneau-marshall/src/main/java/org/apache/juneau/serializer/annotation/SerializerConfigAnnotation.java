@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
 public class SerializerConfigAnnotation {
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<SerializerConfig> {
 
@@ -43,27 +43,27 @@ public class SerializerConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<SerializerConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			SerializerConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(SERIALIZER_addBeanTypes, bool(a.addBeanTypes()));
-			psb.setIfNotEmpty(SERIALIZER_addRootType, bool(a.addRootType()));
-			psb.setIfNotEmpty(SERIALIZER_keepNullProperties, bool(a.keepNullProperties()));
-			psb.setIf(a.listener() != SerializerListener.Null.class, SERIALIZER_listener, a.listener());
-			psb.setIfNotEmpty(SERIALIZER_sortCollections, bool(a.sortCollections()));
-			psb.setIfNotEmpty(SERIALIZER_sortMaps, bool(a.sortMaps()));
-			psb.setIfNotEmpty(SERIALIZER_trimEmptyCollections, bool(a.trimEmptyCollections()));
-			psb.setIfNotEmpty(SERIALIZER_trimEmptyMaps, bool(a.trimEmptyMaps()));
-			psb.setIfNotEmpty(SERIALIZER_trimStrings, bool(a.trimStrings()));
-			psb.setIfNotEmpty(SERIALIZER_uriContext, string(a.uriContext()));
-			psb.setIfNotEmpty(SERIALIZER_uriRelativity, string(a.uriRelativity()));
-			psb.setIfNotEmpty(SERIALIZER_uriResolution, string(a.uriResolution()));
-			psb.setIfNotEmpty(OSSERIALIZER_binaryFormat, string(a.binaryFormat()));
-			psb.setIfNotEmpty(WSERIALIZER_fileCharset, charset(a.fileCharset()));
-			psb.setIfNotEmpty(WSERIALIZER_maxIndent, integer(a.maxIndent(), "maxIndent"));
-			psb.setIfNotEmpty(WSERIALIZER_quoteChar, character(a.quoteChar(), "quoteChar"));
-			psb.setIfNotEmpty(WSERIALIZER_streamCharset, charset(a.streamCharset()));
-			psb.setIfNotEmpty(WSERIALIZER_useWhitespace, bool(a.useWhitespace()));
+			cpb.setIfNotEmpty(SERIALIZER_addBeanTypes, bool(a.addBeanTypes()));
+			cpb.setIfNotEmpty(SERIALIZER_addRootType, bool(a.addRootType()));
+			cpb.setIfNotEmpty(SERIALIZER_keepNullProperties, bool(a.keepNullProperties()));
+			cpb.setIf(a.listener() != SerializerListener.Null.class, SERIALIZER_listener, a.listener());
+			cpb.setIfNotEmpty(SERIALIZER_sortCollections, bool(a.sortCollections()));
+			cpb.setIfNotEmpty(SERIALIZER_sortMaps, bool(a.sortMaps()));
+			cpb.setIfNotEmpty(SERIALIZER_trimEmptyCollections, bool(a.trimEmptyCollections()));
+			cpb.setIfNotEmpty(SERIALIZER_trimEmptyMaps, bool(a.trimEmptyMaps()));
+			cpb.setIfNotEmpty(SERIALIZER_trimStrings, bool(a.trimStrings()));
+			cpb.setIfNotEmpty(SERIALIZER_uriContext, string(a.uriContext()));
+			cpb.setIfNotEmpty(SERIALIZER_uriRelativity, string(a.uriRelativity()));
+			cpb.setIfNotEmpty(SERIALIZER_uriResolution, string(a.uriResolution()));
+			cpb.setIfNotEmpty(OSSERIALIZER_binaryFormat, string(a.binaryFormat()));
+			cpb.setIfNotEmpty(WSERIALIZER_fileCharset, charset(a.fileCharset()));
+			cpb.setIfNotEmpty(WSERIALIZER_maxIndent, integer(a.maxIndent(), "maxIndent"));
+			cpb.setIfNotEmpty(WSERIALIZER_quoteChar, character(a.quoteChar(), "quoteChar"));
+			cpb.setIfNotEmpty(WSERIALIZER_streamCharset, charset(a.streamCharset()));
+			cpb.setIfNotEmpty(WSERIALIZER_useWhitespace, bool(a.useWhitespace()));
 		}
 
 		private Object charset(String in) {

@@ -133,8 +133,8 @@ public class RestClient_Test {
 
 	public static class B4 extends RestClient {
 		private static boolean CREATE_REQUEST_CALLED, CREATE_RESPONSE_CALLED;
-		public B4(PropertyStore ps) {
-			super(ps);
+		public B4(ContextProperties cp) {
+			super(cp);
 		}
 		@Override
 		protected RestRequest createRequest(java.net.URI uri, String method, boolean hasBody) throws RestCallException {

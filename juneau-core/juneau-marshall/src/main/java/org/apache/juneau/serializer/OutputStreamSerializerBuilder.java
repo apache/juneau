@@ -39,10 +39,10 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public OutputStreamSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public OutputStreamSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder apply(PropertyStore copyFrom) {
+	public OutputStreamSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

@@ -40,10 +40,10 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public WriterSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public WriterSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -321,7 +321,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public WriterSerializerBuilder apply(PropertyStore copyFrom) {
+	public WriterSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

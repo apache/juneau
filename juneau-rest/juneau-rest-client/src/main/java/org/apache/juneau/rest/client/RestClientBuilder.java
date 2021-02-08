@@ -100,11 +100,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Constructor.
-	 * @param ps
+	 * @param cp
 	 * 	Initial configuration properties for this builder.
 	 */
-	protected RestClientBuilder(PropertyStore ps) {
-		super(ps);
+	protected RestClientBuilder(ContextProperties cp) {
+		super(cp);
 		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
 	}
@@ -123,7 +123,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClient build() {
 		set(RESTCLIENT_httpClient, getHttpClient());
 		set(RESTCLIENT_httpClientBuilder, getHttpClientBuilder());
-		return new RestClient(getPropertyStore());
+		return new RestClient(getContextProperties());
 	}
 
 	@Override /* ContextBuilder */
@@ -4670,7 +4670,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder apply(PropertyStore copyFrom) {
+	public RestClientBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

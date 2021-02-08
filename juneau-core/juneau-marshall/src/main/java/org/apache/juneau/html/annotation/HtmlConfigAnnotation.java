@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
 public class HtmlConfigAnnotation {
 
 	/**
-	 * Applies {@link HtmlConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link HtmlConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<HtmlConfig> {
 
@@ -39,15 +39,15 @@ public class HtmlConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<HtmlConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			HtmlConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(HTML_addBeanTypes, bool(a.addBeanTypes()));
-			psb.setIfNotEmpty(HTML_addKeyValueTableHeaders, bool(a.addKeyValueTableHeaders()));
-			psb.setIfNotEmpty(HTML_disableDetectLabelParameters, bool(a.disableDetectLabelParameters()));
-			psb.setIfNotEmpty(HTML_disableDetectLinksInStrings, bool(a.disableDetectLinksInStrings()));
-			psb.setIfNotEmpty(HTML_labelParameter, string(a.labelParameter()));
-			psb.setIfNotEmpty(HTML_uriAnchorText, string(a.uriAnchorText()));
+			cpb.setIfNotEmpty(HTML_addBeanTypes, bool(a.addBeanTypes()));
+			cpb.setIfNotEmpty(HTML_addKeyValueTableHeaders, bool(a.addKeyValueTableHeaders()));
+			cpb.setIfNotEmpty(HTML_disableDetectLabelParameters, bool(a.disableDetectLabelParameters()));
+			cpb.setIfNotEmpty(HTML_disableDetectLinksInStrings, bool(a.disableDetectLinksInStrings()));
+			cpb.setIfNotEmpty(HTML_labelParameter, string(a.labelParameter()));
+			cpb.setIfNotEmpty(HTML_uriAnchorText, string(a.uriAnchorText()));
 		}
 	}
 }

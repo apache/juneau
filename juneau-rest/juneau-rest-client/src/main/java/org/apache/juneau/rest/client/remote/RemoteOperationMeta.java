@@ -132,7 +132,7 @@ public class RemoteOperationMeta {
 					else
 						bodyArg = rma;
 				}
-				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, PropertyStore.DEFAULT);
+				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, ContextProperties.DEFAULT);
 				if (rmba != null) {
 					requestArgs.add(new RemoteOperationBeanArg(mpi.getIndex(), rmba));
 				}

@@ -38,10 +38,10 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public BeanTraverseBuilder(PropertyStore ps) {
-		super(ps);
+	public BeanTraverseBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -235,7 +235,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanTraverseBuilder apply(PropertyStore copyFrom) {
+	public BeanTraverseBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

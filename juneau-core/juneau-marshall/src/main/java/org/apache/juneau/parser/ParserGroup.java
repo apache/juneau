@@ -112,7 +112,7 @@ public final class ParserGroup extends BeanContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The modifiable properties that were used to initialize the parsers.
 	 * 	A snapshot of these will be made so that we can clone and modify this group.
 	 * @param parsers
@@ -120,8 +120,8 @@ public final class ParserGroup extends BeanContext {
 	 * 	The order is important because they will be tried in reverse order (e.g. newer first) in which they will be
 	 * 	tried to match against media types.
 	 */
-	public ParserGroup(PropertyStore ps, Parser[] parsers) {
-		super(ps);
+	public ParserGroup(ContextProperties cp, Parser[] parsers) {
+		super(cp);
 		this.parsers = AList.unmodifiable(parsers);
 
 		AList<MediaType> lmt = AList.create();

@@ -26,7 +26,7 @@ public class TurtleSerializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default Turtle serializer, all default settings.*/
-	public static final TurtleSerializer DEFAULT = new TurtleSerializer(PropertyStore.DEFAULT);
+	public static final TurtleSerializer DEFAULT = new TurtleSerializer(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class TurtleSerializer extends RdfSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public TurtleSerializer(PropertyStore ps) {
+	public TurtleSerializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_TURTLE)
 				.build(),
 			"text/turtle", (String)null

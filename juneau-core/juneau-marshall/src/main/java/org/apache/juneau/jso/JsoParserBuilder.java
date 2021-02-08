@@ -37,10 +37,10 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public JsoParserBuilder(PropertyStore ps) {
-		super(ps);
+	public JsoParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -73,7 +73,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsoParserBuilder apply(PropertyStore copyFrom) {
+	public JsoParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

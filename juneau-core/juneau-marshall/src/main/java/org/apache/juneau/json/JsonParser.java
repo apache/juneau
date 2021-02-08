@@ -56,7 +56,7 @@ import org.apache.juneau.parser.*;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link OMap OMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the <c>beanTypeName</c> setting on the {@link PropertyStore} for more information about parsing
+ * 		See the <c>beanTypeName</c> setting on the {@link ContextProperties} for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link OList OLists}.
@@ -165,10 +165,10 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT = new JsonParser(PropertyStore.DEFAULT);
+	public static final JsonParser DEFAULT = new JsonParser(ContextProperties.DEFAULT);
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(PropertyStore.DEFAULT);
+	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -181,10 +181,10 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Strict(PropertyStore ps) {
-			super(ps.builder().setDefault(PARSER_strict, true).setDefault(JSON_validateEnd, true).build());
+		public Strict(ContextProperties cp) {
+			super(cp.builder().setDefault(PARSER_strict, true).setDefault(JSON_validateEnd, true).build());
 		}
 	}
 
@@ -201,26 +201,26 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public JsonParser(PropertyStore ps) {
-		this(ps, "application/json", "text/json");
+	public JsonParser(ContextProperties cp) {
+		this(cp, "application/json", "text/json");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public JsonParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
-		validateEnd = ps.getBoolean(JSON_validateEnd).orElse(false);
+	public JsonParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
+		validateEnd = cp.getBoolean(JSON_validateEnd).orElse(false);
 	}
 
 	@Override /* Context */
 	public JsonParserBuilder builder() {
-		return new JsonParserBuilder(getPropertyStore());
+		return new JsonParserBuilder(getContextProperties());
 	}
 
 	/**

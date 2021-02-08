@@ -26,7 +26,7 @@ public class NTripleParser extends RdfParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N-Triple parser, all default settings.*/
-	public static final NTripleParser DEFAULT = new NTripleParser(PropertyStore.DEFAULT);
+	public static final NTripleParser DEFAULT = new NTripleParser(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class NTripleParser extends RdfParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public NTripleParser(PropertyStore ps) {
+	public NTripleParser(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_NTRIPLE)
 				.build(),
 			"text/n-triple"

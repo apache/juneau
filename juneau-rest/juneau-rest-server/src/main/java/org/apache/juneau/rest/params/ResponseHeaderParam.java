@@ -41,12 +41,12 @@ public class ResponseHeaderParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @return A new {@link ResponseHeaderParam}, or <jk>null</jk> if the parameter is not annotated with {@link ResponseHeader}.
 	 */
-	public static ResponseHeaderParam create(ParamInfo paramInfo, PropertyStore ps) {
+	public static ResponseHeaderParam create(ParamInfo paramInfo, ContextProperties cp) {
 		if (paramInfo.hasAnnotation(ResponseHeader.class) || paramInfo.getParameterType().hasAnnotation(ResponseHeader.class))
-			return new ResponseHeaderParam(paramInfo, ps);
+			return new ResponseHeaderParam(paramInfo, cp);
 		return null;
 	}
 
@@ -54,13 +54,13 @@ public class ResponseHeaderParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 */
-	protected ResponseHeaderParam(ParamInfo paramInfo, PropertyStore ps) {
+	protected ResponseHeaderParam(ParamInfo paramInfo, ContextProperties cp) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType().innerType();
 		HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, paramInfo);
-		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, ps));
+		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, cp));
 
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)

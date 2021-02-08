@@ -63,8 +63,8 @@ public class RestClient_Response_Test {
 	}
 
 	public static class A1 extends MockRestClient {
-		public A1(PropertyStore ps) {
-			super(ps);
+		public A1(ContextProperties cp) {
+			super(cp);
 		}
 		@Override
 		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {

@@ -38,10 +38,10 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public PlainTextParserBuilder(PropertyStore ps) {
-		super(ps);
+	public PlainTextParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -74,7 +74,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public PlainTextParserBuilder apply(PropertyStore copyFrom) {
+	public PlainTextParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

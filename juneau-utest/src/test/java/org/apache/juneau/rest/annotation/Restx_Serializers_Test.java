@@ -33,8 +33,8 @@ public class Restx_Serializers_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class SA extends WriterSerializer {
-		public SA(PropertyStore ps) {
-			super(ps, "text/a", null);
+		public SA(ContextProperties cp) {
+			super(cp, "text/a", null);
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -48,8 +48,8 @@ public class Restx_Serializers_Test {
 	}
 
 	public static class SB extends WriterSerializer {
-		public SB(PropertyStore ps) {
-			super(ps, "text/b", null);
+		public SB(ContextProperties cp) {
+			super(cp, "text/b", null);
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -63,8 +63,8 @@ public class Restx_Serializers_Test {
 	}
 
 	public static class SC extends WriterSerializer {
-		public SC(PropertyStore ps) {
-			super(ps, "text/a", null);
+		public SC(ContextProperties cp) {
+			super(cp, "text/a", null);
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -78,8 +78,8 @@ public class Restx_Serializers_Test {
 	}
 
 	public static class SD extends WriterSerializer {
-		public SD(PropertyStore ps) {
-			super(ps, "text/d", "text/a,text/d");
+		public SD(ContextProperties cp) {
+			super(cp, "text/d", "text/a,text/d");
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -172,7 +172,7 @@ public class Restx_Serializers_Test {
 
 	public static class DummySerializer extends WriterSerializer {
 		public DummySerializer(String produces) {
-			super(PropertyStore.DEFAULT, produces, null);
+			super(ContextProperties.DEFAULT, produces, null);
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -185,11 +185,11 @@ public class Restx_Serializers_Test {
 		}
 	}
 
-	public static class S1 extends DummySerializer{ public S1(PropertyStore ps) {super("text/s1");} }
-	public static class S2 extends DummySerializer{ public S2(PropertyStore ps) {super("text/s2");} }
-	public static class S3 extends DummySerializer{ public S3(PropertyStore ps) {super("text/s3");} }
-	public static class S4 extends DummySerializer{ public S4(PropertyStore ps) {super("text/s4");} }
-	public static class S5 extends DummySerializer{ public S5(PropertyStore ps) {super("text/s5");} }
+	public static class S1 extends DummySerializer{ public S1(ContextProperties cp) {super("text/s1");} }
+	public static class S2 extends DummySerializer{ public S2(ContextProperties cp) {super("text/s2");} }
+	public static class S3 extends DummySerializer{ public S3(ContextProperties cp) {super("text/s3");} }
+	public static class S4 extends DummySerializer{ public S4(ContextProperties cp) {super("text/s4");} }
+	public static class S5 extends DummySerializer{ public S5(ContextProperties cp) {super("text/s5");} }
 
 	@Rest(serializers={S1.class,S2.class})
 	public static class B {}

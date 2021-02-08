@@ -36,8 +36,8 @@ public class Restx_Parsers_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class PA extends ReaderParser {
-		public PA(PropertyStore ps) {
-			super(ps, "text/a");
+		public PA(ContextProperties cp) {
+			super(cp, "text/a");
 		}
 		@Override /* Parser */
 		public ReaderParserSession createSession(ParserSessionArgs args) {
@@ -52,8 +52,8 @@ public class Restx_Parsers_Test {
 	}
 
 	public static class PB extends ReaderParser {
-		public PB(PropertyStore ps) {
-			super(ps, "text/b");
+		public PB(ContextProperties cp) {
+			super(cp, "text/b");
 		}
 		@Override /* Parser */
 		public ReaderParserSession createSession(ParserSessionArgs args) {
@@ -68,8 +68,8 @@ public class Restx_Parsers_Test {
 	}
 
 	public static class PC extends ReaderParser {
-		public PC(PropertyStore ps) {
-			super(ps, "text/c");
+		public PC(ContextProperties cp) {
+			super(cp, "text/c");
 		}
 		@Override /* Parser */
 		public ReaderParserSession createSession(ParserSessionArgs args) {
@@ -84,8 +84,8 @@ public class Restx_Parsers_Test {
 	}
 
 	public static class PD extends ReaderParser {
-		public PD(PropertyStore ps) {
-			super(ps, "text/d");
+		public PD(ContextProperties cp) {
+			super(cp, "text/d");
 		}
 		@Override /* Parser */
 		public ReaderParserSession createSession(ParserSessionArgs args) {
@@ -191,7 +191,7 @@ public class Restx_Parsers_Test {
 
 	public static class DummyParser extends ReaderParser {
 		public DummyParser(String...consumes) {
-			super(PropertyStore.DEFAULT, consumes);
+			super(ContextProperties.DEFAULT, consumes);
 		}
 		@Override /* Parser */
 		public ReaderParserSession createSession(ParserSessionArgs args) {
@@ -204,11 +204,11 @@ public class Restx_Parsers_Test {
 		}
 	}
 
-	public static class P1 extends DummyParser{ public P1(PropertyStore ps) {super("text/p1");} }
-	public static class P2 extends DummyParser{ public P2(PropertyStore ps) {super("text/p2");} }
-	public static class P3 extends DummyParser{ public P3(PropertyStore ps) {super("text/p3");} }
-	public static class P4 extends DummyParser{ public P4(PropertyStore ps) {super("text/p4");} }
-	public static class P5 extends DummyParser{ public P5(PropertyStore ps) {super("text/p5");} }
+	public static class P1 extends DummyParser{ public P1(ContextProperties cp) {super("text/p1");} }
+	public static class P2 extends DummyParser{ public P2(ContextProperties cp) {super("text/p2");} }
+	public static class P3 extends DummyParser{ public P3(ContextProperties cp) {super("text/p3");} }
+	public static class P4 extends DummyParser{ public P4(ContextProperties cp) {super("text/p4");} }
+	public static class P5 extends DummyParser{ public P5(ContextProperties cp) {super("text/p5");} }
 
 	@Rest(parsers={P1.class,P2.class})
 	public static class B {}

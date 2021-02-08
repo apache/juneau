@@ -45,11 +45,11 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestOperationContext build() {
 		try {
-			PropertyStore ps = getPropertyStore();
+			ContextProperties cp = getContextProperties();
 
 			Class<? extends RestOperationContext> ic = implClass;
 			if (ic == null)
-				ic = ps.getClass(RESTOP_contextClass, RestOperationContext.class).orElse(getDefaultImplClass());
+				ic = cp.getClass(RESTOP_contextClass, RestOperationContext.class).orElse(getDefaultImplClass());
 
 			return BeanFactory.of(beanFactory).addBean(RestOperationContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
@@ -585,7 +585,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestOperationContextBuilder apply(PropertyStore copyFrom) {
+	public RestOperationContextBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

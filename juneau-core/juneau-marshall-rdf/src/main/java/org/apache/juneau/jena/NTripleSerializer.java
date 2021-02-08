@@ -26,7 +26,7 @@ public class NTripleSerializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N-Triple serializer, all default settings.*/
-	public static final NTripleSerializer DEFAULT = new NTripleSerializer(PropertyStore.DEFAULT);
+	public static final NTripleSerializer DEFAULT = new NTripleSerializer(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class NTripleSerializer extends RdfSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public NTripleSerializer(PropertyStore ps) {
+	public NTripleSerializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_NTRIPLE)
 				.build(),
 			"text/n-triple", (String)null

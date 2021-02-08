@@ -41,10 +41,10 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public XmlSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public XmlSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -201,7 +201,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder apply(PropertyStore copyFrom) {
+	public XmlSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

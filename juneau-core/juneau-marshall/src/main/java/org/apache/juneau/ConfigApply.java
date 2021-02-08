@@ -25,7 +25,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Class used to add properties to a {@link PropertyStore} from an annotation (e.g. {@link BeanConfig}).
+ * Class used to add properties to a {@link ContextProperties} from an annotation (e.g. {@link BeanConfig}).
  *
  * @param <T> The annotation that this <c>ConfigApply</c> reads from.
  */
@@ -49,10 +49,10 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * Apply the specified annotation to the specified property store builder.
 	 *
 	 * @param a The annotation.
-	 * @param ps The property store builder.
+	 * @param cpb The property store builder.
 	 * @param vr The var resolver.  Should be the same as the one passed in through the constructor.
 	 */
-	public abstract void apply(AnnotationInfo<T> a, PropertyStoreBuilder ps, VarResolverSession vr);
+	public abstract void apply(AnnotationInfo<T> a, ContextPropertiesBuilder cpb, VarResolverSession vr);
 
 
 	/**
@@ -223,6 +223,6 @@ public abstract class ConfigApply<T extends Annotation> {
 		}
 
 		@Override /* ConfigApply */
-		public void apply(AnnotationInfo<Annotation> a, PropertyStoreBuilder ps, VarResolverSession vr) {}
+		public void apply(AnnotationInfo<Annotation> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {}
 	}
 }

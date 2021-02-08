@@ -124,8 +124,8 @@ public abstract class Parser extends BeanContext {
 	 * Represents no Parser.
 	 */
 	public static abstract class Null extends Parser {
-		private Null(PropertyStore ps, String[] consumes) {
-			super(ps, consumes);
+		private Null(ContextProperties cp, String[] consumes) {
+			super(cp, consumes);
 		}
 	}
 
@@ -512,7 +512,7 @@ public abstract class Parser extends BeanContext {
 	 */
 	public static final String PARSER_unbuffered = PREFIX + ".unbuffered.b";
 
-	static Parser DEFAULT = new Parser(PropertyStore.create().build()) {
+	static Parser DEFAULT = new Parser(ContextProperties.create().build()) {
 		@Override
 		public ParserSession createSession(ParserSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -533,18 +533,18 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	protected Parser(PropertyStore ps, String...consumes) {
-		super(ps);
+	protected Parser(ContextProperties cp, String...consumes) {
+		super(cp);
 
-		trimStrings = ps.getBoolean(PARSER_trimStrings).orElse(false);
-		strict = ps.getBoolean(PARSER_strict).orElse(false);
-		autoCloseStreams = ps.getBoolean(PARSER_autoCloseStreams).orElse(false);
-		debugOutputLines = ps.getInteger(PARSER_debugOutputLines).orElse(5);
-		unbuffered = ps.getBoolean(PARSER_unbuffered).orElse(false);
-		listener = ps.getClass(PARSER_listener, ParserListener.class).orElse(null);
+		trimStrings = cp.getBoolean(PARSER_trimStrings).orElse(false);
+		strict = cp.getBoolean(PARSER_strict).orElse(false);
+		autoCloseStreams = cp.getBoolean(PARSER_autoCloseStreams).orElse(false);
+		debugOutputLines = cp.getInteger(PARSER_debugOutputLines).orElse(5);
+		unbuffered = cp.getBoolean(PARSER_unbuffered).orElse(false);
+		listener = cp.getClass(PARSER_listener, ParserListener.class).orElse(null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
 			this.consumes[i] = MediaType.of(consumes[i]);
@@ -553,7 +553,7 @@ public abstract class Parser extends BeanContext {
 
 	@Override /* Context */
 	public ParserBuilder builder() {
-		return new ParserBuilder(getPropertyStore());
+		return new ParserBuilder(getContextProperties());
 	}
 
 	/**
@@ -569,7 +569,7 @@ public abstract class Parser extends BeanContext {
 	 * @return A new {@link ParserBuilder} object.
 	 */
 	public static ParserBuilder create() {
-		return new ParserBuilder(PropertyStore.DEFAULT);
+		return new ParserBuilder(ContextProperties.DEFAULT);
 	}
 
 

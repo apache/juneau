@@ -975,7 +975,7 @@ public class ResponseHeaderAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link ResponseHeader} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link ResponseHeader} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<ResponseHeader> {
 
@@ -990,13 +990,13 @@ public class ResponseHeaderAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseHeader> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ResponseHeader> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			ResponseHeader a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

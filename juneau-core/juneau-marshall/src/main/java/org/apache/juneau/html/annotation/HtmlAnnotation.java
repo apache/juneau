@@ -265,7 +265,7 @@ public class HtmlAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Html} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Html} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Html> {
 
@@ -280,13 +280,13 @@ public class HtmlAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Html> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Html> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Html a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

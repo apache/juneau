@@ -36,12 +36,12 @@ public class ResponseBeanParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @return A new {@link ResponseBeanParam}, or <jk>null</jk> if the parameter is not annotated with {@link Response}.
 	 */
-	public static ResponseBeanParam create(ParamInfo paramInfo, PropertyStore ps) {
+	public static ResponseBeanParam create(ParamInfo paramInfo, ContextProperties cp) {
 		if (paramInfo.hasAnnotation(Response.class) || paramInfo.getParameterType().hasAnnotation(Response.class))
-			return new ResponseBeanParam(paramInfo, ps);
+			return new ResponseBeanParam(paramInfo, cp);
 		return null;
 	}
 
@@ -49,11 +49,11 @@ public class ResponseBeanParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 */
-	protected ResponseBeanParam(ParamInfo paramInfo, PropertyStore ps) {
+	protected ResponseBeanParam(ParamInfo paramInfo, ContextProperties cp) {
 		this.type = paramInfo.getParameterType().innerType();
-		this.meta = ResponseBeanMeta.create(paramInfo, ps);
+		this.meta = ResponseBeanMeta.create(paramInfo, cp);
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)
 			throw new ParameterException(paramInfo, "Type must be Value<?> on parameter annotated with @Response annotation");

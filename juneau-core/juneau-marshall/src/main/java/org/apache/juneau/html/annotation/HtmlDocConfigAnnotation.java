@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
 public class HtmlDocConfigAnnotation {
 
 	/**
-	 * Applies {@link HtmlDocConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link HtmlDocConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<HtmlDocConfig> {
 
@@ -45,23 +45,23 @@ public class HtmlDocConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlDocConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<HtmlDocConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			HtmlDocConfig a = ai.getAnnotation();
 
-			psb.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));
-			psb.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
-			psb.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), psb.peek(String[].class, HTMLDOC_footer)));
-			psb.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), psb.peek(String[].class, HTMLDOC_head)));
-			psb.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), psb.peek(String[].class, HTMLDOC_header)));
-			psb.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), psb.peek(String[].class, HTMLDOC_nav)));
-			psb.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), psb.peek(String[].class, HTMLDOC_navlinks)));
-			psb.setIfNotEmpty(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
-			psb.setIfNotEmpty(HTMLDOC_nowrap, bool(a.nowrap()));
-			psb.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), psb.peek(String[].class, HTMLDOC_script)));
-			psb.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), psb.peek(String[].class, HTMLDOC_style)));
-			psb.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), psb.peek(String[].class, HTMLDOC_stylesheet)));
-			psb.setIf(a.template() != HtmlDocTemplate.Null.class, HTMLDOC_template, a.template());
-			asList(a.widgets()).stream().forEach(x -> psb.prependTo(HTMLDOC_widgets, x));
+			cpb.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), cpb.peek(String[].class, HTMLDOC_aside)));
+			cpb.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
+			cpb.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), cpb.peek(String[].class, HTMLDOC_footer)));
+			cpb.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), cpb.peek(String[].class, HTMLDOC_head)));
+			cpb.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), cpb.peek(String[].class, HTMLDOC_header)));
+			cpb.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), cpb.peek(String[].class, HTMLDOC_nav)));
+			cpb.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), cpb.peek(String[].class, HTMLDOC_navlinks)));
+			cpb.setIfNotEmpty(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
+			cpb.setIfNotEmpty(HTMLDOC_nowrap, bool(a.nowrap()));
+			cpb.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), cpb.peek(String[].class, HTMLDOC_script)));
+			cpb.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), cpb.peek(String[].class, HTMLDOC_style)));
+			cpb.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), cpb.peek(String[].class, HTMLDOC_stylesheet)));
+			cpb.setIf(a.template() != HtmlDocTemplate.Null.class, HTMLDOC_template, a.template());
+			asList(a.widgets()).stream().forEach(x -> cpb.prependTo(HTMLDOC_widgets, x));
 		}
 
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");

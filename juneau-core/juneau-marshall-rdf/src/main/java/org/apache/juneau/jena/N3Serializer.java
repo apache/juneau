@@ -26,7 +26,7 @@ public class N3Serializer extends RdfSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N3 serializer, all default settings.*/
-	public static final N3Serializer DEFAULT = new N3Serializer(PropertyStore.DEFAULT);
+	public static final N3Serializer DEFAULT = new N3Serializer(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class N3Serializer extends RdfSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public N3Serializer(PropertyStore ps) {
+	public N3Serializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_N3)
 				.build(),
 			"text/n3", (String)null

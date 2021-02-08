@@ -215,7 +215,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final XmlParser DEFAULT = new XmlParser(PropertyStore.DEFAULT);
+	public static final XmlParser DEFAULT = new XmlParser(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -235,33 +235,33 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public XmlParser(PropertyStore ps) {
-		this(ps, "text/xml", "application/xml");
+	public XmlParser(ContextProperties cp) {
+		this(cp, "text/xml", "application/xml");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public XmlParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
-		validating = ps.getBoolean(XML_validating).orElse(false);
-		preserveRootElement = ps.getBoolean(XML_preserveRootElement).orElse(false);
-		reporter = ps.getInstance(XML_reporter, XMLReporter.class).orElse(null);
-		resolver = ps.getInstance(XML_resolver, XMLResolver.class).orElse(null);
-		eventAllocator = ps.getInstance(XML_eventAllocator, XMLEventAllocator.class).orElse(null);
+	public XmlParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
+		validating = cp.getBoolean(XML_validating).orElse(false);
+		preserveRootElement = cp.getBoolean(XML_preserveRootElement).orElse(false);
+		reporter = cp.getInstance(XML_reporter, XMLReporter.class).orElse(null);
+		resolver = cp.getInstance(XML_resolver, XMLResolver.class).orElse(null);
+		eventAllocator = cp.getInstance(XML_eventAllocator, XMLEventAllocator.class).orElse(null);
 	}
 
 	@Override /* Context */
 	public XmlParserBuilder builder() {
-		return new XmlParserBuilder(getPropertyStore());
+		return new XmlParserBuilder(getContextProperties());
 	}
 
 	/**

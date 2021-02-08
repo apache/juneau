@@ -38,10 +38,10 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public CsvParserBuilder(PropertyStore ps) {
-		super(ps);
+	public CsvParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -74,7 +74,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder apply(PropertyStore copyFrom) {
+	public CsvParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

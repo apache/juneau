@@ -38,10 +38,10 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public CsvSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public CsvSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -74,7 +74,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvSerializerBuilder apply(PropertyStore copyFrom) {
+	public CsvSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

@@ -265,16 +265,16 @@ public abstract class BeanTraverseContext extends BeanContext {
 	/**
 	 * Constructor
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	protected BeanTraverseContext(PropertyStore ps) {
-		super(ps);
+	protected BeanTraverseContext(ContextProperties cp) {
+		super(cp);
 
-		maxDepth = ps.getInteger(BEANTRAVERSE_maxDepth).orElse(100);
-		initialDepth = ps.getInteger(BEANTRAVERSE_initialDepth).orElse(0);
-		ignoreRecursions = ps.getBoolean(BEANTRAVERSE_ignoreRecursions).orElse(false);
-		detectRecursions = ps.getBoolean(BEANTRAVERSE_detectRecursions).orElse(ignoreRecursions);
+		maxDepth = cp.getInteger(BEANTRAVERSE_maxDepth).orElse(100);
+		initialDepth = cp.getInteger(BEANTRAVERSE_initialDepth).orElse(0);
+		ignoreRecursions = cp.getBoolean(BEANTRAVERSE_ignoreRecursions).orElse(false);
+		detectRecursions = cp.getBoolean(BEANTRAVERSE_detectRecursions).orElse(ignoreRecursions);
 	}
 
 	@Override /* Context */

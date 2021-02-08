@@ -489,7 +489,7 @@ public class BeanAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Bean} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Bean} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Bean> {
 
@@ -504,13 +504,13 @@ public class BeanAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Bean> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Bean> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Bean a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

@@ -17,7 +17,7 @@ import org.apache.juneau.xml.*;
 public class XmlValidatorParserBuilder extends XmlParserBuilder {
 
 	public XmlValidatorParserBuilder() {
-		super(PropertyStore.DEFAULT);
+		super(ContextProperties.DEFAULT);
 	}
 
 	@Override

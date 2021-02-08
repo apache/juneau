@@ -48,8 +48,8 @@ public class ResponseBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
-		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.ps);
+		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp);
+		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp);
 	}
 
 	static class Builder {
@@ -57,7 +57,7 @@ public class ResponseBeanPropertyMeta {
 		HttpPartSchema schema = HttpPartSchema.DEFAULT;
 		String name;
 		Method getter;
-		PropertyStore ps = PropertyStore.DEFAULT;
+		ContextProperties cp = ContextProperties.DEFAULT;
 
 		Builder name(String value) {
 			name = value;

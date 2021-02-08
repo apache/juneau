@@ -48,16 +48,16 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSchemaSerializer DEFAULT = new JsonSchemaSerializer(PropertyStore.DEFAULT);
+	public static final JsonSchemaSerializer DEFAULT = new JsonSchemaSerializer(ContextProperties.DEFAULT);
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSchemaSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final JsonSchemaSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode. */
-	public static final JsonSchemaSerializer DEFAULT_SIMPLE = new Simple(PropertyStore.DEFAULT);
+	public static final JsonSchemaSerializer DEFAULT_SIMPLE = new Simple(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final JsonSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
+	public static final JsonSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -70,11 +70,11 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore ps) {
+		public Readable(ContextProperties cp) {
 			super(
-				ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
+				cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -85,11 +85,11 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Simple(PropertyStore ps) {
+		public Simple(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
@@ -103,11 +103,11 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public SimpleReadable(PropertyStore ps) {
+		public SimpleReadable(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -128,23 +128,23 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	/**
 	 * Constructor.
 	 *
-	 * @param ps Initialize with the specified config property store.
+	 * @param cp Initialize with the specified config property store.
 	 */
-	public JsonSchemaSerializer(PropertyStore ps) {
+	public JsonSchemaSerializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(BEANTRAVERSE_detectRecursions, true)
 				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
 			"application/json", "application/json+schema,text/json+schema"
 		);
 
-		generator = JsonSchemaGenerator.create().apply(getPropertyStore()).build();
+		generator = JsonSchemaGenerator.create().apply(getContextProperties()).build();
 	}
 
 	@Override /* Context */
 	public JsonSchemaSerializerBuilder builder() {
-		return new JsonSchemaSerializerBuilder(getPropertyStore());
+		return new JsonSchemaSerializerBuilder(getContextProperties());
 	}
 
 	/**

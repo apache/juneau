@@ -52,16 +52,16 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(PropertyStore.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(ContextProperties.DEFAULT);
 
 	/** Default serializer, all default settings.*/
-	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode. */
-	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(PropertyStore.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(ContextProperties.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -73,11 +73,11 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore ps) {
+		public Readable(ContextProperties cp) {
 			super(
-				ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
+				cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -88,11 +88,11 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Simple(PropertyStore ps) {
+		public Simple(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
@@ -105,11 +105,11 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public SimpleReadable(PropertyStore ps) {
+		public SimpleReadable(ContextProperties cp) {
 			super(
-				ps.builder()
+				cp.builder()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
@@ -126,24 +126,24 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store to use for creating the context for this serializer.
 	 */
-	public HtmlSchemaSerializer(PropertyStore ps) {
+	public HtmlSchemaSerializer(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(BEANTRAVERSE_detectRecursions, true)
 				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
 			"text/html", "text/html+schema"
 		);
 
-		generator = JsonSchemaGenerator.create().apply(getPropertyStore()).build();
+		generator = JsonSchemaGenerator.create().apply(getContextProperties()).build();
 	}
 
 	@Override /* Context */
 	public HtmlSchemaSerializerBuilder builder() {
-		return new HtmlSchemaSerializerBuilder(getPropertyStore());
+		return new HtmlSchemaSerializerBuilder(getContextProperties());
 	}
 
 	@Override /* Context */

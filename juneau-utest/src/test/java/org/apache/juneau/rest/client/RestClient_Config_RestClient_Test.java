@@ -335,8 +335,8 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A7 extends RestClient {
 		private static String lastMessage;
-		public A7(PropertyStore ps) {
-			super(ps);
+		public A7(ContextProperties cp) {
+			super(cp);
 		}
 		@Override
 		public void log(Level level,String msg,Object...args) {

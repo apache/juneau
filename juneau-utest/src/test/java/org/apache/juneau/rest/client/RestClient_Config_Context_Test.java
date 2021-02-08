@@ -110,7 +110,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a05_apply() throws Exception {
-		MockRestClient.create(A.class).json().apply(SimpleJsonSerializer.DEFAULT.getPropertyStore()).build().post("/echoBody",A5.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(A5.class);
+		MockRestClient.create(A.class).json().apply(SimpleJsonSerializer.DEFAULT.getContextProperties()).build().post("/echoBody",A5.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(A5.class);
 	}
 
 	public static class A6a {

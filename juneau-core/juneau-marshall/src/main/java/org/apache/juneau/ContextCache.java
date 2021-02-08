@@ -38,7 +38,7 @@ public class ContextCache {
 	 */
 	public static final ContextCache INSTANCE = new ContextCache();
 
-	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<PropertyStore,Context>> contextCache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<ContextProperties,Context>> contextCache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Class<?>,String[]> prefixCache = new ConcurrentHashMap<>();
 
 	// When enabled, this will spit out cache-hit metrics to the console on shutdown.
@@ -93,34 +93,34 @@ public class ContextCache {
 	 * property store was already created.
 	 *
 	 * @param c The instance of the class to create.
-	 * @param ps The property store to use to create the class.
+	 * @param cp The property store to use to create the class.
 	 * @return The
 	 */
-	public <T extends Context> T create(Class<T> c, PropertyStore ps) {
+	public <T extends Context> T create(Class<T> c, ContextProperties cp) {
 		String[] prefixes = getPrefixes(c);
 
 		if (prefixes == null)
-			return instantiate(c, ps);
+			return instantiate(c, cp);
 
-		ConcurrentHashMap<PropertyStore,Context> m = getContextCache(c);
+		ConcurrentHashMap<ContextProperties,Context> m = getContextCache(c);
 
-		ps = ps.subset(prefixes);
+		cp = cp.subset(prefixes);
 
-		Context context = m.get(ps);
+		Context context = m.get(cp);
 
 		logCache(c, context != null);
 
 		if (context == null) {
-			context = instantiate(c, ps);
-			m.putIfAbsent(ps, context);
+			context = instantiate(c, cp);
+			m.putIfAbsent(cp, context);
 		}
 
 		return (T)context;
 	}
 
-	private <T extends Context> T instantiate(Class<T> c, PropertyStore ps) {
+	private <T extends Context> T instantiate(Class<T> c, ContextProperties cp) {
 		try {
-			return newInstance(c, ps);
+			return newInstance(c, cp);
 		} catch (ContextRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
@@ -128,11 +128,11 @@ public class ContextCache {
 		}
 	}
 
-	private ConcurrentHashMap<PropertyStore,Context> getContextCache(Class<?> c) {
-		ConcurrentHashMap<PropertyStore,Context> m = contextCache.get(c);
+	private ConcurrentHashMap<ContextProperties,Context> getContextCache(Class<?> c) {
+		ConcurrentHashMap<ContextProperties,Context> m = contextCache.get(c);
 		if (m == null) {
 			m = new ConcurrentHashMap<>();
-			ConcurrentHashMap<PropertyStore,Context> m2 = contextCache.putIfAbsent(c, m);
+			ConcurrentHashMap<ContextProperties,Context> m2 = contextCache.putIfAbsent(c, m);
 			if (m2 != null)
 				m = m2;
 		}
@@ -164,7 +164,7 @@ public class ContextCache {
 		return prefixes.length == 0 ? null : prefixes;
 	}
 
-	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {
-		return (T)castOrCreate(Context.class, cc, true, ps);
+	private <T> T newInstance(Class<T> cc, ContextProperties cp) throws Exception {
+		return (T)castOrCreate(Context.class, cc, true, cp);
 	}
 }

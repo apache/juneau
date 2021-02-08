@@ -48,7 +48,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider, HtmlCommo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final HtmlParser DEFAULT = new HtmlParser(PropertyStore.DEFAULT);
+	public static final HtmlParser DEFAULT = new HtmlParser(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -61,15 +61,15 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider, HtmlCommo
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public HtmlParser(PropertyStore ps) {
-		super(ps, "text/html", "text/html+stripped");
+	public HtmlParser(ContextProperties cp) {
+		super(cp, "text/html", "text/html+stripped");
 	}
 
 	@Override /* Context */
 	public HtmlParserBuilder builder() {
-		return new HtmlParserBuilder(getPropertyStore());
+		return new HtmlParserBuilder(getContextProperties());
 	}
 
 	/**

@@ -42,7 +42,7 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final JsoParser DEFAULT = new JsoParser(PropertyStore.DEFAULT);
+	public static final JsoParser DEFAULT = new JsoParser(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -54,15 +54,15 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public JsoParser(PropertyStore ps) {
-		super(ps, "application/x-java-serialized-object");
+	public JsoParser(ContextProperties cp) {
+		super(cp, "application/x-java-serialized-object");
 	}
 
 	@Override /* Context */
 	public JsoParserBuilder builder() {
-		return new JsoParserBuilder(getPropertyStore());
+		return new JsoParserBuilder(getContextProperties());
 	}
 
 	/**

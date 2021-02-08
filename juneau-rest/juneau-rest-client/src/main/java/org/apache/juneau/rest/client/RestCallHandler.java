@@ -32,7 +32,7 @@ import org.apache.juneau.*;
  * The constructor on the implementation class can optionally take in any of the following parameters:
  * <ul>
  * 	<li>{@link RestClient} - The client using this handler.
- * 	<li>{@link PropertyStore} - The properties used to initialize the client.
+ * 	<li>{@link ContextProperties} - The properties used to initialize the client.
  * </ul>
  *
  * <p>

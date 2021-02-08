@@ -45,10 +45,10 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public HtmlSchemaSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public HtmlSchemaSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -254,7 +254,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSchemaSerializerBuilder apply(PropertyStore copyFrom) {
+	public HtmlSchemaSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

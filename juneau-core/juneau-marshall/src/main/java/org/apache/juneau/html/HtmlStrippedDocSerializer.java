@@ -40,7 +40,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlStrippedDocSerializer DEFAULT = new HtmlStrippedDocSerializer(PropertyStore.DEFAULT);
+	public static final HtmlStrippedDocSerializer DEFAULT = new HtmlStrippedDocSerializer(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -51,16 +51,16 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public HtmlStrippedDocSerializer(PropertyStore ps) {
-		this(ps, "text/html", "text/html+stripped");
+	public HtmlStrippedDocSerializer(ContextProperties cp) {
+		this(cp, "text/html", "text/html+stripped");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -84,13 +84,13 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public HtmlStrippedDocSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
+	public HtmlStrippedDocSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
 	}
 
 	@Override /* Context */
 	public HtmlStrippedDocSerializerBuilder builder() {
-		return new HtmlStrippedDocSerializerBuilder(getPropertyStore());
+		return new HtmlStrippedDocSerializerBuilder(getContextProperties());
 	}
 
 	/**

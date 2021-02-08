@@ -44,17 +44,17 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store to use for creating the context for this serializer.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore ps) {
-		this(ps, "text/html", "text/html+schema");
+	public HtmlSchemaDocSerializer(ContextProperties cp) {
+		this(cp, "text/html", "text/html+schema");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -78,9 +78,9 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String accept) {
+	public HtmlSchemaDocSerializer(ContextProperties cp, String produces, String accept) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(BEANTRAVERSE_detectRecursions, true)
 				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
@@ -88,7 +88,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			accept
 		);
 
-		generator = JsonSchemaGenerator.create().apply(getPropertyStore()).build();
+		generator = JsonSchemaGenerator.create().apply(getContextProperties()).build();
 	}
 
 	@Override /* Serializer */

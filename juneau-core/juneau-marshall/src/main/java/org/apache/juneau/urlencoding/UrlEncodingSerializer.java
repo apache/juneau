@@ -191,16 +191,16 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
-	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(PropertyStore.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(ContextProperties.DEFAULT);
 
 	/** Reusable instance of {@link UrlEncodingSerializer.PlainText}. */
-	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(PropertyStore.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(ContextProperties.DEFAULT);
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
-	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(PropertyStore.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(ContextProperties.DEFAULT);
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
-	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -215,10 +215,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Expanded(PropertyStore ps) {
-			super(ps.builder().setDefault(URLENC_expandedParams, true).build());
+		public Expanded(ContextProperties cp) {
+			super(cp.builder().setDefault(URLENC_expandedParams, true).build());
 		}
 	}
 
@@ -230,10 +230,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore ps) {
-			super(ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
+		public Readable(ContextProperties cp) {
+			super(cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -245,10 +245,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Constructor.
 		 *
-		 * @param ps The property store containing all the settings for this object.
+		 * @param cp The property store containing all the settings for this object.
 		 */
-		public PlainText(PropertyStore ps) {
-			super(ps.builder().setDefault(UON_paramFormat, "PLAINTEXT").build());
+		public PlainText(ContextProperties cp) {
+			super(cp.builder().setDefault(UON_paramFormat, "PLAINTEXT").build());
 		}
 	}
 
@@ -265,17 +265,17 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UrlEncodingSerializer(PropertyStore ps) {
-		this(ps, "application/x-www-form-urlencoded", (String)null);
+	public UrlEncodingSerializer(ContextProperties cp) {
+		this(cp, "application/x-www-form-urlencoded", (String)null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -298,20 +298,20 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public UrlEncodingSerializer(PropertyStore ps, String produces, String accept) {
+	public UrlEncodingSerializer(ContextProperties cp, String produces, String accept) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(UON_encoding, true)
 				.build(),
 			produces,
 			accept
 		);
-		expandedParams = ps.getBoolean(URLENC_expandedParams).orElse(false);
+		expandedParams = cp.getBoolean(URLENC_expandedParams).orElse(false);
 	}
 
 	@Override /* Context */
 	public UrlEncodingSerializerBuilder builder() {
-		return new UrlEncodingSerializerBuilder(getPropertyStore());
+		return new UrlEncodingSerializerBuilder(getContextProperties());
 	}
 
 	/**

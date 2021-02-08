@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
 public class MsgPackConfigAnnotation {
 
 	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link MsgPackConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<MsgPackConfig> {
 
@@ -39,10 +39,10 @@ public class MsgPackConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<MsgPackConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			MsgPackConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
+			cpb.setIfNotEmpty(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
 		}
 	}
 }

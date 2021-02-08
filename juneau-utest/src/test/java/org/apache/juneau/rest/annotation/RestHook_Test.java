@@ -83,8 +83,8 @@ public class RestHook_Test {
 	}
 
 	public static class A1 extends ReaderParser {
-		public A1(PropertyStore ps) {
-			super(ps, "text/a1", "text/a2", "text/a3");
+		public A1(ContextProperties cp) {
+			super(cp, "text/a1", "text/a2", "text/a3");
 		}
 		@Override /* Parser */
 		public ReaderParserSession createSession(ParserSessionArgs args) {
@@ -160,8 +160,8 @@ public class RestHook_Test {
 	}
 
 	public static class B1 extends WriterSerializer {
-		public B1(PropertyStore ps) {
-			super(ps, "test/s1", "text/s1,text/s2,text/s3");
+		public B1(ContextProperties cp) {
+			super(cp, "test/s1", "text/s1,text/s2,text/s3");
 		}
 		@Override /* Serializer */
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {

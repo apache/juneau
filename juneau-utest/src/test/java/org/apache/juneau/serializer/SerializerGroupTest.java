@@ -52,20 +52,20 @@ public class SerializerGroupTest {
 
 
 	public static class SA1 extends JsonSerializer {
-		public SA1(PropertyStore ps) {
-			super(ps, "application/json", "text/foo+*,text/foo_a+*");
+		public SA1(ContextProperties cp) {
+			super(cp, "application/json", "text/foo+*,text/foo_a+*");
 		}
 	}
 
 	public static class SA2 extends JsonSerializer {
-		public SA2(PropertyStore ps) {
-			super(ps, "application/json", "text/foo+bar+*,text/foo+bar_a+*");
+		public SA2(ContextProperties cp) {
+			super(cp, "application/json", "text/foo+bar+*,text/foo+bar_a+*");
 		}
 	}
 
 	public static class SA3 extends JsonSerializer {
-		public SA3(PropertyStore ps) {
-			super(ps, "application/json", "text/baz+*,text/baz_a+*");
+		public SA3(ContextProperties cp) {
+			super(cp, "application/json", "text/baz+*,text/baz_a+*");
 		}
 	}
 
@@ -91,32 +91,32 @@ public class SerializerGroupTest {
 	}
 
 	public static class SB1 extends JsonSerializer {
-		public SB1(PropertyStore ps) {
-			super(ps, "application/json", "text/1");
+		public SB1(ContextProperties cp) {
+			super(cp, "application/json", "text/1");
 		}
 	}
 
 	public static class SB2 extends JsonSerializer {
-		public SB2(PropertyStore ps) {
-			super(ps, "application/json", "text/2,text/2a");
+		public SB2(ContextProperties cp) {
+			super(cp, "application/json", "text/2,text/2a");
 		}
 	}
 
 	public static class SB3 extends JsonSerializer {
-		public SB3(PropertyStore ps) {
-			super(ps, "application/json", "text/3");
+		public SB3(ContextProperties cp) {
+			super(cp, "application/json", "text/3");
 		}
 	}
 
 	public static class SB4 extends JsonSerializer {
-		public SB4(PropertyStore ps) {
-			super(ps, "application/json", "text/4,text/4a");
+		public SB4(ContextProperties cp) {
+			super(cp, "application/json", "text/4,text/4a");
 		}
 	}
 
 	public static class SB5 extends JsonSerializer {
-		public SB5(PropertyStore ps) {
-			super(ps, "application/json", "text/5");
+		public SB5(ContextProperties cp) {
+			super(cp, "application/json", "text/5");
 		}
 	}
 
@@ -136,20 +136,20 @@ public class SerializerGroupTest {
 	}
 
 	public static class SC1 extends JsonSerializer {
-		public SC1(PropertyStore ps) {
-			super(ps, "application/json", "text/*");
+		public SC1(ContextProperties cp) {
+			super(cp, "application/json", "text/*");
 		}
 	}
 
 	public static class SC2 extends JsonSerializer {
-		public SC2(PropertyStore ps) {
-			super(ps, "application/json", "*/json");
+		public SC2(ContextProperties cp) {
+			super(cp, "application/json", "*/json");
 		}
 	}
 
 	public static class SC3 extends JsonSerializer {
-		public SC3(PropertyStore ps) {
-			super(ps, "application/json", "*/*");
+		public SC3(ContextProperties cp) {
+			super(cp, "application/json", "*/*");
 		}
 	}
 }

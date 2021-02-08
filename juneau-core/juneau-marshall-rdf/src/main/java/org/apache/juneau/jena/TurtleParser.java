@@ -26,7 +26,7 @@ public class TurtleParser extends RdfParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default Turtle parser, all default settings.*/
-	public static final TurtleParser DEFAULT = new TurtleParser(PropertyStore.DEFAULT);
+	public static final TurtleParser DEFAULT = new TurtleParser(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class TurtleParser extends RdfParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public TurtleParser(PropertyStore ps) {
+	public TurtleParser(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_TURTLE)
 				.build(),
 			"text/turtle"

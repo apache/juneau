@@ -33,31 +33,31 @@ public class RequestBeanMeta {
 	 * Create metadata from specified parameter.
 	 *
 	 * @param mpi The method parameter.
-	 * @param ps
+	 * @param cp
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(ParamInfo mpi, PropertyStore ps) {
+	public static RequestBeanMeta create(ParamInfo mpi, ContextProperties cp) {
 		if (! mpi.hasAnnotation(Request.class))
 			return null;
-		return new RequestBeanMeta.Builder(ps).apply(mpi).build();
+		return new RequestBeanMeta.Builder(cp).apply(mpi).build();
 	}
 
 	/**
 	 * Create metadata from specified class.
 	 *
 	 * @param c The class annotated with {@link Request}.
-	 * @param ps
+	 * @param cp
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(Class<?> c, PropertyStore ps) {
+	public static RequestBeanMeta create(Class<?> c, ContextProperties cp) {
 		ClassInfo ci = ClassInfo.of(c);
 		if (! ci.hasAnnotation(Request.class))
 			return null;
-		return new RequestBeanMeta.Builder(ps).apply(c).build();
+		return new RequestBeanMeta.Builder(cp).apply(c).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -71,8 +71,8 @@ public class RequestBeanMeta {
 
 	RequestBeanMeta(Builder b) {
 		this.cm = b.cm;
-		this.serializer = castOrCreate(HttpPartSerializer.class, b.serializer, true, b.ps);
-		this.parser = castOrCreate(HttpPartParser.class, b.parser, true, b.ps);
+		this.serializer = castOrCreate(HttpPartSerializer.class, b.serializer, true, b.cp);
+		this.parser = castOrCreate(HttpPartParser.class, b.parser, true, b.cp);
 		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>();
 		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
 			properties.put(e.getKey(), e.getValue().build(serializer, parser));
@@ -81,13 +81,13 @@ public class RequestBeanMeta {
 
 	static class Builder {
 		ClassMeta<?> cm;
-		PropertyStore ps;
+		ContextProperties cp;
 		Class<? extends HttpPartSerializer> serializer;
 		Class<? extends HttpPartParser> parser;
 		Map<String,RequestBeanPropertyMeta.Builder> properties = new LinkedHashMap<>();
 
-		Builder(PropertyStore ps) {
-			this.ps = ps;
+		Builder(ContextProperties cp) {
+			this.cp = cp;
 		}
 
 		Builder apply(ParamInfo mpi) {

@@ -121,7 +121,7 @@ public class ParentPropertyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link ParentProperty} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link ParentProperty} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<ParentProperty> {
 
@@ -136,13 +136,13 @@ public class ParentPropertyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParentProperty> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ParentProperty> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			ParentProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

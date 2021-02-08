@@ -80,7 +80,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	public static final String OSSERIALIZER_binaryFormat = PREFIX + ".binaryFormat.s";
 
-	static final OutputStreamSerializer DEFAULT = new OutputStreamSerializer(PropertyStore.create().build(), "", "") {
+	static final OutputStreamSerializer DEFAULT = new OutputStreamSerializer(ContextProperties.create().build(), "", "") {
 		@Override
 		public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -96,7 +96,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -119,10 +119,10 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	protected OutputStreamSerializer(PropertyStore ps, String produces, String accept) {
-		super(ps, produces, accept);
+	protected OutputStreamSerializer(ContextProperties cp, String produces, String accept) {
+		super(cp, produces, accept);
 
-		binaryFormat = ps.get(OSSERIALIZER_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.HEX);
+		binaryFormat = cp.get(OSSERIALIZER_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.HEX);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -77,10 +77,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public BeanContextBuilder(PropertyStore ps) {
-		super(ps);
+	public BeanContextBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -2992,7 +2992,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder apply(PropertyStore copyFrom) {
+	public BeanContextBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

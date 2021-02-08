@@ -46,8 +46,8 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Represents no Serializer.
 	 */
 	public static abstract class Null extends Serializer {
-		private Null(PropertyStore ps, String produces, String accept) {
-			super(ps, produces, accept);
+		private Null(ContextProperties cp, String produces, String accept) {
+			super(cp, produces, accept);
 		}
 	}
 
@@ -768,7 +768,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + ".uriResolution.s";
 
-	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "", "") {
+	static final Serializer DEFAULT = new Serializer(ContextProperties.create().build(), "", "") {
 		@Override
 		public SerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -800,7 +800,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Constructor
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -823,21 +823,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	protected Serializer(PropertyStore ps, String produces, String accept) {
-		super(ps);
+	protected Serializer(ContextProperties cp, String produces, String accept) {
+		super(cp);
 
-		addBeanTypes = ps.getBoolean(SERIALIZER_addBeanTypes).orElse(false);
-		keepNullProperties = ps.getBoolean(SERIALIZER_keepNullProperties).orElse(false);
-		trimEmptyCollections = ps.getBoolean(SERIALIZER_trimEmptyCollections).orElse(false);
-		trimEmptyMaps = ps.getBoolean(SERIALIZER_trimEmptyMaps).orElse(false);
-		trimStrings = ps.getBoolean(SERIALIZER_trimStrings).orElse(false);
-		sortCollections = ps.getBoolean(SERIALIZER_sortCollections).orElse(false);
-		sortMaps = ps.getBoolean(SERIALIZER_sortMaps).orElse(false);
-		addRootType = ps.getBoolean(SERIALIZER_addRootType).orElse(false);
-		uriContext = ps.get(SERIALIZER_uriContext, UriContext.class).orElse(UriContext.DEFAULT);
-		uriResolution = ps.get(SERIALIZER_uriResolution, UriResolution.class).orElse(UriResolution.NONE);
-		uriRelativity = ps.get(SERIALIZER_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
-		listener = ps.getClass(SERIALIZER_listener, SerializerListener.class).orElse(null);
+		addBeanTypes = cp.getBoolean(SERIALIZER_addBeanTypes).orElse(false);
+		keepNullProperties = cp.getBoolean(SERIALIZER_keepNullProperties).orElse(false);
+		trimEmptyCollections = cp.getBoolean(SERIALIZER_trimEmptyCollections).orElse(false);
+		trimEmptyMaps = cp.getBoolean(SERIALIZER_trimEmptyMaps).orElse(false);
+		trimStrings = cp.getBoolean(SERIALIZER_trimStrings).orElse(false);
+		sortCollections = cp.getBoolean(SERIALIZER_sortCollections).orElse(false);
+		sortMaps = cp.getBoolean(SERIALIZER_sortMaps).orElse(false);
+		addRootType = cp.getBoolean(SERIALIZER_addRootType).orElse(false);
+		uriContext = cp.get(SERIALIZER_uriContext, UriContext.class).orElse(UriContext.DEFAULT);
+		uriResolution = cp.get(SERIALIZER_uriResolution, UriResolution.class).orElse(UriResolution.NONE);
+		uriRelativity = cp.get(SERIALIZER_uriRelativity, UriRelativity.class).orElse(UriRelativity.RESOURCE);
+		listener = cp.getClass(SERIALIZER_listener, SerializerListener.class).orElse(null);
 
 		this.produces = MediaType.of(produces);
 		this.accept = accept == null ? MediaRanges.of(produces) : MediaRanges.of(accept);

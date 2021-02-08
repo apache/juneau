@@ -56,7 +56,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore.DEFAULT);
+	public static final PlainTextParser DEFAULT = new PlainTextParser(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -69,27 +69,27 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public PlainTextParser(PropertyStore ps) {
-		this(ps, "text/plain");
+	public PlainTextParser(ContextProperties cp) {
+		this(cp, "text/plain");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>
 	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
 	 */
-	public PlainTextParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
+	public PlainTextParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
 	}
 
 	@Override /* Context */
 	public PlainTextParserBuilder builder() {
-		return new PlainTextParserBuilder(getPropertyStore());
+		return new PlainTextParserBuilder(getContextProperties());
 	}
 
 	/**

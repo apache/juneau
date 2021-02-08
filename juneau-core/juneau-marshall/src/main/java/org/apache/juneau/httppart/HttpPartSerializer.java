@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * Implementations must include either a public no-args constructor or a public constructor that takes in a single
- * {@link PropertyStore} object.
+ * {@link ContextProperties} object.
  */
 public interface HttpPartSerializer {
 

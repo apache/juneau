@@ -50,10 +50,10 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The settings for this content store.
+	 * @param cp The settings for this content store.
 	 */
-	protected ConfigStore(PropertyStore ps) {
-		super(ps, false);
+	protected ConfigStore(ContextProperties cp) {
+		super(cp, false);
 	}
 
 	/**

@@ -35,10 +35,10 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public ConfigStoreBuilder(PropertyStore ps) {
-		super(ps);
+	public ConfigStoreBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigStoreBuilder apply(PropertyStore copyFrom) {
+	public ConfigStoreBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

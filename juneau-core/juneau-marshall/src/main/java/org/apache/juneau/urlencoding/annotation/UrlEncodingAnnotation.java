@@ -169,7 +169,7 @@ public class UrlEncodingAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link UrlEncoding} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link UrlEncoding} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<UrlEncoding> {
 
@@ -184,13 +184,13 @@ public class UrlEncodingAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncoding> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<UrlEncoding> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			UrlEncoding a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

@@ -26,7 +26,7 @@ public class N3Parser extends RdfParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default N3 parser, all default settings.*/
-	public static final N3Parser DEFAULT = new N3Parser(PropertyStore.DEFAULT);
+	public static final N3Parser DEFAULT = new N3Parser(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class N3Parser extends RdfParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public N3Parser(PropertyStore ps) {
+	public N3Parser(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_N3)
 				.build(),
 			"text/n3"

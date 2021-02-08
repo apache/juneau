@@ -172,7 +172,7 @@ public class MarshalledAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Marshalled} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Marshalled} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Marshalled> {
 
@@ -187,13 +187,13 @@ public class MarshalledAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Marshalled> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Marshalled> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Marshalled a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

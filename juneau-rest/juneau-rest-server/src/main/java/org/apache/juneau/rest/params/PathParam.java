@@ -43,13 +43,13 @@ public class PathParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @param pathMatcher Path matcher for the specified method.
 	 * @return A new {@link PathParam}, or <jk>null</jk> if the parameter is not annotated with {@link Path}.
 	 */
-	public static PathParam create(ParamInfo paramInfo, PropertyStore ps, UrlPathMatcher pathMatcher) {
+	public static PathParam create(ParamInfo paramInfo, ContextProperties cp, UrlPathMatcher pathMatcher) {
 		if (paramInfo.hasAnnotation(Path.class) || paramInfo.getParameterType().hasAnnotation(Path.class))
-			return new PathParam(paramInfo, ps, pathMatcher);
+			return new PathParam(paramInfo, cp, pathMatcher);
 		return null;
 	}
 
@@ -57,14 +57,14 @@ public class PathParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @param pathMatcher Path matcher for the specified method.
 	 */
-	protected PathParam(ParamInfo paramInfo, PropertyStore ps, UrlPathMatcher pathMatcher) {
+	protected PathParam(ParamInfo paramInfo, ContextProperties cp, UrlPathMatcher pathMatcher) {
 		this.name = getName(paramInfo, pathMatcher);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Path.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, ps);
+		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
 	}
 
 	private String getName(ParamInfo paramInfo, UrlPathMatcher pathMatcher) {

@@ -1278,7 +1278,7 @@ public class SchemaAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Schema} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Schema} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Schema> {
 
@@ -1293,13 +1293,13 @@ public class SchemaAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Schema> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Schema> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Schema a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

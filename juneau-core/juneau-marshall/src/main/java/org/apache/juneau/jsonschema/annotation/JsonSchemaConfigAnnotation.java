@@ -25,7 +25,7 @@ import org.apache.juneau.svl.*;
 public class JsonSchemaConfigAnnotation {
 
 	/**
-	 * Applies {@link JsonSchemaConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link JsonSchemaConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<JsonSchemaConfig> {
 
@@ -40,16 +40,16 @@ public class JsonSchemaConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonSchemaConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<JsonSchemaConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			JsonSchemaConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
-			psb.setIfNotEmpty(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
-			psb.setIfNotEmpty(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
-			psb.setIfNotEmpty(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
-			psb.setIf(a.beanDefMapper() != BeanDefMapper.Null.class, JSONSCHEMA_beanDefMapper, a.beanDefMapper());
-			psb.setIfNotEmpty(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
-			psb.setIfNotEmpty(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
+			cpb.setIfNotEmpty(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
+			cpb.setIfNotEmpty(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
+			cpb.setIfNotEmpty(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
+			cpb.setIfNotEmpty(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
+			cpb.setIf(a.beanDefMapper() != BeanDefMapper.Null.class, JSONSCHEMA_beanDefMapper, a.beanDefMapper());
+			cpb.setIfNotEmpty(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
+			cpb.setIfNotEmpty(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
 		}
 	}
 }

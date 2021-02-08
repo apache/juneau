@@ -42,10 +42,10 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public OpenApiParserBuilder(PropertyStore ps) {
-		super(ps);
+	public OpenApiParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -189,7 +189,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OpenApiParserBuilder apply(PropertyStore copyFrom) {
+	public OpenApiParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

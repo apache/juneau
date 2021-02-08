@@ -19,7 +19,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.PropertyStoreBuilder.*;
+import org.apache.juneau.ContextPropertiesBuilder.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -51,17 +51,17 @@ import org.apache.juneau.reflect.*;
  * This has the effect of significantly improving performance, especially if you're creating many Serializers and
  * Parsers.
  *
- * <h5 class='topic'>PropertyStoreBuilder</h5>
+ * <h5 class='topic'>ContextPropertiesBuilder</h5>
  *
  * <p>
- * The {@link PropertyStoreBuilder} class is used to build up and instantiate immutable <c>PropertyStore</c>
+ * The {@link ContextPropertiesBuilder} class is used to build up and instantiate immutable <c>PropertyStore</c>
  * objects.
  *
  * <p>
  * In the example above, the property store being built looks like the following:
  *
  * <p class='bcode w800'>
- * 	PropertyStore ps = PropertyStore
+ * 	ContextProperties cp = ContextProperties
  * 		.<jsm>create</jsm>()
  * 		.set(<js>"BeanContext.swaps.lc"</js>, MySwap.<jk>class</jk>)
  * 		.set(<js>"JsonSerializer.simpleMode.b"</js>)
@@ -190,18 +190,18 @@ import org.apache.juneau.reflect.*;
  * </p>
  */
 @SuppressWarnings("unchecked")
-public final class PropertyStore {
+public final class ContextProperties {
 
 	/**
 	 * A default empty property store.
 	 */
-	public static PropertyStore DEFAULT = PropertyStore.create().build();
+	public static ContextProperties DEFAULT = ContextProperties.create().build();
 
 	final Map<String,PropertyGroup> groups;
 	private final int hashCode;
 
-	// Created by PropertyStoreBuilder.build()
-	PropertyStore(Map<String,PropertyGroupBuilder> propertyMaps) {
+	// Created by ContextPropertiesBuilder.build()
+	ContextProperties(Map<String,PropertyGroupBuilder> propertyMaps) {
 		Map<String,PropertyGroup> m = new LinkedHashMap<>();
 		for (Map.Entry<String,PropertyGroupBuilder> p : propertyMaps.entrySet())
 			m.put(p.getKey(), p.getValue().build());
@@ -215,7 +215,7 @@ public final class PropertyStore {
 	 * @param groups The group names to include.
 	 * @return A new property store.
 	 */
-	public PropertyStore subset(String[] groups) {
+	public ContextProperties subset(String[] groups) {
 		TreeMap<String,PropertyGroup> m = new TreeMap<>();
 		for (String g : groups) {
 			PropertyGroup g2 = this.groups.get(g);
@@ -223,10 +223,10 @@ public final class PropertyStore {
 				m.put(g, g2);
 		}
 
-		return new PropertyStore(m);
+		return new ContextProperties(m);
 	}
 
-	private PropertyStore(SortedMap<String,PropertyGroup> propertyMaps) {
+	private ContextProperties(SortedMap<String,PropertyGroup> propertyMaps) {
 		this.groups = Collections.unmodifiableMap(new LinkedHashMap<>(propertyMaps));
 		this.hashCode = groups.hashCode();
 	}
@@ -237,8 +237,8 @@ public final class PropertyStore {
 	 *
 	 * @return A new empty builder for a property store.
 	 */
-	public static PropertyStoreBuilder create() {
-		return new PropertyStoreBuilder();
+	public static ContextPropertiesBuilder create() {
+		return new ContextPropertiesBuilder();
 	}
 
 	/**
@@ -246,8 +246,8 @@ public final class PropertyStore {
 	 *
 	 * @return A new property store builder.
 	 */
-	public PropertyStoreBuilder builder() {
-		return new PropertyStoreBuilder(this);
+	public ContextPropertiesBuilder builder() {
+		return new ContextPropertiesBuilder(this);
 	}
 
 	private Property findProperty(String key) {
@@ -266,7 +266,7 @@ public final class PropertyStore {
 
 		s = SystemProperties.getProperty(k1, SystemProperties.getProperty(k2));
 
-		return s == null ? null : PropertyStoreBuilder.MutableProperty.create(k, s).build();
+		return s == null ? null : ContextPropertiesBuilder.MutableProperty.create(k, s).build();
 	}
 
 	/**
@@ -555,22 +555,22 @@ public final class PropertyStore {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof PropertyStore) && eq(this, (PropertyStore)o, (x,y)->eq(x.groups, y.groups));
+		return (o instanceof ContextProperties) && eq(this, (ContextProperties)o, (x,y)->eq(x.groups, y.groups));
 	}
 
 	/**
 	 * Compares two property stores, but only based on the specified group names.
 	 *
-	 * @param ps The property store to compare to.
+	 * @param cp The property store to compare to.
 	 * @param groups The groups to compare.
 	 * @return <jk>true</jk> if the two property stores are equal in the specified groups.
 	 */
-	public boolean equals(PropertyStore ps, String...groups) {
-		if (this == ps)
+	public boolean equals(ContextProperties cp, String...groups) {
+		if (this == cp)
 			return true;
-		for (String p : groups) {
-			if (p != null) {
-				PropertyGroup pg1 = this.groups.get(p), pg2 = ps.groups.get(p);
+		for (String g : groups) {
+			if (g != null) {
+				PropertyGroup pg1 = this.groups.get(g), pg2 = cp.groups.get(g);
 				if (pg1 == null && pg2 == null)
 					continue;
 				if (pg1 == null || pg2 == null)

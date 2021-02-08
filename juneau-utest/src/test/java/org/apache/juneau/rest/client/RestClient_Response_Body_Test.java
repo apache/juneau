@@ -78,8 +78,8 @@ public class RestClient_Response_Body_Test {
 			this.headers = o;
 			return this;
 		}
-		public TestClient(PropertyStore ps) {
-			super(ps);
+		public TestClient(ContextProperties cp) {
+			super(cp);
 		}
 		@Override
 		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {

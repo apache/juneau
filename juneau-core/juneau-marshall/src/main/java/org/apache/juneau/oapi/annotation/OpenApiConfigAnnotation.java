@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
 public class OpenApiConfigAnnotation {
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link OpenApiConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<OpenApiConfig> {
 
@@ -39,11 +39,11 @@ public class OpenApiConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApiConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<OpenApiConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			OpenApiConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(OAPI_format, string(a.format()));
-			psb.setIfNotEmpty(OAPI_collectionFormat, string(a.collectionFormat()));
+			cpb.setIfNotEmpty(OAPI_format, string(a.format()));
+			cpb.setIfNotEmpty(OAPI_collectionFormat, string(a.collectionFormat()));
 		}
 	}
 }

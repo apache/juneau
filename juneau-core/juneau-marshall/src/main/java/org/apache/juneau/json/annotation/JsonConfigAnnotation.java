@@ -25,7 +25,7 @@ import org.apache.juneau.svl.*;
 public class JsonConfigAnnotation {
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<JsonConfig> {
 
@@ -40,13 +40,13 @@ public class JsonConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<JsonConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			JsonConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(JSON_addBeanTypes, bool(a.addBeanTypes()));
-			psb.setIfNotEmpty(JSON_escapeSolidus, bool(a.escapeSolidus()));
-			psb.setIfNotEmpty(JSON_simpleMode, bool(a.simpleMode()));
-			psb.setIfNotEmpty(JSON_validateEnd, bool(a.validateEnd()));
+			cpb.setIfNotEmpty(JSON_addBeanTypes, bool(a.addBeanTypes()));
+			cpb.setIfNotEmpty(JSON_escapeSolidus, bool(a.escapeSolidus()));
+			cpb.setIfNotEmpty(JSON_simpleMode, bool(a.simpleMode()));
+			cpb.setIfNotEmpty(JSON_validateEnd, bool(a.validateEnd()));
 		}
 	}
 }

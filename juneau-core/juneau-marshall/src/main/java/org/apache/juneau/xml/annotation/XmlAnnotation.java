@@ -223,7 +223,7 @@ public class XmlAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Xml} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Xml} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Xml> {
 
@@ -238,13 +238,13 @@ public class XmlAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Xml> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Xml> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Xml a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

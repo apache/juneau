@@ -433,35 +433,35 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 	@Override /* Context */
 	public ConfigBuilder builder() {
-		return new ConfigBuilder(getPropertyStore());
+		return new ConfigBuilder(getContextProperties());
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The property store containing all the settings for this object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Config(PropertyStore ps) throws IOException {
-		super(ps, true);
+	public Config(ContextProperties cp) throws IOException {
+		super(cp, true);
 
-		name = ps.getString(CONFIG_name).orElse("Configuration.cfg");
-		store = ps.getInstance(CONFIG_store, ConfigStore.class).orElse(ConfigFileStore.DEFAULT);
+		name = cp.getString(CONFIG_name).orElse("Configuration.cfg");
+		store = cp.getInstance(CONFIG_store, ConfigStore.class).orElse(ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
 		configMap.register(this);
-		serializer = ps.getInstance(CONFIG_serializer, WriterSerializer.class).orElse(SimpleJsonSerializer.DEFAULT);
-		parser = ps.getInstance(CONFIG_parser, ReaderParser.class).orElse(JsonParser.DEFAULT);
+		serializer = cp.getInstance(CONFIG_serializer, WriterSerializer.class).orElse(SimpleJsonSerializer.DEFAULT);
+		parser = cp.getInstance(CONFIG_parser, ReaderParser.class).orElse(JsonParser.DEFAULT);
 		beanSession = parser.createBeanSession();
-		encoder = ps.getInstance(CONFIG_encoder, ConfigEncoder.class).orElse(ConfigXorEncoder.INSTANCE);
-		varSession = ps.getInstance(CONFIG_varResolver, VarResolver.class).orElse(VarResolver.DEFAULT)
+		encoder = cp.getInstance(CONFIG_encoder, ConfigEncoder.class).orElse(ConfigXorEncoder.INSTANCE);
+		varSession = cp.getInstance(CONFIG_varResolver, VarResolver.class).orElse(VarResolver.DEFAULT)
 			.builder()
 			.vars(ConfigVar.class)
 			.bean(Config.class, this)
 			.build()
 			.createSession();
-		binaryLineLength = ps.getInteger(CONFIG_binaryLineLength).orElse(-1);
-		binaryFormat = ps.get(CONFIG_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.BASE64);
+		binaryLineLength = cp.getInteger(CONFIG_binaryLineLength).orElse(-1);
+		binaryFormat = cp.get(CONFIG_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.BASE64);
 		multiLineValuesOnSeparateLines = getBoolean(CONFIG_multiLineValuesOnSeparateLines, false);
 		readOnly = getBoolean(CONFIG_readOnly, false);
 	}

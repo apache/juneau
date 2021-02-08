@@ -292,7 +292,7 @@ public class BeanpAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Beanp} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Beanp} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Beanp> {
 
@@ -307,13 +307,13 @@ public class BeanpAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Beanp> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Beanp> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Beanp a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

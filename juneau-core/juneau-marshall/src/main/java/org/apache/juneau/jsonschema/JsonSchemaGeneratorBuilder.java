@@ -42,10 +42,10 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public JsonSchemaGeneratorBuilder(PropertyStore ps) {
-		super(ps);
+	public JsonSchemaGeneratorBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -283,7 +283,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder apply(PropertyStore copyFrom) {
+	public JsonSchemaGeneratorBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

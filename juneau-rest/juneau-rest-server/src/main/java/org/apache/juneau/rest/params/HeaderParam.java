@@ -46,12 +46,12 @@ public class HeaderParam implements RestOperationParam {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 * @return A new {@link HeaderParam}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
-	public static HeaderParam create(ParamInfo paramInfo, PropertyStore ps) {
+	public static HeaderParam create(ParamInfo paramInfo, ContextProperties cp) {
 		if (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class))
-			return new HeaderParam(paramInfo, ps);
+			return new HeaderParam(paramInfo, cp);
 		return null;
 	}
 
@@ -59,13 +59,13 @@ public class HeaderParam implements RestOperationParam {
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @param ps The configuration properties of the {@link RestContext}.
+	 * @param cp The configuration properties of the {@link RestContext}.
 	 */
-	protected HeaderParam(ParamInfo paramInfo, PropertyStore ps) {
+	protected HeaderParam(ParamInfo paramInfo, ContextProperties cp) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, paramInfo);
-		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, ps);
+		this.partParser = castOrCreate(HttpPartParser.class, schema.getParser(), true, cp);
 		this.multi = getMulti(paramInfo);
 
 		if (multi && ! type.isCollectionOrArray())

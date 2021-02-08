@@ -37,10 +37,10 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cpb The initial configuration settings for this builder.
 	 */
-	public MsgPackParserBuilder(PropertyStore ps) {
-		super(ps);
+	public MsgPackParserBuilder(ContextProperties cpb) {
+		super(cpb);
 	}
 
 	@Override /* ContextBuilder */
@@ -73,7 +73,7 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public MsgPackParserBuilder apply(PropertyStore copyFrom) {
+	public MsgPackParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

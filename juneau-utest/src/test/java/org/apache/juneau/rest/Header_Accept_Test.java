@@ -33,8 +33,8 @@ public class Header_Accept_Test {
 
 	public static class DummySerializer extends WriterSerializer {
 		String name;
-		DummySerializer(PropertyStore ps, String name, String produces) {
-			super(ps, produces, null);
+		DummySerializer(ContextProperties cp, String name, String produces) {
+			super(cp, produces, null);
 			this.name = name;
 		}
 		@Override /* Serializer */
@@ -48,9 +48,9 @@ public class Header_Accept_Test {
 		}
 	}
 
-	public static class S1 extends DummySerializer { public S1(PropertyStore ps) {super(ps, "s1", "text/s1");}}
-	public static class S2 extends DummySerializer { public S2(PropertyStore ps) {super(ps, "s2", "text/s2");}}
-	public static class S3 extends DummySerializer { public S3(PropertyStore ps) {super(ps, "s3", "text/s3");}}
+	public static class S1 extends DummySerializer { public S1(ContextProperties cp) {super(cp, "s1", "text/s1");}}
+	public static class S2 extends DummySerializer { public S2(ContextProperties cp) {super(cp, "s2", "text/s2");}}
+	public static class S3 extends DummySerializer { public S3(ContextProperties cp) {super(cp, "s3", "text/s3");}}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Accept headers on servlet annotation are picked up.

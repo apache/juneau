@@ -41,7 +41,7 @@ import org.apache.juneau.transform.*;
  * <br>However, it MUST be thread-safe and all fields should be declared final to prevent modification.
  * <br>It should NOT be used for storing temporary or state information.
  *
- * @see PropertyStore
+ * @see ContextProperties
  */
 @ConfigurableContext
 public abstract class Context {
@@ -320,7 +320,7 @@ public abstract class Context {
 	public static final String CONTEXT_timeZone = PREFIX + ".timeZone.s";
 
 
-	private final PropertyStore propertyStore;
+	private final ContextProperties properties;
 	private final int identityCode;
 
 	private final boolean debug;
@@ -334,17 +334,17 @@ public abstract class Context {
 	 * <p>
 	 * Subclasses MUST implement the same public constructor.
 	 *
-	 * @param ps The read-only configuration for this context object.
+	 * @param cp The read-only configuration for this context object.
 	 * @param allowReuse If <jk>true</jk>, subclasses that share the same property store values can be reused.
 	 */
-	public Context(PropertyStore ps, boolean allowReuse) {
-		propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
-		ps = propertyStore;
-		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
-		debug = ps.getBoolean(CONTEXT_debug).orElse(false);
-		locale = ps.getInstance(CONTEXT_locale, Locale.class).orElseGet(()->Locale.getDefault());
-		timeZone = ps.getInstance(CONTEXT_timeZone, TimeZone.class).orElse(null);
-		mediaType = ps.getInstance(CONTEXT_mediaType, MediaType.class).orElse(null);
+	public Context(ContextProperties cp, boolean allowReuse) {
+		properties = cp == null ? ContextProperties.DEFAULT : cp;
+		cp = properties;
+		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(cp).get() : System.identityHashCode(this);
+		debug = cp.getBoolean(CONTEXT_debug).orElse(false);
+		locale = cp.getInstance(CONTEXT_locale, Locale.class).orElseGet(()->Locale.getDefault());
+		timeZone = cp.getInstance(CONTEXT_timeZone, TimeZone.class).orElse(null);
+		mediaType = cp.getInstance(CONTEXT_mediaType, MediaType.class).orElse(null);
 	}
 
 	/**
@@ -357,7 +357,7 @@ public abstract class Context {
 	 * @return The set of property keys, or an empty set if the group was not found.
 	 */
 	public Set<String> getPropertyKeys(String group) {
-		return propertyStore.getKeys(group);
+		return properties.getKeys(group);
 	}
 
 	/**
@@ -366,8 +366,8 @@ public abstract class Context {
 	 * @return The property store associated with this context.
 	 */
 	@BeanIgnore
-	public final PropertyStore getPropertyStore() {
-		return propertyStore;
+	public final ContextProperties getContextProperties() {
+		return properties;
 	}
 
 	/**
@@ -390,7 +390,7 @@ public abstract class Context {
 	 * @return The instantiated context class.
 	 */
 	public <T extends Context> T getContext(Class<T> c) {
-		return ContextCache.INSTANCE.create(c, propertyStore);
+		return ContextCache.INSTANCE.create(c, properties);
 	}
 
 	/**
@@ -449,7 +449,7 @@ public abstract class Context {
 		if (o.getClass() != this.getClass())
 			return false;
 		Context c = (Context)o;
-		return (c.propertyStore.equals(propertyStore));
+		return (c.properties.equals(properties));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -527,7 +527,7 @@ public abstract class Context {
 					.create()
 					.filtered()
 					.a("identityCode", identityCode)
-					.a("propertyStore", System.identityHashCode(propertyStore))
+					.a("properties", System.identityHashCode(properties))
 			);
 	}
 }

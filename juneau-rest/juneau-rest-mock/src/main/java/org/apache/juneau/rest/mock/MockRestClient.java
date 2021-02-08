@@ -249,31 +249,31 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 */
-	public MockRestClient(PropertyStore ps) {
-		super(preInit(ps));
-		ps = getPropertyStore();
-		this.restBeanCtx = ps.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class).get();
+	public MockRestClient(ContextProperties cp) {
+		super(preInit(cp));
+		cp = getContextProperties();
+		this.restBeanCtx = cp.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class).get();
 		this.restObject = restBeanCtx.getResource();
-		this.contextPath = ps.getString(MOCKRESTCLIENT_contextPath).orElse("");
-		this.servletPath = ps.getString(MOCKRESTCLIENT_servletPath).orElse("");
-		this.pathVars = ps.getMap(MOCKRESTCLIENT_pathVars, String.class).orElse(emptyMap());
+		this.contextPath = cp.getString(MOCKRESTCLIENT_contextPath).orElse("");
+		this.servletPath = cp.getString(MOCKRESTCLIENT_servletPath).orElse("");
+		this.pathVars = cp.getMap(MOCKRESTCLIENT_pathVars, String.class).orElse(emptyMap());
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
 		if (ccm instanceof MockHttpClientConnectionManager)
 			((MockHttpClientConnectionManager)ccm).init(this);
 	}
 
-	private static PropertyStore preInit(PropertyStore ps) {
+	private static ContextProperties preInit(ContextProperties cp) {
 		try {
-			PropertyStoreBuilder psb = ps.builder();
-			Object restBean = ps.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
-			String contextPath = ps.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
-			String servletPath = ps.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
-			String rootUrl = ps.get(RESTCLIENT_rootUri, String.class).orElse("http://localhost");
+			ContextPropertiesBuilder cpb = cp.builder();
+			Object restBean = cp.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
+			String contextPath = cp.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
+			String servletPath = cp.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
+			String rootUrl = cp.get(RESTCLIENT_rootUri, String.class).orElse("http://localhost");
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			if (! REST_CONTEXTS.containsKey(c)) {
@@ -289,16 +289,16 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				REST_CONTEXTS.put(c, rc);
 			}
 			RestContext restBeanCtx = REST_CONTEXTS.get(c);
-			psb.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
+			cpb.set(MOCKRESTCLIENT_restBeanCtx, restBeanCtx);
 
 			if (servletPath == null)
 				servletPath = toValidContextPath(restBeanCtx.getFullPath());
 
 			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
 
-			psb.set(MOCKRESTCLIENT_servletPath, servletPath);
-			psb.set(RESTCLIENT_rootUri, rootUrl);
-			return psb.build();
+			cpb.set(MOCKRESTCLIENT_servletPath, servletPath);
+			cpb.set(RESTCLIENT_rootUri, rootUrl);
+			return cpb.build();
 		} catch (Exception e) {
 			throw new ConfigException(e, "Could not initialize MockRestClient");
 		}

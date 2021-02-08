@@ -139,7 +139,7 @@ public class ResponseStatusAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link ResponseStatus} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link ResponseStatus} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<ResponseStatus> {
 
@@ -154,13 +154,13 @@ public class ResponseStatusAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseStatus> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ResponseStatus> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			ResponseStatus a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

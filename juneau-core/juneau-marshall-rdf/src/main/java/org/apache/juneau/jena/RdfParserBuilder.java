@@ -43,10 +43,10 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public RdfParserBuilder(PropertyStore ps) {
-		super(ps);
+	public RdfParserBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -781,7 +781,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfParserBuilder apply(PropertyStore copyFrom) {
+	public RdfParserBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

@@ -26,7 +26,7 @@ public class RdfXmlParser extends RdfParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default XML parser, all default settings.*/
-	public static final RdfXmlParser DEFAULT = new RdfXmlParser(PropertyStore.DEFAULT);
+	public static final RdfXmlParser DEFAULT = new RdfXmlParser(ContextProperties.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -48,11 +48,11 @@ public class RdfXmlParser extends RdfParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public RdfXmlParser(PropertyStore ps) {
+	public RdfXmlParser(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.set(RDF_language, LANG_RDF_XML)
 				.build(),
 			"text/xml+rdf"

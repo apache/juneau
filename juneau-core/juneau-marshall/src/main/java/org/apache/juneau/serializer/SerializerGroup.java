@@ -106,7 +106,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
+	 * @param cp
 	 * 	The modifiable properties that were used to initialize the serializers.
 	 * 	A snapshot of these will be made so that we can clone and modify this group.
 	 * @param serializers
@@ -114,8 +114,8 @@ public final class SerializerGroup extends BeanTraverseContext {
 	 * 	The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
 	 * 	to match against media types.
 	 */
-	public SerializerGroup(PropertyStore ps, Serializer[] serializers) {
-		super(ps);
+	public SerializerGroup(ContextProperties cp, Serializer[] serializers) {
+		super(cp);
 		this.serializers = AList.unmodifiable(serializers);
 
 		AList<MediaRange> lmtr = AList.create();

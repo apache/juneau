@@ -111,7 +111,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
-	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore.DEFAULT);
+	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -125,21 +125,21 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 */
-	public UrlEncodingParser(PropertyStore ps) {
+	public UrlEncodingParser(ContextProperties cp) {
 		super(
-			ps.builder()
+			cp.builder()
 				.setDefault(UON_decoding, true)
 				.build(),
 			"application/x-www-form-urlencoded"
 		);
-		expandedParams = ps.getBoolean(URLENC_expandedParams).orElse(false);
+		expandedParams = cp.getBoolean(URLENC_expandedParams).orElse(false);
 	}
 
 	@Override /* Context */
 	public UrlEncodingParserBuilder builder() {
-		return new UrlEncodingParserBuilder(getPropertyStore());
+		return new UrlEncodingParserBuilder(getContextProperties());
 	}
 
 	/**

@@ -25,7 +25,7 @@ import org.apache.juneau.svl.*;
 public class UonConfigAnnotation {
 
 	/**
-	 * Applies {@link UonConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link UonConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<UonConfig> {
 
@@ -40,14 +40,14 @@ public class UonConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UonConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<UonConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			UonConfig a = ai.getAnnotation();
 
-			psb.setIfNotEmpty(UON_addBeanTypes, bool(a.addBeanTypes()));
-			psb.setIfNotEmpty(UON_encoding, bool(a.encoding()));
-			psb.setIfNotEmpty(UON_paramFormat, string(a.paramFormat()));
-			psb.setIfNotEmpty(UON_decoding, bool(a.decoding()));
-			psb.setIfNotEmpty(UON_validateEnd, bool(a.validateEnd()));
+			cpb.setIfNotEmpty(UON_addBeanTypes, bool(a.addBeanTypes()));
+			cpb.setIfNotEmpty(UON_encoding, bool(a.encoding()));
+			cpb.setIfNotEmpty(UON_paramFormat, string(a.paramFormat()));
+			cpb.setIfNotEmpty(UON_decoding, bool(a.decoding()));
+			cpb.setIfNotEmpty(UON_validateEnd, bool(a.validateEnd()));
 		}
 	}
 }

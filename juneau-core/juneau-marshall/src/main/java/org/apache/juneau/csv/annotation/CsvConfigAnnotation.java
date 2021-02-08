@@ -22,7 +22,7 @@ import org.apache.juneau.svl.*;
 public class CsvConfigAnnotation {
 
 	/**
-	 * Applies {@link CsvConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link CsvConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<CsvConfig> {
 
@@ -37,7 +37,7 @@ public class CsvConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<CsvConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<CsvConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 		}
 	}
 }

@@ -295,7 +295,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(PropertyStore.DEFAULT);
+	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(ContextProperties.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -313,29 +313,29 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Constructor.
 	 *
-	 * @param ps Initialize with the specified config property store.
+	 * @param cp Initialize with the specified config property store.
 	 */
-	public JsonSchemaGenerator(PropertyStore ps) {
-		super(ps.builder().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
+	public JsonSchemaGenerator(ContextProperties cp) {
+		super(cp.builder().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
 
-		useBeanDefs = ps.getBoolean(JSONSCHEMA_useBeanDefs).orElse(false);
-		allowNestedExamples = ps.getBoolean(JSONSCHEMA_allowNestedExamples).orElse(false);
-		allowNestedDescriptions = ps.getBoolean(JSONSCHEMA_allowNestedDescriptions).orElse(false);
-		beanDefMapper = ps.getInstance(JSONSCHEMA_beanDefMapper, BeanDefMapper.class).orElseGet(BasicBeanDefMapper::new);
-		addExamplesTo = TypeCategory.parse(ps.getString(JSONSCHEMA_addExamplesTo).orElse(null));
-		addDescriptionsTo = TypeCategory.parse(ps.getString(JSONSCHEMA_addDescriptionsTo).orElse(null));
+		useBeanDefs = cp.getBoolean(JSONSCHEMA_useBeanDefs).orElse(false);
+		allowNestedExamples = cp.getBoolean(JSONSCHEMA_allowNestedExamples).orElse(false);
+		allowNestedDescriptions = cp.getBoolean(JSONSCHEMA_allowNestedDescriptions).orElse(false);
+		beanDefMapper = cp.getInstance(JSONSCHEMA_beanDefMapper, BeanDefMapper.class).orElseGet(BasicBeanDefMapper::new);
+		addExamplesTo = TypeCategory.parse(cp.getString(JSONSCHEMA_addExamplesTo).orElse(null));
+		addDescriptionsTo = TypeCategory.parse(cp.getString(JSONSCHEMA_addDescriptionsTo).orElse(null));
 
 		Set<Pattern> ignoreTypes = new LinkedHashSet<>();
-		for (String s : split(ps.get(JSONSCHEMA_ignoreTypes, String.class).orElse("")))
+		for (String s : split(cp.get(JSONSCHEMA_ignoreTypes, String.class).orElse("")))
 			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
 		this.ignoreTypes = ignoreTypes;
 
-		jsonSerializer = new JsonSerializer(ps);
+		jsonSerializer = new JsonSerializer(cp);
 	}
 
 	@Override /* Context */
 	public JsonSchemaGeneratorBuilder builder() {
-		return new JsonSchemaGeneratorBuilder(getPropertyStore());
+		return new JsonSchemaGeneratorBuilder(getContextProperties());
 	}
 
 	/**

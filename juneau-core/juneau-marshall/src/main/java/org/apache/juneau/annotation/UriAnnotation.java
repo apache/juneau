@@ -144,7 +144,7 @@ public class UriAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Uri} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link Uri} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<Uri> {
 
@@ -159,13 +159,13 @@ public class UriAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uri> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Uri> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			Uri a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

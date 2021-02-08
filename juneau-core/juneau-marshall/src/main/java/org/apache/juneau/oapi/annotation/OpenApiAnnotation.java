@@ -145,7 +145,7 @@ public class OpenApiAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link OpenApi} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies targeted {@link OpenApi} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<OpenApi> {
 
@@ -160,13 +160,13 @@ public class OpenApiAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApi> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<OpenApi> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 			OpenApi a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, vr));
+			cpb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

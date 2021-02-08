@@ -22,7 +22,7 @@ import org.apache.juneau.svl.*;
 public class JsoConfigAnnotation {
 
 	/**
-	 * Applies {@link JsoConfig} annotations to a {@link PropertyStoreBuilder}.
+	 * Applies {@link JsoConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
 	public static class Apply extends ConfigApply<JsoConfig> {
 
@@ -37,7 +37,7 @@ public class JsoConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsoConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<JsoConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
 		}
 	}
 }

@@ -85,7 +85,7 @@ public abstract class InputStreamParser extends Parser {
 	 */
 	public static final String ISPARSER_binaryFormat = PREFIX + ".binaryFormat.s";
 
-	static final InputStreamParser DEFAULT = new InputStreamParser(PropertyStore.create().build(), "") {
+	static final InputStreamParser DEFAULT = new InputStreamParser(ContextProperties.create().build(), "") {
 		@Override
 		public InputStreamParserSession createSession(ParserSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -101,12 +101,12 @@ public abstract class InputStreamParser extends Parser {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The property store containing all the settings for this object.
+	 * @param cp The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	protected InputStreamParser(PropertyStore ps, String...consumes) {
-		super(ps, consumes);
-		binaryFormat = ps.get(ISPARSER_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.HEX);
+	protected InputStreamParser(ContextProperties cp, String...consumes) {
+		super(cp, consumes);
+		binaryFormat = cp.get(ISPARSER_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.HEX);
 	}
 
 	@Override /* Parser */

@@ -71,8 +71,8 @@ public class Header_AcceptCharset_Test {
 		}
 
 		public static class TestParser extends InputStreamParser {
-			public TestParser(PropertyStore ps) {
-				super(ps, "text/plain");
+			public TestParser(ContextProperties cp) {
+				super(cp, "text/plain");
 			}
 			@Override /* Parser */
 			public InputStreamParserSession createSession(final ParserSessionArgs args) {
@@ -88,8 +88,8 @@ public class Header_AcceptCharset_Test {
 		}
 
 		public static class TestSerializer extends OutputStreamSerializer {
-			public TestSerializer(PropertyStore ps) {
-				super(ps, "text/plain", null);
+			public TestSerializer(ContextProperties cp) {
+				super(cp, "text/plain", null);
 			}
 			@Override /* Serializer */
 			public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {

@@ -45,10 +45,10 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps The initial configuration settings for this builder.
+	 * @param cp The initial configuration settings for this builder.
 	 */
-	public RdfSerializerBuilder(PropertyStore ps) {
-		super(ps);
+	public RdfSerializerBuilder(ContextProperties cp) {
+		super(cp);
 	}
 
 	@Override /* ContextBuilder */
@@ -897,7 +897,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder apply(PropertyStore copyFrom) {
+	public RdfSerializerBuilder apply(ContextProperties copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
