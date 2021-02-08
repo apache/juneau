@@ -1229,7 +1229,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = (HttpPartSerializer)resource;
 
 		if (x == null)
-			x = ps.getInstance(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
+			x = ps.getInstance(REST_partSerializer, HttpPartSerializer.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
@@ -1287,7 +1287,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			x = (HttpPartParser)resource;
 
 		if (x == null)
-			x = ps.getInstance(REST_partParser, HttpPartParser.class, null, beanFactory);
+			x = ps.getInstance(REST_partParser, HttpPartParser.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);

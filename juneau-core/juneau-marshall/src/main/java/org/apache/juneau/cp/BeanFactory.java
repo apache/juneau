@@ -261,6 +261,22 @@ public class BeanFactory {
 	}
 
 	/**
+	 * Same as {@link #createBean(Class)} but returns the bean creation wrapped in a supplier.
+	 * 
+	 * @param c The bean type to create.
+	 * @return A supplier for the newly-created bean.
+	 */
+	public <T> Supplier<T> createBeanSupplier(Class<T> c) {
+		return () -> {
+			try {
+				return createBean(c);
+			} catch (ExecutableException e) {
+				throw new RuntimeException(e);
+			}
+		};
+	}
+
+	/**
 	 * Create a method finder for finding bean creation methods.
 	 *
 	 * <h5 class='section'>Example:</h5>

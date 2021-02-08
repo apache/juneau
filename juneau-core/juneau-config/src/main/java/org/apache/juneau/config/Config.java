@@ -447,14 +447,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		super(ps, true);
 
 		name = ps.getString(CONFIG_name).orElse("Configuration.cfg");
-		store = ps.getInstance(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
+		store = ps.getInstance(CONFIG_store, ConfigStore.class).orElse(ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
 		configMap.register(this);
-		serializer = ps.getInstance(CONFIG_serializer, WriterSerializer.class, SimpleJsonSerializer.DEFAULT);
-		parser = ps.getInstance(CONFIG_parser, ReaderParser.class, JsonParser.DEFAULT);
+		serializer = ps.getInstance(CONFIG_serializer, WriterSerializer.class).orElse(SimpleJsonSerializer.DEFAULT);
+		parser = ps.getInstance(CONFIG_parser, ReaderParser.class).orElse(JsonParser.DEFAULT);
 		beanSession = parser.createBeanSession();
-		encoder = ps.getInstance(CONFIG_encoder, ConfigEncoder.class, ConfigXorEncoder.INSTANCE);
-		varSession = ps.getInstance(CONFIG_varResolver, VarResolver.class, VarResolver.DEFAULT)
+		encoder = ps.getInstance(CONFIG_encoder, ConfigEncoder.class).orElse(ConfigXorEncoder.INSTANCE);
+		varSession = ps.getInstance(CONFIG_varResolver, VarResolver.class).orElse(VarResolver.DEFAULT)
 			.builder()
 			.vars(ConfigVar.class)
 			.bean(Config.class, this)

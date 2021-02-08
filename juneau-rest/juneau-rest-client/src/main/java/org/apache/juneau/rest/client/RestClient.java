@@ -2038,20 +2038,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	@SuppressWarnings("unchecked")
 	protected RestClient(PropertyStore ps) {
 		super(ps);
-		this.httpClient = ps.getInstance(RESTCLIENT_httpClient, CloseableHttpClient.class);
-		this.connectionManager = ps.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class);
+		this.httpClient = ps.getInstance(RESTCLIENT_httpClient, CloseableHttpClient.class).orElse(null);
+		this.connectionManager = ps.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class).orElse(null);
 		this.keepHttpClientOpen = ps.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
-		this.errorCodes = ps.getInstance(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
+		this.errorCodes = ps.getInstance(RESTCLIENT_errorCodes, Predicate.class).orElse(ERROR_CODES_DEFAULT);
 		this.executorServiceShutdownOnClose = ps.getBoolean(RESTCLIENT_executorServiceShutdownOnClose).orElse(false);
 		this.rootUri = StringUtils.nullIfEmpty(ps.getString(RESTCLIENT_rootUri).orElse("").replaceAll("\\/$", ""));
 		this.leakDetection = ps.getBoolean(RESTCLIENT_leakDetection).orElse(isDebug());
 		this.ignoreErrors = ps.getBoolean(RESTCLIENT_ignoreErrors).orElse(false);
-		this.logger = ps.getInstance(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));
-		this.logRequests = ps.getInstance(RESTCLIENT_logRequests, DetailLevel.class, isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
-		this.logRequestsLevel = ps.getInstance(RESTCLIENT_logRequestsLevel, Level.class, isDebug() ? Level.WARNING : Level.OFF);
+		this.logger = ps.getInstance(RESTCLIENT_logger, Logger.class).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
+		this.logRequests = ps.getInstance(RESTCLIENT_logRequests, DetailLevel.class).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
+		this.logRequestsLevel = ps.getInstance(RESTCLIENT_logRequestsLevel, Level.class).orElse(isDebug() ? Level.WARNING : Level.OFF);
 		this.logToConsole = ps.getBoolean(RESTCLIENT_logToConsole).orElse(isDebug());
-		this.console = ps.getInstance(RESTCLIENT_console, PrintStream.class, System.err);
-		this.logRequestsPredicate = ps.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class, LOG_REQUESTS_PREDICATE_DEFAULT);
+		this.console = ps.getInstance(RESTCLIENT_console, PrintStream.class).orElse(System.err);
+		this.logRequestsPredicate = ps.getInstance(RESTCLIENT_logRequestsPredicate, BiPredicate.class).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		SerializerGroupBuilder sgb = SerializerGroup.create();
 		for (Object o : ps.getArray(RESTCLIENT_serializers, Object.class).orElse(new Object[0])) {
@@ -2083,14 +2083,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 		this.parsers = pgb.build();
 
-		BeanFactory beanFactory = new BeanFactory()
+		BeanFactory bf = new BeanFactory()
 			.addBean(PropertyStore.class, ps)
 			.addBean(RestClient.class, this);
 
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
-		this.partSerializer = ps.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, beanFactory);
-		this.partParser = ps.getInstance(RESTCLIENT_partParser, HttpPartParser.class, OpenApiParser.class, beanFactory);
-		this.executorService = ps.getInstance(RESTCLIENT_executorService, ExecutorService.class, null);
+		this.partSerializer = ps.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, bf).orElseGet(bf.createBeanSupplier(OpenApiSerializer.class));
+		this.partParser = ps.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bf).orElseGet(bf.createBeanSupplier(OpenApiParser.class));
+		this.executorService = ps.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
 
@@ -2121,7 +2121,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				formData.add(BasicNameValuePair.cast(o));
 		}
 
-		this.callHandler = ps.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, BasicRestCallHandler.class, beanFactory);
+		this.callHandler = ps.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bf).orElseGet(bf.createBeanSupplier(BasicRestCallHandler.class));
 
 		this.interceptors = ps.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class);
 

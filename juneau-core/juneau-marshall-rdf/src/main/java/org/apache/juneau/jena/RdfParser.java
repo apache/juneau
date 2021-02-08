@@ -131,8 +131,8 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 		trimWhitespace = ps.getBoolean(RDF_trimWhitespace).orElse(false);
 		looseCollections = ps.getBoolean(RDF_looseCollections).orElse(false);
 		rdfLanguage = ps.getString(RDF_language).orElse("RDF/XML-ABBREV");
-		juneauNs = ps.getInstance(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
-		juneauBpNs = ps.getInstance(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
+		juneauNs = ps.getInstance(RDF_juneauNs, Namespace.class).orElse(DEFAULT_JUNEAU_NS);
+		juneauBpNs = ps.getInstance(RDF_juneauBpNs, Namespace.class).orElse(DEFAULT_JUNEAUBP_NS);
 		collectionFormat = ps.get(RDF_collectionFormat, RdfCollectionFormat.class).orElse(RdfCollectionFormat.DEFAULT);
 
 		ASortedMap<String,Object> m = ASortedMap.create();

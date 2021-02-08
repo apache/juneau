@@ -20,7 +20,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.PropertyStoreBuilder.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -474,64 +473,25 @@ public final class PropertyStore {
 	/**
 	 * Returns an instance of the specified class, string, or object property.
 	 *
-	 * <p>
-	 * If instantiating a class, assumes the class has a no-arg constructor.
-	 * Otherwise, throws a runtime exception.
-	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
-	 * @return A new property instance.
-	 */
-	public <T> T getInstance(String key, Class<T> type, Object def) {
-		return getInstance(key, type, def, new BeanFactory());
-	}
-
-	/**
-	 * Returns an instance of the specified class, string, or object property.
-	 *
-	 * <p>
-	 * If instantiating a class, assumes the class has a no-arg constructor.
-	 * Otherwise, throws a runtime exception.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @return A new property instance or <jk>null</jk> if the property doesn't exist.
-	 */
-	public <T> T getInstance(String key, Class<T> type) {
-		return getInstance(key, type, null);
-	}
-
-	/**
-	 * Returns an instance of the specified class, string, or object property.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def
-	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
 	 * @param beanFactory The bean factory to use for instantiating the bean.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstance(String key, Class<T> type, Object def, BeanFactory beanFactory) {
-		Assertions.assertArgNotNull("type", type);
+	public <T> Optional<T> getInstance(String key, Class<T> type, BeanFactory beanFactory) {
 		Property p = findProperty(key);
-		if (p != null)
-			return p.asInstance(type, beanFactory);
-		if (def == null)
-			return null;
-		if (def instanceof Class) {
-			try {
-				return beanFactory.createBean((Class<T>)def);
-			} catch (ExecutableException e) {
-				throw new ConfigException(e, "Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
-			}
-		}
-		if (type.isInstance(def))
-			return (T)def;
-		throw new ConfigException("Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
+		return Optional.ofNullable(p == null ? null : p.asInstance(type, beanFactory));
+	}
+
+	/**
+	 * Returns an instance of the specified class, string, or object property.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return A new property instance.
+	 */
+	public <T> Optional<T> getInstance(String key, Class<T> type) {
+		return getInstance(key, type, null);
 	}
 
 	/**
@@ -967,12 +927,17 @@ public final class PropertyStore {
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
 
+	static BeanFactory DEFAULT_BEAN_FACTORY = BeanFactory.create().build();
+	
 	static <T> T instantiate(BeanFactory beanFactory, Class<T> c, Object value) {
 		if (ClassInfo.of(c).isParentOf(value.getClass()))
 			return (T)value;
 		try {
-			if (ClassInfo.of(value.getClass()).isChildOf(Class.class))
+			if (ClassInfo.of(value.getClass()).isChildOf(Class.class)) {
+				if (beanFactory == null)
+					beanFactory = DEFAULT_BEAN_FACTORY;
 				return beanFactory.createBean((Class<T>)value);
+			}
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not create bean of type ''{0}''.", value);
 		}

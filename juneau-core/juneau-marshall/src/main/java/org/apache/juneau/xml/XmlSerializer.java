@@ -516,7 +516,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		autoDetectNamespaces = ! ps.getBoolean(XML_disableAutoDetectNamespaces).orElse(false);
 		enableNamespaces = ps.getBoolean(XML_enableNamespaces).orElse(false);
 		addNamespaceUrlsToRoot = ps.getBoolean(XML_addNamespaceUrisToRoot).orElse(false);
-		defaultNamespace = ps.getInstance(XML_defaultNamespace, Namespace.class, DEFAULT_JUNEAU_NAMESPACE);
+		defaultNamespace = ps.getInstance(XML_defaultNamespace, Namespace.class).orElse(DEFAULT_JUNEAU_NAMESPACE);
 		addBeanTypes = ps.getFirstBoolean(XML_addBeanTypes, SERIALIZER_addBeanTypes).orElse(false);
 		namespaces = ps.getInstanceArray(XML_namespaces, Namespace.class);
 	}

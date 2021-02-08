@@ -256,7 +256,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestClient(PropertyStore ps) {
 		super(preInit(ps));
 		ps = getPropertyStore();
-		this.restBeanCtx = ps.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class);
+		this.restBeanCtx = ps.getInstance(MOCKRESTCLIENT_restBeanCtx, RestContext.class).get();
 		this.restObject = restBeanCtx.getResource();
 		this.contextPath = ps.getString(MOCKRESTCLIENT_contextPath).orElse("");
 		this.servletPath = ps.getString(MOCKRESTCLIENT_servletPath).orElse("");
@@ -270,7 +270,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	private static PropertyStore preInit(PropertyStore ps) {
 		try {
 			PropertyStoreBuilder psb = ps.builder();
-			Object restBean = ps.getInstance(MOCKRESTCLIENT_restBean, Object.class, null);
+			Object restBean = ps.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
 			String contextPath = ps.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
 			String servletPath = ps.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);
 			String rootUrl = ps.get(RESTCLIENT_rootUri, String.class).orElse("http://localhost");

@@ -2135,7 +2135,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 		notBeanClasses = ps.getClassArray(BEAN_notBeanClasses).orElse(DEFAULT_NOTBEAN_CLASSES);
 
-		propertyNamer = ps.getInstance(BEAN_propertyNamer, PropertyNamer.class, BasicPropertyNamer.class);
+		propertyNamer = ps.getInstance(BEAN_propertyNamer, PropertyNamer.class).orElseGet(BasicPropertyNamer::new);
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();

@@ -4411,7 +4411,7 @@ public class RestContext extends BeanContext {
 			x = (HttpPartSerializer)resource;
 
 		if (x == null)
-			x = properties.getInstance(REST_partSerializer, HttpPartSerializer.class, null, beanFactory);
+			x = properties.getInstance(REST_partSerializer, HttpPartSerializer.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartSerializer.class).orElse(null);
@@ -4476,7 +4476,7 @@ public class RestContext extends BeanContext {
 			x = (HttpPartParser)resource;
 
 		if (x == null)
-			x = properties.getInstance(REST_partParser, HttpPartParser.class, null, beanFactory);
+			x = properties.getInstance(REST_partParser, HttpPartParser.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(HttpPartParser.class).orElse(null);
@@ -5306,9 +5306,14 @@ public class RestContext extends BeanContext {
 			.withDefault(x)
 			.run();
 
-		Enablement defaultDebug = properties.getInstance(REST_debug, Enablement.class, properties.getInstance(REST_debugDefault, Enablement.class, null));
+		Enablement defaultDebug = properties.getInstance(REST_debug, Enablement.class).orElse(null);
+
+		if (defaultDebug == null)
+			defaultDebug = properties.getInstance(REST_debugDefault, Enablement.class).orElse(null);
+
 		if (defaultDebug == null)
 			defaultDebug = isDebug() ? Enablement.ALWAYS : Enablement.NEVER;
+
 		x.defaultEnable(defaultDebug);
 
 		for (Map.Entry<String,String> e : splitMap(properties.getString(REST_debugOn).orElse(""), true).entrySet()) {

@@ -775,7 +775,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nowrap = ps.getBoolean(HTMLDOC_nowrap).orElse(false);
 		navlinks = ps.getArray(HTMLDOC_navlinks, String.class).orElse(new String[0]);
 		noResultsMessage = ps.getString(HTMLDOC_noResultsMessage).orElse("<p>no results</p>");
-		template = ps.getInstance(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
+		template = ps.getInstance(HTMLDOC_template, HtmlDocTemplate.class).orElseGet(BasicHtmlDocTemplate::new);
 
 		widgets = new HtmlWidgetMap();
 		widgets.append(ps.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class));
