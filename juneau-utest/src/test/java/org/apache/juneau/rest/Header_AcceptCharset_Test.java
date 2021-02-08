@@ -80,7 +80,8 @@ public class Header_AcceptCharset_Test {
 					@Override /* ParserSession */
 					@SuppressWarnings("unchecked")
 					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-						return (T)args.getProperty(ReaderParser.RPARSER_streamCharset).toString();
+						SessionProperties sp = getSessionProperties();
+						return (T)sp.get(ReaderParser.RPARSER_streamCharset).get().toString();
 					}
 				};
 			}
@@ -95,8 +96,9 @@ public class Header_AcceptCharset_Test {
 				return new OutputStreamSerializerSession(args) {
 					@Override /* SerializerSession */
 					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+						SessionProperties sp = getSessionProperties();
 						try (Writer w = new OutputStreamWriter(out.getOutputStream())) {
-							Object sc = args.getProperty(WriterSerializer.WSERIALIZER_streamCharset);
+							Object sc = sp.get(WriterSerializer.WSERIALIZER_streamCharset).orElse(null);
 							w.append(o.toString()).append('/').append(sc == null ? null : sc.toString());
 						}
 					}

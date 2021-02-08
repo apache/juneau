@@ -52,7 +52,7 @@ public abstract class Session {
 	 */
 	protected Session(Context ctx, SessionArgs args) {
 		this.ctx = ctx;
-		SessionProperties sp = this.properties = new SessionProperties(args.properties == null ? OMap.EMPTY_MAP : args.properties);
+		SessionProperties sp = this.properties = args.properties;
 		debug = sp.get(CONTEXT_debug, Boolean.class).orElse(ctx.isDebug());
 		locale = sp.get(CONTEXT_locale, Locale.class).orElse(ctx.getDefaultLocale());
 		timeZone = sp.get(CONTEXT_timeZone, TimeZone.class).orElse(ctx.getDefaultTimeZone());

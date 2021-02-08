@@ -26,12 +26,7 @@ import org.apache.juneau.json.*;
  */
 public class SessionArgs {
 
-	/**
-	 * Default empty session arguments.
-	 */
-	public static final SessionArgs DEFAULT = new SessionArgs();
-
-	OMap properties;
+	SessionProperties properties = SessionProperties.create();
 
 	/**
 	 * Constructor.
@@ -138,7 +133,7 @@ public class SessionArgs {
 	 */
 	@FluentSetter
 	public SessionArgs properties(OMap value) {
-		this.properties = value;
+		this.properties = SessionProperties.create(value);
 		return this;
 	}
 
@@ -152,26 +147,11 @@ public class SessionArgs {
 	@FluentSetter
 	public SessionArgs property(String key, Object value) {
 		if (value == null) {
-			if (properties != null)
-				properties.remove(key);
+			properties.remove(key);
 		} else {
-			if (properties == null)
-				properties = new OMap();
 			properties.put(key, value);
 		}
 		return this;
-	}
-
-	/**
-	 * Returns a property on this session.
-	 *
-	 * @param key The property key.
-	 * @return The property value, or <jk>null</jk> if not set.
-	 */
-	public Object getProperty(String key) {
-		if (properties != null)
-			return properties.get(key);
-		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -191,7 +171,7 @@ public class SessionArgs {
 			.create()
 			.filtered()
 			.append("SessionArgs", OMap.create().filtered()
-				.append("properties", properties)
+				.append("properties", properties.asMap())
 			);
 	}
 

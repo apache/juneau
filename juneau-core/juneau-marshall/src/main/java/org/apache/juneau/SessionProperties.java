@@ -28,12 +28,29 @@ public class SessionProperties {
 	private final OMap map;
 
 	/**
-	 * Constructor.
+	 * Static creator.
 	 *
-	 * @param map The map containing the properties for this session.
+	 * @return A new instance of this class.
 	 */
-	public SessionProperties(OMap map) {
-		this.map = map;
+	public static SessionProperties create() {
+		return new SessionProperties(null);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param inner The initial contents of these properties.
+	 * @return A new instance of this class.
+	 */
+	public static SessionProperties create(OMap inner) {
+		return new SessionProperties(inner);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	private SessionProperties(OMap inner) {
+		this.map = inner == null ? new OMap() : inner;
 	}
 
 	/**
@@ -43,7 +60,7 @@ public class SessionProperties {
 	 * @return <jk>true</jk> if this session has the specified property defined.
 	 */
 	public final boolean contains(String key) {
-		return map != null && map.containsKey(key);
+		return map.containsKey(key);
 	}
 
 	/**
@@ -53,7 +70,7 @@ public class SessionProperties {
 	 * @return The property value.  Never <jk>null</jk>.
 	 */
 	public final Optional<Object> get(String key) {
-		return Optional.ofNullable(map == null ? null : map.get(key));
+		return Optional.ofNullable(map.get(key));
 	}
 
 	/**
@@ -105,8 +122,7 @@ public class SessionProperties {
 	 * @return The session property.
 	 */
 	public <T> Optional<T> getInstance(String key, Class<T> type) {
-		Object o = map == null ? null : map.get(key);
-		return Optional.ofNullable(newInstance(type, o));
+		return Optional.ofNullable(newInstance(type, map.get(key)));
 	}
 
 	/**
@@ -118,11 +134,11 @@ public class SessionProperties {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T[]> getInstanceArray(String key, Class<T> type) {
-		Object o = map == null ? null : map.get(key);
-		T[] t = null;
+		Object o = map.get(key);
 		if (o == null)
 			return Optional.empty();
-		else if (o.getClass().isArray()) {
+		T[] t = null;
+		if (o.getClass().isArray()) {
 			if (o.getClass().getComponentType() == type)
 				t = (T[])o;
 			else {
@@ -146,7 +162,7 @@ public class SessionProperties {
 	 * @return All the keys in these properties.
 	 */
 	public Set<String> keySet() {
-		return map == null ? Collections.emptySet() : map.keySet();
+		return map.keySet();
 	}
 
 	/**
@@ -159,8 +175,7 @@ public class SessionProperties {
 	}
 
 	private <T> T find(String key, Class<T> c) {
-		Object o = map == null ? null : map.get(key);
-		return newInstance(c, o);
+		return newInstance(c, map.get(key));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -177,5 +192,40 @@ public class SessionProperties {
 		if (t != null)
 			return t;
 		throw new ConfigException("Could not instantiate type ''{0}'' as type {1}", o, type);
+	}
+
+	/**
+	 * Removes a property from this store.
+	 *
+	 * @param key The property key.
+	 * @return This object (for method chaining).
+	 */
+	public SessionProperties remove(String key) {
+		map.remove(key);
+		return this;
+	}
+
+	/**
+	 * Adds a property to this store.
+	 *
+	 * @param key The property key.
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public SessionProperties put(String key, Object value) {
+		map.put(key, value);
+		return this;
+	}
+
+	/**
+	 * Adds multiple properties to this store.
+	 *
+	 * @param values The map containing the properties to add.
+	 * @return This object (for method chaining).
+	 */
+	public SessionProperties putAll(Map<String,Object> values) {
+		if (values != null)
+			map.putAll(values);
+		return this;
 	}
 }
