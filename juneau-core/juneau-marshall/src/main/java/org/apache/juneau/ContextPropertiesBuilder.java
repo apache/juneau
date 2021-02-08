@@ -34,8 +34,8 @@ import org.apache.juneau.svl.*;
  */
 public class ContextPropertiesBuilder {
 
-	// Contains a cache of all created PropertyStore objects keyed by hashcode.
-	// Used to minimize memory consumption by reusing identical PropertyStores.
+	// Contains a cache of all created ContextProperties objects keyed by hashcode.
+	// Used to minimize memory consumption by reusing identical ContextProperties.
 	private static final Map<ContextProperties,ContextProperties> CACHE = new ConcurrentHashMap<>();
 
 	// Maps property suffixes (e.g. "lc") to PropertyType (e.g. LIST_CLASS)
@@ -50,12 +50,12 @@ public class ContextPropertiesBuilder {
 	// Previously-created property store.
 	private volatile ContextProperties properties;
 
-	// Called by PropertyStore.builder()
+	// Called by ContextProperties.builder()
 	ContextPropertiesBuilder(ContextProperties cp) {
 		apply(cp);
 	}
 
-	// Called by PropertyStore.create()
+	// Called by ContextProperties.create()
 	ContextPropertiesBuilder() {}
 
 	/**
@@ -622,7 +622,7 @@ public class ContextPropertiesBuilder {
 	}
 
 	/**
-	 * Clears the PropertyStore cache.
+	 * Clears the ContextProperties cache.
 	 */
 	public static void clearCache() {
 		CACHE.clear();

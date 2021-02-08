@@ -60,7 +60,7 @@ import org.apache.juneau.serializer.*;
  * Subclasses must implement one of the following constructors:
  * <ul>
  * 	<li><jk>public</jk> T();  <jc>// No-arg constructor</jc>
- * 	<li><jk>public</jk> T(PropertyStore);  <jc>// Property store of the RestContext</jc>
+ * 	<li><jk>public</jk> T(ContextProperties);  <jc>// Property store of the RestContext</jc>
  * </ul>
  *
  * <p>

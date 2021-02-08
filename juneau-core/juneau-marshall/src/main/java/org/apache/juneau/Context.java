@@ -33,7 +33,7 @@ import org.apache.juneau.transform.*;
  * Subclasses MUST implement the following constructor:
  *
  * <p class='bcode w800'>
- * 	<jk>public</jk> T(PropertyStore);
+ * 	<jk>public</jk> T(ContextProperties);
  * </p>
  *
  * <p>

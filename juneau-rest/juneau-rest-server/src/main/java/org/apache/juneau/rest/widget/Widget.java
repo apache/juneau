@@ -27,7 +27,7 @@ import org.apache.juneau.http.exception.*;
  * Widgets must provide one of the following public constructors:
  * <ul>
  * 	<li><code><jk>public</jk> Widget();</code>
- * 	<li><code><jk>public</jk> Widget(PropertyStore);</code>
+ * 	<li><code><jk>public</jk> Widget(ContextProperties);</code>
  * </ul>
  *
  * <p>

@@ -143,7 +143,7 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ContextsBuildersSessionsPropertyStores}
+ * 	<li class='link'>{@doc ContextsBuildersSessionsContextProperties}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

@@ -54,7 +54,7 @@ import org.apache.juneau.reflect.*;
  * <h5 class='topic'>ContextPropertiesBuilder</h5>
  *
  * <p>
- * The {@link ContextPropertiesBuilder} class is used to build up and instantiate immutable <c>PropertyStore</c>
+ * The {@link ContextPropertiesBuilder} class is used to build up and instantiate immutable <c>ContextProperties</c>
  * objects.
  *
  * <p>
@@ -69,7 +69,7 @@ import org.apache.juneau.reflect.*;
  * </p>
  *
  * <p>
- * Property stores are immutable, comparable, and their hashcodes are calculated exactly one time.
+ * <c>ContextProperties</c> objects are immutable, comparable, and their hashcodes are calculated exactly one time.
  * That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
  *
  * <h5 class='topic'>Property naming convention</h5>

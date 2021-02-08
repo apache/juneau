@@ -107,16 +107,16 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a free-form set of properties.</jc>
-	 * 	PropertyStore ps = PropertyStore
+	 * 	ContextProperties <jv>properties</jv> = ContextProperties
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_sortMaps</jsf>)
 	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a serializer that uses those settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.apply(ps)
+	 * 		.apply(<jv>properties</jv>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -141,17 +141,17 @@ public abstract class ContextBuilder {
 	 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
 	 * 	<jk>public class</jk> MyClass {...}
 	 *
-	 * 	<jc>// Find all annotations that themselves are annotated with @PropertyStoreApply.</jc>
-	 * 	AnnotationList al = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>)
+	 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
+	 * 	AnnotationList <jv>al</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>)
 	 * 		.getAnnotationList(ConfigAnnotationFilter.<jsf>INSTANCE</jsf>);
 	 *
 	 * 	<jc>// Use the default VarResolver to resolve any variables in the annotation fields.</jc>
-	 * 	VarResolverSession vs = VarResolver.<jsf>DEFAULT</jsf>.createSession();
+	 * 	VarResolverSession <jv>vs</jv> = VarResolver.<jsf>DEFAULT</jsf>.createSession();
 	 *
 	 * 	<jc>// Apply any settings found on the annotations.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.applyAnnotations(al, vs)
+	 * 		.applyAnnotations(<jv>al</jv>, <jv>vs</jv>)
 	 * 		.build();
 	 * </p>
 	 *

@@ -1019,8 +1019,8 @@ import org.apache.juneau.utils.*;
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
- * 		<jk>public</jk> MyRestClient(PropertyStore <jv>ps</jv>) {
- * 			<jk>super</jk>(<jv>ps</jv>);
+ * 		<jk>public</jk> MyRestClient(ContextProperties <jv>properties</jv>) {
+ * 			<jk>super</jk>(<jv>properties</jv>);
  * 		}
  *
  * 		<ja>@Override</ja>
@@ -2056,7 +2056,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		SerializerGroupBuilder sgb = SerializerGroup.create();
 		for (Object o : cp.getArray(RESTCLIENT_serializers, Object.class).orElse(new Object[0])) {
 			if (o instanceof Serializer) {
-				sgb.append((Serializer)o);  // Don't apply PropertyStore.
+				sgb.append((Serializer)o);  // Don't apply ContextProperties.
 			} else if (o instanceof Class) {
 				Class<?> c = (Class<?>)o;
 				if (! Serializer.class.isAssignableFrom(c))
@@ -2071,7 +2071,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		ParserGroupBuilder pgb = ParserGroup.create();
 		for (Object o : cp.getArray(RESTCLIENT_parsers, Object.class).orElse(new Object[0])) {
 			if (o instanceof Parser) {
-				pgb.append((Parser)o);  // Don't apply PropertyStore.
+				pgb.append((Parser)o);  // Don't apply ContextProperties.
 			} else if (o instanceof Class) {
 				Class<?> c = (Class<?>)o;
 				if (! Parser.class.isAssignableFrom(c))
