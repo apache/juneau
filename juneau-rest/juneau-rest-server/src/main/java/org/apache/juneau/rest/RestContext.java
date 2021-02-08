@@ -4159,7 +4159,7 @@ public class RestContext extends BeanContext {
 
 		ResponseHandlerList x = ResponseHandlerList.create();
 
-		x.append(properties.getInstanceArray(REST_responseHandlers, ResponseHandler.class, new ResponseHandler[0], beanFactory));
+		x.append(properties.getInstanceArray(REST_responseHandlers, ResponseHandler.class, beanFactory).orElse(new ResponseHandler[0]));
 
 		if (x.isEmpty())
 			x.append(beanFactory.getBean(ResponseHandlerList.class).orElse(null));
@@ -5160,7 +5160,7 @@ public class RestContext extends BeanContext {
 
 		HeaderList x = HeaderList.create();
 
-		x.appendUnique(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, beanFactory).orElse(new org.apache.http.Header[0]));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -5191,7 +5191,7 @@ public class RestContext extends BeanContext {
 
 		HeaderList x = HeaderList.create();
 
-		x.appendUnique(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, beanFactory).orElse(new org.apache.http.Header[0]));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -5222,7 +5222,7 @@ public class RestContext extends BeanContext {
 
 		NamedAttributeList x = NamedAttributeList.create();
 
-		x.appendUnique(properties.getInstanceArray(REST_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(REST_defaultRequestAttributes, NamedAttribute.class, beanFactory).orElse(new NamedAttribute[0]));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -5374,7 +5374,7 @@ public class RestContext extends BeanContext {
 	 */
 	protected MessagesBuilder createMessagesBuilder(Object resource, PropertyStore properties) throws Exception {
 
-		Tuple2<Class<?>,String>[] mbl = properties.getInstanceArray(REST_messages, Tuple2.class);
+		Tuple2<Class<?>,String>[] mbl = properties.getInstanceArray(REST_messages, Tuple2.class).orElse(new Tuple2[0]);
 		MessagesBuilder x = null;
 
 		for (int i = mbl.length-1; i >= 0; i--) {

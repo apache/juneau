@@ -877,7 +877,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		RestConverterList x = RestConverterList.create();
 
-		x.append(properties.getInstanceArray(REST_converters, RestConverter.class, new RestConverter[0], beanFactory));
+		x.append(properties.getInstanceArray(REST_converters, RestConverter.class, beanFactory).orElse(new RestConverter[0]));
 
 		if (x.isEmpty())
 			x = beanFactory.getBean(RestConverterList.class).orElse(x);
@@ -929,7 +929,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		RestGuardList x = RestGuardList.create();
 
-		x.append(properties.getInstanceArray(REST_guards, RestGuard.class, new RestGuard[0], beanFactory));
+		x.append(properties.getInstanceArray(REST_guards, RestGuard.class, beanFactory).orElse(new RestGuard[0]));
 
 		if (x.isEmpty())
 			x = beanFactory.getBean(RestGuardList.class).orElse(x);
@@ -990,7 +990,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		RestMatcherList x = RestMatcherList.create();
 
-		x.append(properties.getInstanceArray(RESTOP_matchers, RestMatcher.class, new RestMatcher[0], beanFactory));
+		x.append(properties.getInstanceArray(RESTOP_matchers, RestMatcher.class, beanFactory).orElse(new RestMatcher[0]));
 
 		if (x.isEmpty())
 			x = beanFactory.getBean(RestMatcherList.class).orElse(x);
@@ -1043,7 +1043,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 */
 	protected EncoderGroup createEncoders(Object resource, PropertyStore properties, BeanFactory beanFactory) throws Exception {
 
-		Encoder[] x = properties.getInstanceArray(REST_encoders, Encoder.class, null, beanFactory);
+		Encoder[] x = properties.getInstanceArray(REST_encoders, Encoder.class, beanFactory).orElse(null);
 
 		if (x == null)
 			x = beanFactory.getBean(Encoder[].class).orElse(null);
@@ -1397,7 +1397,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x.appendUnique(context.defaultRequestHeaders);
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanFactory).orElse(new org.apache.http.Header[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1443,7 +1443,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x.appendUnique(context.defaultResponseHeaders);
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, new org.apache.http.Header[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, beanFactory).orElse(new org.apache.http.Header[0]));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -1472,7 +1472,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x.appendUnique(context.defaultRequestAttributes);
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestAttributes, NamedAttribute.class, new NamedAttribute[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestAttributes, NamedAttribute.class, beanFactory).orElse(new NamedAttribute[0]));
 
 		x = BeanFactory
 			.of(beanFactory, resource)
@@ -1499,7 +1499,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		NameValuePairList x = NameValuePairList.create();
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultQuery, NameValuePair.class, new NameValuePair[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultQuery, NameValuePair.class, beanFactory).orElse(new NameValuePair[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1543,7 +1543,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		NameValuePairList x = NameValuePairList.create();
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultFormData, NameValuePair.class, new NameValuePair[0], beanFactory));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultFormData, NameValuePair.class, beanFactory).orElse(new NameValuePair[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {

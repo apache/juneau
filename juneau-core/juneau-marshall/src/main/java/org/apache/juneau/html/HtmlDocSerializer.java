@@ -778,7 +778,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		template = ps.getInstance(HTMLDOC_template, HtmlDocTemplate.class).orElseGet(BasicHtmlDocTemplate::new);
 
 		widgets = new HtmlWidgetMap();
-		widgets.append(ps.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class));
+		widgets.append(ps.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class).orElse(new HtmlWidget[0]));
 	}
 
 	@Override /* Context */

@@ -495,40 +495,27 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Returns the specified property as an array of instantiated objects.
+	 * Returns an instance array of the specified class, string, or object property.
 	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @return A new property instance, or an empty array if it doesn't exist.
+	 * @param beanFactory The bean factory to use for instantiating the bean.
+	 * @return A new property instance array.
 	 */
-	public <T> T[] getInstanceArray(String key, Class<T> type) {
-		return getInstanceArray(key, type, (T[])Array.newInstance(type, 0));
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @return A new property instance.
-	 */
-	public <T> T[] getInstanceArray(String key, Class<T> type, T[] def) {
-		return getInstanceArray(key, type, def, new BeanFactory());
-	}
-
-	/**
-	 * Returns the specified property as an array of instantiated objects.
-	 *
-	 * @param key The property name.
-	 * @param type The class type of the property.
-	 * @param def The default object to return if the property doesn't exist.
-	 * @param beanFactory The bean factory to use for instantiating beans.
-	 * @return A new property instance.
-	 */
-	public <T> T[] getInstanceArray(String key, Class<T> type, T[] def, BeanFactory beanFactory) {
+	public <T> Optional<T[]> getInstanceArray(String key, Class<T> type, BeanFactory beanFactory) {
 		Property p = findProperty(key);
-		return p == null ? def : p.asInstanceArray(type, beanFactory);
+		return Optional.ofNullable(p == null ? null : p.asInstanceArray(type, beanFactory));
+	}
+
+	/**
+	 * Returns an instance array of the specified class, string, or object property.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return A new property instance array.
+	 */
+	public <T> Optional<T[]> getInstanceArray(String key, Class<T> type) {
+		return getInstanceArray(key, type, null);
 	}
 
 	/**
@@ -928,7 +915,7 @@ public final class PropertyStore {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static BeanFactory DEFAULT_BEAN_FACTORY = BeanFactory.create().build();
-	
+
 	static <T> T instantiate(BeanFactory beanFactory, Class<T> c, Object value) {
 		if (ClassInfo.of(c).isParentOf(value.getClass()))
 			return (T)value;

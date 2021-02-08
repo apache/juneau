@@ -2123,7 +2123,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		this.callHandler = ps.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bf).orElseGet(bf.createBeanSupplier(BasicRestCallHandler.class));
 
-		this.interceptors = ps.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class);
+		this.interceptors = ps.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 	}
