@@ -125,7 +125,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestRequest(RestCall call) throws ServletException {
+	RestRequest(RestCall call, RestOperationContext roc) throws Exception {
 		super(call.getRequest());
 		HttpServletRequest req = call.getRequest();
 		this.inner = req;
@@ -133,45 +133,33 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.context = call.getContext();
 		this.call = call;
 
-		try {
-			// If this is a POST, we want to parse the query parameters ourselves to prevent
-			// the servlet code from processing the HTTP body as URL-Encoded parameters.
-			queryParams = new RequestQuery(this);
-			queryParams.putAll(call.getQueryParams());
+		queryParams = new RequestQuery(this);
+		queryParams.putAll(call.getQueryParams());
 
-			method = call.getMethod();
+		method = call.getMethod();
 
-			headers = new RequestHeaders(this);
-			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
-				String name = e.nextElement();
-				headers.put(name, super.getHeaders(name));
-			}
-
-			body = new RequestBody(this);
-
-			if (context.isAllowBodyParam()) {
-				String b = getQuery().getString("body");
-				if (b != null) {
-					headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
-					body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
-				}
-			}
-
-			Set<String> s = context.getAllowedHeaderParams();
-			if (! s.isEmpty())
-				headers.queryParams(queryParams, s);
-
-			this.pathParams = new RequestPath(call);
-
-		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
+		headers = new RequestHeaders(this);
+		for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
+			String name = e.nextElement();
+			headers.put(name, super.getHeaders(name));
 		}
-	}
 
-	/*
-	 * Called from RestServlet after a match has been made but before the guard or method invocation.
-	 */
-	final void init(RestOperationContext roc) throws IOException {
+		body = new RequestBody(this);
+
+		if (context.isAllowBodyParam()) {
+			String b = getQuery().getString("body");
+			if (b != null) {
+				headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
+				body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
+			}
+		}
+
+		Set<String> s = context.getAllowedHeaderParams();
+		if (! s.isEmpty())
+			headers.queryParams(queryParams, s);
+
+		this.pathParams = new RequestPath(call);
+
 		this.opContext = Optional.of(roc);
 		this.javaMethod = roc.getJavaMethod();
 		this.beanSession = roc.createSession();
@@ -196,9 +184,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.headers(headers)
 			.maxInput(roc.getMaxInput());
 
-		if (isDebug()) {
+		if (isDebug())
 			inner = CachingHttpServletRequest.wrap(inner);
-		}
 	}
 
 	RestRequest setResponse(RestResponse res) {

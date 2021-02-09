@@ -73,7 +73,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestCall call) throws BadRequest {
+	RestResponse(RestCall call, RestOperationContext roc) throws Exception {
 		super(call.getResponse());
 		this.inner = call.getResponse();
 		this.request = call.getRestRequest();
@@ -91,16 +91,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		} catch (Exception e1) {
 			throw new BadRequest(e1, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.");
 		}
-	}
 
-	/*
-	 * Called from RestServlet after a match has been made but before the guard or method invocation.
-	 */
-	final void init(RestOperationContext roc) throws NotAcceptable, IOException {
 		this.opContext = roc;
-
-		if (request.isDebug())
-			setDebug();
 
 		// Find acceptable charset
 		String h = request.getHeader("accept-charset");

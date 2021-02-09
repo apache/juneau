@@ -72,7 +72,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		this.restMethod = method;
 		this.beanFactory = context.getRootBeanFactory();
 
-		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
 		try {
@@ -87,9 +86,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 						ro = RestOpAnnotation.DEFAULT;
 				}
 			}
-
-			if (ro == null)
-				throw new RestServletException("@RestOp annotation not found on method ''{0}''", sig);
 
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();

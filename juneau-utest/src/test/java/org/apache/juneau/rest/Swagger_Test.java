@@ -43,16 +43,20 @@ public class Swagger_Test {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
+	public void testMethod() {}
+
 	private org.apache.juneau.dto.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).fileFinder(TestClasspathFileFinder.class).build();
-		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null));
+		RestOperationContext roc = RestOperationContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
+		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null), roc);
 		SwaggerProvider ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
 	private static org.apache.juneau.dto.swagger.Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null));
+		RestOperationContext roc = RestOperationContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
+		RestRequest req = rc.createRequest(new RestCall(resource, rc, new MockServletRequest(), null), roc);
 		SwaggerProvider ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}

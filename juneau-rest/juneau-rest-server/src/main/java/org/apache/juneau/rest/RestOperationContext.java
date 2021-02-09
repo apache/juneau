@@ -1838,8 +1838,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 */
 	protected void invoke(RestCall call) throws Throwable {
 
-		context.createRequest(call).init(this);
-		context.createResponse(call).init(this);
+		context.createRequest(call, this);
+		context.createResponse(call, this);
 
 		UrlPathMatch pm = call.getUrlPathMatch();
 		if (pm == null)
@@ -1856,9 +1856,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			rp.put(e.getKey(), e.getValue());
 		if (pm.getRemainder() != null)
 			rp.remainder(pm.getRemainder());
-
-		req.init(this);
-		res.init(this);
 
 		context.preCall(call);
 
