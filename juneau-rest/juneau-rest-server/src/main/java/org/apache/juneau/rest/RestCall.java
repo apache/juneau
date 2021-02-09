@@ -142,7 +142,6 @@ public class RestCall {
 	 */
 	public RestCall restResponse(RestResponse value) {
 		rres = value;
-		rreq.setResponse(value);
 		beanFactory.addBean(RestResponse.class, value);
 		return this;
 	}

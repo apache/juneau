@@ -111,9 +111,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final HttpPartParserSession partParserSession;
 	private final RestCall call;
 
-	// Post-constructor initialized.
-	private RestResponse res;
-
 	// Lazy initialized.
 	private VarResolverSession varSession;
 	private RequestFormData formData;
@@ -187,11 +184,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 		if (isDebug())
 			inner = CachingHttpServletRequest.wrap(inner);
-	}
-
-	RestRequest setResponse(RestResponse res) {
-		this.res = res;
-		return this;
 	}
 
 	/**
@@ -1061,7 +1053,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				.getVarResolver()
 				.createSession(call.getBeanFactory())
 				.bean(RestRequest.class, this)
-				.bean(RestResponse.class, res)
 				.bean(RestCall.class, call);
 		return varSession;
 	}
