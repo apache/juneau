@@ -99,11 +99,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	private HttpServletRequest inner;
 	private final RestContext context;
-	private Optional<RestOperationContext> opContext = Optional.empty();
+	private final RestOperationContext opContext;
 
 	private final String method;
 	private RequestBody body;
-	private Method javaMethod;
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
@@ -160,8 +159,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 		this.pathParams = new RequestPath(call);
 
-		this.opContext = Optional.of(roc);
-		this.javaMethod = roc.getJavaMethod();
+		this.opContext = roc;
 		this.beanSession = roc.createSession();
 		this.partParserSession = roc.getPartParser().createPartSession(getParserSessionArgs());
 		this.partSerializerSession = roc.getPartSerializer().createPartSession(getSerializerSessionArgs());
@@ -274,7 +272,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getProduces() {
-		return opContext.isPresent() ? opContext.get().getSupportedAcceptTypes() : emptyList();
+		return opContext.getSupportedAcceptTypes();
 	}
 
 	/**
@@ -283,7 +281,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getConsumes() {
-		return opContext.isPresent() ? opContext.get().getSupportedContentTypes() : emptyList();
+		return opContext.getSupportedContentTypes();
 	}
 
 	/**
@@ -297,7 +295,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public ContextProperties getContextProperties() {
-		return opContext.isPresent() ? opContext.get().getContextProperties() : ContextProperties.DEFAULT;
+		return opContext.getContextProperties();
 	}
 
 	/**
@@ -323,8 +321,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				if (i > 0)
 					charset = h.substring(i+9).trim();
 			}
-			if (charset == null && opContext.isPresent())
-				charset = opContext.get().getDefaultCharset();
+			if (charset == null)
+				charset = opContext.getDefaultCharset();
 			if (charset == null)
 				charset = "UTF-8";
 			if (! Charset.isSupported(charset))
@@ -573,8 +571,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			if (opContext.isPresent())
-				formData.addDefault(opContext.get().getDefaultRequestFormData());
+			formData.addDefault(opContext.getDefaultRequestFormData());
 			return formData;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
@@ -889,7 +886,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
-		return opContext.isPresent() ? opContext.get().getSerializers() : SerializerGroup.EMPTY;
+		return opContext.getSerializers();
 	}
 
 	/**
@@ -902,7 +899,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParsers() {
-		return opContext.isPresent() ? opContext.get().getParsers() : ParserGroup.EMPTY;
+		return opContext.getParsers();
 	}
 
 	/**
@@ -1014,25 +1011,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RestContext getContext() {
 		return context;
-	}
-
-	/**
-	 * Returns the java method handling the request.
-	 *
-	 * <p>
-	 * Can be used to access the method name or method annotations during requests, such as in calls to
-	 * {@link RestGuard#guard(RestRequest, RestResponse)}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		This returns <jk>null</jk> when evaluating servlet-level guards since the method has not been resolved at that
-	 * 		point of execution.
-	 * </ul>
-	 *
-	 * @return The Java method handling the request, or <c>null</c> if the method has not yet been resolved.
-	 */
-	public Method getJavaMethod() {
-		return javaMethod;
 	}
 
 	/**
@@ -1339,9 +1317,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			String h = e.nextElement();
 			sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");
 		}
-		if (javaMethod == null) {
-			sb.append("***init() not called yet!***\n");
-		} else if (method.equals("PUT") || method.equals("POST")) {
+		if (method.equals("PUT") || method.equals("POST")) {
 			try {
 				sb.append("---Body UTF-8---\n");
 				sb.append(body.asString()).append("\n");
@@ -1363,7 +1339,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (serializerSessionArgs == null)
 			serializerSessionArgs = SerializerSessionArgs
 				.create()
-				.javaMethod(getJavaMethod())
+				.javaMethod(opContext.getJavaMethod())
 				.locale(getLocale())
 				.timeZone(getHeaders().getTimeZone())
 				.debug(isDebug() ? true : null)
@@ -1383,7 +1359,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			parserSessionArgs =
 				ParserSessionArgs
 					.create()
-					.javaMethod(getJavaMethod())
+					.javaMethod(opContext.getJavaMethod())
 					.locale(getLocale())
 					.timeZone(getHeaders().getTimeZone())
 					.debug(isDebug() ? true : null);
@@ -1407,7 +1383,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		return opContext.isPresent() ? opContext.get().getResponseBeanMeta(o) : context.getResponseBeanMeta(o);
+		return opContext.getResponseBeanMeta(o);
 	}
 
 	/**
@@ -1417,7 +1393,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
-		return opContext.isPresent() ? opContext.get().getResponseHeaderMeta(o) : null;
+		return opContext.getResponseHeaderMeta(o);
 	}
 
 	/**
@@ -1427,7 +1403,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
 	 */
 	public ResponsePartMeta getResponseBodyMeta(Object o) {
-		return opContext.isPresent() ? opContext.get().getResponseBodyMeta(o) : null;
+		return opContext.getResponseBodyMeta(o);
 	}
 
 	/**
@@ -1435,7 +1411,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The {@link RestOperationContext} of this method.  May be <jk>null</jk> if method has not yet been found.
 	 */
-	public Optional<RestOperationContext> getMethodContext() {
+	public RestOperationContext getOpContext() {
 		return opContext;
 	}
 
@@ -1446,14 +1422,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Optional<Operation> getMethodSwagger() {
 
-		if (! opContext.isPresent())
-			return Optional.empty();
-
 		Optional<Swagger> swagger = context.getSwagger(getLocale());
 		if (! swagger.isPresent())
 			return Optional.empty();
 
-		return swagger.get().operation(opContext.get().getPathPattern(), getMethod().toLowerCase());
+		return swagger.get().operation(opContext.getPathPattern(), getMethod().toLowerCase());
 	}
 
 	/**
@@ -1497,9 +1470,5 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			lang = lang.substring(0,i).trim();
 		}
 		return new Locale(lang, country);
-	}
-
-	void setJavaMethod(Method method) {
-		this.javaMethod = method;
 	}
 }

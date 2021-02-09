@@ -439,7 +439,7 @@ public class RequestBody {
 			ParserSessionArgs pArgs = ParserSessionArgs
 				.create()
 				.properties(req.getAttributes())
-				.javaMethod(req.getJavaMethod())
+				.javaMethod(req.getOpContext().getJavaMethod())
 				.locale(locale)
 				.timeZone(timeZone)
 				.mediaType(mediaType)
