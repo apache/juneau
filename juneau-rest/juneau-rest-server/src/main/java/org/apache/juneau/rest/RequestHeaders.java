@@ -511,7 +511,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		if (parser == null)
-			parser = req.getPartParser();
+			parser = req.getPartParserSession();
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();

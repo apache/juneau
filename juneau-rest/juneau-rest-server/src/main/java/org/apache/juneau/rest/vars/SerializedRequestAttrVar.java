@@ -60,7 +60,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		Object o = req.getAttribute(key);
 		if (o == null)
 			o = key;
-		Serializer s = req.getSerializers().getSerializer(s2[0]);
+		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]);
 		if (s != null)
 			s.serialize(w, o);
 	}

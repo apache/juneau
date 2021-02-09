@@ -92,7 +92,7 @@ public class QueryParam implements RestOperationParam {
 	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
 		RequestQuery rq = req.getQuery();
 		return multi ? rq.getAll(ps, schema, name, type.innerType()) : rq.get(ps, schema, name, type.innerType());
 	}

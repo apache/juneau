@@ -97,45 +97,49 @@ import org.apache.juneau.utils.*;
 @SuppressWarnings({ "unchecked", "unused" })
 public final class RestRequest extends HttpServletRequestWrapper {
 
+	// Constructor initialized.
 	private HttpServletRequest inner;
 	private final RestContext context;
 	private final RestOperationContext opContext;
-
-	private final String method;
-	private RequestBody body;
-	private BeanSession beanSession;
-	private VarResolverSession varSession;
+	private final RequestBody body;
+	private final BeanSession beanSession;
 	private final RequestQuery queryParams;
+	private final RequestPath pathParams;
+	private final RequestHeaders headers;
+	private final RequestAttributes attrs;
+	private final HttpPartSerializerSession partSerializerSession;
+	private final HttpPartParserSession partParserSession;
+	private final RestCall call;
+
+	// Post-constructor initialized.
+	private RestResponse res;
+
+	// Lazy initialized.
+	private VarResolverSession varSession;
 	private RequestFormData formData;
-	private RequestPath pathParams;
 	private UriContext uriContext;
 	private String charset, authorityPath;
-	private RequestHeaders headers;
-	private RequestAttributes attrs;
-	private Config cf;
+	private Config config;
 	private Swagger swagger;
 	private SerializerSessionArgs serializerSessionArgs;
 	private ParserSessionArgs parserSessionArgs;
-	private RestResponse res;
-	private HttpPartSerializerSession partSerializerSession;
-	private HttpPartParserSession partParserSession;
-	private final RestCall call;
 
 	/**
 	 * Constructor.
 	 */
-	RestRequest(RestCall call, RestOperationContext roc) throws Exception {
+	RestRequest(RestCall call, RestOperationContext opContext) throws Exception {
 		super(call.getRequest());
-		HttpServletRequest req = call.getRequest();
-		this.inner = req;
-		call.restRequest(this);
-		this.context = call.getContext();
+
 		this.call = call;
+		this.opContext = opContext;
+
+		inner = call.getRequest();
+		call.restRequest(this);
+
+		context = call.getContext();
 
 		queryParams = new RequestQuery(this);
 		queryParams.putAll(call.getQueryParams());
-
-		method = call.getMethod();
 
 		headers = new RequestHeaders(this);
 		for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
@@ -159,28 +163,27 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 		this.pathParams = new RequestPath(call);
 
-		this.opContext = roc;
-		this.beanSession = roc.createSession();
-		this.partParserSession = roc.getPartParser().createPartSession(getParserSessionArgs());
-		this.partSerializerSession = roc.getPartSerializer().createPartSession(getSerializerSessionArgs());
+		this.beanSession = opContext.createSession();
+		this.partParserSession = opContext.getPartParser().createPartSession(getParserSessionArgs());
+		this.partSerializerSession = opContext.getPartSerializer().createPartSession(getSerializerSessionArgs());
 		this.pathParams
 			.parser(partParserSession);
 		this.queryParams
-			.addDefault(roc.getDefaultRequestQuery())
+			.addDefault(opContext.getDefaultRequestQuery())
 			.parser(partParserSession);
 		this.headers
-			.addDefault(roc.getDefaultRequestHeaders())
+			.addDefault(opContext.getDefaultRequestHeaders())
 			.addDefault(context.getDefaultRequestHeaders())
 			.parser(partParserSession);
 		this.attrs = new RequestAttributes(this);
 		this.attrs
-			.addDefault(roc.getDefaultRequestAttributes())
+			.addDefault(opContext.getDefaultRequestAttributes())
 			.addDefault(context.getDefaultRequestAttributes());
 		this.body
-			.encoders(roc.getEncoders())
-			.parsers(roc.getParsers())
+			.encoders(opContext.getEncoders())
+			.parsers(opContext.getParsers())
 			.headers(headers)
-			.maxInput(roc.getMaxInput());
+			.maxInput(opContext.getMaxInput());
 
 		if (isDebug())
 			inner = CachingHttpServletRequest.wrap(inner);
@@ -264,38 +267,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (v == null || v.length == 0)
 			return Collections.enumeration(Collections.EMPTY_LIST);
 		return Collections.enumeration(Arrays.asList(v));
-	}
-
-	/**
-	 * Returns the media types that are valid for <c>Accept</c> headers on the request.
-	 *
-	 * @return The set of media types registered in the serializer group of this request.
-	 */
-	public List<MediaType> getProduces() {
-		return opContext.getSupportedAcceptTypes();
-	}
-
-	/**
-	 * Returns the media types that are valid for <c>Content-Type</c> headers on the request.
-	 *
-	 * @return The set of media types registered in the parser group of this request.
-	 */
-	public List<MediaType> getConsumes() {
-		return opContext.getSupportedContentTypes();
-	}
-
-	/**
-	 * Returns the {@link ContextProperties} for this request.
-	 *
-	 * <p>
-	 * Consists of a read-only roll-up of all configuration properties defined on this method and class.
-	 *
-	 * @return
-	 * 	The property store for this request.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public ContextProperties getContextProperties() {
-		return opContext.getContextProperties();
 	}
 
 	/**
@@ -420,30 +391,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return attrs;
 	}
 
-	/**
-	 * Same as {@link #getAttribute(String)} but returns a default value if not found.
-	 *
-	 * @param name The request attribute name.
-	 * @param def The default value if the attribute doesn't exist.
-	 * @return The request attribute value.
-	 */
-	public Object getAttribute(String name, Object def) {
-		Object o = super.getAttribute(name);
-		return (o == null ? def : o);
-	}
-
-	/**
-	 * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.
-	 *
-	 * @param name The request attribute name.
-	 * @param value The request attribute value.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest attr(String name, Object value) {
-		setAttribute(name, value);
-		return this;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Query parameters
 	//-----------------------------------------------------------------------------------------------------------------
@@ -560,7 +507,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public RequestFormData getFormData() throws InternalServerError {
 		try {
 			if (formData == null) {
-				formData = new RequestFormData(this, getPartParser());
+				formData = new RequestFormData(this, partParserSession);
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
@@ -727,11 +674,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return getBody().getInputStream();
 	}
 
-	ServletInputStream getRawInputStream() throws IOException {
-		return inner.getInputStream();
-	}
-
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// URI-related methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -872,34 +814,31 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return context.getSwagger(getLocale());
 	}
 
+	/**
+	 * Returns the swagger for the Java method invoked.
+	 *
+	 * @return The swagger for the Java method as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<Operation> getOperationSwagger() {
+
+		Optional<Swagger> swagger = getSwagger();
+		if (! swagger.isPresent())
+			return Optional.empty();
+
+		return swagger.get().operation(opContext.getPathPattern(), getMethod().toLowerCase());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the serializers associated with this request.
+	 * Returns the part serializer associated with this request.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * </ul>
-	 *
-	 * @return The serializers associated with this request.
+	 * @return The part serializer associated with this request.
 	 */
-	public SerializerGroup getSerializers() {
-		return opContext.getSerializers();
-	}
-
-	/**
-	 * Returns the parsers associated with this request.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestParsers}
-	 * </ul>
-	 *
-	 * @return The parsers associated with this request.
-	 */
-	public ParserGroup getParsers() {
-		return opContext.getParsers();
+	public HttpPartParserSession getPartParserSession() {
+		return partParserSession;
 	}
 
 	/**
@@ -907,17 +846,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The part serializer associated with this request.
 	 */
-	public HttpPartParserSession getPartParser() {
-		return partParserSession == null ? OpenApiParser.DEFAULT.createPartSession(null) : partParserSession;
-	}
-
-	/**
-	 * Returns the part serializer associated with this request.
-	 *
-	 * @return The part serializer associated with this request.
-	 */
-	public HttpPartSerializerSession getPartSerializer() {
-		return partSerializerSession == null ? OpenApiSerializer.DEFAULT.createPartSession(null) : partSerializerSession;
+	public HttpPartSerializerSession getPartSerializerSession() {
+		return partSerializerSession;
 	}
 
 	/**
@@ -929,16 +859,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	@Override /* ServletRequest */
 	public String getMethod() {
-		return method;
+		return call.getMethod();
 	}
 
 	@Override /* ServletRequest */
 	public int getContentLength() {
 		return getBody().getContentLength();
-	}
-
-	int getRawContentLength() {
-		return super.getContentLength();
 	}
 
 	/**
@@ -1019,8 +945,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The request bean session.
 	 */
 	public BeanSession getBeanSession() {
-		if (beanSession == null)
-			beanSession = context.createBeanSession();
 		return beanSession;
 	}
 
@@ -1216,9 +1140,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	associated with it.
 	 */
 	public Config getConfig() {
-		if (cf == null)
-			cf = context.getConfig().resolving(getVarResolverSession());
-		return cf;
+		if (config == null)
+			config = context.getConfig().resolving(getVarResolverSession());
+		return config;
 	}
 
 	/**
@@ -1284,7 +1208,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
 						if (pm != null) {
-							HttpPartParserSession pp = pm.getParser(getPartParser());
+							HttpPartParserSession pp = pm.getParser(getPartParserSession());
 							HttpPartSchema schema = pm.getSchema();
 							String name = pm.getPartName();
 							ClassMeta<?> type = getContext().getClassMeta(method.getGenericReturnType());
@@ -1317,7 +1241,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			String h = e.nextElement();
 			sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");
 		}
-		if (method.equals("PUT") || method.equals("POST")) {
+		String m = getMethod();
+		if (m.equals("PUT") || m.equals("POST")) {
 			try {
 				sb.append("---Body UTF-8---\n");
 				sb.append(body.asString()).append("\n");
@@ -1367,9 +1292,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	void close() {
-		if (cf != null) {
+		if (config != null) {
 			try {
-				cf.close();
+				config.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -1416,25 +1341,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the swagger for the Java method invoked.
-	 *
-	 * @return The swagger for the Java method as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Operation> getMethodSwagger() {
-
-		Optional<Swagger> swagger = context.getSwagger(getLocale());
-		if (! swagger.isPresent())
-			return Optional.empty();
-
-		return swagger.get().operation(opContext.getPathPattern(), getMethod().toLowerCase());
-	}
-
-	/**
 	 * Returns the wrapped servlet request.
 	 *
 	 * @return The wrapped servlet request.
 	 */
-	public HttpServletRequest getInner() {
+	public HttpServletRequest getHttpServletRequest() {
 		return inner;
 	}
 

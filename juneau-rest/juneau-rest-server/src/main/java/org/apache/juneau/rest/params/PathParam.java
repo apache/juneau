@@ -102,7 +102,7 @@ public class PathParam implements RestOperationParam {
 	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
 		return call.getRestRequest().getPathMatch().get(ps, schema, name, type);
 	}
 }

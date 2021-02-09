@@ -331,10 +331,12 @@ public class RequestBody {
 
 		Encoder enc = getEncoder();
 
+		InputStream is = req.getHttpServletRequest().getInputStream();
+		
 		if (enc == null)
-			return new BoundedServletInputStream(req.getRawInputStream(), maxInput);
+			return new BoundedServletInputStream(is, maxInput);
 
-		return new BoundedServletInputStream(enc.getInputStream(req.getRawInputStream()), maxInput);
+		return new BoundedServletInputStream(enc.getInputStream(is), maxInput);
 	}
 
 	/**
@@ -469,7 +471,7 @@ public class RequestBody {
 
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			headers.getContentType().getValue(), req.getParsers().getSupportedMediaTypes()
+			headers.getContentType().getValue(), req.getOpContext().getParsers().getSupportedMediaTypes()
 		);
 	}
 
@@ -502,7 +504,7 @@ public class RequestBody {
 	 * @return The content length of the body in bytes.
 	 */
 	public int getContentLength() {
-		return contentLength == 0 ? req.getRawContentLength() : contentLength;
+		return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
 	}
 
 

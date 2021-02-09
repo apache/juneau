@@ -91,7 +91,7 @@ public class ResponseHeaderParam implements RestOperationParam {
 					ResponsePartMeta rpm = req.getResponseHeaderMeta(o);
 					if (rpm == null)
 						rpm = ResponseHeaderParam.this.meta;
-					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializer() : rpm.getSerializer().createPartSession(req.getSerializerSessionArgs());
+					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().createPartSession(req.getSerializerSessionArgs());
 					res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), pss, o));
 				} catch (SerializeException | SchemaValidationException e) {
 					throw new RuntimeException(e);

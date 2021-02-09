@@ -98,7 +98,7 @@ public class DefaultHandler implements ResponseHandler {
 								String k = stringify(e.getKey());
 								Object v = e.getValue();
 								HttpPartSchema s = hm.getSchema().getProperty(k);
-								res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), v));
+								res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializerSession()), v));
 							} else if (ho2 instanceof NameValuePair) {
 								NameValuePair p = (NameValuePair)ho2;
 								res.setHeader(p.getName(), p.getValue());
@@ -111,7 +111,7 @@ public class DefaultHandler implements ResponseHandler {
 							NameValuePair p = (NameValuePair)ho;
 							res.setHeader(p.getName(), p.getValue());
 						} else {
-							res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), ho));
+							res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializerSession()), ho));
 						}
 					}
 				} catch (Exception e) {

@@ -96,7 +96,7 @@ public class HeaderParam implements RestOperationParam {
 	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
 		RequestHeaders rh = call.getRestRequest().getHeaders();
 		return multi ? rh.getAll(ps, schema, name, type.innerType()) : rh.get(ps, schema, name, type.innerType());
 	}

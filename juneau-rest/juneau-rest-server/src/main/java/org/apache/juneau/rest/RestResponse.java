@@ -540,7 +540,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public RestResponse header(HttpPartSerializerSession serializer, HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
 		if (serializer == null)
-			serializer = request.getPartSerializer();
+			serializer = request.getPartSerializerSession();
 		setHeader(name, serializer.serialize(HEADER, schema, value));
 		return this;
 	}

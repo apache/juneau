@@ -95,7 +95,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 			Optional<Swagger> swagger = req.getSwagger();
 			WriterSerializer s = SimpleJsonSerializer.DEFAULT;
-			Optional<Operation> methodSwagger = req.getMethodSwagger();
+			Optional<Operation> methodSwagger = req.getOperationSwagger();
 			char c = StringUtils.charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key))
