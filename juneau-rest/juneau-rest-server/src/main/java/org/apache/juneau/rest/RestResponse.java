@@ -61,23 +61,25 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	private HttpServletResponse inner;
 	private final RestRequest request;
-	private RestOperationContext opContext;
+
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
-
 	private ResponseBeanMeta responseMeta;
 
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestCall call, RestOperationContext roc) throws Exception {
+	RestResponse(RestCall call, RestOperationContext opContext) throws Exception {
 		super(call.getResponse());
-		this.inner = call.getResponse();
-		this.request = call.getRestRequest();
 		call.restResponse(this);
+
+		inner = call.getResponse();
+		request = call.getRestRequest();
+		responseMeta = opContext.getResponseMeta();
+
 		RestContext context = call.getContext();
 
 		try {
@@ -92,17 +94,15 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			throw new BadRequest(e1, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.");
 		}
 
-		this.opContext = roc;
-
 		// Find acceptable charset
 		String h = request.getHeader("accept-charset");
 		String charset = null;
 		if (h == null)
-			charset = roc.getDefaultCharset();
+			charset = opContext.getDefaultCharset();
 		else for (StringRange r : StringRanges.of(h).getRanges()) {
 			if (r.getQValue() > 0) {
 				if (r.getName().equals("*"))
-					charset = roc.getDefaultCharset();
+					charset = opContext.getDefaultCharset();
 				else if (Charset.isSupported(r.getName()))
 					charset = r.getName();
 				if (charset != null)
@@ -112,46 +112,31 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 		for (Header e : request.getContext().getDefaultResponseHeaders())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
-		for (Header e : roc.getDefaultResponseHeaders())
+		for (Header e : opContext.getDefaultResponseHeaders())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
 		super.setCharacterEncoding(charset);
 
-		this.responseMeta = roc.getResponseMeta();
 	}
 
 	/**
-	 * Gets the serializer group for the response.
+	 * Returns access to the inner {@link RestContext} of the class of this method.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestSerializers}
-	 * </ul>
-	 *
-	 * @return The serializer group for the response.
+	 * @return The {@link RestContext} of this class.  Never <jk>null</jk>.
 	 */
-	public SerializerGroup getSerializers() {
-		return opContext == null ? SerializerGroup.EMPTY : opContext.getSerializers();
+	public RestContext getContext() {
+		return request.getContext();
 	}
 
 	/**
-	 * Returns the media types that are valid for <c>Accept</c> headers on the request.
+	 * Returns access to the inner {@link RestOperationContext} of this method.
 	 *
-	 * @return The set of media types registered in the parser group of this request.
+	 * @return The {@link RestOperationContext} of this method.  Never <jk>null</jk>.
 	 */
-	public List<MediaType> getSupportedMediaTypes() {
-		return opContext == null ? Collections.<MediaType>emptyList() : opContext.getSupportedAcceptTypes();
-	}
-
-	/**
-	 * Returns the codings that are valid for <c>Accept-Encoding</c> and <c>Content-Encoding</c> headers on
-	 * the request.
-	 *
-	 * @return The set of media types registered in the parser group of this request.
-	 */
-	public List<String> getSupportedEncodings() {
-		return opContext == null ? Collections.<String>emptyList() : opContext.getEncoders().getSupportedEncodings();
+	public RestOperationContext getOpContext() {
+		return request.getOpContext();
 	}
 
 	/**
@@ -277,7 +262,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
-			EncoderGroup encoders = opContext == null ? EncoderGroup.DEFAULT : opContext.getEncoders();
+			EncoderGroup encoders = request.getOpContext().getEncoders();
 
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {
@@ -668,7 +653,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The wrapped servlet request.
 	 */
-	public HttpServletResponse getInner() {
+	public HttpServletResponse getHttpServletResponse() {
 		return inner;
 	}
 

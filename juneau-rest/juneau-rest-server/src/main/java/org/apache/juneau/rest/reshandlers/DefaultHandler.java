@@ -54,7 +54,7 @@ public class DefaultHandler implements ResponseHandler {
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res) throws IOException, InternalServerError, NotAcceptable {
-		SerializerGroup g = res.getSerializers();
+		SerializerGroup g = res.getOpContext().getSerializers();
 		String accept = req.getHeaders().getString("Accept", "*/*");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		HttpPartSchema schema = null;
