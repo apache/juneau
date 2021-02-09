@@ -29,6 +29,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.ParseException;
@@ -1808,11 +1809,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		}
 
 		try {
-			RestRequest req = call.getRestRequest();
-			RestResponse res = call.getRestResponse();
-
-			req.init(this);
-			res.init(this);
+			HttpServletRequest req = call.getRequest();
 
 			// If the method implements matchers, test them.
 			for (RestMatcher m : requiredMatchers)
@@ -1840,6 +1837,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @throws Throwable Typically an HTTP exception.  Anything else will result in an HTTP 500.
 	 */
 	protected void invoke(RestCall call) throws Throwable {
+
+		context.createRequest(call).init(this);
+		context.createResponse(call).init(this);
 
 		UrlPathMatch pm = call.getUrlPathMatch();
 		if (pm == null)

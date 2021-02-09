@@ -15,8 +15,10 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
+import javax.servlet.http.*;
+
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -53,14 +55,14 @@ public class RestOp_Matchers_Test {
 
 		public static class A1 extends RestMatcher {
 			@Override /* RestMatcher */
-			public boolean matches(RestRequest req) {
-				return req.getQuery().getString("t1","").equals("1");
+			public boolean matches(HttpServletRequest req) {
+				return StringUtils.emptyIfNull(req.getQueryString()).contains("t1=1");
 			}
 		}
 		public static class A2 extends RestMatcher {
 			@Override /* RestMatcher */
-			public boolean matches(RestRequest req) {
-				return req.getQuery().getString("t2","").equals("2");
+			public boolean matches(HttpServletRequest req) {
+				return StringUtils.emptyIfNull(req.getQueryString()).contains("t2=2");
 			}
 		}
 	}

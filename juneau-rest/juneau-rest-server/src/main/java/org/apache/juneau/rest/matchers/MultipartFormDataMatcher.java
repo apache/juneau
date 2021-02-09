@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.matchers;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.rest.*;
 
 /**
@@ -24,7 +26,7 @@ import org.apache.juneau.rest.*;
 public class MultipartFormDataMatcher extends RestMatcher {
 
 	@Override /* RestMatcher */
-	public boolean matches(RestRequest req) {
+	public boolean matches(HttpServletRequest req) {
 		String contentType = req.getContentType();
 		return contentType != null && contentType.startsWith("multipart/form-data");
 	}

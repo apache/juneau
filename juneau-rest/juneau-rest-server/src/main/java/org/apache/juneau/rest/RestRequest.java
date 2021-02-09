@@ -109,7 +109,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final RequestQuery queryParams;
 	private RequestFormData formData;
 	private RequestPath pathParams;
-	private boolean isPost;
 	private UriContext uriContext;
 	private String charset, authorityPath;
 	private RequestHeaders headers;
@@ -135,35 +134,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.call = call;
 
 		try {
-			isPost = req.getMethod().equalsIgnoreCase("POST");
-
 			// If this is a POST, we want to parse the query parameters ourselves to prevent
 			// the servlet code from processing the HTTP body as URL-Encoded parameters.
 			queryParams = new RequestQuery(this);
-			if (isPost)
-				RestUtils.parseQuery(getQueryString(), queryParams);
-			else
-				queryParams.putAll(req.getParameterMap());
+			queryParams.putAll(call.getQueryParams());
 
-			// Get the HTTP method.
-			// Can be overridden through a "method" GET attribute.
-			String _method = super.getMethod();
-
-			String m = getQuery().getString("method");
-			if (m != null) {
-				Set<String> s = context.getAllowedMethodParams();
-				if (! s.isEmpty() && (s.contains("*") || s.contains(m)))
-					_method = m;
-			}
-
-			m = req.getHeader("X-Method");
-			if (m != null) {
-				Set<String> s = context.getAllowedMethodHeaders();
-				if (! s.isEmpty() && (s.contains("*") || s.contains(m)))
-					_method = m;
-			}
-
-			method = _method;
+			method = call.getMethod();
 
 			headers = new RequestHeaders(this);
 			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {

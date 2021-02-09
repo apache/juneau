@@ -46,6 +46,8 @@ public class RestCall {
 	private long startTime = System.currentTimeMillis();
 	private RestLogger logger;
 	private BeanFactory beanFactory;
+	private Map<String,String[]> queryParams;
+	private String method;
 
 	private UrlPathMatch urlPathMatch;
 
@@ -127,7 +129,6 @@ public class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall restRequest(RestRequest value) {
-		request(value);
 		rreq = value;
 		beanFactory.addBean(RestRequest.class, value);
 		return this;
@@ -140,7 +141,6 @@ public class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall restResponse(RestResponse value) {
-		response(value);
 		rres = value;
 		rreq.setResponse(value);
 		beanFactory.addBean(RestResponse.class, value);
@@ -365,7 +365,10 @@ public class RestCall {
 	 */
 	public RestCall finish() {
 		try {
-			res.flushBuffer();
+			if (rres != null)
+				rres.flushBuffer();
+			else
+				res.flushBuffer();
 			req.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			if (rreq != null)
 				rreq.close();
@@ -423,14 +426,53 @@ public class RestCall {
 	}
 
 	/**
+	 * Returns the query parameters on the request.
+	 *
+	 * <p>
+	 * Unlike {@link HttpServletRequest#getParameterMap()}, this doesn't parse the content body if it's a POST.
+	 *
+	 * @return The query parameters on the request.
+	 */
+	public Map<String,String[]> getQueryParams() {
+		if (queryParams == null) {
+			if (req.getMethod().equalsIgnoreCase("POST"))
+				queryParams = RestUtils.parseQuery(req.getQueryString(), new LinkedHashMap<>());
+			else
+				queryParams = req.getParameterMap();
+		}
+		return queryParams;
+	}
+
+	/**
 	 * Returns the HTTP method name.
 	 *
 	 * @return The HTTP method name, always uppercased.
 	 */
 	public String getMethod() {
-		if (rreq != null)
-			return rreq.getMethod().toUpperCase(Locale.ENGLISH);
-		return req.getMethod().toUpperCase(Locale.ENGLISH);
+		if (method == null) {
+
+			Set<String> s1 = context.getAllowedMethodParams();
+			Set<String> s2 = context.getAllowedMethodHeaders();
+
+			if (! s1.isEmpty()) {
+				String[] x = getQueryParams().get("method");
+				if (x != null && (s1.contains("*") || s1.contains(x[0])))
+					method = x[0];
+			}
+
+			if (method == null && ! s2.isEmpty()) {
+				String x = req.getHeader("X-Method");
+				if (x != null && (s2.contains("*") || s2.contains(x)))
+					method = x;
+			}
+
+			if (method == null)
+				method = req.getMethod();
+
+			method = method.toUpperCase(Locale.ENGLISH);
+		}
+
+		return method;
 	}
 
 	/**

@@ -6723,9 +6723,6 @@ public class RestContext extends BeanContext {
 
 			startCall(call);
 
-			createRequest(call);
-			createResponse(call);
-
 			// If the specified method has been defined in a subclass, invoke it.
 			try {
 				restOperations.findOperation(call).invoke(call);

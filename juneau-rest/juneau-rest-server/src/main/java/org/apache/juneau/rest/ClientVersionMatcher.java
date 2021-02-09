@@ -14,6 +14,8 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -45,7 +47,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	}
 
 	@Override /* RestMatcher */
-	public boolean matches(RestRequest req) {
+	public boolean matches(HttpServletRequest req) {
 		return range.matches(req.getHeader(clientVersionHeader));
 	}
 

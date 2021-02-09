@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -75,7 +77,7 @@ public abstract class RestMatcher {
 	 * @param req The servlet request.
 	 * @return <jk>true</jk> if the specified request matches this matcher.
 	 */
-	public abstract boolean matches(RestRequest req);
+	public abstract boolean matches(HttpServletRequest req);
 
 	/**
 	 * Returns <jk>true</jk> if this matcher is required to match in order for the method to be invoked.

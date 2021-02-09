@@ -17,6 +17,8 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
@@ -217,7 +219,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		}
 		public static class NeverMatcher extends RestMatcher {
 			@Override /* RestMatcher */
-			public boolean matches(RestRequest req) {
+			public boolean matches(HttpServletRequest req) {
 				return false;
 			}
 		}
