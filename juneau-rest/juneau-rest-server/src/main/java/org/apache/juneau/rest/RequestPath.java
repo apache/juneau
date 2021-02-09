@@ -40,10 +40,9 @@ public class RequestPath extends TreeMap<String,String> {
 	private final RestRequest req;
 	private HttpPartParserSession parser;
 
-	RequestPath(RestCall call) {
+	RequestPath(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
-		this.req = call.getRestRequest();
-		putAll(call.getPathVars());
+		this.req = req;
 	}
 
 	RequestPath parser(HttpPartParserSession parser) {

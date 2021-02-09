@@ -6633,25 +6633,23 @@ public class RestContext extends BeanContext {
 	 * This method is called immediately after {@link #startCall(RestCall)} has been called.
 	 *
 	 * @param call The current REST call.
-	 * @param opContext The context of the matched Java method.
 	 * @return The wrapped request object.
 	 * @throws Exception If any errors occur trying to interpret the request.
 	 */
-	public RestRequest createRequest(RestCall call, RestOperationContext opContext) throws Exception {
-		return new RestRequest(call, opContext);
+	public RestRequest createRequest(RestCall call) throws Exception {
+		return new RestRequest(call);
 	}
 
 	/**
 	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
-	 * and the request returned by {@link #createRequest(RestCall,RestOperationContext)}.
+	 * and the request returned by {@link #createRequest(RestCall)}.
 	 *
 	 * @param call The current REST call.
-	 * @param opContext The context of the matched Java method.
 	 * @return The wrapped response object.
 	 * @throws Exception If any errors occur trying to interpret the request or response.
 	 */
-	public RestResponse createResponse(RestCall call, RestOperationContext opContext) throws Exception {
-		return new RestResponse(call, opContext);
+	public RestResponse createResponse(RestCall call) throws Exception {
+		return new RestResponse(call);
 	}
 
 	/**

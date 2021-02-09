@@ -111,38 +111,20 @@ public class RestCall {
 	/**
 	 * Sets the method context on this call.
 	 *
-	 * Used for logging statistics on the method.
+	 * <p>
+	 * This triggers the creation of the {@link RestRequest} and {@link RestResponse}.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
+	 * @throws Exception If thrown from the {@link RestRequest} or {@link RestResponse} constructors.
 	 */
-	public RestCall restOperationContext(RestOperationContext value) {
+	public RestCall restOperationContext(RestOperationContext value) throws Exception {
 		opContext = value;
 		beanFactory.addBean(RestOperationContext.class, value);
-		return this;
-	}
-
-	/**
-	 * Set the {@link RestRequest} object on this REST call.
-	 *
-	 * @param value The {@link RestRequest} object on this REST call.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall restRequest(RestRequest value) {
-		rreq = value;
-		beanFactory.addBean(RestRequest.class, value);
-		return this;
-	}
-
-	/**
-	 * Set the {@link RestResponse} object on this REST call.
-	 *
-	 * @param value The {@link RestResponse} object on this REST call.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall restResponse(RestResponse value) {
-		rres = value;
-		beanFactory.addBean(RestResponse.class, value);
+		rreq = context.createRequest(this);
+		beanFactory.addBean(RestRequest.class, rreq);
+		rres = context.createResponse(this);
+		beanFactory.addBean(RestResponse.class, rres);
 		return this;
 	}
 

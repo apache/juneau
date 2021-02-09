@@ -124,12 +124,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestRequest(RestCall call, RestOperationContext opContext) throws Exception {
+	RestRequest(RestCall call) throws Exception {
 		super(call.getRequest());
-		call.restRequest(this);
 
 		this.call = call;
-		this.opContext = opContext;
+		this.opContext = call.getRestOperationContext();
 
 		inner = call.getRequest();
 		context = call.getContext();
@@ -157,7 +156,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (! s.isEmpty())
 			headers.queryParams(queryParams, s);
 
-		pathParams = new RequestPath(call);
+		pathParams = new RequestPath(this);
+		pathParams.putAll(call.getPathVars());
 
 		beanSession = opContext.createSession();
 

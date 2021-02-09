@@ -1856,8 +1856,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 */
 	protected void invoke(RestCall call) throws Throwable {
 
-		context.createRequest(call, this);
-		context.createResponse(call, this);
+		call.restOperationContext(this);
 
 		UrlPathMatch pm = call.getUrlPathMatch();
 		if (pm == null)

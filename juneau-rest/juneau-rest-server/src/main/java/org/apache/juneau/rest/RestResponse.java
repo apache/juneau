@@ -72,12 +72,13 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestCall call, RestOperationContext opContext) throws Exception {
+	RestResponse(RestCall call) throws Exception {
 		super(call.getResponse());
-		call.restResponse(this);
 
 		inner = call.getResponse();
 		request = call.getRestRequest();
+
+		RestOperationContext opContext = call.getRestOperationContext();
 		responseMeta = opContext.getResponseMeta();
 
 		RestContext context = call.getContext();
