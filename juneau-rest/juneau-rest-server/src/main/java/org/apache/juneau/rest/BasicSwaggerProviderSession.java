@@ -210,7 +210,7 @@ public class BasicSwaggerProviderSession {
 
 			BeanSession bs = sm.createBeanSession();
 
-			Method m = sm.method;
+			Method m = sm.getJavaMethod();
 			MethodInfo mi = MethodInfo.of(m);
 			RestOp rm = mi.getLastAnnotation(RestOp.class);
 			String mn = m.getName();
@@ -504,13 +504,13 @@ public class BasicSwaggerProviderSession {
 				op.put("responses", new TreeMap<>(responses));
 
 			if (! op.containsKey("consumes")) {
-				List<MediaType> mConsumes = sm.supportedContentTypes;
+				List<MediaType> mConsumes = sm.getSupportedContentTypes();
 				if (! mConsumes.equals(consumes))
 					op.put("consumes", mConsumes);
 			}
 
 			if (! op.containsKey("produces")) {
-				List<MediaType> mProduces = sm.supportedAcceptTypes;
+				List<MediaType> mProduces = sm.getSupportedAcceptTypes();
 				if (! mProduces.equals(produces))
 					op.put("produces", mProduces);
 			}

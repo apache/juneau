@@ -213,13 +213,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (resource.isPresent()) {
 			Object r = resource.get();
 			x = BeanFactory
-				.of(parentContext.isPresent() ? parentContext.get().rootBeanFactory : null, r)
+				.of(parentContext.isPresent() ? parentContext.get().getRootBeanFactory() : null, r)
 				.beanCreateMethodFinder(BeanFactory.class, resource)
 				.find("createBeanFactory")
 				.run();
 		}
 		if (x == null && parentContext.isPresent()) {
-			x = parentContext.get().rootBeanFactory;
+			x = parentContext.get().getRootBeanFactory();
 		}
 		return BeanFactory.of(x, resource.orElse(null));
 	}
@@ -2656,7 +2656,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	@Override /* ServletConfig */
 	public ServletContext getServletContext() {
-		return inner != null ? inner.getServletContext() : parentContext != null ? parentContext.builder.getServletContext() : null;
+		return inner != null ? inner.getServletContext() : parentContext != null ? parentContext.getBuilder().getServletContext() : null;
 	}
 
 	@Override /* ServletConfig */

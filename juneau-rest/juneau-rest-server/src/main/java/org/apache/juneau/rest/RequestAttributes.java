@@ -48,11 +48,11 @@ public class RequestAttributes extends OMap {
 
 	/**
 	 * Adds values to these attributes if they're not already set.
-	 * 
+	 *
 	 * @param pairs The attributes to add.
 	 * @return This object (for method chaining).
 	 */
-	public RequestAttributes addDefault(NamedAttribute...pairs) {
+	public RequestAttributes addDefault(List<NamedAttribute> pairs) {
 		for (NamedAttribute p : pairs) {
 			String key = p.getName();
 			Object value = p.getValue();

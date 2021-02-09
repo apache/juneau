@@ -99,7 +99,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RequestHeaders addDefault(Header...pairs) {
+	public RequestHeaders addDefault(List<Header> pairs) {
 		for (Header p : pairs) {
 			String key = p.getName();
 			Object value = p.getValue();

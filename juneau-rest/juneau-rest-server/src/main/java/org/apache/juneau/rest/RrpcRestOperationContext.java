@@ -41,10 +41,10 @@ public class RrpcRestOperationContext extends RestOperationContext {
 	public RrpcRestOperationContext(RestOperationContextBuilder builder) throws ServletException {
 		super(builder);
 
-		ClassMeta<?> interfaceClass = getClassMeta(mi.inner().getGenericReturnType());
+		ClassMeta<?> interfaceClass = getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.getInnerClass(), null);
 		if (meta.getMethodsByPath().isEmpty())
-			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
+			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getFullName());
 
 	}
 

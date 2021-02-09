@@ -197,28 +197,28 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	final void init(RestOperationContext roc) throws IOException {
 		this.opContext = Optional.of(roc);
-		this.javaMethod = roc.method;
+		this.javaMethod = roc.getJavaMethod();
 		this.beanSession = roc.createSession();
-		this.partParserSession = roc.partParser.createPartSession(getParserSessionArgs());
-		this.partSerializerSession = roc.partSerializer.createPartSession(getSerializerSessionArgs());
+		this.partParserSession = roc.getPartParser().createPartSession(getParserSessionArgs());
+		this.partSerializerSession = roc.getPartSerializer().createPartSession(getSerializerSessionArgs());
 		this.pathParams
 			.parser(partParserSession);
 		this.queryParams
-			.addDefault(roc.defaultRequestQuery)
+			.addDefault(roc.getDefaultRequestQuery())
 			.parser(partParserSession);
 		this.headers
-			.addDefault(roc.defaultRequestHeaders)
-			.addDefault(context.defaultRequestHeaders)
+			.addDefault(roc.getDefaultRequestHeaders())
+			.addDefault(context.getDefaultRequestHeaders())
 			.parser(partParserSession);
 		this.attrs = new RequestAttributes(this);
 		this.attrs
-			.addDefault(roc.defaultRequestAttributes)
-			.addDefault(context.defaultRequestAttributes);
+			.addDefault(roc.getDefaultRequestAttributes())
+			.addDefault(context.getDefaultRequestAttributes());
 		this.body
-			.encoders(roc.encoders)
-			.parsers(roc.parsers)
+			.encoders(roc.getEncoders())
+			.parsers(roc.getParsers())
 			.headers(headers)
-			.maxInput(roc.maxInput);
+			.maxInput(roc.getMaxInput());
 
 		if (isDebug()) {
 			inner = CachingHttpServletRequest.wrap(inner);
@@ -311,7 +311,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getProduces() {
-		return opContext.flatMap(RestOperationContext::supportedAcceptTypes).orElse(emptyList());
+		return opContext.isPresent() ? opContext.get().getSupportedAcceptTypes() : emptyList();
 	}
 
 	/**
@@ -320,7 +320,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getConsumes() {
-		return opContext.flatMap(RestOperationContext::supportedContentTypes).orElse(emptyList());
+		return opContext.isPresent() ? opContext.get().getSupportedContentTypes() : emptyList();
 	}
 
 	/**
@@ -334,7 +334,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public ContextProperties getContextProperties() {
-		return opContext.flatMap(RestOperationContext::contextProperties).orElse(ContextProperties.DEFAULT);
+		return opContext.isPresent() ? opContext.get().getContextProperties() : ContextProperties.DEFAULT;
 	}
 
 	/**
@@ -360,8 +360,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				if (i > 0)
 					charset = h.substring(i+9).trim();
 			}
-			if (charset == null)
-				charset = opContext.flatMap(RestOperationContext::defaultCharset).orElse(null);
+			if (charset == null && opContext.isPresent())
+				charset = opContext.get().getDefaultCharset();
 			if (charset == null)
 				charset = "UTF-8";
 			if (! Charset.isSupported(charset))
@@ -610,7 +610,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			formData.addDefault(opContext.flatMap(RestOperationContext::defaultRequestFormData).orElse(new NameValuePair[0]));
+			if (opContext.isPresent())
+				formData.addDefault(opContext.get().getDefaultRequestFormData());
 			return formData;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
@@ -925,7 +926,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
-		return opContext.flatMap(RestOperationContext::serializers).orElse(SerializerGroup.EMPTY);
+		return opContext.isPresent() ? opContext.get().getSerializers() : SerializerGroup.EMPTY;
 	}
 
 	/**
@@ -938,7 +939,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParsers() {
-		return opContext.flatMap(RestOperationContext::parsers).orElse(ParserGroup.EMPTY);
+		return opContext.isPresent() ? opContext.get().getParsers() : ParserGroup.EMPTY;
 	}
 
 	/**

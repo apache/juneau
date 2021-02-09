@@ -88,7 +88,7 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	protected void setContext(RestContext context) throws ServletException {
 		if (this.context.get() == null) {
-			super.init(context.builder);
+			super.init(context.getBuilder());
 			this.context.set(context);
 		}
 	}

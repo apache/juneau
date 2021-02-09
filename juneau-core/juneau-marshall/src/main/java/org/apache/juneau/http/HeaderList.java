@@ -74,6 +74,33 @@ public class HeaderList extends AList<Header> {
 	}
 
 	/**
+	 * Appends or replaces the header values in this list.
+	 *
+	 * <p>
+	 * If the header already exists in this list, it will be replaced with the new value.
+	 * Otherwise it will be appended to the end of this list.
+	 *
+	 * @param values The values to append or replace in this list.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderList appendUnique(Collection<Header> values) {
+		for (Header h : values) {
+			boolean replaced = false;
+			for (ListIterator<Header> li = listIterator(); li.hasNext();) {
+				Header h2 = li.next();
+				if (h2.getName().equalsIgnoreCase(h.getName())) {
+					li.set(h);
+					replaced = true;
+					break;
+				}
+			}
+			if (! replaced)
+				add(h);
+		}
+		return this;
+	}
+
+	/**
 	 * Returns the contents of this list as a {@link Header} array.
 	 *
 	 * @return The contents of this list as a {@link Header} array.

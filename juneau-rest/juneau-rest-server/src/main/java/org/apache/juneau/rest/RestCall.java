@@ -60,7 +60,7 @@ public class RestCall {
 	public RestCall(Object resource, RestContext context, HttpServletRequest req, HttpServletResponse res) {
 		this.context = context;
 		this.resource = resource;
-		beanFactory = BeanFactory.of(context.rootBeanFactory, resource);
+		beanFactory = BeanFactory.of(context.getRootBeanFactory(), resource);
 		beanFactory.addBean(RestContext.class, context);
 		request(req).response(res);
 	}
@@ -322,7 +322,7 @@ public class RestCall {
 	 * @return The java method of this call, or <jk>null</jk> if it hasn't been determined yet.
 	 */
 	public Method getJavaMethod() {
-		return opContext == null ? null : opContext.method;
+		return opContext == null ? null : opContext.getJavaMethod();
 	}
 
 	/**

@@ -65,7 +65,7 @@ public class RestChildren {
 		String pi = call.getPathInfoUndecoded();
 		if ((! children.isEmpty()) && pi != null && ! pi.equals("/")) {
 			for (RestContext rc : children.values()) {
-				UrlPathMatcher upp = rc.pathMatcher;
+				UrlPathMatcher upp = rc.getPathMatcher();
 				UrlPathMatch uppm = upp.match(call.getUrlPath());
 				if (uppm != null) {
 					return Optional.of(RestChildMatch.create(uppm, rc));

@@ -99,7 +99,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RequestFormData addDefault(NameValuePair...pairs) {
+	public RequestFormData addDefault(Collection<NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
 			String key = p.getName();
 			Object value = p.getValue();

@@ -70,7 +70,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 		this.restContext = context;
 		this.restMethod = method;
-		this.beanFactory = context.rootBeanFactory;
+		this.beanFactory = context.getRootBeanFactory();
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);

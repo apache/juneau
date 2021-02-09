@@ -55,7 +55,7 @@ public class NamedAttributeList extends AList<NamedAttribute> {
 	 * @param values The values to append or replace in this list.
 	 * @return This object (for method chaining).
 	 */
-	public NamedAttributeList appendUnique(NamedAttribute...values) {
+	public NamedAttributeList appendUnique(List<NamedAttribute> values) {
 		for (NamedAttribute h : values) {
 			boolean replaced = false;
 			for (ListIterator<NamedAttribute> li = listIterator(); li.hasNext();) {
@@ -70,6 +70,20 @@ public class NamedAttributeList extends AList<NamedAttribute> {
 				add(h);
 		}
 		return this;
+	}
+
+	/**
+	 * Appends or replaces the named attribute values in this list.
+	 *
+	 * <p>
+	 * If the named attribute already exists in this list, it will be replaced with the new value.
+	 * Otherwise it will be appended to the end of this list.
+	 *
+	 * @param values The values to append or replace in this list.
+	 * @return This object (for method chaining).
+	 */
+	public NamedAttributeList appendUnique(NamedAttribute...values) {
+		return appendUnique(Arrays.asList(values));
 	}
 
 	/**

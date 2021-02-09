@@ -20,7 +20,6 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
-import static java.util.Arrays.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -3347,7 +3346,7 @@ public class RestContext extends BeanContext {
 	private final Supplier<?> resource;
 	private final Class<?> resourceClass;
 
-	final RestContextBuilder builder;
+	private final RestContextBuilder builder;
 	private final boolean
 		allowBodyParam,
 		renderResponseStackTraces;
@@ -3355,8 +3354,8 @@ public class RestContext extends BeanContext {
 		clientVersionHeader,
 		uriAuthority,
 		uriContext;
-	final String path, fullPath;
-	final UrlPathMatcher pathMatcher;
+	private final String path, fullPath;
+	private final UrlPathMatcher pathMatcher;
 
 	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
@@ -3369,9 +3368,9 @@ public class RestContext extends BeanContext {
 	private final List<MediaType>
 		consumes,
 		produces;
-	final org.apache.http.Header[] defaultRequestHeaders, defaultResponseHeaders;
-	final NamedAttribute[] defaultRequestAttributes;
-	private final ResponseHandler[] responseHandlers;
+	private final List<org.apache.http.Header> defaultRequestHeaders, defaultResponseHeaders;
+	private final List<NamedAttribute> defaultRequestAttributes;
+	private final List<ResponseHandler> responseHandlers;
 	private final Messages messages;
 	private final Config config;
 	private final VarResolver varResolver;
@@ -3381,7 +3380,7 @@ public class RestContext extends BeanContext {
 	private final SwaggerProvider swaggerProvider;
 	private final HttpException initException;
 	private final RestContext parentContext;
-	final BeanFactory rootBeanFactory;
+	private final BeanFactory rootBeanFactory;
 	private final BeanFactory beanFactory;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
@@ -3494,8 +3493,7 @@ public class RestContext extends BeanContext {
 			config = builder.config.resolving(vr.createSession());
 			bf.addBean(Config.class, config);
 
-			responseHandlers = createResponseHandlers(r, cp, bf).asArray();
-			bf.addBean(ResponseHandler[].class, responseHandlers);
+			responseHandlers = unmodifiableList(createResponseHandlers(r, cp, bf));
 
 			callLogger = createCallLogger(r, cp, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
@@ -3521,9 +3519,9 @@ public class RestContext extends BeanContext {
 			staticFiles = createStaticFiles(r, cp, bf);
 			bf.addBean(StaticFiles.class, staticFiles);
 
-			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bf).asArray();
-			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bf).asArray();
-			defaultRequestAttributes = createDefaultRequestAttributes(r, cp, bf).asArray();
+			defaultRequestHeaders = unmodifiableList(createDefaultRequestHeaders(r, cp, bf));
+			defaultResponseHeaders = unmodifiableList(createDefaultResponseHeaders(r, cp, bf));
+			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, cp, bf));
 
 			opParams = createRestOperationParams(r, cp, bf).asArray();
 			hookMethodParams = createHookMethodParams(r, cp, bf).asArray();
@@ -3542,8 +3540,8 @@ public class RestContext extends BeanContext {
 
 			debugEnablement = createDebugEnablement(r, cp, bf);
 
-			consumes = cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes());
-			produces = cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes());
+			consumes = unmodifiableList(cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes()));
+			produces = unmodifiableList(cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes()));
 
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 			path = builder.getPath();
@@ -6127,7 +6125,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	The header names allowed to be passed as URL parameters.
-	 * 	<br>The set is case-insensitive ordered.
+	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
 	public Set<String> getAllowedHeaderParams() {
 		return allowedHeaderParams;
@@ -6142,7 +6140,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	The method names allowed to be passed as <c>X-Method</c> headers.
-	 * 	<br>The set is case-insensitive ordered.
+	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
 	public Set<String> getAllowedMethodHeaders() {
 		return allowedMethodHeaders;
@@ -6157,7 +6155,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	The method names allowed to be passed as <c>method</c> URL parameters.
-	 * 	<br>The set is case-insensitive ordered.
+	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
 	public Set<String> getAllowedMethodParams() {
 		return allowedMethodParams;
@@ -6280,7 +6278,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The supported <c>Accept</c> header values for this resource.
+	 * 	An unmodifiable list of supported <c>Accept</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<MediaType> getProduces() {
@@ -6296,7 +6294,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The supported <c>Content-Type</c> header values for this resource.
+	 * 	An unmodifiable list of supported <c>Content-Type</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<MediaType> getConsumes() {
@@ -6311,11 +6309,11 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The default request headers for this resource.
+	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<org.apache.http.Header> getDefaultRequestHeaders() {
-		return unmodifiableList(asList(defaultRequestHeaders));
+		return defaultRequestHeaders;
 	}
 
 	/**
@@ -6326,11 +6324,11 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The default request headers for this resource.
+	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<NamedAttribute> getDefaultRequestAttributes() {
-		return unmodifiableList(asList(defaultRequestAttributes));
+		return defaultRequestAttributes;
 	}
 
 	/**
@@ -6341,11 +6339,11 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The default response headers for this resource.
+	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<org.apache.http.Header> getDefaultResponseHeaders() {
-		return unmodifiableList(asList(defaultResponseHeaders));
+		return defaultResponseHeaders;
 	}
 
 	/**
@@ -6359,7 +6357,7 @@ public class RestContext extends BeanContext {
 	 * 	The response handlers associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected ResponseHandler[] getResponseHandlers() {
+	protected List<ResponseHandler> getResponseHandlers() {
 		return responseHandlers;
 	}
 
@@ -6472,6 +6470,33 @@ public class RestContext extends BeanContext {
 	 */
 	public Class<?> getResourceClass() {
 		return resourceClass;
+	}
+
+	/**
+	 * Returns the builder that created this context.
+	 *
+	 * @return The builder that created this context.
+	 */
+	public ServletConfig getBuilder() {
+		return builder;
+	}
+
+	/**
+	 * Returns the path matcher for this context.
+	 *
+	 * @return The path matcher for this context.
+	 */
+	public UrlPathMatcher getPathMatcher() {
+		return pathMatcher;
+	}
+
+	/**
+	 * Returns the root bean factory for this context.
+	 *
+	 * @return The root bean factory for this context.
+	 */
+	public BeanFactory getRootBeanFactory() {
+		return rootBeanFactory;
 	}
 
 	/**

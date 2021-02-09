@@ -106,11 +106,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		String h = request.getHeader("accept-charset");
 		String charset = null;
 		if (h == null)
-			charset = roc.defaultCharset;
+			charset = roc.getDefaultCharset();
 		else for (StringRange r : StringRanges.of(h).getRanges()) {
 			if (r.getQValue() > 0) {
 				if (r.getName().equals("*"))
-					charset = roc.defaultCharset;
+					charset = roc.getDefaultCharset();
 				else if (Charset.isSupported(r.getName()))
 					charset = r.getName();
 				if (charset != null)
@@ -118,16 +118,16 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			}
 		}
 
-		for (Header e : request.getContext().defaultResponseHeaders)
+		for (Header e : request.getContext().getDefaultResponseHeaders())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
-		for (Header e : roc.defaultResponseHeaders)
+		for (Header e : roc.getDefaultResponseHeaders())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
 		super.setCharacterEncoding(charset);
 
-		this.responseMeta = roc.responseMeta;
+		this.responseMeta = roc.getResponseMeta();
 	}
 
 	/**
@@ -140,7 +140,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The serializer group for the response.
 	 */
 	public SerializerGroup getSerializers() {
-		return opContext == null ? SerializerGroup.EMPTY : opContext.serializers;
+		return opContext == null ? SerializerGroup.EMPTY : opContext.getSerializers();
 	}
 
 	/**
@@ -149,7 +149,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return opContext == null ? Collections.<MediaType>emptyList() : opContext.supportedAcceptTypes;
+		return opContext == null ? Collections.<MediaType>emptyList() : opContext.getSupportedAcceptTypes();
 	}
 
 	/**
@@ -159,7 +159,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<String> getSupportedEncodings() {
-		return opContext == null ? Collections.<String>emptyList() : opContext.encoders.getSupportedEncodings();
+		return opContext == null ? Collections.<String>emptyList() : opContext.getEncoders().getSupportedEncodings();
 	}
 
 	/**
@@ -285,7 +285,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
-			EncoderGroup encoders = opContext == null ? EncoderGroup.DEFAULT : opContext.encoders;
+			EncoderGroup encoders = opContext == null ? EncoderGroup.DEFAULT : opContext.getEncoders();
 
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {
