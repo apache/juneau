@@ -1547,7 +1547,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		return x;
 	}
 
-	ResponseBeanMeta getResponseBeanMeta(Object o) {
+	/**
+	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
+	 *
+ 	 * @param o The response POJO.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
+	 */
+	public ResponseBeanMeta getResponseBeanMeta(Object o) {
 		if (o == null)
 			return null;
 		Class<?> c = o.getClass();
@@ -1563,7 +1569,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		return rbm;
 	}
 
-	ResponsePartMeta getResponseHeaderMeta(Object o) {
+	/**
+	 * Returns metadata about the specified response object if it's annotated with {@link ResponseHeader @ResponseHeader}.
+	 *
+ 	 * @param o The response POJO.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
+	 */
+	public ResponsePartMeta getResponseHeaderMeta(Object o) {
 		if (o == null)
 			return null;
 		Class<?> c = o.getClass();
@@ -1584,7 +1596,13 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		return pm;
 	}
 
-	ResponsePartMeta getResponseBodyMeta(Object o) {
+	/**
+	 * Returns metadata about the specified response object if it's annotated with {@link ResponseBody @ResponseBody}.
+	 *
+ 	 * @param o The response POJO.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
+	 */
+	public ResponsePartMeta getResponseBodyMeta(Object o) {
 		if (o == null)
 			return null;
 		Class<?> c = o.getClass();

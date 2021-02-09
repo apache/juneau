@@ -88,7 +88,7 @@ public class ResponseHeaderParam implements RestOperationParam {
 				try {
 					RestRequest req = call.getRestRequest();
 					RestResponse res = call.getRestResponse();
-					ResponsePartMeta rpm = req.getResponseHeaderMeta(o);
+					ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
 					if (rpm == null)
 						rpm = ResponseHeaderParam.this.meta;
 					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().createPartSession(req.getSerializerSessionArgs());

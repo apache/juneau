@@ -68,7 +68,7 @@ public class ResponseBeanParam implements RestOperationParam {
 			public void onSet(Object o) {
 				RestRequest req = call.getRestRequest();
 				RestResponse res = call.getRestResponse();
-				ResponseBeanMeta meta = req.getResponseBeanMeta(o);
+				ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
 				if (meta == null)
 					meta = ResponseBeanParam.this.meta;
 				res.setResponseMeta(meta);

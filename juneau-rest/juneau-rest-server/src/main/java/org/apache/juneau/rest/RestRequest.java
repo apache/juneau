@@ -110,6 +110,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final HttpPartSerializerSession partSerializerSession;
 	private final HttpPartParserSession partParserSession;
 	private final RestCall call;
+	private final SerializerSessionArgs serializerSessionArgs;
+	private final ParserSessionArgs parserSessionArgs;
 
 	// Lazy initialized.
 	private VarResolverSession varSession;
@@ -118,21 +120,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private String charset, authorityPath;
 	private Config config;
 	private Swagger swagger;
-	private SerializerSessionArgs serializerSessionArgs;
-	private ParserSessionArgs parserSessionArgs;
 
 	/**
 	 * Constructor.
 	 */
 	RestRequest(RestCall call, RestOperationContext opContext) throws Exception {
 		super(call.getRequest());
+		call.restRequest(this);
 
 		this.call = call;
 		this.opContext = opContext;
 
 		inner = call.getRequest();
-		call.restRequest(this);
-
 		context = call.getContext();
 
 		queryParams = new RequestQuery(this);
@@ -158,25 +157,49 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (! s.isEmpty())
 			headers.queryParams(queryParams, s);
 
-		this.pathParams = new RequestPath(call);
+		pathParams = new RequestPath(call);
 
-		this.beanSession = opContext.createSession();
-		this.partParserSession = opContext.getPartParser().createPartSession(getParserSessionArgs());
-		this.partSerializerSession = opContext.getPartSerializer().createPartSession(getSerializerSessionArgs());
-		this.pathParams
-			.parser(partParserSession);
-		this.queryParams
+		beanSession = opContext.createSession();
+
+		parserSessionArgs =
+			ParserSessionArgs
+				.create()
+				.javaMethod(opContext.getJavaMethod())
+				.locale(getLocale())
+				.timeZone(getHeaders().getTimeZone())
+				.debug(isDebug() ? true : null);
+
+		partParserSession = opContext.getPartParser().createPartSession(parserSessionArgs);
+
+		serializerSessionArgs = SerializerSessionArgs
+			.create()
+			.javaMethod(opContext.getJavaMethod())
+			.locale(getLocale())
+			.timeZone(getHeaders().getTimeZone())
+			.debug(isDebug() ? true : null)
+			.uriContext(getUriContext())
+			.resolver(getVarResolverSession())
+			.useWhitespace(isPlainText() ? true : null);
+
+		partSerializerSession = opContext.getPartSerializer().createPartSession(serializerSessionArgs);
+
+		pathParams.parser(partParserSession);
+
+		queryParams
 			.addDefault(opContext.getDefaultRequestQuery())
 			.parser(partParserSession);
-		this.headers
+
+		headers
 			.addDefault(opContext.getDefaultRequestHeaders())
 			.addDefault(context.getDefaultRequestHeaders())
 			.parser(partParserSession);
-		this.attrs = new RequestAttributes(this);
-		this.attrs
+
+		attrs = new RequestAttributes(this);
+		attrs
 			.addDefault(opContext.getDefaultRequestAttributes())
 			.addDefault(context.getDefaultRequestAttributes());
-		this.body
+
+		body
 			.encoders(opContext.getEncoders())
 			.parsers(opContext.getParsers())
 			.headers(headers)
@@ -872,7 +895,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
-		return "true".equals(getQuery().getString("plainText", "false"));
+		return "true".equals(queryParams.getString("plainText", "false"));
 	}
 
 	/**
@@ -929,6 +952,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RestContext getContext() {
 		return context;
+	}
+
+	/**
+	 * Returns access to the inner {@link RestOperationContext} of this method.
+	 *
+	 * @return The {@link RestOperationContext} of this method.  May be <jk>null</jk> if method has not yet been found.
+	 */
+	public RestOperationContext getOpContext() {
+		return opContext;
 	}
 
 	/**
@@ -1224,6 +1256,44 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		}
 	}
 
+	/**
+	 * Returns the session arguments to pass to serializers.
+	 *
+	 * @return The session arguments to pass to serializers.
+	 */
+	public SerializerSessionArgs getSerializerSessionArgs() {
+		return serializerSessionArgs;
+	}
+
+	/**
+	 * Returns the session arguments to pass to parsers.
+	 *
+	 * @return The session arguments to pass to parsers.
+	 */
+	public ParserSessionArgs getParserSessionArgs() {
+		return parserSessionArgs;
+	}
+
+	/* Called by RestCall.finish() */
+	void close() {
+		if (config != null) {
+			try {
+				config.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Returns the wrapped servlet request.
+	 *
+	 * @return The wrapped servlet request.
+	 */
+	public HttpServletRequest getHttpServletRequest() {
+		return inner;
+	}
+
 	@Override /* Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder("\n").append(getDescription()).append("\n");
@@ -1244,117 +1314,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			}
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * Returns the session arguments to pass to serializers.
-	 *
-	 * @return The session arguments to pass to serializers.
-	 */
-	public SerializerSessionArgs getSerializerSessionArgs() {
-		if (serializerSessionArgs == null)
-			serializerSessionArgs = SerializerSessionArgs
-				.create()
-				.javaMethod(opContext.getJavaMethod())
-				.locale(getLocale())
-				.timeZone(getHeaders().getTimeZone())
-				.debug(isDebug() ? true : null)
-				.uriContext(getUriContext())
-				.resolver(getVarResolverSession())
-				.useWhitespace(isPlainText() ? true : null);
-		return serializerSessionArgs;
-	}
-
-	/**
-	 * Returns the session arguments to pass to parsers.
-	 *
-	 * @return The session arguments to pass to parsers.
-	 */
-	public ParserSessionArgs getParserSessionArgs() {
-		if (parserSessionArgs == null)
-			parserSessionArgs =
-				ParserSessionArgs
-					.create()
-					.javaMethod(opContext.getJavaMethod())
-					.locale(getLocale())
-					.timeZone(getHeaders().getTimeZone())
-					.debug(isDebug() ? true : null);
-		return parserSessionArgs;
-	}
-
-	void close() {
-		if (config != null) {
-			try {
-				config.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
-	 *
- 	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
-	 */
-	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		return opContext.getResponseBeanMeta(o);
-	}
-
-	/**
-	 * Returns metadata about the specified response object if it's annotated with {@link ResponseHeader @ResponseHeader}.
-	 *
- 	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
-	 */
-	public ResponsePartMeta getResponseHeaderMeta(Object o) {
-		return opContext.getResponseHeaderMeta(o);
-	}
-
-	/**
-	 * Returns metadata about the specified response object if it's annotated with {@link ResponseBody @ResponseBody}.
-	 *
- 	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
-	 */
-	public ResponsePartMeta getResponseBodyMeta(Object o) {
-		return opContext.getResponseBodyMeta(o);
-	}
-
-	/**
-	 * Returns access to the inner {@link RestOperationContext} of this method.
-	 *
-	 * @return The {@link RestOperationContext} of this method.  May be <jk>null</jk> if method has not yet been found.
-	 */
-	public RestOperationContext getOpContext() {
-		return opContext;
-	}
-
-	/**
-	 * Returns the wrapped servlet request.
-	 *
-	 * @return The wrapped servlet request.
-	 */
-	public HttpServletRequest getHttpServletRequest() {
-		return inner;
-	}
-
-	/**
-	 * Returns the REST object of this call.
-	 *
-	 * @return The REST object of this call.
-	 */
-	public Object getResource() {
-		return call.getResource();
-	}
-
-	<T> ClassMeta<T> getClassMeta(Type type, Type[] args) {
-		return beanSession.getClassMeta(type, args);
-	}
-
-	<T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return beanSession.getClassMeta(type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

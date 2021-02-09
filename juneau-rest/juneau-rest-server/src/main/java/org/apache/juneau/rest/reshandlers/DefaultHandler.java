@@ -63,7 +63,7 @@ public class DefaultHandler implements ResponseHandler {
 
 		ResponseBeanMeta rm = res.getResponseMeta();
 		if (rm == null)
-			rm = req.getResponseBeanMeta(o);
+			rm = req.getOpContext().getResponseBeanMeta(o);
 
 		if (rm != null) {
 

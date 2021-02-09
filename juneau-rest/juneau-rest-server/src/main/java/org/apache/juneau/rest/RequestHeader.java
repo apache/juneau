@@ -178,7 +178,7 @@ public class RequestHeader implements Header {
 	 * @throws ParseException If value could not be parsed.
 	 */
 	public <T> T as(Type type, Type...args) throws ParseException {
-		return as(request.getClassMeta(type, args));
+		return as(request.getBeanSession().getClassMeta(type, args));
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class RequestHeader implements Header {
 	 * @throws ParseException If value could not be parsed.
 	 */
 	public <T> T as(Class<T> type) throws ParseException {
-		return as(request.getClassMeta(type));
+		return as(request.getBeanSession().getClassMeta(type));
 	}
 
 	/**
