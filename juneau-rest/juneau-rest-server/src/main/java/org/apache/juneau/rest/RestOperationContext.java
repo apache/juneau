@@ -1929,9 +1929,10 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 			context.postCall(call);
 
-			if (res.hasOutput())
+			Optional<Optional<Object>> o = res.getOutput();
+			if (o.isPresent())
 				for (RestConverter converter : converters)
-					res.setOutput(converter.convert(req, res.getOutput()));
+					res.setOutput(converter.convert(req, o.get().orElse(null)));
 
 		} catch (IllegalArgumentException e) {
 			throw new BadRequest(e,

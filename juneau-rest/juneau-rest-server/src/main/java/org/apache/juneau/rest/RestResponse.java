@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -62,8 +63,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private HttpServletResponse inner;
 	private final RestRequest request;
 
-	private Object output;                       // The POJO being sent to the output.
-	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
+	private Optional<Optional<Object>> output = empty();  // The POJO being sent to the output.
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
@@ -163,7 +163,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
 	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
-	 * 		<br>This distinction affects the {@link #hasOutput()} method behavior.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -175,8 +174,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setOutput(Object output) {
-		this.output = output;
-		this.isNullOutput = output == null;
+		this.output = of(ofNullable(output));
 		return this;
 	}
 
@@ -217,26 +215,22 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setOutputs(Object...output) {
-		this.output = output;
+		this.output = of(of(output));
 		return this;
 	}
 
 	/**
 	 * Returns the output that was set by calling {@link #setOutput(Object)}.
 	 *
-	 * @return The output object.
-	 */
-	public Object getOutput() {
-		return output;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this response has any output associated with it.
+	 * <p>
+	 * If it's empty, then {@link #setOutput(Object)} wasn't called.
+	 * <br>If it's not empty but contains an empty, then <c>setObject(<jk>null</jk>)</c> was called.
+	 * <br>Otherwise, {@link #setOutput(Object)} was called with a non-null value.
 	 *
-	 * @return <jk>true</jk> if {@link #setOutput(Object)} has been called, even if the value passed was <jk>null</jk>.
+	 * @return The output object.  Never <jk>null</jk>.
 	 */
-	public boolean hasOutput() {
-		return output != null || isNullOutput;
+	public Optional<Optional<Object>> getOutput() {
+		return output;
 	}
 
 	/**
@@ -635,7 +629,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return <jk>true</jk> if this response object is of the specified type.
 	 */
 	public boolean isOutputType(Class<?> c) {
-		return c.isInstance(output);
+		return c.isInstance(getRawOutput());
 	}
 
 	/**
@@ -646,7 +640,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getOutput(Class<T> c) {
-		return (T)output;
+		return (T)getRawOutput();
 	}
 
 	/**
@@ -665,5 +659,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		if (os != null)
 			os.flush();
 		super.flushBuffer();
+	}
+
+	private Object getRawOutput() {
+		return output.isPresent() ? output.get().orElse(null) : null;
 	}
 }

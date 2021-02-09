@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static java.util.Optional.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -466,25 +468,19 @@ public class RestCall {
 	}
 
 	/**
-	 * Shortcut for calling <c>getRestResponse().hasOutput()</c>.
+	 * Returns the output that was set by calling {@link RestResponse#setOutput(Object)}.
+	 * 
+	 * <p>
+	 * If it's empty, then {@link RestResponse#setOutput(Object)} wasn't called.
+	 * <br>If it's not empty but contains an empty, then <c>response.setObject(<jk>null</jk>)</c> was called.
+	 * <br>Otherwise, {@link RestResponse#setOutput(Object)} was called with a non-null value.
 	 *
-	 * @return <jk>true</jk> if response has output.
+	 * @return The output object.  Never <jk>null</jk>.
 	 */
-	public boolean hasOutput() {
-		if (rres != null)
-			return rres.hasOutput();
-		return false;
-	}
-
-	/**
-	 * Shortcut for calling <c>getRestResponse().getOutput()</c>.
-	 *
-	 * @return The response output.
-	 */
-	public Object getOutput() {
+	public Optional<Optional<Object>> getOutput() {
 		if (rres != null)
 			return rres.getOutput();
-		return null;
+		return rres == null ? empty() : rres.getOutput();
 	}
 
 	/**

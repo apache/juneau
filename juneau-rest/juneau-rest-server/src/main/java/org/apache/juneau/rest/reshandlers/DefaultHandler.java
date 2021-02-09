@@ -59,7 +59,8 @@ public class DefaultHandler implements ResponseHandler {
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		HttpPartSchema schema = null;
 
-		Object o = res.getOutput();
+		Optional<Optional<Object>> output = res.getOutput();
+		Object o = output.isPresent() ? output.get().orElse(null) : null;
 
 		ResponseBeanMeta rm = res.getResponseMeta();
 		if (rm == null)
@@ -68,11 +69,12 @@ public class DefaultHandler implements ResponseHandler {
 		if (rm != null) {
 
 			boolean isThrowable = rm.getClassMeta().isType(Throwable.class);
-			if (isThrowable) {
+			if (isThrowable && o != null) {
+				Throwable t = (Throwable)o;
 				res.setHeaderSafe("Exception-Name", rm.getClassMeta().getName());
-				res.setHeaderSafe("Exception-Message", ((Throwable)o).getMessage());
+				res.setHeaderSafe("Exception-Message", t.getMessage());
 				if (req.isDebug())
-					((Throwable)o).printStackTrace();
+					t.printStackTrace();
 			}
 
 			ResponseBeanPropertyMeta stm = rm.getStatusMethod();

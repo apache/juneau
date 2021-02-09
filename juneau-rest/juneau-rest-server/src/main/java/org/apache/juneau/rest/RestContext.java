@@ -6733,7 +6733,7 @@ public class RestContext extends BeanContext {
 				handleNotFound(call);
 			}
 
-			if (call.hasOutput()) {
+			if (call.getOutput().isPresent()) {
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
 				handleResponse(call);
@@ -6791,7 +6791,7 @@ public class RestContext extends BeanContext {
 			if (h.handle(req, res))
 				return;
 
-		Object output = res.getOutput();
+		Object output = res.getOutput().get().orElse(null);
 		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
 	}
 
