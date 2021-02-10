@@ -27,7 +27,7 @@ import org.apache.juneau.assertions.*;
  * 		.assertStatus().code().isAny(200,404);
  * </p>
  */
-public class RestResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
+public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 
 	private final StatusLine statusLine;
 
@@ -37,7 +37,7 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @param statusLine The response status line.
 	 * @param returns The object to return after the test.
 	 */
-	public RestResponseStatusLineAssertion(StatusLine statusLine, RestResponse returns) {
+	public ResponseStatusLineAssertion(StatusLine statusLine, RestResponse returns) {
 		super(null, returns);
 		this.statusLine = statusLine;
 	}

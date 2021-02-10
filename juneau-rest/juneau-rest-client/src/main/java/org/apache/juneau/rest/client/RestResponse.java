@@ -51,7 +51,7 @@ public class RestResponse implements HttpResponse {
 	private final HttpResponse response;
 	private final Parser parser;
 	HttpPartParserSession partParser;
-	private RestResponseBody responseBody;
+	private ResponseBody responseBody;
 	private boolean isClosed;
 
 	/**
@@ -67,7 +67,7 @@ public class RestResponse implements HttpResponse {
 		this.request = request;
 		this.parser = parser;
 		this.response = response == null ? new BasicHttpResponse(null, 0, null) : response;
-		this.responseBody = new RestResponseBody(client, request, this, parser);
+		this.responseBody = new ResponseBody(client, request, this, parser);
 		this.partParser = client.getPartParserSession();
 	}
 
@@ -176,8 +176,8 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public RestResponseStatusLineAssertion assertStatus() throws RestCallException {
-		return new RestResponseStatusLineAssertion(getStatusLine(), this);
+	public ResponseStatusLineAssertion assertStatus() throws RestCallException {
+		return new ResponseStatusLineAssertion(getStatusLine(), this);
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The header value, or <jk>null</jk> if header was not found.
 	 */
 	public String getStringHeader(String name) {
-		return getHeader(name).asString();
+		return getResponseHeader(name).asString();
 	}
 
 	/**
@@ -221,21 +221,21 @@ public class RestResponse implements HttpResponse {
 	 * @return The header value, or the default if header was not found.
 	 */
 	public String getStringHeader(String name, String def) {
-		return getHeader(name).asStringOrElse(def);
+		return getResponseHeader(name).asStringOrElse(def);
 	}
 
 	/**
 	 * Returns the last header with the specified name.
 	 *
 	 * Unlike {@link #getFirstHeader(String)} and {@link #getLastHeader(String)}, this method returns an empty
-	 * {@link RestResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
+	 * {@link ResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
 	 * in fluent calls.
 	 *
 	 * @param name The header name.
 	 * @return The header.  Never <jk>null</jk>.
 	 */
-	public RestResponseHeader getHeader(String name) {
-		return new RestResponseHeader(request, this, getLastHeader(name)).parser(partParser);
+	public ResponseHeader getResponseHeader(String name) {
+		return new ResponseHeader(request, this, getLastHeader(name)).parser(partParser);
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public ContentType getContentType() throws RestCallException {
-		return getHeader("Content-Type").as(ContentType.class);
+		return getResponseHeader("Content-Type").as(ContentType.class);
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentStringAssertion<RestResponse> assertStringHeader(String name) {
-		return getHeader(name).assertString();
+		return getResponseHeader(name).assertString();
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentIntegerAssertion<RestResponse> assertIntegerHeader(String name) {
-		return getHeader(name).assertInteger();
+		return getResponseHeader(name).assertInteger();
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentLongAssertion<RestResponse> assertLongHeader(String name) {
-		return getHeader(name).assertLong();
+		return getResponseHeader(name).assertLong();
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentZonedDateTimeAssertion<RestResponse> assertDateHeader(String name) {
-		return getHeader(name).assertDate();
+		return getResponseHeader(name).assertDate();
 	}
 
 	/**
@@ -396,7 +396,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentListAssertion<RestResponse> assertCsvArrayHeader(String name) {
-		return getHeader(name).assertCsvArray();
+		return getResponseHeader(name).assertCsvArray();
 	}
 
 	/**
@@ -443,7 +443,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentStringAssertion<RestResponse> assertContentType() {
-		return getHeader("Content-Type").assertString();
+		return getResponseHeader("Content-Type").assertString();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -457,7 +457,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @return The body of the response.
 	 */
-	public RestResponseBody getBody() {
+	public ResponseBody getBody() {
 		return responseBody;
 	}
 
@@ -520,7 +520,7 @@ public class RestResponse implements HttpResponse {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -548,7 +548,7 @@ public class RestResponse implements HttpResponse {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -565,7 +565,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * <p>
 	 * <p>
-	 * Combines the functionality of {@link RestResponseBody#as(Class)} with {@link #assertBody()} by converting the body to the specified
+	 * Combines the functionality of {@link ResponseBody#as(Class)} with {@link #assertBody()} by converting the body to the specified
 	 * bean and then serializing it to simplified JSON for easy string comparison.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -581,7 +581,7 @@ public class RestResponse implements HttpResponse {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -626,7 +626,7 @@ public class RestResponse implements HttpResponse {
 					String name = pm.getPartName();
 					ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
 					if (pt == RESPONSE_HEADER)
-						return getHeader(name).parser(pp).schema(schema).as(type);
+						return getResponseHeader(name).parser(pp).schema(schema).as(type);
 					if (pt == RESPONSE_STATUS)
 						return getStatusCode();
 					return getBody().schema(schema).as(type);
@@ -749,7 +749,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The response entity.  Never <jk>null</jk>.
 	 */
 	@Override /* HttpResponse */
-	public RestResponseBody getEntity() {
+	public ResponseBody getEntity() {
 		return responseBody;
 	}
 
@@ -767,7 +767,7 @@ public class RestResponse implements HttpResponse {
 	@Override /* HttpResponse */
 	public void setEntity(HttpEntity entity) {
 		response.setEntity(entity);
-		this.responseBody = new RestResponseBody(client, request, this, parser);
+		this.responseBody = new ResponseBody(client, request, this, parser);
 	}
 
 	/**
@@ -827,11 +827,11 @@ public class RestResponse implements HttpResponse {
 	 * @return All the headers with a specified name of this message.
 	 */
 	@Override /* HttpMessage */
-	public RestResponseHeader[] getHeaders(String name) {
+	public ResponseHeader[] getHeaders(String name) {
 		Header[] a = response.getHeaders(name);
-		RestResponseHeader[] b = new RestResponseHeader[a.length];
+		ResponseHeader[] b = new ResponseHeader[a.length];
 		for (int i = 0; i < a.length; i++)
-			b[i] = new RestResponseHeader(request, this, a[i]).parser(partParser);
+			b[i] = new ResponseHeader(request, this, a[i]).parser(partParser);
 		return b;
 	}
 
@@ -845,9 +845,9 @@ public class RestResponse implements HttpResponse {
 	 * @return The header, or <jk>null</jk> if there is no matching header in the message.
 	 */
 	@Override /* HttpMessage */
-	public RestResponseHeader getFirstHeader(String name) {
+	public ResponseHeader getFirstHeader(String name) {
 		Header h = response.getFirstHeader(name);
-		return h == null ? null : new RestResponseHeader(request, this, h).parser(partParser);
+		return h == null ? null : new ResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**
@@ -860,9 +860,9 @@ public class RestResponse implements HttpResponse {
 	 * @return The header, or <jk>null</jk> if there is no matching header in the message.
 	 */
 	@Override /* HttpMessage */
-	public RestResponseHeader getLastHeader(String name) {
+	public ResponseHeader getLastHeader(String name) {
 		Header h = response.getLastHeader(name);
-		return h == null ? null : new RestResponseHeader(request, this, h).parser(partParser);
+		return h == null ? null : new ResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**
@@ -873,11 +873,11 @@ public class RestResponse implements HttpResponse {
 	 * @return All the headers of this message.
 	 */
 	@Override /* HttpMessage */
-	public RestResponseHeader[] getAllHeaders() {
+	public ResponseHeader[] getAllHeaders() {
 		Header[] a = response.getAllHeaders();
-		RestResponseHeader[] b = new RestResponseHeader[a.length];
+		ResponseHeader[] b = new ResponseHeader[a.length];
 		for (int i = 0; i < a.length; i++)
-			b[i] = new RestResponseHeader(request, this, a[i]).parser(partParser);
+			b[i] = new ResponseHeader(request, this, a[i]).parser(partParser);
 		return b;
 	}
 

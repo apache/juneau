@@ -223,11 +223,11 @@ public class RestClient_Response_Body_Test {
 		testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(x4,ABean.class);
 		assertObject(x4.get()).asJson().is("{f:1}");
 
-		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(RestResponseBody.class);
-		assertTrue(x5 instanceof RestResponseBody);
+		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(ResponseBody.class);
+		assertTrue(x5 instanceof ResponseBody);
 
 		HttpEntity x6 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(HttpEntity.class);
-		assertTrue(x6 instanceof RestResponseBody);
+		assertTrue(x6 instanceof ResponseBody);
 
 		plainTestClient().entity(stringEntity("foo")).get().run().getBody().assertObject(A7a.class).passes(x->((A7a)x).x.equals("foo"));
 		plainTestClient().entity(stringEntity("foo")).get().run().getBody().assertObject(A7b.class).passes(x->((A7b)x).x.equals("foo"));
@@ -322,10 +322,10 @@ public class RestClient_Response_Body_Test {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void b01_httpEntityMethods() throws Exception {
-		RestResponseBody x1 = testClient().entity(stringEntity("foo")).get().run().getBody();
+		ResponseBody x1 = testClient().entity(stringEntity("foo")).get().run().getBody();
 		assertTrue(x1.isRepeatable());
 
-		RestResponseBody x2 = testClient().entity(inputStreamEntity("foo")).get().run().getBody();
+		ResponseBody x2 = testClient().entity(inputStreamEntity("foo")).get().run().getBody();
 		assertFalse(x2.isRepeatable());
 		assertLong(x2.getContentLength()).is(-1l);
 		x2.cache().asString();

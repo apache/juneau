@@ -228,13 +228,13 @@ public class RestClient_Test {
 				return super.execute(request, conn, context);
 			}
 		};
-		client().requestExecutor(x).build().get("/echo").run().assertBody().contains("HTTP GET /echo");
+		client().requestExecutor(x).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1");
 		assertTrue(b1.get());
 	}
 
 	@Test
 	public void c04_httpClient_defaultHeaders() throws RestCallException {
-		client().defaultHeaders(AList.of(new org.apache.http.message.BasicHeader("Foo","bar"))).build().get("/echo").run().assertBody().contains("HTTP GET /echo","Foo: bar");
+		client().defaultHeaders(AList.of(new org.apache.http.message.BasicHeader("Foo","bar"))).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1","Foo: bar");
 	}
 
 	@Test

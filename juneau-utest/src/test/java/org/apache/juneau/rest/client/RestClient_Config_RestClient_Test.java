@@ -127,12 +127,12 @@ public class RestClient_Config_RestClient_Test {
 		RestClient x1 = client().executorService(es,true).build();
 
 		assertEquals(es,x1.getExecutorService());
-		x1.get("/echo").runFuture().get().assertCode().is(200).assertBody().contains("HTTP GET /echo");
+		x1.get("/echo").runFuture().get().assertCode().is(200).assertBody().contains("GET /echo HTTP/1.1");
 
 		es = null;
 		RestClient x2 = client().executorService(es,true).build();
 		assertNotNull(x2.getExecutorService());
-		x2.get("/echo").runFuture().get().assertCode().is(200).assertBody().contains("HTTP GET /echo");
+		x2.get("/echo").runFuture().get().assertCode().is(200).assertBody().contains("GET /echo HTTP/1.1");
 	}
 
 	@Test
@@ -482,13 +482,13 @@ public class RestClient_Config_RestClient_Test {
 	@Test
 	public void a12_partSerializer_partParser() throws Exception {
 		RestClient x = client(A12.class).header("Foo",bean).partSerializer(A12a.class).partParser(A12b.class).build();
-		ABean b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
+		ABean b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}",b.toString());
-		b = x.get().header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
+		b = x.get().header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}",b.toString());
 
 		x = client(A12.class).header("Foo",bean).partSerializer(new A12a()).partParser(new A12b()).build();
-		b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
+		b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}",b.toString());
 	}
 

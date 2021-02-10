@@ -20,6 +20,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static java.lang.Integer.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -35,7 +36,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
+import org.apache.http.message.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.cp.Messages;
@@ -214,9 +217,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return A description string of the request.
 	 */
-	public String getDescription() {
-		String qs = getQueryString();
-		return "HTTP " + getMethod() + " " + getRequestURI() + (qs == null ? "" : "?" + qs);
+	public RequestLine getRequestLine() {
+		String x = inner.getProtocol();
+		int i = x.indexOf('/');
+		int j = x.indexOf('.', i);
+		ProtocolVersion pv = new ProtocolVersion(x.substring(0,i), parseInt(x.substring(i+1,j)), parseInt(x.substring(j+1)));
+		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1296,7 +1302,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder("\n").append(getDescription()).append("\n");
+		StringBuilder sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");
 		for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
 			String h = e.nextElement();

@@ -217,7 +217,7 @@ public class RestClient_Response_Test {
 		assertNull(r.getFirstHeader("Foo"));
 
 		r.setHeader(BasicHeader.of("Foo","quuux"));
-		r.getHeader("Foo").assertString().is("quuux");
+		r.getResponseHeader("Foo").assertString().is("quuux");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

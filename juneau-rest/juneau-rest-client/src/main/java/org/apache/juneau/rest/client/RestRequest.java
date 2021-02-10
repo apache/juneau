@@ -534,7 +534,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<ul>
 	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
 	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
-	 * 		<li>Typically the {@link RestResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
+	 * 		<li>Typically the {@link ResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
@@ -2967,7 +2967,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <p>
 	 * Use this method if you're only interested in the status line of the response and not the response entity.
-	 * Attempts to call any of the methods on the response object that retrieve the body (e.g. {@link RestResponseBody#asReader()}
+	 * Attempts to call any of the methods on the response object that retrieve the body (e.g. {@link ResponseBody#asReader()}
 	 * will cause a {@link RestCallException} to be thrown.
 	 *
 	 * <ul class='notes'>

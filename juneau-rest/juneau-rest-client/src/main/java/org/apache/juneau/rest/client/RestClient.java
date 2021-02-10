@@ -134,9 +134,9 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient} <jk>extends</jk> {@link HttpClient}, creates {@link RestRequest} objects.
  * 	<li class='jc'>{@link RestRequest} <jk>extends</jk> {@link HttpUriRequest}, creates {@link RestResponse} objects.
- * 	<li class='jc'>{@link RestResponse} <jk>extends</jk> {@link HttpResponse}, creates {@link RestResponseBody} and {@link RestResponseHeader} objects.
- * 	<li class='jc'>{@link RestResponseBody} <jk>extends</jk> {@link HttpEntity}
- * 	<li class='jc'>{@link RestResponseHeader} <jk>extends</jk> {@link Header}
+ * 	<li class='jc'>{@link RestResponse} <jk>extends</jk> {@link HttpResponse}, creates {@link ResponseBody} and {@link ResponseHeader} objects.
+ * 	<li class='jc'>{@link ResponseBody} <jk>extends</jk> {@link HttpEntity}
+ * 	<li class='jc'>{@link ResponseHeader} <jk>extends</jk> {@link Header}
  * </ul>
  *
  *
@@ -190,7 +190,7 @@ import org.apache.juneau.utils.*;
  * <p class='w900'>
  * The distinction between the two methods is that {@link RestRequest#complete() complete()} automatically consumes the response body and
  * {@link RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
- * for reuse!  The {@link InputStream InputStreams} returned by the {@link RestResponseBody} object are auto-closing once
+ * for reuse!  The {@link InputStream InputStreams} returned by the {@link ResponseBody} object are auto-closing once
  * they are exhausted, so it is often not necessary to explicitly close them.
  *
  * <p class='w900'>
@@ -518,7 +518,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jm'><c>{@link RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link StatusLine}</c>
  * 		<li class='jm'><c>{@link RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link RestResponseStatusLineAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link ResponseStatusLineAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -574,19 +574,19 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponse#getHeader(String) getHeader(String)} <jk>returns</jk> {@link RestResponseHeader}</c>
- * 		<li class='jm'><c>{@link RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link RestResponseHeader}[]</c>
- * 		<li class='jm'><c>{@link RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link RestResponseHeader}</c>
- * 		<li class='jm'><c>{@link RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link RestResponseHeader}</c>
- * 		<li class='jm'><c>{@link RestResponse#getAllHeaders() getAllHeaders()} <jk>returns</jk> {@link RestResponseHeader}[]</c>
+ * 		<li class='jm'><c>{@link RestResponse#getResponseHeader(String) getHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link ResponseHeader}[]</c>
+ * 		<li class='jm'><c>{@link RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getAllHeaders() getAllHeaders()} <jk>returns</jk> {@link ResponseHeader}[]</c>
  * 		<li class='jm'><c>{@link RestResponse#getStringHeader(String) getStringHeader(String)} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link RestResponse#containsHeader(String) containsHeader(String)} <jk>returns</jk> <jk>boolean</jk></c>
  * 	</ul>
  * </ul>
  *
  * <p class='w900'>
- * Unlike {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)}, the {@link RestResponse#getHeader(String)}
- * method returns an empty {@link RestResponseHeader} object instead of returning <jk>null</jk>.
+ * Unlike {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)}, the {@link RestResponse#getResponseHeader(String)}
+ * method returns an empty {@link ResponseHeader} object instead of returning <jk>null</jk>.
  * This allows it to be used more easily in fluent calls.
  *
  * <h5 class='figure'>Example:</h5>
@@ -596,36 +596,36 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <p class='w900'>
- * The {@link RestResponseHeader} class extends from the HttpClient {@link Header} class and provides several convenience
+ * The {@link ResponseHeader} class extends from the HttpClient {@link Header} class and provides several convenience
  * methods:
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RestResponseHeader}
+ * 	<li class='jc'>{@link ResponseHeader}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptionalString() asOptionalString()} <jk>returns</jk> Optional&lt;String&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asStringOrElse(String) asStringOrElse(String)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Type,Type...) asOptional(Type,Type...)} <jk>returns</jk> Optional&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Class) asOptional(Class&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link BasicHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link BasicIntegerHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link BasicStringHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link BasicLongHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link BasicDateHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link BasicCsvArrayHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asEntityTagArrayHeader() asEntityValidatorArrayHeader()} <jk>returns</jk> {@link BasicEntityTagArrayHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asStringRangeArrayHeader() asRangeArrayHeader()} <jk>returns</jk> {@link BasicStringRangeArrayHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link BasicUriHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asString() asString()} <jk>returns</jk> String</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asOptionalString() asOptionalString()} <jk>returns</jk> Optional&lt;String&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asStringOrElse(String) asStringOrElse(String)} <jk>returns</jk> String</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asOptional(Type,Type...) asOptional(Type,Type...)} <jk>returns</jk> Optional&lt;T&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asOptional(Class) asOptional(Class&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link BasicHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link BasicIntegerHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link BasicStringHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link BasicLongHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link BasicDateHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link BasicCsvArrayHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asEntityTagArrayHeader() asEntityValidatorArrayHeader()} <jk>returns</jk> {@link BasicEntityTagArrayHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asStringRangeArrayHeader() asRangeArrayHeader()} <jk>returns</jk> {@link BasicStringRangeArrayHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link BasicUriHeader}</c>
  * 	</ul>
  * </ul>
  *
  * <p>
- * The {@link RestResponseHeader#schema(HttpPartSchema)} method allows you to perform parsing of OpenAPI formats for
+ * The {@link ResponseHeader#schema(HttpPartSchema)} method allows you to perform parsing of OpenAPI formats for
  * header parts.
  *
  * <h5 class='figure'>Example:</h5>
@@ -641,12 +641,12 @@ import org.apache.juneau.utils.*;
  * Assertion methods are also provided for fluent-style calls:
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RestResponseHeader}
+ * 	<li class='jc'>{@link ResponseHeader}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link FluentIntegerAssertion}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link FluentLongAssertion}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertDate() assertDate()} <jk>returns</jk> {@link FluentDateAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link FluentIntegerAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link FluentLongAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#assertDate() assertDate()} <jk>returns</jk> {@link FluentDateAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -672,33 +672,33 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponse#getBody() getBody()} <jk>returns</jk> {@link RestResponseBody}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getBody() getBody()} <jk>returns</jk> {@link ResponseBody}</c>
  * 	</ul>
  * </ul>
  *
  * <p class='w900'>
- * The {@link RestResponseBody} class extends from the HttpClient {@link HttpEntity} class and provides several convenience
+ * The {@link ResponseBody} class extends from the HttpClient {@link HttpEntity} class and provides several convenience
  * methods:
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RestResponseBody}
+ * 	<li class='jc'>{@link ResponseBody}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponseBody#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asReader() asReader()} <jk>returns</jk> Reader</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asPojoRest(Class) asPojoRest(Class&lt;?&gt;)} <jk>returns</jk> {@link PojoRest}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asPojoRest() asPojoRest()} <jk>returns</jk> {@link PojoRest}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asReader() asReader()} <jk>returns</jk> Reader</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
+ * 		<li class='jm'><c>{@link ResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asString() asString()} <jk>returns</jk> String</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asPojoRest(Class) asPojoRest(Class&lt;?&gt;)} <jk>returns</jk> {@link PojoRest}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asPojoRest() asPojoRest()} <jk>returns</jk> {@link PojoRest}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 	</ul>
  * </ul>
  *
@@ -739,9 +739,9 @@ import org.apache.juneau.utils.*;
  *
  * <p class='w900'>
  * The response body can only be consumed once unless it has been cached into memory.  In many cases, the body is
- * automatically cached when using the assertions methods or methods such as {@link RestResponseBody#asString()}.
+ * automatically cached when using the assertions methods or methods such as {@link ResponseBody#asString()}.
  * However, methods that involve reading directly from the input stream cannot be called twice.
- * In these cases, the {@link RestResponse#cacheBody()} and {@link RestResponseBody#cache()} methods are provided
+ * In these cases, the {@link RestResponse#cacheBody()} and {@link ResponseBody#cache()} methods are provided
  * to cache the response body in memory so that you can perform several operations against it.
  *
  * <p class='bcode w800'>
@@ -758,11 +758,11 @@ import org.apache.juneau.utils.*;
  * Assertion methods are also provided for fluent-style calls:
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RestResponseBody}
+ * 	<li class='jc'>{@link ResponseBody}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponseBody#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertObject(Class) assertObject(Class&lt;?&gt;)} <jk>returns</jk> {@link FluentObjectAssertion}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertBytes() assertBytes()} <jk>returns</jk> {@link FluentByteArrayAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#assertObject(Class) assertObject(Class&lt;?&gt;)} <jk>returns</jk> {@link FluentObjectAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#assertBytes() assertBytes()} <jk>returns</jk> {@link FluentByteArrayAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -1205,7 +1205,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#runFuture()}
 	 * 	<li class='jm'>{@link RestRequest#completeFuture()}
-	 * 	<li class='jm'>{@link RestResponseBody#asFuture(Class)} (and similar methods)
+	 * 	<li class='jm'>{@link ResponseBody#asFuture(Class)} (and similar methods)
 	 * </ul>
 	 *
 	 * <p>

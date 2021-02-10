@@ -53,38 +53,38 @@ public class RestClient_Paths_Test {
 
 	@Test
 	public void a01_path_String_Object() throws Exception {
-		client().build().get("/echo/{x}").path("x",new A1().init()).run().assertBody().contains("HTTP GET /echo/x=1");
-		client().build().get("/echo/*").path("/*",new A1().init()).run().assertBody().contains("HTTP GET /echo/x=1");
+		client().build().get("/echo/{x}").path("x",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
+		client().build().get("/echo/*").path("/*",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
 		assertThrown(()->client().build().get("/echo/{x}").path("y","foo")).is("Path variable {y} was not found in path.");
 	}
 
 	@Test
 	public void a02_path_NameValuePair() throws Exception {
-		client().build().get("/echo/{x}").path(pair("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
+		client().build().get("/echo/{x}").path(pair("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
 	}
 
 	@Test
 	public void a03_paths_Object() throws Exception {
-		client().build().get("/echo/{x}").paths(pair("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		client().build().get("/echo/{x}").paths(AList.of(pair("x","foo"))).run().assertBody().contains("HTTP GET /echo/foo");
-		client().build().get("/echo/{x}").paths(pairs("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		client().build().get("/echo/{x}").paths(OMap.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		client().build().get("/echo/{x}").paths((Object)new NameValuePair[]{pair("x","foo")}).run().assertBody().contains("HTTP GET /echo/foo");
-		client().build().get("/echo/{x}").paths(new A1().init()).run().assertBody().contains("HTTP GET /echo/1");
+		client().build().get("/echo/{x}").paths(pair("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths(AList.of(pair("x","foo"))).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths(pairs("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths(OMap.of("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths((Object)new NameValuePair[]{pair("x","foo")}).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths(new A1().init()).run().assertBody().contains("GET /echo/1 HTTP/1.1");
 		assertThrown(()->client().build().get("/echo/{x}").paths("x")).is("Invalid type passed to paths(): java.lang.String");
-		client().build().get("/echo/{x}").paths((Object)null).run().assertBody().contains("HTTP GET /echo/%7Bx%7D");
+		client().build().get("/echo/{x}").paths((Object)null).run().assertBody().contains("GET /echo/%7Bx%7D HTTP/1.1");
 	}
 
 	@Test
 	public void a04_pathPairs_Objects() throws Exception {
-		client().build().get("/echo/{x}").pathPairs("x",1).run().assertBody().contains("HTTP GET /echo/1");
+		client().build().get("/echo/{x}").pathPairs("x",1).run().assertBody().contains("GET /echo/1 HTTP/1.1");
 		assertThrown(()->client().build().get("/echo/{x}").pathPairs("x")).is("Odd number of parameters passed into pathPairs()");
 	}
 
 	@Test
 	public void a05_path_String_Object_Schema() throws Exception {
 		String[] a = new String[]{"foo","bar"};
-		client().build().get("/echo/{x}").path("x",a,T_ARRAY_PIPES).run().assertBody().contains("HTTP GET /echo/foo%7Cbar");
+		client().build().get("/echo/{x}").path("x",a,T_ARRAY_PIPES).run().assertBody().contains("GET /echo/foo%7Cbar HTTP/1.1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

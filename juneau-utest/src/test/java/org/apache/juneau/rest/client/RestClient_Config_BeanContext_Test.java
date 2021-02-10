@@ -99,7 +99,7 @@ public class RestClient_Config_BeanContext_Test {
 	public void a02_beanConstructorVisibility() throws Exception {
 		RestResponse x = client(A2b.class).beanConstructorVisibility(Visibility.PROTECTED).build().post("/test",new A2a(1)).header("X",new A2a(1)).run().cacheBody().assertBody().is("1").assertStringHeader("X").is("1");
 		assertEquals(1,x.getBody().as(A2a.class).f);
-		assertEquals(1,x.getHeader("X").as(A2a.class).f);
+		assertEquals(1,x.getResponseHeader("X").as(A2a.class).f);
 	}
 
 	public static class A3 {
@@ -121,7 +121,7 @@ public class RestClient_Config_BeanContext_Test {
 	public void a03_beanFieldVisibility() throws Exception {
 		RestResponse x = client(A2b.class).beanFieldVisibility(Visibility.PROTECTED).build().post("/test",A3.get()).header("X",A3.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
 		assertEquals(2,x.getBody().as(A3.class).f2);
-		assertEquals(2,x.getHeader("X").as(A3.class).f2);
+		assertEquals(2,x.getResponseHeader("X").as(A3.class).f2);
 	}
 
 	public static interface A4a {
@@ -157,23 +157,23 @@ public class RestClient_Config_BeanContext_Test {
 	public void a04_beanFilters() throws Exception {
 		RestResponse x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
-		assertEquals(0,x.getHeader("X").as(A4b.class).f2);
+		assertEquals(0,x.getResponseHeader("X").as(A4b.class).f2);
 
 		x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
-		assertEquals(0,x.getHeader("X").as(A4b.class).f2);
+		assertEquals(0,x.getResponseHeader("X").as(A4b.class).f2);
 
 		x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
-		assertEquals(0,x.getHeader("X").as(A4b.class).f2);
+		assertEquals(0,x.getResponseHeader("X").as(A4b.class).f2);
 
 		x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
-		assertEquals(0,x.getHeader("X").as(A4b.class).f2);
+		assertEquals(0,x.getResponseHeader("X").as(A4b.class).f2);
 
 		x = client(A2b.class).interfaces(A4a.class).build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f3:3}").assertStringHeader("X").is("f3=3");
 		assertEquals(3,x.getBody().as(A4b.class).f3);
-		assertEquals(3,x.getHeader("X").as(A4b.class).f3);
+		assertEquals(3,x.getResponseHeader("X").as(A4b.class).f3);
 	}
 
 	public static class A5  {
@@ -206,7 +206,7 @@ public class RestClient_Config_BeanContext_Test {
 	public void a05_beanMethodVisibility() throws Exception {
 		RestResponse x = client(A2b.class).beanMethodVisibility(Visibility.PROTECTED).build().post("/test",A5.get()).header("X",A5.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
 		assertEquals(2,x.getBody().as(A5.class).f2);
-		assertEquals(2,x.getHeader("X").as(A5.class).f2);
+		assertEquals(2,x.getResponseHeader("X").as(A5.class).f2);
 	}
 
 	public static class A6 {}
@@ -282,15 +282,15 @@ public class RestClient_Config_BeanContext_Test {
 
 		x = client(A2b.class).beanPropertiesReadOnly(OMap.of("09","f2")).build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
-		assertEquals("1/0",x.getHeader("X").as(A9.class).toString());
+		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).toString());
 
 		x = client(A2b.class).beanPropertiesReadOnly(A9.class,"f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
-		assertEquals("1/0",x.getHeader("X").as(A9.class).toString());
+		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).toString());
 
 		x = client(A2b.class).beanPropertiesReadOnly("O9","f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
-		assertEquals("1/0",x.getHeader("X").as(A9.class).toString());
+		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).toString());
 	}
 
 	@Test
@@ -299,15 +299,15 @@ public class RestClient_Config_BeanContext_Test {
 
 		x = client(A2b.class).beanPropertiesWriteOnly(OMap.of("A9","f2")).build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
-		assertEquals("1/0",x.getHeader("X").as(A9.class).toString());
+		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).toString());
 
 		x = client(A2b.class).beanPropertiesWriteOnly(A9.class,"f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
-		assertEquals("1/0",x.getHeader("X").as(A9.class).toString());
+		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).toString());
 
 		x = client(A2b.class).beanPropertiesWriteOnly("A9","f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
-		assertEquals("1/0",x.getHeader("X").as(A9.class).toString());
+		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).toString());
 	}
 
 	@Test

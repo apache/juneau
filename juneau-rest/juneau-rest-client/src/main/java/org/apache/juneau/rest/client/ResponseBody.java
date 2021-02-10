@@ -47,7 +47,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
-public class RestResponseBody implements HttpEntity {
+public class ResponseBody implements HttpEntity {
 
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
@@ -68,12 +68,12 @@ public class RestResponseBody implements HttpEntity {
 
 		@Override
 		public Header getContentType() {
-			return RestResponseHeader.NULL_HEADER;
+			return ResponseHeader.NULL_HEADER;
 		}
 
 		@Override
 		public Header getContentEncoding() {
-			return RestResponseHeader.NULL_HEADER;
+			return ResponseHeader.NULL_HEADER;
 		}
 
 		@Override
@@ -111,7 +111,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @param response The response object.
 	 * @param parser The parser to use to consume the body.  Can be <jk>null</jk>.
 	 */
-	public RestResponseBody(RestClient client, RestRequest request, RestResponse response, Parser parser) {
+	public ResponseBody(RestClient client, RestRequest request, RestResponse response, Parser parser) {
 		this.client = client;
 		this.request = request;
 		this.response = response;
@@ -133,7 +133,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	The new part parser to use for this body.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseBody parser(Parser value) {
+	public ResponseBody parser(Parser value) {
 		this.parser = value;
 		return this;
 	}
@@ -147,7 +147,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @param value The schema.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseBody schema(HttpPartSchema value) {
+	public ResponseBody schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
@@ -165,7 +165,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseBody cache() {
+	public ResponseBody cache() {
 		this.cached = true;
 		return this;
 	}
@@ -511,7 +511,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
-	 * 			<li>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 			<li>{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
@@ -622,7 +622,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
-	 * 			<li>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 			<li>{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
@@ -745,7 +745,7 @@ public class RestResponseBody implements HttpEntity {
 		try {
 			Class<?> ic = type.getInnerClass();
 
-			if (ic.equals(RestResponseBody.class) || ic.equals(HttpEntity.class))
+			if (ic.equals(ResponseBody.class) || ic.equals(HttpEntity.class))
 				return (T)this;
 
 			if (ic.equals(Reader.class))
@@ -770,7 +770,7 @@ public class RestResponseBody implements HttpEntity {
 				return (T)r;
 			}
 
-			String ct = firstNonEmpty(response.getHeader("Content-Type").asStringOrElse("text/plain"));
+			String ct = firstNonEmpty(response.getResponseHeader("Content-Type").asStringOrElse("text/plain"));
 
 			if (parser == null)
 				parser = client.getMatchingParser(ct);
@@ -1612,7 +1612,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1722,8 +1722,8 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The <c>Content-Type</c> header for this entity, or <jk>null</jk> if the content type is unknown.
 	 */
 	@Override /* HttpEntity */
-	public RestResponseHeader getContentType() {
-		return new RestResponseHeader(request, response, entity.getContentType());
+	public ResponseHeader getContentType() {
+		return new ResponseHeader(request, response, entity.getContentType());
 	}
 
 	/**
@@ -1736,8 +1736,8 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.
 	 */
 	@Override /* HttpEntity */
-	public RestResponseHeader getContentEncoding() {
-		return new RestResponseHeader(request, response, entity.getContentEncoding());
+	public ResponseHeader getContentEncoding() {
+		return new ResponseHeader(request, response, entity.getContentEncoding());
 	}
 
 	/**

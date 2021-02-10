@@ -612,7 +612,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
 	 * 			bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
-	 * 		<li>Typically the {@link RestResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
+	 * 		<li>Typically the {@link ResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
@@ -2537,7 +2537,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#runFuture()}
 	 * 	<li class='jm'>{@link RestRequest#completeFuture()}
-	 * 	<li class='jm'>{@link RestResponseBody#asFuture(Class)} (and similar methods)
+	 * 	<li class='jm'>{@link ResponseBody#asFuture(Class)} (and similar methods)
 	 * </ul>
 	 *
 	 * <p>

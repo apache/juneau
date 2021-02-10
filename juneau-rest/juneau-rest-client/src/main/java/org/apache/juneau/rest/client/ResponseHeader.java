@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
-public class RestResponseHeader implements Header {
+public class ResponseHeader implements Header {
 
 	static final Header NULL_HEADER = new Header() {
 
@@ -73,7 +73,7 @@ public class RestResponseHeader implements Header {
 	 * @param response The response object.
 	 * @param header The wrapped header.  Can be <jk>null</jk>.
 	 */
-	public RestResponseHeader(RestRequest request, RestResponse response, Header header) {
+	public ResponseHeader(RestRequest request, RestResponse response, Header header) {
 		this.request = request;
 		this.response = response;
 		this.header = header == null ? NULL_HEADER : header;
@@ -94,7 +94,7 @@ public class RestResponseHeader implements Header {
 	 * 	The part schema.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseHeader schema(HttpPartSchema value) {
+	public ResponseHeader schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
@@ -110,7 +110,7 @@ public class RestResponseHeader implements Header {
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseHeader parser(HttpPartParserSession value) {
+	public ResponseHeader parser(HttpPartParserSession value) {
 		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
 		return this;
 	}
