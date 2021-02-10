@@ -1944,6 +1944,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		}
 	}
 
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/*
 	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.
@@ -2008,11 +2013,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	public int hashCode() {
 		return method.hashCode();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Context */
 	public OMap toMap() {
 		return super.toMap()

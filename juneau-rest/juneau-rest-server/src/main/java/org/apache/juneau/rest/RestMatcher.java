@@ -36,7 +36,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
  *
  * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
  * 		<jk>public</jk> Object doGetWithDNT() {
@@ -51,8 +51,8 @@ import org.apache.juneau.rest.annotation.*;
  *
  * 	<jk>public class</jk> IsDNT <jk>extends</jk> RestMatcher {
  * 		<ja>@Override</ja>
- * 		<jk>public boolean</jk> matches(RestRequest req) {
- * 			<jk>return</jk> req.getHeader(<jk>int</jk>.<jk>class</jk>, <js>"DNT"</js>, 0) == 1;
+ * 		<jk>public boolean</jk> matches(HttpServletRequest <jv>req</jv>) {
+ * 			<jk>return</jk> <js>"1"</js>.equals(<jv>req</jv>.getHeader(<js>"DNT"</js>));
  * 		}
  * 	}
  * </p>

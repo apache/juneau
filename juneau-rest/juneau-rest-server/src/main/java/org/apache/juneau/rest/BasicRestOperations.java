@@ -29,14 +29,12 @@ import org.apache.juneau.rest.annotation.*;
  * Basic REST operation methods.
  */
 @HtmlDocConfig(
-
 	// Basic page navigation links.
 	navlinks={
 		"up: request:/..",
 		"api: servlet:/api",
 		"stats: servlet:/stats"
 	}
-
 )
 @JsonSchemaConfig(
 	// Add descriptions to the following types when not specified:
@@ -47,14 +45,6 @@ import org.apache.juneau.rest.annotation.*;
 	ignoreTypes="Swagger,org.apache.juneau.dto.html5.*",
 	// Use $ref references for bean definitions to reduce duplication in Swagger.
 	useBeanDefs="true"
-)
-@BeanConfig(
-	// POJO swaps to apply to all serializers/parsers on this method.
-	swaps={
-		// Use the SwaggerUI swap when rendering Swagger beans.
-		// This is a per-media-type swap that only applies to text/html requests.
-		SwaggerUI.class
-	}
 )
 public interface BasicRestOperations {
 
@@ -80,6 +70,14 @@ public interface BasicRestOperations {
 		},
 		// Never show aside contents of page inherited from class.
 		aside="NONE"
+	)
+	@BeanConfig(
+		// POJO swaps to apply to all serializers/parsers on this method.
+		swaps={
+			// Use the SwaggerUI swap when rendering Swagger beans.
+			// This is a per-media-type swap that only applies to text/html requests.
+			SwaggerUI.class
+		}
 	)
 	public Swagger getSwagger(RestRequest req);
 
