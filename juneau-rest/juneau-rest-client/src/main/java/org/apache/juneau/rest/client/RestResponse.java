@@ -207,21 +207,10 @@ public class RestResponse implements HttpResponse {
 	 * Shortcut for calling <code>getHeader(name).asString()</code>.
 	 *
 	 * @param name The header name.
-	 * @return The header value, or <jk>null</jk> if header was not found.
+	 * @return The header value, never <jk>null</jk>
 	 */
-	public String getStringHeader(String name) {
+	public Optional<String> getStringHeader(String name) {
 		return getResponseHeader(name).asString();
-	}
-
-	/**
-	 * Shortcut for calling <code>getHeader(name).asStringOrElse(def)</code>.
-	 *
-	 * @param name The header name.
-	 * @param def The default value if the header was not found.
-	 * @return The header value, or the default if header was not found.
-	 */
-	public String getStringHeader(String name, String def) {
-		return getResponseHeader(name).asStringOrElse(def);
 	}
 
 	/**
@@ -245,7 +234,10 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public String getCharacterEncoding() throws RestCallException {
-		String s = getContentType().getParameter("charset");
+		Optional<ContentType> ct = getContentType();
+		String s = null;
+		if (ct.isPresent())
+			s = getContentType().get().getParameter("charset");
 		return StringUtils.isEmpty(s) ? "utf-8" : s;
 	}
 
@@ -258,7 +250,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The response charset.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public ContentType getContentType() throws RestCallException {
+	public Optional<ContentType> getContentType() throws RestCallException {
 		return getResponseHeader("Content-Type").as(ContentType.class);
 	}
 
@@ -626,7 +618,7 @@ public class RestResponse implements HttpResponse {
 					String name = pm.getPartName();
 					ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
 					if (pt == RESPONSE_HEADER)
-						return getResponseHeader(name).parser(pp).schema(schema).as(type);
+						return getResponseHeader(name).parser(pp).schema(schema).as(type).orElse(null);
 					if (pt == RESPONSE_STATUS)
 						return getStatusCode();
 					return getBody().schema(schema).as(type);

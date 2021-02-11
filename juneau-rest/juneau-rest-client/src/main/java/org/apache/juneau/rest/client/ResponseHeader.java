@@ -13,6 +13,8 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static java.util.Optional.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
@@ -133,8 +135,8 @@ public class ResponseHeader implements Header {
 	 *
 	 * @return The value of this header as a string, or <jk>null</jk> if header was not present.
 	 */
-	public String asString() {
-		return getValue();
+	public Optional<String> asString() {
+		return ofNullable(getValue());
 	}
 
 	/**
@@ -149,10 +151,10 @@ public class ResponseHeader implements Header {
 			ClassInfo ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
 			if (cc != null)
-				return cc.invoke(asString());
+				return cc.invoke(getValue());
 			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
 			if (cc != null)
-				return cc.invoke(getName(), asString());
+				return cc.invoke(getName(), getValue());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -247,38 +249,7 @@ public class ResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 */
 	public RestResponse asString(Mutable<String> m) {
-		m.set(asString());
-		return response;
-	}
-
-	/**
-	 * Returns the value of this header as an {@link Optional}.
-	 *
-	 * @return The value of this header as an {@link Optional}, or an empty optional if header was not present.
-	 */
-	public Optional<String> asOptionalString() {
-		return Optional.ofNullable(getValue());
-	}
-
-	/**
-	 * Returns the value of this header as a string with a default value.
-	 *
-	 * @param def The default value.
-	 * @return The value of this header as a string, or the default value if header was not present.
-	 */
-	public String asStringOrElse(String def) {
-		return getValue() == null ? def : getValue();
-	}
-
-	/**
-	 * Same as {@link #asStringOrElse(String)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the header value in.
-	 * @param def The default value.
-	 * @return The response object (for method chaining).
-	 */
-	public RestResponse asStringOrElse(Mutable<String> m, String def) {
-		m.set(asStringOrElse(def));
+		m.set(asString().orElse(null));
 		return response;
 	}
 
@@ -291,7 +262,7 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> T as(Type type, Type...args) throws RestCallException {
+	public <T> Optional<T> as(Type type, Type...args) throws RestCallException {
 		return as(request.getClassMeta(type, args));
 	}
 
@@ -305,8 +276,9 @@ public class ResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If value could not be parsed.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> RestResponse as(Mutable<T> m, Type type, Type...args) throws RestCallException {
-		m.set(as(type, args));
+		m.set((T)as(type, args).orElse(null));
 		return response;
 	}
 
@@ -318,7 +290,7 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> T as(Class<T> type) throws RestCallException {
+	public <T> Optional<T> as(Class<T> type) throws RestCallException {
 		return as(request.getClassMeta(type));
 	}
 
@@ -332,7 +304,7 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	public <T> RestResponse as(Mutable<T> m, Class<T> type) throws RestCallException {
-		m.set(as(type));
+		m.set(as(type).orElse(null));
 		return response;
 	}
 
@@ -344,9 +316,9 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> T as(ClassMeta<T> type) throws RestCallException {
+	public <T> Optional<T> as(ClassMeta<T> type) throws RestCallException {
 		try {
-			return parser.parse(HEADER, schema, asString(), type);
+			return ofNullable(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
 			throw new RestCallException(response, e, "Could not parse response header {0}.", getName());
 		}
@@ -362,87 +334,7 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	public <T> RestResponse as(Mutable<T> m, ClassMeta<T> type) throws RestCallException {
-		m.set(as(type));
-		return response;
-	}
-
-	/**
-	 * Same as {@link #as(Type,Type...)} but returns the value as an {@link Optional}.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @param args The type parameters.
-	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws RestCallException If value could not be parsed.
-	 */
-	public <T> Optional<T> asOptional(Type type, Type...args) throws RestCallException {
-		return Optional.ofNullable(as(type, args));
-	}
-
-	/**
-	 * Same as {@link #asOptional(Type,Type...)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the parsed header value in.
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @param args The type parameters.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
-	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Type type, Type...args) throws RestCallException {
-		m.set(asOptional(type, args));
-		return response;
-	}
-
-	/**
-	 * Same as {@link #as(Class)} but returns the value as an {@link Optional}.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws RestCallException If value could not be parsed.
-	 */
-	public <T> Optional<T> asOptional(Class<T> type) throws RestCallException {
-		return Optional.ofNullable(as(type));
-	}
-
-	/**
-	 * Same as {@link #asOptional(Class)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the parsed header value in.
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
-	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Class<T> type) throws RestCallException {
-		m.set(asOptional(type));
-		return response;
-	}
-
-	/**
-	 * Same as {@link #as(ClassMeta)} but returns the value as an {@link Optional}.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws RestCallException If value could not be parsed.
-	 */
-	public <T> Optional<T> asOptional(ClassMeta<T> type) throws RestCallException {
-		return Optional.ofNullable(as(type));
-	}
-
-	/**
-	 * Same as {@link #asOptional(ClassMeta)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the parsed header value in.
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
-	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, ClassMeta<T> type) throws RestCallException {
-		m.set(asOptional(type));
+		m.set(as(type).orElse(null));
 		return response;
 	}
 
@@ -467,7 +359,7 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public Matcher asMatcher(Pattern pattern) throws RestCallException {
-		return pattern.matcher(asStringOrElse(""));
+		return pattern.matcher(asString().orElse(""));
 	}
 
 	/**
@@ -494,7 +386,7 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) throws RestCallException {
-		m.set(pattern.matcher(asStringOrElse("")));
+		m.set(pattern.matcher(asString().orElse("")));
 		return response;
 	}
 
@@ -677,7 +569,7 @@ public class ResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentStringAssertion<RestResponse> assertString() {
-		return new FluentStringAssertion<>(asString(), response);
+		return new FluentStringAssertion<>(asString().orElse(null), response);
 	}
 
 	/**
@@ -698,7 +590,7 @@ public class ResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentIntegerAssertion<RestResponse> assertInteger() {
-		return new FluentIntegerAssertion<>(asIntegerHeader().asInt(), response);
+		return new FluentIntegerAssertion<>(asIntegerHeader().asInteger().orElse(null), response);
 	}
 
 	/**
@@ -719,7 +611,7 @@ public class ResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentLongAssertion<RestResponse> assertLong() {
-		return new FluentLongAssertion<>(asLongHeader().asLong(), response);
+		return new FluentLongAssertion<>(asLongHeader().asLong().orElse(null), response);
 	}
 
 	/**
@@ -740,7 +632,7 @@ public class ResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentZonedDateTimeAssertion<RestResponse> assertDate() {
-		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime(), response);
+		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime().orElse(null), response);
 	}
 
 	/**
@@ -761,7 +653,7 @@ public class ResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentListAssertion<RestResponse> assertCsvArray() {
-		return new FluentListAssertion<>(asCsvArrayHeader().asList(), response);
+		return new FluentListAssertion<>(asCsvArrayHeader().asList().orElse(null), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -604,12 +604,8 @@ import org.apache.juneau.utils.*;
  * 	<ul>
  * 		<li class='jm'><c>{@link ResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
  * 		<li class='jm'><c>{@link ResponseHeader#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asOptionalString() asOptionalString()} <jk>returns</jk> Optional&lt;String&gt;</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asStringOrElse(String) asStringOrElse(String)} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link ResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
  * 		<li class='jm'><c>{@link ResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asOptional(Type,Type...) asOptional(Type,Type...)} <jk>returns</jk> Optional&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asOptional(Class) asOptional(Class&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link BasicHeader}</c>
@@ -3191,12 +3187,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				Object v = res.getBody().as(ror.getReturnType());
 				if (v == null && rt.isPrimitive())
 					v = ClassInfo.of(rt).getPrimitiveDefault();
-				if (rt.getName().equals(res.getStringHeader("Exception-Name")))
+				if (rt.getName().equals(res.getStringHeader("Exception-Name").orElse(null)))
 					res.removeHeaders("Exception-Name");
 				ret = v;
 			}
 
-			ThrowableUtils.throwException(res.getStringHeader("Exception-Name"), res.getStringHeader("Exception-Message"), rom.getExceptions());
+			ThrowableUtils.throwException(res.getStringHeader("Exception-Name").orElse(null), res.getStringHeader("Exception-Message").orElse(null), rom.getExceptions());
 			return ret;
 		} catch (RestCallException e) {
 			ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), rom.getExceptions());

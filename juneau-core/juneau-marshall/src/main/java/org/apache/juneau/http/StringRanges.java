@@ -54,7 +54,9 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public class StringRanges {
 
-	private static final StringRanges DEFAULT = new StringRanges("");
+	/** Represents an empty string ranges object. */
+	public static final StringRanges EMPTY = new StringRanges("");
+
 	private static final Cache<String,StringRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	private final StringRange[] ranges;
@@ -68,7 +70,7 @@ public class StringRanges {
 	 */
 	public static StringRanges of(String value) {
 		if (value == null || value.length() == 0)
-			return DEFAULT;
+			return EMPTY;
 
 		StringRanges mr = CACHE.get(value);
 		if (mr == null)

@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -139,7 +140,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
-	public boolean containsIc(String val) {
+	public boolean containsIgnoreCase(String val) {
 		List<String> vv = getParsedValue();
 		if (val != null && vv != null)
 			for (String v : vv)
@@ -164,17 +165,17 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentListAssertion<BasicCsvArrayHeader> assertList() {
-		return new FluentListAssertion<>(asList(), this);
+		return new FluentListAssertion<>(getParsedValue(), this);
 	}
 
 	/**
 	 * Returns the contents of this header as a list of strings.
 	 *
-	 * @return The contents of this header as an unmodifiable list of strings, or <jk>null</jk> if the value was <jk>null</jk>.
+	 * @return The contents of this header as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
 	 */
-	public List<String> asList() {
+	public Optional<List<String>> asList() {
 		List<String> l = getParsedValue();
-		return l == null ? null : Collections.unmodifiableList(l);
+		return ofNullable(l == null ? null : Collections.unmodifiableList(l));
 	}
 
 	private List<String> getParsedValue() {

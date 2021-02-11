@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.time.*;
 import java.util.*;
@@ -122,30 +123,30 @@ public class BasicDateHeader extends BasicHeader {
 	/**
 	 * Returns this header value as a {@link java.util.Calendar}.
 	 *
-	 * @return This header value as a {@link java.util.Calendar}, or <jk>null</jk> if the header could not be parsed.
+	 * @return This header value as a {@link java.util.Calendar}, or {@link Optional#empty()} if the header could not be parsed.
 	 */
-	public Calendar asCalendar() {
+	public Optional<Calendar> asCalendar() {
 		ZonedDateTime zdt = getParsedValue();
-		return zdt == null ? null : GregorianCalendar.from(zdt);
+		return ofNullable(zdt == null ? null : GregorianCalendar.from(zdt));
 	}
 
 	/**
 	 * Returns this header value as a {@link java.util.Date}.
 	 *
-	 * @return This header value as a {@link java.util.Date}, or <jk>null</jk> if the header could not be parsed.
+	 * @return This header value as a {@link java.util.Date}, or {@link Optional#empty()} if the header could not be parsed.
 	 */
-	public java.util.Date asDate() {
-		Calendar c = asCalendar();
-		return c == null ? null : c.getTime();
+	public Optional<java.util.Date> asDate() {
+		Calendar c = asCalendar().orElse(null);
+		return ofNullable(c == null ? null : c.getTime());
 	}
 
 	/**
 	 * Returns this header value as a {@link ZonedDateTime}.
 	 *
-	 * @return This header value as a {@link ZonedDateTime}, or <jk>null</jk> if the header could not be parsed.
+	 * @return This header value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the header could not be parsed.
 	 */
-	public ZonedDateTime asZonedDateTime() {
-		return getParsedValue();
+	public Optional<ZonedDateTime> asZonedDateTime() {
+		return ofNullable(getParsedValue());
 	}
 
 	/**
@@ -164,7 +165,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentZonedDateTimeAssertion<BasicDateHeader> assertZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(asZonedDateTime(), this);
+		return new FluentZonedDateTimeAssertion<>(getParsedValue(), this);
 	}
 
 	private ZonedDateTime getParsedValue() {

@@ -80,19 +80,19 @@ public class BasicCsvArrayHeader_Test {
 	public void a02_contains() throws Exception {
 		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", new String[]{null,"bar","baz"});
 		assertBoolean(x.contains(null)).isFalse();
-		assertBoolean(x.containsIc(null)).isFalse();
+		assertBoolean(x.containsIgnoreCase(null)).isFalse();
 		assertBoolean(x.contains("bar")).isTrue();
-		assertBoolean(x.containsIc("bar")).isTrue();
+		assertBoolean(x.containsIgnoreCase("bar")).isTrue();
 		assertBoolean(x.contains("qux")).isFalse();
-		assertBoolean(x.containsIc("qux")).isFalse();
+		assertBoolean(x.containsIgnoreCase("qux")).isFalse();
 		assertBoolean(x.contains("BAR")).isFalse();
-		assertBoolean(x.containsIc("BAR")).isTrue();
+		assertBoolean(x.containsIgnoreCase("BAR")).isTrue();
 
 		BasicCsvArrayHeader x2 = of("Foo",()->null);
 		assertBoolean(x2.contains(null)).isFalse();
-		assertBoolean(x2.containsIc(null)).isFalse();
+		assertBoolean(x2.containsIgnoreCase(null)).isFalse();
 		assertBoolean(x2.contains("bar")).isFalse();
-		assertBoolean(x2.containsIc("bar")).isFalse();
+		assertBoolean(x2.containsIgnoreCase("bar")).isFalse();
 	}
 
 	@Test

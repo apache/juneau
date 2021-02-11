@@ -37,7 +37,7 @@ public class RestClient_Response_Headers_Test {
 		@RestOp
 		public String getEcho(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String c = req.getHeader("Check");
-			String[] h = req.getHeaders().get(c);
+			String[] h = req.getRequestHeaders().get(c);
 			if (h != null)
 				for (String hh : h)
 					res.addHeader(c, hh);
@@ -84,39 +84,35 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void a03_asString() throws Exception {
-		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString();
+		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
 		Mutable<String> m = Mutable.create();
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString(m);
 		assertEquals("bar", m.get());
 
-		Optional<String> o = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asOptionalString();
+		Optional<String> o = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString();
 		assertEquals("bar", o.get());
-		o = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asOptionalString();
+		o = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asString();
 		assertFalse(o.isPresent());
 
-		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asStringOrElse("baz");
+		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString().orElse("baz");
 		assertEquals("bar", s);
-		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asStringOrElse("baz");
+		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asString().orElse("baz");
 		assertEquals("baz", s);
-
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asStringOrElse(m,"baz");
-		assertEquals("bar", m.get());
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asStringOrElse(m,"baz");
-		assertEquals("baz", m.get());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void a04_asType() throws Exception {
-		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").as(Integer.class);
+		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
 		Mutable<Integer> m1 = Mutable.create();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").as(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
-		List<Integer> l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").as(LinkedList.class,Integer.class);
+		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").as(LinkedList.class,Integer.class).get();
 		assertObject(l).asJson().is("[1,2]");
 
 		Mutable<Integer> m2 = Mutable.create();
@@ -126,7 +122,7 @@ public class RestClient_Response_Headers_Test {
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
 		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
 
-		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").as(cm1);
+		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").as(cm1).get();
 		assertObject(l).asJson().is("[1,2]");
 
 		Mutable<LinkedList<Integer>> m3 = Mutable.create();
@@ -135,38 +131,20 @@ public class RestClient_Response_Headers_Test {
 
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").as(m2,cm1)).contains("Invalid number");
 
-		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asOptional(LinkedList.class,Integer.class);
+		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").as(LinkedList.class,Integer.class);
 		assertObject(o1.get()).asJson().is("[1,2]");
-		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Bar").asOptional(LinkedList.class,Integer.class);
+		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Bar").as(LinkedList.class,Integer.class);
 		assertFalse(o1.isPresent());
 
-		Mutable<Optional<List<Integer>>> m4 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asOptional(m4,LinkedList.class,Integer.class);
-		assertObject(m4.get().get()).asJson().is("[1,2]");
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Bar").asOptional(m4,LinkedList.class,Integer.class);
-		assertFalse(m4.get().isPresent());
-
-		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").asOptional(Integer.class);
+		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").as(Integer.class);
 		assertEquals(1, o2.get().intValue());
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Bar").asOptional(Integer.class);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Bar").as(Integer.class);
 		assertFalse(o2.isPresent());
 
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").asOptional(cm2);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").as(cm2);
 		assertEquals(1, o2.get().intValue());
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Bar").asOptional(cm2);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Bar").as(cm2);
 		assertFalse(o2.isPresent());
-
-		Mutable<Optional<Integer>> m5 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").asOptional(m5,Integer.class);
-		assertEquals(1, m5.get().get().intValue());
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Bar").asOptional(m5,Integer.class);
-		assertFalse(m5.get().isPresent());
-
-		m5 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").asOptional(m5,cm2);
-		assertEquals(1, m5.get().get().intValue());
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Bar").asOptional(m5,cm2);
-		assertFalse(m5.get().isPresent());
 
 		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher("foo").matches());
 		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher("foo").matches());

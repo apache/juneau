@@ -221,6 +221,15 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the value exists.
+	 *
+	 * @return <jk>true</jk> if the value exists.
+	 */
+	public boolean exists() {
+		return getValue() != null;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified object is a {@link Supplier}.
 	 *
 	 * @param o The object to check.

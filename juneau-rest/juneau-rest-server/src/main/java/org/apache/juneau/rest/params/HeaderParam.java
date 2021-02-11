@@ -15,12 +15,13 @@ package org.apache.juneau.rest.params;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Header} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getHeaders() getHeaders}().{@link RequestHeaders#get(HttpPartParserSession,HttpPartSchema,String,Type,Type...) get}(<jv>parserSession<jv>, <jv>schema</jv>, <jv>name</jv>, <jv>type</jv>)</c>
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequestHeaders() getHeaders}()./c>
  * with a {@link HttpPartSchema schema} derived from the {@link Header} annotation.
  *
  * <p>
@@ -93,11 +94,28 @@ public class HeaderParam implements RestOperationParam {
 		return false;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override /* RestOperationParam */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
-		RequestHeaders rh = call.getRestRequest().getHeaders();
-		return multi ? rh.getAll(ps, schema, name, type.innerType()) : rh.get(ps, schema, name, type.innerType());
+		RequestHeaders rh = call.getRestRequest().getRequestHeaders();
+		BeanSession bs = call.getRestRequest().getBeanSession();
+		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
+
+		if (multi) {
+			Collection c = cm.isArray() ? new ArrayList<>() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
+			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
+			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
+		}
+
+		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
+			OMap m = new OMap();
+			for (RequestHeader e : rh.getAll())
+				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null));
+			return req.getBeanSession().convertToType(m, cm);
+		}
+
+		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
 	}
 }

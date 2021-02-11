@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -103,7 +104,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		return stringify(asRanges());
+		return stringify(asRanges().orElse(StringRanges.EMPTY));
 	}
 
 	/**
@@ -112,10 +113,10 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * <p>
 	 * The types ranges in the list are sorted by their q-value in descending order.
 	 *
-	 * @return An unmodifiable list of type ranges.
+	 * @return An unmodifiable list of type ranges, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public StringRanges asRanges() {
-		return parse();
+	public Optional<StringRanges> asRanges() {
+		return ofNullable(parse());
 	}
 
 	/**
@@ -137,7 +138,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<String> names) {
-		return asRanges().match(names);
+		return asRanges().orElse(StringRanges.EMPTY).match(names);
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
 	public StringRange getRange(int index) {
-		return asRanges().getRange(index);
+		return asRanges().orElse(StringRanges.EMPTY).getRange(index);
 	}
 
 	/**
@@ -156,7 +157,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * @return The string ranges that make up this object.
 	 */
 	public List<StringRange> getRanges() {
-		return asRanges().getRanges();
+		return asRanges().orElse(StringRanges.EMPTY).getRanges();
 	}
 
 	private StringRanges parse() {
@@ -164,7 +165,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
-			o = "";
+			return null;
 		return StringRanges.of(o.toString());
 	}
 }

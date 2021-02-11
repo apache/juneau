@@ -332,7 +332,7 @@ public class RequestBody {
 		Encoder enc = getEncoder();
 
 		InputStream is = req.getHttpServletRequest().getInputStream();
-		
+
 		if (enc == null)
 			return new BoundedServletInputStream(is, maxInput);
 
@@ -357,10 +357,10 @@ public class RequestBody {
 	private MediaType getMediaType() {
 		if (mediaType != null)
 			return mediaType;
-		ContentType ct = headers.getContentType();
-		if (ct == null && body != null)
+		Optional<ContentType> ct = headers.getContentType();
+		if (!ct.isPresent() && body != null)
 			return MediaType.UON;
-		return ct == null ? null : ct.asMediaType();
+		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
 	}
 
 	/**
@@ -428,7 +428,7 @@ public class RequestBody {
 		if (cm.isInputStream())
 			return (T)getInputStream();
 
-		TimeZone timeZone = headers.getTimeZone();
+		Optional<TimeZone> timeZone = headers.getTimeZone();
 		Locale locale = req.getLocale();
 		ParserMatch pm = getParserMatch();
 
@@ -443,7 +443,7 @@ public class RequestBody {
 				.properties(req.getAttributes())
 				.javaMethod(req.getOpContext().getJavaMethod())
 				.locale(locale)
-				.timeZone(timeZone)
+				.timeZone(timeZone.orElse(null))
 				.mediaType(mediaType)
 				.streamCharset(req.getCharset())
 				.schema(schema)
@@ -469,9 +469,10 @@ public class RequestBody {
 		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
+		Optional<ContentType> ct = headers.getContentType();
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			headers.getContentType().getValue(), req.getOpContext().getParsers().getSupportedMediaTypes()
+			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", req.getOpContext().getParsers().getSupportedMediaTypes()
 		);
 	}
 

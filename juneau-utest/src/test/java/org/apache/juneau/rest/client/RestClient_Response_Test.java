@@ -150,7 +150,7 @@ public class RestClient_Response_Test {
 		@RestOp(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String n = req.getHeader("Check");
-			String v = req.getHeaders().getString(n);
+			String v = req.getRequestHeaders().getString(n).orElse(null);
 			res.setHeader(n,v);
 			return v;
 		}
@@ -159,9 +159,9 @@ public class RestClient_Response_Test {
 	@Test
 	public void c01_response_getStringHeader() throws Exception {
 		RestResponse x = checkFooClient(C.class).build().get().json().header("Foo","bar").run();
-		assertEquals("bar", x.getStringHeader("Foo"));
-		assertEquals("bar", x.getStringHeader("Foo","baz"));
-		assertEquals("baz", x.getStringHeader("Bar","baz"));
+		assertEquals("bar", x.getStringHeader("Foo").orElse(null));
+		assertEquals("bar", x.getStringHeader("Foo").orElse("baz"));
+		assertEquals("baz", x.getStringHeader("Bar").orElse("baz"));
 	}
 
 	@Test

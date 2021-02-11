@@ -85,7 +85,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().get(req.getHeader("Check"));
+			return req.getRequestHeaders().get(req.getHeader("Check"));
 		}
 	}
 
@@ -445,7 +445,7 @@ public class RestClient_Config_RestClient_Test {
 		@RestOp(path="/")
 		public Ok get(@Header(name="Foo",multi=true) ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);
-			assertObject(req.getHeaders().getAll("Foo",String[].class)).asJson().is("['x{f:1}','x{f:1}']");
+			assertObject(req.getRequestHeaders().get("Foo")).asJson().is("['x{f:1}','x{f:1}']");
 			assertEquals("{f:1}",foo[0].toString());
 			assertEquals("{f:1}",foo[1].toString());
 			res.header("Foo",bean);
@@ -482,13 +482,13 @@ public class RestClient_Config_RestClient_Test {
 	@Test
 	public void a12_partSerializer_partParser() throws Exception {
 		RestClient x = client(A12.class).header("Foo",bean).partSerializer(A12a.class).partParser(A12b.class).build();
-		ABean b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class);
+		ABean b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
-		b = x.get().header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class);
+		b = x.get().header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 
 		x = client(A12.class).header("Foo",bean).partSerializer(new A12a()).partParser(new A12b()).build();
-		b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class);
+		b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getResponseHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 	}
 

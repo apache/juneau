@@ -18,26 +18,25 @@ import static java.util.Optional.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Category of headers that consist of a single long value.
+ * Category of headers that consist of a single boolean value.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Content-Length: 300
+ * 	Foo: true
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
-@Header(type="integer",format="int64")
-public class BasicLongHeader extends BasicHeader {
+@Header(type="boolean")
+public class BasicBooleanHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,16 +48,16 @@ public class BasicLongHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>{@link Boolean} - As-is.
+	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
+	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicBooleanHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicLongHeader of(String name, Object value) {
+	public static BasicBooleanHeader of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicLongHeader(name, value);
+		return new BasicBooleanHeader(name, value);
 	}
 
 	/**
@@ -72,19 +71,19 @@ public class BasicLongHeader extends BasicHeader {
 	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>{@link Boolean} - As-is.
+	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
+	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicBooleanHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicLongHeader of(String name, Supplier<?> value) {
+	public static BasicBooleanHeader of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicLongHeader(name, value);
+		return new BasicBooleanHeader(name, value);
 	}
 
-	private Long parsed;
+	private Boolean parsed;
 
 	/**
 	 * Constructor.
@@ -94,13 +93,13 @@ public class BasicLongHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>{@link Boolean} - As-is.
+	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
+	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicLongHeader(String name, Object value) {
+	public BasicBooleanHeader(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
@@ -112,11 +111,11 @@ public class BasicLongHeader extends BasicHeader {
 	}
 
 	/**
-	 * Returns the header value as a long.
+	 * Returns the header value as a boolean.
 	 *
-	 * @return The header value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The header value as a boolean.
 	 */
-	public Optional<Long> asLong() {
+	public Optional<Boolean> asBoolean() {
 		return ofNullable(getParsedValue());
 	}
 
@@ -125,33 +124,29 @@ public class BasicLongHeader extends BasicHeader {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body is not too large.</jc>
+	 * 	<jc>// Validates the response header Foo is true.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getLongHeader(<js>"Length"</js>).assertThat().isLessThan(100000);
+	 * 		.getHeader(<js>"Foo"</js>).asBooleanHeader().assertBoolean().isTrue();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentLongAssertion<BasicLongHeader> assertLong() {
-		return new FluentLongAssertion<>(getParsedValue(), this);
+	public FluentBooleanAssertion<BasicBooleanHeader> assertBoolean() {
+		return new FluentBooleanAssertion<>(getParsedValue(), this);
 	}
 
-	private Long getParsedValue() {
+	private Boolean getParsedValue() {
 		if (parsed != null)
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		if (o instanceof Number)
-			return ((Number)o).longValue();
+		if (o instanceof Boolean)
+			return (Boolean)o;
 		String s = o.toString();
-		try {
-			return Long.parseLong(s);
-		} catch (NumberFormatException e) {
-			throw new BasicIllegalArgumentException("Value could not be parsed as a long: {0}", o);
-		}
+		return Boolean.parseBoolean(s);
 	}
 }

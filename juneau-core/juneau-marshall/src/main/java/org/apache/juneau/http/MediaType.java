@@ -37,6 +37,9 @@ import org.apache.juneau.json.*;
 @BeanIgnore
 public class MediaType implements Comparable<MediaType>  {
 
+	/** Represents an empty media type object. */
+	public static final MediaType EMPTY = new MediaType("/*");
+
 	private static final Cache<String,MediaType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/** Reusable predefined media type */

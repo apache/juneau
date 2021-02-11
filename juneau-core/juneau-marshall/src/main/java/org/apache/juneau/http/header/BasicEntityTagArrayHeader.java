@@ -13,6 +13,8 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
+import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -114,16 +116,16 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 		Object o = getRawValue();
 		if (o instanceof String)
 			return (String)o;
-		return StringUtils.join(asEntityTags(), ',');
+		return StringUtils.join(asEntityTags().orElse(emptyList()), ',');
 	}
 
 	/**
 	 * Returns this header value as an array of {@link EntityTag} objects.
 	 *
-	 * @return this header value as an array of {@link EntityTag} objects.
+	 * @return this header value as an array of {@link EntityTag} objects, or {@link Optional#empty()} if the value was <jk>null</jk>..
 	 */
-	public List<EntityTag> asEntityTags() {
-		return getParsedValue();
+	public Optional<List<EntityTag>> asEntityTags() {
+		return ofNullable(getParsedValue());
 	}
 
 	private List<EntityTag> getParsedValue() {

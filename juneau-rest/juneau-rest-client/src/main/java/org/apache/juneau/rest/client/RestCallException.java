@@ -47,7 +47,7 @@ public final class RestCallException extends HttpException {
 	 * @return The value of the <js>"Exception-Name"</js> header on the response, or <jk>null</jk> if not found.
 	 */
 	public String getServerExceptionName() {
-		return response == null ? null : response.getStringHeader("Exception-Name", null);
+		return response == null ? null : response.getStringHeader("Exception-Name").orElse(null);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public final class RestCallException extends HttpException {
 	 * @return The value of the <js>"Exception-Message"</js> header on the response, or <jk>null</jk> if not found.
 	 */
 	public String getServerExceptionMessage() {
-		return response == null ? null : response.getStringHeader("Exception-Message", null);
+		return response == null ? null : response.getStringHeader("Exception-Message").orElse(null);
 	}
 
 	/**

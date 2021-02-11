@@ -521,7 +521,7 @@ public class Remote_Test {
 	public static class F extends BasicRestObject {
 		@RestOp
 		public String[] getHeaders(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().get(req.getHeader("Check"));
+			return req.getRequestHeaders().get(req.getHeader("Check"));
 		}
 	}
 

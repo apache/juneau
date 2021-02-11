@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -100,10 +101,10 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	/**
 	 * Returns this header as a {@link MediaRanges} object.
 	 *
-	 * @return This header as a {@link MediaRanges} object.
+	 * @return This header as a {@link MediaRanges} object, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public MediaRanges asMediaRanges() {
-		return parse();
+	public Optional<MediaRanges> asMediaRanges() {
+		return ofNullable(parse());
 	}
 
 	/**
@@ -125,7 +126,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<? extends MediaType> mediaTypes) {
-		return asMediaRanges().match(mediaTypes);
+		return asMediaRanges().orElse(MediaRanges.EMPTY).match(mediaTypes);
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
 	public MediaRange getRange(int index) {
-		return asMediaRanges().getRange(index);
+		return asMediaRanges().orElse(MediaRanges.EMPTY).getRange(index);
 	}
 
 	/**
@@ -150,7 +151,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return <jk>true</jk> if subtype fragment exists.
 	 */
 	public boolean hasSubtypePart(String part) {
-		return asMediaRanges().hasSubtypePart(part);
+		return asMediaRanges().orElse(MediaRanges.EMPTY).hasSubtypePart(part);
 	}
 
 	/**
@@ -159,7 +160,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return The media ranges that make up this object.
 	 */
 	public List<MediaRange> getRanges() {
-		return asMediaRanges().getRanges();
+		return asMediaRanges().orElse(MediaRanges.EMPTY).getRanges();
 	}
 
 	@Override /* Header */
@@ -167,7 +168,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		return stringify(asMediaRanges());
+		return stringify(asMediaRanges().orElse(MediaRanges.EMPTY));
 	}
 
 	private MediaRanges parse() {
@@ -175,7 +176,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
-			o = "";
+			return null;
 		if (o instanceof MediaRanges)
 			return (MediaRanges)o;
 		return MediaRanges.of(o.toString());

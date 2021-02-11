@@ -14,20 +14,26 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.*;
-import java.util.function.*;
+import java.util.Date;
 import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.exception.HttpException;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Represents a single header on an HTTP response.
+ * Represents a single header on an HTTP request.
  */
 public class RequestHeader implements Header {
 
@@ -51,7 +57,6 @@ public class RequestHeader implements Header {
 
 	private final Header header;
 	private final RestRequest request;
-	private final RestResponse response;
 	private HttpPartParserSession parser;
 	private HttpPartSchema schema;
 
@@ -59,12 +64,10 @@ public class RequestHeader implements Header {
 	 * Constructor.
 	 *
 	 * @param request The request object.
-	 * @param response The response object.
 	 * @param header The wrapped header.  Can be <jk>null</jk>.
 	 */
-	public RequestHeader(RestRequest request, RestResponse response, Header header) {
+	public RequestHeader(RestRequest request, Header header) {
 		this.request = request;
-		this.response = response;
 		this.header = header == null ? NULL_HEADER : header;
 		parser(null);
 	}
@@ -120,10 +123,176 @@ public class RequestHeader implements Header {
 	/**
 	 * Returns the value of this header as a string.
 	 *
-	 * @return The value of this header as a string, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a string, or {@link Optional#empty()} if the header was not present.
 	 */
-	public String asString() {
-		return getValue();
+	public Optional<String> asString() {
+		return asStringHeader().asString();
+	}
+
+	/**
+	 * Returns the value of this header as an integer.
+	 *
+	 * @return The value of this header as an integer, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Integer> asInteger() {
+		return asIntegerHeader().asInteger();
+	}
+
+	/**
+	 * Returns the value of this header as a boolean.
+	 *
+	 * @return The value of this header as a boolean, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Boolean> asBoolean() {
+		return asBooleanHeader().asBoolean();
+	}
+
+	/**
+	 * Returns the value of this header as a long.
+	 *
+	 * @return The value of this header as a long, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Long> asLong() {
+		return asLongHeader().asLong();
+	}
+
+	/**
+	 * Returns the value of this header as a date.
+	 *
+	 * @return The value of this header as a date, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Date> asDate() {
+		return asDateHeader().asDate();
+	}
+
+	/**
+	 * Returns the value of this header as a date.
+	 *
+	 * @return The value of this header as a date, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<ZonedDateTime> asZonedDateTime() {
+		return asDateHeader().asZonedDateTime();
+	}
+
+	/**
+	 * Returns the value of this header as a list from a comma-delimited string.
+	 *
+	 * @return The value of this header as a list from a comma-delimited string, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<List<String>> asCsvArray() {
+		return asCsvArrayHeader().asList();
+	}
+
+	/**
+	 * Returns the value of this header as a {@link BasicHeader}.
+	 *
+	 * @param c The subclass of {@link BasicHeader} to instantiate.
+	 * @param <T> The subclass of {@link BasicHeader} to instantiate.
+	 * @return The value of this header as a string, never <jk>null</jk>.
+	 */
+	public <T extends BasicHeader> T asHeader(Class<T> c) {
+		try {
+			ClassInfo ci = ClassInfo.of(c);
+			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
+			if (cc != null)
+				return cc.invoke(asString());
+			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
+			if (cc != null)
+				return cc.invoke(getName(), asString());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		throw new BasicRuntimeException("Could not determine a method to construct type {0}", c.getClass().getName());
+	}
+
+	/**
+	 * Returns the value of this header as a CSV array header.
+	 *
+	 * @return The value of this header as a CSV array header, never <jk>null</jk>.
+	 */
+	public BasicCsvArrayHeader asCsvArrayHeader() {
+		return new BasicCsvArrayHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as a date header.
+	 *
+	 * @return The value of this header as a date header, never <jk>null</jk>.
+	 */
+	public BasicDateHeader asDateHeader() {
+		return new BasicDateHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as an entity validator array header.
+	 *
+	 * @return The value of this header as an entity validator array header, never <jk>null</jk>.
+	 */
+	public BasicEntityTagArrayHeader asEntityTagArrayHeader() {
+		return new BasicEntityTagArrayHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as an entity validator header.
+	 *
+	 * @return The value of this header as an entity validator array, never <jk>null</jk>.
+	 */
+	public BasicEntityTagHeader asEntityTagHeader() {
+		return new BasicEntityTagHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as an integer header.
+	 *
+	 * @return The value of this header as an integer header, never <jk>null</jk>.
+	 */
+	public BasicIntegerHeader asIntegerHeader() {
+		return new BasicIntegerHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as an boolean header.
+	 *
+	 * @return The value of this header as an boolean header, never <jk>null</jk>.
+	 */
+	public BasicBooleanHeader asBooleanHeader() {
+		return new BasicBooleanHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as a long header.
+	 *
+	 * @return The value of this header as a long header, never <jk>null</jk>.
+	 */
+	public BasicLongHeader asLongHeader() {
+		return new BasicLongHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as a range array header.
+	 *
+	 * @return The value of this header as a range array header, never <jk>null</jk>.
+	 */
+	public BasicStringRangeArrayHeader asStringRangeArrayHeader() {
+		return new BasicStringRangeArrayHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as a string header.
+	 *
+	 * @return The value of this header as a string header, never <jk>null</jk>.
+	 */
+	public BasicStringHeader asStringHeader() {
+		return new BasicStringHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as a URI header.
+	 *
+	 * @return The value of this header as a URI header, never <jk>null</jk>.
+	 */
+	public BasicUriHeader asUriHeader() {
+		return new BasicUriHeader(getName(), getValue());
 	}
 
 	/**
@@ -132,40 +301,9 @@ public class RequestHeader implements Header {
 	 * @param m The mutable to set the header value in.
 	 * @return The response object (for method chaining).
 	 */
-	public RestResponse asString(Mutable<String> m) {
-		m.set(asString());
-		return response;
-	}
-
-	/**
-	 * Returns the value of this header as an {@link Optional}.
-	 *
-	 * @return The value of this header as an {@link Optional}, or an empty optional if header was not present.
-	 */
-	public Optional<String> asOptionalString() {
-		return Optional.ofNullable(getValue());
-	}
-
-	/**
-	 * Returns the value of this header as a string with a default value.
-	 *
-	 * @param def The default value.
-	 * @return The value of this header as a string, or the default value if header was not present.
-	 */
-	public String asStringOrElse(String def) {
-		return getValue() == null ? def : getValue();
-	}
-
-	/**
-	 * Same as {@link #asStringOrElse(String)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the header value in.
-	 * @param def The default value.
-	 * @return The response object (for method chaining).
-	 */
-	public RestResponse asStringOrElse(Mutable<String> m, String def) {
-		m.set(asStringOrElse(def));
-		return response;
+	public RestRequest asString(Mutable<String> m) {
+		m.set(asString().orElse(null));
+		return request;
 	}
 
 	/**
@@ -174,10 +312,10 @@ public class RequestHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
-	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws ParseException If value could not be parsed.
+	 * @return The converted type, or {@link Optional#empty()} if the header is not present.
+	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> T as(Type type, Type...args) throws ParseException {
+	public <T> Optional<T> as(Type type, Type...args) throws HttpException {
 		return as(request.getBeanSession().getClassMeta(type, args));
 	}
 
@@ -189,11 +327,12 @@ public class RequestHeader implements Header {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The response object (for method chaining).
-	 * @throws ParseException If value could not be parsed.
+	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, Type type, Type...args) throws ParseException {
-		m.set(as(type, args));
-		return response;
+	@SuppressWarnings("unchecked")
+	public <T> RestRequest as(Mutable<T> m, Type type, Type...args) throws HttpException {
+		m.set((T)as(type, args).orElse(null));
+		return request;
 	}
 
 	/**
@@ -201,10 +340,10 @@ public class RequestHeader implements Header {
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws ParseException If value could not be parsed.
+	 * @return The converted type, or {@link Optional#empty()} if the header is not present.
+	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> T as(Class<T> type) throws ParseException {
+	public <T> Optional<T> as(Class<T> type) throws HttpException {
 		return as(request.getBeanSession().getClassMeta(type));
 	}
 
@@ -215,11 +354,11 @@ public class RequestHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The response object (for method chaining).
-	 * @throws ParseException If value could not be parsed.
+	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, Class<T> type) throws ParseException {
-		m.set(as(type));
-		return response;
+	public <T> RestRequest as(Mutable<T> m, Class<T> type) throws HttpException {
+		m.set(as(type).orElse(null));
+		return request;
 	}
 
 	/**
@@ -227,11 +366,15 @@ public class RequestHeader implements Header {
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws ParseException If value could not be parsed.
+	 * @return The converted type, or {@link Optional#empty()} if the header is not present.
+	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> T as(ClassMeta<T> type) throws ParseException {
-		return parser.parse(HEADER, schema, asString(), type);
+	public <T> Optional<T> as(ClassMeta<T> type) throws HttpException {
+		try {
+			return Optional.ofNullable(parser.parse(HEADER, schema, asString().orElse(null), type));
+		} catch (ParseException e) {
+			throw new BadRequest("Could not parse header ''{0}''.", getName());
+		}
 	}
 
 	/**
@@ -241,91 +384,11 @@ public class RequestHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The response object (for method chaining).
-	 * @throws ParseException If value could not be parsed.
+	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, ClassMeta<T> type) throws ParseException {
-		m.set(as(type));
-		return response;
-	}
-
-	/**
-	 * Same as {@link #as(Type,Type...)} but returns the value as an {@link Optional}.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @param args The type parameters.
-	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws ParseException If value could not be parsed.
-	 */
-	public <T> Optional<T> asOptional(Type type, Type...args) throws ParseException {
-		return Optional.ofNullable(as(type, args));
-	}
-
-	/**
-	 * Same as {@link #asOptional(Type,Type...)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the parsed header value in.
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @param args The type parameters.
-	 * @return The response object (for method chaining).
-	 * @throws ParseException If value could not be parsed.
-	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Type type, Type...args) throws ParseException {
-		m.set(asOptional(type, args));
-		return response;
-	}
-
-	/**
-	 * Same as {@link #as(Class)} but returns the value as an {@link Optional}.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws ParseException If value could not be parsed.
-	 */
-	public <T> Optional<T> asOptional(Class<T> type) throws ParseException {
-		return Optional.ofNullable(as(type));
-	}
-
-	/**
-	 * Same as {@link #asOptional(Class)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the parsed header value in.
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The response object (for method chaining).
-	 * @throws ParseException If value could not be parsed.
-	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Class<T> type) throws ParseException {
-		m.set(asOptional(type));
-		return response;
-	}
-
-	/**
-	 * Same as {@link #as(ClassMeta)} but returns the value as an {@link Optional}.
-	 *
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws ParseException If value could not be parsed.
-	 */
-	public <T> Optional<T> asOptional(ClassMeta<T> type) throws ParseException {
-		return Optional.ofNullable(as(type));
-	}
-
-	/**
-	 * Same as {@link #asOptional(ClassMeta)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the parsed header value in.
-	 * @param <T> The type to convert to.
-	 * @param type The type to convert to.
-	 * @return The response object (for method chaining).
-	 * @throws ParseException If value could not be parsed.
-	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, ClassMeta<T> type) throws ParseException {
-		m.set(asOptional(type));
-		return response;
+	public <T> RestRequest as(Mutable<T> m, ClassMeta<T> type) throws HttpException {
+		m.set(as(type).orElse(null));
+		return request;
 	}
 
 	/**
@@ -334,20 +397,22 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
-	 * 	<jk>if</jk> (m.matches())
-	 * 		String mediaType = m.group(1);
+	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
+	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param pattern The regular expression pattern to match.
 	 * @return The matcher.
+	 * @throws HttpException If a connection error occurred.
 	 */
-	public Matcher asMatcher(Pattern pattern) {
-		return pattern.matcher(asString());
+	public Matcher asMatcher(Pattern pattern) throws HttpException {
+		return pattern.matcher(asString().orElse(""));
 	}
 
 	/**
@@ -356,23 +421,26 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
-	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
+	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
-	 * 		String mediaType = m.get().group(1);
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<jv>mutable</jv>, Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
+	 *
+	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
+	 * 		String <jv>mediaType</jv> = <jv>mutable</jv>.get().group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param m The mutable to set the value in.
 	 * @param pattern The regular expression pattern to match.
 	 * @return The response object (for method chaining).
+	 * @throws HttpException If a connection error occurred.
 	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) {
-		m.set(pattern.matcher(asString()));
-		return response;
+	public RestRequest asMatcher(Mutable<Matcher> m, Pattern pattern) throws HttpException {
+		m.set(pattern.matcher(asString().orElse("")));
+		return request;
 	}
 
 	/**
@@ -381,19 +449,21 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<js>"application/(.*)"</js>);
 	 *
-	 * 	<jk>if</jk> (m.matches())
-	 * 		String mediaType = m.group(1);
+	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
+	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param regex The regular expression pattern to match.
 	 * @return The matcher.
+	 * @throws HttpException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex) {
+	public Matcher asMatcher(String regex) throws HttpException {
 		return asMatcher(regex, 0);
 	}
 
@@ -403,23 +473,26 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
-	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, <js>"application/(.*)"</js>);
+	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
-	 * 		String mediaType = m.get().group(1);
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<jv>mutable</jv>, <js>"application/(.*)"</js>);
+	 *
+	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
+	 * 		String <jv>mediaType</jv> = <jv>mutable</jv>.get().group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param m The mutable to set the value in.
 	 * @param regex The regular expression pattern to match.
 	 * @return The response object (for method chaining).
+	 * @throws HttpException If a connection error occurred.
 	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex) {
-		asMatcher(regex, 0);
-		return response;
+	public RestRequest asMatcher(Mutable<Matcher> m, String regex) throws HttpException {
+		m.set(asMatcher(regex, 0));
+		return request;
 	}
 
 	/**
@@ -428,20 +501,22 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
-	 * 	<jk>if</jk> (m.matches())
-	 * 		String mediaType = m.group(1);
+	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
+	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param regex The regular expression pattern to match.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The matcher.
+	 * @throws HttpException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex, int flags) {
+	public Matcher asMatcher(String regex, int flags) throws HttpException {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 
@@ -451,24 +526,27 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
-	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, <js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
-	 * 		String mediaType = m.get().group(1);
+	 * 	client
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<jv>mutable</jv>, <js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 *
+	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
+	 * 		String <jv>mediaType</jv> = <jv>mutable</jv>.get().group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param m The mutable to set the value in.
 	 * @param regex The regular expression pattern to match.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The response object (for method chaining).
+	 * @throws HttpException If a connection error occurred.
 	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex, int flags) {
-		asMatcher(Pattern.compile(regex, flags));
-		return response;
+	public RestRequest asMatcher(Mutable<Matcher> m, String regex, int flags) throws HttpException {
+		m.set(asMatcher(Pattern.compile(regex, flags)));
+		return request;
 	}
 
 	/**
@@ -476,8 +554,8 @@ public class RequestHeader implements Header {
 	 *
 	 * @return The response that created this object.
 	 */
-	public RestResponse toResponse() {
-		return response;
+	public RestRequest toRequest() {
+		return request;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -485,164 +563,150 @@ public class RequestHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the header equals the specified value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type header is provided.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertExists();
-	 * </p>
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertExists() throws AssertionError {
-		if (! exists())
-			throw new BasicAssertionError("Response did not have the expected header {0}.", getName());
-		return response;
-	}
-
-	/**
-	 * Asserts that the header equals the specified value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue(<js>"application/json"</js>);
-	 * </p>
-	 *
-	 * @param value The value to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertValue(String value) throws AssertionError {
-		if (! StringUtils.isEquals(value, asString()))
-			throw new BasicAssertionError("Response did not have the expected value for header {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", getName(), value, asString());
-		return response;
-	}
-
-	/**
-	 * Asserts that the header passes the specified predicate test.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue(x -&gt; x.equals(<js>"application/json"</js>));
-	 * </p>
-	 *
-	 * @param test The predicate to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertValue(Predicate<String> test) throws AssertionError {
-		String text = asString();
-		if (! test.test(text))
-			throw new BasicAssertionError("Response did not have the expected value for header {0}.\n\tActual=[{1}]", getName(), text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the header contains all the specified substrings.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueContains(<js>"json"</js>);
-	 * </p>
-	 *
-	 * @param values The substrings to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertContains(String...values) throws AssertionError {
-		String text = asString();
-		for (String substring : values)
-			if (! StringUtils.contains(text, substring))
-				throw new BasicAssertionError("Response did not have the expected substring in header {0}.\n\tExpected=[{1}]\n\tHeader=[{2}]", getName(), substring, text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the header matches the specified regular expression.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueMatches(<js>".*json.*"</js>);
-	 * </p>
-	 *
-	 * @param regex The pattern to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertMatches(String regex) throws AssertionError {
-		return assertMatches(regex, 0);
-	}
-
-	/**
-	 * Asserts that the header matches the specified regular expression.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueMatches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
-	 * </p>
-	 *
-	 * @param regex The pattern to test for.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertMatches(String regex, int flags) throws AssertionError {
-		String text = asString();
-		if (! Pattern.compile(regex, flags).matcher(text).matches())
-			throw new BasicAssertionError("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), regex, text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the header matches the specified pattern.
+	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
 	 * <p>
-	 * The pattern can contain <js>"*"</js> to represent zero or more arbitrary characters.
+	 * This method is called directly from the {@link RestRequest#assertStringHeader(String)} method to instantiate a fluent assertions object.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	Pattern p = Pattern.<jsm>compile</jsm>(<js>".*application\\/json.*"</js>);
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 	<jc>// Validates the content type header is provided.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueMatches(p);
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
+	 *
+	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 *
+	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
 	 *
-	 * @param pattern The pattern to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
+	 * <p>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the header and converts it to a bean.</jc>
+	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
 	 */
-	public RestResponse assertMatches(Pattern pattern) throws AssertionError {
-		String text = asString();
-		if (! pattern.matcher(text).matches())
-			throw new BasicAssertionError("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), pattern.pattern(), text);
-		return response;
+	public FluentStringAssertion<RequestHeader> assertString() {
+		return new FluentStringAssertion<>(asString().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on an integer response header.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestRequest#assertIntegerHeader(String)} method to instantiate a fluent assertions object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentIntegerAssertion<RequestHeader> assertInteger() {
+		return new FluentIntegerAssertion<>(asIntegerHeader().asInteger().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a long response header.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestRequest#assertLongHeader(String)} method to instantiate a fluent assertions object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response body is not too long.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentLongAssertion<RequestHeader> assertLong() {
+		return new FluentLongAssertion<>(asLongHeader().asLong().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestRequest#assertDateHeader(String)} method to instantiate a fluent assertions object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getHeader(<js>"Expires"</js>).assertDate().isAfterNow();
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentZonedDateTimeAssertion<RequestHeader> assertDate() {
+		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on comma-separated string headers.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestRequest#assertCsvArrayHeader(String)} method to instantiate a fluent assertions object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getHeader(<js>"Allow"</js>).assertCsvArray().contains(<js>"GET"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentListAssertion<RequestHeader> assertCsvArray() {
+		return new FluentListAssertion<>(asCsvArrayHeader().asList().orElse(null), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -677,10 +741,10 @@ public class RequestHeader implements Header {
 	 * Parses the value.
 	 *
 	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
-	 * @throws org.apache.http.ParseException In case of a parsing error.
+	 * @throws HttpException In case of a parsing error.
 	 */
 	@Override /* Header */
-	public HeaderElement[] getElements() throws org.apache.http.ParseException {
+	public HeaderElement[] getElements() throws HttpException {
 		return header.getElements();
 	}
 

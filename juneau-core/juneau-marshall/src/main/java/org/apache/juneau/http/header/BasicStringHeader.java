@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
@@ -119,6 +120,15 @@ public class BasicStringHeader extends BasicHeader {
 	@Override /* Header */
 	public String getValue() {
 		return getParsedValue();
+	}
+
+	/**
+	 * Returns the value of this header as a string.
+	 *
+	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 */
+	public Optional<String> asString() {
+		return Optional.ofNullable(getParsedValue());
 	}
 
 	private String getParsedValue() {

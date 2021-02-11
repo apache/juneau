@@ -13,7 +13,9 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.*;
@@ -105,16 +107,16 @@ public class BasicEntityTagHeader extends BasicHeader {
 		Object o = getRawValue();
 		if (o instanceof String)
 			return (String)o;
-		return stringify(asEntityTag());
+		return stringify(getParsedValue());
 	}
 
 	/**
 	 * Returns this header as an {@link EntityTag}.
 	 *
-	 * @return This header as an {@link EntityTag}.
+	 * @return This header as an {@link EntityTag}, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
-	public EntityTag asEntityTag() {
-		return getParsedValue();
+	public Optional<EntityTag> asEntityTag() {
+		return ofNullable(getParsedValue());
 	}
 
 	private EntityTag getParsedValue() {

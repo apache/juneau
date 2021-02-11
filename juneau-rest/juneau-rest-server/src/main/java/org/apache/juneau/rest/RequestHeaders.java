@@ -14,19 +14,16 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 
@@ -148,7 +145,66 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified header last value as a string.
+	 * Returns the first header with the specified name.
+	 *
+	 * <p>
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#exists()} can be used
+	 * to test for the existence of the header.
+	 *
+	 * @param name The header name.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getFirst(String name) {
+		String[] x = getValues(name);
+		return new RequestHeader(req, BasicHeader.of(name, x == null ? null : x[0]));
+	}
+
+	/**
+	 * Returns the last header with the specified name.
+	 *
+	 * <p>
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#exists()} can be used
+	 * to test for the existence of the header.
+	 *
+	 * @param name The header name.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getLast(String name) {
+		String[] x = getValues(name);
+		return new RequestHeader(req, BasicHeader.of(name, x == null ? null : x[x.length-1]));
+	}
+
+	/**
+	 * Returns all the headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The list of all headers with the specified name, or an empty list if none are found.
+	 */
+	public List<RequestHeader> getAll(String name) {
+		String[] x = getValues(name);
+		if (x == null)
+			return emptyList();
+		RequestHeader[] l = new RequestHeader[x.length];
+		for (int i = 0; i < x.length; i++)
+			l[i] = new RequestHeader(req, BasicHeader.of(name, x[i]));
+		return Arrays.asList(l);
+	}
+
+	/**
+	 * Returns all the headers in this request.
+	 *
+	 * @return All the headers in this request.
+	 */
+	public List<RequestHeader> getAll() {
+		List<RequestHeader> l = new ArrayList<>();
+ 		for (Map.Entry<String,String[]> e : entrySet())
+			for (String v : e.getValue())
+				l.add(new RequestHeader(req, BasicHeader.of(e.getKey(), v)));
+		return l;
+	}
+
+	/**
+	 * Returns the last header with the specified name as a string.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -156,22 +212,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </ul>
 	 *
 	 * @param name The header name.
-	 * @return The header value, or <jk>null</jk> if it doesn't exist.
+	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
 	 */
-	public String getString(String name) {
-		String[] v = null;
-		if (queryParams != null)
-			if (allowedQueryParams.contains("*") || allowedQueryParams.contains(name))
-				v = queryParams.get(name, true);
-		if (v == null || v.length == 0)
-			v = get(name);
-		if (v == null || v.length == 0)
-			return null;
-		return v[v.length-1];
+	public Optional<String> getString(String name) {
+		return getLast(name).asString();
 	}
 
 	/**
-	 * Returns the specified header value as a string.
+	 * Returns the last header with the specified name as an integer.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -179,16 +227,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </ul>
 	 *
 	 * @param name The HTTP header name.
-	 * @param def The default value to return if the header value isn't found.
-	 * @return The header value, or the default value if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
-	public String getString(String name, String def) {
-		String s = getString(name);
-		return StringUtils.isEmpty(s) ? def : s;
+	public Optional<Integer> getInteger(String name) {
+		return getLast(name).asInteger();
 	}
 
 	/**
-	 * Returns the specified header value as an integer.
+	 * Returns the last header with the specified name as a boolean.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -196,14 +242,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </ul>
 	 *
 	 * @param name The HTTP header name.
-	 * @return The header value, or <code>0</code> value if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
-	public int getInt(String name) {
-		return getInt(name, 0);
+	public Optional<Boolean> getBoolean(String name) {
+		return getLast(name).asBoolean();
 	}
 
 	/**
-	 * Returns the specified header value as an integer.
+	 * Returns the last header with the specified name as a list from a comma-delimited string.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -211,16 +257,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </ul>
 	 *
 	 * @param name The HTTP header name.
-	 * @param def The default value to return if the header value isn't found.
-	 * @return The header value, or the default value if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
-	public int getInt(String name, int def) {
-		String s = getString(name);
-		return StringUtils.isEmpty(s) ? def : Integer.parseInt(s);
+	public Optional<List<String>> getCsvArray(String name) {
+		return getLast(name).asCsvArray();
 	}
 
 	/**
-	 * Returns the specified header value as a boolean.
+	 * Returns the last header with the specified name as a long.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -228,14 +272,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </ul>
 	 *
 	 * @param name The HTTP header name.
-	 * @return The header value, or the default value if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
-	public boolean getBoolean(String name) {
-		return getBoolean(name, false);
+	public Optional<Long> getLong(String name) {
+		return getLast(name).asLong();
 	}
 
 	/**
-	 * Returns the specified header value as a boolean.
+	 * Returns the last header with the specified name as a boolean.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -243,12 +287,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </ul>
 	 *
 	 * @param name The HTTP header name.
-	 * @param def The default value to return if the header value isn't found.
-	 * @return The header value, or the default value if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
-	public boolean getBoolean(String name, boolean def) {
-		String s = getString(name);
-		return StringUtils.isEmpty(s) ? def : Boolean.parseBoolean(s);
+	public Optional<java.util.Date> getDate(String name) {
+		return getLast(name).asDate();
 	}
 
 	/**
@@ -262,313 +304,6 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 */
 	public void put(String name, Object value) {
 		super.put(name, stringifyAll(value));
-	}
-
-	/**
-	 * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> myheader = req.getHeaders().get(<js>"My-Header"</js>, <jk>int</jk>.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse a UUID.</jc>
-	 * 	UUID myheader = req.getHeaders().get(<js>"My-Header"</js>, UUID.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param type The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T get(String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getInner(null, null, name, null, getClassMeta(type));
-	}
-
-	/**
-	 * Returns all headers with the specified name converted to a POJO using the {@link HttpPartParser} registered with the resource.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk>[] myheaders = req.getHeaders().getAll(<js>"My-Header"</js>, <jk>int</jk>[].<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse a UUID.</jc>
-	 * 	UUID[] myheaders = req.getHeaders().getAll(<js>"My-Header"</js>, UUID[].<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * 	<li>
-	 * 		The class must be an array or collection type.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param type The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T getAll(String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getAllInner(null, null, name, getClassMeta(type));
-	}
-
-	/**
-	 * Returns the specified header value converted to a POJO using the specified part parser.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> myheader = req.getHeaders().get(<js>"My-Header"</js>, <jk>int</jk>.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse a UUID.</jc>
-	 * 	UUID myheader = req.getHeaders().get(<js>"My-Header"</js>, UUID.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
-	 * @param parser
-	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
-	 * @param schema
-	 * 	The schema object that defines the format of the input.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
-	 * @param name The HTTP header name.
-	 * @param type The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getInner(parser, schema, name, null, getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #get(String, Class)} but returns a default value if not found.
-	 *
-	 * @param name The HTTP header name.
-	 * @param def The default value if the header was not specified or is <jk>null</jk>.
-	 * @param type The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T get(String name, T def, Class<T> type) throws BadRequest, InternalServerError {
-		return getInner(null, null, name, def, getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #get(String, Object, Class)} but allows you to override the part parser used.
-	 *
-	 * @param parser
-	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
-	 * @param schema
-	 * 	The schema object that defines the format of the input.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
-	 * @param name The HTTP header name.
-	 * @param def The default value if the header was not specified or is <jk>null</jk>.
-	 * @param type The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
-		return getInner(parser, schema, name, def, getClassMeta(type));
-	}
-
-	/**
-	 * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.
-	 *
-	 * <p>
-	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; myheader = req.getHeader(<js>"My-Header"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
-	 * 	<li>
-	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_partParser}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param type
-	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
-	}
-
-	/**
-	 * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser used.
-	 *
-	 * @param parser
-	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
-	 * @param schema
-	 * 	The schema object that defines the format of the input.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
-	 * @param name
-	 * 	The HTTP header name.
-	 * @param type
-	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
-	}
-
-	/**
-	 * Converts all the headers with the specified name to the specified type.
-	 *
-	 * @param parser
-	 * 	The parser to use for parsing the string header.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
-	 * @param schema
-	 * 	The schema object that defines the format of the input.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
-	 * @param name
-	 * 	The HTTP header name.
-	 * @param type
-	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getAllInner(parser, schema, name, this.<T>getClassMeta(type, args));
-	}
-
-	/* Workhorse method */
-	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
-		if (parser == null)
-			parser = req.getPartParserSession();
-		try {
-			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
-				OMap m = new OMap();
-				for (Map.Entry<String,String[]> e : this.entrySet()) {
-					String k = e.getKey();
-					HttpPartSchema pschema = schema == null ? null : schema.getProperty(k);
-					ClassMeta<?> cm2 = cm.getValueType();
-					m.put(k, getInner(parser, pschema, k, null, cm2));
-				}
-				return req.getBeanSession().convertToType(m, cm);
-			}
-			T t = parse(parser, schema, getString(name), cm);
-			return (t == null ? def : t);
-		} catch (SchemaValidationException e) {
-			throw new BadRequest(e, "Validation failed on header ''{0}''. ", name);
-		} catch (ParseException e) {
-			throw new BadRequest(e, "Could not parse header ''{0}''.", name) ;
-		} catch (Exception e) {
-			throw new InternalServerError(e, "Could not parse header ''{0}''.", name);
-		}
-	}
-
-	/* Workhorse method */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	<T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, ClassMeta<T> cm) throws BadRequest, InternalServerError {
-		String[] p = get(name);
-		if (p == null)
-			p = new String[0];
-		if (schema == null)
-			schema = HttpPartSchema.DEFAULT;
-		try {
-			if (cm.isArray()) {
-				List c = new ArrayList();
-				for (int i = 0; i < p.length; i++)
-					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
-				return (T)toArray(c, cm.getElementType().getInnerClass());
-			} else if (cm.isCollection()) {
-				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
-				for (int i = 0; i < p.length; i++)
-					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
-				return (T)c;
-			}
-		} catch (SchemaValidationException e) {
-			throw new BadRequest(e, "Validation failed on header ''{0}''. ", name);
-		} catch (ParseException e) {
-			throw new BadRequest(e, "Could not parse header ''{0}''.", name) ;
-		} catch (Exception e) {
-			throw new InternalServerError(e, "Could not parse header ''{0}''.", name);
-		}
-		throw new InternalServerError("Invalid call to getAll(String, ClassMeta).  Class type must be a Collection or array.");
-	}
-
-	/* Workhorse method */
-	private <T> T parse(HttpPartParserSession parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
-		if (parser == null)
-			parser = this.parser;
-		return parser.parse(HttpPartType.HEADER, schema, val, cm);
 	}
 
 	/**
@@ -606,10 +341,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept: text/plain
 	 * </p>
 	 *
-	 * @return The parsed <c>Accept</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Accept getAccept() {
-		return Accept.of(getString("Accept"));
+	public Optional<Accept> getAccept() {
+		return ofNullable(Accept.of(getString("Accept").orElse(null)));
 	}
 
 	/**
@@ -623,10 +358,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept-Charset: utf-8
 	 * </p>
 	 *
-	 * @return The parsed <c>Accept-Charset</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public AcceptCharset getAcceptCharset() {
-		return AcceptCharset.of(getString("Accept-Charset"));
+	public Optional<AcceptCharset> getAcceptCharset() {
+		return ofNullable(AcceptCharset.of(getString("Accept-Charset").orElse(null)));
 	}
 
 	/**
@@ -640,10 +375,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept-Encoding: gzip, deflate
 	 * </p>
 	 *
-	 * @return The parsed <c>Accept-Encoding</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public AcceptEncoding getAcceptEncoding() {
-		return AcceptEncoding.of(getString("Accept-Encoding"));
+	public Optional<AcceptEncoding> getAcceptEncoding() {
+		return ofNullable(AcceptEncoding.of(getString("Accept-Encoding").orElse(null)));
 	}
 
 	/**
@@ -657,10 +392,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept-Language: en-US
 	 * </p>
 	 *
-	 * @return The parsed <c>Accept-Language</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public AcceptLanguage getAcceptLanguage() {
-		return AcceptLanguage.of(getString("Accept-Language"));
+	public Optional<AcceptLanguage> getAcceptLanguage() {
+		return ofNullable(AcceptLanguage.of(getString("Accept-Language").orElse(null)));
 	}
 
 	/**
@@ -674,10 +409,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
-	 * @return The parsed <c>Authorization</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Authorization getAuthorization() {
-		return Authorization.of(getString("Authorization"));
+	public Optional<Authorization> getAuthorization() {
+		return ofNullable(Authorization.of(getString("Authorization").orElse(null)));
 	}
 
 	/**
@@ -691,10 +426,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Cache-Control: no-cache
 	 * </p>
 	 *
-	 * @return The parsed <c>Cache-Control</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public CacheControl getCacheControl() {
-		return CacheControl.of(getString("Cache-Control"));
+	public Optional<CacheControl> getCacheControl() {
+		return ofNullable(CacheControl.of(getString("Cache-Control").orElse(null)));
 	}
 
 	/**
@@ -709,10 +444,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Connection: Upgrade
 	 * </p>
 	 *
-	 * @return The parsed <code></code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Connection getConnection() {
-		return Connection.of(getString("Connection"));
+	public Optional<Connection> getConnection() {
+		return ofNullable(Connection.of(getString("Connection").orElse(null)));
 	}
 
 	/**
@@ -726,10 +461,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Content-Length: 348
 	 * </p>
 	 *
-	 * @return The parsed <c>Content-Length</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public ContentLength getContentLength() {
-		return ContentLength.of(getString("Content-Length"));
+	public Optional<ContentLength> getContentLength() {
+		return ofNullable(ContentLength.of(getString("Content-Length").orElse(null)));
 	}
 
 	/**
@@ -743,10 +478,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Content-Type: application/x-www-form-urlencoded
 	 * </p>
 	 *
-	 * @return The parsed <c>Content-Type</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public ContentType getContentType() {
-		return ContentType.of(getString("Content-Type"));
+	public Optional<ContentType> getContentType() {
+		return ofNullable(ContentType.of(getString("Content-Type").orElse(null)));
 	}
 
 	/**
@@ -760,10 +495,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed <c>Date</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Date getDate() {
-		return Date.of(getString("Date"));
+	public Optional<Date> getDate() {
+		return ofNullable(Date.of(getString("Date").orElse(null)));
 	}
 
 	/**
@@ -777,10 +512,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Expect: 100-continue
 	 * </p>
 	 *
-	 * @return The parsed <c>Expect</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Expect getExpect() {
-		return Expect.of(getString("Expect"));
+	public Optional<Expect> getExpect() {
+		return ofNullable(Expect.of(getString("Expect").orElse(null)));
 	}
 
 	/**
@@ -794,10 +529,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	From: user@example.com
 	 * </p>
 	 *
-	 * @return The parsed <c>From</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public From getFrom() {
-		return From.of(getString("From"));
+	public Optional<From> getFrom() {
+		return ofNullable(From.of(getString("From").orElse(null)));
 	}
 
 	/**
@@ -813,10 +548,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Host: en.wikipedia.org
 	 * </p>
 	 *
-	 * @return The parsed <c>Host</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Host getHost() {
-		return Host.of(getString("Host"));
+	public Optional<Host> getHost() {
+		return ofNullable(Host.of(getString("Host").orElse(null)));
 	}
 
 	/**
@@ -832,10 +567,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed <c>If-Match</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public IfMatch getIfMatch() {
-		return IfMatch.of(getString("If-Match"));
+	public Optional<IfMatch> getIfMatch() {
+		return ofNullable(IfMatch.of(getString("If-Match").orElse(null)));
 	}
 
 	/**
@@ -849,10 +584,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed <c>If-Modified-Since</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public IfModifiedSince getIfModifiedSince() {
-		return IfModifiedSince.of(getString("If-Modified-Since"));
+	public Optional<IfModifiedSince> getIfModifiedSince() {
+		return ofNullable(IfModifiedSince.of(getString("If-Modified-Since").orElse(null)));
 	}
 
 	/**
@@ -866,27 +601,27 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed <c>If-None-Match</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public IfNoneMatch getIfNoneMatch() {
-		return IfNoneMatch.of(getString("If-None-Match"));
+	public Optional<IfNoneMatch> getIfNoneMatch() {
+		return ofNullable(IfNoneMatch.of(getString("If-None-Match").orElse(null)));
 	}
 
 	/**
 	 * Returns the <c>If-Range</c> header on the request.
 	 *
 	 * <p>
-	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.
+	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire ofNullable(entity.
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed <c>If-Range</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public IfRange getIfRange() {
-		return IfRange.of(getString("If-Range"));
+	public Optional<IfRange> getIfRange() {
+		return ofNullable(IfRange.of(getString("If-Range").orElse(null)));
 	}
 
 	/**
@@ -900,10 +635,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed <c>If-Unmodified-Since</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public IfUnmodifiedSince getIfUnmodifiedSince() {
-		return IfUnmodifiedSince.of(getString("If-Unmodified-Since"));
+	public Optional<IfUnmodifiedSince> getIfUnmodifiedSince() {
+		return ofNullable(IfUnmodifiedSince.of(getString("If-Unmodified-Since").orElse(null)));
 	}
 
 	/**
@@ -917,10 +652,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Max-Forwards: 10
 	 * </p>
 	 *
-	 * @return The parsed <c>Max-Forwards</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public MaxForwards getMaxForwards() {
-		return MaxForwards.of(getString("Max-Forwards"));
+	public Optional<MaxForwards> getMaxForwards() {
+		return ofNullable(MaxForwards.of(getString("Max-Forwards").orElse(null)));
 	}
 
 	/**
@@ -934,10 +669,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Pragma: no-cache
 	 * </p>
 	 *
-	 * @return The parsed <c>Pragma</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Pragma getPragma() {
-		return Pragma.of(getString("Pragma"));
+	public Optional<Pragma> getPragma() {
+		return ofNullable(Pragma.of(getString("Pragma").orElse(null)));
 	}
 
 	/**
@@ -951,10 +686,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
-	 * @return The parsed <c>Proxy-Authorization</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public ProxyAuthorization getProxyAuthorization() {
-		return ProxyAuthorization.of(getString("Proxy-Authorization"));
+	public Optional<ProxyAuthorization> getProxyAuthorization() {
+		return ofNullable(ProxyAuthorization.of(getString("Proxy-Authorization").orElse(null)));
 	}
 
 	/**
@@ -968,10 +703,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Range: bytes=500-999
 	 * </p>
 	 *
-	 * @return The parsed <c>Range</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Range getRange() {
-		return Range.of(getString("Range"));
+	public Optional<Range> getRange() {
+		return ofNullable(Range.of(getString("Range").orElse(null)));
 	}
 
 	/**
@@ -985,10 +720,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Referer: http://en.wikipedia.org/wiki/Main_Page
 	 * </p>
 	 *
-	 * @return The parsed <c>Referer</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Referer getReferer() {
-		return Referer.of(getString("Referer"));
+	public Optional<Referer> getReferer() {
+		return ofNullable(Referer.of(getString("Referer").orElse(null)));
 	}
 
 	/**
@@ -1004,10 +739,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	TE: trailers, deflate
 	 * </p>
 	 *
-	 * @return The parsed <c>TE</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public TE getTE() {
-		return TE.of(getString("TE"));
+	public Optional<TE> getTE() {
+		return ofNullable(TE.of(getString("TE").orElse(null)));
 	}
 
 	/**
@@ -1016,13 +751,13 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * <p>
 	 * Example: <js>"GMT"</js>.
 	 *
-	 * @return The <c>Time-Zone</c> header value on the request, or <jk>null</jk> if not present.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public TimeZone getTimeZone() {
-		String tz = getString("Time-Zone");
+	public Optional<TimeZone> getTimeZone() {
+		String tz = getString("Time-Zone").orElse(null);
 		if (tz != null)
-			return TimeZone.getTimeZone(tz);
-		return null;
+			return of(TimeZone.getTimeZone(tz));
+		return empty();
 	}
 
 	/**
@@ -1036,10 +771,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
 	 * </p>
 	 *
-	 * @return The parsed <c>User-Agent</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public UserAgent getUserAgent() {
-		return UserAgent.of(getString("User-Agent"));
+	public Optional<UserAgent> getUserAgent() {
+		return ofNullable(UserAgent.of(getString("User-Agent").orElse(null)));
 	}
 
 	/**
@@ -1053,10 +788,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
 	 * </p>
 	 *
-	 * @return The parsed <c>Upgrade</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Upgrade getUpgrade() {
-		return Upgrade.of(getString("Upgrade"));
+	public Optional<Upgrade> getUpgrade() {
+		return ofNullable(Upgrade.of(getString("Upgrade").orElse(null)));
 	}
 
 	/**
@@ -1070,10 +805,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
 	 * </p>
 	 *
-	 * @return The parsed <c>Via</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Via getVia() {
-		return Via.of(getString("Via"));
+	public Optional<Via> getVia() {
+		return ofNullable(Via.of(getString("Via").orElse(null)));
 	}
 
 	/**
@@ -1087,10 +822,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Warning: 199 Miscellaneous warning
 	 * </p>
 	 *
-	 * @return The parsed <c>Warning</c> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
 	 */
-	public Warning getWarning() {
-		return Warning.of(getString("Warning"));
+	public Optional<Warning> getWarning() {
+		return ofNullable(Warning.of(getString("Warning").orElse(null)));
 	}
 
 	/**
@@ -1121,11 +856,15 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return req.getBeanSession().getClassMeta(type, args);
-	}
-
-	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return req.getBeanSession().getClassMeta(type);
+	private String[] getValues(String name) {
+		String[] v = null;
+		if (queryParams != null)
+			if (allowedQueryParams.contains("*") || allowedQueryParams.contains(name))
+				v = queryParams.get(name, true);
+		if (v == null || v.length == 0)
+			v = get(name);
+		if (v == null || v.length == 0)
+			return null;
+		return v;
 	}
 }

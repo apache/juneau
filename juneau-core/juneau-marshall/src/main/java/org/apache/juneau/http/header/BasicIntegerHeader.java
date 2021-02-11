@@ -13,7 +13,9 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -106,16 +108,16 @@ public class BasicIntegerHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(asInt());
+		return stringify(getParsedValue());
 	}
 
 	/**
 	 * Returns the header value as an integer.
 	 *
-	 * @return The header value as an integer.
+	 * @return The header value as an integer, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
-	public Integer asInt() {
-		return getParsedValue();
+	public Optional<Integer> asInteger() {
+		return ofNullable(getParsedValue());
 	}
 
 	/**
@@ -134,7 +136,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentIntegerAssertion<BasicIntegerHeader> assertInteger() {
-		return new FluentIntegerAssertion<>(asInt(), this);
+		return new FluentIntegerAssertion<>(getParsedValue(), this);
 	}
 
 	private Integer getParsedValue() {

@@ -45,6 +45,7 @@ import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.BasicHeader;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -62,6 +63,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.exception.HttpException;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.logging.*;
@@ -169,7 +171,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				.create()
 				.javaMethod(opContext.getJavaMethod())
 				.locale(getLocale())
-				.timeZone(getHeaders().getTimeZone())
+				.timeZone(getRequestHeaders().getTimeZone().orElse(null))
 				.debug(isDebug() ? true : null);
 
 		partParserSession = opContext.getPartParser().createPartSession(parserSessionArgs);
@@ -178,7 +180,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.create()
 			.javaMethod(opContext.getJavaMethod())
 			.locale(getLocale())
-			.timeZone(getHeaders().getTimeZone())
+			.timeZone(getRequestHeaders().getTimeZone().orElse(null))
 			.debug(isDebug() ? true : null)
 			.uriContext(getUriContext())
 			.resolver(getVarResolverSession())
@@ -230,6 +232,249 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns the last header with the specified name.
+	 *
+	 * Unlike {@link #getHeader(String)}, this method returns an empty
+	 * {@link ResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
+	 * in fluent calls.
+	 *
+	 * <p class='bcode w800'>
+	 * 		req.getRequestHeader("Foo").asInteger().orElse(-1);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getRequestHeader(String name) {
+		return new RequestHeader(this, headers.getLast(name)).parser(getPartParserSession());
+	}
+
+	/**
+	 * Shortcut for calling <code>getHeader(name).asString()</code>.
+	 *
+	 * @param name The header name.
+	 * @return The header value, never <jk>null</jk>
+	 */
+	public Optional<String> getStringHeader(String name) {
+		return getRequestHeader(name).asString();
+	}
+
+	/**
+	 * Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
+	 *
+	 * <p>
+	 * This is equivalent to calling <c>getHeader(<js>"Content-Type"</js>).as(ContentType.<jk>class</jk>)</c>.
+	 *
+	 * @return The response charset.
+	 */
+	public Optional<ContentType> getContentTypeHeader() {
+		return getRequestHeader("Content-Type").as(ContentType.class);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the content type header is provided.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
+	 *
+	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 *
+	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * </p>
+	 *
+	 * <p>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the header and converts it to a bean.</jc>
+	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentStringAssertion<RestRequest> assertStringHeader(String name) {
+		return new FluentStringAssertion<>(getRequestHeader(name).asString().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on an integer response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentIntegerAssertion<RestRequest> assertIntegerHeader(String name) {
+		return new FluentIntegerAssertion<>(getRequestHeader(name).asInteger().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a long response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response body is not too large.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentLongAssertion<RestRequest> assertLongHeader(String name) {
+		return new FluentLongAssertion<>(getRequestHeader(name).asLong().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentDateAssertion<RestRequest> assertDateHeader(String name) {
+		return new FluentDateAssertion<>(getRequestHeader(name).asDate().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentZonedDateTimeAssertion<RestRequest> assertZonedDateTimeHeader(String name) {
+		return new FluentZonedDateTimeAssertion<>(getRequestHeader(name).asZonedDateTime().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertCsvArrayHeader(<js>"Allow"</js>).contains(<js>"GET"</js>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentListAssertion<RestRequest> assertCsvArrayHeader(String name) {
+		return new FluentListAssertion<>(getRequestHeader(name).asCsvArray().orElse(null), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response character encoding.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertCharset().is(<js>"utf-8"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws HttpException If REST call failed.
+	 */
+	public FluentStringAssertion<RestRequest> assertCharset() {
+		return new FluentStringAssertion<>(getCharacterEncoding(), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response content type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is JSON.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertContentType().is(<js>"application/json"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * Note that this is equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is JSON.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentStringAssertion<RestRequest> assertContentType() {
+		return new FluentStringAssertion<>(getRequestHeader("Content-Type").asString().orElse(null), this);
+	}
+
+	/**
 	 * Request headers.
 	 *
 	 * <p>
@@ -273,13 +518,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The headers on this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestHeaders getHeaders() {
+	public RequestHeaders getRequestHeaders() {
 		return headers;
 	}
 
 	@Override /* ServletRequest */
 	public String getHeader(String name) {
-		return getHeaders().getString(name);
+		return getRequestHeaders().getString(name).orElse(null);
 	}
 
 	@Override /* ServletRequest */
@@ -336,7 +581,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	@Override /* ServletRequest */
 	public Locale getLocale() {
 		Locale best = super.getLocale();
-		String h = headers.getString("Accept-Language");
+		String h = headers.getString("Accept-Language").orElse(null);
 		if (h != null) {
 			StringRanges sr = StringRanges.of(h);
 			float qValue = 0;
@@ -352,7 +597,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* ServletRequest */
 	public Enumeration<Locale> getLocales() {
-		String h = headers.getString("Accept-Language");
+		String h = headers.getString("Accept-Language").orElse(null);
 		if (h != null) {
 			StringRanges mr = StringRanges.of(h);
 			if (! mr.getRanges().isEmpty()) {
@@ -1249,7 +1494,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							if (pt == FORMDATA)
 								return getFormData().get(pp, schema, name, type);
 							if (pt == HEADER)
-								return getHeaders().get(pp, schema, name, type);
+								return getRequestHeaders().getLast(name).parser(pp).schema(schema).as(type);
 							if (pt == PATH)
 								return getPathMatch().get(pp, schema, name, type);
 						}

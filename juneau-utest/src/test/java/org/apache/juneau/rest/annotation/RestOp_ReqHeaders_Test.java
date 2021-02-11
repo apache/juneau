@@ -32,9 +32,9 @@ public class RestOp_ReqHeaders_Test {
 		@RestOp(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.getString("H1"))
-				.a("h2", headers.getString("H2"))
-				.a("h3", headers.getString("H3"));
+				.a("h1", headers.getString("H1").orElse(null))
+				.a("h2", headers.getString("H2").orElse(null))
+				.a("h3", headers.getString("H3").orElse(null));
 		}
 	}
 
@@ -55,9 +55,9 @@ public class RestOp_ReqHeaders_Test {
 		@RestOp(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.getString("h1"))
-				.a("h2", headers.getString("h2"))
-				.a("h3", headers.getString("h3"));
+				.a("h1", headers.getString("h1").orElse(null))
+				.a("h2", headers.getString("h2").orElse(null))
+				.a("h3", headers.getString("h3").orElse(null));
 		}
 	}
 

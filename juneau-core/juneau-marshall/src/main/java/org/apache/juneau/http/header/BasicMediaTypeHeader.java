@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -102,10 +103,10 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	/**
 	 * Returns this header as a {@link MediaType} object.
 	 *
-	 * @return This header as a {@link MediaType} object.
+	 * @return This header as a {@link MediaType} object, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public MediaType asMediaType() {
-		return parse();
+	public Optional<MediaType> asMediaType() {
+		return ofNullable(parse());
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 
 		for (int i = 0; i < mediaTypes.size(); i++) {
 			MediaType mt = mediaTypes.get(i);
-			int matchQuant2 = mt.match(asMediaType(), true);
+			int matchQuant2 = mt.match(asMediaType().orElse(MediaType.EMPTY), true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
 				matchIndex = i;
@@ -143,7 +144,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The media type.
 	 */
 	public final String getType() {
-		return asMediaType().getType();
+		return asMediaType().orElse(MediaType.EMPTY).getType();
 	}
 
 	/**
@@ -152,7 +153,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The media subtype.
 	 */
 	public final String getSubType() {
-		return asMediaType().getSubType();
+		return asMediaType().orElse(MediaType.EMPTY).getSubType();
 	}
 
 	/**
@@ -164,7 +165,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
 	 */
 	public final boolean hasSubType(String st) {
-		return asMediaType().hasSubType(st);
+		return asMediaType().orElse(MediaType.EMPTY).hasSubType(st);
 	}
 
 	/**
@@ -177,7 +178,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
-		return asMediaType().getSubTypes();
+		return asMediaType().orElse(MediaType.EMPTY).getSubTypes();
 	}
 
 	/**
@@ -186,7 +187,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 */
 	public final boolean isMetaSubtype() {
-		return asMediaType().isMetaSubtype();
+		return asMediaType().orElse(MediaType.EMPTY).isMetaSubtype();
 	}
 
 	/**
@@ -231,7 +232,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return <jk>true</jk> if the media types match.
 	 */
 	public final int match(MediaType o, boolean allowExtraSubTypes) {
-		return asMediaType().match(o, allowExtraSubTypes);
+		return asMediaType().orElse(MediaType.EMPTY).match(o, allowExtraSubTypes);
 	}
 
 	/**
@@ -244,7 +245,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
 	public List<NameValuePair> getParameters() {
-		return asMediaType().getParameters();
+		return asMediaType().orElse(MediaType.EMPTY).getParameters();
 	}
 
 	/**
@@ -259,7 +260,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The header value, or <jk>null</jk> if the parameter is not present.
 	 */
 	public String getParameter(String name) {
-		return asMediaType().getParameter(name);
+		return asMediaType().orElse(MediaType.EMPTY).getParameter(name);
 	}
 
 	@Override /* Header */
@@ -267,7 +268,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		return stringify(asMediaType());
+		return stringify(parse());
 	}
 
 	private MediaType parse() {
@@ -275,7 +276,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
-			o = "";
+			return null;
 		if (o instanceof MediaType)
 			return (MediaType)o;
 		return new MediaType(o.toString());

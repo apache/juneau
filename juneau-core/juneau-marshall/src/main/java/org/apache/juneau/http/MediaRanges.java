@@ -48,7 +48,9 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public class MediaRanges {
 
-	private static final MediaRanges DEFAULT = new MediaRanges("");
+	/** Represents an empty media ranges object. */
+	public static final MediaRanges EMPTY = new MediaRanges("");
+
 	private static final Cache<String,MediaRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	private final MediaRange[] ranges;
@@ -62,7 +64,7 @@ public class MediaRanges {
 	 */
 	public static MediaRanges of(String value) {
 		if (value == null || value.length() == 0)
-			return DEFAULT;
+			return EMPTY;
 
 		MediaRanges mr = CACHE.get(value);
 		if (mr == null)

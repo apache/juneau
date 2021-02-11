@@ -702,7 +702,7 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* HttpServletRequest */
 	public long getDateHeader(String name) {
 		String s = getHeader(name);
-		return s == null ? 0 : org.apache.juneau.http.header.Date.of(s).asZonedDateTime().toInstant().toEpochMilli();
+		return s == null ? 0 : org.apache.juneau.http.header.Date.of(s).asZonedDateTime().get().toInstant().toEpochMilli();
 	}
 
 	@Override /* HttpServletRequest */

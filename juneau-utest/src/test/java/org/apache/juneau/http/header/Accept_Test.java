@@ -63,7 +63,7 @@ public class Accept_Test {
 
 	@Test
 	public void a02_asRanges() throws Exception {
-		assertObject(new Accept((String)null).asMediaRanges()).isNotNull();
+		assertObject(new Accept((String)null).asMediaRanges().orElse(null)).isNull();
 		assertInteger(new Accept((String)null).match(AList.of(MediaType.JSON))).is(-1);
 		assertObject(new Accept((String)null).getRange(0)).isNull();
 		assertObject(new Accept(MediaType.JSON).getRange(0)).asString().is("application/json");

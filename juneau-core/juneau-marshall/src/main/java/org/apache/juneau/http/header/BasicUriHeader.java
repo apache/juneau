@@ -13,8 +13,10 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.net.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.*;
@@ -100,10 +102,10 @@ public class BasicUriHeader extends BasicHeader {
 	/**
 	 * Returns this header as a {@link URI}.
 	 *
-	 * @return This header as a {@link URI}.
+	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public URI asURI() {
-		return getParsedValue();
+	public Optional<URI> asURI() {
+		return ofNullable(getParsedValue());
 	}
 
 	private URI getParsedValue() {
