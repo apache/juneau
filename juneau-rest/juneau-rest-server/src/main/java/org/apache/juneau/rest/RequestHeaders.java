@@ -67,30 +67,6 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * <p>
 	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
 	 *
-	 * @param defaultEntries
-	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public RequestHeaders addDefault(Map<String,Object> defaultEntries) {
-		if (defaultEntries != null) {
-			for (Map.Entry<String,Object> e : defaultEntries.entrySet()) {
-				String key = e.getKey();
-				Object value = e.getValue();
-				String[] v = get(key);
-				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, stringifyAll(value));
-			}
-		}
-		return this;
-	}
-
-	/**
-	 * Adds default entries to these headers.
-	 *
-	 * <p>
-	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
-	 *
 	 * @param pairs
 	 * 	The default entries.
 	 * 	<br>Can be <jk>null</jk>.
@@ -105,24 +81,6 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 				put(key, stringifyAll(value));
 		}
 		return this;
-	}
-
-	/**
-	 * Adds a default header value on this request.
-	 *
-	 * <p>
-	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
-	 *
-	 * @param name
-	 * 	The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Converted to a String using <c>toString()</c>.
-	 * 	<br>Ignored if value is <jk>null</jk> or blank.
-	 * @return This object (for method chaining).
-	 */
-	public RequestHeaders addDefault(String name, Object value) {
-		return addDefault(Collections.singletonMap(name, value));
 	}
 
 	/**
