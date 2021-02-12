@@ -30,11 +30,10 @@ import org.apache.juneau.dto.swagger.*;
  * </ul>
  */
 @Documented
-@Target({METHOD,TYPE})
+@Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
 @ContextPropertiesApply(RestOpAnnotation.Apply.class)
-@Repeatable(RestOpAnnotation.Array.class)
 public @interface RestOp {
 
 	/**

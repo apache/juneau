@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
@@ -668,20 +666,5 @@ public class RestOpAnnotation {
 				}
 			}
 		}
-	}
-
-	/**
-	 * A collection of {@link RestOp @RestOp annotations}.
-	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 */
-		RestOp[] value();
 	}
 }

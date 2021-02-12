@@ -178,75 +178,87 @@ public class RestOpAnnotation_Test {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestOp(
-		clientVersion="clientVersion",
-		consumes="consumes",
-		contextClass=RestOperationContext.class,
-		converters=RestConverter.class,
-		debug="debug",
-		defaultAccept="defaultAccept",
-		defaultCharset="defaultCharset",
-		defaultContentType="defaultContentType",
-		defaultFormData="defaultFormData",
-		defaultQuery="defaultQuery",
-		defaultRequestAttributes="defaultRequestAttributes",
-		defaultRequestHeaders="defaultRequestHeaders",
-		defaultResponseHeaders="defaultResponseHeaders",
-		description="description",
-		encoders=Encoder.class,
-		guards=RestGuard.class,
-		matchers=RestMatcher.class,
-		maxInput="maxInput",
-		method="method",
-		on="on",
-		parsers=Parser.class,
-		path="path",
-		priority=1,
-		produces="produces",
-		roleGuard="roleGuard",
-		rolesDeclared="rolesDeclared",
-		serializers=Serializer.class,
-		summary="summary",
-		swagger=@OpSwagger,
-		value="value"
-	)
-	public static class D1 {}
-	RestOp d1 = D1.class.getAnnotationsByType(RestOp.class)[0];
+	public interface D1 {
 
-	@RestOp(
-		clientVersion="clientVersion",
-		consumes="consumes",
-		contextClass=RestOperationContext.class,
-		converters=RestConverter.class,
-		debug="debug",
-		defaultAccept="defaultAccept",
-		defaultCharset="defaultCharset",
-		defaultContentType="defaultContentType",
-		defaultFormData="defaultFormData",
-		defaultQuery="defaultQuery",
-		defaultRequestAttributes="defaultRequestAttributes",
-		defaultRequestHeaders="defaultRequestHeaders",
-		defaultResponseHeaders="defaultResponseHeaders",
-		description="description",
-		encoders=Encoder.class,
-		guards=RestGuard.class,
-		matchers=RestMatcher.class,
-		maxInput="maxInput",
-		method="method",
-		on="on",
-		parsers=Parser.class,
-		path="path",
-		priority=1,
-		produces="produces",
-		roleGuard="roleGuard",
-		rolesDeclared="rolesDeclared",
-		serializers=Serializer.class,
-		summary="summary",
-		swagger=@OpSwagger,
-		value="value"
-	)
-	public static class D2 {}
-	RestOp d2 = D2.class.getAnnotationsByType(RestOp.class)[0];
+		@RestOp(
+			clientVersion="clientVersion",
+			consumes="consumes",
+			contextClass=RestOperationContext.class,
+			converters=RestConverter.class,
+			debug="debug",
+			defaultAccept="defaultAccept",
+			defaultCharset="defaultCharset",
+			defaultContentType="defaultContentType",
+			defaultFormData="defaultFormData",
+			defaultQuery="defaultQuery",
+			defaultRequestAttributes="defaultRequestAttributes",
+			defaultRequestHeaders="defaultRequestHeaders",
+			defaultResponseHeaders="defaultResponseHeaders",
+			description="description",
+			encoders=Encoder.class,
+			guards=RestGuard.class,
+			matchers=RestMatcher.class,
+			maxInput="maxInput",
+			method="method",
+			on="on",
+			parsers=Parser.class,
+			path="path",
+			priority=1,
+			produces="produces",
+			roleGuard="roleGuard",
+			rolesDeclared="rolesDeclared",
+			serializers=Serializer.class,
+			summary="summary",
+			swagger=@OpSwagger,
+			value="value"
+		)
+		void m1();
+
+		@RestOp(
+			clientVersion="clientVersion",
+			consumes="consumes",
+			contextClass=RestOperationContext.class,
+			converters=RestConverter.class,
+			debug="debug",
+			defaultAccept="defaultAccept",
+			defaultCharset="defaultCharset",
+			defaultContentType="defaultContentType",
+			defaultFormData="defaultFormData",
+			defaultQuery="defaultQuery",
+			defaultRequestAttributes="defaultRequestAttributes",
+			defaultRequestHeaders="defaultRequestHeaders",
+			defaultResponseHeaders="defaultResponseHeaders",
+			description="description",
+			encoders=Encoder.class,
+			guards=RestGuard.class,
+			matchers=RestMatcher.class,
+			maxInput="maxInput",
+			method="method",
+			on="on",
+			parsers=Parser.class,
+			path="path",
+			priority=1,
+			produces="produces",
+			roleGuard="roleGuard",
+			rolesDeclared="rolesDeclared",
+			serializers=Serializer.class,
+			summary="summary",
+			swagger=@OpSwagger,
+			value="value"
+		)
+		void m2();
+	}
+
+	RestOp d1, d2;
+	{
+		try {
+			d1 = D1.class.getMethod("m1").getAnnotationsByType(RestOp.class)[0];
+			d2 = D1.class.getMethod("m2").getAnnotationsByType(RestOp.class)[0];
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test
 	public void d01_comparisonWithDeclarativeAnnotations() {

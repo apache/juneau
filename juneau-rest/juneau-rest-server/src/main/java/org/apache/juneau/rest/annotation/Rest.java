@@ -40,11 +40,10 @@ import org.apache.juneau.rest.vars.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,METHOD})
+@Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
 @ContextPropertiesApply(RestAnnotation.Apply.class)
-@Repeatable(RestAnnotation.Array.class)
 public @interface Rest {
 
 	/**
