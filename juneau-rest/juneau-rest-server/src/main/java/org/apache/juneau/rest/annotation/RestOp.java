@@ -601,17 +601,6 @@ public @interface RestOp {
 	String[] path() default {};
 
 	/**
-	 * URL path pattern priority.
-	 *
-	 * <p>
-	 * To force path patterns to be checked before other path patterns, use a higher priority number.
-	 *
-	 * <p>
-	 * By default, it's <c>0</c>, which means it will use an internal heuristic to determine a best match.
-	 */
-	int priority() default 0;
-
-	/**
 	 * Supported accept media types.
 	 *
 	 * <p>

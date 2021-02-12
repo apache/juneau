@@ -61,7 +61,6 @@ public class RestOpAnnotation {
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends RestOperationContext> contextClass = RestOperationContext.Null.class;
 		Class<?>[] encoders=new Class<?>[0], parsers=new Class<?>[0], serializers=new Class<?>[0];
-		int priority = 0;
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", rolesDeclared="", roleGuard="", summary="", value="";
 		String[] consumes={}, defaultFormData={}, defaultQuery={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
@@ -314,17 +313,6 @@ public class RestOpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestOp#priority()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder priority(int value) {
-			this.priority = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestOp#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -425,7 +413,6 @@ public class RestOpAnnotation {
 		private final Class<? extends RestMatcher>[] matchers;
 		private final Class<? extends RestOperationContext> contextClass;
 		private final Class<?>[] encoders, parsers, serializers;
-		private final int priority;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;
 		private final String[] consumes, defaultFormData, defaultQuery, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
@@ -453,7 +440,6 @@ public class RestOpAnnotation {
 			this.method = b.method;
 			this.parsers = copyOf(b.parsers);
 			this.path = copyOf(b.path);
-			this.priority = b.priority;
 			this.produces = copyOf(b.produces);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
@@ -570,11 +556,6 @@ public class RestOpAnnotation {
 		}
 
 		@Override /* RestOp */
-		public int priority() {
-			return priority;
-		}
-
-		@Override /* RestOp */
 		public String[] produces() {
 			return produces;
 		}
@@ -652,7 +633,6 @@ public class RestOpAnnotation {
 			cdStream(a.rolesDeclared()).forEach(x -> cpb.addTo(REST_rolesDeclared, x));
 			cpb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
 			cpb.setIfNotEmpty(RESTOP_httpMethod, string(a.method()));
-			cpb.setIf(a.priority() != 0, RESTOP_priority, a.priority());
 			cpb.setIfNotEmpty(RESTOP_debug, string(a.debug()));
 
 			String v = StringUtils.trim(string(a.value()));

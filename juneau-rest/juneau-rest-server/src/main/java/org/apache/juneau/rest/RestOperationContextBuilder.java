@@ -542,24 +542,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		return set(RESTOP_path, values);
 	}
 
-	/**
-	 * Configuration property:  Priority.
-	 *
-	 * <p>
-	 * URL path pattern priority.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestOperationContext#RESTOP_priority}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestOperationContextBuilder priority(int value) {
-		return set(RESTOP_priority, value);
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */

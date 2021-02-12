@@ -634,40 +634,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 */
 	public static final String RESTOP_path = PREFIX + ".path.ls";
 
-	/**
-	 * Configuration property:  Priority.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_priority RESTMETHOD_priority}
-	 * 	<li><b>Name:</b>  <js>"RestOperationContext.priority.i"</js>
-	 * 	<li><b>Data type:</b>  <jk>int</jk>
-	 * 	<li><b>System property:</b>  <c>RestOperationContext.priority</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_PRIORITY</c>
-	 * 	<li><b>Default:</b>  <c>0</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#priority()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#priority(int)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * URL path pattern priority.
-	 *
-	 * <p>
-	 * To force path patterns to be checked before other path patterns, use a higher priority number.
-	 *
-	 * <p>
-	 * By default, it's <c>0</c>, which means it will use an internal heuristic to determine a best match.
-	 */
-	public static final String RESTOP_priority = PREFIX + ".priority.i";
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -679,7 +645,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
-	private final Integer priority;
 	private final RestContext context;
 	private final Method method;
 	private final MethodInvoker methodInvoker;
@@ -805,8 +770,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			responseMeta = ResponseBeanMeta.create(mi, cp);
 
 			opParams = context.findRestOperationParams(mi.inner(), bf);
-
-			this.priority = cp.getInteger(RESTOP_priority).orElse(0);
 
 			this.callLogger = context.getCallLogger();
 		} catch (ServletException e) {
@@ -1957,10 +1920,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	public int compareTo(RestOperationContext o) {
 		int c;
 
-		c = priority.compareTo(o.priority);
-		if (c != 0)
-			return c;
-
 		for (int i = 0; i < Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
 			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
 			if (c != 0)
@@ -2025,7 +1984,6 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 				.a("defaultRequestHeaders", defaultRequestHeaders)
 				.a("defaultRequestQuery", defaultRequestQuery)
 				.a("httpMethod", httpMethod)
-				.a("priority", priority)
 			);
 	}
 

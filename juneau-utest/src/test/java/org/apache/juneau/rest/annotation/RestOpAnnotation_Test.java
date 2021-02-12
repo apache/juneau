@@ -56,7 +56,6 @@ public class RestOpAnnotation_Test {
 		.on("on")
 		.parsers(Parser.class)
 		.path("path")
-		.priority(1)
 		.produces("produces")
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -89,7 +88,6 @@ public class RestOpAnnotation_Test {
 		.on("on")
 		.parsers(Parser.class)
 		.path("path")
-		.priority(1)
 		.produces("produces")
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -125,7 +123,6 @@ public class RestOpAnnotation_Test {
 				+ "on:['on'],"
 				+ "parsers:['org.apache.juneau.parser.Parser'],"
 				+ "path:['path'],"
-				+ "priority:1,"
 				+ "produces:['produces'],"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -203,7 +200,6 @@ public class RestOpAnnotation_Test {
 			on="on",
 			parsers=Parser.class,
 			path="path",
-			priority=1,
 			produces="produces",
 			roleGuard="roleGuard",
 			rolesDeclared="rolesDeclared",
@@ -237,7 +233,6 @@ public class RestOpAnnotation_Test {
 			on="on",
 			parsers=Parser.class,
 			path="path",
-			priority=1,
 			produces="produces",
 			roleGuard="roleGuard",
 			rolesDeclared="rolesDeclared",
