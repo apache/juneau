@@ -37,7 +37,7 @@ public class RestClient_Response_Headers_Test {
 		@RestOp
 		public String getEcho(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String c = req.getHeader("Check");
-			String[] h = req.getRequestHeaders().get(c);
+			String[] h = req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 			if (h != null)
 				for (String hh : h)
 					res.addHeader(c, hh);

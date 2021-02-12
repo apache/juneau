@@ -55,7 +55,7 @@ public class RequestHeader implements Header {
 		}
 	};
 
-	private final Header header;
+	private final String name, value;
 	private final RestRequest request;
 	private HttpPartParserSession parser;
 	private HttpPartSchema schema;
@@ -64,11 +64,13 @@ public class RequestHeader implements Header {
 	 * Constructor.
 	 *
 	 * @param request The request object.
-	 * @param header The wrapped header.  Can be <jk>null</jk>.
+	 * @param name The header name.
+	 * @param value The header value.
 	 */
-	public RequestHeader(RestRequest request, Header header) {
+	public RequestHeader(RestRequest request, String name, String value) {
 		this.request = request;
-		this.header = header == null ? NULL_HEADER : header;
+		this.name = name;
+		this.value = value;
 		parser(null);
 	}
 
@@ -117,7 +119,7 @@ public class RequestHeader implements Header {
 	 * @return <jk>true</jk> if this header exists on the response.
 	 */
 	public boolean exists() {
-		return header != NULL_HEADER;
+		return value != null;
 	}
 
 	/**
@@ -720,7 +722,7 @@ public class RequestHeader implements Header {
 	 */
 	@Override /* Header */
 	public String getName() {
-		return header.getName();
+		return name;
 	}
 
 	/**
@@ -734,7 +736,7 @@ public class RequestHeader implements Header {
 	 */
 	@Override /* Header */
 	public String getValue() {
-		return header.getValue();
+		return value;
 	}
 
 	/**
@@ -745,7 +747,7 @@ public class RequestHeader implements Header {
 	 */
 	@Override /* Header */
 	public HeaderElement[] getElements() throws HttpException {
-		return header.getElements();
+		return new HeaderElement[0];
 	}
 
 	@Override /* Object */

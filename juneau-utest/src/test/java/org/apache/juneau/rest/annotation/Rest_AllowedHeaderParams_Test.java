@@ -38,7 +38,7 @@ public class Rest_AllowedHeaderParams_Test {
 		}
 	}
 
-	@Rest()
+	@Rest() /* Default is allowedHeaderParams="Accept, Content-Type" */
 	public static class A1 extends A {}
 
 	@Rest(allowedHeaderParams="Accept, Content-Type")

@@ -12,18 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static java.util.Optional.*;
+import static org.apache.juneau.assertions.Assertions.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 
@@ -37,27 +38,76 @@ import org.apache.juneau.http.header.Date;
  * 	<li class='link'>{@doc RestmRequestHeaders}
  * </ul>
  */
-public class RequestHeaders extends TreeMap<String,String[]> {
-	private static final long serialVersionUID = 1L;
+public class RequestHeaders {
 
 	private final RestRequest req;
 	private HttpPartParserSession parser;
-	private RequestQuery queryParams;
-	private Set<String> allowedQueryParams;
 
-	RequestHeaders(RestRequest req) {
-		super(String.CASE_INSENSITIVE_ORDER);
+	private List<RequestHeader> headers = new LinkedList<>();
+	private Map<String,List<RequestHeader>> headerMap = new TreeMap<>();
+
+	RequestHeaders(RestRequest req, RequestQuery query) {
 		this.req = req;
+
+		for (Enumeration<String> e = req.getHeaderNames(); e.hasMoreElements();) {
+			String name = e.nextElement();
+			String n = name.toLowerCase();
+			List<RequestHeader> l = new ArrayList<>();
+			for (Enumeration<String> ve = req.getHeaders(name); ve.hasMoreElements();) {
+				RequestHeader h = new RequestHeader(req, name, ve.nextElement());
+				headers.add(h);
+				l.add(h);
+			}
+			headerMap.put(n, l);
+		}
+
+		Set<String> allowedHeaderParams = req.getContext().getAllowedHeaderParams();
+		if (allowedHeaderParams.contains("*")) {
+			for (Map.Entry<String,String[]> e : query.entrySet()) {
+				String name = e.getKey();
+				String n = name.toLowerCase();
+				List<RequestHeader> l = headerMap.get(n);
+				if (l == null)
+					l = new ArrayList<>();
+				for (String value : e.getValue()) {
+					RequestHeader h = new RequestHeader(req, name, value);
+					headers.add(h);
+					l.add(h);
+				}
+				headerMap.put(n, l);
+			}
+
+		} else for (String name : allowedHeaderParams) {
+			String n = name.toLowerCase();
+			List<RequestHeader> l = headerMap.get(n);
+			String[] values = query.get(name, true);
+			if (values != null) {
+				if (l == null)
+					l = new ArrayList<>();
+				for (String value : values) {
+					RequestHeader h = new RequestHeader(req, name, value);
+					headers.add(h);
+					l.add(h);
+				}
+				headerMap.put(n, l);
+			}
+		}
+	}
+
+	/**
+	 * Subset constructor.
+	 */
+	RequestHeaders(RestRequest req, Map<String,List<RequestHeader>> headerMap, HttpPartParserSession parser) {
+		this.req = req;
+		this.headerMap.putAll(headerMap);
+		this.headers = headerMap.values().stream().flatMap(List::stream).collect(toList());
+		this.parser = parser;
 	}
 
 	RequestHeaders parser(HttpPartParserSession parser) {
 		this.parser = parser;
-		return this;
-	}
-
-	RequestHeaders queryParams(RequestQuery queryParams, Set<String> allowedQueryParams) {
-		this.queryParams = queryParams;
-		this.allowedQueryParams = allowedQueryParams;
+		for (RequestHeader h : headers)
+			h.parser(parser);
 		return this;
 	}
 
@@ -74,30 +124,17 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 */
 	public RequestHeaders addDefault(List<Header> pairs) {
 		for (Header p : pairs) {
-			String key = p.getName();
-			Object value = p.getValue();
-			String[] v = get(key);
-			if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-				put(key, stringifyAll(value));
-		}
-		return this;
-	}
-
-	/**
-	 * Adds a set of header values to this object.
-	 *
-	 * @param name The header name.
-	 * @param values The header values.
-	 * @return This object (for method chaining).
-	 */
-	public RequestHeaders put(String name, Enumeration<String> values) {
-		// Optimized for enumerations of one entry, the most-common case.
-		if (values.hasMoreElements()) {
-			String v = values.nextElement();
-			String[] s = new String[]{v};
-			while (values.hasMoreElements())
-				s = append(s, values.nextElement());
-			put(name, s);
+			String name = p.getName();
+			String n = name.toLowerCase();
+			List<RequestHeader> l = headerMap.get(n);
+			boolean hasAllBlanks = l != null && l.stream().allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			if (l == null || hasAllBlanks) {
+				if (hasAllBlanks)
+					headers.removeAll(l);
+				RequestHeader h = new RequestHeader(req, name, p.getValue());
+				headers.add(h);
+				headerMap.put(n, AList.of(h));
+			}
 		}
 		return this;
 	}
@@ -113,8 +150,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getFirst(String name) {
-		String[] x = getValues(name);
-		return new RequestHeader(req, BasicHeader.of(name, x == null ? null : x[0]));
+		assertArgNotNull("name", name);
+		List<RequestHeader> l = headerMap.get(name.toLowerCase());
+		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(0));
 	}
 
 	/**
@@ -128,8 +166,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getLast(String name) {
-		String[] x = getValues(name);
-		return new RequestHeader(req, BasicHeader.of(name, x == null ? null : x[x.length-1]));
+		assertArgNotNull("name", name);
+		List<RequestHeader> l = headerMap.get(name.toLowerCase());
+		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(l.size()-1));
 	}
 
 	/**
@@ -139,13 +178,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The list of all headers with the specified name, or an empty list if none are found.
 	 */
 	public List<RequestHeader> getAll(String name) {
-		String[] x = getValues(name);
-		if (x == null)
-			return emptyList();
-		RequestHeader[] l = new RequestHeader[x.length];
-		for (int i = 0; i < x.length; i++)
-			l[i] = new RequestHeader(req, BasicHeader.of(name, x[i]));
-		return Arrays.asList(l);
+		assertArgNotNull("name", name);
+		List<RequestHeader> l = headerMap.get(name.toLowerCase());
+		return unmodifiableList(l == null ? emptyList() : l);
 	}
 
 	/**
@@ -154,11 +189,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return All the headers in this request.
 	 */
 	public List<RequestHeader> getAll() {
-		List<RequestHeader> l = new ArrayList<>();
- 		for (Map.Entry<String,String[]> e : entrySet())
-			for (String v : e.getValue())
-				l.add(new RequestHeader(req, BasicHeader.of(e.getKey(), v)));
-		return l;
+		return unmodifiableList(headers);
 	}
 
 	/**
@@ -259,9 +290,39 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
+	 * @return This object (for method chaining).
 	 */
-	public void put(String name, Object value) {
-		super.put(name, stringifyAll(value));
+	public RequestHeaders put(String name, Object value) {
+		assertArgNotNull("name", name);
+		String n = name.toLowerCase();
+		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
+		if (headerMap.containsKey(n))
+			headers.removeIf(x->x.getName().equalsIgnoreCase(name));
+		headers.add(h);
+		headerMap.put(n, AList.of(h));
+		return this;
+	}
+
+	/**
+	 * Adds a request header value.
+	 *
+	 * <p>
+	 * Header is added to the end of the headers.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders add(String name, Object value) {
+		assertArgNotNull("name", name);
+		String n = name.toLowerCase();
+		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
+		if (headerMap.containsKey(n))
+			headerMap.get(n).add(h);
+		else
+			headerMap.put(n, AList.of(h));
+		headers.add(h);
+		return this;
 	}
 
 	/**
@@ -271,11 +332,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A new headers object.
 	 */
 	public RequestHeaders subset(String...headers) {
-		RequestHeaders rh2 = new RequestHeaders(req).parser(parser).queryParams(queryParams, allowedQueryParams);
-		for (String h : headers)
-			if (containsKey(h))
-				rh2.put(h, get(h));
-		return rh2;
+		Map<String,List<RequestHeader>> m = Arrays
+			.asList(headers)
+			.stream()
+			.map(x -> x.toLowerCase())
+			.filter(headerMap::containsKey)
+			.collect(toMap(Function.identity(),headerMap::get));
+
+		return new RequestHeaders(req, m, parser);
 	}
 
 	/**
@@ -793,36 +857,20 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A JSON string containing the contents of the headers.
 	 */
 	public String toString(boolean sorted) {
-		Map<String,Object> m = null;
-		if (sorted)
-			m = new TreeMap<>();
-		else
-			m = new LinkedHashMap<>();
-		for (Map.Entry<String,String[]> e : this.entrySet()) {
-			String[] v = e.getValue();
-			m.put(e.getKey(), v.length == 1 ? v[0] : v);
+		OMap m = OMap.create();
+		if (sorted) {
+			for (List<RequestHeader> h1 : headerMap.values())
+				for (RequestHeader h2 : h1)
+					m.append(h2.getName(), h2.getValue());
+		} else {
+			for (RequestHeader h : headers)
+				m.append(h.getName(), h.getValue());
 		}
-		return SimpleJsonSerializer.DEFAULT.toString(m);
+		return m.toString();
 	}
 
 	@Override /* Object */
 	public String toString() {
 		return toString(false);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private String[] getValues(String name) {
-		String[] v = null;
-		if (queryParams != null)
-			if (allowedQueryParams.contains("*") || allowedQueryParams.contains(name))
-				v = queryParams.get(name, true);
-		if (v == null || v.length == 0)
-			v = get(name);
-		if (v == null || v.length == 0)
-			return null;
-		return v;
 	}
 }

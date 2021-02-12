@@ -83,7 +83,7 @@ public class RestClient_BasicCalls_Test {
 		}
 		@RestOp(path="/checkHeader")
 		public String[] postHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().get(req.getHeader("Check"));
+			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 		@RestOp(path="/",method="*")
 		public Reader echoMethod(@Method String method) {

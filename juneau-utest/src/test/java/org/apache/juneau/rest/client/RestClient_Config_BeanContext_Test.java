@@ -41,7 +41,7 @@ public class RestClient_Config_BeanContext_Test {
 		}
 		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().get(req.getHeader("Check"));
+			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 		@RestOp(path="/checkQuery")
 		public Reader getQuery(org.apache.juneau.rest.RestRequest req) {

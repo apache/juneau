@@ -58,7 +58,7 @@ public class RestClient_Headers_Test {
 	public static class A extends BasicRestObject {
 		@RestOp
 		public String[] getHeaders(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().get(req.getHeader("Check"));
+			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 	}
 
@@ -77,10 +77,10 @@ public class RestClient_Headers_Test {
 		checkFooClient().build().get("/headers").header("Foo","baz").run().assertBody().is("['baz']");
 		checkFooClient().header("Foo","bar").build().get("/headers").header("Foo","baz").run().assertBody().is("['bar','baz']");
 		checkFooClient().header("Foo",bean).build().get("/headers").header("Foo",bean).run().assertBody().is("['f=1','f=1']");
-		checkFooClient().header("Foo",null).build().get("/headers").header("Foo",null).run().assertBody().is("null");
+		checkFooClient().header("Foo",null).build().get("/headers").header("Foo",null).run().assertBody().is("[]");
 
-		checkClient("null").header(null,"bar").build().get("/headers").header(null,"Foo").run().assertBody().is("null");
-		checkClient("null").header(null,null).build().get("/headers").header(null,null).run().assertBody().is("null");
+		checkClient("null").header(null,"bar").build().get("/headers").header(null,"Foo").run().assertBody().is("[]");
+		checkClient("null").header(null,null).build().get("/headers").header(null,null).run().assertBody().is("[]");
 	}
 
 	@Test
@@ -105,7 +105,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a06_headers_Objects() throws Exception {
-		checkFooClient().headers((Header)null).build().get("/headers").headers((Header)null).run().assertBody().is("null");
+		checkFooClient().headers((Header)null).build().get("/headers").headers((Header)null).run().assertBody().is("[]");
 		checkFooClient().headers(header("Foo","bar"),header("Baz","baz")).build().get("/headers").headers(header("Foo","baz"),header("Baz","quux")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(OMap.of("Foo","bar")).build().get("/headers").headers(OMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(AMap.of("Foo","bar")).build().get("/headers").headers(AMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
@@ -117,7 +117,7 @@ public class RestClient_Headers_Test {
 		checkFooClient().headers(HeaderSupplier.of(header("Foo","bar"))).build().get("/headers").headers(HeaderSupplier.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(AList.of(header("Foo","bar"))).build().get("/headers").headers(AList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
 		checkClient("f").build().get("/headers").headers(bean).run().assertBody().is("['1']");
-		checkClient("f").build().get("/headers").headers((Object)null).run().assertBody().is("null");
+		checkClient("f").build().get("/headers").headers((Object)null).run().assertBody().is("[]");
 		assertThrown(()->client().headers("Foo")).contains("Invalid type");
 		assertThrown(()->client().build().get("").headers("Foo")).contains("Invalid type");
 

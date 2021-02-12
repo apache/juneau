@@ -21,6 +21,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.lang.Integer.*;
+import static java.util.Collections.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -31,6 +32,7 @@ import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.stream.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -141,11 +143,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		queryParams = new RequestQuery(this);
 		queryParams.putAll(call.getQueryParams());
 
-		headers = new RequestHeaders(this);
-		for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
-			String name = e.nextElement();
-			headers.put(name, super.getHeaders(name));
-		}
+		headers = new RequestHeaders(this, queryParams);
 
 		body = new RequestBody(this);
 
@@ -156,10 +154,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
 			}
 		}
-
-		Set<String> s = context.getAllowedHeaderParams();
-		if (! s.isEmpty())
-			headers.queryParams(queryParams, s);
 
 		pathParams = new RequestPath(this);
 		pathParams.putAll(call.getPathVars());
@@ -246,7 +240,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getRequestHeader(String name) {
-		return new RequestHeader(this, headers.getLast(name)).parser(getPartParserSession());
+		return headers.getLast(name).parser(getPartParserSession());
 	}
 
 	/**
@@ -529,10 +523,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* ServletRequest */
 	public Enumeration<String> getHeaders(String name) {
-		String[] v = headers.get(name);
-		if (v == null || v.length == 0)
-			return Collections.enumeration(Collections.EMPTY_LIST);
-		return Collections.enumeration(Arrays.asList(v));
+		return inner.getHeaders(name);
 	}
 
 	/**
