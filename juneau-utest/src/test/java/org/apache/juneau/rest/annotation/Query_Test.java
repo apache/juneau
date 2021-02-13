@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -38,12 +37,12 @@ public class Query_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
+		@RestGet
 		public String a(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public String b(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
@@ -87,22 +86,22 @@ public class Query_Test {
 
 	@Rest
 	public static class B {
-		@RestOp
+		@RestGet
 		public String a(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
-		@RestOp
+		@RestGet
 		public String b(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public String c(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public String d(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
@@ -134,27 +133,27 @@ public class Query_Test {
 			public boolean c;
 		}
 
-		@RestOp
+		@RestGet
 		public Object a(@Query(n="x",cf="multi") String[] x) {
 			return x;
 		}
-		@RestOp
+		@RestGet
 		public Object b(@Query(n="x",cf="multi") int[] x) {
 			return x;
 		}
-		@RestOp
+		@RestGet
 		public Object c(@Query(n="x",cf="multi") List<String> x) {
 			return x;
 		}
-		@RestOp
+		@RestGet
 		public Object d(@Query(n="x",cf="multi") List<Integer> x) {
 			return x;
 		}
-		@RestOp
+		@RestGet
 		public Object e(@Query(n="x",cf="multi",items=@Items(f="uon")) C1[] x) {
 			return x;
 		}
-		@RestOp
+		@RestGet
 		public Object f(@Query(n="x",cf="multi",items=@Items(f="uon")) List<C1> x) {
 			return x;
 		}
@@ -183,28 +182,28 @@ public class Query_Test {
 
 	@Rest
 	public static class D {
-		@RestOp(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+		@RestGet(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestQuery query) {
 			return OMap.create()
 				.a("f1", query.getString("f1"))
 				.a("f2", query.getString("f2"))
 				.a("f3", query.getString("f3"));
 		}
-		@RestOp
+		@RestGet
 		public OMap b(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
-		@RestOp
+		@RestGet
 		public OMap c(@Query(n="f1",df="1") String f1, @Query(n="f2",df="2") String f2, @Query(n="f3",df="3") String f3) {
 			return OMap.create()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
-		@RestOp(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+		@RestGet(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 		public OMap d(@Query(n="f1",df="4") String f1, @Query(n="f2",df="5") String f2, @Query(n="f3",df="6") String f3) {
 			return OMap.create()
 				.a("f1", f1)
@@ -232,22 +231,22 @@ public class Query_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class E {
-		@RestOp
+		@RestGet
 		public Object a(@Query("f1") Optional<Integer> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp
+		@RestGet
 		public Object b(@Query("f1") Optional<ABean> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp
+		@RestGet
 		public Object c(@Query("f1") Optional<List<ABean>> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp
+		@RestGet
 		public Object d(@Query("f1") List<Optional<ABean>> f1) throws Exception {
 			return f1;
 		}

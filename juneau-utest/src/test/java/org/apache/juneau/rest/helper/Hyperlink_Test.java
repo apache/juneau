@@ -28,15 +28,15 @@ public class Hyperlink_Test {
 
 	@Rest
 	public static class A extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		public Hyperlink a() {
 			return new Hyperlink("foo", "bar");
 		}
-		@RestOp
+		@RestGet
 		public Hyperlink[] b() {
 			return new Hyperlink[]{a(),a()};
 		}
-		@RestOp
+		@RestGet
 		public Collection<Hyperlink> c() {
 			return Arrays.asList(b());
 		}

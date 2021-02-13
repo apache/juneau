@@ -65,35 +65,35 @@ public class Restx_Path_Test {
 
 	@Rest
 	public static class B {
-		@RestOp(path="/")
+		@RestGet(path="/")
 		public String a() {
 			return "a";
 		}
-		@RestOp(path="/*")
+		@RestGet(path="/*")
 		public String b() {
 			return "b";
 		}
-		@RestOp(path="/foo")
+		@RestGet(path="/foo")
 		public String c() {
 			return "c";
 		}
-		@RestOp(path="/foo/*")
+		@RestGet(path="/foo/*")
 		public String d() {
 			return "d";
 		}
-		@RestOp(path="/{id}")
+		@RestGet(path="/{id}")
 		public String e() {
 			return "e";
 		}
-		@RestOp(path="/{id}/*")
+		@RestGet(path="/{id}/*")
 		public String f() {
 			return "f";
 		}
-		@RestOp(path="/{id}/foo")
+		@RestGet(path="/{id}/foo")
 		public String g() {
 			return "g";
 		}
-		@RestOp(path="/{id}/foo/*")
+		@RestGet(path="/{id}/foo/*")
 		public String h() {
 			return "h";
 		}
@@ -125,7 +125,7 @@ public class Restx_Path_Test {
 
 	@Rest
 	public static class C1 {
-		@RestOp(path="/foo")
+		@RestGet(path="/foo")
 		public String a() {
 			return "a";
 		}
@@ -133,7 +133,7 @@ public class Restx_Path_Test {
 
 	@Rest
 	public static class C2 extends C1 {
-		@RestOp(path="/foo")
+		@RestGet(path="/foo")
 		public String b() {  // Overrides method on parent.
 			return "b";
 		}

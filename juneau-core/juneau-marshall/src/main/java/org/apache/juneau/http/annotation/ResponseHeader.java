@@ -48,14 +48,14 @@ import org.apache.juneau.oapi.*;
  *
  * <p class='bcode w800'>
  * 	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
- * 	<ja>@RestOp</ja>(...)
- * 	<jk>public void</jk> login(RestResponse res) {
- * 		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public void</jk> login(RestResponse <jv>res</jv>) {
+ * 		<jv>res</jv>.setHeader(<js>"X-Rate-Limit"</js>, 1000);
  * 		...
  * 	}
  *
  *	<jc>// Example #2 - Use on parameter.</jc>
- * 	<ja>@RestOp</ja>(...)
+ * 	<ja>@RestPost</ja>(...)
  * 	<jk>public void</jk> login(
  * 			<ja>@ResponseHeader</ja>(
  * 				name=<js>"X-Rate-Limit"</js>,
@@ -64,16 +64,16 @@ import org.apache.juneau.oapi.*;
  * 				description=<js>"Calls per hour allowed by the user."</js>,
  * 				example=<js>"123"</js>
  * 			)
- * 			Value&lt;Integer&gt; rateLimit
+ * 			Value&lt;Integer&gt; <jv>rateLimit</jv>
  *		) {
- *		rateLimit.set(1000);
+ *		<jv>rateLimit</jv>.set(1000);
  *		...
  * 	}
  *
  *	<jc>// Example #3 - Use on type.</jc>
- * 	<ja>@RestOp</ja>(...)
- * 	<jk>public void</jk> login(Value&lt;RateLimit&gt; rateLimit) {
- * 		rateLimit.set(new RateLimit(1000));
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public void</jk> login(Value&lt;RateLimit&gt; <jv>rateLimit</jv>) {
+ * 		<jv>rateLimit</jv>.set(<jk>new</jk> RateLimit(1000));
  * 		...
  * 	}
  *
@@ -716,10 +716,10 @@ public @interface ResponseHeader {
 	 * <p>
 	 * The following are completely equivalent ways of defining a response header:
 	 * <p class='bcode w800'>
-	 * 	<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
+	 * 	<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; <jv>rateLimit</jv>)
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
+	 * 	<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; <jv>rateLimit</jv>)
 	 * </p>
 	 */
 	String value() default "";

@@ -119,53 +119,53 @@ public class HttpUtilsTest {
 
 	@Test
 	public void testGetHttpPath_noargs_detect() throws Exception {
-		assertEquals("/", detectHttpPath(B1.class.getMethod("doGet"), true));
-		assertEquals("/", detectHttpPath(B1.class.getMethod("doGET"), true));
-		assertEquals("/", detectHttpPath(B1.class.getMethod("doPOST"), true));
-		assertEquals("/doFOO", detectHttpPath(B1.class.getMethod("doFOO"), true));
-		assertEquals("/foo", detectHttpPath(B1.class.getMethod("getFoo"), true));
-		assertEquals("/foo", detectHttpPath(B1.class.getMethod("postFoo"), true));
-		assertEquals("/", detectHttpPath(B1.class.getMethod("get"), true));
-		assertEquals("/", detectHttpPath(B1.class.getMethod("post"), true));
-		assertEquals("/createFoo", detectHttpPath(B1.class.getMethod("createFoo"), true));
+		assertEquals("/", detectHttpPath(B1.class.getMethod("doGet"), null));
+		assertEquals("/", detectHttpPath(B1.class.getMethod("doGET"), null));
+		assertEquals("/", detectHttpPath(B1.class.getMethod("doPOST"), null));
+		assertEquals("/doFOO", detectHttpPath(B1.class.getMethod("doFOO"), null));
+		assertEquals("/foo", detectHttpPath(B1.class.getMethod("getFoo"), null));
+		assertEquals("/foo", detectHttpPath(B1.class.getMethod("postFoo"), null));
+		assertEquals("/", detectHttpPath(B1.class.getMethod("get"), null));
+		assertEquals("/", detectHttpPath(B1.class.getMethod("post"), null));
+		assertEquals("/createFoo", detectHttpPath(B1.class.getMethod("createFoo"), null));
 	}
 
 	@Test
 	public void testGetHttpPath_noargs_nodetect() throws Exception {
-		assertEquals("/doGet", detectHttpPath(B1.class.getMethod("doGet"), false));
-		assertEquals("/doGET", detectHttpPath(B1.class.getMethod("doGET"), false));
-		assertEquals("/doPOST", detectHttpPath(B1.class.getMethod("doPOST"), false));
-		assertEquals("/doFOO", detectHttpPath(B1.class.getMethod("doFOO"), false));
-		assertEquals("/getFoo", detectHttpPath(B1.class.getMethod("getFoo"), false));
-		assertEquals("/postFoo", detectHttpPath(B1.class.getMethod("postFoo"), false));
-		assertEquals("/get", detectHttpPath(B1.class.getMethod("get"), false));
-		assertEquals("/post", detectHttpPath(B1.class.getMethod("post"), false));
-		assertEquals("/createFoo", detectHttpPath(B1.class.getMethod("createFoo"), false));
+		assertEquals("/doGet", detectHttpPath(B1.class.getMethod("doGet"), "get"));
+		assertEquals("/doGET", detectHttpPath(B1.class.getMethod("doGET"), "get"));
+		assertEquals("/doPOST", detectHttpPath(B1.class.getMethod("doPOST"), "get"));
+		assertEquals("/doFOO", detectHttpPath(B1.class.getMethod("doFOO"), "get"));
+		assertEquals("/foo", detectHttpPath(B1.class.getMethod("getFoo"), "get"));
+		assertEquals("/postFoo", detectHttpPath(B1.class.getMethod("postFoo"), "get"));
+		assertEquals("/", detectHttpPath(B1.class.getMethod("get"), "get"));
+		assertEquals("/post", detectHttpPath(B1.class.getMethod("post"), "get"));
+		assertEquals("/createFoo", detectHttpPath(B1.class.getMethod("createFoo"), "get"));
 	}
 
 	@Test
 	public void testGetHttpPath_args_detect() throws Exception {
-		assertEquals("/", detectHttpPath(B2.class.getMethod("doGet",int.class,A.class), true));
-		assertEquals("/", detectHttpPath(B2.class.getMethod("doGET",int.class,A.class), true));
-		assertEquals("/", detectHttpPath(B2.class.getMethod("doPOST",int.class,A.class), true));
-		assertEquals("/doFOO", detectHttpPath(B2.class.getMethod("doFOO",int.class,A.class), true));
-		assertEquals("/foo", detectHttpPath(B2.class.getMethod("getFoo",int.class,A.class), true));
-		assertEquals("/foo", detectHttpPath(B2.class.getMethod("postFoo",int.class,A.class), true));
-		assertEquals("/", detectHttpPath(B2.class.getMethod("get",int.class,A.class), true));
-		assertEquals("/", detectHttpPath(B2.class.getMethod("post",int.class,A.class), true));
-		assertEquals("/createFoo", detectHttpPath(B2.class.getMethod("createFoo",int.class,A.class), true));
+		assertEquals("/", detectHttpPath(B2.class.getMethod("doGet",int.class,A.class), null));
+		assertEquals("/", detectHttpPath(B2.class.getMethod("doGET",int.class,A.class), null));
+		assertEquals("/", detectHttpPath(B2.class.getMethod("doPOST",int.class,A.class), null));
+		assertEquals("/doFOO", detectHttpPath(B2.class.getMethod("doFOO",int.class,A.class), null));
+		assertEquals("/foo", detectHttpPath(B2.class.getMethod("getFoo",int.class,A.class), null));
+		assertEquals("/foo", detectHttpPath(B2.class.getMethod("postFoo",int.class,A.class), null));
+		assertEquals("/", detectHttpPath(B2.class.getMethod("get",int.class,A.class), null));
+		assertEquals("/", detectHttpPath(B2.class.getMethod("post",int.class,A.class), null));
+		assertEquals("/createFoo", detectHttpPath(B2.class.getMethod("createFoo",int.class,A.class), null));
 	}
 
 	@Test
 	public void testGetHttpPath_args_nodetect() throws Exception {
-		assertEquals("/doGet", detectHttpPath(B2.class.getMethod("doGet",int.class,A.class), false));
-		assertEquals("/doGET", detectHttpPath(B2.class.getMethod("doGET",int.class,A.class), false));
-		assertEquals("/doPOST", detectHttpPath(B2.class.getMethod("doPOST",int.class,A.class), false));
-		assertEquals("/doFOO", detectHttpPath(B2.class.getMethod("doFOO",int.class,A.class), false));
-		assertEquals("/getFoo", detectHttpPath(B2.class.getMethod("getFoo",int.class,A.class), false));
-		assertEquals("/postFoo", detectHttpPath(B2.class.getMethod("postFoo",int.class,A.class), false));
-		assertEquals("/get", detectHttpPath(B2.class.getMethod("get",int.class,A.class), false));
-		assertEquals("/post", detectHttpPath(B2.class.getMethod("post",int.class,A.class), false));
-		assertEquals("/createFoo", detectHttpPath(B2.class.getMethod("createFoo",int.class,A.class), false));
+		assertEquals("/doGet", detectHttpPath(B2.class.getMethod("doGet",int.class,A.class), "get"));
+		assertEquals("/doGET", detectHttpPath(B2.class.getMethod("doGET",int.class,A.class), "get"));
+		assertEquals("/doPOST", detectHttpPath(B2.class.getMethod("doPOST",int.class,A.class), "get"));
+		assertEquals("/doFOO", detectHttpPath(B2.class.getMethod("doFOO",int.class,A.class), "get"));
+		assertEquals("/foo", detectHttpPath(B2.class.getMethod("getFoo",int.class,A.class), "get"));
+		assertEquals("/postFoo", detectHttpPath(B2.class.getMethod("postFoo",int.class,A.class), "get"));
+		assertEquals("/", detectHttpPath(B2.class.getMethod("get",int.class,A.class), "get"));
+		assertEquals("/post", detectHttpPath(B2.class.getMethod("post",int.class,A.class), "get"));
+		assertEquals("/createFoo", detectHttpPath(B2.class.getMethod("createFoo",int.class,A.class), "get"));
 	}
 }

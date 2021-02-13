@@ -27,28 +27,28 @@ public class UnavailableForLegalReasons_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws UnavailableForLegalReasons {
+		@RestGet
+		public void f1() throws UnavailableForLegalReasons {
 			throw new UnavailableForLegalReasons();
 		}
-		@RestOp
-		public void getF2() throws UnavailableForLegalReasons {
+		@RestGet
+		public void f2() throws UnavailableForLegalReasons {
 			throw new UnavailableForLegalReasons("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws UnavailableForLegalReasons {
+		@RestGet
+		public void f3() throws UnavailableForLegalReasons {
 			throw new UnavailableForLegalReasons(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws UnavailableForLegalReasons {
+		@RestGet
+		public void f4() throws UnavailableForLegalReasons {
 			throw new UnavailableForLegalReasons(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws UnavailableForLegalReasons {
+		@RestGet
+		public void f5() throws UnavailableForLegalReasons {
 			throw new UnavailableForLegalReasons().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws UnavailableForLegalReasons {
+		@RestGet
+		public void f6() throws UnavailableForLegalReasons {
 			throw new UnavailableForLegalReasons("foo");
 		}
 	}

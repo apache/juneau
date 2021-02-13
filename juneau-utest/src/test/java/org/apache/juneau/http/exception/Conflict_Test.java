@@ -27,28 +27,28 @@ public class Conflict_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws Conflict {
+		@RestGet
+		public void f1() throws Conflict {
 			throw new Conflict();
 		}
-		@RestOp
-		public void getF2() throws Conflict {
+		@RestGet
+		public void f2() throws Conflict {
 			throw new Conflict("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws Conflict {
+		@RestGet
+		public void f3() throws Conflict {
 			throw new Conflict(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws Conflict {
+		@RestGet
+		public void f4() throws Conflict {
 			throw new Conflict(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws Conflict {
+		@RestGet
+		public void f5() throws Conflict {
 			throw new Conflict().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws Conflict {
+		@RestGet
+		public void f6() throws Conflict {
 			throw new Conflict("foo");
 		}
 	}

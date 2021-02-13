@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -64,7 +63,7 @@ public class RestHook_Test {
 				req.getRequestHeaders().put("Content-Type", overrideContentType);
 		}
 
-		@RestOp(method=PUT,
+		@RestPut(
 			defaultRequestAttributes={
 				"p3:mp3",
 				"p4:mp4"
@@ -74,7 +73,7 @@ public class RestHook_Test {
 			return in;
 		}
 
-		@RestOp(method=PUT)
+		@RestPut
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.put("p3", "pp3");
 			attrs.put("p4", "pp4");
@@ -137,7 +136,7 @@ public class RestHook_Test {
 				attrs.put("Override-Content-Type", overrideContentType);
 		}
 
-		@RestOp(method=PUT,
+		@RestPut(
 			defaultRequestAttributes={
 				"p3:mp3",
 				"p4:mp4"
@@ -148,7 +147,7 @@ public class RestHook_Test {
 			return null;
 		}
 
-		@RestOp(method=PUT)
+		@RestPut
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.put("p3", "pp3");
 			attrs.put("p4", "pp4");
@@ -225,7 +224,7 @@ public class RestHook_Test {
 		public void init2a() {
 			events.add("super-2a");
 		}
-		@RestOp
+		@RestGet
 		public OList getEvents() {
 			return events;
 		}
@@ -300,7 +299,7 @@ public class RestHook_Test {
 		public void postInit2a() {
 			events.add("super-2a");
 		}
-		@RestOp
+		@RestGet
 		public OList getEvents() {
 			return events;
 		}
@@ -332,7 +331,7 @@ public class RestHook_Test {
 		public void postInitOrderTestSub() {
 			LAST_CALLED = "PARENT";
 		}
-		@RestOp
+		@RestGet
 		public String getLastCalled() {
 			return LAST_CALLED;
 		}
@@ -395,7 +394,7 @@ public class RestHook_Test {
 		public void postInitChildFirst2a() {
 			events.add("super-2a");
 		}
-		@RestOp
+		@RestGet
 		public OList getPostInitChildFirstEvents() {
 			return events;
 		}
@@ -427,7 +426,7 @@ public class RestHook_Test {
 		public void postInitChildFirstOrderTestSub() {
 			LAST_CALLED = "PARENT";
 		}
-		@RestOp
+		@RestGet
 		public String getLastCalled() {
 			return LAST_CALLED;
 		}
@@ -478,7 +477,7 @@ public class RestHook_Test {
 				throw new RuntimeException("start4 called multiple times.");
 			res.setHeader("start4-called", "true");
 		}
-		@RestOp(path="/")
+		@RestGet(path="/")
 		public OMap a(RestRequest req, RestResponse res) {
 			return OMap.create()
 				.a("1", res.getHeader("start1-called"))
@@ -529,7 +528,7 @@ public class RestHook_Test {
 				throw new RuntimeException("pre4 called multiple times.");
 			res.setHeader("pre4-called", "true");
 		}
-		@RestOp(path="/")
+		@RestGet(path="/")
 		public OMap a(RestRequest req, RestResponse res) {
 			return OMap.create()
 				.a("1", res.getHeader("pre1-called"))
@@ -580,7 +579,7 @@ public class RestHook_Test {
 				throw new RuntimeException("post4 called multiple times.");
 			res.setHeader("post4-called", "true");
 		}
-		@RestOp(path="/")
+		@RestGet(path="/")
 		public String a() {
 			return "OK";
 		}

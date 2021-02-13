@@ -42,8 +42,8 @@ public class RestClient_Config_Serializer_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp(path="/echoBody")
-		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+		@RestPost
+		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getBody().getReader();
 		}
 	}

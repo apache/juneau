@@ -153,7 +153,7 @@ public class Header_AcceptEncoding_Test {
 	@Rest(encoders=MyEncoder.class)
 	@SuppressWarnings("resource")
 	public static class C {
-		@RestOp
+		@RestGet
 		public void a(RestResponse res) throws Exception {
 			// This method bypasses the content type and encoding from
 			// the serializers and encoders when calling getOutputStream() directly.
@@ -162,7 +162,7 @@ public class Header_AcceptEncoding_Test {
 			os.write("foo".getBytes());
 			os.flush();
 		}
-		@RestOp
+		@RestGet
 		public void b(RestResponse res) throws Exception {
 			// This method bypasses the content type and encoding from
 			// the serializers and encoders when calling getWriter() directly.
@@ -170,7 +170,7 @@ public class Header_AcceptEncoding_Test {
 			w.append("foo");
 			w.flush();
 		}
-		@RestOp
+		@RestGet
 		public void c(RestResponse res) throws Exception {
 			// This method uses getNegotiatedWriter() which should use GZip encoding.
 			Writer w = res.getNegotiatedWriter();
@@ -178,7 +178,7 @@ public class Header_AcceptEncoding_Test {
 			w.flush();
 			w.close();
 		}
-		@RestOp(encoders={IdentityEncoder.class})
+		@RestGet(encoders={IdentityEncoder.class})
 		public void d(RestResponse res) throws Exception {
 			// This method overrides the set of encoders at the method level and so shouldn't use GZip encoding.
 			Writer w = res.getNegotiatedWriter();

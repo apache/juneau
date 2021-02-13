@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
- * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {
+ * 	<jk>public void</jk> doAnything(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, <ja>@Method</ja> String <jv>method</jv>) {
  * 		...
  * 	}
  * </p>
@@ -36,8 +36,8 @@ import java.lang.annotation.*;
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
  * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
- * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res) {
- * 		String method = req.getMethod();
+ * 	<jk>public void</jk> doAnything(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+ * 		String <jv>method</jv> = <jv>req</jv>.getMethod();
  * 		...
  * 	}
  * </p>

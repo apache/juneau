@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class A {
-		@RestOp(method=PUT)
+		@RestPut
 		public String a(@Body String in) {
 			return in;
 		}
@@ -71,7 +70,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class B {
-		@RestOp(method=PUT, parsers=P3.class)
+		@RestPut(parsers=P3.class)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -114,7 +113,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class C {
-		@RestOp(method=PUT, parsers={P3.class,Inherit.class})
+		@RestPut(parsers={P3.class,Inherit.class})
 		public String a(@Body String in) {
 			return in;
 		}
@@ -146,7 +145,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class D {
-		@RestOp(method=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class)
+		@RestPut(defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -187,7 +186,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class E {
-		@RestOp(method=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
+		@RestPut(defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
 		public String a(@Body String in) {
 			return in;
 		}

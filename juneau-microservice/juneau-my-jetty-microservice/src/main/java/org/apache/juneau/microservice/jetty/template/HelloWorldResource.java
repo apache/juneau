@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty.template;
 
-import static org.apache.juneau.http.HttpMethod.*;
-
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -32,7 +30,7 @@ public class HelloWorldResource extends BasicRestServlet {
 	 * GET request handler.
 	 * @return The string "Hello world!"
 	 */
-	@RestOp(method=GET, path="/*")
+	@RestGet("/*")
 	public String sayHello() {
 		return "Hello world!";
 	}

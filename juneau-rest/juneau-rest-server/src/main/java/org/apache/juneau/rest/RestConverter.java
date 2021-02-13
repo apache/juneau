@@ -39,10 +39,10 @@ import org.apache.juneau.serializer.*;
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// GET request handler</jc>
- * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
- * 		<jk>public</jk> HttpServletRequest doGet(RestRequest req) {
- * 			res.setTitle(<js>"Contents of HttpServletRequest object"</js>);
- * 			<jk>return</jk> req;
+ * 		<ja>@RestGet</ja>(path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
+ * 		<jk>public</jk> HttpServletRequest doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+ * 			<jv>res</jv>.setTitle(<js>"Contents of HttpServletRequest object"</js>);
+ * 			<jk>return</jk> <jv>req</jv>;
  * 		}
  * 	}
  * </p>

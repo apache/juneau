@@ -23,9 +23,9 @@ public class ResetContent_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public ResetContent getA1() { return new ResetContent(); }
-		@RestOp public ResetContent getA2() { return new ResetContent("foo"); }
-		@RestOp public ResetContent getA3() { return new ResetContent().header("Foo","bar"); }
+		@RestGet public ResetContent a1() { return new ResetContent(); }
+		@RestGet public ResetContent a2() { return new ResetContent("foo"); }
+		@RestGet public ResetContent a3() { return new ResetContent().header("Foo","bar"); }
 	}
 
 	@Test

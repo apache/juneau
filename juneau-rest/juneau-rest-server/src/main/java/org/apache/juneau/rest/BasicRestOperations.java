@@ -54,8 +54,7 @@ public interface BasicRestOperations {
 	 * @param req The HTTP request.
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/api/*",
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource."
@@ -88,8 +87,7 @@ public interface BasicRestOperations {
 	 * @param locale The locale of the HTTP request.
 	 * @return An HTTP resource representing the static file.
 	 */
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/htdocs/*",
 		summary="Static files",
 		description="Static file retrieval."
@@ -101,8 +99,7 @@ public interface BasicRestOperations {
 	 *
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="favicon.ico",
 		summary="Favorites icon.",
 		description="Favorites icon."
@@ -137,8 +134,7 @@ public interface BasicRestOperations {
 	 * @param req The HTTP request.
 	 * @return A collection of timing statistics for each annotated method on this resource.
 	 */
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/stats",
 		summary="Timing statistics",
 		description="Timing statistics for method invocations on this resource."

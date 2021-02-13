@@ -48,8 +48,8 @@ import org.apache.juneau.http.exception.*;
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// Delete method with guard that only allows Billy to call it.</jc>
- * 		<ja>@RestOp</ja>(method=<jsf>DELETE</jsf>, guards=BillyGuard.<jk>class</jk>)
- * 		<jk>public</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
+ * 		<ja>@RestDelete</ja>(guards=BillyGuard.<jk>class</jk>)
+ * 		<jk>public</jk> doDelete(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {...}
  * 	}
  * </p>
  *

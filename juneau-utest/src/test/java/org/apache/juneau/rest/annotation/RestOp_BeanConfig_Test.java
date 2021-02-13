@@ -29,17 +29,17 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A1 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(onClass=X1.class, properties="a,_b")
 		public Object a() throws Exception {
 			return new X1().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(onClass=X1.class, p="a")
 		public Object b() throws Exception {
 			return new X1().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(onClass=X1.class, p="_b")
 		public Object c() throws Exception {
 			return new X1().init();
@@ -71,17 +71,17 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A2 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(on="X1", excludeProperties="a,_b")
 		public Object a() throws Exception {
 			return new X1().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(on="X1", xp="a")
 		public Object b() throws Exception {
 			return new X1().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(on="X1", xp="_b")
 		public Object c() throws Exception {
 			return new X1().init();
@@ -113,17 +113,17 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A3 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(onClass=X2.class, p="a,_b")
 		public Object a() throws Exception {
 			return new X2().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(onClass=X2.class, p="a")
 		public Object b() throws Exception {
 			return new X2().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(onClass=X2.class, p="_b")
 		public Object c() throws Exception {
 			return new X2().init();
@@ -155,17 +155,17 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A4 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(onClass=X2.class, xp="a,_b")
 		public Object a() throws Exception {
 			return new X2().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(onClass=X2.class, xp="a")
 		public Object b() throws Exception {
 			return new X2().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(onClass=X2.class, xp="_b")
 		public Object c() throws Exception {
 			return new X2().init();
@@ -197,7 +197,7 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A5 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(on="*", p="a")
 		public Object a() throws Exception {
 			return new X1().init();
@@ -219,7 +219,7 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A6 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(on="org.apache.juneau.rest.annotation.RestOp_BeanConfig_Test$X1", p="a")
 		public Object a() throws Exception {
 			return new X1().init();
@@ -241,13 +241,13 @@ public class RestOp_BeanConfig_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A7 extends BasicRestServlet {
-		@RestOp
+		@RestGet
 		@Bean(on="MyBean", p="a")
 		public Object a() throws Exception {
 			// Should not match.
 			return new X1().init();
 		}
-		@RestOp
+		@RestGet
 		@Bean(on="MyBean", p="a")
 		public Object b() throws Exception {
 			// Should not match.  We don't support meta-matches in class names.

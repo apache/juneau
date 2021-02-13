@@ -422,8 +422,8 @@ public @interface Rest {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource {
 	 *
-	 *		<ja>@RestOp</ja>
-	 *		<jk>public void</jk> String doX() {
+	 *		<ja>@RestGet</ja>
+	 *		<jk>public void</jk> String getX() {
 	 *			...
 	 *		}
 	 * </p>
@@ -779,9 +779,7 @@ public @interface Rest {
 	 *		path=<js>"/grandchild"</js>
 	 *	)
 	 *	<jk>public class</jk> GrandchildResource {
-	 *		<ja>@RestOp</ja>(
-	 *			path=<js>"/"</js>
-	 *		)
+	 *		<ja>@RestGet</ja>(js>"/"</js>)
 	 *		<jk>public</jk> String sayHello() {
 	 *			<jk>return</jk> <js>"Hello!"</js>;
 	 *		}
@@ -807,10 +805,10 @@ public @interface Rest {
 	 * 	<jk>public class</jk> App {
 	 *
 	 *		<jc>// Our entry-point method.</jc>
-	 * 		<jk>public static void</jk> main(String[] args) {
+	 * 		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 	 * 			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
 	 * 				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-	 * 				.run(args);
+	 * 				.run(<jv>args</jv>);
 	 * 		}
 	 *
 	 * 		<jc>// Our top-level servlet.</jc>
@@ -842,10 +840,8 @@ public @interface Rest {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
-	 *		<ja>@RestOp</ja>(
-	 *			path=<js>"/{baz}"</js>
-	 *		)
-	 *		<jk>public void</jk> String doX(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyPojo baz) {
+	 *		<ja>@RestGet</ja>(<js>"/{baz}"</js>)
+	 *		<jk>public void</jk> String doX(<ja>@Path</ja> String <jv>foo</jv>, <ja>@Path</ja> <jk>int</jk> <jv>bar</jv>, <ja>@Path</ja> MyPojo <jv>baz</jv>) {
 	 *			...
 	 *		}
 	 * 	}

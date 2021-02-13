@@ -217,15 +217,15 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
+	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
 	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
 	 * 	<jk>public class</jk> Pet {...}
@@ -375,9 +375,9 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>PUT</jsf>)
+	 * 	<ja>@RestPut</ja>
 	 * 	<jk>public void</jk> setAge(
-	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String input
+	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -685,8 +685,8 @@ public @interface Schema {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(method=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
+	 * 	<ja>@RestPut</ja>
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String <jv>input<jv>) {...}
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -744,15 +744,15 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
+	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
 	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
 	 * 	<jk>public class</jk> Pet {...}
@@ -797,15 +797,15 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet input
+	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
 	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
 	 * 	<jk>public class</jk> Pet {...}

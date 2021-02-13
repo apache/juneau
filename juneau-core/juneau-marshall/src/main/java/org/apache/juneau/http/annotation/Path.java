@@ -47,12 +47,12 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+ * 	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(
- * 			<ja>@Path</ja>(<js>"foo"</js>) String foo,
- * 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
- * 			<ja>@Path</ja>(<js>"baz"</js>) UUID baz,
- * 			<ja>@Path</ja>(<js>"/*"</js>) String remainder,
+ * 			<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>,
+ * 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> <jv>bar</jv>,
+ * 			<ja>@Path</ja>(<js>"baz"</js>) UUID <jv>baz</jv>,
+ * 			<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>,
  * 		) {...}
  * </p>
  *
@@ -106,22 +106,22 @@ public @interface Path {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Comma-delimited list</jc>
-	 * 	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
+	 * 	<ja>@RestGet</ja>(<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
 	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// JSON array</jc>
-	 * 	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
+	 * 	<ja>@RestGet</ja>(<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
 	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -361,7 +361,7 @@ public @interface Path {
 	 * 		collectionFormat=<js>"csv"</js>,
 	 * 		example=<js>"AVALIABLE,PENDING"</js>
 	 * 	)
-	 * 	PetStatus[] status
+	 * 	PetStatus[] <jv>status</jv>
 	 * </p>
 	 *
 	 * <p>
@@ -789,8 +789,8 @@ public @interface Path {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> OMap allPathParameters) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> OMap <jv>allPathParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
@@ -799,7 +799,7 @@ public @interface Path {
 	 *
 	 * 		<jc>// Equivalent to @Path("*")</jc>
 	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod/{foo}/{bar}"</js>)
-	 * 		String myProxyMethod1(<ja>@Path</ja> Map&lt;String,Object&gt; allPathParameters);
+	 * 		String myProxyMethod1(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>allPathParameters</jv>);
 	 * 	}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
@@ -924,8 +924,8 @@ public @interface Path {
 	 * 	<ja>@Rest</ja>(path="/child")
 	 * 	<jk>public class</jk> Child {
 	 *
-	 * 		<ja>@RestOp</ja>(path="/")
-	 * 		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"p1"</js>,required=<jk>false</jk>) String p1) {
+	 * 		<ja>@RestGet</ja>("/")
+	 * 		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"p1"</js>,required=<jk>false</jk>) String <jv>p1</jv>) {
 	 * 			<jc>// p1 will be null when accessed via "/child"</jc>
 	 *			<jc>// p1 will be non-null when accessed via "/parent/p1/child".</jc>
 	 * 		}
@@ -1066,18 +1066,12 @@ public @interface Path {
 	 * <p>
 	 * The following are completely equivalent ways of defining a path entry:
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<js>"GET"</js>,
-	 * 		path=<js>"/pet/{petId}"</js>
-	 * 	)
-	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) { ... }
+	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
+	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<js>"GET"</js>,
-	 * 		path=<js>"/pet/{petId}"</js>
-	 * 	)
-	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> petId) { ... }
+	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
+	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>
 	 */
 	String value() default "";

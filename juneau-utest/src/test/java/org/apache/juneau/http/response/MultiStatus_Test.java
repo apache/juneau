@@ -23,9 +23,9 @@ public class MultiStatus_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public MultiStatus getA1() { return new MultiStatus(); }
-		@RestOp public MultiStatus getA2() { return new MultiStatus("foo"); }
-		@RestOp public MultiStatus getA3() { return new MultiStatus().header("Foo","bar"); }
+		@RestGet public MultiStatus a1() { return new MultiStatus(); }
+		@RestGet public MultiStatus a2() { return new MultiStatus("foo"); }
+		@RestGet public MultiStatus a3() { return new MultiStatus().header("Foo","bar"); }
 	}
 
 	@Test

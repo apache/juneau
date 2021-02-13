@@ -44,79 +44,79 @@ public class RestOp_Params_Test {
 
 	@Rest(messages="RestParamsTest")
 	public static class A {
-		@RestOp
+		@RestGet
 		public String a(ResourceBundle t) {
 			return t == null ? null : t.getString("foo");
 		}
-		@RestOp
+		@RestGet
 		public String b(Messages t) {
 			return t == null ? null : t.getString("foo");
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public String c(InputStream t) throws IOException {
 			return read(t);
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public String d(ServletInputStream t) throws IOException {
 			return read(t);
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public String e(Reader t) throws IOException {
 			return read(t);
 		}
-		@RestOp
+		@RestGet
 		public void f(OutputStream t) throws IOException {
 			t.write("OK".getBytes());
 		}
-		@RestOp
+		@RestGet
 		public void g(ServletOutputStream t) throws IOException {
 			t.write("OK".getBytes());
 		}
-		@RestOp
+		@RestGet
 		public void h(Writer t) throws IOException {
 			t.write("OK");
 		}
-		@RestOp
+		@RestGet
 		public boolean i(RequestHeaders t) {
 			return t != null;
 		}
-		@RestOp
+		@RestGet
 		public boolean j(RequestQuery t) {
 			return t != null;
 		}
-		@RestOp
+		@RestGet
 		public boolean k(RequestFormData t) {
 			return t != null;
 		}
-		@RestOp
+		@RestGet
 		public String l(@Method String t) {
 			return t;
 		}
-		@RestOp
+		@RestGet
 		public boolean n(RestContext t) {
 			return t != null;
 		}
-		@RestOp(parsers={JsonParser.class})
+		@RestOp(method=GET,parsers={JsonParser.class})
 		public String o(Parser t) {
 			return t.getClass().getName();
 		}
-		@RestOp
+		@RestGet
 		public String p(Locale t) {
 			return t.toString();
 		}
-		@RestOp
+		@RestGet
 		public boolean q(org.apache.juneau.dto.swagger.Swagger t) {
 			return t != null;
 		}
-		@RestOp
+		@RestGet
 		public boolean r(RequestPath t) {
 			return t != null;
 		}
-		@RestOp
+		@RestGet
 		public boolean s(RequestBody t) {
 			return t != null;
 		}
-		@RestOp
+		@RestGet
 		public boolean t(Config t) {
 			return t != null;
 		}
@@ -161,111 +161,111 @@ public class RestOp_Params_Test {
 	)
 	public static class B1 {
 
-		@RestOp
+		@RestGet
 		public String accept(Accept accept) {
 			return accept.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String acceptCharset(AcceptCharset acceptCharset) {
 			return acceptCharset.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String acceptEncoding(AcceptEncoding acceptEncoding) {
 			return acceptEncoding.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String acceptLanguage(AcceptLanguage acceptLanguage) {
 			return acceptLanguage.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String authorization(Authorization authorization) {
 			return authorization.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String cacheControl(CacheControl cacheControl) {
 			return cacheControl.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String connection(Connection connection) {
 			return connection.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String contentLength(ContentLength contentLength) {
 			return contentLength.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String contentType(ContentType contentType) {
 			return contentType.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String date(org.apache.juneau.http.header.Date date) {
 			return date.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String expect(Expect expect) {
 			return expect.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String from(From from) {
 			return from.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String host(Host host) {
 			return host.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String ifMatch(IfMatch ifMatch) {
 			return ifMatch.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String ifModifiedSince(IfModifiedSince ifModifiedSince) {
 			return ifModifiedSince.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String ifNoneMatch(IfNoneMatch ifNoneMatch) {
 			return ifNoneMatch.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String ifRange(IfRange ifRange) {
 			return ifRange.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String ifUnmodifiedSince(IfUnmodifiedSince ifUnmodifiedSince) {
 			return ifUnmodifiedSince.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String maxForwards(MaxForwards maxForwards) {
 			return maxForwards.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String pragma(Pragma pragma) {
 			return pragma.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String proxyAuthorization(ProxyAuthorization proxyAuthorization) {
 			return proxyAuthorization.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String range(Range range) {
 			return range.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String referer(Referer referer) {
 			return referer.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String te(TE te) {
 			return te.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String upgrade(Upgrade upgrade) {
 			return upgrade.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String userAgent(UserAgent userAgent) {
 			return userAgent.getValue();
 		}
-		@RestOp
+		@RestGet
 		public String warning(Warning warning) {
 			return warning.getValue();
 		}
@@ -370,7 +370,7 @@ public class RestOp_Params_Test {
 		allowedHeaderParams="Custom"
 	)
 	public static class B2 {
-		@RestOp
+		@RestGet
 		public String a(B2b customHeader) {
 			return customHeader.toString();
 		}

@@ -119,7 +119,7 @@ public class AtomFeedResource extends BasicRestServletJena {
 	 *
 	 * @return The sample ATOM feed.
 	 */
-	@RestOp(
+	@RestGet(
 		summary="Get the sample ATOM feed"
 	)
 	public Feed get() {
@@ -132,7 +132,7 @@ public class AtomFeedResource extends BasicRestServletJena {
 	 * @param feed The new ATOM feed.
 	 * @return The updated ATOM feed.
 	 */
-	@RestOp(
+	@RestPut(
 		summary="Overwrite the sample ATOM feed",
 		description="Replaces the feed with the specified content, and then mirrors it as the response."
 	)

@@ -191,7 +191,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jk>public class</jk> B {...}
 	 *
 	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
-	 * 	<ja>@RestOp</ja>(...)
+	 * 	<ja>@RestGet/ja>(...)
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		annotations={
 	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<js>"street,city,state"</js>)

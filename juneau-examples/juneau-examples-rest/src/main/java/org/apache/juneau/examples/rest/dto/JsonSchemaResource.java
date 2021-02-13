@@ -94,7 +94,7 @@ public class JsonSchemaResource extends BasicRestServletJena {
 	 *
 	 * @return The JSON-Schema document.
 	 */
-	@RestOp(
+	@RestGet(
 		summary="Get the JSON-Schema document"
 	)
 	public JsonSchema get() {
@@ -107,7 +107,7 @@ public class JsonSchemaResource extends BasicRestServletJena {
 	 * @param schema The new schema document.
 	 * @return The updated schema document.
 	 */
-	@RestOp(
+	@RestPut(
 		summary="Overwrite the JSON-Schema document",
 		description="Replaces the schema document with the specified content, and then mirrors it as the response."
 	)

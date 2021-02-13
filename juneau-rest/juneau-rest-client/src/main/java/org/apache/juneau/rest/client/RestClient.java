@@ -2200,6 +2200,22 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
+	 * Perform an arbitrary request against the specified URI.
+	 *
+	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest op(RestOperation op) throws RestCallException {
+		RestRequest req = request(op.getMethod(), op.getUrl(), op.hasBody());
+		if (op.getBody() != null)
+			req.body(op.getBody());
+		return req;
+	}
+
+	/**
 	 * Perform a <c>GET</c> request against the specified URI.
 	 *
 	 * @param uri

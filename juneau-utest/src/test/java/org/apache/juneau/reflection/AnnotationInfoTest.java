@@ -16,7 +16,9 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.Assertions.*;
 
+import org.apache.juneau.annotation.*;
 import java.lang.annotation.*;
 import java.util.function.*;
 
@@ -67,12 +69,63 @@ public class AnnotationInfoTest {
 	static ClassInfo b = of(B.class);
 
 	@Test
-	public void getClassOn() {
+	public void b01_getClassOn() {
 		check("B", b.getAnnotationInfos(A.class).get(0).getClassOn());
 	}
 
 	@Test
-	public void getAnnotation() {
+	public void b02_getAnnotation() {
 		check("@A(1)", b.getAnnotationInfos(A.class).get(0).getAnnotation());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Get value.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	public static @interface C {
+		String foo() default "x";
+	}
+
+	@C(foo="bar")
+	public static class C1 {}
+
+	@Test
+	public void c01_getValue() {
+		ClassInfo c1 = ClassInfo.of(C1.class);
+		AnnotationInfo<?> ai = c1.getAnnotationInfos(C.class).get(0);
+		assertString(ai.getValue(String.class, "foo")).is("bar");
+		assertObject(ai.getValue(Integer.class, "foo")).isNull();
+		assertObject(ai.getValue(String.class, "bar")).isNull();
+	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Is in group.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	@AnnotationGroup(D1.class)
+	public static @interface D1 {}
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	@AnnotationGroup(D1.class)
+	public static @interface D2 {}
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	public static @interface D3 {}
+
+	@D1 @D2 @D3
+	public static class D {}
+
+	@Test
+	public void d01_isInGroup() {
+		ClassInfo d = ClassInfo.of(D.class);
+		AnnotationList l = d.getAnnotationGroupList(D1.class);
+		assertList(l).isSize(2);
 	}
 }

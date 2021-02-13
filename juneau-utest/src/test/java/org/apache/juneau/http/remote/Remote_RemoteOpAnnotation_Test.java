@@ -213,8 +213,8 @@ public class Remote_RemoteOpAnnotation_Test {
 
 	@Rest
 	public static class D implements BasicOpenApiRest {
-		@RestOp(path="/*") @Response
-		public String postX1(@Body String body) {
+		@RestPost(path="/*") @Response
+		public String x1(@Body String body) {
 			return body;
 		}
 	}

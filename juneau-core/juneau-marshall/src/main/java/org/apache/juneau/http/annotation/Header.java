@@ -47,16 +47,16 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
- * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, <js>"ETag"</js>);
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+ * 		UUID <jv>etag</jv> = <jv>req</jv>.getHeader(UUID.<jk>class</jk>, <js>"ETag"</js>);
  * 		...
  * 	}
  * </p>
@@ -109,9 +109,9 @@ public @interface Header {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Order placeOrder(
-	 * 		<ja>@Header</ja>(name=<js>"X-PetId"</js>, _default=<js>"100"</js>) <jk>long</jk> petId,
-	 * 		<ja>@Header</ja>(name=<js>"X-AdditionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
-	 * 		<ja>@Header</ja>(name=<js>"X-Flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
+	 * 		<ja>@Header</ja>(name=<js>"X-PetId"</js>, _default=<js>"100"</js>) <jk>long</jk> <jv>petId</jv>,
+	 * 		<ja>@Header</ja>(name=<js>"X-AdditionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo <jv>additionalInfo</jv>,
+	 * 		<ja>@Header</ja>(name=<js>"X-Flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] <jv>flags</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -149,7 +149,7 @@ public @interface Header {
 	 * 		<ja>@Header</ja>(
 	 * 			name=<js>"X-Status"</js>,
 	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -158,7 +158,7 @@ public @interface Header {
 	 * 		<ja>@Header</ja>(
 	 * 			name=<js>"X-Status"</js>,
 	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -401,7 +401,7 @@ public @interface Header {
 	 * 		collectionFormat=<js>"csv"</js>,
 	 * 		example=<js>"AVAILIABLE,PENDING"</js>
 	 * 	)
-	 * 	PetStatus[] status
+	 * 	PetStatus[] <jv>status</jv>
 	 * </p>
 	 *
 	 * <p>
@@ -782,7 +782,7 @@ public @interface Header {
 	 *
 	 * <h5 class='figure'>Example</h5>
 	 * 	<jk>public void</jk> doPost(
-	 * 		<ja>@Header</ja>(name=<js>"Beans"</js>, multi=<jk>true</jk>) MyBean[] beans
+	 * 		<ja>@Header</ja>(name=<js>"Beans"</js>, multi=<jk>true</jk>) MyBean[] <jv>beans</jv>
 	 * 	) {
 	 *
 	 * <ul class='notes'>
@@ -844,8 +844,8 @@ public @interface Header {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> OMap allHeaderParameters) {...}
+	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
+	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> OMap <jv>allHeaderParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
@@ -854,7 +854,7 @@ public @interface Header {
 	 *
 	 * 		<jc>// Equivalent to @Header("*")</jc>
 	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
-	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; allHeaderParameters);
+	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>allHeaderParameters</jv>);
 	 * 	}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
@@ -1110,10 +1110,10 @@ public @interface Header {
 	 * <p>
 	 * The following are completely equivalent ways of defining a header entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(name=<js>"api_key"</js>) String apiKey) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(name=<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(<js>"api_key"</js>) String apiKey) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
 	 */
 	String value() default "";

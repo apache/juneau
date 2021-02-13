@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -37,7 +36,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	//------------------------------------------------------------------------------------------------------------------
 	@Rest
 	public static class A {
-		@RestOp(method=PUT)
+		@RestPut
 		public Reader a(@Body String b) {
 			return new StringReader(b);
 		}
@@ -57,21 +56,21 @@ public class Rest_PredefinedStatusCodes_Test {
 
 	@Rest(parsers=JsonParser.class)
 	public static class B {
-		@RestOp(method=PUT)
+		@RestPut
 		public String a(@Body B1 in) {
 			return "OK";
 		}
 		public static class B1 {
 			public String f1;
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public String b(@Body B2 in) {
 			return "OK";
 		}
 		public static class B2 {
 			public int f1;
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public String c(@Body B3 in) {
 			return "OK";
 		}
@@ -79,21 +78,21 @@ public class Rest_PredefinedStatusCodes_Test {
 			public int f1;
 			private B3(){}
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public String d(@Body B4 in) {
 			return "OK";
 		}
 		public class B4 {
 			public B4(){}
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public String e(@Body B5 in) {
 			return "OK";
 		}
 		static class B5 {
 			public B5(){}
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public String f(@Body B6 in) {
 			return "OK";
 		}
@@ -104,7 +103,7 @@ public class Rest_PredefinedStatusCodes_Test {
 				throw new RuntimeException("Test error");
 			}
 		}
-		@RestOp(method=PUT, path="/g/{a1}")
+		@RestPut(path="/g/{a1}")
 		public String g(@Query("p1") int t1, @Path("a1") int a1, @Header("h1") int h1) {
 			return "OK";
 		}
@@ -182,7 +181,7 @@ public class Rest_PredefinedStatusCodes_Test {
 
 	@Rest
 	public static class C {
-		@RestOp(method=GET, path="/")
+		@RestGet(path="/")
 		public String a() {
 			return "OK";
 		}
@@ -213,7 +212,7 @@ public class Rest_PredefinedStatusCodes_Test {
 
 	@Rest
 	public static class D {
-		@RestOp(method=GET, matchers=NeverMatcher.class)
+		@RestGet(matchers=NeverMatcher.class)
 		public String d() {
 			return "OK";
 		}

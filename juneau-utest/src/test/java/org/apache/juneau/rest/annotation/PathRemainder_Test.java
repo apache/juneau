@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -34,18 +33,56 @@ public class PathRemainder_Test {
 
 	@Rest
 	public static class A  {
-		@RestOp(method=GET, path="/*")
+		@RestOp(path="/a/*")
 		public String a(@Path("/*") String remainder) {
-			return remainder;
+			return ""+remainder;
+		}
+		@RestGet(path="/b/*")
+		public String b(@Path("/*") String remainder) {
+			return ""+remainder;
+		}
+		@RestPut(path="/c/*")
+		public String c(@Path("/*") String remainder) {
+			return ""+remainder;
+		}
+		@RestPost(path="/d/*")
+		public String d(@Path("/*") String remainder) {
+			return ""+remainder;
+		}
+		@RestDelete(path="/e/*")
+		public String e(@Path("/*") String remainder) {
+			return ""+remainder;
 		}
 	}
 
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.get("/").run().assertBody().is("");
-		a.get("/foo").run().assertBody().is("foo");
-		a.get("/foo/bar").run().assertBody().is("foo/bar");
+
+		a.get("/a").run().assertBody().is("null");
+		a.get("/a/").run().assertBody().is("");
+		a.get("/a/foo").run().assertBody().is("foo");
+		a.get("/a/foo/bar").run().assertBody().is("foo/bar");
+
+		a.get("/b").run().assertBody().is("null");
+		a.get("/b/").run().assertBody().is("");
+		a.get("/b/foo").run().assertBody().is("foo");
+		a.get("/b/foo/bar").run().assertBody().is("foo/bar");
+
+		a.put("/c").run().assertBody().is("null");
+		a.put("/c/").run().assertBody().is("");
+		a.put("/c/foo").run().assertBody().is("foo");
+		a.put("/c/foo/bar").run().assertBody().is("foo/bar");
+
+		a.post("/d").run().assertBody().is("null");
+		a.post("/d/").run().assertBody().is("");
+		a.post("/d/foo").run().assertBody().is("foo");
+		a.post("/d/foo/bar").run().assertBody().is("foo/bar");
+
+		a.delete("/e").run().assertBody().is("null");
+		a.delete("/e/").run().assertBody().is("");
+		a.delete("/e/foo").run().assertBody().is("foo");
+		a.delete("/e/foo/bar").run().assertBody().is("foo/bar");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -54,22 +91,22 @@ public class PathRemainder_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class B {
-		@RestOp(method=GET,path="/a/*")
+		@RestGet(path="/a/*")
 		public Object a(@Path("/*") Optional<Integer> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp(method=GET,path="/b/*")
+		@RestPut(path="/b/*")
 		public Object b(@Path("/*") Optional<ABean> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp(method=GET,path="/c/*")
+		@RestPost(path="/c/*")
 		public Object c(@Path("/*") Optional<List<ABean>> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp(method=GET,path="/d/*")
+		@RestDelete(path="/d/*")
 		public Object d(@Path("/*") List<Optional<ABean>> f1) throws Exception {
 			return f1;
 		}
@@ -82,15 +119,15 @@ public class PathRemainder_Test {
 			.run()
 			.assertCode().is(200)
 			.assertBody().is("123");
-		b.get("/b/a=1,b=foo")
+		b.put("/b/a=1,b=foo")
 			.run()
 			.assertCode().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
-		b.get("/c/@((a=1,b=foo))")
+		b.post("/c/@((a=1,b=foo))")
 			.run()
 			.assertCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
-		b.get("/d/@((a=1,b=foo))")
+		b.delete("/d/@((a=1,b=foo))")
 			.run()
 			.assertCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");

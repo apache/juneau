@@ -41,7 +41,7 @@ public class Swagger_FormData_Test {
 		public static class A1 {
 			public A1(String x) {}
 		}
-		@RestOp
+		@RestGet
 		public void a(A1 f) {}
 
 		@FormData(
@@ -54,7 +54,7 @@ public class Swagger_FormData_Test {
 		public static class A2 {
 			public A2(String x) {}
 		}
-		@RestOp
+		@RestPut
 		public void b(A2 f) {}
 
 		@FormData(
@@ -69,12 +69,12 @@ public class Swagger_FormData_Test {
 		public static class A3 {
 			public A3(String x) {}
 		}
-		@RestOp
+		@RestPost
 		public void c(A3 f) {}
 
 		@FormData("F")
 		public static class A4 {}
-		@RestOp
+		@RestDelete
 		public void d(A4 f) {}
 	}
 
@@ -88,17 +88,17 @@ public class Swagger_FormData_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/b","get","formData","F");
+		x = s.getParameterInfo("/b","put","formData","F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/c","get","formData","F");
+		x = s.getParameterInfo("/c","post","formData","F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/d","get","formData","F");
+		x = s.getParameterInfo("/d","delete","formData","F");
 		assertEquals("F", x.getName());
 	}
 
@@ -107,26 +107,26 @@ public class Swagger_FormData_Test {
 
 		@FormData(name="F")
 		public static class B1 {}
-		@RestOp
+		@RestGet
 		public void a(B1 f) {}
 
 		@FormData("F")
 		public static class B2 {
 			public String f1;
 		}
-		@RestOp
+		@RestPut
 		public void b(B2 f) {}
 
 		@FormData("F")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp
+		@RestPost
 		public void c(B3 f) {}
 
 		@FormData("F")
 		public static class B4 {}
-		@RestOp
+		@RestDelete
 		public void d(B4 f) {}
 	}
 
@@ -138,13 +138,13 @@ public class Swagger_FormData_Test {
 		x = s.getParameterInfo("/a","get","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 
-		x = s.getParameterInfo("/b","get","formData","F");
+		x = s.getParameterInfo("/b","put","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c","get","formData","F");
+		x = s.getParameterInfo("/c","post","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d","get","formData","F");
+		x = s.getParameterInfo("/d","delete","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 	}
 
@@ -155,7 +155,7 @@ public class Swagger_FormData_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestOp
+		@RestGet
 		public void a(C1 f) {}
 	}
 
@@ -170,7 +170,7 @@ public class Swagger_FormData_Test {
 	@Rest
 	public static class D {
 
-		@RestOp
+		@RestGet
 		public void a(
 			@FormData(
 				name="F",
@@ -178,7 +178,7 @@ public class Swagger_FormData_Test {
 				type="string"
 			) String f) {}
 
-		@RestOp
+		@RestPut
 		public void b(
 			@FormData(
 				name="F",
@@ -188,7 +188,7 @@ public class Swagger_FormData_Test {
 				}
 			) String f) {}
 
-		@RestOp
+		@RestPost
 		public void c(
 			@FormData(
 				name="F",
@@ -200,7 +200,7 @@ public class Swagger_FormData_Test {
 				type="string"
 			) String f) {}
 
-		@RestOp
+		@RestDelete
 		public void d(@FormData("F") String f) {}
 	}
 
@@ -214,46 +214,46 @@ public class Swagger_FormData_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/b","get","formData","F");
+		x = s.getParameterInfo("/b","put","formData","F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/c","get","formData","F");
+		x = s.getParameterInfo("/c","post","formData","F");
 		assertEquals("F", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/d","get","formData","F");
+		x = s.getParameterInfo("/d","delete","formData","F");
 		assertEquals("F", x.getName());
 	}
 
 	@Rest
 	public static class E {
 
-		@RestOp
+		@RestGet
 		public void a(@FormData(name="F") String f) {}
 
 		public static class E2 {
 			public String f1;
 		}
-		@RestOp
+		@RestPut
 		public void b(@FormData("F") E2 b) {}
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp
+		@RestPost
 		public void c(@FormData("F") E3 b) {}
 
 		public static class E4 {}
-		@RestOp
+		@RestDelete
 		public void d(@FormData("F") E4 b) {}
 
 		@RestOp
 		public void e(@FormData("F") Integer b) {}
 
-		@RestOp
+		@RestGet
 		public void f(@FormData("F") Boolean b) {}
 	}
 
@@ -265,13 +265,13 @@ public class Swagger_FormData_Test {
 		x = s.getParameterInfo("/a","get","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 
-		x = s.getParameterInfo("/b","get","formData","F");
+		x = s.getParameterInfo("/b","put","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c","get","formData","F");
+		x = s.getParameterInfo("/c","post","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d","get","formData","F");
+		x = s.getParameterInfo("/d","delete","formData","F");
 		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/e","get","formData","F");
@@ -287,7 +287,7 @@ public class Swagger_FormData_Test {
 
 	@Rest
 	public static class F {
-		@RestOp
+		@RestGet
 		public void a(@FormData(name="F", example="{f1:'a'}") String f) {}
 	}
 

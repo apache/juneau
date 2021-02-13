@@ -73,8 +73,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	// REST methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/",
 		summary="List of available remote interfaces",
 		description="Shows a list of the interfaces registered with this remote interface servlet."
@@ -86,8 +85,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return l;
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/{javaInterface}",
 		summary="List of available methods on interface",
 		description="Shows a list of all the exposed methods on an interface."
@@ -105,8 +103,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return l;
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/{javaInterface}/{javaMethod}",
 		summary="Form entry for interface method call",
 		description="Shows a form entry page for executing a remote interface method."
@@ -153,8 +150,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return div(form().id("form").action("request:/").method(POST).children(t));
 	}
 
-	@RestOp(
-		method=POST,
+	@RestPost(
 		path="/{javaInterface}/{javaMethod}",
 		summary="Invoke an interface method",
 		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",

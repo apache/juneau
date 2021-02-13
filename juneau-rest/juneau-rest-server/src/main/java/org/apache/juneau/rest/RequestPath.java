@@ -108,19 +108,19 @@ public class RequestPath extends TreeMap<String,String> {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> myparam = path.get(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> <jv>myparam</jv> = <jv>path</jv>.get(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into an int array.</jc>
-	 * 	<jk>int</jk>[] myparam = path.get(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
+	 * 	<jk>int</jk>[] <jv>myparam</jv> = <jv>path</jv>.get(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean myparam = path.get(<js>"myparam"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myparam</jv> = <jv>path</jv>.get(<js>"myparam"</js>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List myparam = path.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>myparam</jv> = <jv>path</jv>.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map myparam = path.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>myparam</jv> = <jv>path</jv>.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -172,16 +172,16 @@ public class RequestPath extends TreeMap<String,String> {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>myparam</jv> = <jv>req</jv>.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>myparam</jv> = <jv>req</jv>.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>myparam</jv> = <jv>req</jv>.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>myparam</jv> = <jv>req</jv>.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -316,9 +316,9 @@ public class RequestPath extends TreeMap<String,String> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// REST method</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>,path=<js>"/foo/{bar}/*"</js>)
-	 * 	<jk>public</jk> String doGetById(RequestPathMatch path, <jk>int</jk> bar) {
-	 * 		<jk>return</jk> path.getRemainder();
+	 * 	<ja>@RestGet</ja>(<js>"/foo/{bar}/*"</js>)
+	 * 	<jk>public</jk> String doGetById(RequestPathMatch <jv>path</jv>, <jk>int</jk> <jv>bar</jv>) {
+	 * 		<jk>return</jk> <jv>path</jv>.getRemainder();
 	 * 	}
 	 * </p>
 	 *

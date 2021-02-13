@@ -39,12 +39,12 @@ public class SerializedHttpEntity_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp
-		public String[] postCheckHeader(org.apache.juneau.rest.RestRequest req) {
+		@RestPost
+		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
-		@RestOp
-		public Reader postCheckBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+		@RestPost
+		public Reader checkBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getReader();
 		}
 	}

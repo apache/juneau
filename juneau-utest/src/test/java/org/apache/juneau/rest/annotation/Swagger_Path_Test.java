@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -48,7 +47,7 @@ public class Swagger_Path_Test {
 				return "a";
 			}
 		}
-		@RestOp(method=GET,path="/a/{P}")
+		@RestGet(path="/a/{P}")
 		public void a(A1 f) {}
 
 		@Path(
@@ -67,7 +66,7 @@ public class Swagger_Path_Test {
 				return "b";
 			}
 		}
-		@RestOp(method=GET,path="/b/{P}")
+		@RestPut(path="/b/{P}")
 		public void b(A2 f) {}
 
 		@Path(
@@ -90,7 +89,7 @@ public class Swagger_Path_Test {
 				return "c";
 			}
 		}
-		@RestOp(method=GET,path="/c/{P}")
+		@RestPost(path="/c/{P}")
 		public void c(A3 f) {}
 
 
@@ -101,7 +100,7 @@ public class Swagger_Path_Test {
 				return "d";
 			}
 		}
-		@RestOp(method=GET,path="/d/{P}")
+		@RestDelete(path="/d/{P}")
 		public void d(A4 f) {}
 
 		@Path(n="P",e={" ['a','b'] "})
@@ -111,7 +110,7 @@ public class Swagger_Path_Test {
 				return "e";
 			}
 		}
-		@RestOp(method=GET,path="/e/{P}")
+		@RestOp(path="/e/{P}")
 		public void e(A5 f) {}
 	}
 
@@ -128,7 +127,7 @@ public class Swagger_Path_Test {
 		assertEquals("a", x.getExample());
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/a/a'}}");
 
-		x = s.getParameterInfo("/b/{P}","get","path","P");
+		x = s.getParameterInfo("/b/{P}","put","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
@@ -136,7 +135,7 @@ public class Swagger_Path_Test {
 		assertEquals("a", x.getExample());
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/b/a'}}");
 
-		x = s.getParameterInfo("/c/{P}","get","path","P");
+		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
@@ -144,7 +143,7 @@ public class Swagger_Path_Test {
 		assertEquals("a", x.getExample());
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],example:'a',examples:{example:'/c/a'}}");
 
-		x = s.getParameterInfo("/d/{P}","get","path","P");
+		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertEquals("P", x.getName());
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
@@ -158,26 +157,26 @@ public class Swagger_Path_Test {
 
 		@Path(n="P")
 		public static class B1 {}
-		@RestOp(method=GET,path="/a/{P}")
+		@RestGet(path="/a/{P}")
 		public void a(B1 f) {}
 
 		@Path("P")
 		public static class B2 {
 			public String f1;
 		}
-		@RestOp(method=GET,path="/b/{P}")
+		@RestPut(path="/b/{P}")
 		public void b(B2 b) {}
 
 		@Path("P")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp(method=GET,path="/c/{P}")
+		@RestPost(path="/c/{P}")
 		public void c(B3 b) {}
 
 		@Path("P")
 		public static class B4 {}
-		@RestOp(method=GET,path="/d/{P}")
+		@RestDelete(path="/d/{P}")
 		public void d(B4 b) {}
 	}
 
@@ -189,13 +188,13 @@ public class Swagger_Path_Test {
 		x = s.getParameterInfo("/a/{P}","get","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
-		x = s.getParameterInfo("/b/{P}","get","path","P");
+		x = s.getParameterInfo("/b/{P}","put","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c/{P}","get","path","P");
+		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d/{P}","get","path","P");
+		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 
@@ -206,7 +205,7 @@ public class Swagger_Path_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestOp(method=GET,path="/a/{P}")
+		@RestGet(path="/a/{P}")
 		public void a(C1 f) {}
 	}
 
@@ -221,14 +220,14 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class D {
 
-		@RestOp(method=GET,path="/a/{P}")
+		@RestGet(path="/a/{P}")
 		public void a(@Path(
 			n="P",
 			d="a",
 			t="string"
 		) String h) {}
 
-		@RestOp(method=GET,path="/b/{P}")
+		@RestPut(path="/b/{P}")
 		public void b(@Path(
 			n="P",
 			api={
@@ -237,7 +236,7 @@ public class Swagger_Path_Test {
 			}
 		) String h) {}
 
-		@RestOp(method=GET,path="/c/{P}")
+		@RestPost(path="/c/{P}")
 		public void c(@Path(
 			n="P",
 			api={
@@ -248,10 +247,10 @@ public class Swagger_Path_Test {
 			t="string"
 		) String h) {}
 
-		@RestOp(method=GET,path="/d/{P}")
+		@RestDelete(path="/d/{P}")
 		public void d(@Path("P") String h) {}
 
-		@RestOp(method=GET,path="/e/{P}")
+		@RestOp(path="/e/{P}")
 		public void e(@Path(n="P",e={" ['a','b'] "}) String h) {}
 	}
 
@@ -264,15 +263,15 @@ public class Swagger_Path_Test {
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/b/{P}","get","path","P");
+		x = s.getParameterInfo("/b/{P}","put","path","P");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/c/{P}","get","path","P");
+		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/d/{P}","get","path","P");
+		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertEquals("P", x.getName());
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
@@ -282,29 +281,29 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class E {
 
-		@RestOp(method=GET,path="/a/{P}")
+		@RestGet(path="/a/{P}")
 		public void a(@Path("P") String h) {}
 
 		public static class E2 {
 			public String f1;
 		}
-		@RestOp(method=GET,path="/b/{P}")
+		@RestPut(path="/b/{P}")
 		public void b(@Path("P") E2 b) {}
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp(method=GET,path="/c/{P}")
+		@RestPost(path="/c/{P}")
 		public void c(@Path("P") E3 b) {}
 
 		public static class E4 {}
-		@RestOp(method=GET,path="/d/{P}")
+		@RestDelete(path="/d/{P}")
 		public void d(@Path("P") E4 b) {}
 
-		@RestOp(method=GET,path="/e/{P}")
+		@RestOp(path="/e/{P}")
 		public void e(@Path("P") Integer b) {}
 
-		@RestOp(method=GET,path="/f/{P}")
+		@RestGet(path="/f/{P}")
 		public void f(@Path("P") Boolean b) {}
 	}
 
@@ -316,13 +315,13 @@ public class Swagger_Path_Test {
 		x = s.getParameterInfo("/a/{P}","get","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
-		x = s.getParameterInfo("/b/{P}","get","path","P");
+		x = s.getParameterInfo("/b/{P}","put","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c/{P}","get","path","P");
+		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d/{P}","get","path","P");
+		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
@@ -335,7 +334,7 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class F {
 
-		@RestOp(method=GET,path="/a/{P}")
+		@RestGet(path="/a/{P}")
 		public void a(@Path(n="P",ex="{f1:'b'}") String h) {}
 	}
 

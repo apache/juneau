@@ -52,22 +52,22 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
+ * 	<ja>@RestGet</ja>
  * 	<jk>public void</jk> doGet(
- * 			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1,
- * 			<ja>@Query</ja>(<js>"p2"</js>) String p2,
- * 			<ja>@Query</ja>(<js>"p3"</js>) UUID p3
+ * 			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
+ * 			<ja>@Query</ja>(<js>"p2"</js>) String <jv>p2</jv>,
+ * 			<ja>@Query</ja>(<js>"p3"</js>) UUID <jv>p3</jv>
  * 		) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
- * 		<jk>int</jk> p1 = req.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
- * 		String p2 = req.getQueryParameter(String.<jk>class</jk>, <js>"p2"</js>);
- * 		UUID p3 = req.getQueryParameter(UUID.<jk>class</jk>, <js>"p3"</js>);
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>req</jv>.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
+ * 		String <jv>p2</jv> = <jv>req</jv>.getQueryParameter(String.<jk>class</jk>, <js>"p2"</js>);
+ * 		UUID <jv>p3</jv> = <jv>req</jv>.getQueryParameter(UUID.<jk>class</jk>, <js>"p3"</js>);
  * 		...
  * 	}
  * </p>
@@ -117,9 +117,9 @@ public @interface Query {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Order placeOrder(
-	 * 		<ja>@Query</ja>(name=<js>"petId"</js>, _default=<js>"100"</js>) <jk>long</jk> petId,
-	 * 		<ja>@Query</ja>(name=<js>"additionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
-	 * 		<ja>@Query</ja>(name=<js>"flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
+	 * 		<ja>@Query</ja>(name=<js>"petId"</js>, _default=<js>"100"</js>) <jk>long</jk> <jv>petId</jv>,
+	 * 		<ja>@Query</ja>(name=<js>"additionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo <jv>additionalInfo</jv>,
+	 * 		<ja>@Query</ja>(name=<js>"flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] <jv>flags</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -157,7 +157,7 @@ public @interface Query {
 	 * 		<ja>@Query</ja>(
 	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -166,7 +166,7 @@ public @interface Query {
 	 * 		<ja>@Query</ja>(
 	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -424,7 +424,7 @@ public @interface Query {
 	 * 		collectionFormat=<js>"csv"</js>,
 	 * 		example=<js>"AVAILABLE,PENDING"</js>
 	 * 	)
-	 * 	PetStatus[] status
+	 * 	PetStatus[] <jv>status</jv>
 	 * </p>
 	 *
 	 * <p>
@@ -868,8 +868,8 @@ public @interface Query {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Query</ja> OMap allQueryParameters) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(<ja>@Query</ja> OMap <jv>allQueryParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
@@ -878,7 +878,7 @@ public @interface Query {
 	 *
 	 * 		<jc>// Equivalent to @Query("*")</jc>
 	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
-	 * 		String myProxyMethod1(<ja>@Query</ja> Map&lt;String,Object&gt; allQueryParameters);
+	 * 		String myProxyMethod1(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>allQueryParameters</jv>);
 	 * 	}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
@@ -1137,10 +1137,10 @@ public @interface Query {
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a query entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Query</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@Query</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Query</ja>(<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@Query</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
 	 */
 	String value() default "";

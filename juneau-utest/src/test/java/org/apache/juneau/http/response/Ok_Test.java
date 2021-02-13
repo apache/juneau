@@ -23,9 +23,9 @@ public class Ok_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public Ok getA1() { return new Ok(); }
-		@RestOp public Ok getA2() { return new Ok("foo"); }
-		@RestOp public Ok getA3() { return new Ok().header("Foo","bar"); }
+		@RestGet public Ok a1() { return new Ok(); }
+		@RestGet public Ok a2() { return new Ok("foo"); }
+		@RestGet public Ok a3() { return new Ok().header("Foo","bar"); }
 	}
 
 	@Test

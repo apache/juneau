@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.annotation.HasFormData;
@@ -31,7 +30,7 @@ public class HasFormData_Test {
 
 	@Rest
 	public static class A {
-		@RestOp(method=POST)
+		@RestPost
 		public String a(RestRequest req, @HasFormData("p1") boolean p1, @HasFormData("p2") Boolean p2) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+f.containsKey("p1")+"],p2=["+p2+","+f.containsKey("p2")+"]";

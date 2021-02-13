@@ -54,8 +54,8 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public String getA(@Header("*") OMap m) {
+		@RestGet
+		public String a(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -151,8 +151,8 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestOp
-		public String getA(@Header("*") OMap m) {
+		@RestGet
+		public String a(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}

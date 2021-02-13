@@ -40,10 +40,10 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>
- * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet, <ja>@ResponseStatus</ja> Value&lt;Integer&gt; status) {
- * 		<jsm>addPet</jsm>(pet);
- * 		status.set(200);
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>, <ja>@ResponseStatus</ja> Value&lt;Integer&gt; <jv>status</jv>) {
+ * 		<jsm>addPet</jsm>(<jv>pet</jv>);
+ * 		<jv>status</jv>.set(200);
  * 	}
  * </p>
  *
@@ -58,9 +58,9 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>
- * 	<jk>public</jk> Success addPet() {
- * 		<jsm>addPet</jsm>(pet);
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public</jk> Success addPet(Pet <jv>pet</jv>) {
+ * 		<jsm>addPet</jsm>(<jv>pet</jv>);
  * 		<jk>return new</jk> Success();
  * 	}
  * </p>

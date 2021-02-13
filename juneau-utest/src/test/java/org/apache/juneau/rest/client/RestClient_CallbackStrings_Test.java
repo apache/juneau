@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -33,11 +32,11 @@ public class RestClient_CallbackStrings_Test {
 
 	@Rest
 	public static class A {
-		@RestOp(method=GET,path="/*")
+		@RestGet(path="/*")
 		public OMap get(RestRequest req) throws Exception {
 			return OMap.of("method","GET","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}
-		@RestOp(method=PUT,path="/*")
+		@RestPut(path="/*")
 		public OMap put(RestRequest req) throws Exception {
 			return OMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}

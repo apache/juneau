@@ -27,28 +27,28 @@ public class LengthRequired_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws LengthRequired {
+		@RestGet
+		public void f1() throws LengthRequired {
 			throw new LengthRequired();
 		}
-		@RestOp
-		public void getF2() throws LengthRequired {
+		@RestGet
+		public void f2() throws LengthRequired {
 			throw new LengthRequired("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws LengthRequired {
+		@RestGet
+		public void f3() throws LengthRequired {
 			throw new LengthRequired(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws LengthRequired {
+		@RestGet
+		public void f4() throws LengthRequired {
 			throw new LengthRequired(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws LengthRequired {
+		@RestGet
+		public void f5() throws LengthRequired {
 			throw new LengthRequired().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws LengthRequired {
+		@RestGet
+		public void f6() throws LengthRequired {
 			throw new LengthRequired("foo");
 		}
 	}

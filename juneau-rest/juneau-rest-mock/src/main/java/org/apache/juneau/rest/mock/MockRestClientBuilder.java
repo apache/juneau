@@ -166,7 +166,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * 	<ja>@Rest</ja>
 	 * 	<jk>public class</jk> Child {
 	 *
-	 * 		<jk>@RestOp</jk>
+	 * 		<jk>@RestGet</jk>
 	 * 		<jk>public</jk> String get(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>) {
 	 * 			<jk>return</jk> <jv>foo<jv>;
 	 * 		}

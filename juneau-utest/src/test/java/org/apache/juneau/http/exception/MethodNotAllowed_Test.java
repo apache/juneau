@@ -27,28 +27,28 @@ public class MethodNotAllowed_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws MethodNotAllowed {
+		@RestGet
+		public void f1() throws MethodNotAllowed {
 			throw new MethodNotAllowed();
 		}
-		@RestOp
-		public void getF2() throws MethodNotAllowed {
+		@RestGet
+		public void f2() throws MethodNotAllowed {
 			throw new MethodNotAllowed("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws MethodNotAllowed {
+		@RestGet
+		public void f3() throws MethodNotAllowed {
 			throw new MethodNotAllowed(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws MethodNotAllowed {
+		@RestGet
+		public void f4() throws MethodNotAllowed {
 			throw new MethodNotAllowed(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws MethodNotAllowed {
+		@RestGet
+		public void f5() throws MethodNotAllowed {
 			throw new MethodNotAllowed().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws MethodNotAllowed {
+		@RestGet
+		public void f6() throws MethodNotAllowed {
 			throw new MethodNotAllowed("foo");
 		}
 	}

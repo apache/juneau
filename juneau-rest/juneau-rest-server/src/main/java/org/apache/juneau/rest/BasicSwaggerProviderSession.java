@@ -212,14 +212,14 @@ public class BasicSwaggerProviderSession {
 
 			Method m = sm.getJavaMethod();
 			MethodInfo mi = MethodInfo.of(m);
-			RestOp rm = mi.getLastAnnotation(RestOp.class);
+			AnnotationList al = mi.getAnnotationGroupList(RestOp.class);
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
 			OMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
 			// Add @RestOp(swagger)
-			OpSwagger ms = rm.swagger();
+			OpSwagger ms = al.getValues(OpSwagger.class, "swagger").stream().filter(x -> ! OpSwaggerAnnotation.empty(x)).findFirst().orElse(OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendSkipEmpty("operationId",
@@ -234,7 +234,7 @@ public class BasicSwaggerProviderSession {
 					resolve(ms.summary()),
 					resolve(mb.findFirstString(mn + ".summary")),
 					op.getString("summary"),
-					resolve(rm.summary())
+					resolve(al.getValues(String.class, "summary").stream().filter(x -> !x.isEmpty()).findFirst().orElse(null))
 				)
 			);
 			op.appendSkipEmpty("description",
@@ -242,7 +242,7 @@ public class BasicSwaggerProviderSession {
 					resolve(ms.description()),
 					resolve(mb.findFirstString(mn + ".description")),
 					op.getString("description"),
-					resolve(rm.description())
+					resolve(al.getValues(String[].class, "description").stream().filter(x -> x.length > 0).findFirst().orElse(new String[0]))
 				)
 			);
 			op.appendSkipEmpty("deprecated",

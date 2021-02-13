@@ -32,15 +32,15 @@ public class Rest_Messages_Test {
 
 	@Rest
 	public static class A1 {
-		@RestOp
+		@RestGet
 		public OMap a(ResourceBundle rb) {
 			return asMap(rb);
 		}
-		@RestOp
+		@RestGet
 		public OMap b(Messages m) {
 			return asMap(m);
 		}
-		@RestOp
+		@RestGet
 		public String c(Messages m, @Query("name") String name) {
 			return m.getString(name);
 		}
@@ -76,15 +76,15 @@ public class Rest_Messages_Test {
 
 	@Rest(messages="B1x")
 	public static class B1 {
-		@RestOp
+		@RestGet
 		public OMap a(ResourceBundle rb) {
 			return asMap(rb);
 		}
-		@RestOp
+		@RestGet
 		public OMap b(Messages m) {
 			return asMap(m);
 		}
-		@RestOp
+		@RestGet
 		public String c(Messages m, @Query("name") String name) {
 			return m.getString(name);
 		}

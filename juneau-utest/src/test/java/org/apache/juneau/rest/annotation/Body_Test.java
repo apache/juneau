@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -45,58 +44,58 @@ public class Body_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static class A {
-		@RestOp(method=PUT, path="/String")
+		@RestPut(path="/String")
 		public String a(@Body String b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/Integer")
+		@RestPut(path="/Integer")
 		public Integer b(@Body Integer b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/int")
+		@RestPut(path="/int")
 		public Integer c(@Body int b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/Boolean")
+		@RestPut(path="/Boolean")
 		public Boolean d(@Body Boolean b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/boolean")
+		@RestPut(path="/boolean")
 		public Boolean e(@Body boolean b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/float")
+		@RestPut(path="/float")
 		public float f(@Body float f) {
 			return f;
 		}
-		@RestOp(method=PUT, path="/Float")
+		@RestPut(path="/Float")
 		public Float g(@Body Float f) {
 			return f;
 		}
-		@RestOp(method=PUT, path="/Map")
+		@RestPut(path="/Map")
 		public TreeMap<String,Integer> h(@Body TreeMap<String,Integer> m) {
 			return m;
 		}
-		@RestOp(method=PUT, path="/enum")
+		@RestPut(path="/enum")
 		public TestEnum i(@Body TestEnum e) {
 			return e;
 		}
 		public static class A11 {
 			public String f1;
 		}
-		@RestOp(method=PUT, path="/Bean")
+		@RestPut(path="/Bean")
 		public A11 j(@Body A11 b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/InputStream")
+		@RestPut(path="/InputStream")
 		public String k(@Body InputStream b) throws Exception {
 			return IOUtils.read(b);
 		}
-		@RestOp(method=PUT, path="/Reader")
+		@RestPut(path="/Reader")
 		public String l(@Body Reader b) throws Exception {
 			return IOUtils.read(b);
 		}
-		@RestOp(method=PUT, path="/InputStreamTransform")
+		@RestPut(path="/InputStreamTransform")
 		public A14 m(@Body A14 b) throws Exception {
 			return b;
 		}
@@ -105,7 +104,7 @@ public class Body_Test {
 			public A14(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/ReaderTransform")
+		@RestPut(path="/ReaderTransform")
 		public A15 n(@Body A15 b) throws Exception {
 			return b;
 		}
@@ -114,7 +113,7 @@ public class Body_Test {
 			public A15(Reader in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/StringTransform")
+		@RestPut(path="/StringTransform")
 		public A16 o(@Body A16 b) throws Exception { return b; }
 		public static class A16 {
 			private String s;
@@ -421,7 +420,7 @@ public class Body_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class B {
-		@RestOp(method=PUT, path="/StringTransform")
+		@RestPut(path="/StringTransform")
 		public B1 a(B1 b) {
 			return b;
 		}
@@ -431,7 +430,7 @@ public class Body_Test {
 			public B1(String val) { this.val = val; }
 			@Override public String toString() { return val; }
 		}
-		@RestOp(method=PUT, path="/Bean")
+		@RestPut(path="/Bean")
 		public B2 b(B2 b) {
 			return b;
 		}
@@ -439,14 +438,14 @@ public class Body_Test {
 		public static class B2 {
 			public String f1;
 		}
-		@RestOp(method=PUT, path="/BeanList")
+		@RestPut(path="/BeanList")
 		public B3 c(B3 b) {
 			return b;
 		}
 		@SuppressWarnings("serial")
 		@Body
 		public static class B3 extends LinkedList<B2> {}
-		@RestOp(method=PUT, path="/InputStreamTransform")
+		@RestPut(path="/InputStreamTransform")
 		public B4 d(B4 b) throws Exception {
 			return b;
 		}
@@ -456,7 +455,7 @@ public class Body_Test {
 			public B4(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/ReaderTransform")
+		@RestPut(path="/ReaderTransform")
 		public B5 e(B5 b) throws Exception {
 			return b;
 		}
@@ -512,19 +511,19 @@ public class Body_Test {
 
 	@Rest
 	public static class D {
-		@RestOp(method=PUT, path="/String")
+		@RestPut(path="/String")
 		public Reader a(@Body Reader b) throws Exception {
 			return b;
 		}
-		@RestOp(method=PUT, path="/InputStream")
+		@RestPut(path="/InputStream")
 		public InputStream b(@Body InputStream b) throws Exception {
 			return b;
 		}
-		@RestOp(method=PUT, path="/Reader")
+		@RestPut(path="/Reader")
 		public Reader c(@Body Reader b) throws Exception {
 			return b;
 		}
-		@RestOp(method=PUT, path="/StringTransform")
+		@RestPut(path="/StringTransform")
 		public Reader d(@Body D1 b) throws Exception {
 			return new StringReader(b.toString());
 		}
@@ -533,7 +532,7 @@ public class Body_Test {
 			public D1(String in) throws Exception { this.s = in; }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/InputStreamTransform")
+		@RestPut(path="/InputStreamTransform")
 		public Reader e(@Body D2 b) throws Exception {
 			return new StringReader(b.toString());
 		}
@@ -542,7 +541,7 @@ public class Body_Test {
 			public D2(InputStream in) throws Exception { this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/ReaderTransform")
+		@RestPut(path="/ReaderTransform")
 		public Reader f(@Body D3 b) throws Exception {
 			return new StringReader(b.toString());
 		}
@@ -551,7 +550,7 @@ public class Body_Test {
 			public D3(Reader in) throws Exception{ this.s = IOUtils.read(in); }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/StringTransformBodyOnPojo")
+		@RestPut(path="/StringTransformBodyOnPojo")
 		public Reader g(D4 b) throws Exception {
 			return new StringReader(b.toString());
 		}
@@ -561,7 +560,7 @@ public class Body_Test {
 			public D4(String in) throws Exception { this.s = in; }
 			@Override public String toString() { return s; }
 		}
-		@RestOp(method=PUT, path="/InputStreamTransformBodyOnPojo")
+		@RestPut(path="/InputStreamTransformBodyOnPojo")
 		public Reader h(D5 b) throws Exception {
 			return new StringReader(b.toString());
 		}
@@ -572,7 +571,7 @@ public class Body_Test {
 			@Override public String toString() { return s; }
 		}
 
-		@RestOp(method=PUT, path="/ReaderTransformBodyOnPojo")
+		@RestPut(path="/ReaderTransformBodyOnPojo")
 		public Reader i(D6 b) throws Exception {
 			return new StringReader(b.toString());
 		}
@@ -649,11 +648,11 @@ public class Body_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class E {
-		@RestOp(method=PUT, path="/B")
+		@RestPut(path="/B")
 		public XBeans.XB a(@Body XBeans.XB b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/C")
+		@RestPut(path="/C")
 		public XBeans.XC b(@Body XBeans.XC c) {
 			return c;
 		}
@@ -689,11 +688,11 @@ public class Body_Test {
 	@Bean(on="A,B,C",sort=true)
 	@UrlEncoding(on="C",expandedParams=true)
 	public static class E2 {
-		@RestOp(method=PUT, path="/B")
+		@RestPut(path="/B")
 		public XBeans.XE a(@Body XBeans.XE b) {
 			return b;
 		}
-		@RestOp(method=PUT, path="/C")
+		@RestPut(path="/C")
 		public XBeans.XF b(@Body XBeans.XF c) {
 			return c;
 		}
@@ -731,7 +730,7 @@ public class Body_Test {
 
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class F {
-		@RestOp(method=POST, path="/*")
+		@RestPost(path="/*")
 		public Reader a(
 				@Body F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
@@ -769,7 +768,7 @@ public class Body_Test {
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
-		@RestOp(method=POST,path="/")
+		@RestPost(path="/")
 		public XBeans.XC a(@Body XBeans.XC content) throws Exception {
 			return content;
 		}
@@ -812,7 +811,7 @@ public class Body_Test {
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class H {
-		@RestOp(method=POST,path="/")
+		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
 		public XBeans.XB a(@Body XBeans.XB content) throws Exception {
 			return content;
@@ -852,7 +851,7 @@ public class Body_Test {
 	@Bean(on="A,B,C",sort=true)
 	@UrlEncoding(on="C",expandedParams=true)
 	public static class H2 {
-		@RestOp(method=POST,path="/")
+		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
 		public XBeans.XE a(@Body XBeans.XE content) throws Exception {
 			return content;
@@ -894,11 +893,11 @@ public class Body_Test {
 
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
-		@RestOp(method=POST)
+		@RestPost
 		public XBeans.XB a(@Body(r=true) XBeans.XB content) throws Exception {
 			return content;
 		}
-		@RestOp(method=POST)
+		@RestPost
 		@Bean(on="A,B,C",sort=true)
 		@UrlEncoding(on="C",expandedParams=true)
 		public XBeans.XE b(@Body(r=true) XBeans.XE content) throws Exception {
@@ -933,22 +932,22 @@ public class Body_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class,parsers=JsonParser.class)
 	public static class J {
-		@RestOp(method=POST)
+		@RestPost
 		public Object a(@Body Optional<Integer> body) throws Exception {
 			assertNotNull(body);
 			return body;
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public Object b(@Body Optional<ABean> body) throws Exception {
 			assertNotNull(body);
 			return body;
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public Object c(@Body Optional<List<ABean>> body) throws Exception {
 			assertNotNull(body);
 			return body;
 		}
-		@RestOp(method=POST)
+		@RestPost
 		public Object d(@Body List<Optional<ABean>> body) throws Exception {
 			return body;
 		}

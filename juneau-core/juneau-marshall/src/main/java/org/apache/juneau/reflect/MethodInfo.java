@@ -206,6 +206,20 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
+	 * Returns <jk>true</jk> if at least one of the specified annotation is present on this method.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if at least one of the specified annotation is present on this method.
+	 */
+	@SafeVarargs
+	public final boolean hasAnyAnnotations(Class<? extends Annotation>...a) {
+		for (Class<? extends Annotation> aa : a)
+			if (hasAnnotation(aa))
+				return true;
+		return false;
+	}
+
+	/**
 	 * Returns all annotations of the specified type defined on the specified method.
 	 *
 	 * <p>
@@ -274,6 +288,17 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public AnnotationList getAnnotationList() {
 		return getAnnotationList(null);
+	}
+
+	/**
+	 * Constructs an {@link AnnotationList} of all annotations found on this class that belong to the specified
+	 * {@link AnnotationGroup annotation group}.
+	 *
+	 * @param group The annotation group.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public AnnotationList getAnnotationGroupList(Class<? extends Annotation> group) {
+		return getAnnotationList(x -> x.isInGroup(group));
 	}
 
 	/**

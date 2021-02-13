@@ -54,12 +54,12 @@ public class RestClient_Response_Body_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp
-		public InputStream postEcho(InputStream is) {
+		@RestPost
+		public InputStream echo(InputStream is) {
 			return is;
 		}
-		@RestOp
-		public ABean getBean() {
+		@RestGet
+		public ABean bean() {
 			return bean;
 		}
 		@RestOp

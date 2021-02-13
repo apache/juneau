@@ -41,17 +41,17 @@ public class RestClient_Logging_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp
-		public ABean postBean(@Body ABean b) {
+		@RestPost
+		public ABean bean(@Body ABean b) {
 			return b;
 		}
-		@RestOp
-		public InputStream postStream(@Body InputStream b, org.apache.juneau.rest.RestResponse res) {
+		@RestPost
+		public InputStream stream(@Body InputStream b, org.apache.juneau.rest.RestResponse res) {
 			res.setHeader("Content-Encoding", "identity");
 			return b;
 		}
-		@RestOp
-		public ABean getBean() {
+		@RestGet
+		public ABean bean() {
 			return bean;
 		}
 	}

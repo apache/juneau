@@ -27,28 +27,28 @@ public class UnprocessableEntity_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws UnprocessableEntity {
+		@RestGet
+		public void f1() throws UnprocessableEntity {
 			throw new UnprocessableEntity();
 		}
-		@RestOp
-		public void getF2() throws UnprocessableEntity {
+		@RestGet
+		public void f2() throws UnprocessableEntity {
 			throw new UnprocessableEntity("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws UnprocessableEntity {
+		@RestGet
+		public void f3() throws UnprocessableEntity {
 			throw new UnprocessableEntity(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws UnprocessableEntity {
+		@RestGet
+		public void f4() throws UnprocessableEntity {
 			throw new UnprocessableEntity(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws UnprocessableEntity {
+		@RestGet
+		public void f5() throws UnprocessableEntity {
 			throw new UnprocessableEntity().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws UnprocessableEntity {
+		@RestGet
+		public void f6() throws UnprocessableEntity {
 			throw new UnprocessableEntity("foo");
 		}
 	}

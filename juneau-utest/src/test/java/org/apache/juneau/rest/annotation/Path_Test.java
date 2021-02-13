@@ -38,23 +38,23 @@ public class Path_Test {
 
 	@Rest
 	public static class A  {
-		@RestOp(method=GET, path="/")
+		@RestGet(path="/")
 		public void a(RestResponse res) {
 			res.setOutput(GET);
 		}
-		@RestOp(method=GET, path="/a")
+		@RestGet(path="/a")
 		public String b() {
 			return "GET /a";
 		}
-		@RestOp(method=GET, path="/a/{foo}")
+		@RestGet(path="/a/{foo}")
 		public String c(RestResponse res, @Path("foo") String foo) {
 			return "GET /a " + foo;
 		}
-		@RestOp(method=GET, path="/a/{foo}/{bar}")
+		@RestGet(path="/a/{foo}/{bar}")
 		public String d(RestResponse res, @Path("foo") String foo, @Path("bar") String bar) {
 			return "GET /a " + foo + "," + bar;
 		}
-		@RestOp(method=GET, path="/a/{foo}/{bar}/*")
+		@RestGet(path="/a/{foo}/{bar}/*")
 		public String e(@Path("foo") String foo, @Path("bar") int bar, @Path("/*") String remainder) {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
@@ -109,35 +109,35 @@ public class Path_Test {
 
 	@Rest
 	public static class B  {
-		@RestOp(method=GET, path="/a/{x}/foo")
+		@RestGet(path="/a/{x}/foo")
 		public String a(@Path("x") int x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/b/{x}/foo")
+		@RestGet(path="/b/{x}/foo")
 		public String b(@Path("x") short x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/c/{x}/foo")
+		@RestGet(path="/c/{x}/foo")
 		public String c(@Path("x") long x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/d/{x}/foo")
+		@RestGet(path="/d/{x}/foo")
 		public String d(@Path("x") char x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/e/{x}/foo")
+		@RestGet(path="/e/{x}/foo")
 		public String e(@Path("x") float x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/f/{x}/foo")
+		@RestGet(path="/f/{x}/foo")
 		public String f(@Path("x") double x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/g/{x}/foo")
+		@RestGet(path="/g/{x}/foo")
 		public String g(@Path("x") byte x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/h/{x}/foo")
+		@RestGet(path="/h/{x}/foo")
 		public String h(@Path("x") boolean x) {
 			return String.valueOf(x);
 		}
@@ -210,35 +210,35 @@ public class Path_Test {
 
 	@Rest
 	public static class C  {
-		@RestOp(method=GET, path="/a/{x}/foo")
+		@RestGet(path="/a/{x}/foo")
 		public String a(@Path("x") Integer x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/b/{x}/foo")
+		@RestGet(path="/b/{x}/foo")
 		public String b(@Path("x") Short x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/c/{x}/foo")
+		@RestGet(path="/c/{x}/foo")
 		public String c(@Path("x") Long x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/d/{x}/foo")
+		@RestGet(path="/d/{x}/foo")
 		public String d(@Path("x") Character x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/e/{x}/foo")
+		@RestGet(path="/e/{x}/foo")
 		public String e(@Path("x") Float x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/f/{x}/foo")
+		@RestGet(path="/f/{x}/foo")
 		public String f(@Path("x") Double x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/g/{x}/foo")
+		@RestGet(path="/g/{x}/foo")
 		public String g(@Path("x") Byte x) {
 			return String.valueOf(x);
 		}
-		@RestOp(method=GET, path="/h/{x}/foo")
+		@RestGet(path="/h/{x}/foo")
 		public String h(@Path("x") Boolean x) {
 			return String.valueOf(x);
 		}
@@ -312,7 +312,7 @@ public class Path_Test {
 	@Rest
 	public static class D {
 		// Object with forString(String) method
-		@RestOp(method=GET, path="/a/{uuid}")
+		@RestGet(path="/a/{uuid}")
 		public UUID a(RestResponse res, @Path("uuid") UUID uuid) {
 			return uuid;
 		}
@@ -334,23 +334,23 @@ public class Path_Test {
 
 	@Rest
 	public static class E  {
-		@RestOp(method=GET, path="/x/{foo}/{bar}")
+		@RestGet(path="/x/{foo}/{bar}")
 		public Object a(@Path String foo, @Path String bar) {
 			return OMap.of("m", "normal1", "foo", foo, "bar", bar);
 		}
-		@RestOp(method=GET, path="/x/{foo}/x/{bar}/x")
+		@RestGet(path="/x/{foo}/x/{bar}/x")
 		public Object b(@Path String foo, @Path String bar) {
 			return OMap.of("m", "normal2", "foo", foo, "bar", bar);
 		}
-		@RestOp(method=GET, path="/y/{0}/{1}")
+		@RestGet(path="/y/{0}/{1}")
 		public Object c(@Path String foo, @Path String bar) {
 			return OMap.of("m", "numbers1", "0", foo, "1", bar);
 		}
-		@RestOp(method=GET, path="/y/{0}/y/{1}/y")
+		@RestGet(path="/y/{0}/y/{1}/y")
 		public Object d(@Path String foo, @Path String bar) {
 			return OMap.of("m", "numbers2", "0", foo, "1", bar);
 		}
-		@RestOp(method=GET, path="/z/{1}/z/{0}/z")
+		@RestGet(path="/z/{1}/z/{0}/z")
 		public Object e(@Path String foo, @Path String bar) {
 			return OMap.of("m", "numbers3", "0", foo, "1", bar);
 		}
@@ -382,27 +382,27 @@ public class Path_Test {
 
 	@Rest(path="/f/{a}/{b}")
 	public static class F  {
-		@RestOp(method=GET, path="/")
+		@RestGet(path="/")
 		public String a(RequestPath path) {
 			return format("a: {0}", path);
 		}
-		@RestOp(method=GET, path="/*")
+		@RestGet(path="/*")
 		public String b(RequestPath path) {
 			return format("b: {0}", path);
 		}
-		@RestOp(method=GET, path="/fc")
+		@RestGet(path="/fc")
 		public String c(RequestPath path) {
 			return format("c: {0}", path);
 		}
-		@RestOp(method=GET, path="/fd/{c}/{d}")
+		@RestGet(path="/fd/{c}/{d}")
 		public String d(RequestPath path) {
 			return format("d: {0}", path);
 		}
-		@RestOp(method=GET, path="/fe/{a}/{b}")
+		@RestGet(path="/fe/{a}/{b}")
 		public String e(RequestPath path) {
 			return format("e: {0}", path);
 		}
-		@RestOp(method=GET, path="/ff/{c}/{d}/*")
+		@RestGet(path="/ff/{c}/{d}/*")
 		public String f(RequestPath path) {
 			return format("f: {0}", path);
 		}
@@ -745,22 +745,22 @@ public class Path_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class J {
-		@RestOp(method=GET,path="/a/{f1}")
+		@RestGet(path="/a/{f1}")
 		public Object a(@Path("f1") Optional<Integer> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp(method=GET,path="/b/{f1}")
+		@RestGet(path="/b/{f1}")
 		public Object b(@Path("f1") Optional<ABean> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp(method=GET,path="/c/{f1}")
+		@RestGet(path="/c/{f1}")
 		public Object c(@Path("f1") Optional<List<ABean>> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestOp(method=GET,path="/d/{f1}")
+		@RestGet(path="/d/{f1}")
 		public Object d(@Path("f1") List<Optional<ABean>> f1) throws Exception {
 			return f1;
 		}
@@ -797,11 +797,11 @@ public class Path_Test {
 
 	@Rest(path="/k2")
 	public static class K2 {
-		@RestOp(path="/")
+		@RestGet(path="/")
 		public String a(@Path(n="k1",r=false) String k1) {
 			return k1 == null ? "nil" : k1;
 		}
-		@RestOp(path="/foo/{bar}")
+		@RestGet(path="/foo/{bar}")
 		public String b(@Path(n="k1",r=false) String k1, @Path(n="bar",r=false) String bar) {
 			return (k1 == null ? "nil" : k1) + "," + (bar == null ? "nil" : bar);
 		}
@@ -839,11 +839,11 @@ public class Path_Test {
 
 	@Rest(path="/l2")
 	public static class L2 {
-		@RestOp(path={"/","/{foo}"})
+		@RestGet(path={"/","/{foo}"})
 		public String a(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
 			return "1," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}
-		@RestOp(path={"/foo","/foo/{foo}"})
+		@RestGet(path={"/foo","/foo/{foo}"})
 		public String b(@Path(n="l1",r=false) String l1, @Path(n="foo",r=false) String foo) {
 			return "2," + (l1 == null ? "nil" : l1) + "," + (foo == null ? "nil" : foo);
 		}

@@ -67,8 +67,8 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public String postA(@FormData("*") OMap m, @Header("Content-Type") String ct) {
+		@RestPost
+		public String a(@FormData("*") OMap m, @Header("Content-Type") String ct) {
 			assertEquals(ct,"application/x-www-form-urlencoded");
 			return m.toString();
 		}
@@ -175,12 +175,12 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestOp
-		public String postA(@FormData("*") OMap m) {
+		@RestPost
+		public String a(@FormData("*") OMap m) {
 			return m.toString();
 		}
-		@RestOp
-		public Reader postB(@Body Reader b) {
+		@RestPost
+		public Reader b(@Body Reader b) {
 			return b;
 		}
 	}

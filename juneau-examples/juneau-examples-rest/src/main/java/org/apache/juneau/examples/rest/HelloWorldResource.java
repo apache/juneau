@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.http.HttpMethod.*;
-
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -45,7 +43,7 @@ public class HelloWorldResource extends BasicRestObject {
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestOp(method=GET, path="/*", summary="Responds with \"Hello world!\"")
+	@RestGet(path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";
 	}

@@ -42,8 +42,8 @@ public class ClientVersionMatcher extends RestMatcher {
 	 */
 	protected ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "X-Client-Version" : clientVersionHeader;
-		RestOp m = mi.getLastAnnotation(RestOp.class);
-		range = new VersionRange(m.clientVersion());
+		String clientVersion = mi.getAnnotationGroupList(RestOp.class).getValues(String.class, "clientVersion").stream().filter(x->!x.isEmpty()).findFirst().orElse(null);
+		range = new VersionRange(clientVersion);
 	}
 
 	@Override /* RestMatcher */

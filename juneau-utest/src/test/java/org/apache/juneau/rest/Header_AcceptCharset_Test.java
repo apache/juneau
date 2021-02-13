@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -36,7 +35,7 @@ public class Header_AcceptCharset_Test {
 
 	@Rest(defaultCharset="utf-8",serializers=PlainTextSerializer.class)
 	public static class A {
-		@RestOp
+		@RestGet
 		public String a() {
 			return "foo";
 		}
@@ -65,7 +64,7 @@ public class Header_AcceptCharset_Test {
 	@Rest(defaultCharset="utf-8")
 	public static class B {
 
-		@RestOp(method=PUT, parsers=TestParser.class, serializers=TestSerializer.class)
+		@RestPut(parsers=TestParser.class, serializers=TestSerializer.class)
 		public String a(@Body String in) {
 			return in;
 		}

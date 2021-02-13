@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Converter for enablement of {@link PojoIntrospector} support on response objects returned by a
- * <c>@RestOp</c> method.
+ * <c>@RestOp</c>-annotated method.
  *
  * <p>
  * When enabled, public methods can be called on objects returned through the {@link RestResponse#setOutput(Object)}

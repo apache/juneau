@@ -41,7 +41,7 @@ public class Swagger_Query_Test {
 		public static class A1 {
 			public A1(String x) {}
 		}
-		@RestOp
+		@RestGet
 		public void a(A1 q) {}
 
 		@Query(
@@ -54,7 +54,7 @@ public class Swagger_Query_Test {
 		public static class A2 {
 			public A2(String x) {}
 		}
-		@RestOp
+		@RestPut
 		public void b(A2 q) {}
 
 		@Query(
@@ -69,12 +69,12 @@ public class Swagger_Query_Test {
 		public static class A3 {
 			public A3(String x) {}
 		}
-		@RestOp
+		@RestPost
 		public void c(A3 q) {}
 
 		@Query("Q")
 		public static class A4 {}
-		@RestOp
+		@RestDelete
 		public void d(A4 q) {}
 	}
 
@@ -88,17 +88,17 @@ public class Swagger_Query_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/b","get","query","Q");
+		x = s.getParameterInfo("/b","put","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/c","get","query","Q");
+		x = s.getParameterInfo("/c","post","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/d","get","query","Q");
+		x = s.getParameterInfo("/d","delete","query","Q");
 		assertEquals("Q", x.getName());
 	}
 
@@ -107,26 +107,26 @@ public class Swagger_Query_Test {
 
 		@Query(n="Q")
 		public static class B1 {}
-		@RestOp
+		@RestGet
 		public void a(B1 q) {}
 
 		@Query("Q")
 		public static class B2 {
 			public String f1;
 		}
-		@RestOp
+		@RestPut
 		public void b(B2 q) {}
 
 		@Query("Q")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp
+		@RestPost
 		public void c(B3 q) {}
 
 		@Query("Q")
 		public static class B4 {}
-		@RestOp
+		@RestDelete
 		public void d(B4 q) {}
 	}
 
@@ -138,13 +138,13 @@ public class Swagger_Query_Test {
 		x = s.getParameterInfo("/a","get","query","Q");
 		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
 
-		x = s.getParameterInfo("/b","get","query","Q");
+		x = s.getParameterInfo("/b","put","query","Q");
 		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c","get","query","Q");
+		x = s.getParameterInfo("/c","post","query","Q");
 		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d","get","query","Q");
+		x = s.getParameterInfo("/d","delete","query","Q");
 		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
 	}
 
@@ -155,7 +155,7 @@ public class Swagger_Query_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestOp
+		@RestGet
 		public void a(C1 q) {}
 	}
 
@@ -170,7 +170,7 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class D {
 
-		@RestOp
+		@RestGet
 		public void a(
 			@Query(
 				n="Q",
@@ -179,7 +179,7 @@ public class Swagger_Query_Test {
 			)
 			String q) {}
 
-		@RestOp
+		@RestPut
 		public void b(
 			@Query(
 				n="Q",
@@ -190,7 +190,7 @@ public class Swagger_Query_Test {
 			)
 			String q) {}
 
-		@RestOp
+		@RestPost
 		public void c(
 			@Query(
 				n="Q",
@@ -203,7 +203,7 @@ public class Swagger_Query_Test {
 			)
 			String q) {}
 
-		@RestOp
+		@RestDelete
 		public void d(@Query("Q") String q) {}
 	}
 
@@ -217,17 +217,17 @@ public class Swagger_Query_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/b","get","query","Q");
+		x = s.getParameterInfo("/b","put","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/c","get","query","Q");
+		x = s.getParameterInfo("/c","post","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/d","get","query","Q");
+		x = s.getParameterInfo("/d","delete","query","Q");
 		assertEquals("Q", x.getName());
 	}
 
@@ -238,7 +238,7 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class E {
 
-		@RestOp
+		@RestGet
 		public void a(@Query("Q") String q) {}
 	}
 
@@ -257,7 +257,7 @@ public class Swagger_Query_Test {
 	@Rest
 	public static class F {
 
-		@RestOp
+		@RestGet
 		public void a(@Query(n="Q",ex={"a","b"}) String q) {}
 	}
 

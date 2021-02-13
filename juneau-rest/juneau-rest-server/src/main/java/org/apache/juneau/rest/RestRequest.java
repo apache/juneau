@@ -233,7 +233,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * in fluent calls.
 	 *
 	 * <p class='bcode w800'>
-	 * 		req.getRequestHeader("Foo").asInteger().orElse(-1);
+	 * 		<jv>req</jv>.getRequestHeader("Foo").asInteger().orElse(-1);
 	 * </p>
 	 *
 	 * @param name The header name.
@@ -271,52 +271,38 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
+	 * 	<jv>req</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).exists();
 	 *
 	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 * 	<jv>req</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 	<jv>req</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
+	 * 	<jv>req</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
+	 * 	<jv>req</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 	<jv>req</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the header and converts it to a bean.</jc>
-	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
-	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
+	 * 	MediaType <jv>mediaType</jv> = <jv>rreq</jv>
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).exists()
+	 * 		.assertStringHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.getRequestHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param name The header name.
@@ -332,9 +318,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
+	 * 	<jv>req</jv>
 	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
 	 * </p>
 	 *
@@ -351,9 +335,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response body is not too large.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
+	 * 	<jv>req</jv>
 	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
 	 * </p>
 	 *
@@ -370,9 +352,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
+	 * 	<jv>re2</jv>
 	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
 	 * </p>
 	 *
@@ -389,10 +369,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
+	 * 	<jv>req</jv>
+	 * 		.assertZoneDateTimeHeader(<js>"Expires"</js>).isAfterNow();
 	 * </p>
 	 *
 	 * @param name The header name.
@@ -408,9 +386,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
+	 * 	<jv>req</jv>
 	 * 		.assertCsvArrayHeader(<js>"Allow"</js>).contains(<js>"GET"</js>);
 	 * </p>
 	 *
@@ -427,9 +403,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
+	 * 	<jv>req</jv>
 	 * 		.assertCharset().is(<js>"utf-8"</js>);
 	 * </p>
 	 *
@@ -446,9 +420,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
+	 * 	<jv>req</jv>
 	 * 		.assertContentType().is(<js>"application/json"</js>);
 	 * </p>
 	 *
@@ -456,10 +428,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Note that this is equivalent to the following code:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 * 	<jv>req</jv>
+	 * 		.assertRequestHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
@@ -476,20 +446,20 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
+	 * 	<ja>@RestPost</ja>(...)
+	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to headers.</jc>
-	 * 		RequestHeaders h = req.getHeaders();
+	 * 		RequestHeaders <jv>headers</jv> = <jv>req</jv>.getHeaders();
 	 *
 	 * 		<jc>// Add a default value.</jc>
-	 * 		h.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+	 * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	 *
 	 *  	<jc>// Get a header value as a POJO.</jc>
-	 * 		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	 *
 	 * 		<jc>// Get a standard header.</jc>
-	 * 		CacheControl = h.getCacheControl();
+	 * 		CacheControl = <jv>headers</jv>.getCacheControl();
 	 * 	}
 	 * </p>
 	 *
@@ -614,14 +584,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
+	 * 	<ja>@RestPost</ja>(...)
+	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to attributes.</jc>
-	 * 		RequestAttributes a = req.getAttributes();
+	 * 		RequestAttributes <jv>attributes</jv> = <jv>req</jv>.getAttributes();
 	 *
 	 *  	<jc>// Get a header value as a POJO.</jc>
-	 * 		UUID etag = a.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	 * 		UUID <jv>etag</jv> = <jv>attributes</jv>.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	 * 	}
 	 * </p>
 	 *
@@ -663,16 +633,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public void</jk> doGet(RestRequest req) {
+	 * 	<ja>@RestGet</ja>(...)
+	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to query parameters on the URL.</jc>
-	 * 		RequestQuery q = req.getQuery();
+	 * 		RequestQuery <jv>query</jv> = <jv>req</jv>.getQuery();
 	 *
 	 * 		<jc>// Get query parameters converted to various types.</jc>
-	 * 		<jk>int</jk> p1 = q.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-	 * 		String p2 = q.get(<js>"p2"</js>, String.<jk>class</jk>);
-	 * 		UUID p3 = q.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 * 		<jk>int</jk> <jv>p1/<jv> = <jv>query</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+	 * 		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
+	 * 		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	 * 	}
 	 * </p>
 	 *
@@ -727,16 +697,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public void</jk> doPost(RestRequest req) {
+	 * 	<ja>@RestPost</ja>(...)
+	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to parsed form data parameters.</jc>
-	 * 		RequestFormData fd = req.getFormData();
+	 * 		RequestFormData <jv>formData</jv> = <jv>req</jv>.getFormData();
 	 *
 	 * 		<jc>// Get form data parameters converted to various types.</jc>
-	 * 		<jk>int</jk> p1 = fd.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-	 * 		String p2 = fd.get(<js>"p2"</js>, String.<jk>class</jk>);
-	 * 		UUID p3 = fd.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 * 		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+	 * 		String <jv>p2</jv> = <jv>formData</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
+	 * 		UUID <jv>p3</jv> = <jv>formData</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	 * 	}
 	 * </p>
 	 *
@@ -805,18 +775,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
-	 * 	<jk>public void</jk> doGet(RestRequest req) {
+	 * 	<ja>@RestGet</ja>(<js>"/{foo}/{bar}/{baz}/*"</js>)
+	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to path data.</jc>
-	 * 		RequestPathMatch pm = req.getPathMatch();
+	 * 		RequestPathMatch <jv>pathMatch</jv> = <jv>req</jv>.getPathMatch();
 	 *
 	 * 		<jc>// Example URL:  /123/qux/true/quux</jc>
 	 *
-	 * 		<jk>int</jk> foo = pm.getInt(<js>"foo"</js>);  <jc>// =123</jc>
-	 * 		String bar = pm.getString(<js>"bar"</js>);  <jc>// =qux</jc>
-	 * 		<jk>boolean</jk> baz = pm.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
-	 * 		String remainder = pm.getRemainder();  <jc>// =quux</jc>
+	 * 		<jk>int</jk> <jv>foo</jv> = <jv>pathMatch</jv>.getInt(<js>"foo"</js>);  <jc>// =123</jc>
+	 * 		String <jv>bar</jv> = <jv>pathMatch</jv>.getString(<js>"bar"</js>);  <jc>// =qux</jc>
+	 * 		<jk>boolean</jk> <jv>baz</jv> = <jv>pathMatch</jv>.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
+	 * 		String <jv>remainder</jv> = <jv>pathMatch</jv>.getRemainder();  <jc>// =quux</jc>
 	 * 	}
 	 * </p>
 	 *
@@ -874,11 +844,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public void</jk> doPost2(RestRequest req) {
+	 * 	<ja>@RestPost</ja>(...)
+	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Convert body to a linked list of Person objects.</jc>
-	 * 		List&lt;Person&gt; l = req.getBody().asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+	 * 		List&lt;Person&gt; <jv>list</jv> = <jv>req</jv>.getBody().asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
 	 * 		..
 	 * 	}
 	 * </p>
@@ -1047,9 +1017,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public</jk> List&lt;Tag&gt; getSwaggerTags(RestRequest req) {
-	 * 		<jk>return</jk> req.getSwagger().getTags();
+	 * 	<ja>@RestGet</ja>
+	 * 	<jk>public</jk> List&lt;Tag&gt; swaggerTags(RestRequest <jv>req</jv>) {
+	 * 		<jk>return</jk> <jv>req</jv>.getSwagger().getTags();
 	 * 	}
 	 * </p>
 	 *
@@ -1145,11 +1115,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public</jk> String sayHello(RestRequest req, <ja>@Query</ja>(<js>"user"</js>) String user) {
+	 * 	<ja>@RestGet</ja>
+	 * 	<jk>public</jk> String hello(RestRequest <jv>req</jv>, <ja>@Query</ja>(<js>"user"</js>) String <jv>user</jv>) {
 	 *
 	 * 		<jc>// Return a localized message.</jc>
-	 * 		<jk>return</jk> req.getMessages().getString(<js>"hello.message"</js>, user);
+	 * 		<jk>return</jk> <jv>req</jv>.getMessages().getString(<js>"hello.message"</js>, <jv>user</jv>);
 	 * 	}
 	 * </p>
 	 *
@@ -1298,14 +1268,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public</jk> String sayHello(RestRequest req) {
+	 * 	<ja>@RestGet</ja>
+	 * 	<jk>public</jk> String hello(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get var resolver session.</jc>
-	 * 		VarResolverSession session = getVarResolverSession();
+	 * 		VarResolverSession <jv>session</jv> = getVarResolverSession();
 	 *
 	 * 		<jc>// Use it to construct a customized message from a query parameter.</jc>
-	 * 		<jk>return</jk> session.resolve(<js>"Hello $RQ{user}!"</js>);
+	 * 		<jk>return</jk> <jv>session</jv>.resolve(<js>"Hello $RQ{user}!"</js>);
 	 * 	}
 	 * </p>
 	 *
@@ -1377,17 +1347,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<jk>public void</jk> doGet(RestRequest req) {
+	 * 	<ja>@RestGet</ja>(...)
+	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get config file.</jc>
-	 * 		Config cf = req.getConfig();
+	 * 		Config <jv>config</jv> = <jv>req</jv>.getConfig();
 	 *
 	 * 		<jc>// Get simple values from config file.</jc>
-	 * 		<jk>int</jk> timeout = cf.getInt(<js>"MyResource/timeout"</js>, 10000);
+	 * 		<jk>int</jk> <jv>timeout</jv> = <jv>config</jv>.getInt(<js>"MyResource/timeout"</js>, 10000);
 	 *
 	 * 		<jc>// Get complex values from config file.</jc>
-	 * 		MyBean b = cf.getObject(<js>"MyResource/myBean"</js>, MyBean.<jk>class</jk>);
+	 * 		MyBean <jv>bean</jv> = <jv>config</jv>.getObject(<js>"MyResource/myBean"</js>, MyBean.<jk>class</jk>);
 	 * 	}
 	 * </p>
 	 *
@@ -1415,8 +1385,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
-	 * 	<jk>public void</jk> myMethod(@Request MyRequest rb) {...}
+	 * 	<ja>@RestPost</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
+	 * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
 	 *
 	 * 	<jk>public interface</jk> MyRequest {
 	 *

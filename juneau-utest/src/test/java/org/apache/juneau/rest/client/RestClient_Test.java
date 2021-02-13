@@ -60,12 +60,12 @@ public class RestClient_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp(path="/bean")
-		public ABean getBean() {
+		@RestGet
+		public ABean bean() {
 			return bean;
 		}
-		@RestOp(path="/echo/*")
-		public String getEcho(org.apache.juneau.rest.RestRequest req) {
+		@RestGet(path="/echo/*")
+		public String echo(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
 		}
 	}
@@ -332,8 +332,8 @@ public class RestClient_Test {
 
 	@Rest
 	public static class D extends BasicRestObject {
-		@RestOp
-		public String getEcho(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
+		@RestGet
+		public String echo(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
 			if (auth == null) {
 				throw new Unauthorized().header("WWW-Authenticate","BASIC realm=\"foo\"");
 			} else {

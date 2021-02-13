@@ -27,28 +27,28 @@ public class FailedDependency_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws FailedDependency {
+		@RestGet
+		public void f1() throws FailedDependency {
 			throw new FailedDependency();
 		}
-		@RestOp
-		public void getF2() throws FailedDependency {
+		@RestGet
+		public void f2() throws FailedDependency {
 			throw new FailedDependency("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws FailedDependency {
+		@RestGet
+		public void f3() throws FailedDependency {
 			throw new FailedDependency(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws FailedDependency {
+		@RestGet
+		public void f4() throws FailedDependency {
 			throw new FailedDependency(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws FailedDependency {
+		@RestGet
+		public void f5() throws FailedDependency {
 			throw new FailedDependency().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws FailedDependency {
+		@RestGet
+		public void f6() throws FailedDependency {
 			throw new FailedDependency("foo");
 		}
 	}

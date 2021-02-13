@@ -23,9 +23,9 @@ public class Continue_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public Continue getA1() { return new Continue(); }
-		@RestOp public Continue getA2() { return new Continue("foo"); }
-		@RestOp public Continue getA3() { return new Continue().header("Foo","bar"); }
+		@RestGet public Continue a1() { return new Continue(); }
+		@RestGet public Continue a2() { return new Continue("foo"); }
+		@RestGet public Continue a3() { return new Continue().header("Foo","bar"); }
 	}
 
 	@Test

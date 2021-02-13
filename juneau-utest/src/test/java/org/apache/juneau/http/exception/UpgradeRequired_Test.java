@@ -27,28 +27,28 @@ public class UpgradeRequired_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws UpgradeRequired {
+		@RestGet
+		public void f1() throws UpgradeRequired {
 			throw new UpgradeRequired();
 		}
-		@RestOp
-		public void getF2() throws UpgradeRequired {
+		@RestGet
+		public void f2() throws UpgradeRequired {
 			throw new UpgradeRequired("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws UpgradeRequired {
+		@RestGet
+		public void f3() throws UpgradeRequired {
 			throw new UpgradeRequired(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws UpgradeRequired {
+		@RestGet
+		public void f4() throws UpgradeRequired {
 			throw new UpgradeRequired(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws UpgradeRequired {
+		@RestGet
+		public void f5() throws UpgradeRequired {
 			throw new UpgradeRequired().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws UpgradeRequired {
+		@RestGet
+		public void f6() throws UpgradeRequired {
 			throw new UpgradeRequired("foo");
 		}
 	}

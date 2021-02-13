@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.annotation.Body;
@@ -32,11 +31,11 @@ public class Rest_AnnotationInheritance_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IA {
-		@RestOp(method=PUT)
+		@RestPut
 		public String a(@Body String b);
-		@RestOp(method=GET)
+		@RestGet
 		public String b(@Query("foo") String b);
-		@RestOp(method=GET)
+		@RestGet
 		public String c(@Header("foo") String b);
 	}
 

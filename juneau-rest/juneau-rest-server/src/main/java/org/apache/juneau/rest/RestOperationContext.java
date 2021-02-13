@@ -120,15 +120,15 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
 	 *
@@ -137,11 +137,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * backwards compatibility.
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
+	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod();
 	 * 	}
@@ -223,8 +223,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * 	<ja>@Rest</ja>
 	 * 	<jk>public class</jk> MyResource {
 	 * 		...
-	 * 		<ja>@RestOp</ja>(contextClass=MyRestOperationContext.<jk>class</jk>)
-	 * 		<jk>public</jk> Object getFoo(RequestAttributes <jv>attributes</jv>) {
+	 * 		<ja>@RestGet</ja>(contextClass=MyRestOperationContext.<jk>class</jk>)
+	 * 		<jk>public</jk> Object foo(RequestAttributes <jv>attributes</jv>) {
 	 * 			<jk>return</jk> <jv>attributes</jv>.get(<js>"foo"</js>);
 	 * 		}
 	 * 	}
@@ -302,8 +302,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
+	 * 	<ja>@RestPost</ja>(path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 */
 	public static final String RESTOP_defaultFormData = PREFIX + ".defaultFormData.lo";
@@ -341,8 +341,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 */
 	public static final String RESTOP_defaultQuery = PREFIX + ".defaultQuery.lo";
@@ -381,7 +381,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
@@ -426,7 +426,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
@@ -471,7 +471,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
+	 * 	<ja>@RestGet</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
@@ -1266,9 +1266,25 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 		}
 
 		if (x.isEmpty()) {
-			String p = HttpUtils.detectHttpPath(method, true);
+			MethodInfo mi = MethodInfo.of(method);
+			String p = null;
+			String httpMethod = null;
+			if (mi.hasAnnotation(RestGet.class))
+				httpMethod = "get";
+			else if (mi.hasAnnotation(RestPut.class))
+				httpMethod = "put";
+			else if (mi.hasAnnotation(RestPost.class))
+				httpMethod = "post";
+			else if (mi.hasAnnotation(RestDelete.class))
+				httpMethod = "delete";
+			else if (mi.hasAnnotation(RestOp.class))
+				httpMethod = mi.getAnnotations(RestOp.class).stream().map(y -> y.method()).filter(y -> ! y.isEmpty()).findFirst().orElse(null);
+
+			p = HttpUtils.detectHttpPath(method, httpMethod);
+
 			if (dotAll && ! p.endsWith("/*"))
 				p += "/*";
+
 			x.add(UrlPathMatcher.of(p));
 		}
 

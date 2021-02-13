@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import javax.servlet.http.*;
@@ -32,23 +31,23 @@ public class RestOp_Matchers_Test {
 
 	@Rest
 	public static class A {
-		@RestOp(method=GET, path="/one", matchers=A1.class)
+		@RestOp(path="/one", matchers=A1.class)
 		public String a() {
 			return "OK-1a";
 		}
-		@RestOp(method=GET, path="/one", matchers=A2.class)
+		@RestGet(path="/one", matchers=A2.class)
 		public String b() {
 			return "OK-1b";
 		}
-		@RestOp(method=GET, path="/one")
+		@RestGet(path="/one")
 		public String c() {
 			return "OK-1c";
 		}
-		@RestOp(method=GET, path="/two")
+		@RestOp(path="/two")
 		public String d() {
 			return "OK-2a";
 		}
-		@RestOp(method=GET, path="/two", matchers={A1.class, A2.class})
+		@RestGet(path="/two", matchers={A1.class, A2.class})
 		public String e() {
 			return "OK-2b";
 		}

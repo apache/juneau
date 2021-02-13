@@ -66,4 +66,21 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 		Collections.sort(this, RANK_COMPARATOR);
 		return this;
 	}
+
+	/**
+	 * Returns the specified values from all annotations in this list.
+	 *
+	 * @param type The annotation value type.
+	 * @param name The annotation value name.
+	 * @return A list of all values found.
+	 */
+	public <T> List<T> getValues(Class<T> type, String name) {
+		List<T> l = new ArrayList<>();
+		for (AnnotationInfo<?> ai : this) {
+			Optional<T> o = ai.getValue(type, name);
+			if (o.isPresent())
+				l.add(o.get());
+		}
+		return l;
+	}
 }

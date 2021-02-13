@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethod.*;
-
 import javax.servlet.http.*;
 
 import org.apache.juneau.rest.annotation.*;
@@ -35,7 +33,7 @@ public abstract class BasicRestObjectGroup extends BasicRestObject {
 	 * @param req The HTTP request.
 	 * @return The bean containing links to the child resources.
 	 */
-	@RestOp(method=GET, path="/", summary="Navigation page")
+	@RestGet(path="/", summary="Navigation page")
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return new ChildResourceDescriptions(req);
 	}

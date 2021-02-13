@@ -36,11 +36,11 @@ public class Response_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
+		@RestGet
 		public A1 a() {
 			return new A1();
 		}
-		@RestOp
+		@RestGet
 		public String b() throws A2 {
 			throw new A2();
 		}
@@ -77,19 +77,19 @@ public class Response_Test {
 	@Rest(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
 	public static class B {
 		@Response
-		@RestOp
+		@RestGet
 		public String a() {
 			return "foo";
 		}
-		@RestOp
+		@RestGet
 		public B1 b() {
 			return new B1();
 		}
-		@RestOp
+		@RestGet
 		public String c() throws B2 {
 			throw new B2();
 		}
-		@RestOp
+		@RestGet
 		public void d(@Response Value<String> value) {
 			value.set("foo");
 		}
@@ -135,36 +135,36 @@ public class Response_Test {
 	@Rest(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
 	public static class D {
 		@Response(schema=@Schema(collectionFormat="pipes"))
-		@RestOp
+		@RestGet
 		public String[] a() {
 			return new String[]{"foo","bar"};
 		}
 		@Response(schema=@Schema(type="string",format="byte"))
-		@RestOp
+		@RestGet
 		public byte[] b() {
 			return "foo".getBytes();
 		}
-		@RestOp
+		@RestGet
 		public D1 c() {
 			return new D1();
 		}
-		@RestOp
+		@RestGet
 		public D2 d() {
 			return new D2();
 		}
-		@RestOp
+		@RestGet
 		public String e() throws D3 {
 			throw new D3();
 		}
-		@RestOp
+		@RestGet
 		public String f() throws D4 {
 			throw new D4();
 		}
-		@RestOp
+		@RestGet
 		public void g(@Response(schema=@Schema(collectionFormat="pipes")) Value<String[]> value) {
 			value.set(new String[]{"foo","bar"});
 		}
-		@RestOp
+		@RestGet
 		public void h(@Response(schema=@Schema(type="string",format="byte")) Value<byte[]> value) {
 			value.set("foo".getBytes());
 		}
@@ -241,20 +241,20 @@ public class Response_Test {
 
 	@Rest
 	public static class E {
-		@RestOp
+		@RestGet
 		public void a(@Response Value<E1> body) {
 			body.set(new E1());
 		}
-		@RestOp
+		@RestGet
 		public void b(Value<E2> body) {
 			body.set(new E2());
 		}
-		@RestOp
+		@RestGet
 		@Response
 		public E1 c() {
 			return new E1();
 		}
-		@RestOp
+		@RestGet
 		public E2 d() {
 			return new E2();
 		}
@@ -298,20 +298,20 @@ public class Response_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class G {
-		@RestOp
+		@RestGet
 		public void a(@Response Value<List<Integer>> body) {
 			body.set(AList.of(1,2));
 		}
-		@RestOp
+		@RestGet
 		public void b(Value<G1> body) {
 			body.set(new G1());
 		}
-		@RestOp
+		@RestGet
 		@Response
 		public List<Integer> c() {
 			return AList.of(1,2);
 		}
-		@RestOp
+		@RestGet
 		public G1 d() {
 			return new G1();
 		}

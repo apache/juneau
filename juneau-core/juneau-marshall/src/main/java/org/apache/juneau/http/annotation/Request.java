@@ -40,8 +40,8 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
- * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest rb) {...}
+ * 	<ja>@RestGet</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
+ * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
  *
  * 	<jk>public interface</jk> MyRequest {
  *
@@ -74,8 +74,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Same as above but annotation defined on interface.</jc>
- * 	<ja>@RestOp</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
- * 	<jk>public void</jk> myMethod(MyRequest rb) {...}
+ * 	<ja>@RestGet</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+ * 	<jk>public void</jk> myMethod(MyRequest <jv>requestBean</jv>) {...}
  *
  *	<ja>@Request</ja>
  * 	<jk>public interface</jk> MyRequest {...}
@@ -98,7 +98,7 @@ import org.apache.juneau.oapi.*;
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
- * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+ * 		String myProxyMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>);
  * 	}
  *
  * 	<jk>public class</jk> MyRequest {

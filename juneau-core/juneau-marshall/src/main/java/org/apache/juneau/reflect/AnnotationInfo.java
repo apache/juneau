@@ -227,8 +227,39 @@ public class AnnotationInfo<T extends Annotation> {
 		return this.a.annotationType().getAnnotation(a) != null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
+	 *
+	 * @param group The group annotation.
+	 * @return <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
+	 */
+	public boolean isInGroup(Class<? extends Annotation> group) {
+		AnnotationGroup x = a.annotationType().getAnnotation(AnnotationGroup.class);
+		return (x != null && x.value().equals(group));
+	}
+
 	@Override
 	public String toString() {
 		return SimpleJson.DEFAULT_READABLE.toString(toOMap());
+	}
+
+	/**
+	 * Returns a value on this annotation.
+	 *
+	 * @param type The annotation field type.
+	 * @param name The annotation field name.
+	 * @return The value on this annotation if the field exists and is the specified type.
+	 */
+	@SuppressWarnings("unchecked")
+	public <V> Optional<V> getValue(Class<V> type, String name) {
+		for (Method m : a.annotationType().getMethods())
+			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
+				try {
+					return Optional.ofNullable((V)m.invoke(a));
+				} catch (Exception e) {
+					e.printStackTrace(); // Shouldn't happen.
+				}
+			}
+		return Optional.empty();
 	}
 }

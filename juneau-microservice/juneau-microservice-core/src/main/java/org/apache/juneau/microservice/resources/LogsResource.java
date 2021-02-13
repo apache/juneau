@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -96,8 +95,7 @@ public class LogsResource extends BasicRestServlet {
 		);
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/*",
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory."
@@ -221,8 +219,7 @@ public class LogsResource extends BasicRestServlet {
 		}
 	}
 
-	@RestOp(
-		method=DELETE,
+	@RestDelete(
 		path="/*",
 		summary="Delete log file",
 		description="Delete a log file on the file system."

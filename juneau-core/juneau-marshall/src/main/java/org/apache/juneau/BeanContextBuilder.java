@@ -117,7 +117,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jk>public class</jk> B {...}
 	 *
 	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
-	 * 	<ja>@RestOp</ja>(...)
+	 * 	<ja>@RestGet</ja>(...)
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		annotations={
 	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)

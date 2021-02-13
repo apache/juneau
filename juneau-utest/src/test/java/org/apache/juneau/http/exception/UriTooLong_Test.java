@@ -27,28 +27,28 @@ public class UriTooLong_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws UriTooLong {
+		@RestGet
+		public void f1() throws UriTooLong {
 			throw new UriTooLong();
 		}
-		@RestOp
-		public void getF2() throws UriTooLong {
+		@RestGet
+		public void f2() throws UriTooLong {
 			throw new UriTooLong("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws UriTooLong {
+		@RestGet
+		public void f3() throws UriTooLong {
 			throw new UriTooLong(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws UriTooLong {
+		@RestGet
+		public void f4() throws UriTooLong {
 			throw new UriTooLong(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws UriTooLong {
+		@RestGet
+		public void f5() throws UriTooLong {
 			throw new UriTooLong().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws UriTooLong {
+		@RestGet
+		public void f6() throws UriTooLong {
 			throw new UriTooLong("foo");
 		}
 	}

@@ -27,28 +27,28 @@ public class NotExtended_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws NotExtended {
+		@RestGet
+		public void f1() throws NotExtended {
 			throw new NotExtended();
 		}
-		@RestOp
-		public void getF2() throws NotExtended {
+		@RestGet
+		public void f2() throws NotExtended {
 			throw new NotExtended("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws NotExtended {
+		@RestGet
+		public void f3() throws NotExtended {
 			throw new NotExtended(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws NotExtended {
+		@RestGet
+		public void f4() throws NotExtended {
 			throw new NotExtended(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws NotExtended {
+		@RestGet
+		public void f5() throws NotExtended {
 			throw new NotExtended().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws NotExtended {
+		@RestGet
+		public void f6() throws NotExtended {
 			throw new NotExtended("foo");
 		}
 	}

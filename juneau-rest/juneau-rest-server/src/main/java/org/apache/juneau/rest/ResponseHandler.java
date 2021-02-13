@@ -62,19 +62,19 @@ import org.apache.juneau.rest.reshandlers.*;
  * 	)
  * 	<jk>public class</jk> Example <jk>extends</jk> RestServlet {
  *
- * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+ * 		<ja>@RestGet</ja>(<js>"/"</js>)
  * 		<jk>public</jk> Foo test1() {
  * 			<jk>return new</jk> Foo(<js>"123"</js>);
  * 		}
  *
  * 		<jk>public static class</jk> FooHandler <jk>implements</jk> ResponseHandler {
  * 			<ja>@Override</ja>
- * 			<jk>public boolean</jk> handle(RestRequest req, RestResponse res, Object output) <jk>throws</jk> IOException, RestException {
- * 				<jk>if</jk> (output <jk>instanceof</jk> Foo) {
- * 					Foo foo = (Foo)output;
+ * 			<jk>public boolean</jk> handle(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, Object <jv>output</jv>) <jk>throws</jk> IOException, RestException {
+ * 				<jk>if</jk> (<jv>output</jv> <jk>instanceof</jk> Foo) {
+ * 					Foo <jv>foo</jv> = (Foo)<jv>output</jv>;
  * 					<jc>// Set some headers and body content.</jc>
- * 					res.setHeader(<js>"Foo-ID"</js>, foo.getId());
- * 					res.getWriter().write(<js>"foo.id="</js> + foo.getId());
+ * 					<jv>res</jv>.setHeader(<js>"Foo-ID"</js>, <jv>foo</jv>.getId());
+ * 					<jv>res</jv>.getWriter().write(<js>"foo.id="</js> + <jv>foo</jv>.getId());
  * 					<jk>return true</jk>;  <jc>// We handled it.</jc>
  * 				}
  * 				<jk>return false</jk>;  <jc>// We didn't handle it.</jc>

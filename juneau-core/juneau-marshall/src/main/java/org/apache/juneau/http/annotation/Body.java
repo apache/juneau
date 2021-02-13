@@ -45,12 +45,12 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Used on parameter</jc>
- * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on class</jc>
- * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(Pet pet) {...}
  *
  * 	<ja>@Body</ja>
@@ -60,9 +60,9 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
- * 	<jk>public void</jk> addPet(RestRequest req) {
- * 		Pet pet = req.getBody().asType(Pet.<jk>class</jk>);
+ * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
+ * 	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
+ * 		Pet <jv>pet</jv> = <jv>req</jv>.getBody().asType(Pet.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
@@ -72,8 +72,8 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>,path=<js>"/pets"</js>)
- * 	<jk>public void</jk> addPet(Pet pet) {...}
+ * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
+ * 	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
  *
  * 	<ja>@Body</ja>(
  * 		description=<js>"Pet object to add to the store"</js>,
@@ -184,15 +184,15 @@ public @interface Body {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
+	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
 	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
 	 * 	<jk>public class</jk> Pet {...}
@@ -424,15 +424,15 @@ public @interface Body {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
+	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
 	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
 	 * 	<jk>public class</jk> Pet {...}
@@ -494,31 +494,31 @@ public @interface Body {
 	 * The following are completely equivalent ways of defining the swagger description of the body:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(
 	 * 			description=<js>"Pet object to add to the store"</js>,
 	 * 			required=<jk>true</jk>,
 	 * 			example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 		) Pet input
+	 * 		) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>({
 	 * 			<js>"description: 'Pet object to add to the store',"</js>,
 	 * 			<js>"required: true,"</js>,
 	 * 			<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 		}) Pet input
+	 * 		}) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(<js>"$L{petObjectSwagger}"</js>) Pet input
+	 * 		<ja>@Body</ja>(<js>"$L{petObjectSwagger}"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>

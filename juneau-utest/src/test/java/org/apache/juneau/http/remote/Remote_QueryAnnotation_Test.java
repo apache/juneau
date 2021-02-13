@@ -56,8 +56,8 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public String getA(@Query("*") OMap m) {
+		@RestGet
+		public String a(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -161,12 +161,12 @@ public class Remote_QueryAnnotation_Test {
 
 	@Rest
 	public static class C {
-		@RestOp
-		public String getA(@Query("*") OMap m) {
+		@RestGet
+		public String a(@Query("*") OMap m) {
 			return m.toString();
 		}
-		@RestOp
-		public Reader getB(RestRequest req) {
+		@RestGet
+		public Reader b(RestRequest req) {
 			return new StringReader(req.getQueryString());
 		}
 	}

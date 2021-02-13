@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -105,23 +104,23 @@ public class Restx_Parsers_Test {
 
 	@Rest(parsers=PA.class)
 	public static class A {
-		@RestOp(method=PUT)
+		@RestPut
 		public String a(@Body String in) {
 			return in;
 		}
-		@RestOp(method=PUT, parsers=PB.class)
+		@RestPut(parsers=PB.class)
 		public String b(@Body String in) {
 			return in;
 		}
-		@RestOp(method=PUT, parsers={Inherit.class, PB.class,PC.class})
+		@RestPut(parsers={Inherit.class, PB.class,PC.class})
 		public String c(@Body String in) {
 			return in;
 		}
-		@RestOp(method=PUT, parsers={Inherit.class, PD.class})
+		@RestPut(parsers={Inherit.class, PD.class})
 		public String d(@Body String in) {
 			return in;
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public String e(@Body String in) {
 			return in;
 		}

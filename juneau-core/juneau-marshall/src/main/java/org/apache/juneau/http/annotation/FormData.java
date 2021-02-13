@@ -46,22 +46,22 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+ * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> doPost(
- * 			<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1,
- * 			<ja>@FormData</ja>(<js>"p2"</js>) String p2,
- * 			<ja>@FormData</ja>(<js>"p3"</js>) UUID p3
+ * 			<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
+ * 			<ja>@FormData</ja>(<js>"p2"</js>) String <jv>p2</jv>,
+ * 			<ja>@FormData</ja>(<js>"p3"</js>) UUID <jv>p3</jv>
  * 		) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(RestRequest req) {
- * 		<jk>int</jk> p1 = req.getFormData(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
- * 		String p2 = req.getFormData(String.<jk>class</jk>, <js>"p2"</js>);
- * 		UUID p3 = req.getFormData(UUID.<jk>class</jk>, <js>"p3"</js>);
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>req</jv>.getFormData(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
+ * 		String <jv>p2</jv> = <jv>req</jv>.getFormData(String.<jk>class</jk>, <js>"p2"</js>);
+ * 		UUID <jv>p3</jv> = <jv>req</jv>.getFormData(UUID.<jk>class</jk>, <js>"p3"</js>);
  * 		...
  * 	}
  * </p>
@@ -136,9 +136,9 @@ public @interface FormData {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Order placeOrder(
-	 * 		<ja>@FormData</ja>(name=<js>"petId"</js>, _default=<js>"100"</js>) <jk>long</jk> petId,
-	 * 		<ja>@FormData</ja>(name=<js>"additionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
-	 * 		<ja>@FormData</ja>(name=<js>"flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
+	 * 		<ja>@FormData</ja>(name=<js>"petId"</js>, _default=<js>"100"</js>) <jk>long</jk> <jv>petId</jv>,
+	 * 		<ja>@FormData</ja>(name=<js>"additionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo <jv>additionalInfo</jv>,
+	 * 		<ja>@FormData</ja>(name=<js>"flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] <jv>flags</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -176,7 +176,7 @@ public @interface FormData {
 	 * 		<ja>@FormData</ja>(
 	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -185,7 +185,7 @@ public @interface FormData {
 	 * 		<ja>@FormData</ja>(
 	 * 			name=<js>"status"</js>,
 	 * 			_enum=<js>"['AVAILABLE','PENDING','SOLD']"</js>,
-	 * 		) PetStatus status
+	 * 		) PetStatus <jv>status</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -427,7 +427,7 @@ public @interface FormData {
 	 * 		collectionFormat=<js>"csv"</js>,
 	 * 		example=<js>"AVAILIABLE,PENDING"</js>
 	 * 	)
-	 * 	PetStatus[] status
+	 * 	PetStatus[] <jv>status</jv>
 	 * </p>
 	 *
 	 * <p>
@@ -808,7 +808,7 @@ public @interface FormData {
 	 *
 	 * <h5 class='figure'>Example</h5>
 	 * 	<jk>public void</jk> doPost(
-	 * 		<ja>@FormData</ja>(name=<js>"beans"</js>, multi=<jk>true</jk>) MyBean[] beans
+	 * 		<ja>@FormData</ja>(name=<js>"beans"</js>, multi=<jk>true</jk>) MyBean[] <jv>beans</jv>
 	 * 	) {
 	 *
 	 * <ul class='notes'>
@@ -870,8 +870,8 @@ public @interface FormData {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@FormData</ja> OMap allFormDataParameters) {...}
+	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
+	 * 	<jk>public void</jk> addPet(<ja>@FormData</ja> OMap <jv>allFormDataParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
@@ -880,7 +880,7 @@ public @interface FormData {
 	 *
 	 * 		<jc>// Equivalent to @FormData("*")</jc>
 	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
-	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; allFormDataParameters);
+	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; <jv>allFormDataParameters</jv>);
 	 * 	}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
@@ -1143,10 +1143,10 @@ public @interface FormData {
 	 * <p>
 	 * The following are completely equivalent ways of defining a form post entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
 	 */
 	String value() default "";

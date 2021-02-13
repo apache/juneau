@@ -14,11 +14,20 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Restx_RoleGuard_Test {
+
+	private static RestOperation[] ops(RestOperation...ops) {
+		return ops;
+	}
+
+	private static RestOperation op(String method, String url) {
+		return RestOperation.of(method, url);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Simple guard on class
@@ -27,7 +36,23 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo")
 	public static class A1 {
 		@RestOp
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet
+		public String b() {
+			return "OK";
+		}
+		@RestPut
+		public String c() {
+			return "OK";
+		}
+		@RestPost
+		public String d() {
+			return "OK";
+		}
+		@RestDelete
+		public String e() {
 			return "OK";
 		}
 	}
@@ -35,12 +60,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void a01a_onClass_simple() throws Exception {
 		MockRestClient a1 = MockRestClient.buildLax(A1.class);
-		a1.get().roles("foo").run().assertCode().is(200);
-		a1.get().roles("foo","bar").run().assertCode().is(200);
-		a1.get().roles("bar","foo").run().assertCode().is(200);
-		a1.get().run().assertCode().is(403);
-		a1.get().roles("foo2").run().assertCode().is(403);
-		a1.get().roles("foo2","bar").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			a1.op(op).roles("foo").run().assertCode().is(200);
+			a1.op(op).roles("foo","bar").run().assertCode().is(200);
+			a1.op(op).roles("bar","foo").run().assertCode().is(200);
+			a1.op(op).run().assertCode().is(403);
+			a1.op(op).roles("foo2").run().assertCode().is(403);
+			a1.op(op).roles("foo2","bar").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -50,7 +78,23 @@ public class Restx_RoleGuard_Test {
 	@Rest
 	public static class A2 {
 		@RestOp(roleGuard="foo")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="foo")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="foo")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="foo")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="foo")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -58,12 +102,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void a02a_onMethod_simple() throws Exception {
 		MockRestClient a2 = MockRestClient.buildLax(A2.class);
-		a2.get().roles("foo").run().assertCode().is(200);
-		a2.get().roles("foo","bar").run().assertCode().is(200);
-		a2.get().roles("bar","foo").run().assertCode().is(200);
-		a2.get().run().assertCode().is(403);
-		a2.get().roles("foo2").run().assertCode().is(403);
-		a2.get().roles("foo2","bar").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			a2.op(op).roles("foo").run().assertCode().is(200);
+			a2.op(op).roles("foo","bar").run().assertCode().is(200);
+			a2.op(op).roles("bar","foo").run().assertCode().is(200);
+			a2.op(op).run().assertCode().is(403);
+			a2.op(op).roles("foo2").run().assertCode().is(403);
+			a2.op(op).roles("foo2","bar").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -73,7 +120,23 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo")
 	public static class A3 {
 		@RestOp(roleGuard="bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -81,14 +144,17 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void a03a_onBoth_simple() throws Exception {
 		MockRestClient a3 = MockRestClient.buildLax(A3.class);
-		a3.get().roles("foo","bar").run().assertCode().is(200);
-		a3.get().roles("bar","foo").run().assertCode().is(200);
-		a3.get().roles("bar","foo","baz").run().assertCode().is(200);
-		a3.get().run().assertCode().is(403);
-		a3.get().roles("foo").run().assertCode().is(403);
-		a3.get().roles("bar").run().assertCode().is(403);
-		a3.get().roles("foo2").run().assertCode().is(403);
-		a3.get().roles("foo2","bar").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			a3.op(op).roles("foo","bar").run().assertCode().is(200);
+			a3.op(op).roles("bar","foo").run().assertCode().is(200);
+			a3.op(op).roles("bar","foo","baz").run().assertCode().is(200);
+			a3.op(op).run().assertCode().is(403);
+			a3.op(op).roles("foo").run().assertCode().is(403);
+			a3.op(op).roles("bar").run().assertCode().is(403);
+			a3.op(op).roles("foo2").run().assertCode().is(403);
+			a3.op(op).roles("foo2","bar").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -98,7 +164,23 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo")
 	public static class A4a {
 		@RestOp(roleGuard="bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -107,7 +189,27 @@ public class Restx_RoleGuard_Test {
 	public static class A4b extends A4a {
 		@Override
 		@RestOp(roleGuard="qux")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@Override
+		@RestGet(roleGuard="qux")
+		public String b() {
+			return "OK";
+		}
+		@Override
+		@RestPut(roleGuard="qux")
+		public String c() {
+			return "OK";
+		}
+		@Override
+		@RestPost(roleGuard="qux")
+		public String d() {
+			return "OK";
+		}
+		@Override
+		@RestDelete(roleGuard="qux")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -115,12 +217,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void a04a_inheritence_simple() throws Exception {
 		MockRestClient a4 = MockRestClient.buildLax(A4b.class);
-		a4.get().roles("foo","bar","baz","qux").run().assertCode().is(200);
-		a4.get().roles("foo","bar","baz","qux","quux").run().assertCode().is(200);
-		a4.get().roles("foo","bar","baz").run().assertCode().is(403);
-		a4.get().roles("foo","bar","qux").run().assertCode().is(403);
-		a4.get().roles("foo","baz","qux").run().assertCode().is(403);
-		a4.get().roles("bar","baz","qux").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			a4.op(op).roles("foo","bar","baz","qux").run().assertCode().is(200);
+			a4.op(op).roles("foo","bar","baz","qux","quux").run().assertCode().is(200);
+			a4.op(op).roles("foo","bar","baz").run().assertCode().is(403);
+			a4.op(op).roles("foo","bar","qux").run().assertCode().is(403);
+			a4.op(op).roles("foo","baz","qux").run().assertCode().is(403);
+			a4.op(op).roles("bar","baz","qux").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -130,7 +235,23 @@ public class Restx_RoleGuard_Test {
 	@Rest
 	public static class B1 {
 		@RestOp
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet
+		public String b() {
+			return "OK";
+		}
+		@RestPut
+		public String c() {
+			return "OK";
+		}
+		@RestPost
+		public String d() {
+			return "OK";
+		}
+		@RestDelete
+		public String e() {
 			return "OK";
 		}
 	}
@@ -141,12 +262,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01a_orsWithComma_pass() throws Exception {
 		MockRestClient b1a = MockRestClient.buildLax(B1a.class);
-		b1a.get().roles("foo").run().assertCode().is(200);
-		b1a.get().roles("bar").run().assertCode().is(200);
-		b1a.get().roles("foo","bar").run().assertCode().is(200);
-		b1a.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1a.get().roles().run().assertCode().is(403);
-		b1a.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1a.op(op).roles("foo").run().assertCode().is(200);
+			b1a.op(op).roles("bar").run().assertCode().is(200);
+			b1a.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1a.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1a.op(op).roles().run().assertCode().is(403);
+			b1a.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="foo | bar")
@@ -155,12 +279,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01b_orsWithSinglePipe_pass() throws Exception {
 		MockRestClient b1b = MockRestClient.buildLax(B1b.class);
-		b1b.get().roles("foo").run().assertCode().is(200);
-		b1b.get().roles("bar").run().assertCode().is(200);
-		b1b.get().roles("foo","bar").run().assertCode().is(200);
-		b1b.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1b.get().roles().run().assertCode().is(403);
-		b1b.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1b.op(op).roles("foo").run().assertCode().is(200);
+			b1b.op(op).roles("bar").run().assertCode().is(200);
+			b1b.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1b.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1b.op(op).roles().run().assertCode().is(403);
+			b1b.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="foo || bar")
@@ -169,12 +296,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01c_orsWithDoublePipe_pass() throws Exception {
 		MockRestClient b1c = MockRestClient.buildLax(B1c.class);
-		b1c.get().roles("foo").run().assertCode().is(200);
-		b1c.get().roles("bar").run().assertCode().is(200);
-		b1c.get().roles("foo","bar").run().assertCode().is(200);
-		b1c.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1c.get().roles().run().assertCode().is(403);
-		b1c.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1c.op(op).roles("foo").run().assertCode().is(200);
+			b1c.op(op).roles("bar").run().assertCode().is(200);
+			b1c.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1c.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1c.op(op).roles().run().assertCode().is(403);
+			b1c.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="foo & bar")
@@ -183,12 +313,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01d_andsWithSingleAmp_pass() throws Exception {
 		MockRestClient b1d = MockRestClient.buildLax(B1d.class);
-		b1d.get().roles("foo","bar").run().assertCode().is(200);
-		b1d.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1d.get().roles().run().assertCode().is(403);
-		b1d.get().roles("foo").run().assertCode().is(403);
-		b1d.get().roles("bar").run().assertCode().is(403);
-		b1d.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1d.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1d.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1d.op(op).roles().run().assertCode().is(403);
+			b1d.op(op).roles("foo").run().assertCode().is(403);
+			b1d.op(op).roles("bar").run().assertCode().is(403);
+			b1d.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="foo && bar")
@@ -197,12 +330,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01e_andsWithDoubleAmp_pass() throws Exception {
 		MockRestClient b1e = MockRestClient.buildLax(B1e.class);
-		b1e.get().roles("foo","bar").run().assertCode().is(200);
-		b1e.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1e.get().roles().run().assertCode().is(403);
-		b1e.get().roles("foo").run().assertCode().is(403);
-		b1e.get().roles("bar").run().assertCode().is(403);
-		b1e.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1e.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1e.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1e.op(op).roles().run().assertCode().is(403);
+			b1e.op(op).roles("foo").run().assertCode().is(403);
+			b1e.op(op).roles("bar").run().assertCode().is(403);
+			b1e.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="(foo) && (bar)")
@@ -211,12 +347,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01f_andsWithDoubleAmpAndParens_pass() throws Exception {
 		MockRestClient b1f = MockRestClient.buildLax(B1f.class);
-		b1f.get().roles("foo","bar").run().assertCode().is(200);
-		b1f.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1f.get().roles().run().assertCode().is(403);
-		b1f.get().roles("foo").run().assertCode().is(403);
-		b1f.get().roles("bar").run().assertCode().is(403);
-		b1f.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1f.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1f.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1f.op(op).roles().run().assertCode().is(403);
+			b1f.op(op).roles("foo").run().assertCode().is(403);
+			b1f.op(op).roles("bar").run().assertCode().is(403);
+			b1f.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="foo && (bar || baz)")
@@ -225,13 +364,16 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01g_complex_pass() throws Exception {
 		MockRestClient b1g = MockRestClient.buildLax(B1g.class);
-		b1g.get().roles("foo","bar").run().assertCode().is(200);
-		b1g.get().roles("foo","baz").run().assertCode().is(200);
-		b1g.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1g.get().roles().run().assertCode().is(403);
-		b1g.get().roles("foo").run().assertCode().is(403);
-		b1g.get().roles("bar","baz").run().assertCode().is(403);
-		b1g.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1g.op(op).roles("foo","bar").run().assertCode().is(200);
+			b1g.op(op).roles("foo","baz").run().assertCode().is(200);
+			b1g.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1g.op(op).roles().run().assertCode().is(403);
+			b1g.op(op).roles("foo").run().assertCode().is(403);
+			b1g.op(op).roles("bar","baz").run().assertCode().is(403);
+			b1g.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="foo || (bar && baz)")
@@ -240,12 +382,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b01h_complex_pass() throws Exception {
 		MockRestClient b1h = MockRestClient.buildLax(B1h.class);
-		b1h.get().roles("foo").run().assertCode().is(200);
-		b1h.get().roles("bar","baz").run().assertCode().is(200);
-		b1h.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b1h.get().roles().run().assertCode().is(403);
-		b1h.get().roles("bar").run().assertCode().is(403);
-		b1h.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b1h.op(op).roles("foo").run().assertCode().is(200);
+			b1h.op(op).roles("bar","baz").run().assertCode().is(200);
+			b1h.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b1h.op(op).roles().run().assertCode().is(403);
+			b1h.op(op).roles("bar").run().assertCode().is(403);
+			b1h.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -255,7 +400,23 @@ public class Restx_RoleGuard_Test {
 	@Rest
 	public static class B2a {
 		@RestOp(roleGuard="foo,bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="foo,bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="foo,bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="foo,bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="foo,bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -263,18 +424,37 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b02a_orsWithComma_pass() throws Exception {
 		MockRestClient b2a = MockRestClient.buildLax(B2a.class);
-		b2a.get().roles("foo").run().assertCode().is(200);
-		b2a.get().roles("bar").run().assertCode().is(200);
-		b2a.get().roles("foo","bar").run().assertCode().is(200);
-		b2a.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b2a.get().roles().run().assertCode().is(403);
-		b2a.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b2a.op(op).roles("foo").run().assertCode().is(200);
+			b2a.op(op).roles("bar").run().assertCode().is(200);
+			b2a.op(op).roles("foo","bar").run().assertCode().is(200);
+			b2a.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b2a.op(op).roles().run().assertCode().is(403);
+			b2a.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest
 	public static class B2b {
 		@RestOp(roleGuard="foo | bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="foo | bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="foo | bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="foo | bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="foo | bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -282,18 +462,37 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b02b_orsWithSinglePipe_pass() throws Exception {
 		MockRestClient b2b = MockRestClient.buildLax(B2b.class);
-		b2b.get().roles("foo").run().assertCode().is(200);
-		b2b.get().roles("bar").run().assertCode().is(200);
-		b2b.get().roles("foo","bar").run().assertCode().is(200);
-		b2b.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b2b.get().roles().run().assertCode().is(403);
-		b2b.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b2b.op(op).roles("foo").run().assertCode().is(200);
+			b2b.op(op).roles("bar").run().assertCode().is(200);
+			b2b.op(op).roles("foo","bar").run().assertCode().is(200);
+			b2b.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b2b.op(op).roles().run().assertCode().is(403);
+			b2b.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest
 	public static class B2c {
 		@RestOp(roleGuard="foo || bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="foo || bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="foo || bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="foo || bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="foo || bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -301,18 +500,37 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b02c_orsWithDoublePipe_pass() throws Exception {
 		MockRestClient b2c = MockRestClient.buildLax(B2c.class);
-		b2c.get().roles("foo").run().assertCode().is(200);
-		b2c.get().roles("bar").run().assertCode().is(200);
-		b2c.get().roles("foo","bar").run().assertCode().is(200);
-		b2c.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b2c.get().roles().run().assertCode().is(403);
-		b2c.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b2c.op(op).roles("foo").run().assertCode().is(200);
+			b2c.op(op).roles("bar").run().assertCode().is(200);
+			b2c.op(op).roles("foo","bar").run().assertCode().is(200);
+			b2c.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b2c.op(op).roles().run().assertCode().is(403);
+			b2c.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest
 	public static class B2d {
 		@RestOp(roleGuard="foo & bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="foo & bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="foo & bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="foo & bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="foo & bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -320,18 +538,37 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b02d_andsWithSingleAmp_pass() throws Exception {
 		MockRestClient b2d = MockRestClient.buildLax(B2d.class);
-		b2d.get().roles("foo","bar").run().assertCode().is(200);
-		b2d.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b2d.get().roles().run().assertCode().is(403);
-		b2d.get().roles("foo").run().assertCode().is(403);
-		b2d.get().roles("bar").run().assertCode().is(403);
-		b2d.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b2d.op(op).roles("foo","bar").run().assertCode().is(200);
+			b2d.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b2d.op(op).roles().run().assertCode().is(403);
+			b2d.op(op).roles("foo").run().assertCode().is(403);
+			b2d.op(op).roles("bar").run().assertCode().is(403);
+			b2d.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest
 	public static class B2e {
 		@RestOp(roleGuard="foo && bar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="foo && bar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="foo && bar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="foo && bar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="foo && bar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -339,12 +576,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void b02e_andsWithDoubleAmp_pass() throws Exception {
 		MockRestClient b2e = MockRestClient.buildLax(B2e.class);
-		b2e.get().roles("foo","bar").run().assertCode().is(200);
-		b2e.get().roles("foo","bar","baz").run().assertCode().is(200);
-		b2e.get().roles().run().assertCode().is(403);
-		b2e.get().roles("foo").run().assertCode().is(403);
-		b2e.get().roles("bar").run().assertCode().is(403);
-		b2e.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			b2e.op(op).roles("foo","bar").run().assertCode().is(200);
+			b2e.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			b2e.op(op).roles().run().assertCode().is(403);
+			b2e.op(op).roles("foo").run().assertCode().is(403);
+			b2e.op(op).roles("bar").run().assertCode().is(403);
+			b2e.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest
@@ -412,7 +652,23 @@ public class Restx_RoleGuard_Test {
 	@Rest(rolesDeclared="foo,bar,baz")
 	public static class C1 {
 		@RestOp
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet
+		public String b() {
+			return "OK";
+		}
+		@RestPut
+		public String c() {
+			return "OK";
+		}
+		@RestPost
+		public String d() {
+			return "OK";
+		}
+		@RestDelete
+		public String e() {
 			return "OK";
 		}
 	}
@@ -423,12 +679,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01a_orPatternsWithComma_pass() throws Exception {
 		MockRestClient c1a = MockRestClient.buildLax(C1a.class);
-		c1a.get().roles("foo").run().assertCode().is(200);
-		c1a.get().roles("bar").run().assertCode().is(200);
-		c1a.get().roles("foo","bar").run().assertCode().is(200);
-		c1a.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1a.get().roles().run().assertCode().is(403);
-		c1a.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1a.op(op).roles("foo").run().assertCode().is(200);
+			c1a.op(op).roles("bar").run().assertCode().is(200);
+			c1a.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1a.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1a.op(op).roles().run().assertCode().is(403);
+			c1a.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="fo* | *ar")
@@ -437,12 +696,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01b_orPatternsWithSinglePipe_pass() throws Exception {
 		MockRestClient c1b = MockRestClient.buildLax(C1b.class);
-		c1b.get().roles("foo").run().assertCode().is(200);
-		c1b.get().roles("bar").run().assertCode().is(200);
-		c1b.get().roles("foo","bar").run().assertCode().is(200);
-		c1b.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1b.get().roles().run().assertCode().is(403);
-		c1b.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1b.op(op).roles("foo").run().assertCode().is(200);
+			c1b.op(op).roles("bar").run().assertCode().is(200);
+			c1b.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1b.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1b.op(op).roles().run().assertCode().is(403);
+			c1b.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="fo* || *ar")
@@ -451,12 +713,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01c_orPatternsWithDoublePipe_pass() throws Exception {
 		MockRestClient c1c = MockRestClient.buildLax(C1c.class);
-		c1c.get().roles("foo").run().assertCode().is(200);
-		c1c.get().roles("bar").run().assertCode().is(200);
-		c1c.get().roles("foo","bar").run().assertCode().is(200);
-		c1c.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1c.get().roles().run().assertCode().is(403);
-		c1c.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1c.op(op).roles("foo").run().assertCode().is(200);
+			c1c.op(op).roles("bar").run().assertCode().is(200);
+			c1c.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1c.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1c.op(op).roles().run().assertCode().is(403);
+			c1c.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="fo* & *ar")
@@ -465,12 +730,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01d_andPatternsWithSingleAmp_pass() throws Exception {
 		MockRestClient c1d = MockRestClient.buildLax(C1d.class);
-		c1d.get().roles("foo","bar").run().assertCode().is(200);
-		c1d.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1d.get().roles().run().assertCode().is(403);
-		c1d.get().roles("foo").run().assertCode().is(403);
-		c1d.get().roles("bar").run().assertCode().is(403);
-		c1d.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1d.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1d.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1d.op(op).roles().run().assertCode().is(403);
+			c1d.op(op).roles("foo").run().assertCode().is(403);
+			c1d.op(op).roles("bar").run().assertCode().is(403);
+			c1d.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="fo* && *ar")
@@ -479,12 +747,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01e_andPatternsWithDoubleAmp_pass() throws Exception {
 		MockRestClient c1e = MockRestClient.buildLax(C1e.class);
-		c1e.get().roles("foo","bar").run().assertCode().is(200);
-		c1e.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1e.get().roles().run().assertCode().is(403);
-		c1e.get().roles("foo").run().assertCode().is(403);
-		c1e.get().roles("bar").run().assertCode().is(403);
-		c1e.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1e.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1e.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1e.op(op).roles().run().assertCode().is(403);
+			c1e.op(op).roles("foo").run().assertCode().is(403);
+			c1e.op(op).roles("bar").run().assertCode().is(403);
+			c1e.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="(fo*) && (*ar)")
@@ -493,12 +764,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01f_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
 		MockRestClient c1f = MockRestClient.buildLax(C1f.class);
-		c1f.get().roles("foo","bar").run().assertCode().is(200);
-		c1f.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1f.get().roles().run().assertCode().is(403);
-		c1f.get().roles("foo").run().assertCode().is(403);
-		c1f.get().roles("bar").run().assertCode().is(403);
-		c1f.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1f.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1f.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1f.op(op).roles().run().assertCode().is(403);
+			c1f.op(op).roles("foo").run().assertCode().is(403);
+			c1f.op(op).roles("bar").run().assertCode().is(403);
+			c1f.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="fo* && (*ar || *az)")
@@ -507,13 +781,16 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01g_complexPatterns_pass() throws Exception {
 		MockRestClient c1g = MockRestClient.buildLax(C1g.class);
-		c1g.get().roles("foo","bar").run().assertCode().is(200);
-		c1g.get().roles("foo","baz").run().assertCode().is(200);
-		c1g.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1g.get().roles().run().assertCode().is(403);
-		c1g.get().roles("foo").run().assertCode().is(403);
-		c1g.get().roles("bar","baz").run().assertCode().is(403);
-		c1g.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1g.op(op).roles("foo","bar").run().assertCode().is(200);
+			c1g.op(op).roles("foo","baz").run().assertCode().is(200);
+			c1g.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1g.op(op).roles().run().assertCode().is(403);
+			c1g.op(op).roles("foo").run().assertCode().is(403);
+			c1g.op(op).roles("bar","baz").run().assertCode().is(403);
+			c1g.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest(roleGuard="fo* || (*ar && *az)")
@@ -522,12 +799,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c01h_complexPatterns_pass() throws Exception {
 		MockRestClient c1h = MockRestClient.buildLax(C1h.class);
-		c1h.get().roles("foo").run().assertCode().is(200);
-		c1h.get().roles("bar","baz").run().assertCode().is(200);
-		c1h.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c1h.get().roles().run().assertCode().is(403);
-		c1h.get().roles("bar").run().assertCode().is(403);
-		c1h.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c1h.op(op).roles("foo").run().assertCode().is(200);
+			c1h.op(op).roles("bar","baz").run().assertCode().is(200);
+			c1h.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c1h.op(op).roles().run().assertCode().is(403);
+			c1h.op(op).roles("bar").run().assertCode().is(403);
+			c1h.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -537,7 +817,23 @@ public class Restx_RoleGuard_Test {
 	@Rest
 	public static class C2a {
 		@RestOp(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -545,12 +841,15 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void c02a_orPatternsWithComma_pass() throws Exception {
 		MockRestClient c2a = MockRestClient.buildLax(C2a.class);
-		c2a.get().roles("foo").run().assertCode().is(200);
-		c2a.get().roles("bar").run().assertCode().is(200);
-		c2a.get().roles("foo","bar").run().assertCode().is(200);
-		c2a.get().roles("foo","bar","baz").run().assertCode().is(200);
-		c2a.get().roles().run().assertCode().is(403);
-		c2a.get().roles("baz").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			c2a.op(op).roles("foo").run().assertCode().is(200);
+			c2a.op(op).roles("bar").run().assertCode().is(200);
+			c2a.op(op).roles("foo","bar").run().assertCode().is(200);
+			c2a.op(op).roles("foo","bar","baz").run().assertCode().is(200);
+			c2a.op(op).roles().run().assertCode().is(403);
+			c2a.op(op).roles("baz").run().assertCode().is(403);
+		}
 	}
 
 	@Rest
@@ -694,7 +993,23 @@ public class Restx_RoleGuard_Test {
 	@Rest
 	public static class D {
 		@RestOp(roleGuard="fo*,*ar")
-		public String get() {
+		public String a() {
+			return "OK";
+		}
+		@RestGet(roleGuard="fo*,*ar")
+		public String b() {
+			return "OK";
+		}
+		@RestPut(roleGuard="fo*,*ar")
+		public String c() {
+			return "OK";
+		}
+		@RestPost(roleGuard="fo*,*ar")
+		public String d() {
+			return "OK";
+		}
+		@RestDelete(roleGuard="fo*,*ar")
+		public String e() {
 			return "OK";
 		}
 	}
@@ -702,11 +1017,14 @@ public class Restx_RoleGuard_Test {
 	@Test
 	public void d01_patternsWithoutRoles() throws Exception {
 		MockRestClient d = MockRestClient.buildLax(D.class);
-		d.get().roles().run().assertCode().is(403);
-		d.get().roles("foo").run().assertCode().is(403);
-		d.get().roles("bar").run().assertCode().is(403);
-		d.get().roles("baz").run().assertCode().is(403);
-		d.get().roles("foo","bar").run().assertCode().is(403);
+
+		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+			d.op(op).roles().run().assertCode().is(403);
+			d.op(op).roles("foo").run().assertCode().is(403);
+			d.op(op).roles("bar").run().assertCode().is(403);
+			d.op(op).roles("baz").run().assertCode().is(403);
+			d.op(op).roles("foo","bar").run().assertCode().is(403);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

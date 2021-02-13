@@ -53,8 +53,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class A {
-		@RestOp(path="/a/{x}")
-		public String getA(@Path("x") Object x) {
+		@RestGet(path="/a/{x}")
+		public String a(@Path("x") Object x) {
 			return x.toString();
 		}
 	}
@@ -119,8 +119,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class B {
-		@RestOp(path="/a/{x}")
-		public String getA(@Path("x") Object x) {
+		@RestGet(path="/a/{x}")
+		public String a(@Path("x") Object x) {
 			return x.toString();
 		}
 	}

@@ -23,9 +23,9 @@ public class PartialContent_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public PartialContent getA1() { return new PartialContent(); }
-		@RestOp public PartialContent getA2() { return new PartialContent("foo"); }
-		@RestOp public PartialContent getA3() { return new PartialContent().header("Foo","bar"); }
+		@RestGet public PartialContent a1() { return new PartialContent(); }
+		@RestGet public PartialContent a2() { return new PartialContent("foo"); }
+		@RestGet public PartialContent a3() { return new PartialContent().header("Foo","bar"); }
 	}
 
 	@Test

@@ -36,15 +36,15 @@ public class Remote_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
+		@RestGet
 		public String x1() {
 			return "foo";
 		}
-		@RestOp(path="/A/x2")
+		@RestGet(path="/A/x2")
 		public String x2() {
 			return "foo";
 		}
-		@RestOp(path="/A/A/x3")
+		@RestGet(path="/A/A/x3")
 		public String x3() {
 			return "foo";
 		}
@@ -176,7 +176,7 @@ public class Remote_Test {
 
 	@Rest
 	public static class B {
-		@RestOp(path="B/x1")
+		@RestGet(path="B/x1")
 		public String x1() {
 			return "foo";
 		}
@@ -245,6 +245,14 @@ public class Remote_Test {
 		public String x3x() {
 			return "baz";
 		}
+		@RestGet
+		public String x4() {
+			return "qux";
+		}
+		@RestGet("/x5")
+		public String x5x() {
+			return "quux";
+		}
 	}
 
 	@Remote(path="/")
@@ -252,6 +260,8 @@ public class Remote_Test {
 		String x1();
 		@RemoteOp("GET") String x2();
 		@RemoteOp("GET /x3") String x3x();
+		@RemoteOp("GET /x4") String x4();
+		@RemoteOp("GET /x5") String x5x();
 	}
 
 	@Test
@@ -260,6 +270,8 @@ public class Remote_Test {
 		assertEquals("foo",x.x1());
 		assertEquals("bar",x.x2());
 		assertEquals("baz",x.x3x());
+		assertEquals("qux",x.x4());
+		assertEquals("quux",x.x5x());
 	}
 
 	@Test
@@ -279,12 +291,22 @@ public class Remote_Test {
 		public String getX2() {
 			return "baz";
 		}
+		@RestGet
+		public String x3() {
+			return "baz";
+		}
+		@RestGet
+		public String getX4() {
+			return "qux";
+		}
 	}
 
 	@Remote(path="/")
 	public static interface C3b {
 		String x1();
 		String getX2();
+		String x3();
+		String getX4();
 	}
 
 	@Test
@@ -292,6 +314,8 @@ public class Remote_Test {
 		C3b x = remote(C3a.class,C3b.class);
 		assertEquals("bar",x.x1());
 		assertEquals("baz",x.getX2());
+		assertEquals("baz",x.x3());
+		assertEquals("qux",x.getX4());
 	}
 
 	@Rest(path="/C4")
@@ -308,6 +332,18 @@ public class Remote_Test {
 		public String x3() {
 			throw new AssertionError("foo");
 		}
+		@RestGet
+		public String x4() throws C4c {
+			throw new C4c("foo");
+		}
+		@RestGet
+		public String x5() throws C4c {
+			throw new RuntimeException("foo");
+		}
+		@RestGet
+		public String x6() {
+			throw new AssertionError("foo");
+		}
 	}
 
 	@Remote
@@ -317,6 +353,11 @@ public class Remote_Test {
 		@RemoteOp(path="x1") CompletableFuture<String> x1b() throws C4c;
 		String x2() throws C4c;
 		Future<String> x3() throws AssertionError;
+		String x4() throws C4c;
+		@RemoteOp(path="x1") Future<String> x4a() throws C4c;
+		@RemoteOp(path="x1") CompletableFuture<String> x4b() throws C4c;
+		String x5() throws C4c;
+		Future<String> x6() throws AssertionError;
 	}
 
 	@SuppressWarnings("serial")
@@ -334,6 +375,11 @@ public class Remote_Test {
 		assertThrown(()->x.x1b().get()).contains("foo");
 		assertThrown(()->x.x2()).contains("foo");
 		assertThrown(()->x.x3().get()).contains("foo");
+		assertThrown(()->x.x4()).is("foo");
+		assertThrown(()->x.x4a().get()).contains("foo");
+		assertThrown(()->x.x4b().get()).contains("foo");
+		assertThrown(()->x.x5()).contains("foo");
+		assertThrown(()->x.x6().get()).contains("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -342,12 +388,12 @@ public class Remote_Test {
 
 	@Rest
 	public static class D1 implements BasicSimpleJsonRest {
-		@RestOp
-		public void getR202(org.apache.juneau.rest.RestResponse res) {
+		@RestGet
+		public void r202(org.apache.juneau.rest.RestResponse res) {
 			res.setStatus(202);
 		}
-		@RestOp
-		public void getR400(org.apache.juneau.rest.RestResponse res) {
+		@RestGet
+		public void r400(org.apache.juneau.rest.RestResponse res) {
 			res.setStatus(400);
 		}
 	}
@@ -383,12 +429,12 @@ public class Remote_Test {
 
 	@Rest
 	public static class D2 implements BasicSimpleJsonRest {
-		@RestOp
-		public Integer getX1() {
+		@RestGet
+		public Integer x1() {
 			return null;
 		}
-		@RestOp
-		public Integer getX2() {
+		@RestGet
+		public Integer x2() {
 			return 1;
 		}
 	}
@@ -415,7 +461,7 @@ public class Remote_Test {
 	@Rest
 	public static class E implements BasicSimpleJsonRest {
 		@RestOp(method=HttpMethod.RRPC)
-		public E1 getProxy() {
+		public E1 proxy() {
 			return new E1() {
 				@Override
 				public String echo(String body) {
@@ -467,7 +513,7 @@ public class Remote_Test {
 	@Rest
 	public static class E5 implements BasicSimpleJsonRest {
 		@RestOp(method=HttpMethod.RRPC)
-		public E5b getProxy() {
+		public E5b proxy() {
 			return new E5b() {
 				@Override
 				public String echo(String body) throws E5a {
@@ -497,7 +543,7 @@ public class Remote_Test {
 	@Rest
 	public static class E6 implements BasicSimpleJsonRest {
 		@RestOp(method=HttpMethod.RRPC)
-		public E5b getProxy() {
+		public E5b proxy() {
 			return new E5b() {
 				@Override
 				public String echo(String body) throws E5a {
@@ -519,8 +565,8 @@ public class Remote_Test {
 
 	@Rest
 	public static class F extends BasicRestObject {
-		@RestOp
-		public String[] getHeaders(org.apache.juneau.rest.RestRequest req) {
+		@RestGet
+		public String[] headers(org.apache.juneau.rest.RestRequest req) {
 			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 	}

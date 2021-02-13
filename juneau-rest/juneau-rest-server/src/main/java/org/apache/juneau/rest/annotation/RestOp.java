@@ -34,6 +34,7 @@ import org.apache.juneau.dto.swagger.*;
 @Retention(RUNTIME)
 @Inherited
 @ContextPropertiesApply(RestOpAnnotation.Apply.class)
+@AnnotationGroup(RestOp.class)
 public @interface RestOp {
 
 	/**
@@ -117,13 +118,7 @@ public @interface RestOp {
 	String[] consumes() default {};
 
 	/**
-	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
-	 *
-	 * <p>
-	 * The subclass must provide the following:
-	 * <ul>
-	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestOperationContextBuilder}.
-	 * </ul>
+	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestOperationContextBuilder#contextClass(Class)}

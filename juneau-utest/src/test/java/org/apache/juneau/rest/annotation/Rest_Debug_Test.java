@@ -50,78 +50,177 @@ public class Rest_Debug_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class)
-	public static class A1 implements BasicUniversalRest {
+	public static class A1_RestOp implements BasicUniversalRest {
 		@RestOp
-		public boolean a(RestRequest req) {
+		public boolean aa(RestRequest req) {
 			return req.isDebug();
 		}
 		@RestOp(debug="false")
-		public boolean b(RestRequest req) {
+		public boolean ab(RestRequest req) {
 			return req.isDebug();
 		}
 		@RestOp(debug="true")
-		public boolean c(RestRequest req) {
+		public boolean ac(RestRequest req) {
 			return req.isDebug();
 		}
 		@RestOp(debug="conditional")
-		public boolean d(RestRequest req) {
+		public boolean ad(RestRequest req) {
 			return req.isDebug();
 		}
 		@RestOp(debug="foo")
-		public boolean e(RestRequest req) {
+		public boolean ae(RestRequest req) {
 			return req.isDebug();
 		}
 		@RestOp
-		public boolean f(RestRequest req) throws Exception {
+		public boolean af(RestRequest req) throws Exception {
 			req.setDebug();
 			return req.isDebug();
 		}
 		@RestOp
-		public boolean g(RestRequest req) throws Exception {
+		public boolean ag(RestRequest req) throws Exception {
+			req.setDebug(false);
+			return req.isDebug();
+		}
+		@RestGet
+		public boolean ba(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="false")
+		public boolean bb(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="true")
+		public boolean bc(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="conditional")
+		public boolean bd(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="foo")
+		public boolean be(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet
+		public boolean bf(RestRequest req) throws Exception {
+			req.setDebug();
+			return req.isDebug();
+		}
+		@RestGet
+		public boolean bg(RestRequest req) throws Exception {
 			req.setDebug(false);
 			return req.isDebug();
 		}
 	}
 
 	@Test
-	public void a01_debugDefault() throws Exception {
-		RestClient a1 = MockRestClient.buildSimpleJson(A1.class);
-		RestClient a1d = MockRestClient.create(A1.class).simpleJson().debug().build();
+	public void a01_restOp_debugDefault() throws Exception {
+		RestClient a1 = MockRestClient.buildSimpleJson(A1_RestOp.class);
+		RestClient a1d = MockRestClient.create(A1_RestOp.class).simpleJson().debug().build();
 
-		a1.get("/a").run().assertBody().is("false");
+		a1.get("/aa").run().assertBody().is("false");
 		assertNotLogged();
-		a1d.get("/a").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /a");
+		a1d.get("/aa").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /aa");
 
-		a1.get("/b").run().assertBody().is("false");
+		a1.get("/ab").run().assertBody().is("false");
 		assertNotLogged();
-		a1d.get("/b").run().assertBody().is("false");
+		a1d.get("/ab").run().assertBody().is("false");
 		assertNotLogged();
 
-		a1.get("/c").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /c");
-		a1d.get("/c").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /c");
+		a1.get("/ac").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /ac");
+		a1d.get("/ac").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /ac");
 
-		a1.get("/d").run().assertBody().is("false");
+		a1.get("/ad").run().assertBody().is("false");
 		assertNotLogged();
-		a1d.get("/d").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /d");
+		a1d.get("/ad").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /ad");
 
-		a1.get("/e").run().assertBody().is("false");
+		a1.get("/ae").run().assertBody().is("false");
 		assertNotLogged();
-		a1d.get("/e").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /e");
+		a1d.get("/ae").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /ae");
 
-		a1.get("/f").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /f");
-		a1d.get("/f").run().assertBody().is("true");
-		assertLogged("[200] HTTP GET /f");
+		a1.get("/af").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /af");
+		a1d.get("/af").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /af");
 
-		a1.get("/g").run().assertBody().is("false");
+		a1.get("/ag").run().assertBody().is("false");
 		assertNotLogged();
-		a1d.get("/g").run().assertBody().is("false");
+		a1d.get("/ag").run().assertBody().is("false");
 		assertNotLogged();
+
+		a1.get("/ba").run().assertBody().is("false");
+		assertNotLogged();
+		a1d.get("/ba").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /ba");
+
+		a1.get("/bb").run().assertBody().is("false");
+		assertNotLogged();
+		a1d.get("/bb").run().assertBody().is("false");
+		assertNotLogged();
+
+		a1.get("/bc").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /bc");
+		a1d.get("/bc").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /bc");
+
+		a1.get("/bd").run().assertBody().is("false");
+		assertNotLogged();
+		a1d.get("/bd").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /bd");
+
+		a1.get("/be").run().assertBody().is("false");
+		assertNotLogged();
+		a1d.get("/be").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /be");
+
+		a1.get("/bf").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /bf");
+		a1d.get("/bf").run().assertBody().is("true");
+		assertLogged("[200] HTTP GET /bf");
+
+		a1.get("/bg").run().assertBody().is("false");
+		assertNotLogged();
+		a1d.get("/bg").run().assertBody().is("false");
+		assertNotLogged();
+	}
+
+	@Rest(callLogger=CaptureLogger.class)
+	public static class A1_RestGet implements BasicUniversalRest {
+		@RestGet
+		public boolean a(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="false")
+		public boolean b(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="true")
+		public boolean c(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="conditional")
+		public boolean d(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet(debug="foo")
+		public boolean e(RestRequest req) {
+			return req.isDebug();
+		}
+		@RestGet
+		public boolean f(RestRequest req) throws Exception {
+			req.setDebug();
+			return req.isDebug();
+		}
+		@RestGet
+		public boolean g(RestRequest req) throws Exception {
+			req.setDebug(false);
+			return req.isDebug();
+		}
 	}
 
 	@Rest(callLogger=CaptureLogger.class)

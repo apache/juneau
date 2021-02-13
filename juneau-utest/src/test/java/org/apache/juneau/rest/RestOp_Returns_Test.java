@@ -37,28 +37,28 @@ public class RestOp_Returns_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public Accepted accepted() { return new Accepted(); }
-		@RestOp public AlreadyReported alreadyReported() { return new AlreadyReported(); }
-		@RestOp(path="/continue") public Continue _continue() { return new Continue(); }
-		@RestOp public Created created() { return new Created(); }
-		@RestOp public EarlyHints earlyHints() { return new EarlyHints(); }
-		@RestOp public Found found() { return new Found(); }
-		@RestOp public IMUsed imUsed() { return new IMUsed(); }
-		@RestOp public MovedPermanently movedPermanently() { return new MovedPermanently(); }
-		@RestOp public MultipleChoices multipleChoices() { return new MultipleChoices(); }
-		@RestOp public MultiStatus multiStatus() { return new MultiStatus(); }
-		@RestOp public NoContent noContent() { return new NoContent(); }
-		@RestOp public NonAuthoritiveInformation nonAuthoritiveInformation() { return new NonAuthoritiveInformation(); }
-		@RestOp public NotModified notModified() { return new NotModified(); }
-		@RestOp public Ok ok() { return new Ok(); }
-		@RestOp public PartialContent partialContent() { return new PartialContent(); }
-		@RestOp public PermanentRedirect permanentRedirect() { return new PermanentRedirect(); }
-		@RestOp public Processing processing() { return new Processing(); }
-		@RestOp public ResetContent resetContent() { return new ResetContent(); }
-		@RestOp public SeeOther seeOther() { return new SeeOther(); }
-		@RestOp public SwitchingProtocols switchingProtocols() { return new SwitchingProtocols(); }
-		@RestOp public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect(); }
-		@RestOp public UseProxy useProxy() { return new UseProxy(); }
+		@RestGet public Accepted accepted() { return new Accepted(); }
+		@RestGet public AlreadyReported alreadyReported() { return new AlreadyReported(); }
+		@RestGet(path="/continue") public Continue _continue() { return new Continue(); }
+		@RestGet public Created created() { return new Created(); }
+		@RestGet public EarlyHints earlyHints() { return new EarlyHints(); }
+		@RestGet public Found found() { return new Found(); }
+		@RestGet public IMUsed imUsed() { return new IMUsed(); }
+		@RestGet public MovedPermanently movedPermanently() { return new MovedPermanently(); }
+		@RestGet public MultipleChoices multipleChoices() { return new MultipleChoices(); }
+		@RestGet public MultiStatus multiStatus() { return new MultiStatus(); }
+		@RestGet public NoContent noContent() { return new NoContent(); }
+		@RestGet public NonAuthoritiveInformation nonAuthoritiveInformation() { return new NonAuthoritiveInformation(); }
+		@RestGet public NotModified notModified() { return new NotModified(); }
+		@RestGet public Ok ok() { return new Ok(); }
+		@RestGet public PartialContent partialContent() { return new PartialContent(); }
+		@RestGet public PermanentRedirect permanentRedirect() { return new PermanentRedirect(); }
+		@RestGet public Processing processing() { return new Processing(); }
+		@RestGet public ResetContent resetContent() { return new ResetContent(); }
+		@RestGet public SeeOther seeOther() { return new SeeOther(); }
+		@RestGet public SwitchingProtocols switchingProtocols() { return new SwitchingProtocols(); }
+		@RestGet public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect(); }
+		@RestGet public UseProxy useProxy() { return new UseProxy(); }
 	}
 
 	@Test
@@ -121,31 +121,31 @@ public class RestOp_Returns_Test {
 
 	@Rest
 	public static class B {
-		@RestOp
+		@RestGet
 		public BasicHttpResource a() throws Exception {
 			return BasicHttpResource.of("foo");
 		}
-		@RestOp
+		@RestGet
 		public BasicHttpResource b() throws Exception {
 			return BasicHttpResource.of(null).header("Foo", "Bar");
 		}
-		@RestOp
+		@RestGet
 		public BasicHttpResource c() throws Exception {
 			return BasicHttpResource.of(null).contentType("application/json");
 		}
-		@RestOp
+		@RestGet
 		public BasicHttpResource d(RestRequest req) throws Exception {
 			return BasicHttpResource.of(()->req.getVarResolverSession().resolve("$RQ{foo}"));
 		}
-		@RestOp
+		@RestGet
 		public BasicHttpResource e() throws Exception {
 			return BasicHttpResource.of(new ByteArrayInputStream("foo".getBytes()));
 		}
-		@RestOp
+		@RestGet
 		public BasicHttpResource f() throws Exception {
 			return BasicHttpResource.of(new StringReader("foo"));
 		}
-		@RestOp
+		@RestGet
 		public BasicHttpResource g() throws Exception {
 			return BasicHttpResource.of(new StringBuilder("foo"));
 		}

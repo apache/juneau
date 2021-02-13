@@ -75,12 +75,11 @@ import org.apache.juneau.rest.logging.*;
  * 		)
  * 		<jk>public static class</jk> EchoRest {
  *
- * 			<ja>@RestOp</ja>(
- * 				method=<jsf>PUT</jsf>,
+ * 			<ja>@RestPut</ja>(
  * 				path=<js>"/echo"</js>
  * 			)
- * 			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean bean) {
- * 				<jk>return</jk> bean;
+ * 			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
+ * 				<jk>return</jk> <jv>bean</jv>;
  * 			}
  * 		}
  *
@@ -88,20 +87,20 @@ import org.apache.juneau.rest.logging.*;
  * 		<ja>@Test</ja>
  * 		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
  *
- * 			MyBean myBean = <jk>new</jk> MyBean();
+ * 			MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
  *
  * 			<jc>// Do a round-trip on the bean through the REST interface</jc>
- * 			myBean = MockRestClient
+ * 			<jv>myBean</jv> = MockRestClient
  * 				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
  * 				.simpleJson()
  * 				.build()
- * 				.put(<js>"/echo"</js>, myBean)
+ * 				.put(<js>"/echo"</js>, <jv>myBean</jv>)
  * 				.run()
  * 				.assertStatus().is(200)
  * 				.assertBody().is(<js>"{foo:1}"</js>)
  * 				.getBody().as(MyBean.<jk>class</jk>);
  *
- * 			<jsm>assertEquals</jsm>(1, myBean.<jf>foo</jf>);
+ * 			<jsm>assertEquals</jsm>(1, <jv>myBean</jv>.<jf>foo</jf>);
  * 		}
  * 	}
  * </p>
@@ -113,23 +112,23 @@ import org.apache.juneau.rest.logging.*;
  * 	<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
  *
  * 		<jc>// Instantiate our mock client.</jc>
- * 		MockRestClient client = MockRestClient
+ * 		MockRestClient <jv>client</jv> = MockRestClient
  * 			.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
  * 			.simpleJson()
  * 			.build();
  *
  * 		<jc>// Create a request.</jc>
- * 		RestRequest req = client.put(<js>"/echo"</js>, myBean);
+ * 		RestRequest <jv>req</jv> = <jv>client</jv>.put(<js>"/echo"</js>, <jv>myBean</jv>);
  *
  * 		<jc>// Execute it (by calling RestCallHandler.service(...) and then returning the response object).</jc>
- * 		RestResponse res = req.run();
+ * 		RestResponse <jv>res</jv> = <jv>req</jv>.run();
  *
  * 		<jc>// Run assertion tests on the results.</jc>
- * 		res.assertStatus().is(200);
- * 		res.assertBody().is(<js>"'foo'"</js>);
+ * 		<jv>res</jv>.assertStatus().is(200);
+ * 		<jv>res</jv>.assertBody().is(<js>"'foo'"</js>);
  *
  * 		<jc>// Convert the body of the response to a bean.</jc>
- * 		myBean = res.getBody().as(MyBean.<jk>class</jk>);
+ * 		<jv>myBean</jv> = <jv>res</jv>.getBody().as(MyBean.<jk>class</jk>);
  * 	}
  * </p>
  *
@@ -146,7 +145,7 @@ import org.apache.juneau.rest.logging.*;
  * <p class='bcode w800'>
  * 	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
  * 	<jk>public class</jk> A {
- * 		<ja>@RestOp</ja>
+ * 		<ja>@RestGet</ja>
  * 		<jk>public</jk> String get() {
  * 			<jk>return</jk> <js>"OK"</js>;
  * 		}
@@ -154,11 +153,11 @@ import org.apache.juneau.rest.logging.*;
  *
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> mytest() <jk>throws</jk> Exception {
- * 		MockRestClient a = MockRestClient.<jsm>build</jsm>(A.<jk>class</jk>);
+ * 		MockRestClient <jv>client</jv> = MockRestClient.<jsm>build</jsm>(A.<jk>class</jk>);
  *
  * 		<jc>// Admin user should get 200, but anyone else should get 403-Unauthorized.</jc>
- * 		a.get().roles(<js>"ADMIN"</js>).run().assertStatus().is(200);
- * 		a.get().roles(<js>"USER"</js>).run().assertStatus().is(403);
+ * 		<jv>client</jv>.get().roles(<js>"ADMIN"</js>).run().assertStatus().is(200);
+ * 		<jv>client</jv>.get().roles(<js>"USER"</js>).run().assertStatus().is(403);
  * 	}
  * </p>
  *
@@ -167,7 +166,7 @@ import org.apache.juneau.rest.logging.*;
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
- * 	MockRestClient mr = MockRestClient
+ * 	MockRestClient <jv>client</jv> = MockRestClient
  * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
  * 		.debug()
  * 		.simpleJson()
@@ -184,28 +183,28 @@ import org.apache.juneau.rest.logging.*;
  * 	<jk>public interface</jk> MyRemoteInterface {
  *
  * 		<ja>@RemoteOp</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
- * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
+ * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> <jv>id</jv>);
  * 	}
  *
  * 	<jc>// Our mocked-up REST interface to test against.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest {
  *
- * 		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
- * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
- * 			<jk>return</jk> id;
+ * 		<ja>@RestGet</ja>(path=<js>"/echoQuery"</js>)
+ * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String <jv>id</jv>) {
+ * 			<jk>return</jk> <jv>id</jv>;
  * 		}
  * 	}
  *
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> testProxy() {
- * 		MyRemoteInterface mri = MockRestClient
+ * 		MyRemoteInterface <jv>client</jv> = MockRestClient
  * 			.create(MyRest.<jk>class</jk>)
  * 			.json()
  * 			.build()
  * 			.getRemote(MyRemoteInterface.<jk>class</jk>);
  *
- * 		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
+ * 		<jsm>assertEquals</jsm>(123, <jv>client</jv>.echoQuery(123));
  * 	}
  * </p>
  *
@@ -337,7 +336,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).build();
 	 * </p>
 	 *
 	 * @param impl
@@ -358,7 +357,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).ignoreErrors().noLog().build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).ignoreErrors().noLog().build();
 	 * </p>
 	 *
 	 * @param impl
@@ -376,7 +375,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).json().build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
 	 * </p>
 	 *
 	 * @param impl
@@ -397,7 +396,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).json().ignoreErrors().build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
 	 * </p>
 	 *
 	 * @param impl
@@ -415,7 +414,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).json().build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
 	 * </p>
 	 *
 	 * @param impl
@@ -436,7 +435,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.create(impl).json().ignoreErrors().build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
 	 * </p>
 	 *
 	 * @param impl
@@ -451,6 +450,11 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	//------------------------------------------------------------------------------------------------------------------
 	// Entry point methods.
 	//------------------------------------------------------------------------------------------------------------------
+
+	@Override /* RestClient */
+	public MockRestRequest op(RestOperation op) throws RestCallException {
+		return (MockRestRequest)super.op(op);
+	}
 
 	@Override /* RestClient */
 	public MockRestRequest get(Object url) throws RestCallException {

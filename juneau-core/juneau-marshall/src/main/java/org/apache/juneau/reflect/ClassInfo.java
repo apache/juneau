@@ -1257,6 +1257,17 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Constructs an {@link AnnotationList} of all annotations found on this class that belong to the specified
+	 * annotation group.
+	 *
+	 * @param group The annotation group.  See {@link AnnotationGroup}.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public AnnotationList getAnnotationGroupList(Class<? extends Annotation> group) {
+		return getAnnotationList(x -> x.isInGroup(group));
+	}
+
+	/**
 	 * Constructs an {@link AnnotationList} of all annotations found on this class.
 	 *
 	 * <p>

@@ -49,12 +49,12 @@ public class HttpUtils {
 	 * Given a Java method, infers the REST path.
 	 *
 	 * @param m The Java method.
-	 * @param detectMethod Whether we should auto-detect the HTTP method name from the Java method name.
+	 * @param method The HTTP method name if it's known.
 	 * @return The REST path or <jk>null</jk> if not detected.
 	 */
-	public static String detectHttpPath(Method m, boolean detectMethod) {
+	public static String detectHttpPath(Method m, String method) {
 		String n = m.getName();
-		if (detectMethod) {
+		if (method == null) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = n.substring(2).toUpperCase();
 				if (isOneOf(n2, "GET","PUT","POST","DELETE","OPTIONS","HEAD","CONNECT","TRACE","PATCH"))
@@ -64,6 +64,12 @@ public class HttpUtils {
 				if (n.startsWith(t) && (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length())))) {
 					return '/' + java.beans.Introspector.decapitalize(n.substring(t.length()));
 				}
+			}
+		} else {
+			if (n.equalsIgnoreCase(method) || n.equals("do") || n.equals("_"))
+				return "/";
+			if (n.startsWith(method) && (n.length() == method.length() || Character.isUpperCase(n.charAt(method.length())))) {
+				return '/' + java.beans.Introspector.decapitalize(n.substring(method.length()));
 			}
 		}
 		return '/' + n;

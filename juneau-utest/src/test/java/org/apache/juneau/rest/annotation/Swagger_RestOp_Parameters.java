@@ -30,19 +30,19 @@ public class Swagger_RestOp_Parameters {
 	@Rest
 	public static class A {
 
-		@RestOp
+		@RestGet
 		public String accept(Accept accept) {
 			return accept.getValue();
 		}
-		@RestOp
+		@RestPut
 		public String acceptCharset(AcceptCharset acceptCharset) {
 			return acceptCharset.getValue();
 		}
-		@RestOp
+		@RestPost
 		public String acceptEncoding(AcceptEncoding acceptEncoding) {
 			return acceptEncoding.getValue();
 		}
-		@RestOp
+		@RestDelete
 		public String acceptLanguage(AcceptLanguage acceptLanguage) {
 			return acceptLanguage.getValue();
 		}
@@ -148,13 +148,13 @@ public class Swagger_RestOp_Parameters {
 		x = s.getParameterInfo("/accept","get","header","Accept");
 		assertObject(x).asJson().is("{'in':'header',name:'Accept',type:'string'}");
 
-		x = s.getParameterInfo("/acceptCharset","get","header","Accept-Charset");
+		x = s.getParameterInfo("/acceptCharset","put","header","Accept-Charset");
 		assertObject(x).asJson().is("{'in':'header',name:'Accept-Charset',type:'string'}");
 
-		x = s.getParameterInfo("/acceptEncoding","get","header","Accept-Encoding");
+		x = s.getParameterInfo("/acceptEncoding","post","header","Accept-Encoding");
 		assertObject(x).asJson().is("{'in':'header',name:'Accept-Encoding',type:'string'}");
 
-		x = s.getParameterInfo("/acceptLanguage","get","header","Accept-Language");
+		x = s.getParameterInfo("/acceptLanguage","delete","header","Accept-Language");
 		assertObject(x).asJson().is("{'in':'header',name:'Accept-Language',type:'string'}");
 
 		x = s.getParameterInfo("/authorization","get","header","Authorization");

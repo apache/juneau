@@ -46,9 +46,9 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>
- * 	<jk>public</jk> AddPetSuccess addPet() {
- * 		<jsm>addPet</jsm>(pet);
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public</jk> AddPetSuccess addPet(Pet <jv>pet</jv>) {
+ * 		<jsm>addPet</jsm>(<jv>pet</jv>);
  * 		<jk>return new</jk> AddPetSuccess(...);
  * 	}
  * </p>
@@ -74,8 +74,8 @@ import org.apache.juneau.annotation.*;
  * 		}
  *
  * 		<ja>@ResponseBody</ja>
- * 		<jk>public void</jk> writeTo(Writer out) {
- * 			out.write(<js>"{'foo':'bar'}"</js>);
+ * 		<jk>public void</jk> writeTo(Writer <jv>out</jv>) {
+ * 			<jv>out</jv>.write(<js>"{'foo':'bar'}"</js>);
  * 		}
  * 	}
  * </p>

@@ -95,23 +95,23 @@ public class Restx_Serializers_Test {
 
 	@Rest(serializers=SA.class)
 	public static class A {
-		@RestOp
+		@RestGet
 		public String a() {
 			return "test1";
 		}
-		@RestOp(serializers=SB.class)
+		@RestGet(serializers=SB.class)
 		public String b() {
 			return "test2";
 		}
-		@RestOp(serializers={SB.class,SC.class,Inherit.class})
+		@RestGet(serializers={SB.class,SC.class,Inherit.class})
 		public String c() {
 			return "test3";
 		}
-		@RestOp(serializers={SD.class,Inherit.class})
+		@RestGet(serializers={SD.class,Inherit.class})
 		public String d() {
 			return "test4";
 		}
-		@RestOp
+		@RestGet
 		public String e() {
 			return "test406";
 		}
@@ -199,17 +199,17 @@ public class Restx_Serializers_Test {
 
 	@Rest
 	public static class B2 extends B1 {
-		@RestOp
+		@RestGet
 		public OList a(RestResponse res) {
 			// Should show ['text/s3','text/s4','text/s1','text/s2']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
-		@RestOp(serializers=S5.class)
+		@RestGet(serializers=S5.class)
 		public OList b(RestResponse res) {
 			// Should show ['text/s5']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
-		@RestOp(serializers={S5.class,Inherit.class})
+		@RestGet(serializers={S5.class,Inherit.class})
 		public OList c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
 			return OList.of(res.getOpContext().getSupportedAcceptTypes());

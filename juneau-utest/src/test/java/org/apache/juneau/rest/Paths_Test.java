@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
@@ -47,7 +46,7 @@ public class Paths_Test {
 
 	@Rest
 	public static class A {
-		@RestOp(method=GET,path="/*")
+		@RestGet(path="/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
@@ -195,7 +194,7 @@ public class Paths_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B {
-		@RestOp(method=GET, path="/subpath/*")
+		@RestGet(path="/subpath/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
@@ -347,7 +346,7 @@ public class Paths_Test {
 
 	@Rest(path="/a")
 	public static class C1 {
-		@RestOp(method=GET,path="/*")
+		@RestGet(path="/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
@@ -499,7 +498,7 @@ public class Paths_Test {
 
 	@Rest(path="/a")
 	public static class D1 {
-		@RestOp(method=GET, path="/subpath/*")
+		@RestGet(path="/subpath/*")
 		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -114,8 +113,7 @@ public class DirectoryResource extends BasicRestServlet {
 		allowUploads = c.getBoolean(DIRECTORY_RESOURCE_allowUploads, false);
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/*",
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory."
@@ -167,8 +165,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
-	@RestOp(
-		method=DELETE,
+	@RestDelete(
 		path="/*",
 		summary="Delete file",
 		description="Delete a file on the file system."
@@ -178,8 +175,7 @@ public class DirectoryResource extends BasicRestServlet {
 		return new RedirectToRoot();
 	}
 
-	@RestOp(
-		method=PUT,
+	@RestPut(
 		path="/*",
 		summary="Add or replace file",
 		description="Add or overwrite a file on the file system."

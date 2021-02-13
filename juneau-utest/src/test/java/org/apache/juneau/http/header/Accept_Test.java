@@ -36,7 +36,7 @@ public class Accept_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
+		@RestGet
 		public StringReader get(@Header(name=HEADER,multi=true) String[] h) {
 			return new StringReader(h == null ? "null" : StringUtils.join(h, ','));
 		}

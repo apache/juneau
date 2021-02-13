@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.config.rest;
 
-import static org.apache.juneau.http.HttpMethod.GET;
-
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.JsonSerializer;
 import org.apache.juneau.rest.RestServlet;
@@ -26,7 +24,7 @@ public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
 
-	@RestOp(method = GET, path = "/{project}/{branch}/*", consumes = "application/json", produces = "application/json")
+	@RestGet(path="/{project}/{branch}/*", produces="application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
 		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 

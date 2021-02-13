@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static java.lang.String.*;
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.IOException;
@@ -50,7 +49,8 @@ public class Rest_RVars_Test {
 	)
 	public static class A {
 
-		@RestOp(method=GET, path="/p2",
+		@RestGet(
+			path="/p2",
 			defaultRequestAttributes={"B1: b1", "B2:b"},
 			serializers=A1.class
 		)

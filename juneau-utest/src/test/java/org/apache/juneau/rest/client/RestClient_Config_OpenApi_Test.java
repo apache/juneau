@@ -30,20 +30,20 @@ public class RestClient_Config_OpenApi_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp(path="/echoBody")
-		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+		@RestPost
+		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getBody().getReader();
 		}
-		@RestOp(path="/checkHeader")
-		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
+		@RestGet
+		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
-		@RestOp(path="/checkQuery")
-		public Reader getQuery(org.apache.juneau.rest.RestRequest req) {
+		@RestGet
+		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getQuery().asQueryString());
 		}
-		@RestOp(path="/checkFormData")
-		public Reader postFormData(org.apache.juneau.rest.RestRequest req) {
+		@RestPost
+		public Reader checkFormData(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getFormData().asQueryString());
 		}
 	}

@@ -47,9 +47,9 @@ public class Swagger_Response_Test {
 		public static class A1 {
 			public A1(String x){}
 		}
-		@RestOp
+		@RestGet
 		public void a(Value<A1> r) {}
-		@RestOp
+		@RestPut
 		public A1 b() {return null;}
 
 		@Response(
@@ -64,9 +64,9 @@ public class Swagger_Response_Test {
 		public static class A2 {
 			public A2(String x){}
 		}
-		@RestOp
+		@RestPost
 		public void c(Value<A2> r) {}
-		@RestOp
+		@RestDelete
 		public A2 d() {return null;}
 
 		@Response(
@@ -125,21 +125,21 @@ public class Swagger_Response_Test {
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
-		x = s.getResponseInfo("/b","get",200);
+		x = s.getResponseInfo("/b","put",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
-		x = s.getResponseInfo("/c","get",200);
+		x = s.getResponseInfo("/c","post",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
 		assertEquals("a", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
-		x = s.getResponseInfo("/d","get",200);
+		x = s.getResponseInfo("/d","delete",200);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
@@ -184,18 +184,18 @@ public class Swagger_Response_Test {
 
 		@Response(schema=@Schema(" type:'number' "))
 		public static class B1 {}
-		@RestOp
+		@RestGet
 		public void a(Value<B1> r) {}
-		@RestOp
+		@RestPut
 		public B1 b() {return null;}
 
 		@Response
 		public static class B2 {
 			public String f1;
 		}
-		@RestOp
+		@RestPost
 		public void c(Value<B2> b) {}
-		@RestOp
+		@RestDelete
 		public B2 d() {return null;}
 
 		@Response
@@ -223,13 +223,13 @@ public class Swagger_Response_Test {
 		x = s.getResponseInfo("/a","get",200);
 		assertObject(x.getSchema()).asJson().is("{type:'number'}");
 
-		x = s.getResponseInfo("/b","get",200);
+		x = s.getResponseInfo("/b","put",200);
 		assertObject(x.getSchema()).asJson().is("{type:'number'}");
 
-		x = s.getResponseInfo("/c","get",200);
+		x = s.getResponseInfo("/c","post",200);
 		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
 
-		x = s.getResponseInfo("/d","get",200);
+		x = s.getResponseInfo("/d","delete",200);
 		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getResponseInfo("/e","get",200);
@@ -252,18 +252,18 @@ public class Swagger_Response_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestOp
+		@RestGet
 		public void a(Value<C1> r) {}
-		@RestOp
+		@RestPut
 		public C1 b() {return null;}
 
 		@Response(examples={" foo:'b' "})
 		public static class C2 {
 			public C2(String x){}
 		}
-		@RestOp
+		@RestPost
 		public void c(Value<C2> r) {}
-		@RestOp
+		@RestDelete
 		public C2 d() {return null;}
 	}
 
@@ -275,13 +275,13 @@ public class Swagger_Response_Test {
 		x = sc.getResponseInfo("/a","get",200);
 		assertEquals("{f1:'a'}", x.getExample());
 
-		x = sc.getResponseInfo("/b","get",200);
+		x = sc.getResponseInfo("/b","put",200);
 		assertEquals("{f1:'a'}", x.getExample());
 
-		x = sc.getResponseInfo("/c","get",200);
+		x = sc.getResponseInfo("/c","post",200);
 		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
 
-		x = sc.getResponseInfo("/d","get",200);
+		x = sc.getResponseInfo("/d","delete",200);
 		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
 	}
 
@@ -296,7 +296,7 @@ public class Swagger_Response_Test {
 			examples=" {foo:'a'} "
 		)
 		public static class D1 extends Throwable {}
-		@RestOp
+		@RestGet
 		public void a() throws D1 {}
 
 		@Response(
@@ -309,7 +309,7 @@ public class Swagger_Response_Test {
 			}
 		)
 		public static class D2 extends Throwable {}
-		@RestOp
+		@RestPut
 		public void b() throws D2 {}
 
 		@Response(
@@ -327,12 +327,12 @@ public class Swagger_Response_Test {
 			examples=" {foo:'a'} "
 		)
 		public static class D3 extends Throwable {}
-		@RestOp
+		@RestPost
 		public void c() throws D3 {}
 
 		@Response(code=100)
 		public static class D4 extends Throwable {}
-		@RestOp
+		@RestDelete
 		public void d() throws D4 {}
 
 		@Response(code=100)
@@ -358,21 +358,21 @@ public class Swagger_Response_Test {
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
-		x = s.getResponseInfo("/b","get",500);
+		x = s.getResponseInfo("/b","put",500);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
 		assertObject(x.getExample()).asJson().is("'a'");
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
-		x = s.getResponseInfo("/c","get",500);
+		x = s.getResponseInfo("/c","post",500);
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getSchema()).asJson().is("{type:'string'}");
 		assertObject(x.getHeaders()).asJson().is("{bar:{type:'number'},foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
 		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
 
-		x = s.getResponseInfo("/d","get",100);
+		x = s.getResponseInfo("/d","delete",100);
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/e","get",100);
@@ -387,7 +387,7 @@ public class Swagger_Response_Test {
 
 		@Response(schema=@Schema(" type:'number' "))
 		public static class E1 extends Throwable {}
-		@RestOp
+		@RestGet
 		public void a() throws E1 {}
 	}
 
@@ -408,12 +408,12 @@ public class Swagger_Response_Test {
 
 		@Response(example={" {f1:'b'} "})
 		public static class F1 extends Throwable {}
-		@RestOp
+		@RestGet
 		public void a() throws F1 {}
 
 		@Response(examples={" foo:'b' "})
 		public static class F2 extends Throwable {}
-		@RestOp
+		@RestPut
 		public void b() throws F2 {}
 	}
 
@@ -425,7 +425,7 @@ public class Swagger_Response_Test {
 		x = s.getResponseInfo("/a","get",500);
 		assertEquals("{f1:'b'}", x.getExample());
 
-		x = s.getResponseInfo("/b","get",500);
+		x = s.getResponseInfo("/b","put",500);
 		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
 	}
 }

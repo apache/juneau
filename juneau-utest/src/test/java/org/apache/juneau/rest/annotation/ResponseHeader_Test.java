@@ -32,15 +32,15 @@ public class ResponseHeader_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
+		@RestGet
 		public void a(Value<A1> h) {
 			h.set(new A1());
 		}
-		@RestOp
+		@RestGet
 		public void b(@ResponseHeader(name="Foo") Value<String> h) {
 			h.set("foo");
 		}
-		@RestOp
+		@RestGet
 		public void c(@ResponseHeader(name="Bar") Value<A1> h) {
 			h.set(new A1());
 		}
@@ -82,7 +82,7 @@ public class ResponseHeader_Test {
 			type="string"
 		)
 		public static class B1 {}
-		@RestOp
+		@RestGet
 		public void a(Value<B1> h) {}
 
 		@ResponseHeader(
@@ -93,7 +93,7 @@ public class ResponseHeader_Test {
 			}
 		)
 		public static class B2 {}
-		@RestOp
+		@RestGet
 		public void b(Value<B2> h) {}
 
 		@ResponseHeader(
@@ -106,27 +106,27 @@ public class ResponseHeader_Test {
 			type="string"
 		)
 		public static class B3 {}
-		@RestOp
+		@RestGet
 		public void c(Value<B3> h) {}
 
 		@ResponseHeader(name="H", code=100)
 		public static class B4 {}
-		@RestOp
+		@RestGet
 		public void d(Value<B4> h) {}
 
 		@ResponseHeader(name="H", code={100,101})
 		public static class B5 {}
-		@RestOp
+		@RestGet
 		public void e(Value<B5> h) {}
 
 		@ResponseHeader(name="H", description="a")
 		public static class B6 {}
-		@RestOp
+		@RestGet
 		public void f(Value<B6> h) {}
 
 		@ResponseHeader("H")
 		public static class B7 {}
-		@RestOp
+		@RestGet
 		public void g(Value<B7> h) {}
 	}
 
@@ -170,7 +170,7 @@ public class ResponseHeader_Test {
 	public static class C {
 
 		public static class C1 {}
-		@RestOp
+		@RestGet
 		public void a(
 			@ResponseHeader(
 				name="H",
@@ -179,7 +179,7 @@ public class ResponseHeader_Test {
 			) Value<C1> h) {}
 
 		public static class C2 {}
-		@RestOp
+		@RestGet
 		public void b(
 			@ResponseHeader(
 				name="H",
@@ -190,7 +190,7 @@ public class ResponseHeader_Test {
 			) Value<C2> h) {}
 
 		public static class C3 {}
-		@RestOp
+		@RestGet
 		public void c(
 			@ResponseHeader(
 				name="H",
@@ -203,19 +203,19 @@ public class ResponseHeader_Test {
 			) Value<C3> h) {}
 
 		public static class C4 {}
-		@RestOp
+		@RestGet
 		public void d(@ResponseHeader(name="H", code=100) Value<C4> h) {}
 
 		public static class C5 {}
-		@RestOp
+		@RestGet
 		public void e(@ResponseHeader(name="H", code={100,101}) Value<C5> h) {}
 
 		public static class C6 {}
-		@RestOp
+		@RestGet
 		public void f(@ResponseHeader(name="H", description="a") Value<C6> h) {}
 
 		public static class C7 {}
-		@RestOp
+		@RestGet
 		public void g(@ResponseHeader("H") Value<C7> h) {}
 	}
 

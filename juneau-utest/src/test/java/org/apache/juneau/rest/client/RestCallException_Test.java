@@ -44,8 +44,8 @@ public class RestCallException_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp
-		public InputStream postEcho(InputStream is) {
+		@RestPost
+		public InputStream echo(InputStream is) {
 			return is;
 		}
 	}

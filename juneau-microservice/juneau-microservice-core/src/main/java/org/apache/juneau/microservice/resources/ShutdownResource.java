@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.http.HttpMethod.*;
-
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -33,7 +31,7 @@ public class ShutdownResource extends BasicRestServlet {
 	 *
 	 * @return The string <js>"OK"</js>.
 	 */
-	@RestOp(method=GET, path="/", description="Show contents of config file.")
+	@RestGet(path="/", description="Show contents of config file.")
 	public String shutdown() {
 		new Thread(
 			new Runnable() {

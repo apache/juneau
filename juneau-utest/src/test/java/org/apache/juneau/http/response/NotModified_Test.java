@@ -23,9 +23,9 @@ public class NotModified_Test {
 
 	@Rest
 	public static class A {
-		@RestOp public NotModified getA1() { return new NotModified(); }
-		@RestOp public NotModified getA2() { return new NotModified("foo"); }
-		@RestOp public NotModified getA3() { return new NotModified().header("Foo","bar"); }
+		@RestGet public NotModified a1() { return new NotModified(); }
+		@RestGet public NotModified a2() { return new NotModified("foo"); }
+		@RestGet public NotModified a3() { return new NotModified().header("Foo","bar"); }
 	}
 
 	@Test

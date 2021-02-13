@@ -39,8 +39,8 @@ public class RestClient_FormData_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp
-		public Reader postFormData(org.apache.juneau.rest.RestRequest req) {
+		@RestPost
+		public Reader formData(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getFormData().asQueryString());
 		}
 	}

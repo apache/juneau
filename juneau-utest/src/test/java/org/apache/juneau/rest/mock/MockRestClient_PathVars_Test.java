@@ -23,7 +23,7 @@ public class MockRestClient_PathVars_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
+		@RestGet
 		public String get(@Path("foo") String foo) {
 			return foo;
 		}

@@ -286,4 +286,14 @@ public class OpSwaggerAnnotation {
 			return value;
 		}
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(OpSwagger a) {
+		return a == null || DEFAULT.equals(a);
+	}
 }

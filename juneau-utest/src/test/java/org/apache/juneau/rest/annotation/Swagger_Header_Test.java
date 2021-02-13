@@ -41,7 +41,7 @@ public class Swagger_Header_Test {
 		public static class A1 {
 			public A1(String x) {}
 		}
-		@RestOp
+		@RestGet
 		public void a(A1 h) {}
 
 		@Header(
@@ -54,7 +54,7 @@ public class Swagger_Header_Test {
 		public static class A2 {
 			public A2(String x) {}
 		}
-		@RestOp
+		@RestPut
 		public void b(A2 h) {}
 
 		@Header(
@@ -69,7 +69,7 @@ public class Swagger_Header_Test {
 		public static class A3 {
 			public A3(String x) {}
 		}
-		@RestOp
+		@RestPost
 		public void c(A3 h) {}
 	}
 
@@ -82,11 +82,11 @@ public class Swagger_Header_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getType()).asJson().is("'string'");
 
-		x = s.getParameterInfo("/b","get","header","H");
+		x = s.getParameterInfo("/b","put","header","H");
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getType()).asJson().is("'string'");
 
-		x = s.getParameterInfo("/c","get","header","H");
+		x = s.getParameterInfo("/c","post","header","H");
 		assertEquals("a\nb", x.getDescription());
 		assertObject(x.getType()).asJson().is("'string'");
 	}
@@ -96,26 +96,26 @@ public class Swagger_Header_Test {
 
 		@Header(name="H")
 		public static class B1 {}
-		@RestOp
+		@RestGet
 		public void a(B1 h) {}
 
 		@Header(name="H")
 		public static class B2 {
 			public String f1;
 		}
-		@RestOp
+		@RestPut
 		public void b(B2 b) {}
 
 		@Header(name="H")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp
+		@RestPost
 		public void c(B3 b) {}
 
 		@Header(name="H")
 		public static class B4 {}
-		@RestOp
+		@RestDelete
 		public void d(B4 b) {}
 	}
 
@@ -127,13 +127,13 @@ public class Swagger_Header_Test {
 		x = s.getParameterInfo("/a","get","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 
-		x = s.getParameterInfo("/b","get","header","H");
+		x = s.getParameterInfo("/b","put","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c","get","header","H");
+		x = s.getParameterInfo("/c","post","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d","get","header","H");
+		x = s.getParameterInfo("/d","delete","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 	}
 
@@ -148,7 +148,7 @@ public class Swagger_Header_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestOp
+		@RestGet
 		public void a(C1 h) {}
 	}
 
@@ -163,7 +163,7 @@ public class Swagger_Header_Test {
 	@Rest
 	public static class D {
 
-		@RestOp
+		@RestGet
 		public void a(
 			@Header(
 				name="H",
@@ -171,7 +171,7 @@ public class Swagger_Header_Test {
 				type="string"
 			) String h) {}
 
-		@RestOp
+		@RestPut
 		public void b(
 			@Header(
 				name="H",
@@ -181,7 +181,7 @@ public class Swagger_Header_Test {
 				}
 			) String h) {}
 
-		@RestOp
+		@RestPost
 		public void c(
 			@Header(
 				name="H",
@@ -193,7 +193,7 @@ public class Swagger_Header_Test {
 				type="string"
 			) String h) {}
 
-		@RestOp
+		@RestDelete
 		public void d(@Header("H") String h) {}
 	}
 
@@ -207,46 +207,46 @@ public class Swagger_Header_Test {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/b","get","header","H");
+		x = s.getParameterInfo("/b","put","header","H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/c","get","header","H");
+		x = s.getParameterInfo("/c","post","header","H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 
-		x = s.getParameterInfo("/d","get","header","H");
+		x = s.getParameterInfo("/d","delete","header","H");
 		assertEquals("H", x.getName());
 	}
 
 	@Rest
 	public static class E {
 
-		@RestOp
+		@RestGet
 		public void a(@Header(name="H") String h) {}
 
 		public static class E2 {
 			public String f1;
 		}
-		@RestOp
+		@RestPut
 		public void b(@Header("H") E2 b) {}
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestOp
+		@RestPost
 		public void c(@Header("H") E3 b) {}
 
 		public static class E4 {}
-		@RestOp
+		@RestDelete
 		public void d(@Header("H") E4 b) {}
 
 		@RestOp
 		public void e(@Header("H") Integer b) {}
 
-		@RestOp
+		@RestGet
 		public void f(@Header("H") Boolean b) {}
 	}
 
@@ -258,13 +258,13 @@ public class Swagger_Header_Test {
 		x = s.getParameterInfo("/a","get","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 
-		x = s.getParameterInfo("/b","get","header","H");
+		x = s.getParameterInfo("/b","put","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
-		x = s.getParameterInfo("/c","get","header","H");
+		x = s.getParameterInfo("/c","post","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 
-		x = s.getParameterInfo("/d","get","header","H");
+		x = s.getParameterInfo("/d","delete","header","H");
 		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/e","get","header","H");
@@ -281,7 +281,7 @@ public class Swagger_Header_Test {
 	@Rest
 	public static class F {
 
-		@RestOp
+		@RestGet
 		public void a(@Header(name="H", example={"a","b"}) String h) {}
 	}
 

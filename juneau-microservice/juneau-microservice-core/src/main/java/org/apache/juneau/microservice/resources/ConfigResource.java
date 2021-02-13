@@ -13,8 +13,6 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.http.HttpMethod.*;
-
 import java.io.*;
 import java.util.Map;
 
@@ -50,8 +48,7 @@ import org.apache.juneau.http.exception.*;
 public class ConfigResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/",
 		summary="Get config file contents",
 		description="Show contents of config file as an OMap.",
@@ -65,8 +62,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getContext().getConfig().toMap();
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/edit",
 		summary="Render form entry page for editing config file",
 		description="Renders a form entry page for editing the raw text of a config file."
@@ -86,8 +82,7 @@ public class ConfigResource extends BasicRestServlet {
 		);
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/{section}",
 		summary="Get config file section contents",
 		description="Show contents of config file section as an OMap.",
@@ -104,8 +99,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section);
 	}
 
-	@RestOp(
-		method=GET,
+	@RestGet(
 		path="/{section}/{key}",
 		summary="Get config file entry value",
 		description="Show value of config file entry as a simple string.",
@@ -123,8 +117,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section).getString(key);
 	}
 
-	@RestOp(
-		method=POST,
+	@RestPost(
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from a FORM post.",
@@ -141,8 +134,7 @@ public class ConfigResource extends BasicRestServlet {
 		return setConfigContents(new StringReader(contents));
 	}
 
-	@RestOp(
-		method=PUT,
+	@RestPut(
 		path="/",
 		summary="Update config file contents",
 		description="Update the contents of the config file from raw text.",
@@ -159,8 +151,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getContext().getConfig().load(contents, true).toMap();
 	}
 
-	@RestOp(
-		method=PUT,
+	@RestPut(
 		path="/{section}",
 		summary="Update config section contents",
 		description="Add or overwrite a config file section.",
@@ -182,8 +173,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section);
 	}
 
-	@RestOp(
-		method=PUT,
+	@RestPut(
 		path="/{section}/{key}",
 		summary="Update config entry value",
 		description="Add or overwrite a config file entry.",

@@ -51,7 +51,7 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
+	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			deprecated=<jk>true</jk>
 	 * 		)
@@ -95,7 +95,7 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
+	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
 	 * 		)
@@ -138,8 +138,8 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<jsf>POST</jsf>, path=<js>"/{a}"</js>,
+	 * 	<ja>@RestPost</ja>(
+	 * 		path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			parameters={
@@ -191,8 +191,8 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<jsf>GET</jsf>, path=<js>"/"</js>,
+	 * 	<ja>@RestGet</ja>(
+	 * 		path=<js>"/"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			responses={
 					<js>"200:{ description:'Okay' },"</js>,
@@ -258,7 +258,7 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
+	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			tags=<js>"foo,bar"</js>
 	 * 		)
@@ -283,7 +283,7 @@ public @interface OpSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(
+	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			<js>"tags:['pet'],"</js>,
 	 * 			<js>"security:[ { petstore_auth:['write:pets','read:pets'] } ]"</js>
@@ -317,8 +317,7 @@ public @interface OpSwagger {
 	 * The following are completely equivalent ways of defining the swagger description of a resource method:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<js>"POST"</js>,
+	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			summary=<js>"Add pet"</js>,
@@ -333,8 +332,7 @@ public @interface OpSwagger {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<js>"POST"</js>,
+	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>({
 	 * 			<js>"summary: 'Add pet',"</js>,
@@ -349,8 +347,7 @@ public @interface OpSwagger {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestOp</ja>(
-	 * 		method=<js>"POST"</js>,
+	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(<js>"$L{addPetSwagger}"</js>)
 	 * )

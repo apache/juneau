@@ -29,7 +29,7 @@ public class RestClient_Paths_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp(path="/echo/*")
+		@RestGet(path="/echo/*")
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
 		}

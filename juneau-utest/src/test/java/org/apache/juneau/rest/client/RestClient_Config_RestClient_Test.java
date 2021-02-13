@@ -443,7 +443,7 @@ public class RestClient_Config_RestClient_Test {
 
 	@Rest(partSerializer=A12a.class,partParser=A12b.class)
 	public static class A12 extends BasicRestObject {
-		@RestOp(path="/")
+		@RestGet(path="/")
 		public Ok get(@Header(name="Foo",multi=true) ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);
 			assertObject(req.getRequestHeaders().getAll("Foo").stream().map(RequestHeader::getValue).collect(Collectors.toList())).asJson().is("['x{f:1}','x{f:1}']");

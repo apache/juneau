@@ -48,9 +48,9 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
- * 		res.setOutput(<js>"Simple string response"</js>);
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>) {
+ * 		<jv>res</jv>.setOutput(<js>"Simple string response"</js>);
  * 	}
  * </p>
  *
@@ -151,10 +151,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(..., path=<js>"/example2/{personId}"</js>)
-	 * 	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
-	 * 		Person p = getPersonById(personId);
-	 * 		res.setOutput(p);
+	 * 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
+	 * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>, <ja>@Path</ja> UUID <jv>personId</jv>) {
+	 * 		Person <jv>person</jv> = getPersonById(<jv>personId</jv>);
+	 * 		<jv>res</jv>.setOutput(<jv>person</jv>);
 	 * 	}
 	 * </p>
 	 *
@@ -205,10 +205,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Instead of...</jc>
-	 * 	response.setOutput(<jk>new</jk> Object[]{x,y,z});
+	 * 	<jv>response</jv>.setOutput(<jk>new</jk> Object[]{<jv>x</jv>,<jv>y</jv>,<jv>z</jv>});
 	 *
 	 * 	<jc>// ...call this...</jc>
-	 * 	response.setOutput(x,y,z);
+	 * 	<jv>response</jv>.setOutput(<jv>x</jv>,<jv>y</jv>,<jv>z</jv>);
 	 * </p>
 	 *
 	 * @param output The output to serialize to the connection.

@@ -32,14 +32,14 @@ import org.apache.juneau.rest.client.*;
  * 	<jc>// A simple REST API that echos a posted bean.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRest {
- * 		<ja>@RestOp</ja>(path=<js>"/bean"</js>)
- * 		<jk>public</jk> Bean postBean(<ja>@Body</ja> Bean b) {
- * 			<jk>return</jk> b;
+ * 		<ja>@RestPost</ja>(<js>"/bean"</js>)
+ * 		<jk>public</jk> Bean postBean(<ja>@Body</ja> Bean <jv>bean</jv>) {
+ * 			<jk>return</jk> <jv>bean</jv>;
  * 		}
  * 	}
  *
  *	<jc>// Our mock console.</jc>
- * 	MockConsole console = MockConsole.<jsm>create</jsm>();
+ * 	MockConsole <jv>console</jv> = MockConsole.<jsm>create</jsm>();
  *
  *	<jc>// Make a call against our REST API and log the call.</jc>
  * 	MockRestClient
@@ -47,12 +47,12 @@ import org.apache.juneau.rest.client.*;
  * 		.simpleJson()
  * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>)
  * 		.logToConsole()
- * 		.console(console)
+ * 		.console(<jv>console</jv>)
  * 		.build()
- * 		.post(<js>"/bean"</js>, bean)
+ * 		.post(<js>"/bean"</js>, <jv>bean</jv>)
  * 		.run();
  *
- * 	console.assertContents().is(
+ * 	<jv>console</jv>.assertContents().is(
  * 		<js>""</js>,
  * 		<js>"=== HTTP Call (outgoing) ======================================================"</js>,
  * 		<js>"=== REQUEST ==="</js>,
@@ -109,18 +109,18 @@ public class MockConsole extends PrintStream {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	MockConsole console = MockConsole.<jsf>create</jsf>();
+	 * 	MockConsole <jv>console</jv> = MockConsole.<jsf>create</jsf>();
 	 *
 	 * 	MockRestClient
 	 * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-	 * 		.console(console)
+	 * 		.console(<jv>console</jv>)
 	 * 		.debug()
 	 * 		.simpleJson()
 	 * 		.build()
 	 * 		.get(<js>"/url"</js>)
 	 * 		.run();
 	 *
-	 * 	console.assertContents().contains(<js>"HTTP GET /url"</js>);
+	 * 	<jv>console</jv>.assertContents().contains(<js>"HTTP GET /url"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent-style assertion object.
@@ -134,18 +134,18 @@ public class MockConsole extends PrintStream {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	MockConsole console = MockConsole.<jsf>create</jsf>();
+	 * 	MockConsole <jv>console</jv> = MockConsole.<jsf>create</jsf>();
 	 *
 	 * 	MockRestClient
 	 * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-	 * 		.console(console)
+	 * 		.console(<jv>console</jv>)
 	 * 		.debug()
 	 * 		.simpleJson()
 	 * 		.build()
 	 * 		.get(<js>"/url"</js>)
 	 * 		.run();
 	 *
-	 * 	console.assertSize().isGreaterThan(0);
+	 * 	<jv>console</jv>.assertSize().isGreaterThan(0);
 	 * </p>
 	 *
 	 * @return A new fluent-style assertion object.

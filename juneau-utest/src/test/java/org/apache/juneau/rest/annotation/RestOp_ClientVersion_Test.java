@@ -27,7 +27,7 @@ public class RestOp_ClientVersion_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class A {
+	public static class A1 {
 		@RestOp(method=GET, path="/")
 		public String a() {
 			return "no-version";
@@ -52,7 +52,46 @@ public class RestOp_ClientVersion_Test {
 
 	@Test
 	public void a01_defaultHeader() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		RestClient a = MockRestClient.build(A1.class);
+		a.get("/").run().assertBody().is("no-version");
+		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
+			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]",s).is("[1.0,1.0]");
+		}
+		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
+			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]").is("[1.1,2)");
+		}
+		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
+			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]").is("2");
+		}
+	}
+
+	@Rest
+	public static class A2 {
+		@RestGet(path="/")
+		public String a() {
+			return "no-version";
+		}
+		@RestGet(path="/", clientVersion="[0.0,1.0)")
+		public String b() {
+			return "[0.0,1.0)";
+		}
+		@RestGet(path="/", clientVersion="[1.0,1.0]")
+		public String c() {
+			return "[1.0,1.0]";
+		}
+		@RestGet(path="/", clientVersion="[1.1,2)")
+		public String d() {
+			return "[1.1,2)";
+		}
+		@RestGet(path="/", clientVersion="2")
+		public String e() {
+			return "2";
+		}
+	}
+
+	@Test
+	public void a02_defaultHeader() throws Exception {
+		RestClient a = MockRestClient.build(A2.class);
 		a.get("/").run().assertBody().is("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
 			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]",s).is("[1.0,1.0]");
@@ -70,7 +109,7 @@ public class RestOp_ClientVersion_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(clientVersionHeader="Custom-Client-Version")
-	public static class B {
+	public static class B1 {
 		@RestOp(method=GET, path="/")
 		public String a() {
 			return "no-version";
@@ -95,7 +134,49 @@ public class RestOp_ClientVersion_Test {
 
 	@Test
 	public void b01_testCustomHeader() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		RestClient b = MockRestClient.build(B1.class);
+		b.get("/").run().assertBody().is("no-version");
+		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
+			b.get("/").header("Custom-Client-Version", s).run().assertBody().is("[0.0,1.0)");
+		}
+		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
+			b.get("/").header("Custom-Client-Version", s).run().assertBody().is("[1.0,1.0]");
+		}
+		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
+			b.get("/").header("Custom-Client-Version", s).run().assertBody().is("[1.1,2)");
+		}
+		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
+			b.get("/").header("Custom-Client-Version", s).run().assertBody().is("2");
+		}
+	}
+
+	@Rest(clientVersionHeader="Custom-Client-Version")
+	public static class B2 {
+		@RestGet(path="/")
+		public String a() {
+			return "no-version";
+		}
+		@RestGet(path="/", clientVersion="[0.0,1.0)")
+		public String b() {
+			return "[0.0,1.0)";
+		}
+		@RestGet(path="/", clientVersion="[1.0,1.0]")
+		public String c() {
+			return "[1.0,1.0]";
+		}
+		@RestGet(path="/", clientVersion="[1.1,2)")
+		public String d() {
+			return "[1.1,2)";
+		}
+		@RestGet(path="/", clientVersion="2")
+		public String e() {
+			return "2";
+		}
+	}
+
+	@Test
+	public void b02_testCustomHeader() throws Exception {
+		RestClient b = MockRestClient.build(B2.class);
 		b.get("/").run().assertBody().is("no-version");
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
 			b.get("/").header("Custom-Client-Version", s).run().assertBody().is("[0.0,1.0)");

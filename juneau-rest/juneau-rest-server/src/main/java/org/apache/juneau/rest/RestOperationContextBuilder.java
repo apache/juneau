@@ -27,7 +27,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
 import java.lang.reflect.Method;
 
@@ -75,17 +74,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
 		try {
-
-			RestOp ro = mi.getLastAnnotation(RestOp.class);
-
-			// Also include methods on @Rest-annotated interfaces.
-			if (ro == null) {
-				for (Method mi2 : mi.getMatching()) {
-					Class<?> ci2 = mi2.getDeclaringClass();
-					if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null)
-						ro = RestOpAnnotation.DEFAULT;
-				}
-			}
 
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();

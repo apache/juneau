@@ -243,6 +243,9 @@ public class DefaultHandler implements ResponseHandler {
 			return true;
 		}
 
+		if (o == null)
+			return true;
+
 		throw new NotAcceptable(
 			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
 			req.getRequestHeaders().getString("Accept").orElse(""), g.getSupportedMediaTypes()

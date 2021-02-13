@@ -21,7 +21,7 @@ import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Converter for enabling of {@link PojoRest} support on response objects returned by a <c>@RestOp</c> method.
+ * Converter for enabling of {@link PojoRest} support on response objects returned by a <c>@RestOp</c>-annotated method.
  *
  * <p>
  * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path
@@ -30,15 +30,8 @@ import org.apache.juneau.utils.*;
  * <p class='bcode w800'>
  * 	<jc>// Resource method on resource "http://localhost:8080/sample/addressBook"</jc>
  * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, converters=Traversable.<jk>class</jk>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
+ * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
  * 		<jk>return new</jk> AddressBook();
- * 	}
- *
- * 	<jc>// Sample usage</jc>
- * 	<jk>public static void</jk> main(String[] args) {
- * 		<jc>// Get the zip code of the 2nd address of the first person in the address book.</jc>
- * 		RestCall r = <jk>new</jk> RestClient().doGet(<js>"http://localhost:8080/sample/addressBook/0/addresses/1/zip"</js>);
- * 		<jk>int</jk> zip = r.getResponse(Integer.<jk>class</jk>);
  * 	}
  * </p>
  *

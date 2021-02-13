@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
@@ -91,29 +90,29 @@ public class BeanConfig_Swaps_Test {
 	@BeanConfig(swaps={SwapA2.class})
 	public static class A1 extends A2 {
 
-		@RestOp
+		@RestGet
 		public A a() {
 			return new A(); // Should return "A2-1".
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		public A b(@Body A a) {
 			return a; // Should return "A2-1".
 		}
-		@RestOp(method=PUT, path="/c/{a}")
+		@RestPut(path="/c/{a}")
 		public A c(@Path("a") A a) {
 			return a; // Should return "A2-1".
 		}
-		@RestOp
+		@RestGet
 		@BeanConfig(swaps={SwapA3.class})
 		public A d() {
 			return new A(); // Should return "A3-1".
 		}
-		@RestOp(method=PUT)
+		@RestPut
 		@BeanConfig(swaps={SwapA3.class})
 		public A e(@Body A a) {
 			return a; // Should return "A3-1".
 		}
-		@RestOp(method=PUT, path="/f/{a}")
+		@RestPut(path="/f/{a}")
 		@BeanConfig(swaps={SwapA3.class})
 		public A f(@Path("a") A a) {
 			return a; // Should return "A3-1".

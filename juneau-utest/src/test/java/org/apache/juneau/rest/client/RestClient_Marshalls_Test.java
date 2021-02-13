@@ -50,8 +50,8 @@ public class RestClient_Marshalls_Test {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp
-		public Bean postA01(@Body Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
+		@RestPost
+		public Bean a01(@Body Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
 			assertEquals("Accept doesn't match",nn(xaccept),nn(accept));
 			assertEquals("Content-Type doesn't match",nn(xct),nn(ct));
 			return b;

@@ -31,16 +31,16 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(<ja>@Attr</ja>(<js>"ETag"</js>) UUID etag) {...}
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public</jk> Person getPerson(<ja>@Attr</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
- * 		UUID etag = req.getAttributes().get(UUID.<jk>class</jk>, <js>"ETag"</js>);
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public void</jk> postPerson(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+ * 		UUID <jv>etag</jv> = <jv>req</jv>.getAttributes().get(UUID.<jk>class</jk>, <js>"ETag"</js>);
  * 		...
  * 	}
  * </p>
@@ -78,8 +78,8 @@ public @interface Attr {
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
-	 * 	<ja>@RestOp</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> OMap allAttributes) {...}
+	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
+	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> OMap <jv>allAttributes</jv>) {...}
 	 * 		</p>
 	 * 	</li>
 	 * </ul>
@@ -95,10 +95,10 @@ public @interface Attr {
 	 * <p>
 	 * The following are completely equivalent ways of defining a header entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(name=<js>"api_key"</js>) String apiKey) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(name=<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(<js>"api_key"</js>) String apiKey) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
 	 */
 	String value() default "";

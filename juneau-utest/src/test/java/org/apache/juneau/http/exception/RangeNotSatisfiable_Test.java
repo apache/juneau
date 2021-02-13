@@ -27,28 +27,28 @@ public class RangeNotSatisfiable_Test {
 
 	@Rest
 	public static class A {
-		@RestOp
-		public void getF1() throws RangeNotSatisfiable {
+		@RestGet
+		public void f1() throws RangeNotSatisfiable {
 			throw new RangeNotSatisfiable();
 		}
-		@RestOp
-		public void getF2() throws RangeNotSatisfiable {
+		@RestGet
+		public void f2() throws RangeNotSatisfiable {
 			throw new RangeNotSatisfiable("foo {0}", "bar");
 		}
-		@RestOp
-		public void getF3() throws RangeNotSatisfiable {
+		@RestGet
+		public void f3() throws RangeNotSatisfiable {
 			throw new RangeNotSatisfiable(new RuntimeException("baz"));
 		}
-		@RestOp
-		public void getF4() throws RangeNotSatisfiable {
+		@RestGet
+		public void f4() throws RangeNotSatisfiable {
 			throw new RangeNotSatisfiable(new RuntimeException("baz"), "foo {0}", "bar");
 		}
-		@RestOp
-		public void getF5() throws RangeNotSatisfiable {
+		@RestGet
+		public void f5() throws RangeNotSatisfiable {
 			throw new RangeNotSatisfiable().header("Foo", "bar");
 		}
-		@RestOp
-		public void getF6() throws RangeNotSatisfiable {
+		@RestGet
+		public void f6() throws RangeNotSatisfiable {
 			throw new RangeNotSatisfiable("foo");
 		}
 	}

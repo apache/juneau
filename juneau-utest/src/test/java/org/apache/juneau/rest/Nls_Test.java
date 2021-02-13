@@ -37,11 +37,11 @@ public class Nls_Test {
 		messages="NlsTest"
 	)
 	public static class A {
-		@RestOp
+		@RestGet
 		public String a() {
 			return null;
 		}
-		@RestOp(
+		@RestGet(
 			defaultRequestAttributes={"TestProperty:$L{key2}"}
 		)
 		public String b() {
@@ -95,7 +95,7 @@ public class Nls_Test {
 
 	@Rest
 	public static class C {
-		@RestOp
+		@RestGet
 		public String a(RestRequest req) {
 			// Missing resource bundle should cause {!!x} string.
 			return req.getMessage("bad", 1, 2, 3);

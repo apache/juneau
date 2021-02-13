@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.template;
 
-import static org.apache.juneau.http.HttpMethod.*;
-
 import java.util.*;
 
 import javax.inject.*;
@@ -71,7 +69,7 @@ public class HelloWorldResource extends BasicRestObject {
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestOp(method=GET, path="/*", summary="Responds with \"Hello world!\"")
+	@RestGet(path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		String message = this.message;
 		if (messageProvider != null && messageProvider.isPresent())
