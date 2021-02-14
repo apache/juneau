@@ -54,8 +54,7 @@ public @interface RemoteOp {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// POST /pet</jc>
-	 * 	<ja>@RemoteOp</ja>
+	 * 	<ja>@RemotePost</ja>
 	 * 	<jk>public void</jk> postPet(...);
 	 * </p>
 	 *
@@ -72,8 +71,7 @@ public @interface RemoteOp {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jc>// POST /pet</jc>
-	 * 	<ja>@RemoteOp</ja>
+	 * 	<ja>@RemotePost</ja>
 	 * 	<jk>public void</jk> postPet(...);
 	 * </p>
 	 *

@@ -192,7 +192,7 @@ MockRestClient
 	<ja>@Remote</ja>
 	<jk>public interface</jk> MyRemoteInterface {
 	
-		<ja>@RemoteOp</ja>(method=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+		<ja>@RemoteGet</ja>(<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> <jv>id</jv>);
 	}
 

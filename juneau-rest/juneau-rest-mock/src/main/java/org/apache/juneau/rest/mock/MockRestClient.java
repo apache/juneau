@@ -182,7 +182,7 @@ import org.apache.juneau.rest.logging.*;
  * 	<ja>@Remote</ja>
  * 	<jk>public interface</jk> MyRemoteInterface {
  *
- * 		<ja>@RemoteOp</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+ * 		<ja>@RemoteGet</ja>(<js>"/echoQuery"</js>)
  * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> <jv>id</jv>);
  * 	}
  *

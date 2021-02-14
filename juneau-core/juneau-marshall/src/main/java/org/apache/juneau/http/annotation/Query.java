@@ -877,7 +877,7 @@ public @interface Query {
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @Query("*")</jc>
-	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
+	 * 		<ja>@RemoteGet</ja>(<js>"/mymethod"</js>)
 	 * 		String myProxyMethod1(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>allQueryParameters</jv>);
 	 * 	}
 	 * 		</p>

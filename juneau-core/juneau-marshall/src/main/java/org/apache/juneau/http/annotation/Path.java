@@ -798,7 +798,7 @@ public @interface Path {
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @Path("*")</jc>
-	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod/{foo}/{bar}"</js>)
+	 * 		<ja>@RemoteGet</ja>(<js>"/mymethod/{foo}/{bar}"</js>)
 	 * 		String myProxyMethod1(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>allPathParameters</jv>);
 	 * 	}
 	 * 		</p>

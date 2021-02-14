@@ -97,7 +97,7 @@ import org.apache.juneau.oapi.*;
  * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
- * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
+ * 		<ja>@RemoteGet</ja>(<js>"/mymethod/{p1}/{p2}"</js>)
  * 		String myProxyMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>);
  * 	}
  *

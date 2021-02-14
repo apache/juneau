@@ -853,7 +853,7 @@ public @interface Header {
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @Header("*")</jc>
-	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
+	 * 		<ja>@RemoteGet</ja>(<js>"/mymethod"</js>)
 	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>allHeaderParameters</jv>);
 	 * 	}
 	 * 		</p>

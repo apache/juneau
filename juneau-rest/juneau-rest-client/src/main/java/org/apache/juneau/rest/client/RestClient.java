@@ -113,7 +113,7 @@ import org.apache.juneau.utils.*;
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
  *
- * 		<ja>@RemoteOp</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+ * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
  * 		Pet addPet(
  * 			<ja>@Body</ja> CreatePet <jv>pet</jv>,
  * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
@@ -923,7 +923,7 @@ import org.apache.juneau.utils.*;
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
  *
- * 		<ja>@RemoteOp</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+ * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
  * 		Pet addPet(
  * 			<ja>@Body</ja> CreatePet <jv>pet</jv>,
  * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,

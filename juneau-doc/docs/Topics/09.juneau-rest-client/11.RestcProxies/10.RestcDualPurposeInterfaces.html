@@ -35,10 +35,10 @@ Dual-purpose (end-to-end) interfaces
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 	
-		<ja>@RemoteOp</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
+		<ja>@RemoteGet</ja>(<js>"/pet"</js>)
 		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable;
 	
-		<ja>@RemoteOp</ja>(method=<jsf>DELETE</jsf>, path=<js>"/pet/{petId}"</js>)
+		<ja>@RemotDelete</ja>(<js>"/pet/{petId}"</js>)
 		<jk>public</jk> Ok deletePet(
 			<ja>@Header</ja>(
 				name=<js>"api_key"</js>,

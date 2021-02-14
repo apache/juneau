@@ -55,23 +55,23 @@
 
 		<jc>// Explicit names specified for HTTP headers.</jc>
 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
-		<ja>@RemoteOp</ja>(path=<js>"/mymethod1"</js>)
+		<ja>@RemoteGet</ja>(<js>"/mymethod1"</js>)
 		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String <jv>foo</jv>,
 			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 
 		<jc>// Multiple values pulled from a HeaderSupplier object.</jc>
 		<jc>// Same as @Header("*").</jc>
-		<ja>@RemoteOp</ja>(path=<js>"/mymethod2"</js>)
+		<ja>@RemoteGet</ja>(<js>"/mymethod2"</js>)
 		String myProxyMethod2(<ja>@Header</ja> HeaderSupplier <jv>headerSupplier</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Header("*").</jc>
-		<ja>@RemoteOp</ja>(path=<js>"/mymethod3"</js>)
+		<ja>@RemoteGet</ja>(<js>"/mymethod3"</js>)
 		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<jc>// Same as @Header("*").</jc>
-		<ja>@RemoteOp</ja>(path=<js>"/mymethod4"</js>)
+		<ja>@RemoteGet</ja>(<js>"/mymethod4"</js>)
 		String myProxyMethod4(<ja>@Header</ja> MyBean <jv>myBean</jv>);
 	}
 </p>

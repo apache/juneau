@@ -879,7 +879,7 @@ public @interface FormData {
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @FormData("*")</jc>
-	 * 		<ja>@RemoteOp</ja>(path=<js>"/mymethod"</js>)
+	 * 		<ja>@RemotePost</ja>(<js>"/mymethod"</js>)
 	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; <jv>allFormDataParameters</jv>);
 	 * 	}
 	 * 		</p>

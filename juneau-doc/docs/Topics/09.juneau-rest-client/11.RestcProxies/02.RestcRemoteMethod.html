@@ -38,7 +38,7 @@
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pets/{petId}</jc>
-		<ja>@RemoteOp</ja>(method=<js>"GET"</js>, path=<js>"/pets/{petId}"</js>)
+		<ja>@RemoteGet</ja>(<js>"/pets/{petId}"</js>)
 		Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>id</jv>);
 	}
 </p>
@@ -159,8 +159,8 @@
 		
 		<jc>// POST /pets</jc>
 		<jc>// Returns HTTP status code.</jc>
-		<ja>@RemoteOp</ja>(returns=<jsf>STATUS</jsf>)
-		<jk>int</jk> postPets(...);
+		<ja>@RemotePost</ja>(returns=<jsf>STATUS</jsf>)
+		<jk>int</jk> pets(...);
 	}
 </p>
 <p>
