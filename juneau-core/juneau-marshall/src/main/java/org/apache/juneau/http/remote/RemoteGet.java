@@ -36,7 +36,7 @@ import org.apache.juneau.http.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @AnnotationGroup(RemoteOp.class)
-public @interface RemoteOp {
+public @interface RemoteGet {
 
 	/**
 	 * REST service path.
@@ -55,34 +55,14 @@ public @interface RemoteOp {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// POST /pet</jc>
-	 * 	<ja>@RemoteOp</ja>
-	 * 	<jk>public void</jk> postPet(...);
+	 * 	<ja>@RemoteGet</ja>
+	 * 	<jk>public</jk> Pet getPet(...);
 	 * </p>
 	 *
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
 	 */
 	String path() default "";
-
-	/**
-	 * Defines the HTTP method to use for REST calls.
-	 *
-	 * <p>
-	 * If not specified, then the method is inferred from the Java method name.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// POST /pet</jc>
-	 * 	<ja>@RemoteOp</ja>
-	 * 	<jk>public void</jk> postPet(...);
-	 * </p>
-	 *
-	 * <br>If the method cannot be inferred, then the default is <js>"GET"</js>.
-	 *
-	 * <p>
-	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
-	 */
-	String method() default "";
 
 	/**
 	 * The value the remote method returns.
@@ -123,25 +103,20 @@ public @interface RemoteOp {
 	RemoteReturn returns() default RemoteReturn.BODY;
 
 	/**
-	 * REST method name and path.
+	 * REST path.
 	 *
 	 * <p>
-	 * Can be used to provide a shortened combined form for the {@link #method()} and {@link #path()} values.
+	 * Can be used to provide a shortened form for the {@link #path()} value.
 	 *
 	 * <p>
 	 * The following examples are considered equivalent.
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal form</jc>
-	 * 	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
+	 * 	<ja>@RemoteGet</ja>(path=<js>"/{propertyName}"</js>)
 	 *
 	 * 	<jc>// Shortened form</jc>
-	 * 	<ja>@RemoteOp</ja>(<js>"PUT /{propertyName}"</js>)
+	 * 	<ja>@RemoteGet</ja>(<js>"/{propertyName}"</js>)
 	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The path portion is optional.
-	 * </ul>
 	 */
 	String value() default "";
 }

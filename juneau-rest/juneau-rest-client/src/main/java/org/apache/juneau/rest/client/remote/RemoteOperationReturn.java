@@ -40,9 +40,9 @@ public final class RemoteOperationReturn {
 	RemoteOperationReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		RemoteOp op = m.getLastAnnotation(RemoteOp.class);
-		if (op == null)
-			op = m.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(RemoteOp.class);
+		AnnotationList al = m.getAnnotationGroupList(RemoteOp.class);
+		if (al.isEmpty())
+			al = m.getReturnType().unwrap(Value.class,Optional.class).getAnnotationGroupList(RemoteOp.class);
 
 		RemoteReturn rv = null;
 
@@ -56,8 +56,8 @@ public final class RemoteOperationReturn {
 
 		if (rt.is(void.class) || rt.is(Void.class))
 			rv = RemoteReturn.NONE;
-		else if (op != null)
-			rv = op.returns();
+		else if (! al.isEmpty())
+			rv = al.getValues(RemoteReturn.class,"returns").stream().findFirst().orElse(RemoteReturn.BODY);
 		else
 			rv = RemoteReturn.BODY;
 

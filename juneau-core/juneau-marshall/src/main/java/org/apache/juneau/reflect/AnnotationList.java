@@ -83,4 +83,16 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 		}
 		return l;
 	}
+
+	/**
+	 * Filters this list using the specified test.
+	 *
+	 * @param test The test to use to filter this list.
+	 * @return A new list containing only the filtered elements.
+	 */
+	public AnnotationList filter(Predicate<AnnotationInfo<?>> test) {
+		AnnotationList al = new AnnotationList(null);
+		stream().filter(test).forEach(x->al.add(x));
+		return al;
+	}
 }

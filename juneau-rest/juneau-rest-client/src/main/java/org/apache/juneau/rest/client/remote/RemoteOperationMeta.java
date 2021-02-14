@@ -83,22 +83,26 @@ public class RemoteOperationMeta {
 
 			MethodInfo mi = MethodInfo.of(m);
 
-			RemoteOp op = mi.getLastAnnotation(RemoteOp.class);
-			if (op == null)
-				op = mi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(RemoteOp.class);
+			AnnotationList al = mi.getAnnotationGroupList(RemoteOp.class);
+			if (al.isEmpty())
+				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationGroupList(RemoteOp.class);
 
-			httpMethod = op == null ? "" : op.method();
-			path = op == null ? "" : op.path();
+			httpMethod = al.getValues(String.class, "method").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
+			path = al.getValues(String.class, "path").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
 
-			if (op != null && ! op.value().isEmpty()) {
-				String v = op.value().trim();
-				int i = v.indexOf(' ');
+			String value1 = al.filter(x->x.isType(RemoteOp.class)).getValues(String.class, "value").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
+			String value2 = al.filter(x->!x.isType(RemoteOp.class)).getValues(String.class, "value").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
+			
+			if (isNotEmpty(value1)) {
+				int i = value1.indexOf(' ');
 				if (i == -1) {
-					httpMethod = v;
+					httpMethod = value1;
 				} else {
-					httpMethod = v.substring(0, i).trim();
-					path = v.substring(i).trim();
+					httpMethod = value1.substring(0, i).trim();
+					path = value1.substring(i).trim();
 				}
+			} else if (isNotEmpty(value2)) {
+				path = value2;
 			}
 
 			if (path.isEmpty()) {
