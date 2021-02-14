@@ -343,16 +343,6 @@ public class RequestHeaders {
 	}
 
 	/**
-	 * Same as {@link #subset(String...)} but allows you to specify header names as a comma-delimited list.
-	 *
-	 * @param headers The headers to include in the copy.
-	 * @return A new headers object.
-	 */
-	public RequestHeaders subset(String headers) {
-		return subset(split(headers));
-	}
-
-	/**
 	 * Returns the <c>Accept</c> header on the request.
 	 *
 	 * <p>
