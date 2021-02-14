@@ -28,20 +28,20 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Default method</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestGet</ja>(path=<js>"/*"</js>)
 	<jk>public void</jk> doGetDefault() {
 		...
 	}
 
 	<jc>// Method with path pattern</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/xxx"</js>)
+	<ja>@RestGet</ja>(path=<js>"/xxx"</js>)
 	<jk>public void</jk> doGetNoArgs(...) {
 		...
 	}
 
 	<jc>// Method with path pattern with arguments</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
-	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Path</ja>(<js>"baz"</js>) MyEnum baz, <ja>@Path</ja>(<js>"bing"</js>) UUID bing) {
+	<ja>@RestGet</ja>(path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
+	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> <jv>bar</jv>, <ja>@Path</ja>(<js>"baz"</js>) MyEnum <jv>baz</jv>, <ja>@Path</ja>(<js>"bing"</js>) UUID <jv>qux</jv>) {
 		...
 	}
 </p>
@@ -51,34 +51,28 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Try first </jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foo/bar"</js>)
+	<ja>@RestGet</ja>(<js>"/foo/bar"</js>)
 	<jk>public void</jk> method1() {
 		...
 	}
 
 	<jc>// Try second</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foo/{bar}"</js>)
+	<ja>@RestGet</ja>(<js>"/foo/{bar}"</js>)
 	<jk>public void</jk> method2(...) {
 		...
 	}
 
 	<jc>// Try third</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
+	<ja>@RestGet</ja>(<js>"/foo/*"</js>)
 	<jk>public void</jk> method3(...) {
 		...
 	}
 
 	<jc>// Try last</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestGet</ja>(<js>"/*"</js>)
 	<jk>public void</jk> method4(...) {
 		...
 	}
-</p>
-<p>
-	The match heuristic behavior can be overridden by the 
-	{@link oajr.annotation.RestOp#priority() @RestOp(priority)} annotation 
-	property.
-	However, in practice this is almost never needed.
 </p>
 <p>
 	Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
@@ -92,12 +86,12 @@
 	The following example shows the distinction.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
-	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String remainder) {
+	<ja>@RestGet</ja>(<js>"/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>) {
 		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>
 	}
 
-	<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>)
+	<ja>@RestPut</ja>(<js>"/"</js>)
 	<jk>public void</jk> doPut() {
 		<jc>// URL path pattern must match exactly and will cause a 404 error if a remainder exists.</jc>
 	}
@@ -108,8 +102,8 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Example GET request with access to query parameters</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/urlWithParams"</js>)
-	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String foo, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Query</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {
+	<ja>@RestGet</ja>(<js>"/urlWithParams"</js>)
+	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> <jv>bar</jv>, <ja>@Query</ja>(<js>"baz"</js>) UUID <jv>baz</jv>) <jk>throws</jk> Exception {
 		<jk>return</jk> <js>"GET /urlWithParams?foo="</js>+foo+<js>"&amp;bar="</js>+bar+<js>"&amp;baz="</js>+baz;
 	}
 </p>

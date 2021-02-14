@@ -39,8 +39,8 @@ MockRestClient
 		<ja>@Rest</ja>
 		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicJsonRest {
 
-			<ja>@RestOp</ja>
-			<jk>public</jk> MyBean putEcho(<ja>@Body</ja> MyBean <jv>bean</jv>) {
+			<ja>@RestPut</ja>
+			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
 				<jk>return</jk> <jv>bean</jv>;
 			}
 		}
@@ -154,7 +154,7 @@ MockRestClient
 <p class='bpcode w800'>
 	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
 	<jk>public</jk> class A {
-		<ja>@RestOp</ja>
+		<ja>@RestGet</ja>
 		<jk>public</jk> String get() {
 			<jk>return</jk> <js>"OK"</js>;
 		}
@@ -200,7 +200,7 @@ MockRestClient
 	<ja>@Rest</ja>
 	<jk>public class</jk> MyRest {
 	
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
+		<ja>@RestGet</ja>
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String <jv>id</jv>) {
 			<jk>return</jk> <jv>id</jv>;
 		}

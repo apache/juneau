@@ -23,13 +23,13 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// GET method that gets invoked for administrators</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
+	<ja>@RestGet</ja>(path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
 	<jk>public</jk> Object doGetForAdmin() {
 		...
 	}
 
 	<jc>// GET method that gets invoked for everyone else</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestGet</ja>(<js>"/*"</js>)
 	<jk>public</jk> Object doGetForEveryoneElse() {
 		...
 	}
@@ -41,8 +41,8 @@
 	<jk>public class</jk> IsAdminMatcher <jk>extends</jk> RestMatcher {
 
 		<ja>@Override</ja> <jc>/* RestMatcher */</jc>
-		<jk>public boolean</jk> matches(RestRequest req) {
-			<jk>return</jk> req.isUserInRole(<js>"ADMINS_GROUP"</js>);
+		<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.isUserInRole(<js>"ADMINS_GROUP"</js>);
 		}
 	}
 </p>

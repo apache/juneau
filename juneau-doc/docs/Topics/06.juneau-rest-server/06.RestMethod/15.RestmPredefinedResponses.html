@@ -21,18 +21,18 @@ Predefined Responses
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
-	<jk>public</jk> Ok addPet(<ja>@Body</ja> Pet pet) {
-		<jsm>addPet</jsm>(Pet);
+	<ja>@RestPost</ja>(<js>"/pets"</js>)
+	<jk>public</jk> Ok addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {
+		<jsm>addPet</jsm>(<jv>pet</jv>);
 		
 		<jc>// Predefined "200 OK" response bean.</jc>
 		<jk>return new</jk> Ok();  <jc>// Could also use Ok.OK instance</jc> 
 	}
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
-	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet pet) {
-		<jsm>addPet</jsm>(Pet);
+	<ja>@RestPost</ja>(<js>"/pets"</js>)
+	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {
+		<jsm>addPet</jsm>(<jv>pet</jv>);
 		
 		<jc>// Predefined "302 See Other" response bean with redirect to /pets.</jc>
 		<jk>return new</jk> SeeOther(<js>"servlet:/pets"</js>);  
@@ -105,7 +105,7 @@ Predefined Responses
 	<jk>public class</jk> SeeOtherServletRoot <jk>extends</jk> SeeOther {
 	
 		<jk>public</jk> SeeOtherServletRoot() {
-			<jk>super</jk>(URI.create("servlet:/"));
+			<jk>super</jk>(URI.<jsm>create</jsm>(<js>"servlet:/"</js>));
 		}
 	}
 </p>
@@ -116,9 +116,9 @@ Predefined Responses
 	in the following example (since all we see is an Object response). 
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
-	<jk>public</jk> Object addPet(<ja>@Body</ja> Pet pet) {
-		<jsm>addPet</jsm>(Pet);
+	<ja>@RestPost</ja>(<js>"/pets"</js>)
+	<jk>public</jk> Object addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {
+		<jsm>addPet</jsm>(<jv>pet</jv>);
 		
 		<jc>// Note the Object return type.</jc>
 		<jk>return new</jk> SeeOther(<js>"servlet:/pets"</js>);  

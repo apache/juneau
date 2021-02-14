@@ -24,8 +24,7 @@ Operations
 </p>
 <h5 class='figure'>PetStoreResource.getPets()</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>,
+	<ja>@RestGet</ja>(
 		path=<js>"/pet"</js>,
 		summary=<js>"All pets in the store"</js>,
 		swagger=<ja>@OpSwagger</ja>(
@@ -43,8 +42,7 @@ Operations
 </p>
 <h5 class='figure'>PetStoreResource.findPetsByTag()</h5>
 <p class='bpcode w800'>	
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>,
+	<ja>@RestGet</ja>(
 		path=<js>"/pet/findByTags"</js>,
 		summary=<js>"Finds Pets by tags"</js>,
 		...

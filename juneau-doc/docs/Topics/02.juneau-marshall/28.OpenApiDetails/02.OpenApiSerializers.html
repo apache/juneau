@@ -25,7 +25,7 @@ OpenAPI Serializers
 	The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(
 		<ja>@Body</ja>(
 			schema=<ja>@Schema</ja>(
@@ -51,7 +51,7 @@ OpenAPI Serializers
 	) {...}
 
 	<jc>// Alternate shortened format.</jc>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(
 		<ja>@Body</ja>(
 			schema=<ja>@Schema</ja>(

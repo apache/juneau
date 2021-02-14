@@ -20,22 +20,22 @@ RequestHeaders
 	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestHeaders headers) {...}			
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestHeaders headers) {
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
 
 		<jc>// Add a default value.</jc>
-		headers.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	
 		<jc>// Get a header value as a POJO.</jc>
-		UUID etag = headers.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	
 		<jc>// Get a standard header.</jc>
-		CacheControl = headers.getCacheControl();
+		CacheControl <jv>cacheControl</jv> = <jv>headers</jv>.getCacheControl().orElse(<jk>null</jk>);
 	}			
 </p>
 <p>

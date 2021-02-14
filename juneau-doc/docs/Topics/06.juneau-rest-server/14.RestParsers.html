@@ -46,27 +46,27 @@ Parsers
 	<jk>public class</jk> MyResource {
 		
 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 			
 			<jc>// Using method on builder.</jc>
-			builder.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
 
 			<jc>// Same, but use pre-instantiated parsers.</jc>
-			builder.parsers(JsonParser.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>);
+			<jv>builder</jv>.parsers(JsonParser.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>);
 
 			<jc>// Same, but using property.</jc>
-			builder.set(<jsf>REST_parsers</jsf>, JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+			<jv>builder</jv>.set(<jsf>REST_parsers</jsf>, JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
 		}
 
 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-			builder.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
+		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+			<jv>builder</jv>.parsers(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
 		}
 
 		<jc>// Override at the method level.</jc>
-		<ja>@RestOp</ja>(parsers={HtmlParser.<jk>class</jk>})
-		<jk>public</jk> Object myMethod(<ja>@Body</ja> MyPojo myPojo) {
+		<ja>@RestPost</ja>(parsers={HtmlParser.<jk>class</jk>})
+		<jk>public</jk> Object myMethod(<ja>@Body</ja> MyPojo <jv>myPojo</jv>) {
 			<jc>// Do something with your parsed POJO.</jc>
 		}
 	}

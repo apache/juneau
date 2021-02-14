@@ -29,7 +29,7 @@ Widgets
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
+	<ja>@RestGet</ja>(...)
 	<ja>@HtmlDocConfig</ja>(
 		widgets={
 			MyWidget.<jk>class</jk>
@@ -75,13 +75,13 @@ Widgets
 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
 
 		<ja>@Override</ja> <jc>/* Widget */</jc>
-		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
-			UriResolver r = req.getUriResolver(); <jc>// API used for resolving URIs.</jc>
-			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+r.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
+		<jk>public</jk> String getHtml(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+			UriResolver <jv>r</jv> = <jv>req</jv>.getUriResolver(); <jc>// API used for resolving URIs.</jc>
+			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+<jv>r</jv>.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
 		}
 
 		<ja>@Override</ja> <jc>/* Widget */</jc>
-		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
+		<jk>public</jk> String getScript(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> <js>""</js>
 				+ <js>"\n function myalert(imageElement) {"</js>
 				+ <js>"\n 	alert('cool!');"</js>
@@ -89,7 +89,7 @@ Widgets
 		}
 
 		<ja>@Override</ja> <jc>/* Widget */</jc>
-		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
+		<jk>public</jk> String getStyle(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> <js>""</js>
 				+ <js>"\n .myimage {"</js>
 				+ <js>"\n 	border: 10px solid red;"</js>
@@ -115,12 +115,12 @@ Widgets
 		...
 
 		<ja>@Override</ja> <jc>/* Widget */</jc>
-		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
+		<jk>public</jk> String getScript(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> getClasspathResourceAsString(<js>"MyWidget.js"</js>);
 		}
 
 		<ja>@Override</ja> <jc>/* Widget */</jc>
-		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
+		<jk>public</jk> String getStyle(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> getClasspathResourceAsString(<js>"MyWidget.css"</js>);
 		}
 	}

@@ -31,8 +31,8 @@ Guards
 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
 
 		<ja>@Override</ja> <jc>/* RestGuard */</jc>
-		<jk>public boolean</jk> isRequestAllowed(RestRequest req) {
-			<jk>return</jk> req.getUserPrincipal().getName().equals(<js>"Billy"</js>);
+		<jk>public boolean</jk> isRequestAllowed(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.getUserPrincipal().getName().equals(<js>"Billy"</js>);
 		}
 	}
 
@@ -41,8 +41,8 @@ Guards
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 
  		<jc>// Delete method that only Billy is allowed to call.</jc>
- 		<ja>@RestOp</ja>(method=<js>"DELETE"</js>)
-		<jk>public</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
+ 		<ja>@RestDelete</ja>
+		<jk>public</jk> doDelete(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {...}
  	}
 </p>
 <p>
@@ -50,15 +50,15 @@ Guards
 </p>
 <p class='bpcode w800'>
 	<jc>// DELETE method</jc>
-	<ja>@RestOp</ja>(method=<jsf>DELETE</jsf>, guards={AdminGuard.<jk>class</jk>})
-	<jk>public void</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
+	<ja>@RestDDelete</ja>(guards={AdminGuard.<jk>class</jk>})
+	<jk>public void</jk> doDelete(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {...}
 </p>
 <p class='bpcode w800'>
 	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 
 		<ja>@Override</ja> <jc>/* RestGuard */</jc>
-		<jk>public boolean</jk> isRequestAllowed(RestRequest req) {
-			<jk>return</jk> req.getUserPrincipal().isUserInRole(<js>"ADMIN"</js>);
+		<jk>public boolean</jk> isRequestAllowed(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.getUserPrincipal().isUserInRole(<js>"ADMIN"</js>);
 		}
 	}
 </p>
@@ -72,7 +72,7 @@ Guards
 	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 
 		<ja>@Override</ja> <jc>/* RestGuard */</jc>
-		<jk>public boolean</jk> guard(RestRequest req, RestResponse res) <jk>throws</jk> RestException {
+		<jk>public boolean</jk> guard(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> RestException {
 			<jk>if</jk> (! isOkay(req))
 				<jk>throw new</jk> RestException(<jsf>SC_FORBIDDEN</jsf>, <js>"Access denied!!!"</js>);
 			<jk>return true</jk>;

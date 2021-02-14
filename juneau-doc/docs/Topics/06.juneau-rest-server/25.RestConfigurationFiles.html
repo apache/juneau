@@ -132,9 +132,9 @@ Configuration Files
 		 * GET request handler.
 		 * Specify the GET parameter "?person=X" for a specialized message! 
 		 */</jd>
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> String sayHello(RestRequest req) {
-			<jk>return</jk> req.getConfig().getString(<js>"HelloWorldResource/message"</js>);
+		<ja>@RestGet</ja>(<js>"/"</js>)
+		<jk>public</jk> String sayHello(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.getConfig().getString(<js>"HelloWorldResource/message"</js>);
 		}
 	}
 </p>
@@ -169,9 +169,9 @@ Configuration Files
 		 * GET request handler.
 		 * Specify the GET parameter "?person=X" for a specialized message! 
 		 */</jd>
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> String sayHello(RestRequest req) {
-			<jk>return</jk> req.getConfig().getString(<js>"HelloWorldResource/message"</js>);
+		<ja>@RestGet</ja>(<js>"/"</js>)
+		<jk>public</jk> String sayHello(RestRequest <jv>req</jv>) {
+			<jk>return</jk> <jv>req</jv>.getConfig().getString(<js>"HelloWorldResource/message"</js>);
 		}
 	}
 </p>

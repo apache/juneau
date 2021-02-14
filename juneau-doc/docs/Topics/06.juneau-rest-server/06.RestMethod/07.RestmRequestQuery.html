@@ -20,18 +20,18 @@ RequestQuery
 	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestQuery query) {...}			
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestQuery <jv>query</jv>) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestQuery query) {
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestQuery <jv>query</jv>) {
 
 		<jc>// Get query parameters converted to various types.</jc>
-		<jk>int</jk> p1 = query.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-		String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>);
-		UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+		<jk>int</jk> <jv>p1</jv> = <jv>query</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	 }			
 </p>
 <p>

@@ -28,8 +28,8 @@
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(path=<js>"/pets/{petId}"</js>)
-	<jk>public void</jk> putPet(UpdatePet updatePet) {...}
+	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
+	<jk>public void</jk> putPet(UpdatePet <jv>updatePet</jv>) {...}
 
 	<ja>@Request</ja>
 	<jk>public interface</jk> UpdatePet {
@@ -51,12 +51,12 @@
 	The example above is identical in behavior to specifying individual annotated parameters on the <ja>@RestOp</ja>-annotated method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(path=<js>"/pets/{petId}"</js>)
+	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(
-		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> petId,
-		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> debug,
-		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; allHeaders,
-		<ja>@Body</ja> Pet pet
+		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>petId</jv>,
+		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> <jv>debug</jv>,
+		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>allHeaders</jv>,
+		<ja>@Body</ja> Pet <jv>pet</jv>
 	) 
 	{...}
 </p>
@@ -84,7 +84,7 @@
 				maximumLength=10
 			)
 		)
-		<jk>int</jk>[][] getPipedCdlInts();
+		<jk>int</jk>[][] <jv>getPipedCdlInts</jv>();
 	}
 </p>
 <p>
@@ -92,8 +92,8 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(path=<js>"/pets/{petId}"</js>)
-	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet updatePet) {...}
+	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
+	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet <jv>updatePet</jv>) {...}
 
 	<ja>@Request</ja>
 	<jk>public interface</jk> UpdatePet {...}

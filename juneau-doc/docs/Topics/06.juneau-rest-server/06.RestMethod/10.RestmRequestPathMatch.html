@@ -20,19 +20,19 @@ RequestPathMatch
 	and remainder on the URL path.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestPathMatch path) {...}			
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestPathMatch <jv>path</jv>) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
-	<jk>public void</jk> doGet(RequestPathMatch path) {
+	<ja>@RestPost</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
+	<jk>public void</jk> doGet(RequestPathMatch <jv>pathMatch</jv>) {
 		<jc>// Example URL:  /123/qux/true/quux</jc>
 	 	
-		<jk>int</jk> foo = pm.getInt(<js>"foo"</js>);  <jc>// =123</jc>
-		String bar = pm.getString(<js>"bar"</js>);  <jc>// =qux</jc>
-		<jk>boolean</jk> baz = pm.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
-		String remainder = pm.getRemainder();  <jc>// =quux</jc>
+		<jk>int</jk> <jv>foo</jv> = <jv>pathMatch</jv>.getInt(<js>"foo"</js>);  <jc>// =123</jc>
+		String <jv>bar</jv> = <jv>pathMatch</jv>.getString(<js>"bar"</js>);  <jc>// =qux</jc>
+		<jk>boolean</jk> <jv>baz</jv> = <jv>pathMatch</jv>.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
+		String <jv>remainder</jv> = <jv>pathMatch</jv>.getRemainder();  <jc>// =quux</jc>
 	}
 </p>
 <p>

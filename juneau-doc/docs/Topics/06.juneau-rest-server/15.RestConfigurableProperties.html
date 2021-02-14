@@ -56,9 +56,9 @@ Configurable Properties
 	<ja>@Rest</ja>(...)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 	
-		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
+		<jk>public</jk> MyRestServlet(RestContextBuilder <jv>builder</jv>) {
 			
-			builder
+			<jv>builder</jv>
 				.sortProperties();  <jc>// Note: RestContextBuilder extends from BeanContextBuilder</jc>
 				.set(<jsf>SERIALIZER_trimNulls</jsf>);
 				.set(<jsf>JSON_escapeSolidus</jsf>);
@@ -74,8 +74,8 @@ Configurable Properties
 </ul>
 <p class='bpcode w800'>
 	<jc>// GET method with method-level properties</jc>
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>, path=<js>"/*"</js>,
+	<ja>@RestGet</ja>(
+		path=<js>"/*"</js>,
 		properties={
 			<jc>// Bean properties should be sorted alphabetically.</jc>
 			<ja>@Property</ja>(name=<jsf>BEAN_sortProperties</jsf>, value=<js>"true"</js>),

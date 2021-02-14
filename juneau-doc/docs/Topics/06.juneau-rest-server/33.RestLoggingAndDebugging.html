@@ -93,12 +93,12 @@ Logging / Debugging
 	)
 	<jk>public static class</jk> MyRestClass {
 
-		<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
-		<jk>public</jk> String myRestOp(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-			res.setStatus(500);
-			res.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
-			res.setException(<jk>new</jk> StringIndexOutOfBoundsException());  <jc>// Could also throw.</jc>
-			<jk>return</jk> req.getBody().asString();
+		<ja>@RestPost</ja>(<js>"foo"</js>)
+		<jk>public</jk> String myRestOp(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+			<jv>res</jv>.setStatus(500);
+			<jv>res</jv>.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
+			<jv>res</jv>.setException(<jk>new</jk> StringIndexOutOfBoundsException());  <jc>// Could also throw.</jc>
+			<jk>return</jk> <jv>req</jv>.getBody().asString();
 		}
 	}
 
@@ -303,15 +303,15 @@ Logging / Debugging
 	)
 	<jk>public static class</jk> MyRestClass {
 
-		<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
-		<jk>public</jk> String myRestOp(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-			res.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
+		<ja>@RestPost</ja>(<js>"foo"</js>)
+		<jk>public</jk> String myRestOp(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+			<jv>res</jv>.setHeader(<js>"Foo"</js>, <js>"bar"</js>);	
 		
-			// Equivalent to throwing an exception. 
-			res.setStatus(500);
-			res.setException(<jk>new</jk> StringIndexOutOfBoundsException());
+			<jc>// Equivalent to throwing an exception.</jc>
+			<jv>res</jv>.setStatus(500);
+			<jv>res</jv>.setException(<jk>new</jk> StringIndexOutOfBoundsException());
 			
-			<jk>return</jk> req.getBody().asString();
+			<jk>return</jk> <jv>req</jv>.getBody().asString();
 		}
 	}
 

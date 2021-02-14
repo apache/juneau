@@ -20,15 +20,15 @@ RequestBody
 	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestBody body) {...}			
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestBody <jv>body</jv>) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public void</jk> doPost(RequestBody body) {
+	<ja>@RestPost</ja>(...)
+	<jk>public void</jk> doPost(RequestBody <jv>body</jv>) {
 		<jc>// Convert body to a linked list of Person objects.</jc>
-		List&lt;Person&gt; l = body.asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+		List&lt;Person&gt; <jv>list</jv> = <jv>body</jv>.asType(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
 		...
 	}
 </p>

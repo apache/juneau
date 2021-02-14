@@ -20,18 +20,18 @@ RequestFormData
 	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestFormData query) {...}			
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestFormData <jv>formData</jv>) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object myMethod(RequestFormData formData) {
+	<ja>@RestPost</ja>(...)
+	<jk>public</jk> Object myMethod(RequestFormData <jv>formData</jv>) {
 
 		<jc>// Get query parameters converted to various types.</jc>
-		<jk>int</jk> p1 = formData.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-		String p2 = formData.get(<js>"p2"</js>, String.<jk>class</jk>);
-		UUID p3 = formData.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String <jv>p2</jv> = <jv>formData<jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID <jv>p3</jv> = <jv>formData</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	 }			
 </p>
 <p>

@@ -22,7 +22,7 @@ Method Return Types
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestGet</ja>
 	<jk>public</jk> String doGet() {
 		<jk>return</jk> <js>"Hello World!"</js>;
 	}
@@ -76,28 +76,28 @@ Method Return Types
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Equivalent method 1</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
-	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
-		Person p = getPersonById(personId);
-		<jk>return</jk> p;
+	<ja>@RestGet</ja>(<js>"/example1/{personId}"</js>)
+	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID <jv>personId</jv>) {
+		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
+		<jk>return</jk> <jv>person</jv>;
 	}
 
 	<jc>// Equivalent method 2</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
-	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
-		Person p = getPersonById(personId);
-		res.setOutput(p);
+	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
+	<jk>public void</jk> doGet2(RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
+		<jv>res</jv>.setOutput(<jv>person</jv>);
 	}
 
 	<jc>// (Sorta) Equivalent method 3</jc>
 	<jc>// (Ignores any converters or method-level properties)</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
-	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
-		Person p = getPersonById(personId);
-		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
-		WriterSerializer s = res.getSerializerGroup().getWriterSerializer(accept);
-		res.setContentType(s.getResponseContentType());
-		s.serialize(p, res.getNegotiatedWriter());
+	<ja>@RestGet</ja>(<js>"/example3/{personId}"</js>)
+	<jk>public void</jk> doGet3(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
+		String <jv>accept</jv> = <jv>req</jv>.getStringHeader(<js>"Accept"</js>).orElse(<js>"text/json"</js>);
+		WriterSerializer <jv>serializer</jv> = <jv>res</jv>.getSerializerGroup().getWriterSerializer(<jv>accept</jv>);
+		<jv>res</jv>.setContentType(<jv>serializer</jv>.getResponseContentType());
+		<jv>serializer</jv>.serialize(<jv>person</jv>, <jv>res</jv>.getNegotiatedWriter());
 	}
 </p>
 <ul class='seealso'>

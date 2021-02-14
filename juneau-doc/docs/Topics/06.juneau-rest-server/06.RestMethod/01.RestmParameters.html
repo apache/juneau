@@ -115,24 +115,24 @@ Java Method Parameters
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
+	<ja>@RestGet</ja>(<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
 	<jk>public</jk> String doGetExample1(
-		RestRequest req,
-		RestResponse res,
-		<ja>@Method</ja> String method,
-		<ja>@Path</ja>(<js>"a1"</js>) String a1,
-		<ja>@Path</ja>(<js>"a2"</js>) <jk>int</jk> a2,
-		<ja>@Path</ja>(<js>"a3"</js>) UUID a3,
-		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1,
-		<ja>@Query</ja>(<js>"p2"</js>) String p2,
-		<ja>@Query</ja>(<js>"p3"</js>) UUID p3,
-		<ja>@HasQuery</ja>(<js>"p3"</js>) boolean hasP3,
-		<ja>@Path</ja>(<js>"/*"</js>) String remainder,
-		<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang,
-		<ja>@Header</ja>(<js>"Accept"</js>) String accept,
-		<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack,
-		RequestProperties properties,
-		ResourceBundle nls
+		RestRequest <jv>req</jv>,
+		RestResponse <jv>res</jv>,
+		<ja>@Method</ja> String <jv>method</jv>,
+		<ja>@Path</ja>(<js>"a1"</js>) String <jv>a1</jv>,
+		<ja>@Path</ja>(<js>"a2"</js>) <jk>int</jk> <jv>a2</jv>,
+		<ja>@Path</ja>(<js>"a3"</js>) UUID <jv>a3</jv>,
+		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
+		<ja>@Query</ja>(<js>"p2"</js>) String <jv>p2</jv>,
+		<ja>@Query</ja>(<js>"p3"</js>) UUID <jv>p3</jv>,
+		<ja>@HasQuery</ja>(<js>"p3"</js>) boolean <jv>hasP3</jv>,
+		<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>,
+		<ja>@Header</ja>(<js>"Accept-Language"</js>) String <jv>lang</jv>,
+		<ja>@Header</ja>(<js>"Accept"</js>) String <jv>accept</jv>,
+		<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> <jv>doNotTrack</jv>,
+		RequestAttributes <jv>attributes</jv>,
+		ResourceBundle <jv>nls</jv>
 	) {
 		<jc>// Do something with all of those</jc>
 	}

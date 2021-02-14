@@ -24,9 +24,7 @@ Parameters
 	being passed to your <ja>@RestOp</ja>-annotated method, like so:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		...
-	)
+	<ja>@RestGet</ja>
 	<jk>public</jk> Collection&lt;Pet&gt; getPets(
 			<ja>@Query</ja>(
 				name=<js>"s"</js>,
@@ -41,7 +39,7 @@ Parameters
 				collectionFormat=<js>"csv"</js>,
 				example=<js>"Bill*,birthDate>2000"</js>
 			) 
-			String[] s,
+			String[] <jv>s</jv>,
 			<ja>@Query</ja>(
 				name=<js>"v"</js>,
 				description={
@@ -52,7 +50,7 @@ Parameters
 				collectionFormat=<js>"csv"</js>,
 				example=<js>"name,birthDate"</js>
 			) 
-			String[] v,
+			String[] <jv>v</jv>,
 			...
 		) <jk>throws</jk> NotAcceptable {
 		...
@@ -70,8 +68,7 @@ Parameters
 </p>
 <h5 class='figure'>PetStoreResource.getPets()</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>,
+	<ja>@RestGet</ja>(
 		path=<js>"/pet"</js>,
 		summary=<js>"All pets in the store"</js>,
 		swagger=<ja>@OpSwagger</ja>(
@@ -132,17 +129,17 @@ Parameters
 	The definition of this method is shown here:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
+	<ja>@RestPost</ja>(
 		summary=<js>"Add a new pet to the store"</js>,
 		swagger=<ja>@OpSwagger</ja>(
 			tags=<js>"pet"</js>
 		)
 	)
 	<jk>public</jk> Ok postPet(
-			<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) PetCreate pet
+			<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) PetCreate <jv>pet</jv>
 		) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
 
-		<jf>store</jf>.create(pet);
+		<jf>store</jf>.create(<jv>pet</jv>);
 		<jk>return</jk> <jsf>OK</jsf>;
 	}
 </p>

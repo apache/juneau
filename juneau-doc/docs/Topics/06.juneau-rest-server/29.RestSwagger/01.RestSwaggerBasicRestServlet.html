@@ -80,9 +80,9 @@ BasicRestServlet
 				SwaggerUI.<jk>class</jk>
 			}
 		)
-		<jk>public</jk> Swagger getOptions(RestRequest req) {
+		<jk>public</jk> Swagger getOptions(RestRequest <jv>req</jv>) {
 			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
-			<jk>return</jk> req.getSwagger();
+			<jk>return</jk> <jv>req</jv>.getSwagger();
 		}
 	}
 </p>

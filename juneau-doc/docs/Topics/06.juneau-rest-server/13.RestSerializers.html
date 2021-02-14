@@ -46,26 +46,26 @@ Serializers
 	<jk>public class</jk> MyResource {
 		
 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-			<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+			<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 			
 			<jc>// Using method on builder.</jc>
-			builder.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+			<jv>builder</jv>.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
 
 			<jc>// Same, but use pre-instantiated parsers.</jc>
-			builder.serializers(JsonSerializer.<jsf>DEFAULT</jsf>, XmlSerializer.<jsf>DEFAULT</jsf>);
+			<jv>builder</jv>.serializers(JsonSerializer.<jsf>DEFAULT</jsf>, XmlSerializer.<jsf>DEFAULT</jsf>);
 
 			<jc>// Same, but using property.</jc>
-			builder.set(<jsf>REST_serializers</jsf>, JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+			<jv>builder</jv>.set(<jsf>REST_serializers</jsf>, JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
 		}
 
 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-			builder.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+			<jv>builder</jv>.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
 		}
 
 		<jc>// Override at the method level.</jc>
-		<ja>@RestOp</ja>(serializers={HtmlSerializer.<jk>class</jk>})
+		<ja>@RestGet</ja>(serializers={HtmlSerializer.<jk>class</jk>})
 		<jk>public</jk> MyPojo myMethod() {
 			<jc>// Return a POJO to be serialized.</jc>
 			<jk>return new</jk> MyPojo(); 

@@ -25,13 +25,13 @@ Predefined Exceptions
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 	<jk>public</jk> Ok login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>
 	) <jk>throws</jk> Unauthorized 
 	{
-		<jk>if</jk> (! <jsm>isOK</jsm>(username, password))
+		<jk>if</jk> (! <jsm>isOK</jsm>(<jv>username</jv>, <jv>password</jv>))
 			<jk>throw new</jk> Unauthorized(<js>"You're not welcome!"</js>);
 			
 		<jk>return</jk> Ok.<jsf>OK</jsf>;

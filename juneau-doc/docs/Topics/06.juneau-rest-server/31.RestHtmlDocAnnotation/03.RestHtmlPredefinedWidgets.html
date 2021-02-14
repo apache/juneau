@@ -84,8 +84,7 @@ Predefined Widgets
 	An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides a drop-down menu item for rendering all other supported content types in plain text:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>,
+	<ja>@RestGet</ja>(
 		path=<js>"/"</js>,
 		widgets={
 			ContentTypeMenuItem.<jk>class</jk>,
@@ -124,8 +123,7 @@ Predefined Widgets
 	An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
 	search/view/sort capabilities against the collection of POJOs:
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>,
+	<ja>@RestGet</ja>(
 		path=<js>"/"</js>,
 		widgets={
 			QueryMenuItem.<jk>class</jk>,
@@ -171,8 +169,7 @@ Predefined Widgets
 	a drop-down menu item for rendering all other supported content types in plain text:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		method=<jsf>GET</jsf>,
+	<ja>@RestGet</ja>(
 		path=<js>"/"</js>,
 		widgets={
 			ThemeMenuItem.<jk>class</jk>,
@@ -228,12 +225,12 @@ Predefined Widgets
 	<jk>public class</jk> MyFormMenuItem <jk>extends</jk> MenuItemWidget {
 	
 		<ja>@Override</ja>
-		<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
+		<jk>public</jk> String getLabel(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> <js>"myform"</js>;
 		}
 	
 		<ja>@Override</ja>
-		<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
+		<jk>public</jk> Object getContent(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> div(
 				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/form"</js>).method(<jsf>POST</jsf>).children(
 					<jsm>table</jsm>(

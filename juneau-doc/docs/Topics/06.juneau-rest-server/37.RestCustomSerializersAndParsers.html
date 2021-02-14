@@ -42,16 +42,16 @@ Custom Serializers and Parsers
 	<jk>public class</jk> PhotosResource <jk>extends</jk> BasicRestServlet {
 	
 		<jc>// Our cache of photos</jc>
-		<jk>private</jk> Map&lt;Integer,Photo&gt; photos = <jk>new</jk> TreeMap&lt;Integer,Photo&gt;();
+		<jk>private</jk> Map&lt;Integer,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap&lt;Integer,Photo&gt;();
 		
 		<jd>/** Bean class for storing photos */</jd>
 		<jk>public static class</jk> Photo {
 			<jk>private int</jk> <jf>id</jf>;
 			BufferedImage <jf>image</jf>;
 			
-			Photo(int id, BufferedImage image) {
-				<jk>this</jk>.<jf>id</jf> = id;
-				<jk>this</jk>.<jf>image</jf> = image;
+			Photo(<jk>int</jk> <jv>id</jv>, BufferedImage <jv>image</jv>) {
+				<jk>this</jk>.<jf>id</jf> = <jv>id</jv>;
+				<jk>this</jk>.<jf>image</jf> = <jv>image</jv>;
 			}
 			
 			<jk>public</jk> URI getURI() <jk>throws</jk> URISyntaxException {
@@ -64,62 +64,56 @@ Custom Serializers and Parsers
 		}
 		
 		<jd>/** GET request handler for list of all photos */</jd>
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-			res.setPageTitle(<js>"Photo REST service"</js>);
-			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
-			<jk>return</jk> photos.values();
+		<ja>@RestGet</ja>(<js>"/"</js>)
+		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+			<jv>res</jv>.setPageTitle(<js>"Photo REST service"</js>);
+			<jv>res</jv>.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
+			<jk>return</jk> <jf>photos</jf>.values();
 		}
 		
 		<jd>/** GET request handler for single photo */</jd>
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
-		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) int id) <jk>throws</jk> Exception {
-			Photo p = photos.get(id);
-			if (p == <jk>null</jk>)
+		<ja>@RestGet</ja>(path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
+		<jk>public</jk> BufferedImage getPhoto(RestRequest <jv>req</jv>, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> <jv>id</jv>) <jk>throws</jk> Exception {
+			Photo <jv>p</jv> = <jf>photos</jf>.get(<jv>id</jv>);
+			<jk>if</jk> (<jv>p</jv> == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
-			<jk>return</jk> p.image;
+			<jk>return</jk> <jv>p</jv>.<jf>image</jf>;
 		}
 		
 		<jd>/** PUT request handler */</jd>
-		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
-			photos.put(id, <jk>new</jk> Photo(id, image));
+		<ja>@RestPut</ja>(path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
+		<jk>public</jk> String addPhoto(RestRequest <jv>req</jv>, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> <jv>id</jv>, <ja>@Body</ja> BufferedImage <jv>image</jv>) <jk>throws</jk> Exception {
+			<jf>photos</jf>.put(<jv>id</jv>, <jk>new</jk> Photo(<jv>id</jv>, <jv>image</jv>));
 			<jk>return</jk> <js>"OK"</js>;
 		}
 		
 		<jd>/** POST request handler */</jd>
-		<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
-			<jk>int</jk> id = photos.size();
-			Photo p = <jk>new</jk> Photo(id, image);
-			photos.put(id, p);
-			<jk>return</jk> p;
+		<ja>@RestPost</ja>(path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
+		<jk>public</jk> Photo setPhoto(RestRequest <jv>req</jv>, <ja>@Body</ja> BufferedImage <jv>image</jv>) <jk>throws</jk> Exception {
+			<jk>int</jk> <jv>id</jv> = <jf>photos</jf>.size();
+			Photo <jv>p</jv> = <jk>new</jk> Photo(<jv>id</jv>, <jv>image</jv>);
+			<jf>photos</jf>.put(<jv>id</jv>, <jv>p</jv>);
+			<jk>return</jk> <jv>p</jv>;
 		}
 		
 		<jd>/** DELETE request handler */</jd>
-		<ja>@RestOp</ja>(method=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
-		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception {
-			Photo p = photos.remove(id);
-			if (p == <jk>null</jk>)
+		<ja>@RestDelete</ja>(<js>"/{id}"</js>)
+		<jk>public</jk> String deletePhoto(RestRequest <jv>req</jv>, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> <jv>id</jv>) <jk>throws</jk> Exception {
+			Photo <jv>p</jv> = <jf>photos</jf>.remove(<jv>id</jv>);
+			<jk>if</jk> (<jv>p</jv> == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
 			<jk>return</jk> <js>"OK"</js>;
 		}
 	
-		<jd>/** OPTIONS request handler */</jd>
-		<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
-		<jk>public</jk> Swagger getOptions(RestRequest req) {
-			<jk>return</jk> req.getSwagger();
-		}
-
 		<jd>/** Serializer for converting images to byte streams */</jd>
 		<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
 		
 			<ja>@Override</ja> <jc>/* Serializer */</jc>
-			<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
-				RenderedImage image = (RenderedImage)o;
-				String mediaType = ctx.getMediaType();
-				ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out);
+			<jk>public void</jk> serialize(Object <jv>o</jv>, OutputStream <jv>out</jv>, SerializerSession <jv>session</jv>) <jk>throws</jk> IOException, SerializeException {
+				RenderedImage <jv>image</jv> = (RenderedImage)<jv>o</jv>;
+				String <jv>mediaType</jv> = <jv>session</jv>.getMediaType();
+				ImageIO.<jsm>write</jsm>(<jv>image</jv>, <jv>mediaType</jv>.substring(<jv>mediaType</jv>.indexOf(<js>'/'</js>)+1), <jv>out</jv>);
 			}	
 		}
 		
@@ -128,9 +122,9 @@ Custom Serializers and Parsers
 		<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
 		
 			<ja>@Override</ja> <jc>/* Parser */</jc>
-			<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
-				BufferedImage image = ImageIO.<jsm>read</jsm>(in);
-				<jk>return</jk> (T)image;
+			<jk>public</jk> &lt;T&gt; T parse(InputStream <jv>in</jv>, ClassMeta&lt;T&gt; <jv>type</jv>, ParserSession <jv>session</jv>) <jk>throws</jk> ParseException, IOException {
+				BufferedImage <jv>image</jv> = ImageIO.<jsm>read</jsm>(<jv>in</jv>);
+				<jk>return</jk> (T)<jv>image</jv>;
 			}
 		}
 	}

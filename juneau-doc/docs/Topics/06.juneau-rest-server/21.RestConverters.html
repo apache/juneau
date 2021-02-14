@@ -41,12 +41,12 @@ Converters
 	<jc>// GET person request handler.</jc>
 	<jc>// Traversable conversion enabled to allow nodes in returned POJO tree to be addressed.</jc>
 	<jc>// Queryable conversion enabled to allow returned POJO to be searched/viewed/sorted.</jc>
-	<ja>@RestOp</ja>(
-		name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>,
+	<ja>@RestGet</ja>(
+		path=<js>"/people/{id}/*"</js>,
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
 	)
-	<jk>public</jk> Person getPerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) {
-		<jk>return</jk> findPerson(id);
+	<jk>public</jk> Person getPerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> <jv>id</jv>) {
+		<jk>return</jk> findPerson(<jv>id</jv>);
 	}
 </p>	
 <p>
@@ -64,27 +64,27 @@ Converters
 	<jk>public class</jk> Traversable <jk>implements</jk> RestConverter {
 	
 		<ja>@Override</ja> <jc>/* RestConverter */</jc>
-		<jk>public</jk> Object convert(RestRequest req, Object o) <jk>throws</jk> RestException {
-			if (o == <jk>null</jk>)
+		<jk>public</jk> Object convert(RestRequest <jv>req</jv>, Object <jv>o</jv>) <jk>throws</jk> RestException {
+			<jk>if</jk> (<jv>o</jv> == <jk>null</jk>)
 				<jk>return null</jk>;
 	
-			String pathRemainder = req.getPathMatch().getRemainder();
+			String <jv>pathRemainder</jv> = <jv>req</jv>.getPathMatch().getRemainder();
 	
-			<jk>if</jk> (pathRemainder != <jk>null</jk>) {
+			<jk>if</jk> (<jv>pathRemainder</jv> != <jk>null</jk>) {
 				<jk>try</jk> {
 				
 					<jc>// Use the PojoRest class to traverse our POJO model.</jc> 
-					PojoRest p = <jk>new</jk> PojoRest(o);
-					o = p.get(pathRemainder);
+					PojoRest <jv>p</jv> = <jk>new</jk> PojoRest(<jv>o</jv>);
+					<jv>o</jv> = <jv>p</jv>.get(<jv>pathRemainder</jv>);
 				
-				} <jk>catch</jk> (PojoRestException e) {
-					<jk>throw new</jk> RestException(e.getStatus(), e);
-				} <jk>catch</jk> (Exception e) {
-					<jk>throw new</jk> RestException(HttpServletResponse.<jsf>SC_INTERNAL_SERVER_ERROR</jsf>, e);
+				} <jk>catch</jk> (PojoRestException <jv>e</jv>) {
+					<jk>throw new</jk> RestException(<jv>e</jv>.getStatus(), <jv>e</jv>);
+				} <jk>catch</jk> (Exception <jv>e</jv>) {
+					<jk>throw new</jk> RestException(HttpServletResponse.<jsf>SC_INTERNAL_SERVER_ERROR</jsf>, <jv>e</jv>);
 				}
 			}
 			
-			<jk>return</jk> o;
+			<jk>return</jk> <jv>o</jv>;
 		}
 	}
 </p>	

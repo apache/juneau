@@ -48,25 +48,25 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	<jk>public void</jk> doGet(
-			<ja>@Path</ja>(<js>"foo"</js>) String foo,
-			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
-			<ja>@Path</ja>(<js>"baz"</js>) UUID baz,
-			<ja>@Path</ja>(<js>"/*"</js>) String remainder 
+			<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>,
+			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> <jv>bar</jv>,
+			<ja>@Path</ja>(<js>"baz"</js>) UUID <jv>baz</jv>,
+			<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv> 
 		) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
-	<jk>public void</jk> doGet(RestRequest req) {
-		RequestPath p = req.getPathMatch();
-		String foo = p.getString(<js>"foo"</js>);
-		<jk>int</jk> bar = p.get(<js>"bar"</js>, <jk>int</jk>.<jk>class</jk>);
-		UUID baz = p.get(<js>"baz"</js>, UUID.<jk>class</jk>);
-		String remainder = p.getRemainder();
+	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
+		RequestPath <jv>path</jv> = <jv>req</jv>.getPathMatch();
+		String <jv>foo</jv> = <jv>path</jv>.getString(<js>"foo"</js>);
+		<jk>int</jk> <jv>bar</jv> = <jv>path</jv>.get(<js>"bar"</js>, <jk>int</jk>.<jk>class</jk>);
+		UUID <jv>baz</jv> = <jv>path</jv>.get(<js>"baz"</js>, UUID.<jk>class</jk>);
+		String <jv>remainder</jv> = <jv>path</jv>.getRemainder();
 	}
 </p>
 <p>
@@ -80,18 +80,18 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
-	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+	<ja>@RestGet</ja>(<js>"/{a}/{b}/{c}/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
-	<jk>public void</jk> doGet(<ja>@Path</ja> Map&lt;String,Object&gt; map) {...}
+	<ja>@RestGet</ja>(<js>"/{a}/{b}/{c}/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
-	<jk>public void</jk> doGet(<ja>@Path</ja> MyBean bean) {...}
+	<ja>@RestGet</ja>(<js>"/{a}/{b}/{c}/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja> MyBean <jv>bean</jv>) {...}
 </p>
 
 <p>
@@ -121,7 +121,7 @@
 			minLength=1,
 			maxLength=10
 		)
-		Long[][] pathParameter
+		Long[][] <jv>pathParameter</jv>
 	) {...}
 </p>
 <p>

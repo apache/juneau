@@ -53,17 +53,17 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req) {
-		RequestHeaders h = req.getHeaders();
-		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
+		RequestHeaders <jv>headers</jv> = <jv>req</jv>.getHeaders();
+		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	}
 </p>
 
@@ -74,18 +74,18 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Header</ja> Map&lt;String,Object&gt; map) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Header</ja> MyBean bean) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Header</ja> MyBean <jv>bean</jv>) {...}
 </p>
 
 <p>
@@ -97,7 +97,7 @@
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/testHeader"</js>)	
+	<ja>@RestGet</ja>(<js>"/testHeader"</js>)	
 	<jk>public void</jk> testHeader(
 		<ja>@Header</ja>(
 			name=<js>"My-Header"</js>,

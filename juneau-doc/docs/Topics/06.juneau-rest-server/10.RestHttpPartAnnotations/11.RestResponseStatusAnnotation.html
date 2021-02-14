@@ -28,14 +28,14 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter.</jc>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 	<jk>public void</jk> login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; status
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
+		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; <jv>status</jv>
 	) 
 	{
-		<jk>if</jk> (! isValid(username, password))
-			status.set(401);
+		<jk>if</jk> (! <jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>))
+			<jv>status</jv>.set(401);
 	}
 </p>

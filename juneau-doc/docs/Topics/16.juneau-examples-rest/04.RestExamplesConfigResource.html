@@ -57,13 +57,13 @@ ConfigResource
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
 		
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
+		<ja>@RestGet</ja>(path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
 		<jk>public</jk> OMap getConfig() <jk>throws</jk> Exception {
 			<jk>return</jk> getServletConfig().getConfig().asMap();
 		}
 		
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/edit"</js>, description=<js>"Edit config file."</js>)
-		<jk>public</jk> Form getConfigEditForm(RestRequest req) <jk>throws</jk> Exception {
+		<ja>@RestGet</ja>(path=<js>"/edit"</js>, description=<js>"Edit config file."</js>)
+		<jk>public</jk> Form getConfigEditForm(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 			<jk>return</jk> <jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<js>"POST"</js>).enctype(<js>"application/x-www-form-urlencoded"</js>).children(
 				<jsm>div</jsm>()._class(<js>"data"</js>).children(
 					<jsm>table</jsm>(
@@ -78,7 +78,7 @@ ConfigResource
 			);
 		}
 		
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
+		<ja>@RestGet</ja>(<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -86,11 +86,11 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> OMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
-			<jk>return</jk> getSection(section); 
+		<jk>public</jk> OMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>) <jk>throws</jk> Exception { 
+			<jk>return</jk> getSection(<jv>section</jv>); 
 		} 
 		
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
+		<ja>@RestGet</ja>(<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -99,11 +99,11 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> String getConfigEntry(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key) <jk>throws</jk> Exception { 
-			<jk>return</jk> getSection(section).getString(key); 
+		<jk>public</jk> String getConfigEntry(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>, <ja>@Path</ja>(<js>"key"</js>) String <jv>key</jv>) <jk>throws</jk> Exception { 
+			<jk>return</jk> getSection(<jv>section</jv>).getString(<jv>key</jv>); 
 		} 
 		
-		<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>, 
+		<ja>@RestPost</ja>(<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -111,11 +111,11 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> Config setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
-			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
+		<jk>public</jk> Config setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String <jv>contents</jv>) <jk>throws</jk> Exception { 
+			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(<jv>contents</jv>)); 
 		} 
 		
-		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>, 
+		<ja>@RestPut</ja>(path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -123,11 +123,11 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> Config setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
-			<jk>return</jk> getServletConfig().getConfig().load(contents, <jk>true</jk>).asMap();
+		<jk>public</jk> Config setConfigContents(<ja>@Body</ja> Reader <jv>contents</jv>) <jk>throws</jk> Exception { 
+			<jk>return</jk> getServletConfig().getConfig().load(<jv>contents</jv>, <jk>true</jk>).asMap();
 		} 
 		
-		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
+		<ja>@RestPut</ja>(path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -136,12 +136,12 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> OMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
-			getServletConfig().getConfig().setSection(section, contents); 
+		<jk>public</jk> OMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>, <ja>@Body</ja> Map&lt;String,String&gt; <jv>contents</jv>) <jk>throws</jk> Exception { 
+			getServletConfig().getConfig().setSection(<jv>section</jv>, <jv>contents</jv>); 
 			<jk>return</jk> getSection(section); 
 		} 
 		
-		<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
+		<ja>@RestPut</ja>(path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -151,16 +151,16 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> String setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key, <ja>@Body</ja> String value) <jk>throws</jk> Exception { 
-			getServletConfig().getConfig().put(section, key, value, <jk>false</jk>); 
-			<jk>return</jk> getSection(section).getString(key); 
+		<jk>public</jk> String setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>, <ja>@Path</ja>(<js>"key"</js>) String <jv>key</jv>, <ja>@Body</ja> String <jv>value</jv>) <jk>throws</jk> Exception { 
+			getServletConfig().getConfig().put(<jv>section</jv>, <jv>key</jv>, <jv>value</jv>, <jk>false</jk>); 
+			<jk>return</jk> getSection(<jv>section</jv>).getString(<jv>key</jv>); 
 		} 
 		
-		<jk>private</jk> OMap getSection(String name) { 
-			OMap m = getServletConfig().getConfig().getSectionMap(name); 
-			<jk>if</jk> (m == <jk>null</jk>) 
+		<jk>private</jk> OMap getSection(String <jv>name</jv>) { 
+			OMap <jv>m</jv> = getServletConfig().getConfig().getSectionMap(<jv>name</jv>); 
+			<jk>if</jk> (<jv>m</jv> == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Section not found."</js>); 
-			<jk>return</jk> m; 
+			<jk>return</jk> <jv>m</jv>; 
 		} 
 	} 		
 </p>

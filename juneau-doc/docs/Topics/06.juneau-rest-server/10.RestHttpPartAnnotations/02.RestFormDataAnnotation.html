@@ -55,22 +55,22 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
+	<ja>@RestPost</ja>
 	<jk>public void</jk> doPost(
-		<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
-		<ja>@FormData</ja>(<js>"p2"</js>) String p2, 
-		<ja>@FormData</ja>(<js>"p3"</js>) UUID p3) {...}
+		<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>, 
+		<ja>@FormData</ja>(<js>"p2"</js>) String <jv>p2</jv>, 
+		<ja>@FormData</ja>(<js>"p3"</js>) UUID <jv>p3</jv>) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> doPost(RestRequest req) {
-		RequestFormData fd = req.getFormData();
-		<jk>int</jk> p1 = fd.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-		String p2 = fd.get(<js>"p2"</js>, String.<jk>class</jk>);
-		UUID p3 = fd.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	<ja>@RestPost</ja>
+	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
+		RequestFormData <jv>formData</jv> = <jv>req</jv>.getFormData();
+		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String <jv>p2</jv> = <jv>formData</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID <jv>p3</jv> = <jv>formData</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	}
 </p>
 
@@ -81,18 +81,18 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> doPost(<ja>@FormData</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+	<ja>@RestPost</ja>
+	<jk>public void</jk> doPost(<ja>@FormData</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> doPost(<ja>@FormData</ja> Map&lt;String,Object&gt; map) {...}
+	<ja>@RestPost</ja>
+	<jk>public void</jk> doPost(<ja>@FormData</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> doPost(<ja>@FormData</ja> MyBean bean) {...}
+	<ja>@RestPost</ja>
+	<jk>public void</jk> doPost(<ja>@FormData</ja> MyFormBean <jv>bean</jv>) {...}
 </p>
 
 <p>
@@ -104,7 +104,7 @@
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/testFormData"</js>)	
+	<ja>@RestPost</ja>(<js>"/testFormData"</js>)	
 	<jk>public void</jk> testFormData(
 		<ja>@FormData</ja>(
 			name=<js>"formDataParamName"</js>,
@@ -121,7 +121,7 @@
 			minLength=1,
 			maxLength=10
 		)
-		Long[][] formDataParameter
+		Long[][] <jv>formDataParameter</jv>
 	) {...}
 </p>
 <p>

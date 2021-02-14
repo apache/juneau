@@ -169,14 +169,14 @@ REST/RPC
 	
 		<ja>@Override</ja> <jc>/* RrpcServlet */</jc>
 		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
-			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
+			Map&lt;Class&lt;?&gt;,Object&gt; <jv>map</jv> = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
 	
 			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
 			// One is IAddressBook which only exposes methods defined on that interface, and
 			// the other is AddressBook itself which exposes all methods defined on the class itself (dangerous!).</jc>
-			m.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
-			m.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>);
-			<jk>return</jk> m;
+			<jv>map</jv>.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			<jv>map</jv>.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			<jk>return</jk> <jv>map</jv>;
 		}
 	}
 </p>
@@ -192,7 +192,7 @@ REST/RPC
 	<jc>// Our exposed interface.</jc>
 	<ja>@RestOp</ja>(method=<jsf>RRPC</jsf>, path=<js>"/addressbookproxy/*"</js>)
 	<jk>public</jk> IAddressBook getProxy() {
-		<jk>return</jk> addressBook;
+		<jk>return</jk> <jf>addressBook</jf>;
 	}
 </p>
 
@@ -230,13 +230,13 @@ REST/RPC
 	First, we need to create the serialized form of the arguments:
 </p>
 <p class='bpcode w800'>
-	Object[] args = <jk>new</jk> Object[] {
+	Object[] <jv>args</jv> = <jk>new</jk> Object[] {
 		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
 			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
 			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
 	};
-	String asJson = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(args);
-	System.<jsf>err</jsf>.println(asJson);
+	String <jv>asJson</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(<jv>args</jv>);
+	System.<jsf>err</jsf>.println(<jv>asJson</jv>);
 </p>
 <p>
 	That produces the following JSON output:

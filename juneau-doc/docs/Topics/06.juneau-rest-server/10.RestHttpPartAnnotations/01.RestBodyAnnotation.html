@@ -35,13 +35,13 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter</jc>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
+	<ja>@RestPost</ja>
+	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Defined on POJO class</jc>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> addPet(Pet pet) {...}
+	<ja>@RestPost</ja>
+	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
 	
 	<ja>@Body</ja>
 	<jk>public class</jk> Pet {...}
@@ -50,9 +50,9 @@
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public void</jk> addPet(RestRequest req) {
-		Person person = req.getBody().asType(Pet.<jk>class</jk>);
+	<ja>@RestPost</ja>
+	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
+		Pet <jv>pet</jv> = <jv>req</jv>.getBody().asType(Pet.<jk>class</jk>);
 		...
 	}
 </p>
@@ -110,8 +110,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
-	<ja>@RestOp</ja>(
-		method=<js>"POST"</js>, 
+	<ja>@RestPost</ja>(
 		path=<js>"/testBody"</js>,
 		serializers=OpenApiSerializers.<jk>class</jk>,
 		defaultAccept=<js>"text/openapi"</js>
@@ -135,7 +134,7 @@
 				maxLength=10
 			)
 		)
-		Long[][] body
+		Long[][] <jv>body</jv>
 	) {...}
 </p>
 <p>

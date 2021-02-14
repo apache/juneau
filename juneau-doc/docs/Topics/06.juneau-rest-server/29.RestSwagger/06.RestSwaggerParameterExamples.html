@@ -24,9 +24,7 @@ Parameter Examples
 	The examples for query/form-data/path/header parameters can be defined using the <c>example</c> attribute on your annotated parameters as shown here:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		...
-	)
+	<ja>@RestGet</ja>
 	<jk>public</jk> Collection&lt;Pet&gt; getPets(
 			<ja>@Query</ja>(
 				name=<js>"s"</js>,
@@ -41,6 +39,7 @@ Parameter Examples
 				collectionFormat=<js>"csv"</js>,
 				example=<js>"Bill*,birthDate>2000"</js>
 			) 
+			String[] <jv>query</jv>,
 			...
 		) <jk>throws</jk> NotAcceptable {
 		...

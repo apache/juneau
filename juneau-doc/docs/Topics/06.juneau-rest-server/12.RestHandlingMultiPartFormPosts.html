@@ -34,15 +34,15 @@ Handling Multi-Part Form Posts
 		 * [POST /upload] - Upload a file as a multipart form post.
 		 * Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.
 		 */</jd>
-		<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
-		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception {
-			ServletFileUpload upload = <jk>new</jk> ServletFileUpload();
-			FileItemIterator iter = upload.getItemIterator(req);
-			<jk>while</jk> (iter.hasNext()) {
-				FileItemStream item = iter.next();
-				<jk>if</jk> (item.getFieldName().equals(<js>"contents"</js>)) { 
-					File f = <jk>new</jk> File(getRootDir(), item.getName());
-					IOPipe.<jsm>create</jsm>(item.openStream(), <jk>new</jk> FileOutputStream(f)).closeOut().run();
+		<ja>@RestPost</ja>(path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
+		<jk>public</jk> Redirect uploadFile(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+			ServletFileUpload <jv>upload</jv> = <jk>new</jk> ServletFileUpload();
+			FileItemIterator <jv>iter</jv> = <jv>upload</jv>.getItemIterator(<jv>req</jv>);
+			<jk>while</jk> (<jv>iter</jv>.hasNext()) {
+				FileItemStream <jv>item</jv> = <jv>iter</jv>.next();
+				<jk>if</jk> (<jv>item</jv>.getFieldName().equals(<js>"contents"</js>)) { 
+					File <jv>f</jv> = <jk>new</jk> File(getRootDir(), <jv>item</jv>.getName());
+					IOPipe.<jsm>create</jsm>(<jv>item</jv>.openStream(), <jk>new</jk> FileOutputStream(<jv>f</jv>)).closeOut().run();
 				}
 			}
 			<jk>return new</jk> Redirect(); <jc>// Redirect to the servlet root.</jc>
@@ -52,9 +52,9 @@ Handling Multi-Part Form Posts
 		<jk>public static class</jk> MultipartFormDataMatcher <jk>extends</jk> RestMatcher {
 		
 			<ja>@Override</ja> <jc>/* RestMatcher */</jc>
-			<jk>public boolean</jk> matches(RestRequest req) {
-				String contentType = req.getContentType();
-				<jk>return</jk> contentType != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
+			<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
+				String <jv>contentType</jv> = <jv>req</jv>.getContentType();
+				<jk>return</jk> <jv>contentType</jv> != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
 			}
 		}
 </p>
@@ -63,27 +63,25 @@ Handling Multi-Part Form Posts
 	This example is pulled from the PetStore application.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(
-		...
-	)
-	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest req) <jk>throws</jk> Exception {
+	<ja>@RestPost</ja>
+	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
     	
 		<jc>// Required for Jetty.</jc>
-		MultipartConfigElement mce = <jk>new</jk> MultipartConfigElement((String)<jk>null</jk>);
-		req.setAttribute(<js>"org.eclipse.jetty.multipartConfig"</js>, mce);  
+		MultipartConfigElement <jv>mce</jv> = <jk>new</jk> MultipartConfigElement((String)<jk>null</jk>);
+		<jv>req</jv>.setAttribute(<js>"org.eclipse.jetty.multipartConfig"</js>, <jv>mce</jv>);  
        
-		String id = UUID.<jsm>randomUUID</jsm>().toString();
-		BufferedImage img = <jk>null</jk>;
-		<jk>for</jk> (Part part : req.getParts()) {
-			<jk>switch</jk> (part.getName()) {
+		String <jv>id</jv> = UUID.<jsm>randomUUID</jsm>().toString();
+		BufferedImage <jv>img</jv> = <jk>null</jk>;
+		<jk>for</jk> (Part <jv>part</jv> : <jv>req</jv>.getParts()) {
+			<jk>switch</jk> (<jv>part</jv>.getName()) {
 				<jk>case</jk> <js>"id"</js>:
-					id = IOUtils.<jsm>read</jsm>(part.getInputStream());
+					<jv>id</jv> = IOUtils.<jsm>read</jsm>(<jv>part</jv>.getInputStream());
 					<jk>break</jk>;
 				<jk>case</jk> <js>"file"</js>:
-					img = ImageIO.<jsm>read</jsm>(part.getInputStream());
+					<jv>img</jv> = ImageIO.<jsm>read</jsm>(<jv>part</jv>.getInputStream());
 			}
 		}
-		addPhoto(id, img);
+		<jsm>addPhoto</jsm>(<jv>id</jv>, <jv>img</jv>);
 		<jk>return new</jk> SeeOtherRoot(); <jc>// Redirect to the servlet root.</jc>
 	}
 </p>

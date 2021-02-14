@@ -28,13 +28,13 @@ ReaderResource (TODO)
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>
-	<jk>public</jk> Object sayHello(RestRequest req) {
+	<ja>@RestGet</ja>
+	<jk>public</jk> Object sayHello(RestRequest <jv>req</jv>) {
 	
 		<jc>// Return a reader resource loaded from a file with support for request-time SVL variables.</jc>
 		<jk>return</jk> ReaderResource.<jsm>create</jsm>()
 			.contents(<jk>new</jk> File(<js>"helloWorld.txt"</js>))
-			.varResolver(req.getVarResolver()) 
+			.varResolver(<jv>req</jv>.getVarResolver()) 
 			.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
 			.mediaType(<jsf>TEXT_PLAIN</jsf>)
 			.build();

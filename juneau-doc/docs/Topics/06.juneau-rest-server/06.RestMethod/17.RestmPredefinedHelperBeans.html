@@ -40,7 +40,7 @@ Predefined Helper Beans
 	<ja>@Resource</ja>
 	<jk>public class</jk> PredefinedLabelsResource {
 	
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<ja>@RestGet</ja>(<js>"/"</js>)
 		<jk>public</jk> ResourceDescription[] getChildMethods() {
 			<jk>return new</jk> ResourceDescription[] {
 				<jk>new</jk> ResourceDescription(<js>"beanDescription"</js>, <js>"BeanDescription"</js>),
@@ -75,7 +75,7 @@ Predefined Helper Beans
 	<ja>@Resource</ja>
 	<jk>public class</jk> PredefinedLabelsResource {
 	
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<ja>@RestGet</ja>(<js>"/"</js>)
 		<jk>public</jk> ResourceDescriptions getChildMethods() {
 			<jk>return new</jk> ResourceDescriptions()
 				.append(<js>"beanDescription"</js>, <js>"BeanDescription"</js>)
@@ -89,7 +89,7 @@ Predefined Helper Beans
 	for rendering custom hyperlinks:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>
+	<ja>@RestGet</ja>
 	<jk>public</jk> MyLink[] htmlLinks() {
 		<jk>return new</jk> MyLink[] {
 			<jk>new</jk> MyLink(<js>"apache"</js>, <js>"http://apache.org"</js>),
@@ -104,9 +104,9 @@ Predefined Helper Beans
 		<jc>// Simple bean properties.</jc>
 		<jk>public</jk> String <jf>name</jf>, <jf>href</jf>;  
 	
-		<jk>public</jk> MyLink(String name, String href) {
-			<jk>this</jk>.<jf>name</jf> = name;
-			<jk>this</jk>.<jf>href</jf> = href;
+		<jk>public</jk> MyLink(String <jv>name</jv>, String <jv>href</jv>) {
+			<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
+			<jk>this</jk>.<jf>href</jf> = <jv>href</jv>;
 		}
 	}
 </p>			
@@ -116,7 +116,7 @@ Predefined Helper Beans
 	The following is equivalent to above.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>
+	<ja>@RestGet</ja>
 	<jk>public</jk> LinkString[] htmlLinks() {
 		<jk>return new</jk> LinkString[] {
 			<jk>new</jk> LinkString(<js>"apache"</js>, <js>"http://apache.org"</js>),
@@ -138,7 +138,7 @@ Predefined Helper Beans
 	of a bean and it's properties.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/beanDescription"</js>)
+	<ja>@RestGet</ja>(<js>"/beanDescription"</js>)
 	<jk>public</jk> BeanDescription getBeanDescription() {
 		<jk>return new</jk> BeanDescription(Person.<jk>class</jk>);
 	}	
@@ -160,9 +160,9 @@ Predefined Helper Beans
 	<ja>@Rest</ja>
 	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {
 	
-		<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Navigation page"</js>)
-		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest req) <jk>throws</jk> Exception {
-			<jk>return new</jk> ChildResourceDescriptions(req);
+		<ja>@RestGet</ja>(path=<js>"/"</js>, summary=<js>"Navigation page"</js>)
+		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+			<jk>return new</jk> ChildResourceDescriptions(<jv>req</jv>);
 		}
 	}
 </p>
@@ -201,21 +201,21 @@ Predefined Helper Beans
 	of a resource class.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
-	<jk>public</jk> SeeOtherRoot addPet(<ja>@Body</ja> Pet pet) {
-		<jsm>addPet</jsm>(Pet);
+	<ja>@RestPost</ja>(<js>"/pets"</js>)
+	<jk>public</jk> SeeOtherRoot addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {
+		<jsm>addPet</jsm>(<jv>pet</jv>);
 		
 		<jc>// Redirects to the servlet root URL.</jc>
-		<jk>return</jk> SeeOtherRoot.INSTANCE;  
+		<jk>return</jk> SeeOtherRoot.<jsf>INSTANCE</jsf>;  
 	}
 </p>
 <p>
 	The runtime behavior is the same as the following:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
-	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet pet) {
-		<jsm>addPet</jsm>(Pet);
+	<ja>@RestPost</ja>(<js>"/pets"</js>)
+	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {
+		<jsm>addPet</jsm>(<jv>pet</jv>);
 		
 		<jc>// Redirects to the servlet root URL.</jc>
 		<jk>return new</jk> SeeOther(URI.<jsm>create</jsm>(<js>"servlet:/"</js>));  

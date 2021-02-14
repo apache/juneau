@@ -25,8 +25,8 @@ StreamResource (TODO)
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
-	<jk>public</jk> Object showPicture(RestRequest req) {
+	<ja>@RestGet</ja>(...)
+	<jk>public</jk> Object showPicture(RestRequest <jv>req</jv>) {
 	
 		<jc>// Return a stream resource loaded from a file.</jc>
 		<jk>return</jk> StreamResource.<jsm>create</jsm>()

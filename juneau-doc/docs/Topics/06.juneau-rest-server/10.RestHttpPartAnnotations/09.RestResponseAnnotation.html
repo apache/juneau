@@ -72,13 +72,13 @@
 	}
 
 	<jc>// Our REST method that throws an annotated exception.</jc>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 	<jk>public</jk> Ok login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>
 	) <jk>throws</jk> InvalidLogin 
 	{
-		checkCredentials(username, password);
+		<jsm>checkCredentials</jsm>(<jv>username</jv>, <jv>password</jv>);
 		<jk>return new</jk> Ok();
 	}
 </p>
@@ -135,8 +135,8 @@
 	<jk>public class</jk> Redirect {
 		<jk>private final</jk> URI <jf>location</jf>;
 	
-		<jk>public</jk> Redirect(URI location) {
-			<jk>this</jk>.<jf>location</jf> = location;
+		<jk>public</jk> Redirect(URI <jv>location</jv>) {
+			<jk>this</jk>.<jf>location</jf> = <jv>location</jv>;
 		}
 	
 		<ja>@ResponseHeader</ja>(
@@ -144,7 +144,7 @@
 			format=<js>"uri"</js>
 		)
 		<jk>public</jk> URI getLocation() {
-			<jk>return</jk> location;
+			<jk>return</jk> <jf>location</jf>;
 		}
 
 		<ja>@ResponseBody</ja>
@@ -155,8 +155,8 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Usage</jc>
-	<ja>@RestOp</ja>(method=<jsf>POST</jsf>)
-	<jk>public</jk> Redirect addPet(Pet pet) {
+	<ja>@RestPost</ja>
+	<jk>public</jk> Redirect postPet(Pet pet) {
 		<jc>// Redirect to servlet root</jc>
 		<jk>return new</jk> Redirect(URI.<jsm>create</jsm>(<js>"servlet:/"</js>));
 	}
@@ -168,14 +168,14 @@
 	the same as applying it to the return type (albeit for this method only).
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 	<ja>@Response</ja>(code=200, description=<js>"OK"</js>)
 	<jk>public</jk> Ok login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>
 	) <jk>throws</jk> InvalidLogin
 	{
-		checkCredentials(username, password);
+		<jsm>checkCredentials</jsm>(<jv>username</jv>, <jv>password</jv>);
 		<jk>return new</jk> Ok();
 	}
 </p>
@@ -191,29 +191,29 @@
 	is {@link oaj.Value} (a placeholder for objects).
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 	<jk>public void</jk> login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		<ja>@Response</ja>(code=200, description=<js>"Login succeeded"</js>) Value&lt;String&gt; body
+		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password,/,
+		<ja>@Response</ja>(code=200, description=<js>"Login succeeded"</js>) Value&lt;String&gt; <jv>body</jv>
 	) <jk>throws</jk> InvalidLogin 
 	{
-		checkCredentials(username, password);
-		body.set(<js>"OK"</js>);
+		<jsm>checkCredentials</jsm>(<jv>username</jv>, <jv>password</jv>);
+		<jv>body</jv>.set(<js>"OK"</js>);
 	}
 </p>
 <p>
 	<ja>@Response</ja>-annotated types can also be used as value parameters:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(...)
+	<ja>@RestGet</ja>(...)
 	<jk>public void</jk> login(
 		...
-		<ja>@Response</ja> Value&lt;Ok&gt; res
+		<ja>@Response</ja> Value&lt;Ok&gt; <jv>res</jv>
 	) <jk>throws</jk> InvalidLogin 
 	{
 		...
-		res.set(<jk>new</jk> Ok());
+		<jv>res</jv>.set(<jk>new</jk> Ok());
 	}
 </p>
 <p>
@@ -221,14 +221,14 @@
 	that it's a <ja>@Response</ja> bean.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		...
-		Value&lt;Ok&gt; res  <jc>// @Response annotation not needed.</jc>
+		Value&lt;Ok&gt; <jv>res</jv>  <jc>// @Response annotation not needed.</jc>
 	) <jk>throws</jk> InvalidLogin 
 	{
 		...
-		res.set(<jk>new</jk> Ok());
+		<jv>res</jv>.set(<jk>new</jk> Ok());
 	}
 </p>
 
@@ -320,22 +320,22 @@
 			serializers=OpenApiSerializer.<jk>class</jk>,
 			defaultAccept=<js>"text/openapi"</js>
 		)
-		<ja>@RestOp</ja>
+		<ja>@RestGet</ja>
 		<jk>public</jk> String[] example1() {
 			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
 		}
 
 		<jc>// Example 2 - Same as above.  Annotation on parameter.</jc>
-		<ja>@RestOp</ja>
+		<ja>@RestGet</ja>
 		<jk>public void</jk> example2(
 			<ja>@Response</ja>(
 				serializers=OpenApiSerializer.<jk>class</jk>,
 				defaultAccept=<js>"text/openapi"</js>
 			) 
-			Value&lt;String[]&gt; body
+			Value&lt;String[]&gt; <jv>body</jv>
 		) 
 		{
-			body.set(<jk>new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>});
+			<jv>body</jv>.set(<jk>new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>});
 		}
 	}
 </p>
@@ -351,7 +351,7 @@
 			defaultAccept=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(collectionFormat=<js>"pipes"</js>)
 		)
-		<ja>@RestOp</ja>
+		<ja>@RestGet</ja>
 		<jk>public</jk> String[] example1() {
 			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
 		}
@@ -384,19 +384,19 @@
 	The following two examples are equivalent:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<ja>@RestGet</ja>(<js>"/ok"</js>)
 	<jk>public void</jk> sendContinue(
-		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
+		<ja>@Response</ja>(code=100) Value&lt;String&gt; <jv>body</jv>
 	) 
 	{
-		body.set(<js>"OK"</js>);
+		<jv>body</jv>.set(<js>"OK"</js>);
 	}
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
-	<jk>public void</jk> sendContinue(RestResponse res) {
-		res.setStatus(100);
-		res.setOutput(<js>"OK"</js>);
+	<ja>@RestGet</ja>(<js>"/ok"</js>)
+	<jk>public void</jk> sendContinue(RestResponse <jv>res</jv>) {
+		<jv>res</jv>.setStatus(100);
+		<jv>res</jv>.setOutput(<js>"OK"</js>);
 	}
 </p>
 

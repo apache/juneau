@@ -61,22 +61,22 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
+	<ja>@RestGet</ja>
 	<jk>public void</jk> doGet(
-		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
-		<ja>@Query</ja>(<js>"p2"</js>) String p2, 
-		<ja>@Query</ja>(<js>"p3"</js>) UUID p3) {...}
+		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>, 
+		<ja>@Query</ja>(<js>"p2"</js>) String <jv>p2</jv>, 
+		<ja>@Query</ja>(<js>"p3"</js>) UUID <jv>p3</jv>) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req) {
-		RequestQuery q = req.getQuery();
-		<jk>int</jk> p1 = q.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-		String p2 = q.get(<js>"p2"</js>, String.<jk>class</jk>);
-		UUID p3 = q.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
+		RequestQuery <jv>query</jv> = <jv>req</jv>.getQuery();
+		<jk>int</jk> <jv>p1</jv> = <jv>query</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	}
 </p>
 
@@ -88,18 +88,18 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; map) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(<ja>@Query</ja> MyBean bean) {...}
+	<ja>@RestGet</ja>
+	<jk>public void</jk> doGet(<ja>@Query</ja> MyQueryBean <jv>bean</jv>) {...}
 </p>
 
 <p>
@@ -111,7 +111,7 @@
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestOp</ja>(method=<js>"GET"</js>, path=<js>"/testQuery"</js>)	
+	<ja>@RestGet</ja>(<js>"/testQuery"</js>)	
 	<jk>public void</jk> testQuery(
 		<ja>@Query</ja>(
 			name=<js>"queryParamName"</js>,
@@ -128,7 +128,7 @@
 			minLength=1,
 			maxLength=10
 		)
-		Long[][] queryParameter
+		Long[][] <jv>queryParameter</jv>
 	) {...}
 </p>
 <p>
