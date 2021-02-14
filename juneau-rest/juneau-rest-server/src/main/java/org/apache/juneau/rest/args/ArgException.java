@@ -10,59 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.args;
 
-import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import java.lang.reflect.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.mstat.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
- * A specialized invoker for methods that are called during a servlet request.
+ * General exception due to a malformed Java parameter.
  */
-public class RestOperationInvoker extends MethodInvoker {
-
-	private final RestOperationArg[] opArgs;
+public class ArgException extends InternalServerError {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param m The method being wrapped.
-	 * @param opArgs The parameter resolvers.
-	 * @param stats The instrumentor.
+	 * @param pi The parameter with the issue.
+	 * @param msg The message.
+	 * @param args The message args.
 	 */
-	public RestOperationInvoker(Method m, RestOperationArg[] opArgs, MethodExecStats stats) {
-		super(m, stats);
-		this.opArgs = opArgs;
-	}
-
-	/**
-	 * Invokes this method from the specified {@link RestCall}.
-	 *
-	 * @param call The REST call.
-	 * @param resource The REST resource object.
-	 * @return The results of the call.
-	 * @throws HttpException If an error occurred during either parameter resolution or method invocation.
-	 */
-	public Object invokeFromCall(RestCall call, Object resource) throws HttpException {
-		Object[] args = new Object[opArgs.length];
-		for (int i = 0; i < opArgs.length; i++) {
-			ParamInfo pi = inner().getParam(i);
-			try {
-				args[i] = opArgs[i].resolve(call);
-			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
-			}
-		}
-		try {
-			return invoke(resource, args);
-		} catch (ExecutableException e) {
-			throw toHttpException(e.unwrap(), InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
-		}
+	public ArgException(ParamInfo pi, String msg, Object...args) {
+		super(format(msg, args) + " on parameter "+pi.getIndex()+" of method "+pi.getMethod().getFullName()+".");
 	}
 }

@@ -92,7 +92,7 @@ public class RestAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Null.class;
-		Class<? extends RestOperationParam>[] restOperationParams = new Class[0];
+		Class<? extends RestOperationArg>[] restOperationArgs = new Class[0];
 		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
 		Class<? extends RestOperationContext> restOperationContextClass = RestOperationContext.Null.class;
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
@@ -516,13 +516,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#restOperationParams()} property on this annotation.
+		 * Sets the {@link Rest#restOperationArgs()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder restOperationParams(Class<? extends RestOperationParam>...value) {
-			this.restOperationParams = value;
+		public Builder restOperationArgs(Class<? extends RestOperationArg>...value) {
+			this.restOperationArgs = value;
 			return this;
 		}
 
@@ -705,7 +705,7 @@ public class RestAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
-		private final Class<? extends RestOperationParam>[] restOperationParams;
+		private final Class<? extends RestOperationArg>[] restOperationArgs;
 		private final Class<? extends BeanFactory> beanFactory;
 		private final Class<? extends RestOperationContext> restOperationContextClass;
 		private final Class<? extends RestChildren> restChildrenClass;
@@ -755,7 +755,7 @@ public class RestAnnotation {
 			this.restChildrenClass = b.restChildrenClass;
 			this.restOperationContextClass = b.restOperationContextClass;
 			this.restOperationsClass = b.restOperationsClass;
-			this.restOperationParams = copyOf(b.restOperationParams);
+			this.restOperationArgs = copyOf(b.restOperationArgs);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
 			this.serializers = copyOf(b.serializers);
@@ -952,8 +952,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestOperationParam>[] restOperationParams() {
-			return restOperationParams;
+		public Class<? extends RestOperationArg>[] restOperationArgs() {
+			return restOperationArgs;
 		}
 
 		@Override /* Rest */
@@ -1058,7 +1058,7 @@ public class RestAnnotation {
 			cpb.prependTo(REST_converters, a.converters());
 			cpb.prependTo(REST_guards, reverse(a.guards()));
 			cpb.prependTo(REST_children, a.children());
-			cpb.prependTo(REST_restOperationParams, a.restOperationParams());
+			cpb.prependTo(REST_restOperationArgs, a.restOperationArgs());
 			cpb.setIf(a.contextClass() != RestContext.Null.class, REST_contextClass, a.contextClass());
 			cpb.setIfNotEmpty(REST_uriContext, string(a.uriContext()));
 			cpb.setIfNotEmpty(REST_uriAuthority, string(a.uriAuthority()));

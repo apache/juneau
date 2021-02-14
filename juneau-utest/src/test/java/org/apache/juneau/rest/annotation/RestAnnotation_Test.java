@@ -75,7 +75,7 @@ public class RestAnnotation_Test {
 		.responseHandlers(ResponseHandler.class)
 		.restChildrenClass(RestChildren.class)
 		.restOperationContextClass(RestOperationContext.class)
-		.restOperationParams(RestOperationParam.class)
+		.restOperationArgs(RestOperationArg.class)
 		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -130,7 +130,7 @@ public class RestAnnotation_Test {
 		.responseHandlers(ResponseHandler.class)
 		.restChildrenClass(RestChildren.class)
 		.restOperationContextClass(RestOperationContext.class)
-		.restOperationParams(RestOperationParam.class)
+		.restOperationArgs(RestOperationArg.class)
 		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
 		.rolesDeclared("rolesDeclared")
@@ -187,8 +187,8 @@ public class RestAnnotation_Test {
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
 				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
 				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
+				+ "restOperationArgs:['org.apache.juneau.rest.RestOperationArg'],"
 				+ "restOperationContextClass:'org.apache.juneau.rest.RestOperationContext',"
-				+ "restOperationParams:['org.apache.juneau.rest.RestOperationParam'],"
 				+ "restOperationsClass:'org.apache.juneau.rest.RestOperations',"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -288,7 +288,7 @@ public class RestAnnotation_Test {
 		responseHandlers=ResponseHandler.class,
 		restChildrenClass=RestChildren.class,
 		restOperationContextClass=RestOperationContext.class,
-		restOperationParams=RestOperationParam.class,
+		restOperationArgs=RestOperationArg.class,
 		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",
@@ -345,7 +345,7 @@ public class RestAnnotation_Test {
 		responseHandlers=ResponseHandler.class,
 		restChildrenClass=RestChildren.class,
 		restOperationContextClass=RestOperationContext.class,
-		restOperationParams=RestOperationParam.class,
+		restOperationArgs=RestOperationArg.class,
 		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
 		rolesDeclared="rolesDeclared",

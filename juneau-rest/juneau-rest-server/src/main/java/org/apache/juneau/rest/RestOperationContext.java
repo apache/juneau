@@ -640,7 +640,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
-	private final RestOperationParam[] opParams;
+	private final RestOperationArg[] opArgs;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
@@ -769,7 +769,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 			responseMeta = ResponseBeanMeta.create(mi, cp);
 
-			opParams = context.findRestOperationParams(mi.inner(), bf);
+			opArgs = context.findRestOperationArgs(mi.inner(), bf);
 
 			this.callLogger = context.getCallLogger();
 		} catch (ServletException e) {
@@ -1859,11 +1859,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		call.debug(context.getDebugEnablement().isDebug(this, call.getRequest()));
 
-		Object[] args = new Object[opParams.length];
-		for (int i = 0; i < opParams.length; i++) {
+		Object[] args = new Object[opArgs.length];
+		for (int i = 0; i < opArgs.length; i++) {
 			ParamInfo pi = methodInvoker.inner().getParam(i);
 			try {
-				args[i] = opParams[i].resolve(call);
+				args[i] = opArgs[i].resolve(call);
 			} catch (Exception e) {
 				throw toHttpException(e, BadRequest.class, "Could not convert resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), mi.getFullName());
 			}

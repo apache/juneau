@@ -1643,7 +1643,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_restOperationParams}
+	 * 	<li class='jf'>{@link RestContext#REST_restOperationArgs}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
@@ -1651,8 +1651,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	@SuppressWarnings("unchecked")
-	public RestContextBuilder restOperationParams(Class<? extends RestOperationParam>...values) {
-		return prependTo(REST_restOperationParams, values);
+	public RestContextBuilder restOperationArgs(Class<? extends RestOperationArg>...values) {
+		return prependTo(REST_restOperationArgs, values);
 	}
 
 	/**
