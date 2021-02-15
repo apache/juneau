@@ -14403,7 +14403,7 @@
 			<li><b>Request APIs:</b>
 				<ul>
 					<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
-					<li class='jc'>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
+					<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams} - API for accessing request query parameters.
 					<li class='jc'>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
 					<li class='jc'>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
 					<li class='jc'>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
@@ -14659,7 +14659,7 @@
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.RestmRequestQuery' id='juneau-rest-server.RestMethod.RestmRequestQuery'>6.6.7 - RequestQuery</a></h4>
 <div class='topic'><!-- START: 6.6.7 - juneau-rest-server.RestMethod.RestmRequestQuery -->
 <p>
-	The {@link org.apache.juneau.rest.RequestQuery} object is the API for accessing the GET query parameters of an HTTP request.
+	The {@link org.apache.juneau.rest.RequestQueryParams} object is the API for accessing the GET query parameters of an HTTP request.
 	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
@@ -14688,15 +14688,15 @@
 	Some important methods on this class are:
 </p>
 <ul class='javatree'>
-	<li class='jc'><c>{@link org.apache.juneau.rest.RequestQuery} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</c>
+	<li class='jc'><c>{@link org.apache.juneau.rest.RequestQueryParams} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</c>
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Class) get(String,Class)} - Get query parameter value converted to a POJO.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Type,Type...) get(String,Type,Type)} - Get query parameter value converted to a map or collection of POJOs.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getString(String,String) getString(String,String)} - Get query parameter value as a simple string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getInt(String,int) getInt(String,int)} - Get query parameter value as an integer.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getBoolean(String,boolean) getBoolean(String,boolean)} - Get query parameter value as a boolean.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a query parameter.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getSearchArgs() getSearchArgs()} - Returns query parameter search arguments.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#get(String,Class) get(String,Class)} - Get query parameter value converted to a POJO.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#get(String,Type,Type...) get(String,Type,Type)} - Get query parameter value converted to a map or collection of POJOs.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#getString(String,String) getString(String,String)} - Get query parameter value as a simple string.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#getInt(String,int) getInt(String,int)} - Get query parameter value as an integer.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#getBoolean(String,boolean) getBoolean(String,boolean)} - Get query parameter value as a boolean.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a query parameter.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQueryParams#getSearchArgs() getSearchArgs()} - Returns query parameter search arguments.
 	</ul>
 </ul>
 
@@ -16693,7 +16693,7 @@
 
 
 <ul class='seealso'>
-	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestQueryParams}
 	<li class='link'>{@doc RestOpenApiSchemaPartParsing}
 </ul>
 </div><!-- END: 6.10.4 - juneau-rest-server.RestHttpPartAnnotations.RestQueryAnnotation -->
@@ -20848,7 +20848,7 @@ Resource bundles are searched using the following base name patterns:
 </p>
 <p>
 	This widget is designed to be used in conjunction with the {@link org.apache.juneau.rest.converters.Queryable} converter, although implementations
-	can process the query parameters themselves if they wish to do so by using the {@link org.apache.juneau.rest.RequestQuery#getSearchArgs()}
+	can process the query parameters themselves if they wish to do so by using the {@link org.apache.juneau.rest.RequestQueryParams#getSearchArgs()}
 	method to retrieve the arguments and process the data themselves.
 </p>
 <p>
@@ -35036,7 +35036,7 @@ Resource bundles are searched using the following base name patterns:
 		<ul>
 			<li>{@link org.apache.juneau.rest.RequestBody}
 			<li>{@link org.apache.juneau.rest.RequestHeaders}
-			<li>{@link org.apache.juneau.rest.RequestQuery}
+			<li>{@link org.apache.juneau.rest.RequestQueryParams}
 			<li>{@link org.apache.juneau.rest.RequestFormData}
 			<li>{@link org.apache.juneau.rest.RequestPath}
 		</ul>						
@@ -35090,7 +35090,7 @@ Resource bundles are searched using the following base name patterns:
 			<li>{@link org.apache.juneau.utils.MessageBundle} - A resource bundle with additional features.
 			<li>{@link java.util.Locale} - Client locale.
 			<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
-			<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
+			<li>{@link org.apache.juneau.rest.RequestQueryParams} - API for accessing request query parameters.
 			<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
 			<li>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
 			<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
@@ -36466,9 +36466,9 @@ Resource bundles are searched using the following base name patterns:
 				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.RequestQuery}:
+		Changes to {@link org.apache.juneau.rest.RequestQueryParams}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
+			<li>{@link org.apache.juneau.rest.RequestQueryParams#addDefault(Map) addDefault(Map)} takes in a 
 				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 		</ul>
 	<li>

@@ -72,13 +72,13 @@ public class RestOp_Guards_Test {
 		public static class A1 extends RestGuard {
 			@Override /* RestGuard */
 			public boolean isRequestAllowed(RestRequest req) {
-				return req.getQuery().getString("t1","").equals("1");
+				return req.getRequestQuery().getString("t1").orElse("").equals("1");
 			}
 		}
 		public static class A2 extends RestGuard {
 			@Override /* RestGuard */
 			public boolean isRequestAllowed(RestRequest req) {
-				return req.getQuery().getString("t2","").equals("2");
+				return req.getRequestQuery().getString("t2").orElse("").equals("2");
 			}
 		}
 	}

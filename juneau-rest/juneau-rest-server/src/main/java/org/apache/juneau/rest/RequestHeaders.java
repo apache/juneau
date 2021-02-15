@@ -18,6 +18,7 @@ import static java.util.stream.Collectors.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.assertions.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -41,55 +42,41 @@ import org.apache.juneau.http.header.Date;
 public class RequestHeaders {
 
 	private final RestRequest req;
+	private final boolean caseSensitive;
+
 	private HttpPartParserSession parser;
 
-	private List<RequestHeader> headers = new LinkedList<>();
-	private Map<String,List<RequestHeader>> headerMap = new TreeMap<>();
+	private List<RequestHeader> list = new LinkedList<>();
+	private Map<String,List<RequestHeader>> map = new TreeMap<>();
 
-	RequestHeaders(RestRequest req, RequestQuery query) {
+	RequestHeaders(RestRequest req, RequestQueryParams query, boolean caseSensitive) {
 		this.req = req;
+		this.caseSensitive = caseSensitive;
 
 		for (Enumeration<String> e = req.getHeaderNames(); e.hasMoreElements();) {
 			String name = e.nextElement();
-			String n = name.toLowerCase();
+			String key = key(name);
 			List<RequestHeader> l = new ArrayList<>();
 			for (Enumeration<String> ve = req.getHeaders(name); ve.hasMoreElements();) {
 				RequestHeader h = new RequestHeader(req, name, ve.nextElement());
-				headers.add(h);
+				list.add(h);
 				l.add(h);
 			}
-			headerMap.put(n, l);
+			map.put(key, l);
 		}
 
 		Set<String> allowedHeaderParams = req.getContext().getAllowedHeaderParams();
-		if (allowedHeaderParams.contains("*")) {
-			for (Map.Entry<String,String[]> e : query.entrySet()) {
-				String name = e.getKey();
-				String n = name.toLowerCase();
-				List<RequestHeader> l = headerMap.get(n);
+		for (RequestQueryParam p : query.getAll()) {
+			String name = p.getName();
+			String key = key(name);
+			if (allowedHeaderParams.contains(key) || allowedHeaderParams.contains("*")) {
+				List<RequestHeader> l = map.get(key);
 				if (l == null)
 					l = new ArrayList<>();
-				for (String value : e.getValue()) {
-					RequestHeader h = new RequestHeader(req, name, value);
-					headers.add(h);
-					l.add(h);
-				}
-				headerMap.put(n, l);
-			}
-
-		} else for (String name : allowedHeaderParams) {
-			String n = name.toLowerCase();
-			List<RequestHeader> l = headerMap.get(n);
-			String[] values = query.get(name, true);
-			if (values != null) {
-				if (l == null)
-					l = new ArrayList<>();
-				for (String value : values) {
-					RequestHeader h = new RequestHeader(req, name, value);
-					headers.add(h);
-					l.add(h);
-				}
-				headerMap.put(n, l);
+				RequestHeader h = new RequestHeader(req, name, p.getValue());
+				list.add(h);
+				l.add(h);
+				map.put(key, l);
 			}
 		}
 	}
@@ -97,16 +84,17 @@ public class RequestHeaders {
 	/**
 	 * Subset constructor.
 	 */
-	RequestHeaders(RestRequest req, Map<String,List<RequestHeader>> headerMap, HttpPartParserSession parser) {
+	RequestHeaders(RestRequest req, Map<String,List<RequestHeader>> headerMap, HttpPartParserSession parser, boolean caseSensitive) {
 		this.req = req;
-		this.headerMap.putAll(headerMap);
-		this.headers = headerMap.values().stream().flatMap(List::stream).collect(toList());
+		this.map.putAll(headerMap);
+		this.list = headerMap.values().stream().flatMap(List::stream).collect(toList());
 		this.parser = parser;
+		this.caseSensitive = caseSensitive;
 	}
 
 	RequestHeaders parser(HttpPartParserSession parser) {
 		this.parser = parser;
-		for (RequestHeader h : headers)
+		for (RequestHeader h : list)
 			h.parser(parser);
 		return this;
 	}
@@ -125,15 +113,15 @@ public class RequestHeaders {
 	public RequestHeaders addDefault(List<Header> pairs) {
 		for (Header p : pairs) {
 			String name = p.getName();
-			String n = name.toLowerCase();
-			List<RequestHeader> l = headerMap.get(n);
+			String key = key(name);
+			List<RequestHeader> l = map.get(key);
 			boolean hasAllBlanks = l != null && l.stream().allMatch(x -> StringUtils.isEmpty(x.getValue()));
 			if (l == null || hasAllBlanks) {
 				if (hasAllBlanks)
-					headers.removeAll(l);
-				RequestHeader h = new RequestHeader(req, name, p.getValue());
-				headers.add(h);
-				headerMap.put(n, AList.of(h));
+					list.removeAll(l);
+				RequestHeader x = new RequestHeader(req, name, p.getValue());
+				list.add(x);
+				map.put(key, AList.of(x));
 			}
 		}
 		return this;
@@ -151,7 +139,7 @@ public class RequestHeaders {
 	 */
 	public RequestHeader getFirst(String name) {
 		assertArgNotNull("name", name);
-		List<RequestHeader> l = headerMap.get(name.toLowerCase());
+		List<RequestHeader> l = map.get(key(name));
 		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(0));
 	}
 
@@ -167,7 +155,7 @@ public class RequestHeaders {
 	 */
 	public RequestHeader getLast(String name) {
 		assertArgNotNull("name", name);
-		List<RequestHeader> l = headerMap.get(name.toLowerCase());
+		List<RequestHeader> l = map.get(key(name));
 		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(l.size()-1));
 	}
 
@@ -179,7 +167,7 @@ public class RequestHeaders {
 	 */
 	public List<RequestHeader> getAll(String name) {
 		assertArgNotNull("name", name);
-		List<RequestHeader> l = headerMap.get(name.toLowerCase());
+		List<RequestHeader> l = map.get(key(name));
 		return unmodifiableList(l == null ? emptyList() : l);
 	}
 
@@ -189,7 +177,7 @@ public class RequestHeaders {
 	 * @return All the headers in this request.
 	 */
 	public List<RequestHeader> getAll() {
-		return unmodifiableList(headers);
+		return unmodifiableList(list);
 	}
 
 	/**
@@ -215,7 +203,7 @@ public class RequestHeaders {
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * @param name The HTTP header name.
+	 * @param name The header name.
 	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
 	public Optional<Integer> getInteger(String name) {
@@ -230,7 +218,7 @@ public class RequestHeaders {
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * @param name The HTTP header name.
+	 * @param name The header name.
 	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
 	public Optional<Boolean> getBoolean(String name) {
@@ -245,7 +233,7 @@ public class RequestHeaders {
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * @param name The HTTP header name.
+	 * @param name The header name.
 	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
 	public Optional<List<String>> getCsvArray(String name) {
@@ -260,7 +248,7 @@ public class RequestHeaders {
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * @param name The HTTP header name.
+	 * @param name The header name.
 	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
 	public Optional<Long> getLong(String name) {
@@ -275,10 +263,10 @@ public class RequestHeaders {
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * @param name The HTTP header name.
+	 * @param name The header name.
 	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
 	 */
-	public Optional<java.util.Date> getDate(String name) {
+	public Optional<ZonedDateTime> getDate(String name) {
 		return getLast(name).asDate();
 	}
 
@@ -294,12 +282,12 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders put(String name, Object value) {
 		assertArgNotNull("name", name);
-		String n = name.toLowerCase();
+		String key = key(name);
 		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		if (headerMap.containsKey(n))
-			headers.removeIf(x->x.getName().equalsIgnoreCase(name));
-		headers.add(h);
-		headerMap.put(n, AList.of(h));
+		if (map.containsKey(key))
+			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
+		list.add(h);
+		map.put(key, AList.of(h));
 		return this;
 	}
 
@@ -315,31 +303,31 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders add(String name, Object value) {
 		assertArgNotNull("name", name);
-		String n = name.toLowerCase();
+		String key = key(name);
 		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		if (headerMap.containsKey(n))
-			headerMap.get(n).add(h);
+		if (map.containsKey(key))
+			map.get(key).add(h);
 		else
-			headerMap.put(n, AList.of(h));
-		headers.add(h);
+			map.put(key, AList.of(h));
+		list.add(h);
 		return this;
 	}
 
 	/**
 	 * Returns a copy of this object but only with the specified header names copied.
 	 *
-	 * @param headers The headers to include in the copy.
-	 * @return A new headers object.
+	 * @param headers The list to include in the copy.
+	 * @return A new list object.
 	 */
 	public RequestHeaders subset(String...headers) {
 		Map<String,List<RequestHeader>> m = Arrays
 			.asList(headers)
 			.stream()
-			.map(x -> x.toLowerCase())
-			.filter(headerMap::containsKey)
-			.collect(toMap(Function.identity(),headerMap::get));
+			.map(x -> key(x))
+			.filter(map::containsKey)
+			.collect(toMap(Function.identity(),map::get));
 
-		return new RequestHeaders(req, m, parser);
+		return new RequestHeaders(req, m, parser, caseSensitive);
 	}
 
 	/**
@@ -849,14 +837,18 @@ public class RequestHeaders {
 	public String toString(boolean sorted) {
 		OMap m = OMap.create();
 		if (sorted) {
-			for (List<RequestHeader> h1 : headerMap.values())
+			for (List<RequestHeader> h1 : map.values())
 				for (RequestHeader h2 : h1)
 					m.append(h2.getName(), h2.getValue());
 		} else {
-			for (RequestHeader h : headers)
+			for (RequestHeader h : list)
 				m.append(h.getName(), h.getValue());
 		}
 		return m.toString();
+	}
+
+	private String key(String name) {
+		return caseSensitive ? name : name.toLowerCase();
 	}
 
 	@Override /* Object */

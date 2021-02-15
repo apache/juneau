@@ -162,6 +162,25 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 		return stringify(unwrap(value));
 	}
 
+	/**
+	 * Returns the raw value of the parameter.
+	 *
+	 * @return The raw value of the parameter.
+	 */
+	protected Object getRawValue() {
+		return unwrap(value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is a {@link Supplier}.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the specified object is a {@link Supplier}.
+	 */
+	protected boolean isSupplier(Object o) {
+		return o instanceof Supplier;
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return urlEncode(getName()) + "=" + urlEncode(getValue());

@@ -17,10 +17,10 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link RequestQuery} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters of type {@link RequestQueryParams} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getQuery() getQuery}()</c>.
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequestQuery() getQuery}()</c>.
  */
 public class RequestQueryArg extends SimpleRestOperationArg {
 
@@ -28,10 +28,10 @@ public class RequestQueryArg extends SimpleRestOperationArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link RequestQueryArg}, or <jk>null</jk> if the parameter type is not {@link RequestQuery}.
+	 * @return A new {@link RequestQueryArg}, or <jk>null</jk> if the parameter type is not {@link RequestQueryParams}.
 	 */
 	public static RequestQueryArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(RequestQuery.class))
+		if (paramInfo.isType(RequestQueryParams.class))
 			return new RequestQueryArg();
 		return null;
 	}
@@ -40,6 +40,6 @@ public class RequestQueryArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestQueryArg() {
-		super((c)->c.getRestRequest().getQuery());
+		super((c)->c.getRestRequest().getRequestQuery());
 	}
 }

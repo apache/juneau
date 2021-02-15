@@ -152,7 +152,7 @@ public enum HookEvent {
 	 * 			<li>{@link ServletOutputStream}
 	 * 			<li>{@link Writer}
 	 * 			<li>{@link RequestHeaders}
-	 * 			<li>{@link RequestQuery}
+	 * 			<li>{@link RequestQueryParams}
 	 * 			<li>{@link RequestFormData}
 	 * 			<li>{@link Logger}
 	 * 			<li>{@link RestContext}

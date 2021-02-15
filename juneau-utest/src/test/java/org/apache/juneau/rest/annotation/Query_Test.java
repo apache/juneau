@@ -39,13 +39,13 @@ public class Query_Test {
 	public static class A {
 		@RestGet
 		public String a(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
-			RequestQuery q = req.getQuery();
-			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
+			RequestQueryParams q = req.getRequestQuery();
+			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.getString("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
-			RequestQuery q = req.getQuery();
-			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
+			RequestQueryParams q = req.getRequestQuery();
+			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.getString("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 	}
 
@@ -88,23 +88,23 @@ public class Query_Test {
 	public static class B {
 		@RestGet
 		public String a(RestRequest req, @Query(n="p1") String p1) throws Exception {
-			RequestQuery q = req.getQuery();
-			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
+			RequestQueryParams q = req.getRequestQuery();
+			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestGet
 		public String b(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
-			RequestQuery q = req.getQuery();
-			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
+			RequestQueryParams q = req.getRequestQuery();
+			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String c(RestRequest req, @Query(n="p1") String p1) throws Exception {
-			RequestQuery q = req.getQuery();
-			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
+			RequestQueryParams q = req.getRequestQuery();
+			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String d(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
-			RequestQuery q = req.getQuery();
-			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
+			RequestQueryParams q = req.getRequestQuery();
+			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 	}
 
@@ -170,10 +170,10 @@ public class Query_Test {
 		c.get("/c?x=a&x=b").run().assertBody().is("['a','b']");
 		c.get("/d?x=1").run().assertBody().is("[1]");
 		c.get("/d?x=1&x=2").run().assertBody().is("[1,2]");
-		c.get("/e?x=a=1,b=2,c=false").run().assertBody().is("[{a:'1',b:2,c:false}]");
-		c.get("/e?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertBody().is("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
-		c.get("/f?x=a=1,b=2,c=false").run().assertBody().is("[{a:'1',b:2,c:false}]");
-		c.get("/f?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertBody().is("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/e?x=a=1,b=2,c=false").run().assertBody().is("[{a:'1,b=2,c=false',b:0,c:false}]");
+		c.get("/e?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertBody().is("[{a:'1,b=2,c=false',b:0,c:false},{a:'3,b=4,c=true',b:0,c:false}]");
+		c.get("/f?x=a=1,b=2,c=false").run().assertBody().is("[{a:'1,b=2,c=false',b:0,c:false}]");
+		c.get("/f?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertBody().is("[{a:'1,b=2,c=false',b:0,c:false},{a:'3,b=4,c=true',b:0,c:false}]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ public class Query_Test {
 	@Rest
 	public static class D {
 		@RestGet(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
-		public OMap a(RequestQuery query) {
+		public OMap a(RequestQueryParams query) {
 			return OMap.create()
 				.a("f1", query.getString("f1"))
 				.a("f2", query.getString("f2"))

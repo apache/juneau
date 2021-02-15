@@ -24,16 +24,16 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.exception.HttpException;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.pair.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 
 /**
- * Represents a single header on an HTTP request.
+ * Represents a single query parameter on an HTTP request.
  */
-public class RequestHeader implements Header {
+public class RequestQueryParam implements NameValuePair {
 
 	private final String name, value;
 	private final RestRequest request;
@@ -44,10 +44,10 @@ public class RequestHeader implements Header {
 	 * Constructor.
 	 *
 	 * @param request The request object.
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param name The parameter name.
+	 * @param value The parameter value.
 	 */
-	public RequestHeader(RestRequest request, String name, String value) {
+	public RequestQueryParam(RestRequest request, String name, String value) {
 		this.request = request;
 		this.name = name;
 		this.value = value;
@@ -59,7 +59,7 @@ public class RequestHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Specifies the part schema for this header.
+	 * Specifies the part schema for this parameter.
 	 *
 	 * <p>
 	 * Used by schema-based part parsers such as {@link OpenApiParser}.
@@ -68,23 +68,23 @@ public class RequestHeader implements Header {
 	 * 	The part schema.
 	 * @return This object (for method chaining).
 	 */
-	public RequestHeader schema(HttpPartSchema value) {
+	public RequestQueryParam schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
 
 	/**
-	 * Specifies the part parser to use for this header.
+	 * Specifies the part parser to use for this parameter.
 	 *
 	 * <p>
 	 * If not specified, uses the part parser defined on the client by calling {@link RestContextBuilder#partParser(Class)}.
 	 *
 	 * @param value
-	 * 	The new part parser to use for this header.
+	 * 	The new part parser to use for this parameter.
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
 	 * @return This object (for method chaining).
 	 */
-	public RequestHeader parser(HttpPartParserSession value) {
+	public RequestQueryParam parser(HttpPartParserSession value) {
 		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
 		return this;
 	}
@@ -94,76 +94,76 @@ public class RequestHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns <jk>true</jk> if this header exists on the request.
+	 * Returns <jk>true</jk> if this parameter exists on the request.
 	 *
-	 * @return <jk>true</jk> if this header exists on the request.
+	 * @return <jk>true</jk> if this parameter exists on the request.
 	 */
 	public boolean exists() {
 		return value != null;
 	}
 
 	/**
-	 * Returns the value of this header as a string.
+	 * Returns the value of this parameter as a string.
 	 *
-	 * @return The value of this header as a string, or {@link Optional#empty()} if the header was not present.
+	 * @return The value of this parameter as a string, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<String> asString() {
-		return asStringHeader().asString();
+		return asNamedString().asString();
 	}
 
 	/**
-	 * Returns the value of this header as an integer.
+	 * Returns the value of this parameter as an integer.
 	 *
-	 * @return The value of this header as an integer, or {@link Optional#empty()} if the header was not present.
+	 * @return The value of this parameter as an integer, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<Integer> asInteger() {
-		return asIntegerHeader().asInteger();
+		return asNamedInteger().asInteger();
 	}
 
 	/**
-	 * Returns the value of this header as a boolean.
+	 * Returns the value of this parameter as a boolean.
 	 *
-	 * @return The value of this header as a boolean, or {@link Optional#empty()} if the header was not present.
+	 * @return The value of this parameter as a boolean, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return asBooleanHeader().asBoolean();
+		return asNamedBoolean().asBoolean();
 	}
 
 	/**
-	 * Returns the value of this header as a long.
+	 * Returns the value of this parameter as a long.
 	 *
-	 * @return The value of this header as a long, or {@link Optional#empty()} if the header was not present.
+	 * @return The value of this parameter as a long, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<Long> asLong() {
-		return asLongHeader().asLong();
+		return asNamedLong().asLong();
 	}
 
 	/**
-	 * Returns the value of this header as a date.
+	 * Returns the value of this parameter as a date.
 	 *
-	 * @return The value of this header as a date, or {@link Optional#empty()} if the header was not present.
+	 * @return The value of this parameter as a date, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<ZonedDateTime> asDate() {
-		return asDateHeader().asZonedDateTime();
+		return asNamedDate().asZonedDateTime();
 	}
 
 	/**
-	 * Returns the value of this header as a list from a comma-delimited string.
+	 * Returns the value of this parameter as a list from a comma-delimited string.
 	 *
-	 * @return The value of this header as a list from a comma-delimited string, or {@link Optional#empty()} if the header was not present.
+	 * @return The value of this parameter as a list from a comma-delimited string, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<List<String>> asCsvArray() {
-		return asCsvArrayHeader().asList();
+		return asNamedCsvArray().asList();
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicHeader}.
+	 * Returns the value of this parameter as a {@link BasicNameValuePair}.
 	 *
-	 * @param c The subclass of {@link BasicHeader} to instantiate.
-	 * @param <T> The subclass of {@link BasicHeader} to instantiate.
-	 * @return The value of this header as a string, never <jk>null</jk>.
+	 * @param c The subclass of {@link BasicNameValuePair} to instantiate.
+	 * @param <T> The subclass of {@link BasicNameValuePair} to instantiate.
+	 * @return The value of this parameter as a string, never <jk>null</jk>.
 	 */
-	public <T extends BasicHeader> T asHeader(Class<T> c) {
+	public <T extends BasicNameValuePair> T asNameValuePair(Class<T> c) {
 		try {
 			ClassInfo ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
@@ -179,102 +179,75 @@ public class RequestHeader implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicCsvArrayHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedCsvArray}.
 	 *
-	 * @return The value of this header as a  {@link BasicCsvArrayHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedCsvArray}, never <jk>null</jk>.
 	 */
-	public BasicCsvArrayHeader asCsvArrayHeader() {
-		return new BasicCsvArrayHeader(getName(), getValue());
+	public BasicNamedCsvArray asNamedCsvArray() {
+		return new BasicNamedCsvArray(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicDateHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedDate}.
 	 *
-	 * @return The value of this header as a {@link BasicDateHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedDate}, never <jk>null</jk>.
 	 */
-	public BasicDateHeader asDateHeader() {
-		return new BasicDateHeader(getName(), getValue());
+	public BasicNamedDate asNamedDate() {
+		return new BasicNamedDate(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicEntityTagArrayHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedInteger}.
 	 *
-	 * @return The value of this header as a {@link BasicEntityTagArrayHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedInteger}, never <jk>null</jk>.
 	 */
-	public BasicEntityTagArrayHeader asEntityTagArrayHeader() {
-		return new BasicEntityTagArrayHeader(getName(), getValue());
+	public BasicNamedInteger asNamedInteger() {
+		return new BasicNamedInteger(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicEntityTagHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedBoolean}.
 	 *
-	 * @return The value of this header as a {@link BasicEntityTagHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedBoolean}, never <jk>null</jk>.
 	 */
-	public BasicEntityTagHeader asEntityTagHeader() {
-		return new BasicEntityTagHeader(getName(), getValue());
+	public BasicNamedBoolean asNamedBoolean() {
+		return new BasicNamedBoolean(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicIntegerHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedLong}.
 	 *
-	 * @return The value of this header as a {@link BasicIntegerHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedLong}, never <jk>null</jk>.
 	 */
-	public BasicIntegerHeader asIntegerHeader() {
-		return new BasicIntegerHeader(getName(), getValue());
+	public BasicNamedLong asNamedLong() {
+		return new BasicNamedLong(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicBooleanHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedString}.
 	 *
-	 * @return The value of this header as a {@link BasicBooleanHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedString}, never <jk>null</jk>.
 	 */
-	public BasicBooleanHeader asBooleanHeader() {
-		return new BasicBooleanHeader(getName(), getValue());
+	public BasicNamedString asNamedString() {
+		return new BasicNamedString(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicLongHeader}.
+	 * Returns the value of this parameter as a {@link BasicNamedUri}.
 	 *
-	 * @return The value of this header as a {@link BasicLongHeader}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicNamedUri}, never <jk>null</jk>.
 	 */
-	public BasicLongHeader asLongHeader() {
-		return new BasicLongHeader(getName(), getValue());
+	public BasicNamedUri asNamedUri() {
+		return new BasicNamedUri(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicStringRangeArrayHeader}.
-	 *
-	 * @return The value of this header as a {@link BasicStringRangeArrayHeader}, never <jk>null</jk>.
-	 */
-	public BasicStringRangeArrayHeader asStringRangeArrayHeader() {
-		return new BasicStringRangeArrayHeader(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this header as a {@link BasicStringHeader}.
-	 *
-	 * @return The value of this header as a {@link BasicStringHeader}, never <jk>null</jk>.
-	 */
-	public BasicStringHeader asStringHeader() {
-		return new BasicStringHeader(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this header as a {@link BasicUriHeader}.
-	 *
-	 * @return The value of this header as a {@link BasicUriHeader}, never <jk>null</jk>.
-	 */
-	public BasicUriHeader asUriHeader() {
-		return new BasicUriHeader(getName(), getValue());
-	}
-
-	/**
-	 * Converts this header to the specified POJO type using the request {@link HttpPartParser} and optional schema.
+	 * Converts this parameter to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
-	 * @return The converted type, or {@link Optional#empty()} if the header is not present.
+	 * @return The converted type, or {@link Optional#empty()} if the parameter is not present.
 	 * @throws HttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Type type, Type...args) throws HttpException {
@@ -282,11 +255,11 @@ public class RequestHeader implements Header {
 	}
 
 	/**
-	 * Converts this header to the specified POJO type using the request {@link HttpPartParser} and optional schema.
+	 * Converts this parameter to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The converted type, or {@link Optional#empty()} if the header is not present.
+	 * @return The converted type, or {@link Optional#empty()} if the parameter is not present.
 	 * @throws HttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Class<T> type) throws HttpException {
@@ -294,32 +267,33 @@ public class RequestHeader implements Header {
 	}
 
 	/**
-	 * Converts this header to the specified POJO type using the request {@link HttpPartParser} and optional schema.
+	 * Converts this parameter to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
-	 * @return The converted type, or {@link Optional#empty()} if the header is not present.
+	 * @return The converted type, or {@link Optional#empty()} if the parameter is not present.
 	 * @throws HttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) throws HttpException {
 		try {
 			return Optional.ofNullable(parser.parse(HEADER, schema, asString().orElse(null), type));
 		} catch (ParseException e) {
-			throw new BadRequest(e, "Could not parse header ''{0}''.", getName());
+			throw new BadRequest(e, "Could not parse query parameter ''{0}''.", getName());
 		}
 	}
 
 	/**
-	 * Matches the specified pattern against this header value.
+	 * Matches the specified pattern against this parameter value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Parse parameter using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
+	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.asMatcher(Pattern.<jsm>compile</jsm>(<js>"foo/(.*)"</js>));
 	 *
-	 * <jk>if</jk> (<jv>matcher</jv>.matches()) {
-	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);
+	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
+	 * 		String <jv>bar</jv> = <jv>matcher</jv>.group(1);
 	 * 	}
 	 * </p>
 	 *
@@ -332,16 +306,17 @@ public class RequestHeader implements Header {
 	}
 
 	/**
-	 * Matches the specified pattern against this header value.
+	 * Matches the specified pattern against this parameter value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Parse parameter using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.asMatcher(<js>"application/(.*)"</js>);
+	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.asMatcher(<js>"foo/(.*)"</js>);
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
-	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);
+	 * 		String <jv>bar</jv> = <jv>matcher</jv>.group(1);
 	 * 	}
 	 * </p>
 	 *
@@ -354,16 +329,17 @@ public class RequestHeader implements Header {
 	}
 
 	/**
-	 * Matches the specified pattern against this header value.
+	 * Matches the specified pattern against this parameter value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Parse parameter using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.asMatcher(<js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.asMatcher(<js>"foo/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
-	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);
+	 * 		String <jv>bar</jv> = <jv>matcher</jv>.group(1);
 	 * 	}
 	 * </p>
 	 *
@@ -381,93 +357,92 @@ public class RequestHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this request header.
+	 * Provides the ability to perform fluent-style assertions on this parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.assertString().is(<js>"application/json"</js>);
+	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.assertString().contains(<js>"bar"</js>);
 	 * </p>
 	 *
 	 * <p>
-	 * The assertion test returns the header object allowing you to chain multiple requests like so:
+	 * The assertion test returns the original object allowing you to chain multiple requests like so:
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the header and then convert it to a bean.</jc>
-	 * 	MediaType <jv>mediaType</jv> = 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.assertString().matches(<js>".*json.*"</js>)
-	 * 		.as(MediaType.<jk>class</jk>).get();
+	 * 	String <jv>foo</jv> = <jv>request</jv>
+	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.assertString().contains(<js>"bar"</js>)
+	 * 		.asString().get();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentStringAssertion<RequestHeader> assertString() {
+	public FluentStringAssertion<RequestQueryParam> assertString() {
 		return new FluentStringAssertion<>(asString().orElse(null), this);
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on an integer request header.
+	 * Provides the ability to perform fluent-style assertions on an integer parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Age"</js>)
+	 * 		.getQueryParam(<js>"age"</js>)
 	 * 		.assertInteger().isGreaterThan(1);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentIntegerAssertion<RequestHeader> assertInteger() {
-		return new FluentIntegerAssertion<>(asIntegerHeader().asInteger().orElse(null), this);
+	public FluentIntegerAssertion<RequestQueryParam> assertInteger() {
+		return new FluentIntegerAssertion<>(asNamedInteger().asInteger().orElse(null), this);
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on a long request header.
+	 * Provides the ability to perform fluent-style assertions on a long parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Length"</js>)
+	 * 		.getQueryParam(<js>"length"</js>)
 	 * 		.assertLong().isLessThan(100000);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentLongAssertion<RequestHeader> assertLong() {
-		return new FluentLongAssertion<>(asLongHeader().asLong().orElse(null), this);
+	public FluentLongAssertion<RequestQueryParam> assertLong() {
+		return new FluentLongAssertion<>(asNamedLong().asLong().orElse(null), this);
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on a date request header.
+	 * Provides the ability to perform fluent-style assertions on a date parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Expires"</js>)
+	 * 		.getQueryParam(<js>"time"</js>)
 	 * 		.assertDate().isAfterNow();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentZonedDateTimeAssertion<RequestHeader> assertDate() {
-		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime().orElse(null), this);
+	public FluentZonedDateTimeAssertion<RequestQueryParam> assertDate() {
+		return new FluentZonedDateTimeAssertion<>(asNamedDate().asZonedDateTime().orElse(null), this);
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on comma-separated string headers.
+	 * Provides the ability to perform fluent-style assertions on comma-separated string parameters.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Allow"</js>)
+	 * 		.getQueryParam(<js>"allow"</js>)
 	 * 		.assertCsvArray().contains(<js>"GET"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentListAssertion<RequestHeader> assertCsvArray() {
-		return new FluentListAssertion<>(asCsvArrayHeader().asList().orElse(null), this);
+	public FluentListAssertion<RequestQueryParam> assertCsvArray() {
+		return new FluentListAssertion<>(asNamedCsvArray().asList().orElse(null), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -475,9 +450,9 @@ public class RequestHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Gets the name of this header.
+	 * Gets the name of this pair.
 	 *
-	 * @return The name of this header, never <jk>null</jk>.
+	 * @return The name of this pair, never <jk>null</jk>.
 	 */
 	@Override /* Header */
 	public String getName() {
@@ -485,28 +460,21 @@ public class RequestHeader implements Header {
 	}
 
 	/**
-	 * Gets the value of this header.
+	 * Gets the value of this pair.
 	 *
-	 * @return The value of this header, may be <jk>null</jk>.
+	 * <ul class='notes'>
+	 * 	<li>{@link #asString()} is an equivalent method and the preferred method for fluent-style coding.
+	 * </ul>
+	 *
+	 * @return The value of this pair, may be <jk>null</jk>.
 	 */
 	@Override /* Header */
 	public String getValue() {
 		return value;
 	}
 
-	/**
-	 * Parses the value.
-	 *
-	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
-	 * @throws HttpException In case of a parsing error.
-	 */
-	@Override /* Header */
-	public HeaderElement[] getElements() throws HttpException {
-		return new HeaderElement[0];
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return getName() + ": " + getValue();
+		return getName() + "=" + getValue();
 	}
 }

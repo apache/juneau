@@ -81,7 +81,7 @@ public class RestOp_Params_Test {
 			return t != null;
 		}
 		@RestGet
-		public boolean j(RequestQuery t) {
+		public boolean j(RequestQueryParams t) {
 			return t != null;
 		}
 		@RestGet

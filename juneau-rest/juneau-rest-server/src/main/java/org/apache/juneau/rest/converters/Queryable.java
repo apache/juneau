@@ -150,7 +150,7 @@ public final class Queryable implements RestConverter {
 	public Object convert(RestRequest req, Object o) {
 		if (o == null)
 			return null;
-		SearchArgs searchArgs = req.getQuery().getSearchArgs();
+		SearchArgs searchArgs = req.getRequestQuery().getSearchArgs();
 		if (searchArgs == null)
 			return o;
 		return new PojoQuery(o, req.getBeanSession()).filter(searchArgs);

@@ -609,8 +609,8 @@ import org.apache.juneau.utils.*;
  * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link BasicHeader}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link BasicIntegerHeader}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link BasicStringHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link BasicStringHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link BasicIntegerHeader}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link BasicLongHeader}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link BasicDateHeader}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link BasicCsvArrayHeader}</c>

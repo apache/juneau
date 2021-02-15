@@ -64,6 +64,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.exception.HttpException;
 import org.apache.juneau.http.header.*;
@@ -110,7 +111,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final RestOperationContext opContext;
 	private final RequestBody body;
 	private final BeanSession beanSession;
-	private final RequestQuery queryParams;
+	private final RequestQueryParams queryParams;
 	private final RequestPath pathParams;
 	private final RequestHeaders headers;
 	private final RequestAttributes attrs;
@@ -140,15 +141,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		inner = call.getRequest();
 		context = call.getContext();
 
-		queryParams = new RequestQuery(this);
-		queryParams.putAll(call.getQueryParams());
+		queryParams = new RequestQueryParams(this, call.getQueryParams(), true);
 
-		headers = new RequestHeaders(this, queryParams);
+		headers = new RequestHeaders(this, queryParams, false);
 
 		body = new RequestBody(this);
 
 		if (context.isAllowBodyParam()) {
-			String b = getQuery().getString("body");
+			String b = queryParams.getString("body").orElse(null);
 			if (b != null) {
 				headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 				body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
@@ -222,221 +222,46 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Headers
+	// Assertions
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the last header with the specified name.
+	 * Returns a fluent assertion for the specified header.
 	 *
-	 * Unlike {@link #getHeader(String)}, this method returns an empty
-	 * {@link ResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
-	 * in fluent calls.
-	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 		<jv>req</jv>.getRequestHeader("Foo").asInteger().orElse(-1);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return The header.  Never <jk>null</jk>.
-	 */
-	public RequestHeader getRequestHeader(String name) {
-		return headers.getLast(name).parser(getPartParserSession());
-	}
-
-	/**
-	 * Shortcut for calling <code>getHeader(name).asString()</code>.
-	 *
-	 * @param name The header name.
-	 * @return The header value, never <jk>null</jk>
-	 */
-	public Optional<String> getStringHeader(String name) {
-		return getRequestHeader(name).asString();
-	}
-
-	/**
-	 * Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
-	 *
-	 * <p>
-	 * This is equivalent to calling <c>getHeader(<js>"Content-Type"</js>).as(ContentType.<jk>class</jk>)</c>.
-	 *
-	 * @return The response charset.
-	 */
-	public Optional<ContentType> getContentTypeHeader() {
-		return getRequestHeader("Content-Type").as(ContentType.class);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type header is provided.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).exists();
-	 *
 	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
-	 *
-	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
-	 *
-	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
-	 *
-	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
-	 *
-	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
-	 * </p>
-	 *
-	 * <p>
-	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the header and converts it to a bean.</jc>
-	 * 	MediaType <jv>mediaType</jv> = <jv>rreq</jv>
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).exists()
-	 * 		.assertStringHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
-	 * 		.getRequestHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
+	 * 	<jv>request</jv>
+	 * 		.assertHeader(<js>"Content-Type"</js>).asString().is(<js>"application/json"</js>);
 	 * </p>
 	 *
 	 * @param name The header name.
-	 * @return A new fluent assertion object.
+	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
-	public FluentStringAssertion<RestRequest> assertStringHeader(String name) {
-		return new FluentStringAssertion<>(getRequestHeader(name).asString().orElse(null), this);
+	public FluentRequestHeaderAssertion<RestRequest> assertHeader(String name) {
+		return new FluentRequestHeaderAssertion<RestRequest>(getRequestHeader(name), this);
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on an integer response header.
+	 * Returns a fluent assertion for the specified query parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertQueryParam(<js>"foo"</js>).asString().contains(<js>"bar"</js>);
 	 * </p>
 	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
+	 * @param name The query parameter name.
+	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
-	public FluentIntegerAssertion<RestRequest> assertIntegerHeader(String name) {
-		return new FluentIntegerAssertion<>(getRequestHeader(name).asInteger().orElse(null), this);
+	public FluentRequestQueryParamAssertion<RestRequest> assertQueryParam(String name) {
+		return new FluentRequestQueryParamAssertion<RestRequest>(getRequestQueryParam(name), this);
 	}
 
-	/**
-	 * Provides the ability to perform fluent-style assertions on a long response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response body is not too large.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentLongAssertion<RestRequest> assertLongHeader(String name) {
-		return new FluentLongAssertion<>(getRequestHeader(name).asLong().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>re2</jv>
-	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentDateAssertion<RestRequest> assertDateHeader(String name) {
-		return new FluentDateAssertion<>(getRequestHeader(name).asDate().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertZoneDateTimeHeader(<js>"Expires"</js>).isAfterNow();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentZonedDateTimeAssertion<RestRequest> assertZonedDateTimeHeader(String name) {
-		return new FluentZonedDateTimeAssertion<>(getRequestHeader(name).asZonedDateTime().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertCsvArrayHeader(<js>"Allow"</js>).contains(<js>"GET"</js>);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentListAssertion<RestRequest> assertCsvArrayHeader(String name) {
-		return new FluentListAssertion<>(getRequestHeader(name).asCsvArray().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the response character encoding.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertCharset().is(<js>"utf-8"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws HttpException If REST call failed.
-	 */
-	public FluentStringAssertion<RestRequest> assertCharset() {
-		return new FluentStringAssertion<>(getCharacterEncoding(), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the response content type.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertContentType().is(<js>"application/json"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * Note that this is equivalent to the following code:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	<jv>req</jv>
-	 * 		.assertRequestHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentStringAssertion<RestRequest> assertContentType() {
-		return new FluentStringAssertion<>(getRequestHeader("Content-Type").asString().orElse(null), this);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Headers
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Request headers.
@@ -450,16 +275,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to headers.</jc>
-	 * 		RequestHeaders <jv>headers</jv> = <jv>req</jv>.getHeaders();
+	 * 		RequestHeaders <jv>headers</jv> = <jv>req</jv>.getRequestHeaders();
 	 *
 	 * 		<jc>// Add a default value.</jc>
 	 * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	 *
 	 *  	<jc>// Get a header value as a POJO.</jc>
-	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
 	 *
 	 * 		<jc>// Get a standard header.</jc>
-	 * 		CacheControl = <jv>headers</jv>.getCacheControl();
+	 * 		Optional&lt;CacheControl&gt; = <jv>headers</jv>.getCacheControl();
 	 * 	}
 	 * </p>
 	 *
@@ -484,6 +309,41 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public RequestHeaders getRequestHeaders() {
 		return headers;
+	}
+
+	/**
+	 * Returns the last header with the specified name.
+	 *
+	 * Unlike {@link #getHeader(String)}, this method returns an empty
+	 * {@link ResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
+	 * in fluent calls.
+	 *
+	 * <p class='bcode w800'>
+	 * 		<jv>req</jv>.getRequestHeader("Foo").asInteger().orElse(-1);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getRequestHeader(String name) {
+		return headers.getLast(name).parser(getPartParserSession());
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response character encoding.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertCharset().is(<js>"utf-8"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws HttpException If REST call failed.
+	 */
+	public FluentStringAssertion<RestRequest> assertCharset() {
+		return new FluentStringAssertion<>(getCharacterEncoding(), this);
 	}
 
 	@Override /* ServletRequest */
@@ -626,7 +486,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Query parameters.
 	 *
 	 * <p>
-	 * Returns a {@link RequestQuery} object that encapsulates access to URL GET parameters.
+	 * Returns a {@link RequestQueryParams} object that encapsulates access to URL GET parameters.
 	 *
 	 * <p>
 	 * Similar to {@link #getParameterMap()} but only looks for query parameters in the URL and not form posts.
@@ -637,26 +497,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to query parameters on the URL.</jc>
-	 * 		RequestQuery <jv>query</jv> = <jv>req</jv>.getQuery();
+	 * 		RequestQueryParams <jv>query</jv> = <jv>req</jv>.getQuery();
 	 *
 	 * 		<jc>// Get query parameters converted to various types.</jc>
-	 * 		<jk>int</jk> <jv>p1/<jv> = <jv>query</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-	 * 		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
-	 * 		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 * 		<jk>int</jk> <jv>p1/<jv> = <jv>query</jv>.getInteger(<js>"p1"</js>).orElse(<jk>null</jk>);
+	 * 		String <jv>p2</jv> = <jv>query</jv>.getString(<js>"p2"</js>).orElse(<jk>null</jk>);
+	 * 		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
-	 * 	<li>
-	 * 		This method can be used to retrieve query parameters without triggering the underlying servlet API to load and parse the request body.
-	 * 	<li>
-	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
-	 * 	<li>
-	 * 		The {@link RequestQuery} object can also be passed as a parameter on the method.
-	 * 	<li>
-	 * 		The {@link Query @Query} annotation can be used to access individual query parameter values.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -667,18 +519,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The query parameters as a modifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestQuery getQuery() {
+	public RequestQueryParams getRequestQuery() {
 		return queryParams;
 	}
 
 	/**
-	 * Shortcut for calling <c>getQuery().getString(name)</c>.
+	 * Shortcut for calling <c>getRequestQuery().getLast(<jv>name</jv>)</c>.
 	 *
 	 * @param name The query parameter name.
-	 * @return The query parameter value, or <jk>null</jk> if not found.
+	 * @return The query parameter, never <jk>null</jk>.
 	 */
-	public String getQuery(String name) {
-		return getQuery().getString(name);
+	public RequestQueryParam getRequestQueryParam(String name) {
+		return queryParams.get(name);
 	}
 
 
@@ -989,7 +841,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String uri = getRequestURI();
 		if (includeQuery || addQueryParams != null) {
 			StringBuilder sb = new StringBuilder(uri);
-			RequestQuery rq = this.queryParams.copy();
+			RequestQueryParams rq = this.queryParams.copy();
 			if (addQueryParams != null)
 				for (Map.Entry<String,?> e : addQueryParams.entrySet())
 					rq.put(e.getKey(), e.getValue());
@@ -1107,7 +959,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
-		return "true".equals(queryParams.getString("plainText", "false"));
+		return "true".equals(queryParams.getString("plainText").orElse("false"));
 	}
 
 	/**
@@ -1451,7 +1303,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							if (pt == HttpPartType.BODY)
 								return getBody().schema(schema).asType(type);
 							if (pt == QUERY)
-								return getQuery().get(pp, schema, name, type);
+								return getRequestQuery().getLast(name).parser(pp).schema(schema).as(type);
 							if (pt == FORMDATA)
 								return getFormData().get(pp, schema, name, type);
 							if (pt == HEADER)

@@ -45,7 +45,7 @@ public class RestClient_Config_BeanContext_Test {
 		}
 		@RestGet
 		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
-			return new StringReader(req.getQuery().asQueryString());
+			return new StringReader(req.getRequestQuery().asQueryString());
 		}
 		@RestPost
 		public Reader checkFormData(org.apache.juneau.rest.RestRequest req) {

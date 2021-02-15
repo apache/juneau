@@ -1,0 +1,182 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.http.pair;
+
+import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
+
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.http.*;
+import org.apache.juneau.assertions.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
+
+/**
+ * A {@link NameValuePair} that consists of a comma-delimited list of string values.
+ */
+public class BasicNamedCsvArray extends BasicNameValuePair {
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value
+	 * 	The parameter value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>String</c> - A comma-delimited string.
+	 * 		<li><c>String[]</c> - A pre-parsed value.
+	 * 		<li>Any other array type - Converted to <c>String[]</c>.
+	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
+	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 	</ul>
+	 * @return A new {@link BasicNamedCsvArray} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 */
+	public static BasicNamedCsvArray of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicNamedCsvArray(name, value);
+	}
+
+	/**
+	 * Convenience creator using supplier.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The parameter name.
+	 * @param value
+	 * 	The parameter value supplier.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>String</c> - A comma-delimited string.
+	 * 		<li><c>String[]</c> - A pre-parsed value.
+	 * 		<li>Any other array type - Converted to <c>String[]</c>.
+	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
+	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 	</ul>
+	 * @return A new {@link BasicNamedCsvArray} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 */
+	public static BasicNamedCsvArray of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicNamedCsvArray(name, value);
+	}
+
+	private List<String> parsed;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The parameter name.
+	 * @param value
+	 * 	The parameter value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>String</c> - A comma-delimited string.
+	 * 		<li><c>String[]</c> - A pre-parsed value.
+	 * 		<li>Any other array type - Converted to <c>String[]</c>.
+	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
+	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 */
+	public BasicNamedCsvArray(String name, Object value) {
+		super(name, value);
+		if (! isSupplier(value))
+			parsed = getParsedValue();
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		Object o = getRawValue();
+		if (o instanceof String)
+			return (String)o;
+		return joine(getParsedValue(), ',');
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this parameter contains the specified value.
+	 *
+	 * @param val The value to check for.
+	 * @return <jk>true</jk> if this parameter contains the specified value.
+	 */
+	public boolean contains(String val) {
+		List<String> vv = getParsedValue();
+		if (val != null && vv != null)
+			for (String v : vv)
+				if (isEquals(v, val))
+					return true;
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this parameter contains the specified value using {@link String#equalsIgnoreCase(String)}.
+	 *
+	 * @param val The value to check for.
+	 * @return <jk>true</jk> if this parameter contains the specified value.
+	 */
+	public boolean containsIgnoreCase(String val) {
+		List<String> vv = getParsedValue();
+		if (val != null && vv != null)
+			for (String v : vv)
+				if (isEqualsIc(v, val))
+					return true;
+		return false;
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentListAssertion<BasicNamedCsvArray> assertList() {
+		return new FluentListAssertion<>(getParsedValue(), this);
+	}
+
+	/**
+	 * Returns the contents of this parameter as a list of strings.
+	 *
+	 * @return The contents of this parameter as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
+	 */
+	public Optional<List<String>> asList() {
+		List<String> l = getParsedValue();
+		return ofNullable(l == null ? null : Collections.unmodifiableList(l));
+	}
+
+	private List<String> getParsedValue() {
+		if (parsed != null)
+			return parsed;
+
+		Object o = getRawValue();
+		if (o == null)
+			return null;
+
+		AList<String> l = AList.create();
+		if (o instanceof Collection) {
+			for (Object o2 : (Collection<?>)o)
+				l.add(stringify(o2));
+		} else if (o.getClass().isArray()) {
+			for (int i = 0; i < Array.getLength(o); i++)
+				l.add(stringify(Array.get(o, i)));
+		} else {
+			for (String s : split(o.toString()))
+				l.add(s);
+		}
+		return l.unmodifiable();
+	}
+}
