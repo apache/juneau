@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.*;
  */
 @FluentSetters(returns="FluentCollectionAssertion<R>")
 @SuppressWarnings("rawtypes")
-public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
+public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection,R> {
 
 	private Collection value;
 

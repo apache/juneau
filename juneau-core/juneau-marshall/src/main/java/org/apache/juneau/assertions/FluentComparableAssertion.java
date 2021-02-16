@@ -17,13 +17,14 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against comparable objects.
  *
+ * @param <V> The value type
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentComparableAssertion<R>")
 @SuppressWarnings("rawtypes")
-public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
+public class FluentComparableAssertion<V extends Comparable,R> extends FluentBaseAssertion<V,R> {
 
-	private final Comparable value;
+	private final V value;
 
 	/**
 	 * Constructor.
@@ -31,7 +32,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param value The value being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentComparableAssertion(Comparable value, R returns) {
+	public FluentComparableAssertion(V value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -42,7 +43,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param value The value being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentComparableAssertion(Assertion creator, Comparable value, R returns) {
+	public FluentComparableAssertion(Assertion creator, V value, R returns) {
 		super(creator, value, returns);
 		this.value = value;
 	}
@@ -186,6 +187,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param value The object to compare against.
 	 * @return The comparison value.
 	 */
+	@SuppressWarnings("unchecked")
 	protected int compareTo(Object value) {
 		return this.value.compareTo(equivalent(value));
 	}
@@ -193,19 +195,19 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<R> msg(String msg, Object...args) {
+	public FluentComparableAssertion<V,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<R> stderr() {
+	public FluentComparableAssertion<V,R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<R> stdout() {
+	public FluentComparableAssertion<V,R> stdout() {
 		super.stdout();
 		return this;
 	}

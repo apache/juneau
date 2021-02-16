@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentBooleanAssertion<R>")
-public class FluentBooleanAssertion<R> extends FluentComparableAssertion<R> {
+public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
 	private final Boolean value;
 

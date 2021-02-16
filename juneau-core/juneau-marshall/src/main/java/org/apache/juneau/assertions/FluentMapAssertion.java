@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.*;
  */
 @FluentSetters(returns="FluentMapAssertion<R>")
 @SuppressWarnings("rawtypes")
-public class FluentMapAssertion<R> extends FluentObjectAssertion<R>  {
+public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 
 	private Map value;
 

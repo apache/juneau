@@ -22,7 +22,7 @@ import org.apache.juneau.rest.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentRequestQueryParamAssertion<R>")
-public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R> {
+public class FluentRequestQueryParamAssertion<R> extends FluentBaseAssertion<String,R> {
 
 	private final RequestQueryParam value;
 
@@ -54,7 +54,6 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a boolean.
 	 */
-	@Override
 	public FluentBooleanAssertion<R> asBoolean() {
 		return new FluentBooleanAssertion<>(this, value.asBoolean().orElse(null), returns());
 	}
@@ -65,7 +64,6 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a date.
 	 */
-	@Override
 	public FluentDateAssertion<R> asDate() {
 		return new FluentDateAssertion<>(this, value.asNamedDate().asDate().orElse(null), returns());
 	}
@@ -76,7 +74,6 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an integer.
 	 */
-	@Override
 	public FluentIntegerAssertion<R> asInteger() {
 		return new FluentIntegerAssertion<>(this, value.asInteger().orElse(null), returns());
 	}
@@ -87,7 +84,6 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a long.
 	 */
-	@Override
 	public FluentLongAssertion<R> asLong() {
 		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
 	}
@@ -98,7 +94,6 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a zoned-datetime.
 	 */
-	@Override
 	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
 		return new FluentZonedDateTimeAssertion<>(this, value.asNamedDate().asZonedDateTime().orElse(null), returns());
 	}

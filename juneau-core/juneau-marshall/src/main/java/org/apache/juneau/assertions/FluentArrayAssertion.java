@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentArrayAssertion<R>")
-public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
+public class FluentArrayAssertion<R> extends FluentBaseAssertion<Object,R> {
 
 	private Object value;
 

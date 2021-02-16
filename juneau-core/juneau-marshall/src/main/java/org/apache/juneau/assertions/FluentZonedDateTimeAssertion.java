@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentZonedDateTimeAssertion<R>")
-public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<R> {
+public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
 
 	private final ZonedDateTime value;
 

@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentObjectAssertion<R>")
-public class FluentBeanAssertion<R> extends FluentObjectAssertion<R> {
+public class FluentBeanAssertion<R> extends FluentBaseAssertion<Object,R> {
 
 	private final Object value;
 

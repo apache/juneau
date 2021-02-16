@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentIntegerAssertion<R>")
-public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
+public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer,R> {
 
 	private final Integer value;
 

@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="ComparableAssertion")
 @SuppressWarnings("rawtypes")
-public class ComparableAssertion extends FluentComparableAssertion<ComparableAssertion> {
+public class ComparableAssertion extends FluentComparableAssertion<Comparable,ComparableAssertion> {
 
 	/**
 	 * Creator.

@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentDateAssertion<R>")
-public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
+public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 
 	private final Date value;
 

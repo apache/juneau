@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentLongAssertion<R>")
-public class FluentLongAssertion<R> extends FluentComparableAssertion<R> {
+public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 
 	private final Long value;
 
@@ -61,7 +61,6 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<R> {
 	 *
 	 * @return A new assertion.
 	 */
-	@Override
 	public FluentIntegerAssertion<R> asInteger() {
 		return new FluentIntegerAssertion<>(this, value == null ? null : value.intValue(), returns());
 	}

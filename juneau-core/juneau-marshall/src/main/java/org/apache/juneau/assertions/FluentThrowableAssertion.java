@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import java.util.function.*;
-
 import org.apache.juneau.internal.*;
 
 /**
@@ -22,7 +20,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentThrowableAssertion<R>")
-public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
+public class FluentThrowableAssertion<R> extends FluentBaseAssertion<Throwable,R> {
 
 	private final Throwable value;
 
@@ -44,7 +42,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentThrowableAssertion(Assertion creator, Throwable value, R returns) {
-		super(creator, returns);
+		super(creator, value, returns);
 		this.value = value;
 	}
 
@@ -61,6 +59,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @param type The type.
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public R isType(Class<?> type) {
 		assertNotNull("type", type);
 		if (! type.isInstance(value))
@@ -126,6 +125,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public R exists() {
 		if (value == null)
 			throw error("Exception was not thrown.");
@@ -143,39 +143,10 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public R doesNotExist() {
 		if (value != null)
 			throw error("Exception was thrown.");
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R passes(Predicate<Throwable> test) throws AssertionError {
-		if (! test.test(value))
-			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param c The class to cast to for the predicate.
-	 * @param <T> The class to cast to for the predicate.
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Throwable> R passes(Class<T> c, Predicate<T> test) throws AssertionError {
-		isType(c);
-		if (! test.test((T) value))
-			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();
 	}
 
