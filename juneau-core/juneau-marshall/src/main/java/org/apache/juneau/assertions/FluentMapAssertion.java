@@ -60,8 +60,32 @@ public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 	 * @param key The key of the item to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<R> value(String key) {
-		return new FluentObjectAssertion<>(this, value == null ? null : value.get(key), returns());
+	public FluentObjectAssertion<Object,R> value(String key) {
+		return value(Object.class, key);
+	}
+
+	/**
+	 * Returns an object assertion on the value specified at the specified key.
+	 *
+	 * <p>
+	 * If the map is <jk>null</jk> or the map doesn't contain the specified key, the returned assertion is a null assertion
+	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @param type The value type.
+	 * @param key The key of the item to retrieve from the map.
+	 * @return A new assertion.
+	 */
+	public <V> FluentObjectAssertion<Object,R> value(Class<V> type, String key) {
+		Object v = getValue(key);
+		if (v == null || type.isInstance(v))
+			return new FluentObjectAssertion<>(this, v, returns());
+		throw error("Map value not of expected type for key ''{0}''.\n\tExpected: {1}.\n\tActual: {2}", key, type, v.getClass());
+	}
+
+	private Object getValue(String key) {
+		if (value != null)
+			return value.get(key);
+		return null;
 	}
 
 	/**

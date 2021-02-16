@@ -1657,7 +1657,7 @@ public class ResponseBody implements HttpEntity {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentObjectAssertion<RestResponse> assertObject(Class<?> type) throws RestCallException {
+	public <T> FluentObjectAssertion<T,RestResponse> assertObject(Class<T> type) throws RestCallException {
 		return new FluentObjectAssertion<>(as(type), response);
 	}
 

@@ -22,9 +22,11 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
  * 	<jsm>assertBean</jsm>(<jv>myBean</jv>).isType(MyBean.<jk>class</jk>).fields(<js>"foo"</js>).asJson().is(<js>"{foo:'bar'}"</js>);
  * </p>
+ *
+ * @param <V> The bean type.
  */
 @FluentSetters(returns="BeanAssertion")
-public class BeanAssertion extends FluentBeanAssertion<BeanAssertion> {
+public class BeanAssertion<V> extends FluentBeanAssertion<Object,BeanAssertion<V>> {
 
 	/**
 	 * Creator.
@@ -32,8 +34,8 @@ public class BeanAssertion extends FluentBeanAssertion<BeanAssertion> {
 	 * @param value The object being wrapped.
 	 * @return A new {@link BeanAssertion} object.
 	 */
-	public static BeanAssertion create(Object value) {
-		return new BeanAssertion(value);
+	public static <V> BeanAssertion<V> create(V value) {
+		return new BeanAssertion<>(value);
 	}
 
 	/**
@@ -46,26 +48,26 @@ public class BeanAssertion extends FluentBeanAssertion<BeanAssertion> {
 	}
 
 	@Override
-	protected BeanAssertion returns() {
+	protected BeanAssertion<V> returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion msg(String msg, Object...args) {
+	public BeanAssertion<V> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion stderr() {
+	public BeanAssertion<V> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion stdout() {
+	public BeanAssertion<V> stdout() {
 		super.stdout();
 		return this;
 	}

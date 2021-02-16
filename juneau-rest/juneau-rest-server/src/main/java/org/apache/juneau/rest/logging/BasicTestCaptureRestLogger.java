@@ -184,8 +184,8 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 	 *
 	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
 	 */
-	public ThrowableAssertion assertThrown() {
-		return new ThrowableAssertion(getThrown());
+	public ThrowableAssertion<Throwable> assertThrown() {
+		return new ThrowableAssertion<>(getThrown());
 	}
 
 	/**

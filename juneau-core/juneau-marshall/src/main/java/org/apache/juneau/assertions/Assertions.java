@@ -184,7 +184,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ObjectAssertion assertObject(Object value) {
+	public static <V> ObjectAssertion<V> assertObject(V value) {
 		return ObjectAssertion.create(value);
 	}
 
@@ -200,7 +200,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ObjectAssertion assertObject(Optional<?> value) {
+	public static <V> ObjectAssertion<V> assertObject(Optional<V> value) {
 		assertArgNotNull("value", value);
 		return assertObject(value.orElse(null));
 	}
@@ -217,7 +217,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static BeanAssertion assertBean(Object value) {
+	public static <V> BeanAssertion<V> assertBean(V value) {
 		return BeanAssertion.create(value);
 	}
 
@@ -233,7 +233,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static BeanAssertion assertBean(Optional<?> value) {
+	public static <V> BeanAssertion<V> assertBean(Optional<V> value) {
 		assertArgNotNull("value", value);
 		return assertBean(value.orElse(null));
 	}
@@ -316,7 +316,7 @@ public class Assertions {
 	 * @param value The throwable being wrapped.
 	 * @return A new {@link ThrowableAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable value) {
+	public static <V extends Throwable> ThrowableAssertion<V> assertThrowable(V value) {
 		return ThrowableAssertion.create(value);
 	}
 
@@ -400,11 +400,34 @@ public class Assertions {
 	 * @param snippet The snippet of code to execute.
 	 * @return A new assertion object.  Never <jk>null</jk>.
 	 */
-	public static ThrowableAssertion assertThrown(Snippet snippet) {
+	public static ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
+		return assertThrown(Throwable.class, snippet);
+	}
+
+	/**
+	 * Executes an arbitrary snippet of code and captures anything thrown from it.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "Foobar" in the message. </jc>
+	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
+	 * 		.exists()
+	 * 		.isType(RuntimeException.<jk>class</jk>)
+	 * 		.contains(<js>"Foobar"</js>);
+	 * </p>
+	 *
+	 * @param type The expected exception type.
+	 * @param snippet The snippet of code to execute.
+	 * @return A new assertion object.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Throwable> ThrowableAssertion<Throwable> assertThrown(Class<T> type, Snippet snippet) {
 		try {
 			snippet.run();
 		} catch (Throwable e) {
-			return assertThrowable(e);
+			if (type.isInstance(e))
+				return assertThrowable((T)e);
+			throw new BasicAssertionError("Exception not of expected type.\n\tExpected: {1}.\n\tActual: {2}", type, e.getClass());
 		}
 		return assertThrowable(null);
 	}

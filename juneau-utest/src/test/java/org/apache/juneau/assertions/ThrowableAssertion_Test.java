@@ -24,7 +24,7 @@ public class ThrowableAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		Exception x1 = new RuntimeException("foo");
+		RuntimeException x1 = new RuntimeException("foo");
 
 		assertThrowable(x1).isType(Exception.class).isType(RuntimeException.class);
 		assertThrown(()->assertThrowable(x1).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[java.lang.RuntimeException]");
@@ -49,9 +49,8 @@ public class ThrowableAssertion_Test {
 		assertThrowable(x1).passes(x->x.getMessage().equals("foo"));
 		assertThrown(()->assertThrowable(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
 
-		assertThrowable(x1).passes(RuntimeException.class, x->x.getMessage().equals("foo"));
-		assertThrown(()->assertThrowable(x1).passes(IOException.class, x->x.getMessage().equals("foo"))).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[java.lang.RuntimeException]");
-		assertThrown(()->assertThrowable(x1).passes(RuntimeException.class, x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		assertThrowable(x1).passes(x->x.getMessage().equals("foo"));
+		assertThrown(()->assertThrowable(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
 
 		assertThrowable(x1).message().is("foo");
 		assertThrowable(new RuntimeException()).message().doesNotExist();

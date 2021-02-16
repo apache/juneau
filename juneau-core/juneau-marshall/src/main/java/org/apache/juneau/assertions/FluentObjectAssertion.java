@@ -21,10 +21,11 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against POJOs.
  *
+ * @param <V> The object type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentObjectAssertion<R>")
-public class FluentObjectAssertion<R> extends FluentBaseAssertion<Object,R> {
+@FluentSetters(returns="FluentObjectAssertion<V,R>")
+public class FluentObjectAssertion<V,R> extends FluentBaseAssertion<V,R> {
 
 	private final Object value;
 
@@ -34,7 +35,7 @@ public class FluentObjectAssertion<R> extends FluentBaseAssertion<Object,R> {
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentObjectAssertion(Object value, R returns) {
+	public FluentObjectAssertion(V value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -45,7 +46,7 @@ public class FluentObjectAssertion<R> extends FluentBaseAssertion<Object,R> {
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentObjectAssertion(Assertion creator, Object value, R returns) {
+	public FluentObjectAssertion(Assertion creator, V value, R returns) {
 		super(creator, value, returns);
 		this.value = value;
 	}
@@ -171,19 +172,19 @@ public class FluentObjectAssertion<R> extends FluentBaseAssertion<Object,R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<R> msg(String msg, Object...args) {
+	public FluentObjectAssertion<V,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<R> stderr() {
+	public FluentObjectAssertion<V,R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<R> stdout() {
+	public FluentObjectAssertion<V,R> stdout() {
 		super.stdout();
 		return this;
 	}

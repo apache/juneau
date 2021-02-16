@@ -89,8 +89,8 @@ public class ObjectAssertion_Test {
 		assertObject(x1).passes(x->x != null);
 		assertThrown(()->assertObject(x1).passes(x->x == null)).stderr().is("Value did not pass predicate test.\n\tValue=[[1,2]]");
 
-		assertObject(x1).passes(int[].class, x->x[0] == 1);
-		assertThrown(()->assertObject(x1).passes(int[].class, x->x[0]==2)).stderr().is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		assertObject(x1).passes(x->x[0] == 1);
+		assertThrown(()->assertObject(x1).passes(x->x[0]==2)).stderr().is("Value did not pass predicate test.\n\tValue=[[1,2]]");
 
 		assertObject(x1).isNot(null);
 

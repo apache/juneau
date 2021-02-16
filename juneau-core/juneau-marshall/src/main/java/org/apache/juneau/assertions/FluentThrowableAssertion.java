@@ -17,10 +17,11 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against throwables.
  *
+ * @param <V> The throwable type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentThrowableAssertion<R>")
-public class FluentThrowableAssertion<R> extends FluentBaseAssertion<Throwable,R> {
+@FluentSetters(returns="FluentThrowableAssertion<V,R>")
+public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseAssertion<V,R> {
 
 	private final Throwable value;
 
@@ -30,7 +31,7 @@ public class FluentThrowableAssertion<R> extends FluentBaseAssertion<Throwable,R
 	 * @param value The throwable being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentThrowableAssertion(Throwable value, R returns) {
+	public FluentThrowableAssertion(V value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -41,7 +42,7 @@ public class FluentThrowableAssertion<R> extends FluentBaseAssertion<Throwable,R
 	 * @param value The throwable being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentThrowableAssertion(Assertion creator, Throwable value, R returns) {
+	public FluentThrowableAssertion(Assertion creator, V value, R returns) {
 		super(creator, value, returns);
 		this.value = value;
 	}
@@ -206,8 +207,28 @@ public class FluentThrowableAssertion<R> extends FluentBaseAssertion<Throwable,R
 	 *
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
-	public FluentThrowableAssertion<R> causedBy() {
-		return new FluentThrowableAssertion<>(this, value == null ? null : value.getCause(), returns());
+	public FluentThrowableAssertion<Throwable,R> causedBy() {
+		return causedBy(Throwable.class);
+	}
+
+	/**
+	 * Returns an assertion against the caused-by throwable.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws an exception whose caused-by message contains 'foobar'. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).causedBy().message().contains(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param type The expected exception type.
+	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public <E extends Throwable> FluentThrowableAssertion<E,R> causedBy(Class<E> type) {
+		Throwable t = value == null ? null : value.getCause();
+		if (t == null || type.isInstance(t))
+			return new FluentThrowableAssertion<>(this, (E)t, returns());
+		throw error("Caused-by exception not of expected type.\n\tExpected: {1}.\n\tActual: {2}", type, t.getClass());
 	}
 
 	/**
@@ -222,32 +243,33 @@ public class FluentThrowableAssertion<R> extends FluentBaseAssertion<Throwable,R
 	 * @param throwableClass The class type to search for in the caused-by chain.
 	 * @return An assertion against the caused-by throwable.  Never <jk>null</jk>.
 	 */
-	public FluentThrowableAssertion<R> find(Class<?> throwableClass) {
+	@SuppressWarnings("unchecked")
+	public <E extends Throwable> FluentThrowableAssertion<E,R> find(Class<E> throwableClass) {
 		Throwable t = value;
 		while (t != null) {
 			if (throwableClass.isInstance(t))
-				return new FluentThrowableAssertion<>(this, t, returns());
+				return new FluentThrowableAssertion<>(this, (E)t, returns());
 			t = t.getCause();
 		}
-		return new FluentThrowableAssertion<>(this, null, returns());
+		return new FluentThrowableAssertion<>(this, (E)null, returns());
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<R> msg(String msg, Object...args) {
+	public FluentThrowableAssertion<V,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<R> stderr() {
+	public FluentThrowableAssertion<V,R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<R> stdout() {
+	public FluentThrowableAssertion<V,R> stdout() {
 		super.stdout();
 		return this;
 	}

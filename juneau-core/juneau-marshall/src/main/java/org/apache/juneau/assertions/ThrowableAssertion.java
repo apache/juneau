@@ -22,9 +22,11 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
  * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
  * </p>
+ *
+ * @param <V> The throwable type.
  */
 @FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+public class ThrowableAssertion<V extends Throwable> extends FluentThrowableAssertion<V,ThrowableAssertion<V>> {
 
 	/**
 	 * Creator.
@@ -32,8 +34,8 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	 * @param value The throwable being wrapped.
 	 * @return A new {@link ThrowableAssertion} object.
 	 */
-	public static ThrowableAssertion create(Throwable value) {
-		return new ThrowableAssertion(value);
+	public static <V extends Throwable> ThrowableAssertion<V> create(V value) {
+		return new ThrowableAssertion<>(value);
 	}
 
 	/**
@@ -41,31 +43,31 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	 *
 	 * @param value The throwable being wrapped.
 	 */
-	public ThrowableAssertion(Throwable value) {
+	public ThrowableAssertion(V value) {
 		super(value, null);
 	}
 
 	@Override
-	protected ThrowableAssertion returns() {
+	protected ThrowableAssertion<V> returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public ThrowableAssertion<V> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public ThrowableAssertion<V> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public ThrowableAssertion<V> stdout() {
 		super.stdout();
 		return this;
 	}

@@ -22,9 +22,11 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Validates the specified POJO is the specified type.</jc>
  * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
  * </p>
+ *
+ * @param <V> The object type.
  */
 @FluentSetters(returns="ObjectAssertion")
-public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
+public class ObjectAssertion<V> extends FluentObjectAssertion<V,ObjectAssertion<V>> {
 
 	/**
 	 * Creator.
@@ -32,8 +34,8 @@ public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.
 	 */
-	public static ObjectAssertion create(Object value) {
-		return new ObjectAssertion(value);
+	public static <V> ObjectAssertion<V> create(V value) {
+		return new ObjectAssertion<>(value);
 	}
 
 	/**
@@ -41,31 +43,31 @@ public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public ObjectAssertion(Object value) {
+	public ObjectAssertion(V value) {
 		super(value, null);
 	}
 
 	@Override
-	protected ObjectAssertion returns() {
+	protected ObjectAssertion<V> returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion msg(String msg, Object...args) {
+	public ObjectAssertion<V> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion stderr() {
+	public ObjectAssertion<V> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion stdout() {
+	public ObjectAssertion<V> stdout() {
 		super.stdout();
 		return this;
 	}

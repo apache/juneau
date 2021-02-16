@@ -93,7 +93,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @return An object for performing assertions against the value of this pair.
 	 */
-	public FluentObjectAssertion<BasicNamedAttribute> assertValue() {
+	public FluentObjectAssertion<Object,BasicNamedAttribute> assertValue() {
 		return new FluentObjectAssertion<>(getValue(), this);
 	}
 

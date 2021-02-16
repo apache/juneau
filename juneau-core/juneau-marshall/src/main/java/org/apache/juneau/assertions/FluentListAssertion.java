@@ -59,8 +59,26 @@ public class FluentListAssertion<R> extends FluentCollectionAssertion<R> {
 	 * @param index The index of the item to retrieve from the list.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<R> item(int index) {
-		return new FluentObjectAssertion<>(this, getItem(index), returns());
+	public FluentObjectAssertion<Object,R> item(int index) {
+		return item(Object.class, index);
+	}
+
+	/**
+	 * Returns an object assertion on the item specified at the specified index.
+	 *
+	 * <p>
+	 * If the list is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
+	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @param type The value type.
+	 * @param index The index of the item to retrieve from the list.
+	 * @return A new assertion.
+	 */
+	public <V> FluentObjectAssertion<Object,R> item(Class<V> type, int index) {
+		Object v = getItem(index);
+		if (v == null || type.isInstance(v))
+			return new FluentObjectAssertion<>(this, v, returns());
+		throw error("List value not of expected type at index ''{0}''.\n\tExpected: {1}.\n\tActual: {2}", index, type, v.getClass());
 	}
 
 	private Object getItem(int index) {

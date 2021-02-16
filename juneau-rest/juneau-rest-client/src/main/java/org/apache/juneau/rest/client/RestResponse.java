@@ -479,7 +479,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentObjectAssertion<RestResponse> assertBody(Class<?> type) throws RestCallException {
+	public <V> FluentObjectAssertion<V,RestResponse> assertBody(Class<V> type) throws RestCallException {
 		return responseBody.cache().assertObject(type);
 	}
 

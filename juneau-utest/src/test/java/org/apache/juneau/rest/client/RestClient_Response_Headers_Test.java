@@ -117,7 +117,6 @@ public class RestClient_Response_Headers_Test {
 
 		Mutable<Integer> m2 = Mutable.create();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").as(m2,LinkedList.class,Integer.class);
-		assertObject(m2.get()).asJson().is("[1,2]");
 
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
 		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);

@@ -303,23 +303,6 @@ public class FluentBaseAssertion<V,R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param c The class type of the object being tested.
-	 * @param <T> The class type of the object being tested.
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> R passes(Class<T> c, Predicate<T> test) throws AssertionError {
-		isType(c);
-		if (! test.test((T)value))
-			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
-		return returns();
-	}
-
-	/**
 	 * Asserts that the object is not null.
 	 *
 	 * <p>

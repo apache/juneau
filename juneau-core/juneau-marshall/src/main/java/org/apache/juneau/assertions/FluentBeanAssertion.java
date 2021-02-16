@@ -18,10 +18,11 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against Java beans.
  *
+ * @param <V> The bean type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentObjectAssertion<R>")
-public class FluentBeanAssertion<R> extends FluentBaseAssertion<Object,R> {
+@FluentSetters(returns="FluentBeanAssertion<V,R>")
+public class FluentBeanAssertion<V,R> extends FluentBaseAssertion<Object,R> {
 
 	private final Object value;
 
@@ -31,7 +32,7 @@ public class FluentBeanAssertion<R> extends FluentBaseAssertion<Object,R> {
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentBeanAssertion(Object value, R returns) {
+	public FluentBeanAssertion(V value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -42,7 +43,7 @@ public class FluentBeanAssertion<R> extends FluentBaseAssertion<Object,R> {
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentBeanAssertion(Assertion creator, Object value, R returns) {
+	public FluentBeanAssertion(Assertion creator, V value, R returns) {
 		super(creator, value, returns);
 		this.value = value;
 	}
@@ -66,27 +67,51 @@ public class FluentBeanAssertion<R> extends FluentBaseAssertion<Object,R> {
 	 * @param name The field to extract.  Can also pass in comma-delimited lists.
 	 * @return The response object (for method chaining).
 	 */
-	public FluentObjectAssertion<R> field(String name) {
-		exists();
-		return new FluentObjectAssertion<>(this, BeanMap.create(value).get(name), returns());
+	public FluentObjectAssertion<Object,R> field(String name) {
+		return field(Object.class, name);
 	}
+
+	/**
+	 * Returns an object assertion on the value specified at the specified key.
+	 *
+	 * <p>
+	 * If the map is <jk>null</jk> or the map doesn't contain the specified key, the returned assertion is a null assertion
+	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @param type The value type.
+	 * @param name The bean property name.
+	 * @return A new assertion.
+	 */
+	@SuppressWarnings("unchecked")
+	public <E> FluentObjectAssertion<E,R> field(Class<E> type, String name) {
+		Object v = getField(name);
+		if (v == null || type.isInstance(v))
+			return new FluentObjectAssertion<>(this, (E)v, returns());
+		throw error("Bean property value not of expected type for property ''{0}''.\n\tExpected: {1}.\n\tActual: {2}", name, type, v.getClass());
+	}
+
+	private Object getField(String name) {
+		exists();
+		return BeanMap.create(value).get(name);
+	}
+
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<R> msg(String msg, Object...args) {
+	public FluentBeanAssertion<V,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<R> stderr() {
+	public FluentBeanAssertion<V,R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<R> stdout() {
+	public FluentBeanAssertion<V,R> stdout() {
 		super.stdout();
 		return this;
 	}
