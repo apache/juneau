@@ -43,6 +43,6 @@ public class NonAuthoritativeInformation_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(203)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

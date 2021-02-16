@@ -43,6 +43,6 @@ public class Processing_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(1102)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

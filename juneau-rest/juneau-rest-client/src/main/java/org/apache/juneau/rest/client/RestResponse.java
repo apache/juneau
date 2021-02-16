@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.client.assertion.*;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -255,6 +256,25 @@ public class RestResponse implements HttpResponse {
 	}
 
 	/**
+	 * Provides the ability to perform fluent-style assertions on the response character encoding.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertCharset().is(<js>"utf-8"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentStringAssertion<RestResponse> assertCharset() throws RestCallException {
+		return new FluentStringAssertion<>(getCharacterEncoding(), this);
+	}
+
+	/**
 	 * Provides the ability to perform fluent-style assertions on a response header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -311,131 +331,8 @@ public class RestResponse implements HttpResponse {
 	 * @param name The header name.
 	 * @return A new fluent assertion object.
 	 */
-	public FluentStringAssertion<RestResponse> assertStringHeader(String name) {
-		return getResponseHeader(name).assertString();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on an integer response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentIntegerAssertion<RestResponse> assertIntegerHeader(String name) {
-		return getResponseHeader(name).assertInteger();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a long response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response body is not too large.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentLongAssertion<RestResponse> assertLongHeader(String name) {
-		return getResponseHeader(name).assertLong();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentZonedDateTimeAssertion<RestResponse> assertDateHeader(String name) {
-		return getResponseHeader(name).assertDate();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertCsvArrayHeader(<js>"Allow"</js>).contains(<js>"GET"</js>);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentListAssertion<RestResponse> assertCsvArrayHeader(String name) {
-		return getResponseHeader(name).assertCsvArray();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the response character encoding.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertCharset().is(<js>"utf-8"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public FluentStringAssertion<RestResponse> assertCharset() throws RestCallException {
-		return new FluentStringAssertion<>(getCharacterEncoding(), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the response content type.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertContentType().is(<js>"application/json"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * Note that this is equivalent to the following code:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentStringAssertion<RestResponse> assertContentType() {
-		return getResponseHeader("Content-Type").assertString();
+	public FluentResponseHeaderAssertion<RestResponse> assertHeader(String name) {
+		return new FluentResponseHeaderAssertion<>(getLastHeader(name), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -830,31 +727,35 @@ public class RestResponse implements HttpResponse {
 	/**
 	 * Returns the first header with a specified name of this message.
 	 *
-	 * Header values are ignored.
-	 * <br>If there is more than one matching header in the message the first element of {@link #getHeaders(String)} is returned.
+	 * <p>
+	 * If there is more than one matching header in the message the first element of {@link #getHeaders(String)} is returned.
+	 * <p>
+	 * This method always returns a value so that you can perform assertions on the result.
 	 *
 	 * @param name The name of the header to return.
-	 * @return The header, or <jk>null</jk> if there is no matching header in the message.
+	 * @return The header, never <jk>null</jk>.
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
 		Header h = response.getFirstHeader(name);
-		return h == null ? null : new ResponseHeader(request, this, h).parser(partParser);
+		return new ResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**
 	 * Returns the last header with a specified name of this message.
 	 *
-	 * Header values are ignored.
-	 * <br>?If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.
+	 * <p>
+	 * If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.
+	 * <p>
+	 * This method always returns a value so that you can perform assertions on the result.
 	 *
 	 * @param name The name of the header to return.
-	 * @return The header, or <jk>null</jk> if there is no matching header in the message.
+	 * @return The header, never <jk>null</jk>.
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
 		Header h = response.getLastHeader(name);
-		return h == null ? null : new ResponseHeader(request, this, h).parser(partParser);
+		return new ResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**

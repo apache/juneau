@@ -43,6 +43,6 @@ public class MultiStatus_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(207)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

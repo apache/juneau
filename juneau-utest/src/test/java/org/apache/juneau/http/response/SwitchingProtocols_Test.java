@@ -43,6 +43,6 @@ public class SwitchingProtocols_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(1101)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

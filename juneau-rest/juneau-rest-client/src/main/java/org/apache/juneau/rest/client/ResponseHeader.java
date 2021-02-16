@@ -16,6 +16,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static java.util.Optional.*;
 
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -62,7 +63,8 @@ public class ResponseHeader implements Header {
 		}
 	};
 
-	private final Header header;
+	private final String name, value;
+	private final HeaderElement[] elements;
 	private final RestRequest request;
 	private final RestResponse response;
 	private HttpPartParserSession parser;
@@ -78,7 +80,9 @@ public class ResponseHeader implements Header {
 	public ResponseHeader(RestRequest request, RestResponse response, Header header) {
 		this.request = request;
 		this.response = response;
-		this.header = header == null ? NULL_HEADER : header;
+		this.name = header == null ? "" : header.getName();
+		this.value = header == null ? null : header.getValue();
+		this.elements = header == null ? new HeaderElement[0] : header.getElements();
 		parser(null);
 	}
 
@@ -127,16 +131,61 @@ public class ResponseHeader implements Header {
 	 * @return <jk>true</jk> if this header exists on the response.
 	 */
 	public boolean exists() {
-		return header != NULL_HEADER;
+		return value != null;
 	}
 
 	/**
 	 * Returns the value of this header as a string.
 	 *
-	 * @return The value of this header as a string, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a string, or {@link Optional#empty()} if the header was not present.
 	 */
 	public Optional<String> asString() {
-		return ofNullable(getValue());
+		return asStringHeader().asString();
+	}
+
+	/**
+	 * Returns the value of this header as an integer.
+	 *
+	 * @return The value of this header as an integer, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Integer> asInteger() {
+		return asIntegerHeader().asInteger();
+	}
+
+	/**
+	 * Returns the value of this header as a boolean.
+	 *
+	 * @return The value of this header as a boolean, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Boolean> asBoolean() {
+		return asBooleanHeader().asBoolean();
+	}
+
+	/**
+	 * Returns the value of this header as a long.
+	 *
+	 * @return The value of this header as a long, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<Long> asLong() {
+		return asLongHeader().asLong();
+	}
+
+	/**
+	 * Returns the value of this header as a date.
+	 *
+	 * @return The value of this header as a date, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<ZonedDateTime> asDate() {
+		return asDateHeader().asZonedDateTime();
+	}
+
+	/**
+	 * Returns the value of this header as a list from a comma-delimited string.
+	 *
+	 * @return The value of this header as a list from a comma-delimited string, or {@link Optional#empty()} if the header was not present.
+	 */
+	public Optional<List<String>> asCsvArray() {
+		return asCsvArrayHeader().asList();
 	}
 
 	/**
@@ -204,6 +253,15 @@ public class ResponseHeader implements Header {
 	 */
 	public BasicIntegerHeader asIntegerHeader() {
 		return new BasicIntegerHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as an boolean header.
+	 *
+	 * @return The value of this header as an boolean header, never <jk>null</jk>.
+	 */
+	public BasicBooleanHeader asBooleanHeader() {
+		return new BasicBooleanHeader(getName(), getValue());
 	}
 
 	/**
@@ -512,9 +570,6 @@ public class ResponseHeader implements Header {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertStringHeader(String)} method to instantiate a fluent assertions object.
-	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
@@ -575,9 +630,6 @@ public class ResponseHeader implements Header {
 	/**
 	 * Provides the ability to perform fluent-style assertions on an integer response header.
 	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertIntegerHeader(String)} method to instantiate a fluent assertions object.
-	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
@@ -595,9 +647,6 @@ public class ResponseHeader implements Header {
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on a long response header.
-	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertLongHeader(String)} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -617,9 +666,6 @@ public class ResponseHeader implements Header {
 	/**
 	 * Provides the ability to perform fluent-style assertions on a date response header.
 	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertDateHeader(String)} method to instantiate a fluent assertions object.
-	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is not expired.</jc>
@@ -637,9 +683,6 @@ public class ResponseHeader implements Header {
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on comma-separated string headers.
-	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertCsvArrayHeader(String)} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -667,7 +710,7 @@ public class ResponseHeader implements Header {
 	 */
 	@Override /* Header */
 	public String getName() {
-		return header.getName();
+		return name;
 	}
 
 	/**
@@ -681,7 +724,7 @@ public class ResponseHeader implements Header {
 	 */
 	@Override /* Header */
 	public String getValue() {
-		return header.getValue();
+		return value;
 	}
 
 	/**
@@ -692,7 +735,7 @@ public class ResponseHeader implements Header {
 	 */
 	@Override /* Header */
 	public HeaderElement[] getElements() throws org.apache.http.ParseException {
-		return header.getElements();
+		return elements;
 	}
 
 	@Override /* Object */

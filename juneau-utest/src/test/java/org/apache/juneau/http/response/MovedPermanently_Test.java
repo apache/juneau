@@ -47,10 +47,10 @@ public class MovedPermanently_Test {
 			.run()
 			.assertCode().is(301)
 			.assertBody().is("Moved Permanently")
-			.assertStringHeader("Location").is("/foo");
+			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()
 			.assertCode().is(301)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

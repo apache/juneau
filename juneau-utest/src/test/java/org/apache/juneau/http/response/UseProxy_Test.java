@@ -43,6 +43,6 @@ public class UseProxy_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(305)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

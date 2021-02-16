@@ -68,7 +68,7 @@ public class HttpException_Test {
 		c.get("/f5").run()
 			.assertStatus().code().is(225)
 			.assertBody().is("")
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 
 	@Test

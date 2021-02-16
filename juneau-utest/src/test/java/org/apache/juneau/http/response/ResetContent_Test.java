@@ -41,6 +41,6 @@ public class ResetContent_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(205)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

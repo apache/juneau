@@ -10,21 +10,21 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.assertions;
+package org.apache.juneau.rest.client.assertion;
 
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.client.*;
 
 /**
- * Used for fluent assertion calls against {@link RequestQueryParam} objects.
+ * Used for fluent assertion calls against {@link ResponseHeader} objects.
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentRequestQueryParamAssertion<R>")
-public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R> {
+@FluentSetters(returns="FluentResponseHeaderAssertion<R>")
+public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 
-	private final RequestQueryParam value;
+	private final ResponseHeader value;
 
 	/**
 	 * Constructor.
@@ -32,7 +32,7 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentRequestQueryParamAssertion(RequestQueryParam value, R returns) {
+	public FluentResponseHeaderAssertion(ResponseHeader value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -43,7 +43,7 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentRequestQueryParamAssertion(Assertion creator, RequestQueryParam value, R returns) {
+	public FluentResponseHeaderAssertion(Assertion creator, ResponseHeader value, R returns) {
 		super(creator, value.getValue(), returns);
 		this.value = value;
 	}
@@ -67,7 +67,7 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 */
 	@Override
 	public FluentDateAssertion<R> asDate() {
-		return new FluentDateAssertion<>(this, value.asNamedDate().asDate().orElse(null), returns());
+		return new FluentDateAssertion<>(this, value.asDateHeader().asDate().orElse(null), returns());
 	}
 
 	/**
@@ -100,25 +100,25 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	 */
 	@Override
 	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(this, value.asNamedDate().asZonedDateTime().orElse(null), returns());
+		return new FluentZonedDateTimeAssertion<>(this, value.asDateHeader().asZonedDateTime().orElse(null), returns());
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentRequestQueryParamAssertion<R> msg(String msg, Object...args) {
+	public FluentResponseHeaderAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentRequestQueryParamAssertion<R> stderr() {
+	public FluentResponseHeaderAssertion<R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentRequestQueryParamAssertion<R> stdout() {
+	public FluentResponseHeaderAssertion<R> stdout() {
 		super.stdout();
 		return this;
 	}

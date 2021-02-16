@@ -43,6 +43,6 @@ public class Created_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(201)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

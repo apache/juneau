@@ -43,6 +43,6 @@ public class MultipleChoices_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(300)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

@@ -43,6 +43,6 @@ public class PartialContent_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(206)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

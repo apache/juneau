@@ -159,10 +159,10 @@ public class RestOp_Returns_Test {
 			.assertBody().is("foo");
 		b.get("/b")
 			.run()
-			.assertStringHeader("Foo").is("Bar");
+			.assertHeader("Foo").is("Bar");
 		b.get("/c")
 			.run()
-			.assertStringHeader("Content-Type").is("application/json");
+			.assertHeader("Content-Type").is("application/json");
 		b.get("/d?foo=bar")
 			.run()
 			.assertBody().is("bar");

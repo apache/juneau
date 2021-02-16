@@ -72,7 +72,7 @@ public class RangeNotSatisfiable_Test {
 		c.get("/f5").run()
 			.assertStatus().code().is(CODE)
 			.assertBody().is(MESSAGE)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 		c.get("/f6").run()
 			.assertStatus().code().is(CODE)
 			.assertBody().is("foo");

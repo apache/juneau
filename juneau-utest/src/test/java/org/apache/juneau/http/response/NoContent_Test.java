@@ -41,6 +41,6 @@ public class NoContent_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(204)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

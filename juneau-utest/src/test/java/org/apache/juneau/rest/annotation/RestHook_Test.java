@@ -605,9 +605,9 @@ public class RestHook_Test {
 	public void h01_postCall() throws Exception {
 		RestClient h = MockRestClient.build(H.class);
 		h.get("/").run()
-			.assertStringHeader("post1-called").is("true")
-			.assertStringHeader("post2-called").is("true")
-			.assertStringHeader("post3-called").is("true")
-			.assertStringHeader("post4-called").is("true");
+			.assertHeader("post1-called").is("true")
+			.assertHeader("post2-called").is("true")
+			.assertHeader("post3-called").is("true")
+			.assertHeader("post4-called").is("true");
 	}
 }

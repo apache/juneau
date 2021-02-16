@@ -172,11 +172,11 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void c03_response_headerAssertions() throws Exception {
-		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertIntegerHeader("Foo").is(123);
-		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertLongHeader("Foo").is(123l);
-		checkFooClient(C.class).build().get().json().header(BasicDateHeader.of("Foo",CALENDAR)).run().assertDateHeader("Foo").isEqual(((GregorianCalendar)CALENDAR).toZonedDateTime(), ChronoUnit.SECONDS);
+		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asInteger().is(123);
+		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asLong().is(123l);
+		checkFooClient(C.class).build().get().json().header(BasicDateHeader.of("Foo",CALENDAR)).run().assertHeader("Foo").asZonedDateTime().isEqual(((GregorianCalendar)CALENDAR).toZonedDateTime(), ChronoUnit.SECONDS);
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertCharset().is("iso-8859-1");
-		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertContentType().is("application/json;charset=iso-8859-1");
+		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertHeader("Content-Type").is("application/json;charset=iso-8859-1");
 	}
 
 	@Test
@@ -195,9 +195,9 @@ public class RestClient_Response_Test {
 		assertEquals(3, r.getHeaders("Foo").length);
 		assertEquals(0, r.getHeaders("Bar").length);
 		r.getFirstHeader("Foo").assertString().is("bar");
-		assertNull(r.getFirstHeader("Bar"));
+		assertFalse(r.getFirstHeader("Bar").exists());
 		r.getLastHeader("Foo").assertString().is("qux");
-		assertNull(r.getLastHeader("Bar"));
+		assertFalse(r.getLastHeader("Bar").exists());
 
 		r.setHeaders(new Header[]{BasicHeader.of("Foo", "quux")});
 		r.getFirstHeader("Foo").assertString().is("quux");
@@ -214,7 +214,7 @@ public class RestClient_Response_Test {
 		assertEquals("quux", i.nextHeader().getValue());
 
 		r.removeHeader(BasicHeader.of("Foo","quux"));
-		assertNull(r.getFirstHeader("Foo"));
+		assertFalse(r.getFirstHeader("Foo").exists());
 
 		r.setHeader(BasicHeader.of("Foo","quuux"));
 		r.getResponseHeader("Foo").assertString().is("quuux");

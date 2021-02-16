@@ -58,15 +58,15 @@ public class ResponseHeader_Test {
 		a.get("/a")
 			.run()
 			.assertCode().is(200)
-			.assertStringHeader("Foo").is("foo");
+			.assertHeader("Foo").is("foo");
 		a.get("/b")
 			.run()
 			.assertCode().is(200)
-			.assertStringHeader("Foo").is("foo");
+			.assertHeader("Foo").is("foo");
 		a.get("/c")
 			.run()
 			.assertCode().is(200)
-			.assertStringHeader("Bar").is("foo");
+			.assertHeader("Bar").is("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

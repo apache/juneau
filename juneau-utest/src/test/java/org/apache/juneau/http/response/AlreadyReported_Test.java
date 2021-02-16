@@ -43,6 +43,6 @@ public class AlreadyReported_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(208)
-			.assertStringHeader("Foo").is("bar");
+			.assertHeader("Foo").is("bar");
 	}
 }

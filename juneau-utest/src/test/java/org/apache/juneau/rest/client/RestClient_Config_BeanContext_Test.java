@@ -97,7 +97,15 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a02_beanConstructorVisibility() throws Exception {
-		RestResponse x = client(A2b.class).beanConstructorVisibility(Visibility.PROTECTED).build().post("/test",new A2a(1)).header("X",new A2a(1)).run().cacheBody().assertBody().is("1").assertStringHeader("X").is("1");
+		RestResponse x = client(A2b.class)
+			.beanConstructorVisibility(Visibility.PROTECTED)
+			.build()
+			.post("/test",new A2a(1))
+			.header("X",new A2a(1))
+			.run()
+			.cacheBody()
+			.assertBody().is("1")
+			.assertHeader("X").is("1");
 		assertEquals(1,x.getBody().as(A2a.class).f);
 		assertEquals(1,x.getResponseHeader("X").as(A2a.class).get().f);
 	}
@@ -119,7 +127,15 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a03_beanFieldVisibility() throws Exception {
-		RestResponse x = client(A2b.class).beanFieldVisibility(Visibility.PROTECTED).build().post("/test",A3.get()).header("X",A3.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
+		RestResponse x = client(A2b.class)
+			.beanFieldVisibility(Visibility.PROTECTED)
+			.build()
+			.post("/test",A3.get())
+			.header("X",A3.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals(2,x.getBody().as(A3.class).f2);
 		assertEquals(2,x.getResponseHeader("X").as(A3.class).get().f2);
 	}
@@ -155,23 +171,64 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a04_beanFilters() throws Exception {
-		RestResponse x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		RestResponse x = client(A2b.class)
+			.beanProperties(A4b.class,"f1")
+			.build()
+			.post("/test",A4b.get())
+			.header("X",A4b.get())
+			.run()
+			.cacheBody()
+			.assertBody()
+			.is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
 		assertEquals(0,x.getResponseHeader("X").as(A4b.class).get().f2);
 
-		x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		x = client(A2b.class)
+			.beanProperties(A4b.class,"f1")
+			.build()
+			.post("/test",A4b.get())
+			.header("X",A4b.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
 		assertEquals(0,x.getResponseHeader("X").as(A4b.class).get().f2);
 
-		x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		x = client(A2b.class)
+			.beanProperties(A4b.class,"f1")
+			.build()
+			.post("/test",A4b.get())
+			.header("X",A4b.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
 		assertEquals(0,x.getResponseHeader("X").as(A4b.class).get().f2);
 
-		x = client(A2b.class).beanProperties(A4b.class,"f1").build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		x = client(A2b.class)
+			.beanProperties(A4b.class,"f1")
+			.build()
+			.post("/test",A4b.get())
+			.header("X",A4b.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().as(A4b.class).f2);
 		assertEquals(0,x.getResponseHeader("X").as(A4b.class).get().f2);
 
-		x = client(A2b.class).interfaces(A4a.class).build().post("/test",A4b.get()).header("X",A4b.get()).run().cacheBody().assertBody().is("{f3:3}").assertStringHeader("X").is("f3=3");
+		x = client(A2b.class)
+			.interfaces(A4a.class)
+			.build()
+			.post("/test",A4b.get())
+			.header("X",A4b.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f3:3}")
+			.assertHeader("X").is("f3=3");
 		assertEquals(3,x.getBody().as(A4b.class).f3);
 		assertEquals(3,x.getResponseHeader("X").as(A4b.class).get().f3);
 	}
@@ -204,7 +261,15 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a05_beanMethodVisibility() throws Exception {
-		RestResponse x = client(A2b.class).beanMethodVisibility(Visibility.PROTECTED).build().post("/test",A5.get()).header("X",A5.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
+		RestResponse x = client(A2b.class)
+			.beanMethodVisibility(Visibility.PROTECTED)
+			.build()
+			.post("/test",A5.get())
+			.header("X",A5.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals(2,x.getBody().as(A5.class).f2);
 		assertEquals(2,x.getResponseHeader("X").as(A5.class).get().f2);
 	}
@@ -229,14 +294,40 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a07_beansRequireDefaultConstructor() throws Exception {
-		client(A2b.class).build().post("/test",new A7("1")).header("X",new A7("1")).run().assertBody().is("{f1:'1'}").assertStringHeader("X").is("f1=1");
-		client(A2b.class).beansRequireDefaultConstructor().build().post("/test",new A7("1")).header("X",new A7("1")).run().assertBody().is("'1'").assertStringHeader("X").is("1");
+		client(A2b.class)
+			.build()
+			.post("/test",new A7("1"))
+			.header("X",new A7("1"))
+			.run()
+			.assertBody().is("{f1:'1'}")
+			.assertHeader("X").is("f1=1");
+		client(A2b.class)
+			.beansRequireDefaultConstructor()
+			.build()
+			.post("/test",new A7("1"))
+			.header("X",new A7("1"))
+			.run()
+			.assertBody().is("'1'")
+			.assertHeader("X").is("1");
 	}
 
 	@Test
 	public void a08_beansRequireSerializable() throws Exception {
-		client(A2b.class).build().post("/test",new A7("1")).header("X",new A7("1")).run().assertBody().is("{f1:'1'}").assertStringHeader("X").is("f1=1");
-		client(A2b.class).beansRequireSerializable().build().post("/test",new A7("1")).header("X",new A7("1")).run().assertBody().is("'1'").assertStringHeader("X").is("1");
+		client(A2b.class)
+			.build()
+			.post("/test",new A7("1"))
+			.header("X",new A7("1"))
+			.run()
+			.assertBody().is("{f1:'1'}")
+			.assertHeader("X").is("f1=1");
+		client(A2b.class)
+			.beansRequireSerializable()
+			.build()
+			.post("/test",new A7("1"))
+			.header("X",new A7("1"))
+			.run()
+			.assertBody().is("'1'")
+			.assertHeader("X").is("1");
 	}
 
 	public static class A9 {
@@ -264,31 +355,96 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a09_beansRequireSettersForGetters() throws Exception {
-		client(A2b.class).build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
-		client(A2b.class).beansRequireSettersForGetters().build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		client(A2b.class)
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2");
+		client(A2b.class)
+			.beansRequireSettersForGetters()
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 	}
 
 	@Test
 	public void a10_bpi() throws Exception {
-		client(A2b.class).beanProperties(OMap.of("A9","f2")).build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
-		client(A2b.class).beanProperties(A9.class,"f2").build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
-		client(A2b.class).beanProperties("A9","f2").build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
-		client(A2b.class).beanProperties(A9.class.getName(),"f2").build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanProperties(OMap.of("A9","f2"))
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanProperties(A9.class,"f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanProperties("A9","f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanProperties(A9.class.getName(),"f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
 	}
 
 	@Test
 	public void a11_bpro() throws Exception {
 		RestResponse x = null;
 
-		x = client(A2b.class).beanPropertiesReadOnly(OMap.of("09","f2")).build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
+		x = client(A2b.class)
+			.beanPropertiesReadOnly(OMap.of("09","f2"))
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
 		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).get().toString());
 
-		x = client(A2b.class).beanPropertiesReadOnly(A9.class,"f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
+		x = client(A2b.class)
+			.beanPropertiesReadOnly(A9.class,"f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
 		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).get().toString());
 
-		x = client(A2b.class).beanPropertiesReadOnly("O9","f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertStringHeader("X").is("f1=1,f2=2");
+		x = client(A2b.class)
+			.beanPropertiesReadOnly("O9","f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
 		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).get().toString());
 	}
@@ -297,25 +453,77 @@ public class RestClient_Config_BeanContext_Test {
 	public void a12_bpwo() throws Exception {
 		RestResponse x = null;
 
-		x = client(A2b.class).beanPropertiesWriteOnly(OMap.of("A9","f2")).build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		x = client(A2b.class)
+			.beanPropertiesWriteOnly(OMap.of("A9","f2"))
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
 		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).get().toString());
 
-		x = client(A2b.class).beanPropertiesWriteOnly(A9.class,"f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		x = client(A2b.class)
+			.beanPropertiesWriteOnly(A9.class,"f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
 		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).get().toString());
 
-		x = client(A2b.class).beanPropertiesWriteOnly("A9","f2").build().post("/test",A9.get()).header("X",A9.get()).run().cacheBody().assertBody().is("{f1:1}").assertStringHeader("X").is("f1=1");
+		x = client(A2b.class)
+			.beanPropertiesWriteOnly("A9","f2")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.cacheBody()
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().as(A9.class).toString());
 		assertEquals("1/0",x.getResponseHeader("X").as(A9.class).get().toString());
 	}
 
 	@Test
 	public void a13_bpx() throws Exception {
-		client(A2b.class).beanPropertiesExcludes(OMap.of("A9","f1")).build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
-		client(A2b.class).beanPropertiesExcludes(A9.class,"f1").build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
-		client(A2b.class).beanPropertiesExcludes("A9","f1").build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
-		client(A2b.class).beanPropertiesExcludes(A9.class.getName(),"f1").build().post("/test",A9.get()).header("X",A9.get()).run().assertBody().is("{f2:2}").assertStringHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanPropertiesExcludes(OMap.of("A9","f1"))
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get()).
+			run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanPropertiesExcludes(A9.class,"f1")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
+		client(A2b.class)
+		.beanPropertiesExcludes("A9","f1")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
+		client(A2b.class)
+			.beanPropertiesExcludes(A9.class.getName(),"f1")
+			.build()
+			.post("/test",A9.get())
+			.header("X",A9.get())
+			.run()
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2");
 	}
 
 	public static class A14 {

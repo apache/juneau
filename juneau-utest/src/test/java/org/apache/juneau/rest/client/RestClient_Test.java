@@ -198,9 +198,9 @@ public class RestClient_Test {
 		};
 
 		client().addInterceptorFirst(x1).addInterceptorLast(x2).addInterceptorFirst(x3).addInterceptorLast(x4)
-			.build().get("/echo").run().assertBody().contains("A1: 1","A2: 2").assertStringHeader("B1").is("1").assertStringHeader("B2").is("2");
-		client().interceptors(C01.class).build().get("/echo").run().assertBody().contains("A1: 1").assertStringHeader("B1").is("1");
-		client().interceptors(new C01()).build().get("/echo").run().assertBody().contains("A1: 1").assertStringHeader("B1").is("1");
+			.build().get("/echo").run().assertBody().contains("A1: 1","A2: 2").assertHeader("B1").is("1").assertHeader("B2").is("2");
+		client().interceptors(C01.class).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
+		client().interceptors(new C01()).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
 	}
 
 	@Test
@@ -215,7 +215,7 @@ public class RestClient_Test {
 				response.setHeader("B1","1");
 			}
 		};
-		client().httpProcessor(x).build().get("/echo").run().assertBody().contains("A1: 1").assertStringHeader("B1").is("1");
+		client().httpProcessor(x).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
 	}
 
 	@Test
