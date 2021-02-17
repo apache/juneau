@@ -417,70 +417,8 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertBody() throws RestCallException {
-		return responseBody.cache().assertString();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body equals the text "foo".</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertBodyBytes().hex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public FluentByteArrayAssertion<RestResponse> assertBodyBytes() throws RestCallException {
-		return responseBody.cache().assertBytes();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on this response body.
-	 *
-	 * <p>
-	 * <p>
-	 * Combines the functionality of {@link ResponseBody#as(Class)} with {@link #assertBody()} by converting the body to the specified
-	 * bean and then serializing it to simplified JSON for easy string comparison.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body bean is the expected value.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<js>"/myBean"</js>)
-	 * 		.run()
-	 * 		.assertBody(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param type The object type to create.
-	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public <V> FluentObjectAssertion<V,RestResponse> assertBody(Class<V> type) throws RestCallException {
-		return responseBody.cache().assertObject(type);
+	public FluentResponseBodyAssertion<RestResponse> assertBody() throws RestCallException {
+		return new FluentResponseBodyAssertion<>(responseBody, this);
 	}
 
 	/**

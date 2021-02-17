@@ -194,18 +194,18 @@ public class RestClient_Response_Test {
 		r.addHeader(BasicStringHeader.of("Foo","qux"));
 		assertEquals(3, r.getHeaders("Foo").length);
 		assertEquals(0, r.getHeaders("Bar").length);
-		r.getFirstHeader("Foo").assertString().is("bar");
+		r.getFirstHeader("Foo").assertValue().is("bar");
 		assertFalse(r.getFirstHeader("Bar").exists());
-		r.getLastHeader("Foo").assertString().is("qux");
+		r.getLastHeader("Foo").assertValue().is("qux");
 		assertFalse(r.getLastHeader("Bar").exists());
 
 		r.setHeaders(new Header[]{BasicHeader.of("Foo", "quux")});
-		r.getFirstHeader("Foo").assertString().is("quux");
-		r.getLastHeader("Foo").assertString().is("quux");
+		r.getFirstHeader("Foo").assertValue().is("quux");
+		r.getLastHeader("Foo").assertValue().is("quux");
 
 		r.removeHeader(BasicHeader.of("Foo","bar"));
-		r.getFirstHeader("Foo").assertString().is("quux");
-		r.getLastHeader("Foo").assertString().is("quux");
+		r.getFirstHeader("Foo").assertValue().is("quux");
+		r.getLastHeader("Foo").assertValue().is("quux");
 
 		HeaderIterator i = r.headerIterator();
 		assertEquals("quux", i.nextHeader().getValue());
@@ -217,7 +217,7 @@ public class RestClient_Response_Test {
 		assertFalse(r.getFirstHeader("Foo").exists());
 
 		r.setHeader(BasicHeader.of("Foo","quuux"));
-		r.getResponseHeader("Foo").assertString().is("quuux");
+		r.getResponseHeader("Foo").assertValue().is("quuux");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -234,14 +234,14 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void d01_response_assertBody() throws Exception {
-		client(D.class).build().post("/bean",bean).run().assertBody(ABean.class).asJson().is("{f:1}");
+		client(D.class).build().post("/bean",bean).run().assertBody().asType(ABean.class).asJson().is("{f:1}");
 	}
 
 	@Test
 	public void d02_response_setEntity() throws Exception {
 		RestResponse x = client(D.class).build().post("/bean",bean).run();
 		x.setEntity(new StringEntity("{f:2}"));
-		x.assertBody(ABean.class).asJson().is("{f:2}");
+		x.assertBody().asType(ABean.class).asJson().is("{f:2}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -93,14 +93,14 @@ public class RestClient_Body_Test {
 		;
 
 		BasicHttpResource x7 = httpResource(new StringReader("foo"));
-		client().build().post("/",x7).run().getBody().assertString().is("foo");
+		client().build().post("/",x7).run().assertBody().is("foo");
 
 		BasicHttpResource x8 = httpResource(new StringReader("foo")).cache();
-		client().build().post("/",x8).run().getBody().assertString().is("foo");
-		client().build().post("/",x8).run().getBody().assertString().is("foo");
+		client().build().post("/",x8).run().assertBody().is("foo");
+		client().build().post("/",x8).run().assertBody().is("foo");
 
 		BasicHttpResource x9 = httpResource(null);
-		client().build().post("/",x9).run().getBody().assertString().isEmpty();
+		client().build().post("/",x9).run().assertBody().isEmpty();
 	}
 
 	@Test
@@ -138,14 +138,14 @@ public class RestClient_Body_Test {
 		;
 
 		BasicHttpEntity x7 = httpEntity(new StringReader("foo"));
-		client().build().post("/",x7).run().getBody().assertString().is("foo");
+		client().build().post("/",x7).run().assertBody().is("foo");
 
 		BasicHttpEntity x8 = httpEntity(new StringReader("foo")).cache();
-		client().build().post("/",x8).run().getBody().assertString().is("foo");
-		client().build().post("/",x8).run().getBody().assertString().is("foo");
+		client().build().post("/",x8).run().assertBody().is("foo");
+		client().build().post("/",x8).run().assertBody().is("foo");
 
 		BasicHttpEntity x9 = httpEntity(null);
-		client().build().post("/",x9).run().getBody().assertString().isEmpty();
+		client().build().post("/",x9).run().assertBody().isEmpty();
 
 		BasicHttpEntity x12 = httpEntity("foo");
 		x12.assertString().is("foo");
@@ -170,35 +170,35 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
-			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x3 = SerializedHttpEntity.of(()->ABean.get(),js);
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
-			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x4 = serializedHttpEntity(new StringReader("{a:1,b:'foo'}"),null);
 		client().build().post("/",x4).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").doesNotExist()
-			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x5 = serializedHttpEntity(new ByteArrayInputStream("{a:1,b:'foo'}".getBytes()),null);
 		client().build().post("/",x5).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").doesNotExist()
-			.getBody().assertObject(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedHttpEntity x6 = serializedHttpEntity(f,null);
 		client().build().post("/",x6).run()
 			.assertHeader("X-Content-Length").is("0")
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").doesNotExist()
-			.getBody().assertObject(ABean.class).asJson().is("{a:0}");
+			.assertBody().asType(ABean.class).asJson().is("{a:0}");
 
 		InputStream x7 = new ByteArrayInputStream("foo".getBytes()) {
 			@Override

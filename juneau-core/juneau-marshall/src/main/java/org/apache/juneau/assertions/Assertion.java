@@ -86,14 +86,26 @@ public class Assertion {
 	 * @return A new {@link BasicAssertionError}.
 	 */
 	protected BasicAssertionError error(String msg, Object...args) {
+		return error(null, msg, args);
+	}
+
+	/**
+	 * Creates a new {@link BasicAssertionError}.
+	 *
+	 * @param cause Optional caused-by throwable.
+	 * @param msg The message.
+	 * @param args The message arguments.
+	 * @return A new {@link BasicAssertionError}.
+	 */
+	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
 		msg = format(msg, args);
 		if (this.msg != null)
-			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
+			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg).replace("<<<CAUSED-BY>>>", cause == null ? "" : "Caused by: " + cause.getMessage());
 		if (stdout)
 			System.out.println(msg);  // NOT DEBUG
 		if (stderr)
 			System.err.println(msg);  // NOT DEBUG
-		return new BasicAssertionError(msg);
+		return new BasicAssertionError(cause, msg);
 	}
 
 	/**

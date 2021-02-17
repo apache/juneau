@@ -115,10 +115,10 @@ public class RestClient_FormData_Test {
 		List<String> l1 = AList.of("bar1","bar2"), l2 = AList.of("qux1","qux2");
 
 		client().formDataPairs("foo","bar","baz","qux").build().post("/formData").run().assertBody().is("foo=bar&baz=qux");
-		client().formDataPairs("foo",l1,"baz",l2).build().post("/formData").run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
+		client().formDataPairs("foo",l1,"baz",l2).build().post("/formData").run().assertBody().asString().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
 
 		client().build().post("/formData").formDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
-		client().build().post("/formData").formDataPairs("foo",l1,"baz",l2).run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
+		client().build().post("/formData").formDataPairs("foo",l1,"baz",l2).run().assertBody().asString().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
 
 		assertThrown(()->client().formDataPairs("foo","bar","baz")).is("Odd number of parameters passed into formDataPairs()");
 		assertThrown(()->client().build().post("").formDataPairs("foo","bar","baz")).is("Odd number of parameters passed into formDataPairs()");
@@ -127,21 +127,21 @@ public class RestClient_FormData_Test {
 	@Test
 	public void a06_formData_String_Object_Schema() throws Exception {
 		List<String> l = AList.of("bar","baz"), l2 = AList.of("qux","quux");
-		client().formData("foo",l,T_ARRAY_PIPES).build().post("/formData").formData("foo",l2,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz&foo=qux|quux");
+		client().formData("foo",l,T_ARRAY_PIPES).build().post("/formData").formData("foo",l2,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=bar|baz&foo=qux|quux");
 	}
 
 	@Test
 	public void a07_formData_String_Object_Schema_Serializer() throws Exception {
 		List<String> l = AList.of("bar","baz");
-		client().formData("foo",l,T_ARRAY_PIPES,UonSerializer.DEFAULT).build().post("/formData").run().assertBody().urlDecode().is("foo=@(bar,baz)");
+		client().formData("foo",l,T_ARRAY_PIPES,UonSerializer.DEFAULT).build().post("/formData").run().assertBody().asString().urlDecode().is("foo=@(bar,baz)");
 	}
 
 	@Test
 	public void a08_formData_AddFlag_String_Object_Schema() throws Exception {
 		List<String> l = AList.of("qux","quux");
-		client().formData("foo","bar").build().post("/formData").formData(APPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar&foo=qux|quux");
-		client().formData("foo","bar").build().post("/formData").formData(PREPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=qux|quux&foo=bar");
-		client().formData("foo","bar").build().post("/formData").formData(REPLACE,"foo",l,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=qux|quux");
+		client().formData("foo","bar").build().post("/formData").formData(APPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=bar&foo=qux|quux");
+		client().formData("foo","bar").build().post("/formData").formData(PREPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=qux|quux&foo=bar");
+		client().formData("foo","bar").build().post("/formData").formData(REPLACE,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=qux|quux");
 	}
 
 	@Test
@@ -150,15 +150,15 @@ public class RestClient_FormData_Test {
 
 		RestClient x1 = client().formData("foo",s).build();
 		s.set(OList.of("foo","bar"));
-		x1.post("/formData").run().assertBody().urlDecode().is("foo=foo,bar");
+		x1.post("/formData").run().assertBody().asString().urlDecode().is("foo=foo,bar");
 		s.set(OList.of("bar","baz"));
-		x1.post("/formData").run().assertBody().urlDecode().is("foo=bar,baz");
+		x1.post("/formData").run().assertBody().asString().urlDecode().is("foo=bar,baz");
 
 		RestClient x2 = client().build();
 		s.set(OList.of("foo","bar"));
-		x2.post("/formData").formData("foo",s).run().assertBody().urlDecode().is("foo=foo,bar");
+		x2.post("/formData").formData("foo",s).run().assertBody().asString().urlDecode().is("foo=foo,bar");
 		s.set(OList.of("bar","baz"));
-		x2.post("/formData").formData("foo",s).run().assertBody().urlDecode().is("foo=bar,baz");
+		x2.post("/formData").formData("foo",s).run().assertBody().asString().urlDecode().is("foo=bar,baz");
 	}
 
 	public static class A8 extends SimplePartSerializer {
@@ -177,9 +177,9 @@ public class RestClient_FormData_Test {
 	public void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
 		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
 		RestClient x = client().formData("foo",s,T_ARRAY_PIPES,new A8()).build();
-		x.post("/formData").run().assertBody().urlDecode().is("foo=x['foo','bar']");
+		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=x['foo','bar']");
 		s.set(OList.of("bar","baz"));
-		x.post("/formData").run().assertBody().urlDecode().is("foo=x['bar','baz']");
+		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=x['bar','baz']");
 	}
 
 	@Test
@@ -189,15 +189,15 @@ public class RestClient_FormData_Test {
 
 		RestClient x1 = client().formData("foo",s,T_ARRAY_PIPES).build();
 		s.set(l1);
-		x1.post("/formData").run().assertBody().urlDecode().is("foo=foo|bar");
+		x1.post("/formData").run().assertBody().asString().urlDecode().is("foo=foo|bar");
 		s.set(l2);
-		x1.post("/formData").run().assertBody().urlDecode().is("foo=bar|baz");
+		x1.post("/formData").run().assertBody().asString().urlDecode().is("foo=bar|baz");
 
 		RestClient x2 = client().build();
 		s.set(l1);
-		x2.post("/formData").formData("foo",s,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=foo|bar");
+		x2.post("/formData").formData("foo",s,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=foo|bar");
 		s.set(l2);
-		x2.post("/formData").formData("foo",s,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz");
+		x2.post("/formData").formData("foo",s,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=bar|baz");
 	}
 
 	public static class A12 implements HttpPartSerializer {

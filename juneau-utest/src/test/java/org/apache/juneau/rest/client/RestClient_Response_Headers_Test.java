@@ -149,20 +149,6 @@ public class RestClient_Response_Headers_Test {
 		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher("foo").matches());
 		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
 		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
-
-		Mutable<Matcher> m6 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher(m6,"foo");
-		assertTrue(m6.get().matches());
-		checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher(m6,"foo");
-		assertFalse(m6.get().matches());
-		checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher(m6,"FOO",Pattern.CASE_INSENSITIVE);
-		assertTrue(m6.get().matches());
-		checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher(m6,"FOO",Pattern.CASE_INSENSITIVE);
-		assertFalse(m6.get().matches());
-		checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher(m6,Pattern.compile("FOO",Pattern.CASE_INSENSITIVE));
-		assertTrue(m6.get().matches());
-		checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher(m6,Pattern.compile("FOO",Pattern.CASE_INSENSITIVE));
-		assertFalse(m6.get().matches());
 	}
 
 	@Test
@@ -177,14 +163,14 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void b01_assertions() throws Exception {
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").assertString().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").assertString().doesNotExist();
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertInteger().is(123);
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertInteger().doesNotExist();
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertLong().is(123l);
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertLong().doesNotExist();
-		checkFooClient().build().get("/echo").header(BasicDateHeader.of("Foo",CALENDAR)).run().getResponseHeader("Foo").assertDate().exists();
-		checkFooClient().build().get("/echo").header(BasicDateHeader.of("Foo",CALENDAR)).run().getResponseHeader("Bar").assertDate().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").assertValue().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertValue().asInteger().is(123);
+		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertValue().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertValue().asLong().is(123l);
+		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertValue().asLong().doesNotExist();
+		checkFooClient().build().get("/echo").header(BasicDateHeader.of("Foo",CALENDAR)).run().getResponseHeader("Foo").assertValue().asDate().exists();
+		checkFooClient().build().get("/echo").header(BasicDateHeader.of("Foo",CALENDAR)).run().getResponseHeader("Bar").assertValue().asDate().doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

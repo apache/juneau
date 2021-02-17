@@ -320,7 +320,7 @@ public class RestClient_BasicCalls_Test {
 			/*[15]*/ s2
 		);
 		for (int i = 0; i < bodies.size(); i++) {
-			client().header("Check","Content-Type").accept("application/json+simple").build().formPost("/checkHeader",bodies.get(i)).run().assertBody().msg("Body {0} failed",i).matchesSimple("['application/x-www-form-urlencoded*']");
+			client().header("Check","Content-Type").accept("application/json+simple").build().formPost("/checkHeader",bodies.get(i)).run().assertBody().msg("Body {0} failed",i).asString().matchesSimple("['application/x-www-form-urlencoded*']");
 			client().build().formPost("/bean",bodies.get(i)).accept("application/json+simple").run().assertBody().msg("Body {0} failed","#"+i).is("{f:1}");
 		}
 	}

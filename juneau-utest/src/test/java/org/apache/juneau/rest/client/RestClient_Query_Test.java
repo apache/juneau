@@ -57,14 +57,14 @@ public class RestClient_Query_Test {
 	@Test
 	public void a02_query_String_Object_Schema() throws Exception {
 		List<String> l = AList.of("bar","baz");
-		client().build().get("/query").query("foo",l,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz");
-		client().query("foo",l,T_ARRAY_PIPES).build().get("/query").run().assertBody().urlDecode().is("foo=bar|baz");
+		client().build().get("/query").query("foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=bar|baz");
+		client().query("foo",l,T_ARRAY_PIPES).build().get("/query").run().assertBody().asString().urlDecode().is("foo=bar|baz");
 	}
 
 	@Test
 	public void a03_query_String_Object_Schema_Serializer() throws Exception {
 		List<String> l = AList.of("bar","baz");
-		client().query("foo",l,T_ARRAY_PIPES,UonSerializer.DEFAULT).build().get("/query").run().assertBody().urlDecode().is("foo=@(bar,baz)");
+		client().query("foo",l,T_ARRAY_PIPES,UonSerializer.DEFAULT).build().get("/query").run().assertBody().asString().urlDecode().is("foo=@(bar,baz)");
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class RestClient_Query_Test {
 	@Test
 	public void a05_query_AddFlag_String_Object_Schema() throws Exception {
 		List<String> l = AList.of("baz","qux");
-		client().query("foo","bar").build().get("/query").query(PREPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=baz|qux&foo=bar");
+		client().query("foo","bar").build().get("/query").query(PREPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=baz|qux&foo=bar");
 	}
 
 	@Test
@@ -89,9 +89,9 @@ public class RestClient_Query_Test {
 		List<String> l1 = AList.of("foo","bar"), l2 = AList.of("bar","baz");
 		TestSupplier s = TestSupplier.of(l1);
 		RestClient x = client().query("foo",s).build();
-		x.get("/query").run().assertBody().urlDecode().is("foo=foo,bar");
+		x.get("/query").run().assertBody().asString().urlDecode().is("foo=foo,bar");
 		s.set(l2);
-		x.get("/query").run().assertBody().urlDecode().is("foo=bar,baz");
+		x.get("/query").run().assertBody().asString().urlDecode().is("foo=bar,baz");
 	}
 
 	@Test
@@ -99,9 +99,9 @@ public class RestClient_Query_Test {
 		String[] l1 = new String[]{"foo","bar"},l2 = new String[]{"bar","baz"};
 		TestSupplier s = TestSupplier.of(l1);
 		RestClient x = client().query("foo",s,T_ARRAY_PIPES).build();
-		x.get("/query").query("bar",s,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=foo|bar&bar=foo|bar");
+		x.get("/query").query("bar",s,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=foo|bar&bar=foo|bar");
 		s.set(l2);
-		x.get("/query").query("bar",s,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz&bar=bar|baz");
+		x.get("/query").query("bar",s,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=bar|baz&bar=bar|baz");
 	}
 
 	public static class A8 extends SimplePartSerializer {
@@ -121,9 +121,9 @@ public class RestClient_Query_Test {
 		List<String> l1 = AList.of("foo","bar"), l2 = AList.of("bar","baz");
 		TestSupplier s = TestSupplier.of(l1);
 		RestClient x = client().query("foo",s,T_ARRAY_PIPES,new A8()).build();
-		x.get("/query").run().assertBody().urlDecode().is("foo=x['foo','bar']");
+		x.get("/query").run().assertBody().asString().urlDecode().is("foo=x['foo','bar']");
 		s.set(l2);
-		x.get("/query").run().assertBody().urlDecode().is("foo=x['bar','baz']");
+		x.get("/query").run().assertBody().asString().urlDecode().is("foo=x['bar','baz']");
 	}
 
 	@Test
@@ -167,8 +167,8 @@ public class RestClient_Query_Test {
 		List<String> l1 = AList.of("bar1","bar2"), l2 = AList.of("qux1","qux2");
 		client().queryPairs("foo","bar","baz","qux").build().get("/query").run().assertBody().is("foo=bar&baz=qux");
 		client().build().get("/query").queryPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
-		client().queryPairs("foo",l1,"baz",l2).build().get("/query").run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
-		client().build().get("/query").queryPairs("foo",l1,"baz",l2).run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
+		client().queryPairs("foo",l1,"baz",l2).build().get("/query").run().assertBody().asString().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
+		client().build().get("/query").queryPairs("foo",l1,"baz",l2).run().assertBody().asString().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
 		assertThrown(()->client().queryPairs("foo","bar","baz")).contains("Odd number of parameters");
 		assertThrown(()->client().build().get().queryPairs("foo","bar","baz")).contains("Odd number of parameters");
 	}

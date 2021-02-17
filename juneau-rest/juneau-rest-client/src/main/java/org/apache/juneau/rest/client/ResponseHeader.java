@@ -22,13 +22,13 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.client.assertion.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -421,34 +421,6 @@ public class ResponseHeader implements Header {
 	}
 
 	/**
-	 * Same as {@link #asMatcher(Pattern)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<jv>mutable</jv>, Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
-	 *
-	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
-	 * 		String <jv>mediaType</jv> = <jv>mutable</jv>.get().group(1);
-	 * 	}
-	 * </p>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param pattern The regular expression pattern to match.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
-	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) throws RestCallException {
-		m.set(pattern.matcher(asString().orElse("")));
-		return response;
-	}
-
-	/**
 	 * Matches the specified pattern against this header value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -470,34 +442,6 @@ public class ResponseHeader implements Header {
 	 */
 	public Matcher asMatcher(String regex) throws RestCallException {
 		return asMatcher(regex, 0);
-	}
-
-	/**
-	 * Same as {@link #asMatcher(String)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<jv>mutable</jv>, <js>"application/(.*)"</js>);
-	 *
-	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
-	 * 		String <jv>mediaType</jv> = <jv>mutable</jv>.get().group(1);
-	 * 	}
-	 * </p>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param regex The regular expression pattern to match.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
-	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex) throws RestCallException {
-		m.set(asMatcher(regex, 0));
-		return response;
 	}
 
 	/**
@@ -526,35 +470,6 @@ public class ResponseHeader implements Header {
 	}
 
 	/**
-	 * Same as {@link #asMatcher(String,int)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
-	 *
-	 * 	client
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<jv>mutable</jv>, <js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
-	 *
-	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
-	 * 		String <jv>mediaType</jv> = <jv>mutable</jv>.get().group(1);
-	 * 	}
-	 * </p>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param regex The regular expression pattern to match.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
-	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex, int flags) throws RestCallException {
-		m.set(asMatcher(Pattern.compile(regex, flags)));
-		return response;
-	}
-
-	/**
 	 * Returns the response that created this object.
 	 *
 	 * @return The response that created this object.
@@ -576,37 +491,37 @@ public class ResponseHeader implements Header {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().exists();
 	 *
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
+	 * 		.getHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().contains(<js>"json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().matches(<js>".*json.*"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
 	 *
 	 * <p>
@@ -616,87 +531,15 @@ public class ResponseHeader implements Header {
 	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().exists()
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().matches(<js>".*json.*"</js>)
 	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentStringAssertion<RestResponse> assertString() {
-		return new FluentStringAssertion<>(asString().orElse(null), response);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on an integer response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentIntegerAssertion<RestResponse> assertInteger() {
-		return new FluentIntegerAssertion<>(asIntegerHeader().asInteger().orElse(null), response);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a long response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response body is not too long.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentLongAssertion<RestResponse> assertLong() {
-		return new FluentLongAssertion<>(asLongHeader().asLong().orElse(null), response);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Expires"</js>).assertDate().isAfterNow();
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentZonedDateTimeAssertion<RestResponse> assertDate() {
-		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime().orElse(null), response);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on comma-separated string headers.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getHeader(<js>"Allow"</js>).assertCsvArray().contains(<js>"GET"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentListAssertion<RestResponse> assertCsvArray() {
-		return new FluentListAssertion<>(asCsvArrayHeader().asList().orElse(null), response);
+	public FluentResponseHeaderAssertion<RestResponse> assertValue() {
+		return new FluentResponseHeaderAssertion<>(this, response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

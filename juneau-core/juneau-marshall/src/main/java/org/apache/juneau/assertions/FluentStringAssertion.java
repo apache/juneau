@@ -360,7 +360,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	}
 
 	/**
-	 * Asserts that the text is not empty.
+	 * Asserts that the text is empty.
 	 *
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.

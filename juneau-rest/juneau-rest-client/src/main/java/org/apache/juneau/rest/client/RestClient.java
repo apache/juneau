@@ -48,7 +48,6 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.remote.RemoteReturn;
@@ -63,6 +62,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.client.assertion.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -639,10 +639,7 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link ResponseHeader}
  * 	<ul>
- * 		<li class='jm'><c>{@link ResponseHeader#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link FluentIntegerAssertion}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link FluentLongAssertion}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#assertDate() assertDate()} <jk>returns</jk> {@link FluentDateAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#assertValue() assertValue()} <jk>returns</jk> {@link FluentResponseHeaderAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -655,7 +652,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Assert the response content type is any sort of JSON.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getHeader(<js>"Content-Type"</js>).assertString().matchesSimple(<js>"application/json*"</js>)
+ * 		.getHeader(<js>"Content-Type"</js>).assertValue().matchesSimple(<js>"application/json*"</js>)
  * 		.getBody().asString();
  * </p>
  *
@@ -756,9 +753,7 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link ResponseBody}
  * 	<ul>
- * 		<li class='jm'><c>{@link ResponseBody#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
- * 		<li class='jm'><c>{@link ResponseBody#assertObject(Class) assertObject(Class&lt;?&gt;)} <jk>returns</jk> {@link FluentObjectAssertion}</c>
- * 		<li class='jm'><c>{@link ResponseBody#assertBytes() assertBytes()} <jk>returns</jk> {@link FluentByteArrayAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#assertValue() assertValue()} <jk>returns</jk> {@link FluentResponseBodyAssertion}</c>
  * 	</ul>
  * </ul>
  *

@@ -24,7 +24,6 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.juneau.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
@@ -33,6 +32,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.client.assertion.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -908,32 +908,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #as(Mutable,Class)} but allows you to run the call asynchronously.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after the execution of the future.
-	 * </ul>
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param m The mutable to set the parsed value in.
-	 * @param type The object type to create.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
-	 */
-	public <T> RestResponse asFuture(Mutable<Future<T>> m, Class<T> type) throws RestCallException {
-		m.set(asFuture(type));
-		return response;
-	}
-
-	/**
 	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
@@ -964,34 +938,6 @@ public class ResponseBody implements HttpEntity {
 				}
 			}
 		);
-	}
-
-	/**
-	 * Same as {@link #as(Mutable,ClassMeta)} but allows you to run the call asynchronously.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after the execution of the future.
-	 * </ul>
-	 *
-	 * @param <T>
-	 * 	The class type of the object being created.
-	 * 	See {@link #as(Type, Type...)} for details.
-	 * @param m The mutable to set the parsed value in.
-	 * @param type The object type to create.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
-	 */
-	public <T> RestResponse asFuture(Mutable<Future<T>>m, ClassMeta<T> type) throws RestCallException {
-		m.set(asFuture(type));
-		return response;
 	}
 
 	/**
@@ -1031,40 +977,6 @@ public class ResponseBody implements HttpEntity {
 				}
 			}
 		);
-	}
-
-	/**
-	 * Same as {@link #as(Mutable,Type,Type...)} but allows you to run the call asynchronously.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after the execution of the future.
-	 * </ul>
-	 *
-	 * @param <T>
-	 * 	The class type of the object being created.
-	 * 	See {@link #as(Type, Type...)} for details.
-	 * @param m The mutable to set the parsed value in.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
-	 */
-	public <T> RestResponse asFuture(Mutable<Future<T>> m, Type type, Type...args) throws RestCallException {
-		m.set(asFuture(type, args));
-		return response;
 	}
 
 	/**
@@ -1313,45 +1225,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #asMatcher(Pattern)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse response using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getBody().asMatcher(<jv>mutable</jv>, Pattern.<jsm>compile</jsm>(<js>"foo=(.*)"</js>))
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	<jk>if</jk> (<jv>matcher</jv>.get().matches()) {
-	 * 		String <jv>foo</jv> = <jv>matcher</jv>.get().group(1);
-	 * 	}
-	 * </p>
-	 *
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param pattern The regular expression pattern to match.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
-	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) throws RestCallException {
-		m.set(pattern.matcher(asString()));
-		return response;
-	}
-
-	/**
 	 * Converts the contents of the response body to a string and then matches the specified pattern against it.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1385,46 +1258,6 @@ public class ResponseBody implements HttpEntity {
 	 */
 	public Matcher asMatcher(String regex) throws RestCallException {
 		return asMatcher(regex, 0);
-	}
-
-	/**
-	 * Same as {@link #asMatcher(String)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse response using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getBody().asMatcher(<jv>mutable</jv>, <js>"foo=(.*)"</js>)
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
-	 * 		String <jv>foo</jv> = <jv>mutable</jv>.get().group(1);
-	 * 	}
-	 *
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param regex The regular expression pattern to match.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
-	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex) throws RestCallException {
-		asMatcher(m, regex, 0);
-		return response;
 	}
 
 	/**
@@ -1465,48 +1298,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #asMatcher(String,int)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse response using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; <jv>mutable</jv> = Mutable.<jsm>create</jsm>();
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getBody().asMatcher(<jv>mutable</jv>, <js>"foo=(.*)"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>)
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	<jk>if</jk> (<jv>mutable</jv>.get().matches()) {
-	 * 		String <jv>foo</jv> = <jv>mutable</jv>.get().group(1);
-	 * 	}
-	 * </p>
-	 *
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param regex The regular expression pattern to match.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
-	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex, int flags) throws RestCallException {
-		asMatcher(m, Pattern.compile(regex, flags));
-		return response;
-	}
-
-	/**
 	 * Returns the response that created this object.
 	 *
 	 * @return The response that created this object.
@@ -1531,38 +1322,38 @@ public class ResponseBody implements HttpEntity {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equals(<js>"OK"</js>);
+	 * 		.getBody().assertValue().equals(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().contains(<js>"OK"</js>);
+	 * 		.getBody().assertValue().contains(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body passes a predicate test.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.getBody().assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>);
+	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern <jv>p</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<jv>p</jv>);
+	 * 		.getBody().assertValue().matches(<jv>p</jv>);
 	 * </p>
 	 *
 	 * <p>
@@ -1572,8 +1363,8 @@ public class ResponseBody implements HttpEntity {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>);
-	 * 		.assertBody().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>);
+	 * 		.getBody().assertValue().doesNotMatch(<js>".*ERROR.*"</js>)
 	 * 		.getBody().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
@@ -1589,76 +1380,8 @@ public class ResponseBody implements HttpEntity {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertString() throws RestCallException {
-		return new FluentStringAssertion<>(asString(), response);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
-	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertBodyBytes()} method to instantiate a fluent assertions object.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body equals the text "foo".</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertBodyBytes().hex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public FluentByteArrayAssertion<RestResponse> assertBytes() throws RestCallException {
-		return new FluentByteArrayAssertion<>(asBytes(), response);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on this response body.
-	 *
-	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertBody(Class)} method to instantiate a fluent assertions object.
-	 *
-	 * <p>
-	 * Converts the body of the response to the specified object using {@link #as(Class)} and returns it as a fluent assertions object.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body bean is the expected value.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<js>"/myBean"</js>)
-	 * 		.run()
-	 * 		.assertBody(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param type The object type to create.
-	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public <T> FluentObjectAssertion<T,RestResponse> assertObject(Class<T> type) throws RestCallException {
-		return new FluentObjectAssertion<>(as(type), response);
+	public FluentResponseBodyAssertion<RestResponse> assertValue() throws RestCallException {
+		return new FluentResponseBodyAssertion<>(this, response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
