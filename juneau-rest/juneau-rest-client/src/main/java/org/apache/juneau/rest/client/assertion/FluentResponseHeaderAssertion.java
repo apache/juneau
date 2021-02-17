@@ -33,18 +33,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	 * @param returns The object to return after the test.
 	 */
 	public FluentResponseHeaderAssertion(ResponseHeader value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
-	 */
-	public FluentResponseHeaderAssertion(Assertion creator, ResponseHeader value, R returns) {
-		super(creator, value.getValue(), returns);
+		super(null, value.getValue(), returns);
 		this.value = value;
 	}
 

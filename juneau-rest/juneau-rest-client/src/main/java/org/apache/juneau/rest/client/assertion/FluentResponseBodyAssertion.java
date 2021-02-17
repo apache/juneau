@@ -35,18 +35,7 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentResponseBodyAssertion(ResponseBody value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
-	 */
-	public FluentResponseBodyAssertion(Assertion creator, ResponseBody value, R returns) {
-		super(creator, returns);
+		super(null, returns);
 		this.value = value;
 	}
 

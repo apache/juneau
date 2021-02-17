@@ -177,8 +177,8 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public ResponseStatusLineAssertion assertStatus() throws RestCallException {
-		return new ResponseStatusLineAssertion(getStatusLine(), this);
+	public FluentResponseStatusLineAssertion<RestResponse> assertStatus() throws RestCallException {
+		return new FluentResponseStatusLineAssertion<>(getStatusLine(), this);
 	}
 
 	/**

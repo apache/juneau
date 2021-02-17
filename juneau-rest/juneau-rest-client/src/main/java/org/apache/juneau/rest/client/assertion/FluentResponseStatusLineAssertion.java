@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client;
+package org.apache.juneau.rest.client.assertion;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
@@ -26,8 +26,10 @@ import org.apache.juneau.assertions.*;
  * 		.run()
  * 		.assertStatus().code().isAny(200,404);
  * </p>
+ *
+ * @param <R> The return type.
  */
-public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
+public class FluentResponseStatusLineAssertion<R> extends FluentAssertion<R> {
 
 	private final StatusLine statusLine;
 
@@ -37,7 +39,7 @@ public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 	 * @param statusLine The response status line.
 	 * @param returns The object to return after the test.
 	 */
-	public ResponseStatusLineAssertion(StatusLine statusLine, RestResponse returns) {
+	public FluentResponseStatusLineAssertion(StatusLine statusLine, R returns) {
 		super(null, returns);
 		this.statusLine = statusLine;
 	}
@@ -47,7 +49,7 @@ public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 	 *
 	 * @return An assertion against the status code on the response status object.
 	 */
-	public FluentIntegerAssertion<RestResponse> code() {
+	public FluentIntegerAssertion<R> code() {
 		return new FluentIntegerAssertion<>(this, statusLine.getStatusCode(), returns());
 	}
 
@@ -56,7 +58,7 @@ public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 	 *
 	 * @return An assertion against the reason phrase on the response status object.
 	 */
-	public FluentStringAssertion<RestResponse> reason() {
+	public FluentStringAssertion<R> reason() {
 		return new FluentStringAssertion<>(this, statusLine.getReasonPhrase(), returns());
 	}
 
@@ -65,7 +67,7 @@ public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 	 *
 	 * @return An assertion against the protocol on the response status object.
 	 */
-	public FluentStringAssertion<RestResponse> protocol() {
+	public FluentStringAssertion<R> protocol() {
 		return new FluentStringAssertion<>(this, statusLine.getProtocolVersion().getProtocol(), returns());
 	}
 
@@ -74,7 +76,7 @@ public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 	 *
 	 * @return An assertion against the protocol major version on the response status object.
 	 */
-	public FluentIntegerAssertion<RestResponse> major() {
+	public FluentIntegerAssertion<R> major() {
 		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMajor(), returns());
 	}
 
@@ -83,7 +85,7 @@ public class ResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 	 *
 	 * @return An assertion against the protocol minor version on the response status object.
 	 */
-	public FluentIntegerAssertion<RestResponse> minor() {
+	public FluentIntegerAssertion<R> minor() {
 		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMinor(), returns());
 	}
 }
