@@ -1877,7 +1877,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest body(Object input) throws RestCallException {
 		this.input = input;
 		this.hasInput = true;
-		this.formData = null;
+		if (input != null)
+			formData = null;
 		return this;
 	}
 

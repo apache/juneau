@@ -452,8 +452,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* RestClient */
-	public MockRestRequest op(RestOperation op) throws RestCallException {
-		return (MockRestRequest)super.op(op);
+	public MockRestRequest request(RestOperation op) throws RestCallException {
+		return (MockRestRequest)super.request(op);
 	}
 
 	@Override /* RestClient */

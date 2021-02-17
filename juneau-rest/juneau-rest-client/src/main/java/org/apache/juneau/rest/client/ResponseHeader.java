@@ -469,15 +469,6 @@ public class ResponseHeader implements Header {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 
-	/**
-	 * Returns the response that created this object.
-	 *
-	 * @return The response that created this object.
-	 */
-	public RestResponse toResponse() {
-		return response;
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Assertions.
 	//------------------------------------------------------------------------------------------------------------------
@@ -538,8 +529,17 @@ public class ResponseHeader implements Header {
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentResponseHeaderAssertion<RestResponse> assertValue() {
-		return new FluentResponseHeaderAssertion<>(this, response);
+	public FluentResponseHeaderAssertion<ResponseHeader> assertValue() {
+		return new FluentResponseHeaderAssertion<>(this, this);
+	}
+
+	/**
+	 * Returns the response that created this object.
+	 *
+	 * @return The response that created this object.
+	 */
+	public RestResponse response() {
+		return response;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

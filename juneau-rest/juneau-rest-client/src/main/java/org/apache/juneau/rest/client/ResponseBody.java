@@ -1054,15 +1054,6 @@ public class ResponseBody implements HttpEntity {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 
-	/**
-	 * Returns the response that created this object.
-	 *
-	 * @return The response that created this object.
-	 */
-	public RestResponse toResponse() {
-		return response;
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Assertions
 	//------------------------------------------------------------------------------------------------------------------
@@ -1135,10 +1126,18 @@ public class ResponseBody implements HttpEntity {
 	 * </ul>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentResponseBodyAssertion<RestResponse> assertValue() throws RestCallException {
-		return new FluentResponseBodyAssertion<>(this, response);
+	public FluentResponseBodyAssertion<ResponseBody> assertValue() {
+		return new FluentResponseBodyAssertion<>(this, this);
+	}
+
+	/**
+	 * Returns the response that created this object.
+	 *
+	 * @return The response that created this object.
+	 */
+	public RestResponse response() {
+		return response;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

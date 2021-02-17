@@ -285,8 +285,8 @@ public class RestClient_Response_Body_Test {
 		InputStreamEntity x3 = inputStreamEntity("foo");
 		x3.setContentType("text/foo");
 		x3.setContentEncoding("identity");
-		testClient().entity(x3).get().run().getBody().toResponse()
-			.getBody().getContentType().assertValue().is("text/foo")
+		testClient().entity(x3).get().run().getBody().response()
+			.getBody().getContentType().assertValue().is("text/foo").response()
 			.getBody().getContentEncoding().assertValue().is("identity");
 
 		InputStream x4 = testClient().entity(inputStreamEntity("foo")).get().run().getBody().asInputStream();

@@ -175,9 +175,8 @@ public class RestResponse implements HttpResponse {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentResponseStatusLineAssertion<RestResponse> assertStatus() throws RestCallException {
+	public FluentResponseStatusLineAssertion<RestResponse> assertStatus() {
 		return new FluentResponseStatusLineAssertion<>(getStatusLine(), this);
 	}
 
@@ -194,9 +193,8 @@ public class RestResponse implements HttpResponse {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertCode() throws RestCallException {
+	public FluentIntegerAssertion<RestResponse> assertCode() {
 		return assertStatus().code();
 	}
 
@@ -415,9 +413,8 @@ public class RestResponse implements HttpResponse {
 	 * </ul>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentResponseBodyAssertion<RestResponse> assertBody() throws RestCallException {
+	public FluentResponseBodyAssertion<RestResponse> assertBody() {
 		return new FluentResponseBodyAssertion<>(responseBody, this);
 	}
 
@@ -500,8 +497,8 @@ public class RestResponse implements HttpResponse {
 	 * @return The status line, or <jk>null</jk> if not yet set.
 	 */
 	@Override /* HttpResponse */
-	public StatusLine getStatusLine() {
-		return response.getStatusLine();
+	public ResponseStatusLine getStatusLine() {
+		return new ResponseStatusLine(this, response.getStatusLine());
 	}
 
 	/**

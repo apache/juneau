@@ -2195,22 +2195,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Perform an arbitrary request against the specified URI.
-	 *
-	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest op(RestOperation op) throws RestCallException {
-		RestRequest req = request(op.getMethod(), op.getUrl(), op.hasBody());
-		if (op.getBody() != null)
-			req.body(op.getBody());
-		return req;
-	}
-
-	/**
 	 * Perform a <c>GET</c> request against the specified URI.
 	 *
 	 * @param uri
@@ -2229,7 +2213,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest get(Object uri) throws RestCallException {
-		return request("GET", uri, false);
+		return request(op("GET", uri));
 	}
 
 	/**
@@ -2241,7 +2225,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest get() throws RestCallException {
-		return request("GET", null, false);
+		return request(op("GET", null));
 	}
 
 	/**
@@ -2281,7 +2265,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest put(Object uri, Object body) throws RestCallException {
-		return request("PUT", uri, true).body(body);
+		return request(op("PUT", uri, body));
 	}
 
 	/**
@@ -2306,7 +2290,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest put(Object uri, String body, String contentType) throws RestCallException {
-		return request("PUT", uri, true).bodyString(body).contentType(contentType);
+		return request(op("PUT", uri, stringBody(body))).contentType(contentType);
 	}
 
 	/**
@@ -2332,7 +2316,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException REST call failed.
 	 */
 	public RestRequest put(Object uri) throws RestCallException {
-		return request("PUT", uri, true);
+		return request(op("PUT", uri));
 	}
 
 	/**
@@ -2376,7 +2360,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest post(Object uri, Object body) throws RestCallException {
-		return request("POST", uri, true).body(body);
+		return request(op("POST", uri, body));
 	}
 
 	/**
@@ -2402,7 +2386,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest post(Object uri, String body, String contentType) throws RestCallException {
-		return request("POST", uri, true).bodyString(body).contentType(contentType);
+		return request(op("POST", uri, stringBody(body))).contentType(contentType);
 	}
 
 	/**
@@ -2432,7 +2416,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException REST call failed.
 	 */
 	public RestRequest post(Object uri) throws RestCallException {
-		return request("POST", uri, true);
+		return request(op("POST", uri));
 	}
 
 	/**
@@ -2454,7 +2438,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest delete(Object uri) throws RestCallException {
-		return request("DELETE", uri, false);
+		return request(op("DELETE", uri));
 	}
 
 	/**
@@ -2476,7 +2460,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest options(Object uri) throws RestCallException {
-		return request("OPTIONS", uri, true);
+		return request(op("OPTIONS", uri));
 	}
 
 	/**
@@ -2498,7 +2482,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest head(Object uri) throws RestCallException {
-		return request("HEAD", uri, false);
+		return request(op("HEAD", uri));
 	}
 
 	/**
@@ -2533,7 +2517,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPost(Object uri, Object body) throws RestCallException {
-		RestRequest req = request("POST", uri, true);
+		RestRequest req = request(op("POST", uri));
 		try {
 			if (body instanceof Supplier)
 				body = ((Supplier<?>)body).get();
@@ -2580,7 +2564,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPost(Object uri) throws RestCallException {
-		return request("POST", uri, true);
+		return request(op("POST", uri));
 	}
 
 	/**
@@ -2649,7 +2633,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest patch(Object uri, Object body) throws RestCallException {
-		return request("PATCH", uri, true).body(body);
+		return request(op("PATCH", uri, body));
 	}
 
 	/**
@@ -2675,7 +2659,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest patch(Object uri, String body, String contentType) throws RestCallException {
-		return request("PATCH", uri, true).bodyString(body).contentType(contentType);
+		return request(op("PATCH", uri, stringBody(body))).contentType(contentType);
 	}
 
 	/**
@@ -2700,7 +2684,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException REST call failed.
 	 */
 	public RestRequest patch(Object uri) throws RestCallException {
-		return request("PATCH", uri, true);
+		return request(op("PATCH", uri));
 	}
 
 
@@ -2834,11 +2818,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest request(String method, Object uri, Object body) throws RestCallException {
-		boolean b = hasContent(method);
-		RestRequest rc = request(method, uri, b);
-		if (b)
-			rc.body(body);
-		return rc;
+		return request(op(method, uri, body));
 	}
 
 	/**
@@ -2861,8 +2841,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest request(String method, Object uri) throws RestCallException {
-		RestRequest rc = request(method, uri, hasContent(method));
-		return rc;
+		return request(op(method, uri));
 	}
 
 	/**
@@ -2890,8 +2869,19 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest request(String method, Object uri, boolean hasBody) throws RestCallException {
-		if (method == null)
-			method = "GET";
+		return request(op(method, uri).hasBody(hasBody));
+	}
+
+	/**
+	 * Perform an arbitrary request against the specified URI.
+	 *
+	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest request(RestOperation op) throws RestCallException {
 		if (isClosed) {
 			Exception e2 = null;
 			if (closedStack != null) {
@@ -2902,7 +2892,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = createRequest(toURI(uri, rootUri), method.toUpperCase(Locale.ENGLISH), hasBody);
+		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasBody());
 
 		for (Object o : headers)
 			req.header(BasicHeader.cast(o));
@@ -2914,6 +2904,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			req.formData(BasicNameValuePair.cast(o));
 
 		onInit(req);
+
+		if (op.hasBody())
+			req.body(op.getBody());
 
 		return req;
 	}
@@ -3794,6 +3787,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			requestContexts.put(c, o);
 		}
 		return (T)o;
+	}
+
+	private RestOperation op(String method, Object url) {
+		return RestOperation.of(method, url);
+	}
+
+	private RestOperation op(String method, Object url, Object body) {
+		return RestOperation.of(method, url, body);
+	}
+
+	private Reader stringBody(String body) {
+		return body == null ? null : new StringReader(stringify(body));
 	}
 
 	@Override /* Context */

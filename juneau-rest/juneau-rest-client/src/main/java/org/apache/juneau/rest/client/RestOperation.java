@@ -13,8 +13,10 @@
 package org.apache.juneau.rest.client;
 
 import java.net.*;
+import java.util.*;
 
 import org.apache.http.client.utils.*;
+import org.apache.juneau.http.*;
 
 /**
  * Aggregates the HTTP method, URL, and optional body into a single bean.
@@ -24,6 +26,7 @@ public class RestOperation {
 	private final Object url;
 	private final String method;
 	private final Object body;
+	private boolean hasBody;
 
 	/**
 	 * Creator.
@@ -84,8 +87,9 @@ public class RestOperation {
 	 */
 	public RestOperation(String method, Object url, Object body) {
 		this.url = url;
-		this.method = method;
+		this.method = method.toUpperCase(Locale.ENGLISH);
 		this.body = body;
+		this.hasBody = HttpMethod.hasContent(method);
 	}
 
 	/**
@@ -93,7 +97,7 @@ public class RestOperation {
 	 *
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Object getUrl() {
+	public Object getUri() {
 		return url;
 	}
 
@@ -121,6 +125,17 @@ public class RestOperation {
 	 * @return <jk>true</jk> if this HTTP method typically has a body.
 	 */
 	public boolean hasBody() {
-		return ! (method.equalsIgnoreCase("get") || method.equalsIgnoreCase("delete"));
+		return hasBody;
+	}
+
+	/**
+	 * Overrides the default value for the {@link #hasBody()} method.
+	 *
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public RestOperation hasBody(boolean value) {
+		this.hasBody = value;
+		return this;
 	}
 }
