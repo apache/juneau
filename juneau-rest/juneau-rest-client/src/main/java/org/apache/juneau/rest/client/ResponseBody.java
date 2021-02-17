@@ -545,56 +545,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #as(Type,Type...)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into a linked-list of strings and also pipe to an output stream.</jc>
-	 * 	Mutable&lt;List&lt;String&gt;&gt; <jv>mutable</jv> = Mutable.<jsm>create()</jsm>;
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.cache()
-	 * 		.getBody().as(<jv>mutable</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>)
-	 * 		.getBody().pipeTo(outputStream)
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	List&lt;String&gt; <jv>list</jv> = <jv>mutable</jv>.get();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param m The mutable to set the parsed value in.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
-	 */
-	public <T> RestResponse as(Mutable<T> m, Type type, Type...args) throws RestCallException {
-		m.set(as(type, args));
-		return response;
-	}
-
-	/**
 	 * Same as {@link #as(Type,Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
@@ -646,51 +596,6 @@ public class ResponseBody implements HttpEntity {
 	 */
 	public <T> T as(Class<T> type) throws RestCallException {
 		return as(getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #as(Class)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into a bean and also pipe to an output stream.</jc>
-	 * 	Mutable&lt;MyBean&gt; <jv>mutable</jv> = Mutable.<jsm>create()</jsm>;
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.cache()
-	 * 		.getBody().as(<jv>mutable</jv>, MyBean.<jk>class</jk>)
-	 * 		.getBody().pipeTo(<jv>outputStream</jv>)
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	MyBean <jv>bean</jv> = <jv>mutable</jv>.get();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param m The mutable to set the parsed value in.
-	 * @param type
-	 * 	The object type to create.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
-	 */
-	public <T> RestResponse as(Mutable<T> m, Class<T> type) throws RestCallException {
-		m.set(as(type));
-		return response;
 	}
 
 	/**
@@ -831,52 +736,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Identical to {@link #as(ClassMeta)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Parse into a bean and also pipe to an output stream.</jc>
-	 * 	Mutable&lt;List&lt;MyBean&gt;&gt; <jv>mutable</jv> = Mutable.<jsm>create()</jsm>;
-	 * 	ClassMeta&lt;List&lt;MyBean&gt;&gt; <jv>cm</jv> = BeanContext.<jsf>DEFAULT</jsf>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.cache()
-	 * 		.getBody().as(<jv>mutable</jv>, <jv>cm</jv>)
-	 * 		.getBody().pipeTo(<jv>outputStream</jv>)
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	MyBean <jv>bean</jv> = <jv>mutable</jv>.get();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param m The mutable to set the parsed value in.
-	 * @param type
-	 * 	The object type to create.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
-	 */
-	public <T> RestResponse as(Mutable<T> m, ClassMeta<T> type) throws RestCallException {
-		m.set(as(type));
-		return response;
-	}
-
-	/**
 	 * Same as {@link #as(Class)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
@@ -1009,30 +868,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #asString()} but sets the value in a mutable for fluent calls.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public RestResponse asString(Mutable<String> m) throws RestCallException {
-		m.set(asString());
-		return response;
-	}
-
-	/**
 	 * Same as {@link #asString()} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
@@ -1062,32 +897,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #asStringFuture()} but sets the value in a mutable for fluent calls.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param m The mutable to set the value in.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
-	 */
-	public RestResponse asStringFuture(Mutable<Future<String>> m) throws RestCallException {
-		m.set(asStringFuture());
-		return response;
-	}
-
-	/**
 	 * Same as {@link #asString()} but truncates the string to the specified length.
 	 *
 	 * <p>
@@ -1102,25 +911,6 @@ public class ResponseBody implements HttpEntity {
 	 */
 	public String asAbbreviatedString(int length) throws RestCallException {
 		return StringUtils.abbreviate(asString(), length);
-	}
-
-	/**
-	 * Same as {@link #asAbbreviatedString(int)} but sets the value in a mutable for fluent calls.
-	 *
-	 * <p>
-	 * If truncation occurs, the string will be suffixed with <js>"..."</js>.
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param length The max length of the returned string.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public RestResponse asAbbreviatedString(Mutable<String> m, int length) throws RestCallException {
-		m.set(asAbbreviatedString(length));
-		return response;
 	}
 
 	/**
@@ -1142,23 +932,6 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #asPojoRest(Class)} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the value in.
-	 * @param innerType The class type of the POJO being wrapped.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public RestResponse asPojoRest(Mutable<PojoRest> m, Class<?> innerType) throws RestCallException {
-		m.set(asPojoRest(innerType));
-		return response;
-	}
-
-	/**
 	 * Converts the output from the connection into an {@link OMap} and then wraps that in a {@link PojoRest}.
 	 *
 	 * <p>
@@ -1173,22 +946,6 @@ public class ResponseBody implements HttpEntity {
 	 */
 	public PojoRest asPojoRest() throws RestCallException {
 		return asPojoRest(OMap.class);
-	}
-
-	/**
-	 * Same as {@link #asPojoRest()} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param m The mutable to set the value in.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public RestResponse asPojoRest(Mutable<PojoRest> m) throws RestCallException {
-		m.set(asPojoRest());
-		return response;
 	}
 
 	/**

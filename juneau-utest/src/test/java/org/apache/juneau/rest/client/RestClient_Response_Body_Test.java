@@ -212,16 +212,8 @@ public class RestClient_Response_Body_Test {
 		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getBody().as(List.class,Integer.class);
 		assertObject(x1).asJson().is("[1,2]");
 
-		Mutable<List<Integer>> x2 = mutable();
-		testClient().entity(stringEntity("[1,2]")).get().run().getBody().as(x2,List.class,Integer.class);
-		assertObject(x2.get()).asJson().is("[1,2]");
-
 		ABean x3 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(ABean.class);
 		assertObject(x3).asJson().is("{f:1}");
-
-		Mutable<ABean> x4 = mutable();
-		testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(x4,ABean.class);
-		assertObject(x4.get()).asJson().is("{f:1}");
 
 		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(ResponseBody.class);
 		assertTrue(x5 instanceof ResponseBody);
@@ -233,10 +225,6 @@ public class RestClient_Response_Body_Test {
 		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asType(A7b.class).passes(x->((A7b)x).x.equals("foo"));
 		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getBody().as(A7c.class)).exists().contains("Unsupported media-type","'foo'");
 		assertThrown(()->testClient().entity(stringEntity("")).get().run().getBody().as(A7c.class)).contains("foo");
-
-		Mutable<ABean> x7 = mutable();
-		testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(x7,cm(ABean.class));
-		assertObject(x7.get()).asJson().is("{f:1}");
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(ABean.class);
 		assertObject(x8.get()).asJson().is("{f:1}");
@@ -252,37 +240,17 @@ public class RestClient_Response_Body_Test {
 
 		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getBody().asString()).contains("foo");
 
-		Mutable<String> x15 = mutable();
-		testClient().entity(stringEntity("{f:1}")).get().run().getBody().asString(x15);
-		assertString(x15.get()).is("{f:1}");
-
 		Future<String> x16 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asStringFuture();
 		assertString(x16.get()).is("{f:1}");
-
-		Mutable<Future<String>> x17 = mutable();
-		testClient().entity(stringEntity("{f:1}")).get().run().getBody().asStringFuture(x17);
-		assertString(x17.get().get()).is("{f:1}");
 
 		String x18 = testClient().entity(stringEntity("12345")).get().run().getBody().asAbbreviatedString(4);
 		assertString(x18).is("1...");
 
-		Mutable<String> x19 = mutable();
-		testClient().entity(stringEntity("12345")).get().run().getBody().asAbbreviatedString(x19,4);
-		assertString(x19.get()).is("1...");
-
 		PojoRest x20 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asPojoRest(ABean.class);
 		assertString(x20.get("f")).is("1");
 
-		Mutable<PojoRest> x21 = mutable();
-		testClient().entity(stringEntity("{f:1}")).get().run().getBody().asPojoRest(x21,ABean.class);
-		assertString(x21.get().get("f")).is("1");
-
 		PojoRest x22 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asPojoRest();
 		assertString(x22.get("f")).is("1");
-
-		Mutable<PojoRest> x23 = mutable();
-		testClient().entity(stringEntity("{f:1}")).get().run().getBody().asPojoRest(x23);
-		assertString(x23.get().get("f")).is("1");
 
 		Matcher x24 = testClient().entity(stringEntity("foo=123")).get().run().getBody().asMatcher(Pattern.compile("foo=(.*)"));
 		assertTrue(x24.matches());
@@ -387,9 +355,5 @@ public class RestClient_Response_Body_Test {
 				throw new IOException("foo");
 			}
 		};
-	}
-
-	private static <T> Mutable<T> mutable() {
-		return Mutable.create();
 	}
 }
