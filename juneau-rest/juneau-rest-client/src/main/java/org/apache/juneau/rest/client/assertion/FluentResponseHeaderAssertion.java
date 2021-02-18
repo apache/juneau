@@ -89,6 +89,38 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 		return new FluentZonedDateTimeAssertion<>(this, value.asDateHeader().asZonedDateTime().orElse(null), returns());
 	}
 
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response body.
+	 *
+	 * <p>
+	 * Converts the body to a type using {@link ResponseBody#asType(Class)} and then returns the value as an object assertion.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body bean is the expected value.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<js>"/myBean"</js>)
+	 * 		.run()
+	 * 		.assertBody().asType(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @param type The object type to create.
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public <V> FluentObjectAssertion<V,R> asType(Class<V> type) throws RestCallException {
+		return new FluentObjectAssertion<>(value.asType(type).orElse(null), returns());
+	}
+
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

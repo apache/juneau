@@ -105,17 +105,17 @@ public class HeaderArg implements RestOperationArg {
 
 		if (multi) {
 			Collection c = cm.isArray() ? new ArrayList<>() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
-			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
+			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).asType(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			OMap m = new OMap();
 			for (RequestHeader e : rh.getAll())
-				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null));
+				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).asType(cm.getValueType()).orElse(null));
 			return req.getBeanSession().convertToType(m, cm);
 		}
 
-		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
+		return rh.getLast(name).parser(ps).schema(schema).asType(type.innerType()).orElse(null);
 	}
 }

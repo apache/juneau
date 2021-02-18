@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Query} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequestQuery() getQuery}().{@link RequestQueryParams#get(String) get}(<jv>name</jv>).{@link RequestQueryParam#as(Class) as}(<jv>type</jv>)</c>
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequestQuery() getQuery}().{@link RequestQueryParams#get(String) get}(<jv>name</jv>).{@link RequestQueryParam#asType(Class) asType}(<jv>type</jv>)</c>
  * with a {@link HttpPartSchema schema} derived from the {@link Query} annotation.
  */
 public class QueryArg implements RestOperationArg {
@@ -102,17 +102,17 @@ public class QueryArg implements RestOperationArg {
 
 		if (multi) {
 			Collection c = cm.isArray() ? new ArrayList<>() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
-			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
+			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).asType(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			OMap m = new OMap();
 			for (RequestQueryParam e : rh.getAll())
-				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null));
+				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).asType(cm.getValueType()).orElse(null));
 			return req.getBeanSession().convertToType(m, cm);
 		}
 
-		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
+		return rh.getLast(name).parser(ps).schema(schema).asType(type.innerType()).orElse(null);
 	}
 }

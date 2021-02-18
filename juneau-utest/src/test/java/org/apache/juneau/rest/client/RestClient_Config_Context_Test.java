@@ -50,7 +50,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a01_addMap() throws Exception {
-		client().add(OMap.of(SERIALIZER_keepNullProperties,true)).build().post("/echoBody",new A1()).run().cacheBody().assertBody().is("{foo:null}").getBody().as(A1.class);
+		client().add(OMap.of(SERIALIZER_keepNullProperties,true)).build().post("/echoBody",new A1()).run().cacheBody().assertBody().is("{foo:null}").getBody().asType(A1.class);
 	}
 
 	public static class A2 {
@@ -68,7 +68,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a02_addToStringObject() throws Exception {
-		client().addTo(BEAN_notBeanClasses,A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheBody().assertBody().is("'bar'").getBody().as(A2.class);
+		client().addTo(BEAN_notBeanClasses,A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheBody().assertBody().is("'bar'").getBody().asType(A2.class);
 	}
 
 	public static class A3a {
@@ -89,13 +89,13 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a03_appendToStringObject() throws Exception {
-		A3a x = client().appendTo(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().as(A3a.class);
+		A3a x = client().appendTo(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().asType(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
 	@Test
 	public void a04_prependToStringObject() throws Exception {
-		A3a x = client().prependTo(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().as(A3a.class);
+		A3a x = client().prependTo(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("1").getBody().asType(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
@@ -110,7 +110,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a05_apply() throws Exception {
-		MockRestClient.create(A.class).json().apply(SimpleJsonSerializer.DEFAULT.getContextProperties()).build().post("/echoBody",A5.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(A5.class);
+		MockRestClient.create(A.class).json().apply(SimpleJsonSerializer.DEFAULT.getContextProperties()).build().post("/echoBody",A5.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().asType(A5.class);
 	}
 
 	public static class A6a {
@@ -140,28 +140,28 @@ public class RestClient_Config_Context_Test {
 		new A6b();
 		new A6c();
 		new A6d().foo();
-		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
-		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
-		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
+		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
+		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
+		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		AnnotationList al = ClassInfo.of(A6c.class).getAnnotationList(ConfigAnnotationFilter.INSTANCE);
 		VarResolverSession vr = VarResolver.DEFAULT.createSession();
-		client().applyAnnotations(al,vr).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
+		client().applyAnnotations(al,vr).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 	}
 
 	@Test
 	public void a07_removeFrom() throws Exception {
-		A3a x = client().appendTo(BEAN_swaps,A3b.class).removeFrom(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(A3a.class);
+		A3a x = client().appendTo(BEAN_swaps,A3b.class).removeFrom(BEAN_swaps,A3b.class).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().asType(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
 	@Test
 	public void a08_setStringObject() throws Exception {
-		MockRestClient.create(A.class).json().set(JSON_simpleMode,true).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(A3a.class);
+		MockRestClient.create(A.class).json().set(JSON_simpleMode,true).build().post("/echoBody",A3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().asType(A3a.class);
 	}
 
 	@Test
 	public void a09_annotations() throws Exception {
-		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
+		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 	}
 
 	public static interface A10a {
@@ -183,7 +183,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a10_putAllTo() throws Exception {
-		A10a x = client().implClass(A10a.class,A10b.class).build().post("/echoBody",new StringReader("{foo:1}")).run().getBody().as(A10a.class);
+		A10a x = client().implClass(A10a.class,A10b.class).build().post("/echoBody",new StringReader("{foo:1}")).run().getBody().asType(A10a.class);
 		assertEquals(1,x.getFoo());
 		assertTrue(x instanceof A10b);
 	}

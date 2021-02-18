@@ -320,12 +320,12 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(Type type, Type...args) throws RestCallException {
-		return as(request.getClassMeta(type, args));
+	public <T> Optional<T> asType(Type type, Type...args) throws RestCallException {
+		return asType(request.getClassMeta(type, args));
 	}
 
 	/**
-	 * Same as {@link #as(Type,Type...)} but sets the value in a mutable for fluent calls.
+	 * Same as {@link #asType(Type,Type...)} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
@@ -335,8 +335,8 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> RestResponse as(Mutable<T> m, Type type, Type...args) throws RestCallException {
-		m.set((T)as(type, args).orElse(null));
+	public <T> RestResponse asType(Mutable<T> m, Type type, Type...args) throws RestCallException {
+		m.set((T)asType(type, args).orElse(null));
 		return response;
 	}
 
@@ -348,12 +348,12 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(Class<T> type) throws RestCallException {
-		return as(request.getClassMeta(type));
+	public <T> Optional<T> asType(Class<T> type) throws RestCallException {
+		return asType(request.getClassMeta(type));
 	}
 
 	/**
-	 * Same as {@link #as(Class)} but sets the value in a mutable for fluent calls.
+	 * Same as {@link #asType(Class)} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
@@ -361,8 +361,8 @@ public class ResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, Class<T> type) throws RestCallException {
-		m.set(as(type).orElse(null));
+	public <T> RestResponse asType(Mutable<T> m, Class<T> type) throws RestCallException {
+		m.set(asType(type).orElse(null));
 		return response;
 	}
 
@@ -374,7 +374,7 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(ClassMeta<T> type) throws RestCallException {
+	public <T> Optional<T> asType(ClassMeta<T> type) throws RestCallException {
 		try {
 			return ofNullable(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
@@ -383,7 +383,7 @@ public class ResponseHeader implements Header {
 	}
 
 	/**
-	 * Same as {@link #as(ClassMeta)} but sets the value in a mutable for fluent calls.
+	 * Same as {@link #asType(ClassMeta)} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param m The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
@@ -391,8 +391,8 @@ public class ResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, ClassMeta<T> type) throws RestCallException {
-		m.set(as(type).orElse(null));
+	public <T> RestResponse asType(Mutable<T> m, ClassMeta<T> type) throws RestCallException {
+		m.set(asType(type).orElse(null));
 		return response;
 	}
 
@@ -405,7 +405,7 @@ public class ResponseHeader implements Header {
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
+	 * 		.getResponseHeader(<js>"Content-Type"</js>).asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
 	 * 		String <jv>mediaType</jv> = <jv>matcher</jv>.group(1);

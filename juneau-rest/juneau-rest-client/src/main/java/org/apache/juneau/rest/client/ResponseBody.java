@@ -99,7 +99,7 @@ public class ResponseBody implements HttpEntity {
 	private final HttpEntity entity;
 	private HttpPartSchema schema;
 	private Parser parser;
-	private byte[] cache;
+	private byte[] body;
 	private boolean cached;
 	boolean isConsumed;
 
@@ -195,13 +195,13 @@ public class ResponseBody implements HttpEntity {
 	@SuppressWarnings("resource")
 	public InputStream asInputStream() throws IOException {
 		try {
-			if (cache != null)
-				return new ByteArrayInputStream(cache);
+			if (body != null)
+				return new ByteArrayInputStream(body);
 
 			if (cached) {
-				cache = IOUtils.readBytes(entity.getContent());
+				body = IOUtils.readBytes(entity.getContent());
 				response.close();
-				return new ByteArrayInputStream(cache);
+				return new ByteArrayInputStream(body);
 			}
 
 			if (isConsumed && ! entity.isRepeatable())
@@ -311,16 +311,16 @@ public class ResponseBody implements HttpEntity {
 	 * @throws RestCallException If an exception occurred.
 	 */
 	public byte[] asBytes() throws RestCallException {
-		if (cache == null) {
+		if (body == null) {
 			try {
-				cache = IOUtils.readBytes(entity.getContent());
+				body = IOUtils.readBytes(entity.getContent());
 			} catch (IOException e) {
 				throw new RestCallException(response, e, "Could not read response body.");
 			} finally {
 				response.close();
 			}
 		}
-		return cache;
+		return body;
 	}
 
 
@@ -507,7 +507,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
+	 * 		Use the {@link #asType(Class)} method instead if you don't need a parameterized map/collection.
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
@@ -540,12 +540,12 @@ public class ResponseBody implements HttpEntity {
 	 * 	</ul>
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	public <T> T as(Type type, Type...args) throws RestCallException {
-		return as(getClassMeta(type, args));
+	public <T> T asType(Type type, Type...args) throws RestCallException {
+		return asType(getClassMeta(type, args));
 	}
 
 	/**
-	 * Same as {@link #as(Type,Type...)} except optimized for a non-parameterized class.
+	 * Same as {@link #asType(Type,Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -587,19 +587,19 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param <T>
 	 * 	The class type of the object being created.
-	 * 	See {@link #as(Type,Type...)} for details.
+	 * 	See {@link #asType(Type,Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws RestCallException
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type, or if a connection
 	 * 	error occurred.
 	 */
-	public <T> T as(Class<T> type) throws RestCallException {
-		return as(getClassMeta(type));
+	public <T> T asType(Class<T> type) throws RestCallException {
+		return asType(getClassMeta(type));
 	}
 
 	/**
-	 * Same as {@link #as(Class)} except allows you to predefine complex data types using the {@link ClassMeta} API.
+	 * Same as {@link #asType(Class)} except allows you to predefine complex data types using the {@link ClassMeta} API.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -646,7 +646,7 @@ public class ResponseBody implements HttpEntity {
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T as(ClassMeta<T> type) throws RestCallException {
+	public <T> T asType(ClassMeta<T> type) throws RestCallException {
 		try {
 			Class<?> ic = type.getInnerClass();
 
@@ -736,7 +736,7 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #as(Class)} but allows you to run the call asynchronously.
+	 * Same as {@link #asType(Class)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -760,14 +760,14 @@ public class ResponseBody implements HttpEntity {
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
-					return as(type);
+					return asType(type);
 				}
 			}
 		);
 	}
 
 	/**
-	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.
+	 * Same as {@link #asType(ClassMeta)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -780,7 +780,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param <T>
 	 * 	The class type of the object being created.
-	 * 	See {@link #as(Type, Type...)} for details.
+	 * 	See {@link #asType(Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
@@ -793,14 +793,14 @@ public class ResponseBody implements HttpEntity {
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
-					return as(type);
+					return asType(type);
 				}
 			}
 		);
 	}
 
 	/**
-	 * Same as {@link #as(Type,Type...)} but allows you to run the call asynchronously.
+	 * Same as {@link #asType(Type,Type...)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -813,7 +813,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param <T>
 	 * 	The class type of the object being created.
-	 * 	See {@link #as(Type, Type...)} for details.
+	 * 	See {@link #asType(Type, Type...)} for details.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -832,7 +832,7 @@ public class ResponseBody implements HttpEntity {
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
-					return as(type, args);
+					return asType(type, args);
 				}
 			}
 		);
@@ -904,13 +904,40 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param length The max length of the returned string.
 	 * @return The truncated string.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
+	 * @throws RestCallException If a problem occurred trying to read from the reader.
 	 */
 	public String asAbbreviatedString(int length) throws RestCallException {
 		return StringUtils.abbreviate(asString(), length);
+	}
+
+	/**
+	 * Returns the HTTP body content as a simple hexadecimal character string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	0123456789ABCDEF
+	 * </p>
+	 *
+	 * @return The incoming input from the connection as a plain string.
+	 * @throws RestCallException If a problem occurred trying to read from the reader.
+	 */
+	public String asHex() throws RestCallException {
+		return toHex(asBytes());
+	}
+
+	/**
+	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	01 23 45 67 89 AB CD EF
+	 * </p>
+	 *
+	 * @return The incoming input from the connection as a plain string.
+	 * @throws RestCallException If a problem occurred trying to read from the reader.
+	 */
+	public String asSpacedHex() throws RestCallException {
+		return toSpacedHex(asBytes());
 	}
 
 	/**
@@ -928,7 +955,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	</ul>
 	 */
 	public PojoRest asPojoRest(Class<?> innerType) throws RestCallException {
-		return new PojoRest(as(innerType));
+		return new PojoRest(asType(innerType));
 	}
 
 	/**
@@ -1188,7 +1215,7 @@ public class ResponseBody implements HttpEntity {
 	 */
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return cache != null ? cache.length : entity.getContentLength();
+		return body != null ? body.length : entity.getContentLength();
 	}
 
 	/**

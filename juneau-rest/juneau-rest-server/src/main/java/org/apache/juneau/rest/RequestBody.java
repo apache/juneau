@@ -245,9 +245,24 @@ public class RequestBody {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public String asString() throws IOException {
-		if (body == null)
-			body = readBytes(getInputStream(), 1024);
+		cache();
 		return new String(body, UTF8);
+	}
+
+	/**
+	 * Returns the HTTP body content as a plain string.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * </ul>
+	 *
+	 * @return The incoming input from the connection as a plain string.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public byte[] asBytes() throws IOException {
+		cache();
+		return body;
 	}
 
 	/**
@@ -262,8 +277,7 @@ public class RequestBody {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public String asHex() throws IOException {
-		if (body == null)
-			body = readBytes(getInputStream(), 1024);
+		cache();
 		return toHex(body);
 	}
 
@@ -279,8 +293,7 @@ public class RequestBody {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public String asSpacedHex() throws IOException {
-		if (body == null)
-			body = readBytes(getInputStream(), 1024);
+		cache();
 		return toSpacedHex(body);
 	}
 
@@ -508,6 +521,17 @@ public class RequestBody {
 		return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
 	}
 
+	/**
+	 * Caches the body in memory for reuse.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws IOException If error occurs while reading stream.
+	 */
+	public RequestBody cache() throws IOException {
+		if (body == null)
+			body = readBytes(getInputStream(), 1024);
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

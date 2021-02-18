@@ -250,8 +250,8 @@ public class RequestQueryParam implements NameValuePair {
 	 * @return The converted type, or {@link Optional#empty()} if the parameter is not present.
 	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(Type type, Type...args) throws HttpException {
-		return as(request.getBeanSession().getClassMeta(type, args));
+	public <T> Optional<T> asType(Type type, Type...args) throws HttpException {
+		return asType(request.getBeanSession().getClassMeta(type, args));
 	}
 
 	/**
@@ -262,8 +262,8 @@ public class RequestQueryParam implements NameValuePair {
 	 * @return The converted type, or {@link Optional#empty()} if the parameter is not present.
 	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(Class<T> type) throws HttpException {
-		return as(request.getBeanSession().getClassMeta(type));
+	public <T> Optional<T> asType(Class<T> type) throws HttpException {
+		return asType(request.getBeanSession().getClassMeta(type));
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class RequestQueryParam implements NameValuePair {
 	 * @return The converted type, or {@link Optional#empty()} if the parameter is not present.
 	 * @throws HttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(ClassMeta<T> type) throws HttpException {
+	public <T> Optional<T> asType(ClassMeta<T> type) throws HttpException {
 		try {
 			return Optional.ofNullable(parser.parse(HEADER, schema, asString().orElse(null), type));
 		} catch (ParseException e) {

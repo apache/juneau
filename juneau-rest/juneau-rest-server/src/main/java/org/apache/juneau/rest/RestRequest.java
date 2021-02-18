@@ -226,6 +226,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns a fluent assertion for the request body.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the request body contains "foo".</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertBody().is(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion on the body, never <jk>null</jk>.
+	 */
+	public FluentRequestBodyAssertion<RestRequest> assertBody() {
+		return new FluentRequestBodyAssertion<RestRequest>(getBody(), this);
+	}
+
+	/**
 	 * Returns a fluent assertion for the specified header.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1303,11 +1319,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							if (pt == HttpPartType.BODY)
 								return getBody().schema(schema).asType(type);
 							if (pt == QUERY)
-								return getRequestQuery().getLast(name).parser(pp).schema(schema).as(type);
+								return getRequestQuery().getLast(name).parser(pp).schema(schema).asType(type);
 							if (pt == FORMDATA)
 								return getFormData().get(pp, schema, name, type);
 							if (pt == HEADER)
-								return getRequestHeaders().getLast(name).parser(pp).schema(schema).as(type);
+								return getRequestHeaders().getLast(name).parser(pp).schema(schema).asType(type);
 							if (pt == PATH)
 								return getPathMatch().get(pp, schema, name, type);
 						}
