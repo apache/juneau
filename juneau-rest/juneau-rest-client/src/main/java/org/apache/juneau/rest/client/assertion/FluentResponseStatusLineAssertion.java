@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client.assertion;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Used for fluent assertion calls against a response {@link StatusLine} object.
@@ -42,6 +43,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentAssertion<R> {
 	public FluentResponseStatusLineAssertion(StatusLine statusLine, R returns) {
 		super(null, returns);
 		this.statusLine = statusLine;
+		throwable(BadRequest.class);
 	}
 
 	/**

@@ -15,6 +15,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -25,6 +26,7 @@ public class Assertion {
 	String msg;
 	Object[] msgArgs;
 	boolean stdout, stderr;
+	Class<? extends RuntimeException> throwable;
 
 	/**
 	 * Constructor used when this assertion is being created from within another assertion.
@@ -36,6 +38,7 @@ public class Assertion {
 			this.msgArgs = creator.msgArgs;
 			this.stdout = creator.stdout;
 			this.stderr = creator.stderr;
+			this.throwable = creator.throwable;
 		}
 	}
 
@@ -79,6 +82,18 @@ public class Assertion {
 	}
 
 	/**
+	 * If an error occurs, throw this exception when {@link #error(String, Object...)} is called.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public Assertion throwable(Class<? extends RuntimeException> value) {
+		this.throwable = value;
+		return this;
+	}
+
+	/**
 	 * Creates a new {@link BasicAssertionError}.
 	 *
 	 * @param msg The message.
@@ -105,6 +120,13 @@ public class Assertion {
 			System.out.println(msg);  // NOT DEBUG
 		if (stderr)
 			System.err.println(msg);  // NOT DEBUG
+		if (throwable != null) {
+			try {
+				throw BeanFactory.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).addBean(Object[].class, new Object[0]).createBean(throwable);
+			} catch (ExecutableException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		return new BasicAssertionError(cause, msg);
 	}
 

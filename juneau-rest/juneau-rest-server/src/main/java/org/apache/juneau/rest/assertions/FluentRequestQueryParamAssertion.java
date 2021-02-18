@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.assertions;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
@@ -34,6 +35,7 @@ public class FluentRequestQueryParamAssertion<R> extends FluentBaseAssertion<Str
 	 */
 	public FluentRequestQueryParamAssertion(RequestQueryParam value, R returns) {
 		this(null, value, returns);
+		throwable(BadRequest.class);
 	}
 
 	/**

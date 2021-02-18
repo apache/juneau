@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client.assertion;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 
@@ -35,6 +36,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	public FluentResponseHeaderAssertion(ResponseHeader value, R returns) {
 		super(null, value.getValue(), returns);
 		this.value = value;
+		throwable(BadRequest.class);
 	}
 
 	/**

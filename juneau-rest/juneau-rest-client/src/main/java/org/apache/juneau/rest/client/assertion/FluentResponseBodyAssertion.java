@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client.assertion;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 
@@ -37,6 +38,7 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	public FluentResponseBodyAssertion(ResponseBody value, R returns) {
 		super(null, returns);
 		this.value = value;
+		throwable(BadRequest.class);
 	}
 
 	/**
