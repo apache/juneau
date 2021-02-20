@@ -26,7 +26,14 @@ import org.apache.juneau.utils.*;
 import org.apache.juneau.collections.*;
 
 /**
- * Represents the query parameters on an HTTP request.
+ * Represents the query parameters in an HTTP request.
+ *
+ * <p>
+ * Entries are stored in a case-sensitive map unless overridden via the constructor.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc RestmRequestHeaders}
+ * </ul>
  */
 public class RequestQueryParams {
 
@@ -65,7 +72,10 @@ public class RequestQueryParams {
 		}
 	}
 
-	RequestQueryParams(RequestQueryParams copyFrom) {
+	/**
+	 * Copy constructor.
+	 */
+	private RequestQueryParams(RequestQueryParams copyFrom) {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -80,11 +90,15 @@ public class RequestQueryParams {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic operations.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Adds default entries to these parameters.
 	 *
 	 * <p>
-	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
 	 *
 	 * @param pairs
 	 * 	The default entries.
@@ -107,6 +121,184 @@ public class RequestQueryParams {
 		}
 		return this;
 	}
+
+	/**
+	 * Returns all the parameters with the specified name.
+	 *
+	 * @param name The parameter name.
+	 * @return The list of all parameters with the specified name, or an empty list if none are found.
+	 */
+	public List<RequestQueryParam> getAll(String name) {
+		assertArgNotNull("name", name);
+		List<RequestQueryParam> l = map.get(key(name));
+		return unmodifiableList(l == null ? emptyList() : l);
+	}
+
+	/**
+	 * Returns all the parameters on this request.
+	 *
+	 * @return All the parameters on this request.
+	 */
+	public List<RequestQueryParam> getAll() {
+		return unmodifiableList(list);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the parameters with the specified names are present.
+	 *
+	 * @param names The parameter names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the parameters with the specified names are present.
+	 */
+	public boolean contains(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (! map.containsKey(key(n)))
+				return false;
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the parameter with any of the specified names are present.
+	 *
+	 * @param names The parameter names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
+	 */
+	public boolean containsAny(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (map.containsKey(key(n)))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if these parameters are empty.
+	 *
+	 * @return <jk>true</jk> if these parameters are empty.
+	 */
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
+
+	/**
+	 * Adds a parameter value.
+	 *
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Existing parameter with the same name are not changed.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams add(String name, Object value) {
+		assertArgNotNull("name", name);
+		String key = key(name);
+		RequestQueryParam h = new RequestQueryParam(req, name, stringify(value)).parser(parser);
+		if (map.containsKey(key))
+			map.get(key).add(h);
+		else
+			map.put(key, AList.of(h));
+		list.add(h);
+		return this;
+	}
+
+	/**
+	 * Adds request parameter values.
+	 *
+	 * <p>
+	 * Parameters are added to the end.
+	 * <br>Existing parameters with the same name are not changed.
+	 *
+	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams add(NameValuePair...parameters) {
+		assertArgNotNull("parameters", parameters);
+		for (NameValuePair p : parameters) {
+			if (p != null)
+				add(p.getName(), p.getValue());
+		}
+		return this;
+	}
+
+	/**
+	 * Sets a parameter value.
+	 *
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Any previous parameters with the same name are removed.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The parameter value.
+	 * 	<br>Converted to a string using {@link Object#toString()}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams set(String name, Object value) {
+		assertArgNotNull("name", name);
+		String key = key(name);
+		RequestQueryParam p = new RequestQueryParam(req, name, stringify(value)).parser(parser);
+		if (map.containsKey(key))
+			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
+		list.add(p);
+		map.put(key, AList.of(p));
+		return this;
+	}
+
+
+	/**
+	 * Sets request header values.
+	 *
+	 * <p>
+	 * Parameters are added to the end of the headers.
+	 * <br>Any previous parameters with the same name are removed.
+	 *
+	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams set(NameValuePair...parameters) {
+		assertArgNotNull("headers", parameters);
+		for (NameValuePair p : parameters)
+			remove(p);
+		for (NameValuePair p : parameters)
+			add(p);
+		return this;
+	}
+
+	/**
+	 * Remove parameters.
+	 *
+	 * @param name The parameter names.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams remove(String...name) {
+		assertArgNotNull("name", name);
+		for (String n : name) {
+			String key = key(n);
+			if (map.containsKey(key))
+				list.removeAll(map.get(key));
+			map.remove(key);
+		}
+		return this;
+	}
+
+	/**
+	 * Remove parameters.
+	 *
+	 * @param parameters The parameters to remove.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams remove(NameValuePair...parameters) {
+		for (NameValuePair p : parameters)
+			remove(p.getName());
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Convenience getters.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the first parameter with the specified name.
@@ -141,28 +333,10 @@ public class RequestQueryParams {
 	}
 
 	/**
-	 * Returns all the parameters with the specified name.
+	 * Returns the last parameter with the specified name.
 	 *
-	 * @param name The parameter name.
-	 * @return The list of all parameters with the specified name, or an empty list if none are found.
-	 */
-	public List<RequestQueryParam> getAll(String name) {
-		assertArgNotNull("name", name);
-		List<RequestQueryParam> l = map.get(key(name));
-		return unmodifiableList(l == null ? emptyList() : l);
-	}
-
-	/**
-	 * Returns all the parameters on this request.
-	 *
-	 * @return All the parameters on this request.
-	 */
-	public List<RequestQueryParam> getAll() {
-		return unmodifiableList(list);
-	}
-
-	/**
-	 * Returns the last parameter with the specified name as a string.
+	 * <p>
+	 * This is equivalent to {@link #getLast(String)}.
 	 *
 	 * @param name The parameter name.
 	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
@@ -231,48 +405,9 @@ public class RequestQueryParams {
 		return getLast(name).asDate();
 	}
 
-	/**
-	 * Sets a parameter value.
-	 *
-	 * <p>
-	 * This overwrites any previous value.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return This object (for method chaining).
-	 */
-	public RequestQueryParams put(String name, Object value) {
-		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestQueryParam p = new RequestQueryParam(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
-		list.add(p);
-		map.put(key, AList.of(p));
-		return this;
-	}
-
-	/**
-	 * Adds a parameter value.
-	 *
-	 * <p>
-	 * Parameter is added to the end of the parameters.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return This object (for method chaining).
-	 */
-	public RequestQueryParams add(String name, Object value) {
-		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestQueryParam h = new RequestQueryParam(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			map.get(key).add(h);
-		else
-			map.put(key, AList.of(h));
-		list.add(h);
-		return this;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this object to a query string.
@@ -299,28 +434,6 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParams copy() {
 		return new RequestQueryParams(this);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if these parameters are empty.
-	 *
-	 * @return <jk>true</jk> if these parameters are empty.
-	 */
-	public boolean isEmpty() {
-		return list.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if these parameters contain the specified name.
-	 *
-	 * @param name The parameter name.
-	 * @return <jk>true</jk> if these parameters contain the specified name.
-	 */
-	public boolean containsName(String...name) {
-		for (String n : name)
-			if (map.containsKey(key(n)))
-				return true;
-		return false;
 	}
 
 	/**
@@ -361,7 +474,7 @@ public class RequestQueryParams {
 	 * 	<br>Returns <jk>null</jk> if no search arguments were found.
 	 */
 	public SearchArgs getSearchArgs() {
-		if (containsName("s","v","o","p","l","i")) {
+		if (contains("s","v","o","p","l","i")) {
 			return new SearchArgs.Builder()
 				.search(getString("s").orElse(null))
 				.view(getString("v").orElse(null))

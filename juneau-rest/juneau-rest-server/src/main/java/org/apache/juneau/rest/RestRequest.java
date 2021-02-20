@@ -923,7 +923,7 @@ public final class RestRequest {
 			RequestQueryParams rq = this.queryParams.copy();
 			if (addQueryParams != null)
 				for (Map.Entry<String,?> e : addQueryParams.entrySet())
-					rq.put(e.getKey(), e.getValue());
+					rq.set(e.getKey(), e.getValue());
 			if (! rq.isEmpty())
 				sb.append('?').append(rq.asQueryString());
 			uri = sb.toString();

@@ -33,12 +33,12 @@ public class HasQuery_Test {
 		@RestGet
 		public String a(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 			RequestQueryParams q = req.getRequestQuery();
-			return "p1=["+p1+","+q.containsName("p1")+"],p2=["+p2+","+q.containsName("p2")+"]";
+			return "p1=["+p1+","+q.contains("p1")+"],p2=["+p2+","+q.contains("p2")+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 			RequestQueryParams q = req.getRequestQuery();
-			return "p1=["+p1+","+q.containsName("p1")+"],p2=["+p2+","+q.containsName("p2")+"]";
+			return "p1=["+p1+","+q.contains("p1")+"],p2=["+p2+","+q.contains("p2")+"]";
 		}
 	}
 

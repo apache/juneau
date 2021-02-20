@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.http.message.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.collections.*;
@@ -34,7 +33,7 @@ import org.apache.juneau.http.header.Date;
  * Represents the headers in an HTTP request.
  *
  * <p>
- * Entries are stored in a case-insensitive map.
+ * Entries are stored in a case-insensitive map unless overridden via the constructor.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc RestmRequestHeaders}
@@ -83,12 +82,23 @@ public class RequestHeaders {
 	}
 
 	/**
+	 * Copy constructor.
+	 */
+	private RequestHeaders(RequestHeaders copyFrom) {
+		req = copyFrom.req;
+		caseSensitive = copyFrom.caseSensitive;
+		parser = copyFrom.parser;
+		list.addAll(copyFrom.list);
+		map.putAll(copyFrom.map);
+	}
+
+	/**
 	 * Subset constructor.
 	 */
-	RequestHeaders(RestRequest req, Map<String,List<RequestHeader>> headerMap, HttpPartParserSession parser, boolean caseSensitive) {
+	private RequestHeaders(RestRequest req, Map<String,List<RequestHeader>> headerMap, HttpPartParserSession parser, boolean caseSensitive) {
 		this.req = req;
-		this.map.putAll(headerMap);
-		this.list = headerMap.values().stream().flatMap(List::stream).collect(toList());
+		map.putAll(headerMap);
+		list = headerMap.values().stream().flatMap(List::stream).collect(toList());
 		this.parser = parser;
 		this.caseSensitive = caseSensitive;
 	}
@@ -132,38 +142,6 @@ public class RequestHeaders {
 	}
 
 	/**
-	 * Returns the first header with the specified name.
-	 *
-	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
-	 * to test for the existence of the header.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @return The header.  Never <jk>null</jk>.
-	 */
-	public RequestHeader getFirst(String name) {
-		assertArgNotNull("name", name);
-		List<RequestHeader> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(0));
-	}
-
-	/**
-	 * Returns the last header with the specified name.
-	 *
-	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
-	 * to test for the existence of the header.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @return The header.  Never <jk>null</jk>.
-	 */
-	public RequestHeader getLast(String name) {
-		assertArgNotNull("name", name);
-		List<RequestHeader> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(l.size()-1));
-	}
-
-	/**
 	 * Returns all the headers with the specified name.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
@@ -185,21 +163,47 @@ public class RequestHeaders {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the header with the specified name is present.
+	 * Returns <jk>true</jk> if the headers with the specified names are present.
 	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the header with the specified name is present.
+	 * @param names The header names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the headers with the specified names are present.
 	 */
-	public boolean contains(String name) {
-		assertArgNotNull("name", name);
-		return map.containsKey(key(name));
+	public boolean contains(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (! map.containsKey(key(n)))
+				return false;
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the header with any of the specified names are present.
+	 *
+	 * @param names The header names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header with any of the specified names are present.
+	 */
+	public boolean containsAny(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (map.containsKey(key(n)))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if these headers are empty.
+	 *
+	 * @return <jk>true</jk> if these headers are empty.
+	 */
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 
 	/**
 	 * Adds a request header value.
 	 *
 	 * <p>
-	 * Header is added to the end of the headers.
+	 * Header is added to the end.
 	 * <br>Existing headers with the same name are not changed.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
@@ -222,17 +226,17 @@ public class RequestHeaders {
 	 * Adds request header values.
 	 *
 	 * <p>
-	 * Headers are added to the end of the headers.
+	 * Headers are added to the end.
 	 * <br>Existing headers with the same name are not changed.
 	 *
-	 * @param header The header objects.  Must not be <jk>null</jk>.
+	 * @param headers The header objects.  Must not be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RequestHeaders add(Header...header) {
-		assertArgNotNull("header", header);
-		for (Header h : header) {
-			assertArgNotNull("header entry", h);
-			add(h.getName(), h.getValue());
+	public RequestHeaders add(Header...headers) {
+		assertArgNotNull("headers", headers);
+		for (Header h : headers) {
+			if (h != null)
+				add(h.getName(), h.getValue());
 		}
 		return this;
 	}
@@ -241,7 +245,7 @@ public class RequestHeaders {
 	 * Sets a request header value.
 	 *
 	 * <p>
-	 * Header is added to the end of the headers.
+	 * Header is added to the end.
 	 * <br>Any previous headers with the same name are removed.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
@@ -265,10 +269,10 @@ public class RequestHeaders {
 	 * Sets request header values.
 	 *
 	 * <p>
-	 * Headers are added to the end of the headers.
+	 * Headers are added to the end.
 	 * <br>Any previous headers with the same name are removed.
 	 *
-	 * @param headers The header beans.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @param headers The header to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RequestHeaders set(Header...headers) {
@@ -310,27 +314,6 @@ public class RequestHeaders {
 	}
 
 	/**
-	 * Returns an iterator of all the headers.
-	 *
-	 * @return An iterator of all the headers.  Never <jk>null</jk>.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public HeaderIterator iterator() {
-		return new BasicListHeaderIterator((List)list, null);
-	}
-
-	/**
-	 * Returns an iterator of all the headers with the specified name.
-	 *
-	 * @param name The header name.
-	 * @return An iterator of all the headers with the specified name.  Never <jk>null</jk>.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public HeaderIterator iterator(String name) {
-		return new BasicListHeaderIterator((List)map.get(key(name)), null);
-	}
-
-	/**
 	 * Returns a copy of this object but only with the specified header names copied.
 	 *
 	 * @param headers The list to include in the copy.
@@ -352,12 +335,52 @@ public class RequestHeaders {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the last header with the specified name as a string.
+	 * Returns the first header with the specified name.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
+	 * <p>
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
+	 * to test for the existence of the header.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getFirst(String name) {
+		assertArgNotNull("name", name);
+		List<RequestHeader> l = map.get(key(name));
+		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(0));
+	}
+
+	/**
+	 * Returns the last header with the specified name.
+	 *
+	 * <p>
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
+	 * to test for the existence of the header.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getLast(String name) {
+		assertArgNotNull("name", name);
+		List<RequestHeader> l = map.get(key(name));
+		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(l.size()-1));
+	}
+
+	/**
+	 * Returns the last header with the specified name.
+	 *
+	 * <p>
+	 * This is equivalent to {@link #getLast(String)}.
+	 *
+	 * @param name The header name.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	public RequestHeader get(String name) {
+		return getLast(name);
+	}
+
+	/**
+	 * Returns the last header with the specified name as a string.
 	 *
 	 * @param name The header name.
 	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
@@ -369,13 +392,8 @@ public class RequestHeaders {
 	/**
 	 * Returns the last header with the specified name as an integer.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
 	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
 	 */
 	public Optional<Integer> getInteger(String name) {
 		return getLast(name).asInteger();
@@ -384,13 +402,8 @@ public class RequestHeaders {
 	/**
 	 * Returns the last header with the specified name as a boolean.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
 	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
 	 */
 	public Optional<Boolean> getBoolean(String name) {
 		return getLast(name).asBoolean();
@@ -399,13 +412,8 @@ public class RequestHeaders {
 	/**
 	 * Returns the last header with the specified name as a list from a comma-delimited string.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
 	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
 	 */
 	public Optional<List<String>> getCsvArray(String name) {
 		return getLast(name).asCsvArray();
@@ -414,13 +422,8 @@ public class RequestHeaders {
 	/**
 	 * Returns the last header with the specified name as a long.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
 	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
 	 */
 	public Optional<Long> getLong(String name) {
 		return getLast(name).asLong();
@@ -429,13 +432,8 @@ public class RequestHeaders {
 	/**
 	 * Returns the last header with the specified name as a boolean.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
-	 * </ul>
-	 *
 	 * @param name The header name.
-	 * @return The header value, or {@link Optional#empty()} if the header isn't present.
+	 * @return The header value, or {@link Optional#empty()} if it doesn't exist.
 	 */
 	public Optional<ZonedDateTime> getDate(String name) {
 		return getLast(name).asDate();
@@ -946,6 +944,15 @@ public class RequestHeaders {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Makes a copy of these parameters.
+	 *
+	 * @return A new parameters object.
+	 */
+	public RequestHeaders copy() {
+		return new RequestHeaders(this);
+	}
 
 	/**
 	 * Converts the headers to a readable string.
