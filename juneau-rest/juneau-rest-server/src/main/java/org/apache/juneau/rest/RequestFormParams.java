@@ -23,7 +23,6 @@ import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
@@ -49,7 +48,7 @@ public class RequestFormParams {
 		Collection<Part> c = null;
 
 		RequestBody body = req.getBody();
-		if (body.isLoaded() || ! req.getContentType().orElse(ContentType.TEXT_PLAIN).equalsIgnoreCase("multipart/form-data"))
+		if (body.isLoaded() || ! req.getContentType().equalsIgnoreCase("multipart/form-data"))
 			m = RestUtils.parseQuery(body.getReader());
 		else {
 			c = req.getHttpServletRequest().getParts();

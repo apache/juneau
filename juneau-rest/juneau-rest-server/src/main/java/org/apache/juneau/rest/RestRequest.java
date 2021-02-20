@@ -498,10 +498,10 @@ public final class RestRequest {
 	 * 	Accept: text/plain
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Accept> getAccept() {
-		return ofNullable(Accept.of(headers.getString("Accept").orElse(null)));
+	public Accept getAccept() {
+		return headers.get("Accept").asHeader(Accept.class);
 	}
 
 	/**
@@ -515,10 +515,10 @@ public final class RestRequest {
 	 * 	Accept-Charset: utf-8
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<AcceptCharset> getAcceptCharset() {
-		return ofNullable(AcceptCharset.of(headers.getString("Accept-Charset").orElse(null)));
+	public AcceptCharset getAcceptCharset() {
+		return headers.get("Accept-Charset").asHeader(AcceptCharset.class);
 	}
 
 	/**
@@ -532,10 +532,10 @@ public final class RestRequest {
 	 * 	Accept-Encoding: gzip, deflate
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<AcceptEncoding> getAcceptEncoding() {
-		return ofNullable(AcceptEncoding.of(headers.getString("Accept-Encoding").orElse(null)));
+	public AcceptEncoding getAcceptEncoding() {
+		return headers.get("Accept-Encoding").asHeader(AcceptEncoding.class);
 	}
 
 	/**
@@ -549,10 +549,10 @@ public final class RestRequest {
 	 * 	Accept-Language: en-US
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<AcceptLanguage> getAcceptLanguage() {
-		return ofNullable(AcceptLanguage.of(headers.getString("Accept-Language").orElse(null)));
+	public AcceptLanguage getAcceptLanguage() {
+		return headers.get("Accept-Language").asHeader(AcceptLanguage.class);
 	}
 
 	/**
@@ -566,10 +566,10 @@ public final class RestRequest {
 	 * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Authorization> getAuthorization() {
-		return ofNullable(Authorization.of(headers.getString("Authorization").orElse(null)));
+	public Authorization getAuthorization() {
+		return headers.get("Authorization").asHeader(Authorization.class);
 	}
 
 	/**
@@ -583,10 +583,10 @@ public final class RestRequest {
 	 * 	Cache-Control: no-cache
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<CacheControl> getCacheControl() {
-		return ofNullable(CacheControl.of(headers.getString("Cache-Control").orElse(null)));
+	public CacheControl getCacheControl() {
+		return headers.get("Cache-Control").asHeader(CacheControl.class);
 	}
 
 	/**
@@ -601,10 +601,10 @@ public final class RestRequest {
 	 * 	Connection: Upgrade
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Connection> getConnection() {
-		return ofNullable(Connection.of(headers.getString("Connection").orElse(null)));
+	public Connection getConnection() {
+		return headers.get("Connection").asHeader(Connection.class);
 	}
 
 	/**
@@ -618,10 +618,10 @@ public final class RestRequest {
 	 * 	Content-Length: 348
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<ContentLength> getContentLength() {
-		return ofNullable(ContentLength.of(headers.getString("Content-Length").orElse(null)));
+	public ContentLength getContentLength() {
+		return headers.get("Content-Length").asHeader(ContentLength.class);
 	}
 
 	/**
@@ -635,10 +635,10 @@ public final class RestRequest {
 	 * 	Content-Type: application/x-www-form-urlencoded
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<ContentType> getContentType() {
-		return ofNullable(ContentType.of(headers.getString("Content-Type").orElse(null)));
+	public ContentType getContentType() {
+		return headers.get("Content-Type").asHeader(ContentType.class);
 	}
 
 	/**
@@ -652,10 +652,10 @@ public final class RestRequest {
 	 * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Date> getDate() {
-		return ofNullable(Date.of(headers.getString("Date").orElse(null)));
+	public Date getDate() {
+		return headers.get("Date").asHeader(Date.class);
 	}
 
 	/**
@@ -669,10 +669,10 @@ public final class RestRequest {
 	 * 	Expect: 100-continue
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Expect> getExpect() {
-		return ofNullable(Expect.of(headers.getString("Expect").orElse(null)));
+	public Expect getExpect() {
+		return headers.get("Expect").asHeader(Expect.class);
 	}
 
 	/**
@@ -686,10 +686,10 @@ public final class RestRequest {
 	 * 	From: user@example.com
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<From> getFrom() {
-		return ofNullable(From.of(headers.getString("From").orElse(null)));
+	public From getFrom() {
+		return headers.get("From").asHeader(From.class);
 	}
 
 	/**
@@ -705,10 +705,10 @@ public final class RestRequest {
 	 * 	Host: en.wikipedia.org
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Host> getHost() {
-		return ofNullable(Host.of(headers.getString("Host").orElse(null)));
+	public Host getHost() {
+		return headers.get("Host").asHeader(Host.class);
 	}
 
 	/**
@@ -724,10 +724,10 @@ public final class RestRequest {
 	 * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<IfMatch> getIfMatch() {
-		return ofNullable(IfMatch.of(headers.getString("If-Match").orElse(null)));
+	public IfMatch getIfMatch() {
+		return headers.get("If-Match").asHeader(IfMatch.class);
 	}
 
 	/**
@@ -741,10 +741,10 @@ public final class RestRequest {
 	 * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<IfModifiedSince> getIfModifiedSince() {
-		return ofNullable(IfModifiedSince.of(headers.getString("If-Modified-Since").orElse(null)));
+	public IfModifiedSince getIfModifiedSince() {
+		return headers.get("If-Modified-Since").asHeader(IfModifiedSince.class);
 	}
 
 	/**
@@ -758,10 +758,10 @@ public final class RestRequest {
 	 * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<IfNoneMatch> getIfNoneMatch() {
-		return ofNullable(IfNoneMatch.of(headers.getString("If-None-Match").orElse(null)));
+	public IfNoneMatch getIfNoneMatch() {
+		return headers.get("If-None-Match").asHeader(IfNoneMatch.class);
 	}
 
 	/**
@@ -775,10 +775,10 @@ public final class RestRequest {
 	 * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<IfRange> getIfRange() {
-		return ofNullable(IfRange.of(headers.getString("If-Range").orElse(null)));
+	public IfRange getIfRange() {
+		return headers.get("If-Range").asHeader(IfRange.class);
 	}
 
 	/**
@@ -792,10 +792,10 @@ public final class RestRequest {
 	 * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<IfUnmodifiedSince> getIfUnmodifiedSince() {
-		return ofNullable(IfUnmodifiedSince.of(headers.getString("If-Unmodified-Since").orElse(null)));
+	public IfUnmodifiedSince getIfUnmodifiedSince() {
+		return headers.get("If-Unmodified-Since").asHeader(IfUnmodifiedSince.class);
 	}
 
 	/**
@@ -809,10 +809,10 @@ public final class RestRequest {
 	 * 	Max-Forwards: 10
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<MaxForwards> getMaxForwards() {
-		return ofNullable(MaxForwards.of(headers.getString("Max-Forwards").orElse(null)));
+	public MaxForwards getMaxForwards() {
+		return headers.get("Max-Forwards").asHeader(MaxForwards.class);
 	}
 
 	/**
@@ -826,10 +826,10 @@ public final class RestRequest {
 	 * 	Pragma: no-cache
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Pragma> getPragma() {
-		return ofNullable(Pragma.of(headers.getString("Pragma").orElse(null)));
+	public Pragma getPragma() {
+		return headers.get("Pragma").asHeader(Pragma.class);
 	}
 
 	/**
@@ -843,10 +843,10 @@ public final class RestRequest {
 	 * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<ProxyAuthorization> getProxyAuthorization() {
-		return ofNullable(ProxyAuthorization.of(headers.getString("Proxy-Authorization").orElse(null)));
+	public ProxyAuthorization getProxyAuthorization() {
+		return headers.get("Proxy-Authorization").asHeader(ProxyAuthorization.class);
 	}
 
 	/**
@@ -860,10 +860,10 @@ public final class RestRequest {
 	 * 	Range: bytes=500-999
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Range> getRange() {
-		return ofNullable(Range.of(headers.getString("Range").orElse(null)));
+	public Range getRange() {
+		return headers.get("Range").asHeader(Range.class);
 	}
 
 	/**
@@ -877,10 +877,10 @@ public final class RestRequest {
 	 * 	Referer: http://en.wikipedia.org/wiki/Main_Page
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Referer> getReferer() {
-		return ofNullable(Referer.of(headers.getString("Referer").orElse(null)));
+	public Referer getReferer() {
+		return headers.get("Referer").asHeader(Referer.class);
 	}
 
 	/**
@@ -896,10 +896,10 @@ public final class RestRequest {
 	 * 	TE: trailers, deflate
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<TE> getTE() {
-		return ofNullable(TE.of(headers.getString("TE").orElse(null)));
+	public TE getTE() {
+		return headers.get("TE").asHeader(TE.class);
 	}
 
 	/**
@@ -908,7 +908,7 @@ public final class RestRequest {
 	 * <p>
 	 * Example: <js>"GMT"</js>.
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
 	public Optional<TimeZone> getTimeZone() {
 		String tz = headers.getString("Time-Zone").orElse(null);
@@ -928,10 +928,10 @@ public final class RestRequest {
 	 * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<UserAgent> getUserAgent() {
-		return ofNullable(UserAgent.of(headers.getString("User-Agent").orElse(null)));
+	public UserAgent getUserAgent() {
+		return headers.get("Upgrade").asHeader(UserAgent.class);
 	}
 
 	/**
@@ -945,10 +945,10 @@ public final class RestRequest {
 	 * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Upgrade> getUpgrade() {
-		return ofNullable(Upgrade.of(headers.getString("Upgrade").orElse(null)));
+	public Upgrade getUpgrade() {
+		return headers.get("Upgrade").asHeader(Upgrade.class);
 	}
 
 	/**
@@ -962,10 +962,10 @@ public final class RestRequest {
 	 * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Via> getVia() {
-		return ofNullable(Via.of(headers.getString("Via").orElse(null)));
+	public Via getVia() {
+		return headers.get("Via").asHeader(Via.class);
 	}
 
 	/**
@@ -979,10 +979,10 @@ public final class RestRequest {
 	 * 	Warning: 199 Miscellaneous warning
 	 * </p>
 	 *
-	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
-	public Optional<Warning> getWarning() {
-		return ofNullable(Warning.of(headers.getString("Warning").orElse(null)));
+	public Warning getWarning() {
+		return headers.get("Warning").asHeader(Warning.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

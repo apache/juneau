@@ -42,6 +42,6 @@ public class TimeZoneArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected TimeZoneArg() {
-		super((c)->c.getRestRequest().getTimeZone());
+		super((c)->c.getRestRequest().getTimeZone().orElse(null));
 	}
 }

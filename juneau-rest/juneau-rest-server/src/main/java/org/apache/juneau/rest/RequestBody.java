@@ -364,10 +364,10 @@ public class RequestBody {
 	private MediaType getMediaType() {
 		if (mediaType != null)
 			return mediaType;
-		Optional<ContentType> ct = req.getContentType();
+		ContentType ct = req.getContentType();
 		if (!ct.isPresent() && body != null)
 			return MediaType.UON;
-		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
+		return ct.isNotEmpty() ? ct.asMediaType().orElse(null) : null;
 	}
 
 	/**
@@ -476,10 +476,10 @@ public class RequestBody {
 		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
-		Optional<ContentType> ct = req.getContentType();
+		ContentType ct = req.getContentType();
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", req.getOpContext().getParsers().getSupportedMediaTypes()
+			ct.isPresent() ? ct.asMediaType().orElse(null) : "not-specified", req.getOpContext().getParsers().getSupportedMediaTypes()
 		);
 	}
 

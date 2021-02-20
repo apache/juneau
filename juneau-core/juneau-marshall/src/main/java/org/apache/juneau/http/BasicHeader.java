@@ -242,6 +242,18 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the value exists and is not empty.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>!asString().orElse(<js>""</js>).isEmpty()</c>.
+	 *
+	 * @return <jk>true</jk> if the value exists and is not empty.
+	 */
+	public boolean isNotEmpty() {
+		return ! asString().orElse("").isEmpty();
+	}
+
+	/**
 	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
 	 *
 	 * <p>
