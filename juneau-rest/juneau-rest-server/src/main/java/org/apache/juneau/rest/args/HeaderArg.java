@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Header} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequestHeaders() getHeaders}()./c>
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getHeaders() getHeaders}()./c>
  * with a {@link HttpPartSchema schema} derived from the {@link Header} annotation.
  *
  * <p>
@@ -99,7 +99,7 @@ public class HeaderArg implements RestOperationArg {
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
-		RequestHeaders rh = call.getRestRequest().getRequestHeaders();
+		RequestHeaders rh = call.getRestRequest().getHeaders();
 		BeanSession bs = call.getRestRequest().getBeanSession();
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
 

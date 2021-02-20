@@ -112,7 +112,7 @@ public class RequestQueryParams {
 	 * Returns the first parameter with the specified name.
 	 *
 	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestQueryParam#exists()} can be used
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestQueryParam#isPresent()} can be used
 	 * to test for the existence of the parameter.
 	 *
 	 * @param name The parameter name.
@@ -128,7 +128,7 @@ public class RequestQueryParams {
 	 * Returns the last parameter with the specified name.
 	 *
 	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestQueryParam#exists()} can be used
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestQueryParam#isPresent()} can be used
 	 * to test for the existence of the parameter.
 	 *
 	 * @param name The parameter name.

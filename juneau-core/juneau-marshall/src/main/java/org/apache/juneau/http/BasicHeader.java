@@ -221,12 +221,49 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
+	 * Returns the value of this header as a string.
+	 *
+	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 */
+	public Optional<String> asString() {
+		return Optional.ofNullable(getValue());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the value exists.
+	 * 
+	 * <p>
+	 * This is a shortcut for calling <c>asString().isPresent()</c>.
 	 *
 	 * @return <jk>true</jk> if the value exists.
 	 */
-	public boolean exists() {
-		return getValue() != null;
+	public boolean isPresent() {
+		return asString().isPresent();
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
+	 * 
+	 * <p>
+	 * This is a shortcut for calling <c>asString().get()</c>.
+	 *
+	 * @return The value if present.
+	 */
+	public String get() {
+		return asString().get();
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise returns other.
+	 * 
+	 * <p>
+	 * This is a shortcut for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The other value.
+	 * @return The value if present or the other value if not.
+	 */
+	public String orElse(String other) {
+		return asString().orElse(other);
 	}
 
 	/**

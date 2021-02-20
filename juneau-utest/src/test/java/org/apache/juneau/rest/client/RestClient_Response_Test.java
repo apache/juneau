@@ -149,8 +149,8 @@ public class RestClient_Response_Test {
 	public static class C extends BasicRestObject {
 		@RestGet(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String n = req.getStringHeader("Check").get();
-			String v = req.getRequestHeaders().getString(n).orElse(null);
+			String n = req.getHeader("Check").orElse(null);
+			String v = req.getHeader(n).orElse(null);
 			res.setHeader(n,v);
 			return v;
 		}
@@ -195,9 +195,9 @@ public class RestClient_Response_Test {
 		assertEquals(3, r.getHeaders("Foo").length);
 		assertEquals(0, r.getHeaders("Bar").length);
 		r.getFirstHeader("Foo").assertValue().is("bar");
-		assertFalse(r.getFirstHeader("Bar").exists());
+		assertFalse(r.getFirstHeader("Bar").isPresent());
 		r.getLastHeader("Foo").assertValue().is("qux");
-		assertFalse(r.getLastHeader("Bar").exists());
+		assertFalse(r.getLastHeader("Bar").isPresent());
 
 		r.setHeaders(new Header[]{BasicHeader.of("Foo", "quux")});
 		r.getFirstHeader("Foo").assertValue().is("quux");
@@ -214,7 +214,7 @@ public class RestClient_Response_Test {
 		assertEquals("quux", i.nextHeader().getValue());
 
 		r.removeHeader(BasicHeader.of("Foo","quux"));
-		assertFalse(r.getFirstHeader("Foo").exists());
+		assertFalse(r.getFirstHeader("Foo").isPresent());
 
 		r.setHeader(BasicHeader.of("Foo","quuux"));
 		r.getResponseHeader("Foo").assertValue().is("quuux");

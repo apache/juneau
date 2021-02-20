@@ -602,7 +602,7 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link ResponseHeader}
  * 	<ul>
- * 		<li class='jm'><c>{@link ResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
+ * 		<li class='jm'><c>{@link ResponseHeader#isPresent() isPresent()} <jk>returns</jk> <jk>boolean</jk></c>
  * 		<li class='jm'><c>{@link ResponseHeader#asString() asString()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asType(Type,Type...) asType(Type,Type...)} <jk>returns</jk> T</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asType(Class) asType(Class&lt;T&gt;)} <jk>returns</jk> T</c>

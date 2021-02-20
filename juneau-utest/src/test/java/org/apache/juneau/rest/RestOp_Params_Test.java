@@ -386,7 +386,7 @@ public class RestOp_Params_Test {
 
 		@Override
 		public Object resolve(RestCall call) throws Exception {
-			return new B2b(call.getRestRequest().getStringHeader("Custom").orElse(null));
+			return new B2b(call.getRestRequest().getHeader("Custom").orElse(null));
 		}
 	}
 

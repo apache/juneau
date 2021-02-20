@@ -36,8 +36,8 @@ public class RestClient_Response_Headers_Test {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String c = req.getStringHeader("Check").get();
-			String[] h = req.getRequestHeaders().getAll(c).stream().map(x -> x.getValue()).toArray(String[]::new);
+			String c = req.getHeader("Check").orElse(null);
+			String[] h = req.getHeaders().getAll(c).stream().map(x -> x.getValue()).toArray(String[]::new);
 			if (h != null)
 				for (String hh : h)
 					res.addHeader(c, hh);
@@ -52,8 +52,8 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void a01_exists() throws Exception {
-		assertFalse(checkFooClient().build().get("/echo").run().getResponseHeader("Foo").exists());
-		assertTrue(checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").exists());
+		assertFalse(checkFooClient().build().get("/echo").run().getResponseHeader("Foo").isPresent());
+		assertTrue(checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").isPresent());
 	}
 
 	public static class A2 extends BasicHeader {

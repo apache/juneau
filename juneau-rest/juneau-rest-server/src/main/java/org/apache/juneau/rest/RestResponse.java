@@ -116,7 +116,7 @@ public final class RestResponse {
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
-			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getStringHeader("Accept-Charset").orElse(null));
+			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset").orElse(null));
 		inner.setCharacterEncoding(charset.name());
 
 	}

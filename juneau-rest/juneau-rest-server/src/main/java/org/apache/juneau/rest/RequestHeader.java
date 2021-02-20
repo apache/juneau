@@ -96,10 +96,25 @@ public class RequestHeader implements Header {
 	/**
 	 * Returns <jk>true</jk> if this header exists on the request.
 	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().isPresent()</c>.
+	 *
 	 * @return <jk>true</jk> if this header exists on the request.
 	 */
-	public boolean exists() {
-		return value != null;
+	public boolean isPresent() {
+		return asString().isPresent();
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().get()</c>.
+	 *
+	 * @return The value if present.
+	 */
+	public String get() {
+		return asString().get();
 	}
 
 	/**

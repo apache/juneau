@@ -135,7 +135,7 @@ public class RequestHeaders {
 	 * Returns the first header with the specified name.
 	 *
 	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#exists()} can be used
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
 	 * to test for the existence of the header.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
@@ -151,7 +151,7 @@ public class RequestHeaders {
 	 * Returns the last header with the specified name.
 	 *
 	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#exists()} can be used
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
 	 * to test for the existence of the header.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.

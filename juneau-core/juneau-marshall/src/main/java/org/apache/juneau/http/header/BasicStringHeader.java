@@ -122,26 +122,9 @@ public class BasicStringHeader extends BasicHeader {
 		return getParsedValue();
 	}
 
-	/**
-	 * Returns the value of this header as a string.
-	 *
-	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
-	 */
+	@Override /* BasicHeader */
 	public Optional<String> asString() {
 		return Optional.ofNullable(getParsedValue());
-	}
-
-	/**
-	 * Return the value if present, otherwise return other.
-	 *
-	 * <p>
-	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
-	 *
-	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
-	 * @return The value, if present, otherwise other.
-	 */
-	public String orElse(String other) {
-		return asString().orElse(other);
 	}
 
 	private String getParsedValue() {

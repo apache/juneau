@@ -104,7 +104,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
-public final class RestRequest implements HttpRequest {
+public final class RestRequest {
 
 	// Constructor initialized.
 	private HttpServletRequest inner;
@@ -167,7 +167,7 @@ public final class RestRequest implements HttpRequest {
 				.create()
 				.javaMethod(opContext.getJavaMethod())
 				.locale(getLocale())
-				.timeZone(getRequestHeaders().getTimeZone().orElse(null))
+				.timeZone(getHeaders().getTimeZone().orElse(null))
 				.debug(isDebug() ? true : null);
 
 		partParserSession = opContext.getPartParser().createPartSession(parserSessionArgs);
@@ -176,7 +176,7 @@ public final class RestRequest implements HttpRequest {
 			.create()
 			.javaMethod(opContext.getJavaMethod())
 			.locale(getLocale())
-			.timeZone(getRequestHeaders().getTimeZone().orElse(null))
+			.timeZone(getHeaders().getTimeZone().orElse(null))
 			.debug(isDebug() ? true : null)
 			.uriContext(getUriContext())
 			.resolver(getVarResolverSession())
@@ -213,7 +213,11 @@ public final class RestRequest implements HttpRequest {
 	// Request line.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HttpRequest */
+	/**
+	 * Returns the request line of this request.
+	 *
+	 * @return The request line of this request.
+	 */
 	public RequestLine getRequestLine() {
 		String x = inner.getProtocol();
 		int i = x.indexOf('/');
@@ -222,7 +226,11 @@ public final class RestRequest implements HttpRequest {
 		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 
-	@Override /* HttpRequest */
+	/**
+	 * Returns the protocol version from the request line of this request.
+	 *
+	 * @return The protocol version from the request line of this request.
+	 */
 	public ProtocolVersion getProtocolVersion() {
 		return getRequestLine().getProtocolVersion();
 	}
@@ -345,7 +353,7 @@ public final class RestRequest implements HttpRequest {
 	 * 	The headers on this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestHeaders getRequestHeaders() {
+	public RequestHeaders getHeaders() {
 		return headers;
 	}
 
@@ -356,144 +364,30 @@ public final class RestRequest implements HttpRequest {
 	 * If there is more than one matching header in the message the last element of <c>getHeaders(String)</c> is returned.
 	 * <br>If there is no matching header in the message, an empty request header object is returned.
 	 *
-	 * <p>
-	 * This method is identical to {@link #getLastHeader(String)}.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"Foo"</js>)
 	 * 		.assertValue().exists()
-	 * 		.asString().get();
+	 * 		.get();
 	 * </p>
 	 *
 	 * @param name The header name.
 	 * @return The request header object, never <jk>null</jk>.
 	 */
 	public RequestHeader getHeader(String name) {
-		return getLastHeader(name);
-	}
-
-	/**
-	 * Returns the last header with a specified name as a string value.
-	 *
-	 * <p>
-	 * This method is equivalent to calling <c>getLastHeader(<jv>name</jv>).asString()</c>.
-	 *
-	 * @param name The header name.
-	 * @return The request header value as a string, never <jk>null</jk>.
-	 */
-	public Optional<String> getStringHeader(String name) {
-		return getLastHeader(name).asString();
-	}
-
-	/**
-	 * Returns the first header with a specified name of this message.
-	 *
-	 * <p>
-	 * If there is more than one matching header in the message the first element of <c>getHeaders(String)</c> is returned.
-	 * <br>If there is no matching header in the message, an empty request header object is returned.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
-	 * 	<jv>request</jv>
-	 * 		.getFirstHeader(<js>"Foo"</js>)
-	 * 		.assertValue().exists()
-	 * 		.asString().get();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return The request header object, never <jk>null</jk>.
-	 */
-	@Override /* HttpRequest */
-	public RequestHeader getFirstHeader(String name) {
-		return headers.getFirst(name);
-	}
-
-	/**
-	 * Returns the last header with a specified name of this message.
-	 *
-	 * <p>
-	 * If there is more than one matching header in the message the last element of <c>getHeaders(String)</c> is returned.
-	 * <br>If there is no matching header in the message, an empty request header object is returned.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
-	 * 	<jv>request</jv>
-	 * 		.getLastHeader(<js>"Foo"</js>)
-	 * 		.assertValue().exists()
-	 * 		.asString().get();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return The request header object, never <jk>null</jk>.
-	 */
-	@Override /* HttpRequest */
-	public RequestHeader getLastHeader(String name) {
 		return headers.getLast(name);
 	}
 
-	@Override /* HttpRequest */
-	public RequestHeader[] getAllHeaders() {
-		return headers.getAll().toArray(new RequestHeader[0]);
-	}
-
-	@Override /* HttpRequest */
-	public void addHeader(org.apache.http.Header header) {
-		headers.add(header);
-	}
-
-	@Override /* HttpRequest */
-	public void addHeader(String name, String value) {
-		headers.add(name, value);
-	}
-
-	@Override /* HttpRequest */
-	public void setHeader(org.apache.http.Header header) {
-		headers.set(header);
-	}
-
-	@Override /* HttpRequest */
-	public void setHeader(String name, String value) {
-		headers.set(name, value);
-	}
-
-	@Override /* HttpRequest */
-	public void setHeaders(org.apache.http.Header[] headers) {
-		this.headers.set(headers);
-	}
-
-	@Override /* HttpRequest */
-	public void removeHeader(org.apache.http.Header header) {
-		headers.remove(header);
-	}
-
-	@Override /* HttpRequest */
-	public void removeHeaders(String name) {
-		headers.remove(name);
-	}
-
-	@Override /* HttpRequest */
-	public HeaderIterator headerIterator() {
-		return headers.iterator();
-	}
-
-	@Override /* HttpRequest */
-	public HeaderIterator headerIterator(String name) {
-		return headers.iterator(name);
-	}
-
-	@Override /* HttpRequest */
+	/**
+	 * Returns <jk>true</jk> if this request contains the specified header.
+	 *
+	 * @param name The header name.
+	 * @return <jk>true</jk> if this request contains the specified header.
+	 */
 	public boolean containsHeader(String name) {
 		return headers.contains(name);
-	}
-
-	@Override /* HttpRequest */
-	public RequestHeader[] getHeaders(String name) {
-		return headers.getAll(name).toArray(new RequestHeader[0]);
 	}
 
 	/**
@@ -532,7 +426,7 @@ public final class RestRequest implements HttpRequest {
 			// Determine charset
 			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
 			// Jetty returns the default charset instead of null if the character is not specified on the request.
-			String h = getLastHeader("Content-Type").orElse(null);
+			String h = getHeader("Content-Type").orElse(null);
 			if (h != null) {
 				int i = h.indexOf(";charset=");
 				if (i > 0)
@@ -1540,7 +1434,7 @@ public final class RestRequest implements HttpRequest {
 							if (pt == FORMDATA)
 								return getFormData().get(pp, schema, name, type);
 							if (pt == HEADER)
-								return getLastHeader(name).parser(pp).schema(schema).asType(type);
+								return getHeader(name).parser(pp).schema(schema).asType(type);
 							if (pt == PATH)
 								return getPathMatch().get(pp, schema, name, type);
 						}
@@ -1583,23 +1477,6 @@ public final class RestRequest implements HttpRequest {
 	}
 
 	/**
-	 * Not implemented.
-	 */
-	@SuppressWarnings("deprecation")
-	@Override
-	public HttpParams getParams() {
-		return null;
-	}
-
-	/**
-	 * Not implemented.
-	 */
-	@SuppressWarnings("deprecation")
-	@Override
-	public void setParams(HttpParams params) {
-	}
-
-	/**
 	 * Returns the current session associated with this request, or if the request does not have a session, creates one.
 	 *
 	 * @return The current request session.
@@ -1637,7 +1514,7 @@ public final class RestRequest implements HttpRequest {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");
-		for (RequestHeader h : getAllHeaders()) {
+		for (RequestHeader h : getHeaders().getAll()) {
 			sb.append("\t").append(h).append("\n");
 		}
 		String m = getMethod();

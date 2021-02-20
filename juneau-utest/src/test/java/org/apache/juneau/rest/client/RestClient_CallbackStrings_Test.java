@@ -42,7 +42,7 @@ public class RestClient_CallbackStrings_Test {
 		}
 		private Map<String,Object> getFooHeaders(RestRequest req) {
 			Map<String,Object> m = new TreeMap<>();
-			req.getRequestHeaders().getAll().stream().filter(x -> x.getName().startsWith("Foo-")).forEach(x -> m.put(x.getName(), x.getValue()));
+			req.getHeaders().getAll().stream().filter(x -> x.getName().startsWith("Foo-")).forEach(x -> m.put(x.getName(), x.getValue()));
 			return m;
 		}
 	}

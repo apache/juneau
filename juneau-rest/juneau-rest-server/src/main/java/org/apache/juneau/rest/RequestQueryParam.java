@@ -95,11 +95,26 @@ public class RequestQueryParam implements NameValuePair {
 
 	/**
 	 * Returns <jk>true</jk> if this parameter exists on the request.
+	 * 
+	 * <p>
+	 * This is a shortened form for calling <c>asString().isPresent()</c>.
 	 *
 	 * @return <jk>true</jk> if this parameter exists on the request.
 	 */
-	public boolean exists() {
+	public boolean isPresent() {
 		return value != null;
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().get()</c>.
+	 *
+	 * @return The value if present.
+	 */
+	public String get() {
+		return asString().get();
 	}
 
 	/**

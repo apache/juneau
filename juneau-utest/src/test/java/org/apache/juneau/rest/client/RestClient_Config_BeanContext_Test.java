@@ -41,7 +41,7 @@ public class RestClient_Config_BeanContext_Test {
 		}
 		@RestGet
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().getAll(req.getStringHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 		@RestGet
 		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
@@ -90,7 +90,7 @@ public class RestClient_Config_BeanContext_Test {
 	public static class A2b extends BasicRestObject {
 		@RestPost
 		public Reader test(org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws IOException {
-			res.setHeader("X",req.getRequestHeaders().getString("X").orElse(null));
+			res.setHeader("X",req.getHeader("X").orElse(null));
 			return req.getBody().getReader();
 		}
 	}

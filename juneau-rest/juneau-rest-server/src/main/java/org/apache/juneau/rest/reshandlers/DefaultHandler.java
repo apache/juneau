@@ -55,7 +55,7 @@ public class DefaultHandler implements ResponseHandler {
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res) throws IOException, InternalServerError, NotAcceptable {
 		SerializerGroup g = res.getOpContext().getSerializers();
-		String accept = req.getRequestHeaders().getString("Accept").orElse("*/*");
+		String accept = req.getHeader("Accept").orElse("*/*");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		HttpPartSchema schema = null;
 
@@ -178,7 +178,7 @@ public class DefaultHandler implements ResponseHandler {
 						.properties(req.getAttributes())
 						.javaMethod(req.getOpContext().getJavaMethod())
 						.locale(req.getLocale())
-						.timeZone(req.getRequestHeaders().getTimeZone().orElse(null))
+						.timeZone(req.getHeaders().getTimeZone().orElse(null))
 						.mediaType(mediaType)
 						.streamCharset(res.getCharset())
 						.schema(schema)
@@ -248,7 +248,7 @@ public class DefaultHandler implements ResponseHandler {
 
 		throw new NotAcceptable(
 			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
-			req.getRequestHeaders().getString("Accept").orElse(""), g.getSupportedMediaTypes()
+			req.getHeader("Accept").orElse(""), g.getSupportedMediaTypes()
 		);
 	}
 
