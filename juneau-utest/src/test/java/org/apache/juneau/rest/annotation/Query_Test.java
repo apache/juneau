@@ -39,12 +39,12 @@ public class Query_Test {
 	public static class A {
 		@RestGet
 		public String a(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
-			RequestQueryParams q = req.getRequestQuery();
+			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.getString("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
-			RequestQueryParams q = req.getRequestQuery();
+			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.getString("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 	}
@@ -88,22 +88,22 @@ public class Query_Test {
 	public static class B {
 		@RestGet
 		public String a(RestRequest req, @Query(n="p1") String p1) throws Exception {
-			RequestQueryParams q = req.getRequestQuery();
+			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestGet
 		public String b(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
-			RequestQueryParams q = req.getRequestQuery();
+			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String c(RestRequest req, @Query(n="p1") String p1) throws Exception {
-			RequestQueryParams q = req.getRequestQuery();
+			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String d(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
-			RequestQueryParams q = req.getRequestQuery();
+			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.getString("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 	}

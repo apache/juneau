@@ -60,8 +60,8 @@ public final class Introspectable implements RestConverter {
 	@Override /* RestConverter */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public Object convert(RestRequest req, Object o) throws InternalServerError {
-		String method = req.getRequestQueryParam("invokeMethod").asString().orElse(null);
-		String args = req.getRequestQueryParam("invokeArgs").asString().orElse(null);
+		String method = req.getQueryParam("invokeMethod").orElse(null);
+		String args = req.getQueryParam("invokeArgs").orElse(null);
 		if (method == null)
 			return o;
 		try {

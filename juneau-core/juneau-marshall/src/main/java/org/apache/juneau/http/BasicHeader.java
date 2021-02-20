@@ -48,7 +48,7 @@ import org.apache.juneau.reflect.*;
 public class BasicHeader implements Header, Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 
-    private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = new HeaderElement[] {};
+	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = new HeaderElement[] {};
 
 	private final String name;
 	private final Object value;
@@ -198,7 +198,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @param compare The value to compare against.
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
-	protected boolean eqIC(String compare) {
+	public boolean equalsIgnoreCase(String compare) {
 		return isEqualsIc(getValue(), compare);
 	}
 
@@ -231,7 +231,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	/**
 	 * Returns <jk>true</jk> if the value exists.
-	 * 
+	 *
 	 * <p>
 	 * This is a shortcut for calling <c>asString().isPresent()</c>.
 	 *
@@ -243,7 +243,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	/**
 	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
-	 * 
+	 *
 	 * <p>
 	 * This is a shortcut for calling <c>asString().get()</c>.
 	 *
@@ -255,7 +255,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	/**
 	 * If a value is present, returns the value, otherwise returns other.
-	 * 
+	 *
 	 * <p>
 	 * This is a shortcut for calling <c>asString().orElse(<jv>other</jv>)</c>.
 	 *

@@ -40,11 +40,11 @@ public class RestClient_Config_OpenApi_Test {
 		}
 		@RestGet
 		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
-			return new StringReader(req.getRequestQuery().asQueryString());
+			return new StringReader(req.getQueryParams().asQueryString());
 		}
 		@RestPost
 		public Reader checkFormData(org.apache.juneau.rest.RestRequest req) {
-			return new StringReader(req.getFormData().asQueryString());
+			return new StringReader(req.getFormParams().asQueryString());
 		}
 	}
 

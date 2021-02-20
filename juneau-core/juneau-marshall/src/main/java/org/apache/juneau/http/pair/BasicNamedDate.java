@@ -38,7 +38,7 @@ public class BasicNamedDate extends BasicNameValuePair {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
 	 * 		<li>{@link ZonedDateTime}
 	 * 		<li>{@link Calendar}
 	 * 		<li>Anything else - Converted to <c>String</c>.
@@ -62,7 +62,7 @@ public class BasicNamedDate extends BasicNameValuePair {
 	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
 	 * 		<li>{@link ZonedDateTime}
 	 * 		<li>{@link Calendar}
 	 * 		<li>Anything else - Converted to <c>String</c>.
@@ -84,7 +84,7 @@ public class BasicNamedDate extends BasicNameValuePair {
 	 * @param value The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
 	 * 		<li>{@link ZonedDateTime} - Will be truncated to seconds.
 	 * 		<li>{@link Calendar} - Will be truncated to seconds.
 	 * 		<li>Anything else - Converted to <c>String</c>.
@@ -104,7 +104,7 @@ public class BasicNamedDate extends BasicNameValuePair {
 			return null;
 		if (o instanceof String)
 			return (String)o;
-		return RFC_1123_DATE_TIME.format(getParsedValue());
+		return ISO_DATE_TIME.format(getParsedValue());
 	}
 
 	/**
@@ -159,6 +159,6 @@ public class BasicNamedDate extends BasicNameValuePair {
 		String s = o.toString();
 		if (isEmpty(s))
 			return null;
-		return ZonedDateTime.from(RFC_1123_DATE_TIME.parse(s)).truncatedTo(SECONDS);
+		return ZonedDateTime.from(ISO_DATE_TIME.parse(s)).truncatedTo(SECONDS);
 	}
 }

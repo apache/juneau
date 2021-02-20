@@ -39,8 +39,8 @@ public class FormData_Test {
 	public static class A {
 		@RestPost
 		public String a(RestRequest req, @FormData(name="p1",allowEmptyValue=true) String p1, @FormData(name="p2",allowEmptyValue=true) int p2) throws Exception {
-			RequestFormData f = req.getFormData();
-			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getString("p2")+","+f.get("p2", int.class)+"]";
+			RequestFormParams f = req.getFormParams();
+			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").asString().orElse(null)+"],p2=["+p2+","+f.get("p2").orElse(null)+","+f.get("p2").asType(int.class).orElse(null)+"]";
 		}
 	}
 
@@ -69,13 +69,13 @@ public class FormData_Test {
 	public static class B {
 		@RestPost
 		public String a(RestRequest req, @FormData(value="p1") String p1) throws Exception {
-			RequestFormData f = req.getFormData();
-			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
+			RequestFormParams f = req.getFormParams();
+			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").orElse(null)+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @FormData(value="p1",format="uon") String p1) throws Exception {
-			RequestFormData f = req.getFormData();
-			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
+			RequestFormParams f = req.getFormParams();
+			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").orElse(null)+"]";
 		}
 	}
 
@@ -97,7 +97,7 @@ public class FormData_Test {
 	@Rest
 	public static class C {
 		@RestPost(defaultFormData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap a(RequestFormData formData) {
+		public OMap a(RequestFormParams formData) {
 			return OMap.create()
 				.a("f1", formData.getString("f1"))
 				.a("f2", formData.getString("f2"))

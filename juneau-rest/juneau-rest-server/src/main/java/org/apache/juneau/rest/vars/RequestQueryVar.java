@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$RQ{key1[,key2...]}"</js>.
  *
  * <p>
- * Used to resolve values returned by {@link RestRequest#getRequestQueryParam(String)}.
+ * Used to resolve values returned by {@link RestRequest#getQueryParam(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <h5 class='section'>Example:</h5>
@@ -68,7 +68,7 @@ public class RequestQueryVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getRequestQueryParam(key).orElse(null);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getQueryParam(key).orElse(null);
 	}
 
 	@Override /* Var */

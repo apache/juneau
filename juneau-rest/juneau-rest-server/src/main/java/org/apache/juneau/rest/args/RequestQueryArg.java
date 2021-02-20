@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters of type {@link RequestQueryParams} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getRequestQuery() getQuery}()</c>.
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getQueryParams() getQueryParams}()</c>.
  */
 public class RequestQueryArg extends SimpleRestOperationArg {
 
@@ -40,6 +40,6 @@ public class RequestQueryArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestQueryArg() {
-		super((c)->c.getRestRequest().getRequestQuery());
+		super((c)->c.getRestRequest().getQueryParams());
 	}
 }

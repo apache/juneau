@@ -173,7 +173,7 @@ public class Connection extends BasicStringHeader {
 	 * @return <jk>true</jk> if the header value is <c>close</c>.
 	 */
 	public boolean isClose() {
-		return eqIC("close");
+		return equalsIgnoreCase("close");
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class Connection extends BasicStringHeader {
 	 * @return <jk>true</jk> if the header value is <c>keep-alive</c>.
 	 */
 	public boolean isKeepAlive() {
-		return eqIC("keep-alive");
+		return equalsIgnoreCase("keep-alive");
 	}
 
 	/**
@@ -191,6 +191,6 @@ public class Connection extends BasicStringHeader {
 	 * @return <jk>true</jk> if the header value is <c>upgrade</c>.
 	 */
 	public boolean isUpgrade() {
-		return eqIC("upgrade");
+		return equalsIgnoreCase("upgrade");
 	}
 }

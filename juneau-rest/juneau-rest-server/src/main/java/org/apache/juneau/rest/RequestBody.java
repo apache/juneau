@@ -48,7 +48,6 @@ public class RequestBody {
 	private Encoder encoder;
 	private ParserGroup parsers;
 	private long maxInput;
-	private RequestHeaders headers;
 	private int contentLength = 0;
 	private MediaType mediaType;
 	private Parser parser;
@@ -76,11 +75,6 @@ public class RequestBody {
 	 */
 	public RequestBody schema(HttpPartSchema schema) {
 		this.schema = schema;
-		return this;
-	}
-
-	RequestBody headers(RequestHeaders headers) {
-		this.headers = headers;
 		return this;
 	}
 
@@ -370,7 +364,7 @@ public class RequestBody {
 	private MediaType getMediaType() {
 		if (mediaType != null)
 			return mediaType;
-		Optional<ContentType> ct = headers.getContentType();
+		Optional<ContentType> ct = req.getContentType();
 		if (!ct.isPresent() && body != null)
 			return MediaType.UON;
 		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
@@ -441,7 +435,7 @@ public class RequestBody {
 		if (cm.isInputStream())
 			return (T)getInputStream();
 
-		Optional<TimeZone> timeZone = headers.getTimeZone();
+		Optional<TimeZone> timeZone = req.getTimeZone();
 		Locale locale = req.getLocale();
 		ParserMatch pm = getParserMatch();
 
@@ -482,7 +476,7 @@ public class RequestBody {
 		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
-		Optional<ContentType> ct = headers.getContentType();
+		Optional<ContentType> ct = req.getContentType();
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
 			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", req.getOpContext().getParsers().getSupportedMediaTypes()

@@ -177,7 +177,7 @@ public @interface RestDelete {
 	 * Strings are of the format <js>"name=value"</js>.
 	 *
 	 * <p>
-	 * Affects values returned by {@link RestRequest#getRequestQueryParam(String)} when the parameter is not present on the request.
+	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

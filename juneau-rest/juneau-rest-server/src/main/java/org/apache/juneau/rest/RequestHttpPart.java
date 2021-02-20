@@ -28,10 +28,10 @@ import org.apache.juneau.parser.ParseException;
 /**
  * Represents a single HTTP part on an HTTP request.
  */
-public class RequestHttpPart {
+public abstract class RequestHttpPart {
 
 	private final HttpPartType partType;
-	private final String name, value;
+	private final String name;
 	private final RestRequest request;
 	private HttpPartParserSession parser;
 	private HttpPartSchema schema;
@@ -42,13 +42,11 @@ public class RequestHttpPart {
 	 * @param partType The HTTP part type.
 	 * @param request The request object.
 	 * @param name The header name.
-	 * @param value The header value.
 	 */
-	public RequestHttpPart(HttpPartType partType, RestRequest request, String name, String value) {
+	public RequestHttpPart(HttpPartType partType, RestRequest request, String name) {
 		this.partType = partType;
 		this.request = request;
 		this.name = name;
-		this.value = value;
 		parser(null);
 	}
 
@@ -136,7 +134,7 @@ public class RequestHttpPart {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return Optional.ofNullable(value);
+		return Optional.ofNullable(getValue());
 	}
 
 	/**
@@ -261,9 +259,7 @@ public class RequestHttpPart {
 	 *
 	 * @return The value of this part, may be <jk>null</jk>.
 	 */
-	public String getValue() {
-		return value;
-	}
+	public abstract String getValue();
 
 	@Override /* Object */
 	public String toString() {

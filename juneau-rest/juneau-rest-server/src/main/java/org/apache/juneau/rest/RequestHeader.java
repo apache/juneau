@@ -31,6 +31,7 @@ import org.apache.juneau.rest.assertions.*;
  */
 public class RequestHeader extends RequestHttpPart implements Header {
 
+	private final String value;
 	/**
 	 * Constructor.
 	 *
@@ -39,12 +40,18 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * @param value The header value.
 	 */
 	public RequestHeader(RestRequest request, String name, String value) {
-		super(HEADER, request, name, value);
+		super(HEADER, request, name);
+		this.value = value;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Retrievers
 	//------------------------------------------------------------------------------------------------------------------
+
+	@Override /* RequestHttpPart */
+	public String getValue() {
+		return value;
+	}
 
 	/**
 	 * Returns the value of this header as an integer.

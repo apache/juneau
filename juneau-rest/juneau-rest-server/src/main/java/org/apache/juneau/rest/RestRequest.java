@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static java.util.Collections.*;
+import static java.util.Optional.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
@@ -69,6 +70,7 @@ import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.exception.HttpException;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.Date;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
@@ -124,7 +126,7 @@ public final class RestRequest {
 
 	// Lazy initialized.
 	private VarResolverSession varSession;
-	private RequestFormData formData;
+	private RequestFormParams formParams;
 	private UriContext uriContext;
 	private String authorityPath;
 	private Config config;
@@ -167,7 +169,7 @@ public final class RestRequest {
 				.create()
 				.javaMethod(opContext.getJavaMethod())
 				.locale(getLocale())
-				.timeZone(getHeaders().getTimeZone().orElse(null))
+				.timeZone(getTimeZone().orElse(null))
 				.debug(isDebug() ? true : null);
 
 		partParserSession = opContext.getPartParser().createPartSession(parserSessionArgs);
@@ -176,7 +178,7 @@ public final class RestRequest {
 			.create()
 			.javaMethod(opContext.getJavaMethod())
 			.locale(getLocale())
-			.timeZone(getHeaders().getTimeZone().orElse(null))
+			.timeZone(getTimeZone().orElse(null))
 			.debug(isDebug() ? true : null)
 			.uriContext(getUriContext())
 			.resolver(getVarResolverSession())
@@ -198,7 +200,6 @@ public final class RestRequest {
 		body
 			.encoders(opContext.getEncoders())
 			.parsers(opContext.getParsers())
-			.headers(headers)
 			.maxInput(opContext.getMaxInput());
 
 		attrs
@@ -302,7 +303,25 @@ public final class RestRequest {
 	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
 	public FluentRequestQueryParamAssertion<RestRequest> assertQueryParam(String name) {
-		return new FluentRequestQueryParamAssertion<RestRequest>(getRequestQueryParam(name), this);
+		return new FluentRequestQueryParamAssertion<RestRequest>(getQueryParam(name), this);
+	}
+
+
+	/**
+	 * Returns a fluent assertion for the specified form parameter.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertFormParam(<js>"foo"</js>).asString().contains(<js>"bar"</js>);
+	 * </p>
+	 *
+	 * @param name The query parameter name.
+	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
+	 */
+	public FluentRequestFormParamAssertion<RestRequest> assertFormParam(String name) {
+		return new FluentRequestFormParamAssertion<RestRequest>(getFormParam(name), this);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -464,6 +483,507 @@ public final class RestRequest {
 		return best;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Standard headers.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the <c>Accept</c> header on the request.
+	 *
+	 * <p>
+	 * Content-Types that are acceptable for the response.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Accept: text/plain
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Accept> getAccept() {
+		return ofNullable(Accept.of(headers.getString("Accept").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Accept-Charset</c> header on the request.
+	 *
+	 * <p>
+	 * Character sets that are acceptable.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Accept-Charset: utf-8
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<AcceptCharset> getAcceptCharset() {
+		return ofNullable(AcceptCharset.of(headers.getString("Accept-Charset").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Accept-Encoding</c> header on the request.
+	 *
+	 * <p>
+	 * List of acceptable encodings.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Accept-Encoding: gzip, deflate
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<AcceptEncoding> getAcceptEncoding() {
+		return ofNullable(AcceptEncoding.of(headers.getString("Accept-Encoding").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Accept-Language</c> header on the request.
+	 *
+	 * <p>
+	 * List of acceptable human languages for response.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Accept-Language: en-US
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<AcceptLanguage> getAcceptLanguage() {
+		return ofNullable(AcceptLanguage.of(headers.getString("Accept-Language").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Authorization</c> header on the request.
+	 *
+	 * <p>
+	 * Authentication credentials for HTTP authentication.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Authorization> getAuthorization() {
+		return ofNullable(Authorization.of(headers.getString("Authorization").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Cache-Control</c> header on the request.
+	 *
+	 * <p>
+	 * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Cache-Control: no-cache
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<CacheControl> getCacheControl() {
+		return ofNullable(CacheControl.of(headers.getString("Cache-Control").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Connection</c> header on the request.
+	 *
+	 * <p>
+	 * Control options for the current connection and list of hop-by-hop request fields.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Connection: keep-alive
+	 * 	Connection: Upgrade
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Connection> getConnection() {
+		return ofNullable(Connection.of(headers.getString("Connection").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Content-Length</c> header on the request.
+	 *
+	 * <p>
+	 * The length of the request body in octets (8-bit bytes).
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Content-Length: 348
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<ContentLength> getContentLength() {
+		return ofNullable(ContentLength.of(headers.getString("Content-Length").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Content-Type</c> header on the request.
+	 *
+	 * <p>
+	 * The MIME type of the body of the request (used with POST and PUT requests).
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Content-Type: application/x-www-form-urlencoded
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<ContentType> getContentType() {
+		return ofNullable(ContentType.of(headers.getString("Content-Type").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Date</c> header on the request.
+	 *
+	 * <p>
+	 * The date and time that the message was originated (in "HTTP-date" format as defined by RFC 7231 Date/Time Formats).
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Date> getDate() {
+		return ofNullable(Date.of(headers.getString("Date").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Expect</c> header on the request.
+	 *
+	 * <p>
+	 * Indicates that particular server behaviors are required by the client.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Expect: 100-continue
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Expect> getExpect() {
+		return ofNullable(Expect.of(headers.getString("Expect").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>From</c> header on the request.
+	 *
+	 * <p>
+	 * The email address of the user making the request.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	From: user@example.com
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<From> getFrom() {
+		return ofNullable(From.of(headers.getString("From").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Host</c> header on the request.
+	 *
+	 * <p>
+	 * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening.
+	 * The port number may be omitted if the port is the standard port for the service requested.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Host: en.wikipedia.org:8080
+	 * 	Host: en.wikipedia.org
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Host> getHost() {
+		return ofNullable(Host.of(headers.getString("Host").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>If-Match</c> header on the request.
+	 *
+	 * <p>
+	 * Only perform the action if the client supplied entity matches the same entity on the server.
+	 * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last
+	 * updated it.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<IfMatch> getIfMatch() {
+		return ofNullable(IfMatch.of(headers.getString("If-Match").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>If-Modified-Since</c> header on the request.
+	 *
+	 * <p>
+	 * Allows a 304 Not Modified to be returned if content is unchanged.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<IfModifiedSince> getIfModifiedSince() {
+		return ofNullable(IfModifiedSince.of(headers.getString("If-Modified-Since").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>If-None-Match</c> header on the request.
+	 *
+	 * <p>
+	 * Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<IfNoneMatch> getIfNoneMatch() {
+		return ofNullable(IfNoneMatch.of(headers.getString("If-None-Match").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>If-Range</c> header on the request.
+	 *
+	 * <p>
+	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire ofNullable(entity.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<IfRange> getIfRange() {
+		return ofNullable(IfRange.of(headers.getString("If-Range").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>If-Unmodified-Since</c> header on the request.
+	 *
+	 * <p>
+	 * Only send the response if the entity has not been modified since a specific time.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<IfUnmodifiedSince> getIfUnmodifiedSince() {
+		return ofNullable(IfUnmodifiedSince.of(headers.getString("If-Unmodified-Since").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Max-Forwards</c> header on the request.
+	 *
+	 * <p>
+	 * Limit the number of times the message can be forwarded through proxies or gateways.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Max-Forwards: 10
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<MaxForwards> getMaxForwards() {
+		return ofNullable(MaxForwards.of(headers.getString("Max-Forwards").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Pragma</c> header on the request.
+	 *
+	 * <p>
+	 * Implementation-specific fields that may have various effects anywhere along the request-response chain.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Pragma: no-cache
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Pragma> getPragma() {
+		return ofNullable(Pragma.of(headers.getString("Pragma").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Proxy-Authorization</c> header on the request.
+	 *
+	 * <p>
+	 * Authorization credentials for connecting to a proxy.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<ProxyAuthorization> getProxyAuthorization() {
+		return ofNullable(ProxyAuthorization.of(headers.getString("Proxy-Authorization").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Range</c> header on the request.
+	 *
+	 * <p>
+	 * Request only part of an entity. Bytes are numbered from 0.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Range: bytes=500-999
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Range> getRange() {
+		return ofNullable(Range.of(headers.getString("Range").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Referer</c> header on the request.
+	 *
+	 * <p>
+	 * This is the address of the previous web page from which a link to the currently requested page was followed.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Referer: http://en.wikipedia.org/wiki/Main_Page
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Referer> getReferer() {
+		return ofNullable(Referer.of(headers.getString("Referer").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>TE</c> header on the request.
+	 *
+	 * <p>
+	 * The transfer encodings the user agent is willing to accept: the same values as for the response header field
+	 * Transfer-Encoding can be used, plus the "trailers" value (related to the "chunked" transfer method) to notify the
+	 * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	TE: trailers, deflate
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<TE> getTE() {
+		return ofNullable(TE.of(headers.getString("TE").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Time-Zone</c> header value on the request if there is one.
+	 *
+	 * <p>
+	 * Example: <js>"GMT"</js>.
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<TimeZone> getTimeZone() {
+		String tz = headers.getString("Time-Zone").orElse(null);
+		if (tz != null)
+			return of(TimeZone.getTimeZone(tz));
+		return empty();
+	}
+
+	/**
+	 * Returns the <c>User-Agent</c> header on the request.
+	 *
+	 * <p>
+	 * The user agent string of the user agent.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<UserAgent> getUserAgent() {
+		return ofNullable(UserAgent.of(headers.getString("User-Agent").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Upgrade</c> header on the request.
+	 *
+	 * <p>
+	 * Ask the server to upgrade to another protocol.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Upgrade> getUpgrade() {
+		return ofNullable(Upgrade.of(headers.getString("Upgrade").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Via</c> header on the request.
+	 *
+	 * <p>
+	 * Informs the server of proxies through which the request was sent.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Via> getVia() {
+		return ofNullable(Via.of(headers.getString("Via").orElse(null)));
+	}
+
+	/**
+	 * Returns the <c>Warning</c> header on the request.
+	 *
+	 * <p>
+	 * A general warning about possible problems with the entity body.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	Warning: 199 Miscellaneous warning
+	 * </p>
+	 *
+	 * @return The parsed header on the request, or {@link Optional#empty()} if not present.
+	 */
+	public Optional<Warning> getWarning() {
+		return ofNullable(Warning.of(headers.getString("Warning").orElse(null)));
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Attributes
@@ -572,7 +1092,7 @@ public final class RestRequest {
 	 * 	The query parameters as a modifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestQueryParams getRequestQuery() {
+	public RequestQueryParams getQueryParams() {
 		return queryParams;
 	}
 
@@ -582,8 +1102,18 @@ public final class RestRequest {
 	 * @param name The query parameter name.
 	 * @return The query parameter, never <jk>null</jk>.
 	 */
-	public RequestQueryParam getRequestQueryParam(String name) {
+	public RequestQueryParam getQueryParam(String name) {
 		return queryParams.get(name);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this request contains the specified header.
+	 *
+	 * @param name The header name.
+	 * @return <jk>true</jk> if this request contains the specified header.
+	 */
+	public boolean containsQueryParam(String name) {
+		return queryParams.contains(name);
 	}
 
 
@@ -595,7 +1125,7 @@ public final class RestRequest {
 	 * Form-data.
 	 *
 	 * <p>
-	 * Returns a {@link RequestFormData} object that encapsulates access to form post parameters.
+	 * Returns a {@link RequestFormParams} object that encapsulates access to form post parameters.
 	 *
 	 * <p>
 	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP body.
@@ -621,7 +1151,7 @@ public final class RestRequest {
 	 * 	<li>
 	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
 	 * 	<li>
-	 * 		The {@link RequestFormData} object can also be passed as a parameter on the method.
+	 * 		The {@link RequestFormParams} object can also be passed as a parameter on the method.
 	 * 	<li>
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
@@ -636,22 +1166,12 @@ public final class RestRequest {
 	 * @throws InternalServerError If query parameters could not be parsed.
 	 * @see org.apache.juneau.http.annotation.FormData
 	 */
-	public RequestFormData getFormData() throws InternalServerError {
+	public RequestFormParams getFormParams() throws InternalServerError {
 		try {
-			if (formData == null) {
-				formData = new RequestFormData(this, partParserSession);
-				if (! body.isLoaded()) {
-					formData.putAll(inner.getParameterMap());
-				} else {
-					Map<String,String[]> m = RestUtils.parseQuery(body.getReader());
-					for (Map.Entry<String,String[]> e : m.entrySet()) {
-						for (String v : e.getValue())
-							formData.put(e.getKey(), v);
-					}
-				}
-			}
-			formData.addDefault(opContext.getDefaultRequestFormData());
-			return formData;
+			if (formParams == null)
+				formParams = new RequestFormParams(this, true).parser(partParserSession);
+			formParams.addDefault(opContext.getDefaultRequestFormData());
+			return formParams;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
 		}
@@ -663,10 +1183,19 @@ public final class RestRequest {
 	 * @param name The form data parameter name.
 	 * @return The form data parameter value, or <jk>null</jk> if not found.
 	 */
-	public String getFormData(String name) {
-		return getFormData().getString(name);
+	public RequestFormParam getFormParam(String name) {
+		return getFormParams().get(name);
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this request contains the specified header.
+	 *
+	 * @param name The header name.
+	 * @return <jk>true</jk> if this request contains the specified header.
+	 */
+	public boolean containsFormParam(String name) {
+		return getFormParams().contains(name);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Path parameters
@@ -1430,9 +1959,9 @@ public final class RestRequest {
 							if (pt == HttpPartType.BODY)
 								return getBody().schema(schema).asType(type);
 							if (pt == QUERY)
-								return getRequestQuery().getLast(name).parser(pp).schema(schema).asType(type);
+								return getQueryParams().get(name).parser(pp).schema(schema).asType(type);
 							if (pt == FORMDATA)
-								return getFormData().get(pp, schema, name, type);
+								return getFormParams().get(name).parser(pp).schema(schema).asType(type);
 							if (pt == HEADER)
 								return getHeader(name).parser(pp).schema(schema).asType(type);
 							if (pt == PATH)

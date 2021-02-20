@@ -14,8 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
-
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
@@ -32,9 +30,9 @@ public class Rest_AllowedHeaderParams_Test {
 	public static class A {
 		@RestOp
 		public String put(RequestHeaders h) {
-			Optional<Accept> accept = h.getAccept();
-			Optional<ContentType> contentType = h.getContentType();
-			return "Accept="+(accept.isPresent() ? accept.get().getValue() : null)+",Content-Type=" + (contentType.isPresent() ? contentType.get().getValue() : null) + ",Custom=" + h.getString("Custom").orElse(null);
+			Accept accept = h.get("Accept").asHeader(Accept.class);
+			ContentType contentType = h.get("Content-Type").asHeader(ContentType.class);
+			return "Accept="+(accept.isPresent() ? accept.get() : null)+",Content-Type=" + (contentType.isPresent() ? contentType.get() : null) + ",Custom=" + h.getString("Custom").orElse(null);
 		}
 	}
 

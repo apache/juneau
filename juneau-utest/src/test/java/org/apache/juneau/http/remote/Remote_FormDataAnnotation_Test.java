@@ -713,7 +713,7 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K {
 		@RestOp
 		public String post(RestRequest req) throws Exception {
-			return req.getFormData().toString(true);
+			return req.getFormParams().toString(true);
 		}
 	}
 

@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$RF{key1[,key2...]}"</js>.
  *
  * <p>
- * Used to resolve values returned by {@link RestRequest#getFormData(String)}.
+ * Used to resolve values returned by {@link RestRequest#getFormParam(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <h5 class='section'>Example:</h5>
@@ -68,7 +68,7 @@ public class RequestFormDataVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getFormData(key);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getFormParam(key).orElse(null);
 	}
 
 	@Override /* Var */

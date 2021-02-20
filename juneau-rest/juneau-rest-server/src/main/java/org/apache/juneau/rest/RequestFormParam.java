@@ -14,8 +14,11 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
+import java.io.*;
 import java.time.*;
 import java.util.*;
+
+import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
@@ -23,14 +26,27 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.pair.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Represents a single query parameter on an HTTP request.
+ * Represents a single form-data parameter on an HTTP request.
  */
-public class RequestQueryParam extends RequestHttpPart implements NameValuePair {
+public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
-	private final String value;
+	private final Part part;
+	private String value;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param request The request object.
+	 * @param part The HTTP part.
+	 */
+	public RequestFormParam(RestRequest request, Part part) {
+		super(FORMDATA, request, part.getName());
+		this.part = part;
+	}
 
 	/**
 	 * Constructor.
@@ -39,9 +55,10 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 */
-	public RequestQueryParam(RestRequest request, String name, String value) {
-		super(QUERY, request, name);
+	public RequestFormParam(RestRequest request, String name, String value) {
+		super(FORMDATA, request, name);
 		this.value = value;
+		this.part = null;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -50,6 +67,12 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 
 	@Override /* RequestHttpPart */
 	public String getValue() {
+		if (value == null && part != null)
+			try {
+				value = IOUtils.read(part.getInputStream());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		return value;
 	}
 
@@ -193,7 +216,7 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.getFormParam(<js>"foo"</js>)
 	 * 		.assertString().contains(<js>"bar"</js>);
 	 * </p>
 	 *
@@ -201,14 +224,14 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * The assertion test returns the original object allowing you to chain multiple requests like so:
 	 * <p class='bcode w800'>
 	 * 	String <jv>foo</jv> = <jv>request</jv>
-	 * 		.getQueryParam(<js>"foo"</js>)
+	 * 		.getFormParam(<js>"foo"</js>)
 	 * 		.assertString().contains(<js>"bar"</js>)
 	 * 		.asString().get();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentStringAssertion<RequestQueryParam> assertString() {
+	public FluentStringAssertion<RequestFormParam> assertString() {
 		return new FluentStringAssertion<>(orElse(null), this);
 	}
 
@@ -218,13 +241,13 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getQueryParam(<js>"age"</js>)
+	 * 		.getFormParam(<js>"age"</js>)
 	 * 		.assertInteger().isGreaterThan(1);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentIntegerAssertion<RequestQueryParam> assertInteger() {
+	public FluentIntegerAssertion<RequestFormParam> assertInteger() {
 		return new FluentIntegerAssertion<>(asNamedInteger().asInteger().orElse(null), this);
 	}
 
@@ -234,13 +257,13 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getQueryParam(<js>"length"</js>)
+	 * 		.getFormParam(<js>"length"</js>)
 	 * 		.assertLong().isLessThan(100000);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentLongAssertion<RequestQueryParam> assertLong() {
+	public FluentLongAssertion<RequestFormParam> assertLong() {
 		return new FluentLongAssertion<>(asNamedLong().asLong().orElse(null), this);
 	}
 
@@ -250,13 +273,13 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getQueryParam(<js>"time"</js>)
+	 * 		.getFormParam(<js>"time"</js>)
 	 * 		.assertDate().isAfterNow();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentZonedDateTimeAssertion<RequestQueryParam> assertDate() {
+	public FluentZonedDateTimeAssertion<RequestFormParam> assertDate() {
 		return new FluentZonedDateTimeAssertion<>(asNamedDate().asZonedDateTime().orElse(null), this);
 	}
 
@@ -266,13 +289,13 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getQueryParam(<js>"allow"</js>)
+	 * 		.getFormParam(<js>"allow"</js>)
 	 * 		.assertCsvArray().contains(<js>"GET"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentListAssertion<RequestQueryParam> assertCsvArray() {
+	public FluentListAssertion<RequestFormParam> assertCsvArray() {
 		return new FluentListAssertion<>(asNamedCsvArray().asList().orElse(null), this);
 	}
 
@@ -288,15 +311,16 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	// <FluentSetters>
 
 	@Override /* GENERATED */
-	public RequestQueryParam schema(HttpPartSchema value) {
+	public RequestFormParam schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
 
 	@Override /* GENERATED */
-	public RequestQueryParam parser(HttpPartParserSession value) {
+	public RequestFormParam parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;
 	}
+
 	// </FluentSetters>
 }

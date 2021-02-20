@@ -178,7 +178,7 @@ public class DefaultHandler implements ResponseHandler {
 						.properties(req.getAttributes())
 						.javaMethod(req.getOpContext().getJavaMethod())
 						.locale(req.getLocale())
-						.timeZone(req.getHeaders().getTimeZone().orElse(null))
+						.timeZone(req.getTimeZone().orElse(null))
 						.mediaType(mediaType)
 						.streamCharset(res.getCharset())
 						.schema(schema)

@@ -115,9 +115,9 @@ public class BasicHeader_Test {
 	@Test
 	public void a07_eqIC() {
 		BasicHeader x = header("X1","1");
-		assertTrue(x.eqIC("1"));
-		assertFalse(x.eqIC("2"));
-		assertFalse(x.eqIC(null));
+		assertTrue(x.equalsIgnoreCase("1"));
+		assertFalse(x.equalsIgnoreCase("2"));
+		assertFalse(x.equalsIgnoreCase(null));
 	}
 
 	@Test

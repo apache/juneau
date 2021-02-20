@@ -31,7 +31,7 @@ public class RestContext_ThreadLocals_Test {
 	public static class A extends BasicRestServlet {
 		@RestGet
 		public void a() throws Exception {
-			getResponse().getWriter().append(getRequest().getRequestQueryParam("foo").asString().orElse(null));
+			getResponse().getWriter().append(getRequest().getQueryParam("foo").orElse(null));
 		}
 
 		@RestHook(HookEvent.END_CALL)

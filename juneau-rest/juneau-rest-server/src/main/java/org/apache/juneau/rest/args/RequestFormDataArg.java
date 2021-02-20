@@ -17,10 +17,10 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters of type {@link RequestFormData} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters of type {@link RequestFormParams} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getFormData() getFormData}()</c>.
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getFormParams() getFormParams}()</c>.
  */
 public class RequestFormDataArg extends SimpleRestOperationArg {
 
@@ -28,10 +28,10 @@ public class RequestFormDataArg extends SimpleRestOperationArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link RequestFormDataArg}, or <jk>null</jk> if the parameter type is not {@link RequestFormData}.
+	 * @return A new {@link RequestFormDataArg}, or <jk>null</jk> if the parameter type is not {@link RequestFormParams}.
 	 */
 	public static RequestFormDataArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(RequestFormData.class))
+		if (paramInfo.isType(RequestFormParams.class))
 			return new RequestFormDataArg();
 		return null;
 	}
@@ -40,6 +40,6 @@ public class RequestFormDataArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestFormDataArg() {
-		super((c)->c.getRestRequest().getFormData());
+		super((c)->c.getRestRequest().getFormParams());
 	}
 }

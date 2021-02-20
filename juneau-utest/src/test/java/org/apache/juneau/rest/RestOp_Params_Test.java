@@ -85,7 +85,7 @@ public class RestOp_Params_Test {
 			return t != null;
 		}
 		@RestGet
-		public boolean k(RequestFormData t) {
+		public boolean k(RequestFormParams t) {
 			return t != null;
 		}
 		@RestGet

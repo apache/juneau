@@ -698,7 +698,7 @@ public class Remote_QueryAnnotation_Test {
 	public static class K {
 		@RestOp
 		public String get(RestRequest req) throws Exception {
-			return req.getRequestQuery().toString(true);
+			return req.getQueryParams().toString(true);
 		}
 	}
 
