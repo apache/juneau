@@ -58,7 +58,7 @@ public class RestClient_Headers_Test {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getRequestHeaders().getAll(req.getStringHeader("Check").get()).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 	}
 

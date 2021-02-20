@@ -335,8 +335,6 @@ public class BasicRestLogger implements RestLogger {
 	}
 
 	private byte[] getRequestBody(HttpServletRequest req) {
-		if (req instanceof RestRequest)
-			req = ((RestRequest)req).getHttpServletRequest();
 		if (req instanceof CachingHttpServletRequest)
 			return ((CachingHttpServletRequest)req).getBody();
 		return castOrNull(req.getAttribute("RequestBody"), byte[].class);

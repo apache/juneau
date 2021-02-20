@@ -45,15 +45,15 @@ public class Header_AcceptCharset_Test {
 	public void a01_qValues() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a").accept("text/plain").acceptCharset("utf-8").run().assertCharset().is("utf-8");
-		a.get("/a").accept("text/plain").acceptCharset("iso-8859-1").run().assertCharset().is("iso-8859-1");
+		a.get("/a").accept("text/plain").acceptCharset("iso-8859-1").run().assertCharset().is("ISO-8859-1");
 		a.get("/a").accept("text/plain").acceptCharset("bad,utf-8").run().assertCharset().is("utf-8");
 		a.get("/a").accept("text/plain").acceptCharset("utf-8,bad").run().assertCharset().is("utf-8");
 		a.get("/a").accept("text/plain").acceptCharset("bad;q=0.9,utf-8;q=0.1").run().assertCharset().is("utf-8");
 		a.get("/a").accept("text/plain").acceptCharset("bad;q=0.1,utf-8;q=0.9").run().assertCharset().is("utf-8");
 		a.get("/a").accept("text/plain").acceptCharset("utf-8;q=0.9,iso-8859-1;q=0.1").run().assertCharset().is("utf-8");
-		a.get("/a").accept("text/plain").acceptCharset("utf-8;q=0.1,iso-8859-1;q=0.9").run().assertCharset().is("iso-8859-1");
+		a.get("/a").accept("text/plain").acceptCharset("utf-8;q=0.1,iso-8859-1;q=0.9").run().assertCharset().is("ISO-8859-1");
 		a.get("/a").accept("text/plain").acceptCharset("*").run().assertCharset().is("utf-8");
-		a.get("/a").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.5,*;q=0.1").run().assertCharset().is("iso-8859-1");
+		a.get("/a").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.5,*;q=0.1").run().assertCharset().is("ISO-8859-1");
 		a.get("/a").accept("text/plain").acceptCharset("bad,iso-8859-1;q=0.1,*;q=0.5").run().assertCharset().is("utf-8");
 	}
 

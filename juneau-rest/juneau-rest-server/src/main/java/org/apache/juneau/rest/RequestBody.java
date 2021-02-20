@@ -314,7 +314,7 @@ public class RequestBody {
 		Reader r = getUnbufferedReader();
 		if (r instanceof BufferedReader)
 			return (BufferedReader)r;
-		int len = req.getContentLength();
+		int len = req.getHttpServletRequest().getContentLength();
 		int buffSize = len <= 0 ? 8192 : Math.max(len, 8192);
 		return new BufferedReader(r, buffSize);
 	}
@@ -328,7 +328,7 @@ public class RequestBody {
 	protected Reader getUnbufferedReader() throws IOException {
 		if (body != null)
 			return new CharSequenceReader(new String(body, UTF8));
-		return new InputStreamReader(getInputStream(), req.getCharacterEncoding());
+		return new InputStreamReader(getInputStream(), req.getCharset());
 	}
 
 	/**
@@ -491,14 +491,14 @@ public class RequestBody {
 
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
-			String ce = req.getHeader("content-encoding");
+			String ce = req.getStringHeader("content-encoding").orElse(null);
 			if (isNotEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
 					throw new UnsupportedMediaType(
 						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						req.getHeader("content-encoding"), encoders.getSupportedEncodings()
+						req.getStringHeader("content-encoding").orElse(null), encoders.getSupportedEncodings()
 					);
 			}
 

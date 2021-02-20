@@ -36,7 +36,7 @@ public class RestClient_Config_OpenApi_Test {
 		}
 		@RestGet
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getRequestHeaders().getAll(req.getStringHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 		@RestGet
 		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {

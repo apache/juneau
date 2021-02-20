@@ -24,6 +24,7 @@ import static java.util.Collections.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -658,7 +659,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	private final List<org.apache.http.Header> defaultRequestHeaders, defaultResponseHeaders;
 	private final List<NameValuePair> defaultRequestQuery, defaultRequestFormData;
 	private final List<NamedAttribute> defaultRequestAttributes;
-	private final String defaultCharset;
+	private final Charset defaultCharset;
 	private final long maxInput;
 	private final List<MediaType>
 		supportedAcceptTypes,
@@ -763,7 +764,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = cp.getString(REST_defaultCharset).orElse("utf-8");
+			defaultCharset = Charset.forName(cp.getString(REST_defaultCharset).orElse("utf-8"));
 
 			maxInput = StringUtils.parseLongWithSuffix(cp.get(REST_maxInput, String.class).orElse("100M"));
 
@@ -1734,7 +1735,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default charset.  Never <jk>null</jk>.
 	 */
-	public String getDefaultCharset() {
+	public Charset getDefaultCharset() {
 		return defaultCharset;
 	}
 

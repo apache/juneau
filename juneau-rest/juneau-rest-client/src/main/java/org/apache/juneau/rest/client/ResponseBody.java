@@ -266,7 +266,7 @@ public class ResponseBody implements HttpEntity {
 
 		// Figure out what the charset of the response is.
 		String cs = null;
-		String ct = getContentType().asString().orElse(null);
+		String ct = getContentType().orElse(null);
 
 		// First look for "charset=" in Content-Type header of response.
 		if (ct != null)
@@ -675,7 +675,7 @@ public class ResponseBody implements HttpEntity {
 				return (T)r;
 			}
 
-			String ct = firstNonEmpty(response.getResponseHeader("Content-Type").asString().orElse("text/plain"));
+			String ct = firstNonEmpty(response.getResponseHeader("Content-Type").orElse("text/plain"));
 
 			if (parser == null)
 				parser = client.getMatchingParser(ct);

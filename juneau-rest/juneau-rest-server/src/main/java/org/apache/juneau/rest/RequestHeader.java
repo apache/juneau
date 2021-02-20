@@ -20,7 +20,6 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.exception.HttpException;
@@ -29,6 +28,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.assertions.*;
 
 /**
  * Represents a single header on an HTTP request.
@@ -103,6 +103,19 @@ public class RequestHeader implements Header {
 	}
 
 	/**
+	 * Return the value if present, otherwise return other.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
+	 * @return The value, if present, otherwise other.
+	 */
+	public String orElse(String other) {
+		return asString().orElse(other);
+	}
+
+	/**
 	 * Returns the value of this header as a string.
 	 *
 	 * @return The value of this header as a string, or {@link Optional#empty()} if the header was not present.
@@ -168,10 +181,10 @@ public class RequestHeader implements Header {
 			ClassInfo ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
 			if (cc != null)
-				return cc.invoke(asString());
+				return cc.invoke(orElse(null));
 			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
 			if (cc != null)
-				return cc.invoke(getName(), asString());
+				return cc.invoke(getName(), orElse(null));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -303,7 +316,7 @@ public class RequestHeader implements Header {
 	 */
 	public <T> Optional<T> asType(ClassMeta<T> type) throws HttpException {
 		try {
-			return Optional.ofNullable(parser.parse(HEADER, schema, asString().orElse(null), type));
+			return Optional.ofNullable(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse header ''{0}''.", getName());
 		}
@@ -328,7 +341,7 @@ public class RequestHeader implements Header {
 	 * @throws HttpException If a connection error occurred.
 	 */
 	public Matcher asMatcher(Pattern pattern) throws HttpException {
-		return pattern.matcher(asString().orElse(""));
+		return pattern.matcher(orElse(""));
 	}
 
 	/**
@@ -386,88 +399,14 @@ public class RequestHeader implements Header {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.assertString().is(<js>"application/json"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * The assertion test returns the header object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the header and then convert it to a bean.</jc>
-	 * 	MediaType <jv>mediaType</jv> = 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
-	 * 		.assertString().matches(<js>".*json.*"</js>)
-	 * 		.as(MediaType.<jk>class</jk>).get();
+	 * 		.getHeader(<js>"Content-Type"</js>)
+	 * 		.assertValue().is(<js>"application/json"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentStringAssertion<RequestHeader> assertString() {
-		return new FluentStringAssertion<>(asString().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on an integer request header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Age"</js>)
-	 * 		.assertInteger().isGreaterThan(1);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentIntegerAssertion<RequestHeader> assertInteger() {
-		return new FluentIntegerAssertion<>(asIntegerHeader().asInteger().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a long request header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Length"</js>)
-	 * 		.assertLong().isLessThan(100000);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentLongAssertion<RequestHeader> assertLong() {
-		return new FluentLongAssertion<>(asLongHeader().asLong().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date request header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Expires"</js>)
-	 * 		.assertDate().isAfterNow();
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentZonedDateTimeAssertion<RequestHeader> assertDate() {
-		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on comma-separated string headers.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jv>request</jv>
-	 * 		.getRequestHeader(<js>"Allow"</js>)
-	 * 		.assertCsvArray().contains(<js>"GET"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentListAssertion<RequestHeader> assertCsvArray() {
-		return new FluentListAssertion<>(asCsvArrayHeader().asList().orElse(null), this);
+	public FluentRequestHeaderAssertion<RequestHeader> assertValue() {
+		return new FluentRequestHeaderAssertion<>(this, this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

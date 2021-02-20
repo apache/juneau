@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.http.message.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.collections.*;
@@ -53,11 +54,11 @@ public class RequestHeaders {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
 
-		for (Enumeration<String> e = req.getHeaderNames(); e.hasMoreElements();) {
+		for (Enumeration<String> e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
 			String name = e.nextElement();
 			String key = key(name);
 			List<RequestHeader> l = new ArrayList<>();
-			for (Enumeration<String> ve = req.getHeaders(name); ve.hasMoreElements();) {
+			for (Enumeration<String> ve = req.getHttpServletRequest().getHeaders(name); ve.hasMoreElements();) {
 				RequestHeader h = new RequestHeader(req, name, ve.nextElement());
 				list.add(h);
 				l.add(h);
@@ -99,18 +100,21 @@ public class RequestHeaders {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic operations.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Adds default entries to these headers.
 	 *
 	 * <p>
-	 * Similar to {@link #put(String, Object)} but doesn't override existing values.
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
 	 *
-	 * @param pairs
-	 * 	The default entries.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param pairs The default entries.  Must not be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RequestHeaders addDefault(List<Header> pairs) {
+		assertArgNotNull("pairs", pairs);
 		for (Header p : pairs) {
 			String name = p.getName();
 			String key = key(name);
@@ -134,7 +138,7 @@ public class RequestHeaders {
 	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#exists()} can be used
 	 * to test for the existence of the header.
 	 *
-	 * @param name The header name.
+	 * @param name The header name.  Must not be <jk>null</jk>.
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getFirst(String name) {
@@ -150,7 +154,7 @@ public class RequestHeaders {
 	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#exists()} can be used
 	 * to test for the existence of the header.
 	 *
-	 * @param name The header name.
+	 * @param name The header name.  Must not be <jk>null</jk>.
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RequestHeader getLast(String name) {
@@ -162,7 +166,7 @@ public class RequestHeaders {
 	/**
 	 * Returns all the headers with the specified name.
 	 *
-	 * @param name The header name.
+	 * @param name The header name.  Must not be <jk>null</jk>.
 	 * @return The list of all headers with the specified name, or an empty list if none are found.
 	 */
 	public List<RequestHeader> getAll(String name) {
@@ -179,6 +183,173 @@ public class RequestHeaders {
 	public List<RequestHeader> getAll() {
 		return unmodifiableList(list);
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the header with the specified name is present.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header with the specified name is present.
+	 */
+	public boolean contains(String name) {
+		assertArgNotNull("name", name);
+		return map.containsKey(key(name));
+	}
+
+	/**
+	 * Adds a request header value.
+	 *
+	 * <p>
+	 * Header is added to the end of the headers.
+	 * <br>Existing headers with the same name are not changed.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders add(String name, Object value) {
+		assertArgNotNull("name", name);
+		String key = key(name);
+		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
+		if (map.containsKey(key))
+			map.get(key).add(h);
+		else
+			map.put(key, AList.of(h));
+		list.add(h);
+		return this;
+	}
+
+	/**
+	 * Adds request header values.
+	 *
+	 * <p>
+	 * Headers are added to the end of the headers.
+	 * <br>Existing headers with the same name are not changed.
+	 *
+	 * @param header The header objects.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders add(Header...header) {
+		assertArgNotNull("header", header);
+		for (Header h : header) {
+			assertArgNotNull("header entry", h);
+			add(h.getName(), h.getValue());
+		}
+		return this;
+	}
+
+	/**
+	 * Sets a request header value.
+	 *
+	 * <p>
+	 * Header is added to the end of the headers.
+	 * <br>Any previous headers with the same name are removed.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Converted to a string using {@link Object#toString()}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders set(String name, Object value) {
+		assertArgNotNull("name", name);
+		String key = key(name);
+		remove(key);
+		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
+		map.put(key, AList.of(h));
+		list.add(h);
+		return this;
+	}
+
+	/**
+	 * Sets request header values.
+	 *
+	 * <p>
+	 * Headers are added to the end of the headers.
+	 * <br>Any previous headers with the same name are removed.
+	 *
+	 * @param headers The header beans.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders set(Header...headers) {
+		assertArgNotNull("headers", headers);
+		for (Header h : headers)
+			remove(h);
+		for (Header h : headers)
+			add(h);
+		return this;
+	}
+
+	/**
+	 * Remove headers.
+	 *
+	 * @param name The header names.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders remove(String...name) {
+		assertArgNotNull("name", name);
+		for (String n : name) {
+			String key = key(n);
+			if (map.containsKey(key))
+				list.removeAll(map.get(key));
+			map.remove(key);
+		}
+		return this;
+	}
+
+	/**
+	 * Remove headers.
+	 *
+	 * @param headers The headers to remove.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders remove(Header...headers) {
+		for (Header h : headers)
+			remove(h.getName());
+		return this;
+	}
+
+	/**
+	 * Returns an iterator of all the headers.
+	 *
+	 * @return An iterator of all the headers.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public HeaderIterator iterator() {
+		return new BasicListHeaderIterator((List)list, null);
+	}
+
+	/**
+	 * Returns an iterator of all the headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return An iterator of all the headers with the specified name.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public HeaderIterator iterator(String name) {
+		return new BasicListHeaderIterator((List)map.get(key(name)), null);
+	}
+
+	/**
+	 * Returns a copy of this object but only with the specified header names copied.
+	 *
+	 * @param headers The list to include in the copy.
+	 * @return A new list object.
+	 */
+	public RequestHeaders subset(String...headers) {
+		Map<String,List<RequestHeader>> m = Arrays
+			.asList(headers)
+			.stream()
+			.map(x -> key(x))
+			.filter(map::containsKey)
+			.collect(toMap(Function.identity(),map::get));
+
+		return new RequestHeaders(req, m, parser, caseSensitive);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Convenience getters.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the last header with the specified name as a string.
@@ -270,65 +441,9 @@ public class RequestHeaders {
 		return getLast(name).asDate();
 	}
 
-	/**
-	 * Sets a request header value.
-	 *
-	 * <p>
-	 * This overwrites any previous value.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 */
-	public RequestHeaders put(String name, Object value) {
-		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
-		list.add(h);
-		map.put(key, AList.of(h));
-		return this;
-	}
-
-	/**
-	 * Adds a request header value.
-	 *
-	 * <p>
-	 * Header is added to the end of the headers.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 */
-	public RequestHeaders add(String name, Object value) {
-		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			map.get(key).add(h);
-		else
-			map.put(key, AList.of(h));
-		list.add(h);
-		return this;
-	}
-
-	/**
-	 * Returns a copy of this object but only with the specified header names copied.
-	 *
-	 * @param headers The list to include in the copy.
-	 * @return A new list object.
-	 */
-	public RequestHeaders subset(String...headers) {
-		Map<String,List<RequestHeader>> m = Arrays
-			.asList(headers)
-			.stream()
-			.map(x -> key(x))
-			.filter(map::containsKey)
-			.collect(toMap(Function.identity(),map::get));
-
-		return new RequestHeaders(req, m, parser, caseSensitive);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Standard headers.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the <c>Accept</c> header on the request.
@@ -827,6 +942,10 @@ public class RequestHeaders {
 	public Optional<Warning> getWarning() {
 		return ofNullable(Warning.of(getString("Warning").orElse(null)));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts the headers to a readable string.

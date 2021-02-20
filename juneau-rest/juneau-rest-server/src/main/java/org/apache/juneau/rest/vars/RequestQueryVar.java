@@ -68,7 +68,7 @@ public class RequestQueryVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getRequestQueryParam(key).asString().orElse(null);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getRequestQueryParam(key).orElse(null);
 	}
 
 	@Override /* Var */

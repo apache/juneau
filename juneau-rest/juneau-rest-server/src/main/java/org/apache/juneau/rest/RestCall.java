@@ -469,7 +469,7 @@ public class RestCall {
 
 	/**
 	 * Returns the output that was set by calling {@link RestResponse#setOutput(Object)}.
-	 * 
+	 *
 	 * <p>
 	 * If it's empty, then {@link RestResponse#setOutput(Object)} wasn't called.
 	 * <br>If it's not empty but contains an empty, then <c>response.setObject(<jk>null</jk>)</c> was called.

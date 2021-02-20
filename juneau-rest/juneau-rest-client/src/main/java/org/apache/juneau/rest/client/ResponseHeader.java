@@ -135,6 +135,19 @@ public class ResponseHeader implements Header {
 	}
 
 	/**
+	 * Return the value if present, otherwise return other.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
+	 * @return The value, if present, otherwise other.
+	 */
+	public String orElse(String other) {
+		return asString().orElse(other);
+	}
+
+	/**
 	 * Returns the value of this header as a string.
 	 *
 	 * @return The value of this header as a string, or {@link Optional#empty()} if the header was not present.
@@ -307,7 +320,7 @@ public class ResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 */
 	public RestResponse asString(Mutable<String> m) {
-		m.set(asString().orElse(null));
+		m.set(orElse(null));
 		return response;
 	}
 
@@ -417,7 +430,7 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public Matcher asMatcher(Pattern pattern) throws RestCallException {
-		return pattern.matcher(asString().orElse(""));
+		return pattern.matcher(orElse(""));
 	}
 
 	/**

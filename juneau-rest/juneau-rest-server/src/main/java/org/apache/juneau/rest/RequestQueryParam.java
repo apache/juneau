@@ -103,6 +103,19 @@ public class RequestQueryParam implements NameValuePair {
 	}
 
 	/**
+	 * Return the value if present, otherwise return other.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
+	 * @return The value, if present, otherwise other.
+	 */
+	public String orElse(String other) {
+		return asString().orElse(other);
+	}
+
+	/**
 	 * Returns the value of this parameter as a string.
 	 *
 	 * @return The value of this parameter as a string, or {@link Optional#empty()} if the parameter was not present.
@@ -168,10 +181,10 @@ public class RequestQueryParam implements NameValuePair {
 			ClassInfo ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
 			if (cc != null)
-				return cc.invoke(asString());
+				return cc.invoke(orElse(null));
 			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
 			if (cc != null)
-				return cc.invoke(getName(), asString());
+				return cc.invoke(getName(), orElse(null));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -276,7 +289,7 @@ public class RequestQueryParam implements NameValuePair {
 	 */
 	public <T> Optional<T> asType(ClassMeta<T> type) throws HttpException {
 		try {
-			return Optional.ofNullable(parser.parse(HEADER, schema, asString().orElse(null), type));
+			return Optional.ofNullable(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse query parameter ''{0}''.", getName());
 		}
@@ -302,7 +315,7 @@ public class RequestQueryParam implements NameValuePair {
 	 * @throws HttpException If a connection error occurred.
 	 */
 	public Matcher asMatcher(Pattern pattern) throws HttpException {
-		return pattern.matcher(asString().orElse(""));
+		return pattern.matcher(orElse(""));
 	}
 
 	/**
@@ -378,7 +391,7 @@ public class RequestQueryParam implements NameValuePair {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentStringAssertion<RequestQueryParam> assertString() {
-		return new FluentStringAssertion<>(asString().orElse(null), this);
+		return new FluentStringAssertion<>(orElse(null), this);
 	}
 
 	/**

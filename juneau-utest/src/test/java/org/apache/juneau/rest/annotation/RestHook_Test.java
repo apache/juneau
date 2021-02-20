@@ -58,9 +58,9 @@ public class RestHook_Test {
 			attrs.put("p2", "xp2");
 			attrs.put("p4", "xp4");
 			attrs.put("p5", "xp5"); // New property
-			String overrideContentType = req.getHeader("Override-Content-Type");
+			String overrideContentType = req.getStringHeader("Override-Content-Type").orElse(null);
 			if (overrideContentType != null)
-				req.getRequestHeaders().put("Content-Type", overrideContentType);
+				req.getRequestHeaders().set("Content-Type", overrideContentType);
 		}
 
 		@RestPut(
@@ -128,10 +128,10 @@ public class RestHook_Test {
 			attrs.put("p2", "xp2");
 			attrs.put("p4", "xp4");
 			attrs.put("p5", "xp5"); // New property
-			String overrideAccept = req.getHeader("Override-Accept");
+			String overrideAccept = req.getStringHeader("Override-Accept").orElse(null);
 			if (overrideAccept != null)
-				req.getRequestHeaders().put("Accept", overrideAccept);
-			String overrideContentType = req.getHeader("Override-Content-Type");
+				req.getRequestHeaders().set("Accept", overrideAccept);
+			String overrideContentType = req.getStringHeader("Override-Content-Type").orElse(null);
 			if (overrideContentType != null)
 				attrs.put("Override-Content-Type", overrideContentType);
 		}
@@ -151,9 +151,9 @@ public class RestHook_Test {
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.put("p3", "pp3");
 			attrs.put("p4", "pp4");
-			String accept = req.getHeader("Accept");
+			String accept = req.getStringHeader("Accept").orElse(null);
 			if (accept == null || accept.isEmpty())
-				req.getRequestHeaders().put("Accept", "text/s2");
+				req.getRequestHeaders().set("Accept", "text/s2");
 			return null;
 		}
 	}

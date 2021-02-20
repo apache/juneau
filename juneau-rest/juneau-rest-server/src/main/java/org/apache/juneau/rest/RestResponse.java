@@ -84,7 +84,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		RestContext context = call.getContext();
 
 		try {
-			String passThroughHeaders = request.getHeader("x-response-headers");
+			String passThroughHeaders = request.getHeader("x-response-headers").orElse(null);
 			if (passThroughHeaders != null) {
 				HttpPartParser p = context.getPartParser();
 				OMap m = p.createPartSession(request.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
@@ -96,8 +96,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		}
 
 		// Find acceptable charset
-		String h = request.getHeader("accept-charset");
-		String charset = null;
+		String h = request.getHeader("accept-charset").orElse(null);
+		Charset charset = null;
 		if (h == null)
 			charset = opContext.getDefaultCharset();
 		else for (StringRange r : StringRanges.of(h).getRanges()) {
@@ -105,7 +105,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 				if (r.getName().equals("*"))
 					charset = opContext.getDefaultCharset();
 				else if (Charset.isSupported(r.getName()))
-					charset = r.getName();
+					charset = Charset.forName(r.getName());
 				if (charset != null)
 					break;
 			}
@@ -117,8 +117,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
-			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
-		super.setCharacterEncoding(charset);
+			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getStringHeader("Accept-Charset").orElse(null));
+		inner.setCharacterEncoding(charset.name());
 
 	}
 
@@ -259,7 +259,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			Encoder encoder = null;
 			EncoderGroup encoders = request.getOpContext().getEncoders();
 
-			String ae = request.getHeader("Accept-Encoding");
+			String ae = request.getHeader("Accept-Encoding").orElse(null);
 			if (! (ae == null || ae.isEmpty())) {
 				EncoderMatch match = encoders.getEncoderMatch(ae);
 				if (match == null) {

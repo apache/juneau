@@ -86,7 +86,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getRequestHeaders().getAll(req.getHeader("Check")).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getRequestHeaders().getAll(req.getStringHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 	}
 

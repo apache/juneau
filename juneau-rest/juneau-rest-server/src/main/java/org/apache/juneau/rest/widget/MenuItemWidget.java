@@ -172,11 +172,7 @@ public abstract class MenuItemWidget extends Widget {
 	}
 
 	private Integer getId(RestRequest req) {
-		Integer id = (Integer)req.getAttribute("LastMenuItemId");
-		if (id == null)
-			id = 1;
-		else
-			id = id + 1;
+		Integer id = (Integer)req.getAttribute("LastMenuItemId").orElse(0) + 1;
 		req.setAttribute("LastMenuItemId", id);
 		return id;
 	}

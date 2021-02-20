@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
@@ -35,13 +37,13 @@ public class RequestAttributes extends OMap {
 
 	private static final long serialVersionUID = 1L;
 
-	final RestRequest req;
+	final HttpServletRequest req;
 	final OMap defaultEntries;
 	final VarResolverSession vs;
 
 	RequestAttributes(RestRequest req) {
 		super();
-		this.req = req;
+		this.req = req.getHttpServletRequest();
 		this.defaultEntries = new OMap();
 		this.vs = req.getVarResolverSession();
 	}

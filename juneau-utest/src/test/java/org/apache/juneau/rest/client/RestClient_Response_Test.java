@@ -149,7 +149,7 @@ public class RestClient_Response_Test {
 	public static class C extends BasicRestObject {
 		@RestGet(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String n = req.getHeader("Check");
+			String n = req.getStringHeader("Check").get();
 			String v = req.getRequestHeaders().getString(n).orElse(null);
 			res.setHeader(n,v);
 			return v;

@@ -39,6 +39,7 @@ import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
+import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.config.*;
@@ -103,7 +104,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
-public final class RestRequest extends HttpServletRequestWrapper {
+public final class RestRequest implements HttpRequest {
 
 	// Constructor initialized.
 	private HttpServletRequest inner;
@@ -125,21 +126,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private VarResolverSession varSession;
 	private RequestFormData formData;
 	private UriContext uriContext;
-	private String charset, authorityPath;
+	private String authorityPath;
 	private Config config;
 	private Swagger swagger;
+	private Charset charset;
 
 	/**
 	 * Constructor.
 	 */
 	RestRequest(RestCall call) throws Exception {
-		super(call.getRequest());
-
 		this.call = call;
 		this.opContext = call.getRestOperationContext();
 
 		inner = call.getRequest();
 		context = call.getContext();
+
+		attrs = new RequestAttributes(this);
 
 		queryParams = new RequestQueryParams(this, call.getQueryParams(), true);
 
@@ -150,7 +152,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (context.isAllowBodyParam()) {
 			String b = queryParams.getString("body").orElse(null);
 			if (b != null) {
-				headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
+				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 				body.load(MediaType.UON, UonParser.DEFAULT, b.getBytes(UTF8));
 			}
 		}
@@ -193,26 +195,25 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.addDefault(context.getDefaultRequestHeaders())
 			.parser(partParserSession);
 
-		attrs = new RequestAttributes(this);
-		attrs
-			.addDefault(opContext.getDefaultRequestAttributes())
-			.addDefault(context.getDefaultRequestAttributes());
-
 		body
 			.encoders(opContext.getEncoders())
 			.parsers(opContext.getParsers())
 			.headers(headers)
 			.maxInput(opContext.getMaxInput());
 
+		attrs
+			.addDefault(opContext.getDefaultRequestAttributes())
+			.addDefault(context.getDefaultRequestAttributes());
+
 		if (isDebug())
 			inner = CachingHttpServletRequest.wrap(inner);
 	}
 
-	/**
-	 * Returns a string of the form <js>"HTTP method-name full-url"</js>
-	 *
-	 * @return A description string of the request.
-	 */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Request line.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* HttpRequest */
 	public RequestLine getRequestLine() {
 		String x = inner.getProtocol();
 		int i = x.indexOf('/');
@@ -221,9 +222,30 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 
+	@Override /* HttpRequest */
+	public ProtocolVersion getProtocolVersion() {
+		return getRequestLine().getProtocolVersion();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Assertions
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an assertion on the request line returned by {@link #getRequestLine()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the request body contains "foo".</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertRequestLine().protocol().minor().is(1);
+	 * </p>
+	 *
+	 * @return A new assertion object.
+	 */
+	public FluentRequestLineAssertion<RestRequest> assertRequestLine() {
+		return new FluentRequestLineAssertion<RestRequest>(getRequestLine(), this);
+	}
 
 	/**
 	 * Returns a fluent assertion for the request body.
@@ -248,14 +270,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertHeader(<js>"Content-Type"</js>).asString().is(<js>"application/json"</js>);
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
 	 * </p>
 	 *
 	 * @param name The header name.
 	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
 	public FluentRequestHeaderAssertion<RestRequest> assertHeader(String name) {
-		return new FluentRequestHeaderAssertion<RestRequest>(getRequestHeader(name), this);
+		return new FluentRequestHeaderAssertion<RestRequest>(getHeader(name), this);
 	}
 
 	/**
@@ -297,7 +319,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	 *
 	 *  	<jc>// Get a header value as a POJO.</jc>
-	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 		UUID etag = <jv>headers</jv>.get(<js>"ETag"</js>).asType(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
 	 *
 	 * 		<jc>// Get a standard header.</jc>
 	 * 		Optional&lt;CacheControl&gt; = <jv>headers</jv>.getCacheControl();
@@ -328,21 +350,150 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the last header with the specified name.
+	 * Returns the last header with a specified name of this message.
 	 *
-	 * Unlike {@link #getHeader(String)}, this method returns an empty
-	 * {@link ResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
-	 * in fluent calls.
+	 * <p>
+	 * If there is more than one matching header in the message the last element of <c>getHeaders(String)</c> is returned.
+	 * <br>If there is no matching header in the message, an empty request header object is returned.
 	 *
+	 * <p>
+	 * This method is identical to {@link #getLastHeader(String)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 		<jv>req</jv>.getRequestHeader("Foo").asInteger().orElse(-1);
+	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
+	 * 	<jv>request</jv>
+	 * 		.getHeader(<js>"Foo"</js>)
+	 * 		.assertValue().exists()
+	 * 		.asString().get();
 	 * </p>
 	 *
 	 * @param name The header name.
-	 * @return The header.  Never <jk>null</jk>.
+	 * @return The request header object, never <jk>null</jk>.
 	 */
-	public RequestHeader getRequestHeader(String name) {
-		return headers.getLast(name).parser(getPartParserSession());
+	public RequestHeader getHeader(String name) {
+		return getLastHeader(name);
+	}
+
+	/**
+	 * Returns the last header with a specified name as a string value.
+	 *
+	 * <p>
+	 * This method is equivalent to calling <c>getLastHeader(<jv>name</jv>).asString()</c>.
+	 *
+	 * @param name The header name.
+	 * @return The request header value as a string, never <jk>null</jk>.
+	 */
+	public Optional<String> getStringHeader(String name) {
+		return getLastHeader(name).asString();
+	}
+
+	/**
+	 * Returns the first header with a specified name of this message.
+	 *
+	 * <p>
+	 * If there is more than one matching header in the message the first element of <c>getHeaders(String)</c> is returned.
+	 * <br>If there is no matching header in the message, an empty request header object is returned.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
+	 * 	<jv>request</jv>
+	 * 		.getFirstHeader(<js>"Foo"</js>)
+	 * 		.assertValue().exists()
+	 * 		.asString().get();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return The request header object, never <jk>null</jk>.
+	 */
+	@Override /* HttpRequest */
+	public RequestHeader getFirstHeader(String name) {
+		return headers.getFirst(name);
+	}
+
+	/**
+	 * Returns the last header with a specified name of this message.
+	 *
+	 * <p>
+	 * If there is more than one matching header in the message the last element of <c>getHeaders(String)</c> is returned.
+	 * <br>If there is no matching header in the message, an empty request header object is returned.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
+	 * 	<jv>request</jv>
+	 * 		.getLastHeader(<js>"Foo"</js>)
+	 * 		.assertValue().exists()
+	 * 		.asString().get();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return The request header object, never <jk>null</jk>.
+	 */
+	@Override /* HttpRequest */
+	public RequestHeader getLastHeader(String name) {
+		return headers.getLast(name);
+	}
+
+	@Override /* HttpRequest */
+	public RequestHeader[] getAllHeaders() {
+		return headers.getAll().toArray(new RequestHeader[0]);
+	}
+
+	@Override /* HttpRequest */
+	public void addHeader(org.apache.http.Header header) {
+		headers.add(header);
+	}
+
+	@Override /* HttpRequest */
+	public void addHeader(String name, String value) {
+		headers.add(name, value);
+	}
+
+	@Override /* HttpRequest */
+	public void setHeader(org.apache.http.Header header) {
+		headers.set(header);
+	}
+
+	@Override /* HttpRequest */
+	public void setHeader(String name, String value) {
+		headers.set(name, value);
+	}
+
+	@Override /* HttpRequest */
+	public void setHeaders(org.apache.http.Header[] headers) {
+		this.headers.set(headers);
+	}
+
+	@Override /* HttpRequest */
+	public void removeHeader(org.apache.http.Header header) {
+		headers.remove(header);
+	}
+
+	@Override /* HttpRequest */
+	public void removeHeaders(String name) {
+		headers.remove(name);
+	}
+
+	@Override /* HttpRequest */
+	public HeaderIterator headerIterator() {
+		return headers.iterator();
+	}
+
+	@Override /* HttpRequest */
+	public HeaderIterator headerIterator(String name) {
+		return headers.iterator(name);
+	}
+
+	@Override /* HttpRequest */
+	public boolean containsHeader(String name) {
+		return headers.contains(name);
+	}
+
+	@Override /* HttpRequest */
+	public RequestHeader[] getHeaders(String name) {
+		return headers.getAll(name).toArray(new RequestHeader[0]);
 	}
 
 	/**
@@ -359,65 +510,52 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws HttpException If REST call failed.
 	 */
 	public FluentStringAssertion<RestRequest> assertCharset() {
-		return new FluentStringAssertion<>(getCharacterEncoding(), this);
-	}
-
-	@Override /* ServletRequest */
-	public String getHeader(String name) {
-		return getRequestHeaders().getString(name).orElse(null);
-	}
-
-	@Override /* ServletRequest */
-	public Enumeration<String> getHeaders(String name) {
-		return inner.getHeaders(name);
+		return new FluentStringAssertion<>(getCharset().name(), this);
 	}
 
 	/**
 	 * Sets the charset to expect on the request body.
+	 *
+	 * @param value The new value to use for the request body.
 	 */
-	@Override /* ServletRequest */
-	public void setCharacterEncoding(String charset) {
-		this.charset = charset;
+	public void setCharset(Charset value) {
+		this.charset = value;
 	}
 
 	/**
 	 * Returns the charset specified on the <c>Content-Type</c> header, or <js>"UTF-8"</js> if not specified.
+	 *
+	 * @return The charset to use to decode the request body.
 	 */
-	@Override /* ServletRequest */
-	public String getCharacterEncoding() throws UnsupportedMediaType {
+	public Charset getCharset() {
 		if (charset == null) {
 			// Determine charset
 			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
 			// Jetty returns the default charset instead of null if the character is not specified on the request.
-			String h = getHeader("Content-Type");
+			String h = getLastHeader("Content-Type").orElse(null);
 			if (h != null) {
 				int i = h.indexOf(";charset=");
 				if (i > 0)
-					charset = h.substring(i+9).trim();
+					charset = Charset.forName(h.substring(i+9).trim());
 			}
 			if (charset == null)
 				charset = opContext.getDefaultCharset();
 			if (charset == null)
-				charset = "UTF-8";
-			if (! Charset.isSupported(charset))
-				throw new UnsupportedMediaType("Unsupported charset in header ''Content-Type'': ''{0}''", h);
+				charset = Charset.forName("UTF-8");
 		}
 		return charset;
 	}
 
 	/**
-	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
+	 * Returns the preferred Locale that the client will accept content in, based on the Accept-Language header.
 	 *
-	 * @return The request character encoding converted to a {@link Charset}.
+	 * <p>
+	 * If the client request doesn't provide an <c>Accept-Language</c> header, this method returns the default locale for the server.
+	 *
+	 * @return The preferred Locale that the client will accept content in.  Never <jk>null</jk>.
 	 */
-	public Charset getCharset() {
-		String s = getCharacterEncoding();
-		return s == null ? null : Charset.forName(s);
-	}
-
-	@Override /* ServletRequest */
 	public Locale getLocale() {
-		Locale best = super.getLocale();
+		Locale best = inner.getLocale();
 		String h = headers.getString("Accept-Language").orElse(null);
 		if (h != null) {
 			StringRanges sr = StringRanges.of(h);
@@ -432,21 +570,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return best;
 	}
 
-	@Override /* ServletRequest */
-	public Enumeration<Locale> getLocales() {
-		String h = headers.getString("Accept-Language").orElse(null);
-		if (h != null) {
-			StringRanges mr = StringRanges.of(h);
-			if (! mr.getRanges().isEmpty()) {
-				List<Locale> l = new ArrayList<>(mr.getRanges().size());
-				for (StringRange r : mr.getRanges())
-					if (r.getQValue() > 0)
-						l.add(toLocale(r.getName()));
-				return enumeration(l);
-			}
-		}
-		return super.getLocales();
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Attributes
@@ -494,6 +617,26 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return attrs;
 	}
 
+	/**
+	 * Returns the request attribute with the specified name.
+	 *
+	 * @param name The attribute name.
+	 * @return The attribute value, never <jk>null</jk>.
+	 */
+	public Optional<Object> getAttribute(String name) {
+		return Optional.ofNullable(attrs.get(name));
+	}
+
+	/**
+	 * Sets a request attribute.
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value.
+	 */
+	public void setAttribute(String name, Object value) {
+		attrs.put(name, value);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Query parameters
 	//-----------------------------------------------------------------------------------------------------------------
@@ -505,7 +648,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns a {@link RequestQueryParams} object that encapsulates access to URL GET parameters.
 	 *
 	 * <p>
-	 * Similar to {@link #getParameterMap()} but only looks for query parameters in the URL and not form posts.
+	 * Similar to {@link HttpServletRequest#getParameterMap()} but only looks for query parameters in the URL and not form posts.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -561,7 +704,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns a {@link RequestFormData} object that encapsulates access to form post parameters.
 	 *
 	 * <p>
-	 * Similar to {@link #getParameterMap()}, but only looks for form data in the HTTP body.
+	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP body.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -604,7 +747,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (formData == null) {
 				formData = new RequestFormData(this, partParserSession);
 				if (! body.isLoaded()) {
-					formData.putAll(getParameterMap());
+					formData.putAll(inner.getParameterMap());
 				} else {
 					Map<String,String[]> m = RestUtils.parseQuery(body.getReader());
 					for (Map.Entry<String,String[]> e : m.entrySet()) {
@@ -749,8 +892,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
+	 *
+	 * <p>
+	 * This method is equivalent to calling <c>getBody().getReader()</c>.
+	 *
+	 * @return The HTTP body content as a {@link Reader}.
+	 * @throws IOException If body could not be read.
 	 */
-	@Override /* ServletRequest */
 	public BufferedReader getReader() throws IOException {
 		return getBody().getReader();
 	}
@@ -761,10 +909,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 *
+	 * <p>
+	 * This method is equivalent to calling <c>getBody().getInputStream()</c>.
+	 *
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
-	@Override /* ServletRequest */
 	public ServletInputStream getInputStream() throws IOException {
 		return getBody().getInputStream();
 	}
@@ -773,10 +923,20 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	// URI-related methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HttpServletRequest */
+	/**
+	 * Returns the portion of the request URI that indicates the context of the request.
+	 *
+	 * <p>The context path always comes first in a request URI.
+	 * The path starts with a <js>"/"</js> character but does not end with a <js>"/"</js> character.
+	 * For servlets in the default (root) context, this method returns <js>""</js>.
+	 * The container does not decode this string.
+	 *
+	 * @return The context path, never <jk>null</jk>.
+	 * @see HttpServletRequest#getContextPath()
+	 */
 	public String getContextPath() {
 		String cp = context.getUriContext();
-		return cp == null ? super.getContextPath() : cp;
+		return cp == null ? inner.getContextPath() : cp;
 	}
 
 	/**
@@ -788,9 +948,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (authorityPath == null)
 			authorityPath = context.getUriAuthority();
 		if (authorityPath == null) {
-			String scheme = getScheme();
-			int port = getServerPort();
-			StringBuilder sb = new StringBuilder(getScheme()).append("://").append(getServerName());
+			String scheme = inner.getScheme();
+			int port = inner.getServerPort();
+			StringBuilder sb = new StringBuilder(inner.getScheme()).append("://").append(inner.getServerName());
 			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
 				sb.append(':').append(port);
 			authorityPath = sb.toString();
@@ -798,10 +958,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return authorityPath;
 	}
 
-	@Override /* HttpServletRequest */
+	/**
+	 * Returns the part of this request's URL that calls the servlet.
+	 *
+	 * <p>
+	 * This path starts with a <js>"/"</js> character and includes either the servlet name or a path to the servlet,
+	 * but does not include any extra path information or a query string.
+	 *
+	 * @return The servlet path, never <jk>null</jk>.
+	 * @see HttpServletRequest#getServletPath()
+	 */
 	public String getServletPath() {
 		String cp = context.getUriContext();
-		String sp = super.getServletPath();
+		String sp = inner.getServletPath();
 		return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
 	}
 
@@ -816,7 +985,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriContext getUriContext() {
 		if (uriContext == null)
-			uriContext = UriContext.of(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));
+			uriContext = UriContext.of(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(inner.getPathInfo()));
 		return uriContext;
 	}
 
@@ -854,7 +1023,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new URI.
 	 */
 	public URI getUri(boolean includeQuery, Map<String,?> addQueryParams) {
-		String uri = getRequestURI();
+		String uri = inner.getRequestURI();
 		if (includeQuery || addQueryParams != null) {
 			StringBuilder sb = new StringBuilder(uri);
 			RequestQueryParams rq = this.queryParams.copy();
@@ -873,6 +1042,58 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		}
 	}
 
+	/**
+	 * Returns any extra path information associated with the URL the client sent when it made this request.
+	 *
+	 * <p>
+	 * The extra path information follows the servlet path but precedes the query string and will start with a <js>"/"</js> character.
+	 * This method returns <jk>null</jk> if there was no extra path information.
+	 *
+	 * @return The extra path information.
+	 * @see HttpServletRequest#getPathInfo()
+	 */
+	public String getPathInfo() {
+		return inner.getPathInfo();
+	}
+
+	/**
+	 * Returns the part of this request's URL from the protocol name up to the query string in the first line of the HTTP request.
+	 *
+	 * The web container does not decode this String
+	 *
+	 * @return The request URI.
+	 * @see HttpServletRequest#getRequestURI()
+	 */
+	public String getRequestURI() {
+		return inner.getRequestURI();
+	}
+
+
+	/**
+	 * Returns the query string that is contained in the request URL after the path.
+	 *
+	 * <p>
+	 * This method returns <jk>null</jk> if the URL does not have a query string.
+	 *
+	 * @return The query string.
+	 * @see HttpServletRequest#getQueryString()
+	 */
+	public String getQueryString() {
+		return inner.getQueryString();
+	}
+
+	/**
+	 * Reconstructs the URL the client used to make the request.
+	 *
+	 * <p>
+	 * The returned URL contains a protocol, server name, port number, and server path, but it does not include query string parameters.
+	 *
+	 * @return The request URL.
+	 * @see HttpServletRequest#getRequestURL()
+	 */
+	public StringBuffer getRequestURL() {
+		return inner.getRequestURL();
+	}
 	//-----------------------------------------------------------------------------------------------------------------
 	// Labels
 	//-----------------------------------------------------------------------------------------------------------------
@@ -946,20 +1167,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the method of this request.
+	 * Returns the HTTP method of this request.
 	 *
 	 * <p>
 	 * If <c>allowHeaderParams</c> init parameter is <jk>true</jk>, then first looks for
 	 * <c>&amp;method=xxx</c> in the URL query string.
+	 *
+	 * @return The HTTP method of this request.
 	 */
-	@Override /* ServletRequest */
 	public String getMethod() {
 		return call.getMethod();
-	}
-
-	@Override /* ServletRequest */
-	public int getContentLength() {
-		return getBody().getContentLength();
 	}
 
 	/**
@@ -1060,7 +1277,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if debug mode is enabled.
 	 */
 	public boolean isDebug() {
-		Boolean b = ObjectUtils.castOrNull(getAttribute("Debug"), Boolean.class);
+		Boolean b = ObjectUtils.castOrNull(getAttribute("Debug").orElse(null), Boolean.class);
 		return b == null ? false : b;
 	}
 
@@ -1323,7 +1540,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							if (pt == FORMDATA)
 								return getFormData().get(pp, schema, name, type);
 							if (pt == HEADER)
-								return getRequestHeaders().getLast(name).parser(pp).schema(schema).asType(type);
+								return getLastHeader(name).parser(pp).schema(schema).asType(type);
 							if (pt == PATH)
 								return getPathMatch().get(pp, schema, name, type);
 						}
@@ -1366,6 +1583,48 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * Not implemented.
+	 */
+	@SuppressWarnings("deprecation")
+	@Override
+	public HttpParams getParams() {
+		return null;
+	}
+
+	/**
+	 * Not implemented.
+	 */
+	@SuppressWarnings("deprecation")
+	@Override
+	public void setParams(HttpParams params) {
+	}
+
+	/**
+	 * Returns the current session associated with this request, or if the request does not have a session, creates one.
+	 *
+	 * @return The current request session.
+	 * @see HttpServletRequest#getSession()
+	 */
+	public HttpSession getSession() {
+		return inner.getSession();
+	}
+
+	/**
+	 * Returns a boolean indicating whether the authenticated user is included in the specified logical "role".
+	 *
+	 * <p>
+	 * Roles and role membership can be defined using deployment descriptors.
+	 * If the user has not been authenticated, the method returns false.
+	 *
+	 * @param role The role name.
+	 * @return <jk>true</jk> if the user holds the specified role.
+	 * @see HttpServletRequest#isUserInRole(String)
+	 */
+	public boolean isUserInRole(String role) {
+		return inner.isUserInRole(role);
+	}
+
+	/**
 	 * Returns the wrapped servlet request.
 	 *
 	 * @return The wrapped servlet request.
@@ -1378,9 +1637,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");
-		for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
-			String h = e.nextElement();
-			sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");
+		for (RequestHeader h : getAllHeaders()) {
+			sb.append("\t").append(h).append("\n");
 		}
 		String m = getMethod();
 		if (m.equals("PUT") || m.equals("POST")) {
