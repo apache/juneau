@@ -171,7 +171,7 @@ public class Rest_PredefinedStatusCodes_Test {
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
-				"Could not parse header 'h1'."
+				"Could not parse header parameter 'h1'."
 			);
 	}
 
