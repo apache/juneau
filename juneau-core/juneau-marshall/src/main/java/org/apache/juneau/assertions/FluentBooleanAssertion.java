@@ -93,5 +93,11 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentBooleanAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

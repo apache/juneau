@@ -542,5 +542,11 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentStringAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

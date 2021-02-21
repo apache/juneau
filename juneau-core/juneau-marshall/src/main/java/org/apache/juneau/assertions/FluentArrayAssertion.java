@@ -182,5 +182,11 @@ public class FluentArrayAssertion<R> extends FluentBaseAssertion<Object,R> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentArrayAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

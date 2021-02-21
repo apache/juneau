@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * @param <V> The throwable type.
  */
-@FluentSetters(returns="ThrowableAssertion")
+@FluentSetters(returns="ThrowableAssertion<V>")
 public class ThrowableAssertion<V extends Throwable> extends FluentThrowableAssertion<V,ThrowableAssertion<V>> {
 
 	/**
@@ -69,6 +69,12 @@ public class ThrowableAssertion<V extends Throwable> extends FluentThrowableAsse
 	@Override /* GENERATED - Assertion */
 	public ThrowableAssertion<V> stdout() {
 		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ThrowableAssertion<V> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
 		return this;
 	}
 

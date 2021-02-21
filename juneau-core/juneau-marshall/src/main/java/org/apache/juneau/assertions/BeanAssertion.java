@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * @param <V> The bean type.
  */
-@FluentSetters(returns="BeanAssertion")
+@FluentSetters(returns="BeanAssertion<V>")
 public class BeanAssertion<V> extends FluentBeanAssertion<Object,BeanAssertion<V>> {
 
 	/**
@@ -69,6 +69,12 @@ public class BeanAssertion<V> extends FluentBeanAssertion<Object,BeanAssertion<V
 	@Override /* GENERATED - Assertion */
 	public BeanAssertion<V> stdout() {
 		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public BeanAssertion<V> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
 		return this;
 	}
 

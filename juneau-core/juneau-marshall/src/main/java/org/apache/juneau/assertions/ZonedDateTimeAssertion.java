@@ -72,5 +72,11 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public ZonedDateTimeAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

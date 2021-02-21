@@ -73,5 +73,11 @@ public class ListAssertion extends FluentListAssertion<ListAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public ListAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

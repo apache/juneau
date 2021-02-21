@@ -64,5 +64,11 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public BooleanAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

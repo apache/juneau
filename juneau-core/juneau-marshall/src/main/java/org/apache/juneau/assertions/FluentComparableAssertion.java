@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * @param <V> The value type
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentComparableAssertion<R>")
+@FluentSetters(returns="FluentComparableAssertion<V,R>")
 @SuppressWarnings("rawtypes")
 public class FluentComparableAssertion<V extends Comparable,R> extends FluentBaseAssertion<V,R> {
 
@@ -209,6 +209,12 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	@Override /* GENERATED - Assertion */
 	public FluentComparableAssertion<V,R> stdout() {
 		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentComparableAssertion<V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
 		return this;
 	}
 

@@ -70,5 +70,11 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public ByteArrayAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

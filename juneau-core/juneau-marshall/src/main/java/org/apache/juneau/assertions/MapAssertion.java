@@ -73,5 +73,11 @@ public class MapAssertion extends FluentMapAssertion<MapAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public MapAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

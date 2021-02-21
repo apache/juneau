@@ -73,5 +73,11 @@ public class CollectionAssertion extends FluentCollectionAssertion<CollectionAss
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public CollectionAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

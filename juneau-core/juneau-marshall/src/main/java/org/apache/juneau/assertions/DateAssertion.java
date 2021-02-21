@@ -72,5 +72,11 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public DateAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

@@ -274,5 +274,11 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentThrowableAssertion<V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

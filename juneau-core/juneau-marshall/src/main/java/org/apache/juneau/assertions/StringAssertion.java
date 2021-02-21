@@ -72,6 +72,12 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public StringAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	@Override /* GENERATED - FluentStringAssertion */
 	public StringAssertion javaStrings() {
 		super.javaStrings();

@@ -70,5 +70,11 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public LongAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

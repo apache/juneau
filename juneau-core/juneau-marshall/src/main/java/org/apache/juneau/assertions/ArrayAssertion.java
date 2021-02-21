@@ -70,5 +70,11 @@ public class ArrayAssertion extends FluentArrayAssertion<ArrayAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public ArrayAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

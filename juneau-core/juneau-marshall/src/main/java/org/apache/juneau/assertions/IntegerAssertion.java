@@ -70,5 +70,11 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public IntegerAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

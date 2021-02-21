@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * @param <V> The object type.
  */
-@FluentSetters(returns="ObjectAssertion")
+@FluentSetters(returns="ObjectAssertion<V>")
 public class ObjectAssertion<V> extends FluentObjectAssertion<V,ObjectAssertion<V>> {
 
 	/**
@@ -69,6 +69,12 @@ public class ObjectAssertion<V> extends FluentObjectAssertion<V,ObjectAssertion<
 	@Override /* GENERATED - Assertion */
 	public ObjectAssertion<V> stdout() {
 		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ObjectAssertion<V> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
 		return this;
 	}
 

@@ -88,5 +88,11 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentIntegerAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

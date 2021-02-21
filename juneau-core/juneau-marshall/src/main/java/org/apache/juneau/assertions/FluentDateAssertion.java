@@ -161,5 +161,11 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentDateAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

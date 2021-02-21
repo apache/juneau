@@ -65,5 +65,11 @@ public class ComparableAssertion extends FluentComparableAssertion<Comparable,Co
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public ComparableAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }
