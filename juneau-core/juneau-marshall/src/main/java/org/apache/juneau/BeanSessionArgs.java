@@ -87,7 +87,7 @@ public class BeanSessionArgs extends SessionArgs {
 	}
 
 	@Override /* GENERATED - SessionArgs */
-	public BeanSessionArgs properties(OMap value) {
+	public BeanSessionArgs properties(Map<String,Object> value) {
 		super.properties(value);
 		return this;
 	}
@@ -110,7 +110,7 @@ public class BeanSessionArgs extends SessionArgs {
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"BeanSessionArgs", 
+				"BeanSessionArgs",
 				OMap
 					.create()
 					.filtered()

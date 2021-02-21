@@ -447,7 +447,7 @@ public class RequestBody {
 			MediaType mediaType = pm.getMediaType();
 			ParserSessionArgs pArgs = ParserSessionArgs
 				.create()
-				.properties(req.getAttributes())
+				.properties(req.getAttributes().asMap())
 				.javaMethod(req.getOpContext().getJavaMethod())
 				.locale(locale)
 				.timeZone(timeZone.orElse(null))

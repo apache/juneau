@@ -1036,8 +1036,8 @@ public final class RestRequest {
 	 * @param name The attribute name.
 	 * @return The attribute value, never <jk>null</jk>.
 	 */
-	public Optional<Object> getAttribute(String name) {
-		return Optional.ofNullable(attrs.get(name));
+	public RequestAttribute getAttribute(String name) {
+		return attrs.get(name);
 	}
 
 	/**
@@ -1047,7 +1047,7 @@ public final class RestRequest {
 	 * @param value The attribute value.
 	 */
 	public void setAttribute(String name, Object value) {
-		attrs.put(name, value);
+		attrs.set(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1689,8 +1689,7 @@ public final class RestRequest {
 	 * @return <jk>true</jk> if debug mode is enabled.
 	 */
 	public boolean isDebug() {
-		Boolean b = ObjectUtils.castOrNull(getAttribute("Debug").orElse(null), Boolean.class);
-		return b == null ? false : b;
+		return getAttribute("Debug").asType(Boolean.class).orElse(false);
 	}
 
 	/**

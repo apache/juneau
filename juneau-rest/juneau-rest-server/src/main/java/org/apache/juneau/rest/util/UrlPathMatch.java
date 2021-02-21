@@ -66,7 +66,6 @@ public class UrlPathMatch {
 		return ! vars.isEmpty();
 	}
 
-
 	/**
 	 * Returns <jk>true</jk> if any of the variable values are blank.
 	 *
@@ -81,6 +80,9 @@ public class UrlPathMatch {
 
 	/**
 	 * Returns the remainder of the path after the pattern match has been made.
+	 *
+	 * <p>
+	 * Same as {#link {@link #getSuffix()} but trims the leading slash if there is one.
 	 *
 	 * @return The remainder of the path after the pattern match has been made.
 	 */

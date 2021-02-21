@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -36,6 +37,7 @@ public class RequestFormParams {
 	private final RestRequest req;
 	private final boolean caseSensitive;
 	private HttpPartParserSession parser;
+	private final VarResolverSession vs ;
 
 	private List<RequestFormParam> list = new LinkedList<>();
 	private Map<String,List<RequestFormParam>> map = new TreeMap<>();
@@ -43,6 +45,7 @@ public class RequestFormParams {
 	RequestFormParams(RestRequest req, boolean caseSensitive) throws Exception {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
+		this.vs = req.getVarResolverSession();
 
 		Map<String,String[]> m = null;
 		Collection<Part> c = null;
@@ -94,6 +97,7 @@ public class RequestFormParams {
 		parser = copyFrom.parser;
 		list.addAll(copyFrom.list);
 		map.putAll(copyFrom.map);
+		vs = copyFrom.vs;
 	}
 
 	RequestFormParams parser(HttpPartParserSession parser) {
@@ -127,13 +131,29 @@ public class RequestFormParams {
 			if (l == null || hasAllBlanks) {
 				if (hasAllBlanks)
 					list.removeAll(l);
-				RequestFormParam x = new RequestFormParam(req, name, p.getValue());
+				RequestFormParam x = new RequestFormParam(req, name, vs.resolve(p.getValue()));
 				list.add(x);
 				map.put(key, AList.of(x));
 			}
 		}
 		return this;
 	}
+
+	/**
+	 * Adds default entries to these parameters.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestFormParams addDefault(NameValuePair...pairs) {
+		return addDefault(Arrays.asList(pairs));
+	}
+
 	/**
 	 * Returns all the parameters with the specified name.
 	 *

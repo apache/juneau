@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -107,9 +108,46 @@ public class BasicNamedAttribute implements NamedAttribute {
 		return unwrap(value);
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the value exists.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>asString().isPresent()</c>.
+	 *
+	 * @return <jk>true</jk> if the value exists.
+	 */
+	public boolean isPresent() {
+		return getValue() != null;
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>asString().get()</c>.
+	 *
+	 * @return The value if present.
+	 */
+	public Object get() {
+		return Optional.ofNullable(getValue()).get();
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise returns other.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The other value.
+	 * @return The value if present or the other value if not.
+	 */
+	public Object orElse(Object other) {
+		return Optional.ofNullable(getValue()).orElse(other);
+	}
+
 	@Override /* Object */
 	public String toString() {
-		return urlEncode(getName()) + "=" + urlEncode(getValue());
+		return urlEncode(getName()) + "=" + getValue();
 	}
 
 	private Object unwrap(Object o) {

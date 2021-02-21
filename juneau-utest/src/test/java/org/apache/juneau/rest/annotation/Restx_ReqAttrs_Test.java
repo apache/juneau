@@ -48,11 +48,11 @@ public class Restx_ReqAttrs_Test {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
-				attrs.put("p1", "x");
-				attrs.put("p2", "x");
-				attrs.put("p3", "x");
-				attrs.put("p4", "x");
-				attrs.put("p5", "x");
+				attrs.set("p1", "x");
+				attrs.set("p2", "x");
+				attrs.set("p3", "x");
+				attrs.set("p4", "x");
+				attrs.set("p5", "x");
 			}
 			return transform(attrs);
 		}
@@ -67,11 +67,11 @@ public class Restx_ReqAttrs_Test {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
-				attrs.put("p1", "x");
-				attrs.put("p2", "x");
-				attrs.put("p3", "x");
-				attrs.put("p4", "x");
-				attrs.put("p5", "x");
+				attrs.set("p1", "x");
+				attrs.set("p2", "x");
+				attrs.set("p3", "x");
+				attrs.set("p4", "x");
+				attrs.set("p5", "x");
 			}
 			return transform(attrs);
 		}
@@ -86,11 +86,11 @@ public class Restx_ReqAttrs_Test {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
-				attrs.put("p1", "x");
-				attrs.put("p2", "x");
-				attrs.put("p3", "x");
-				attrs.put("p4", "x");
-				attrs.put("p5", "x");
+				attrs.set("p1", "x");
+				attrs.set("p2", "x");
+				attrs.set("p3", "x");
+				attrs.set("p4", "x");
+				attrs.set("p5", "x");
 			}
 			return transform(attrs);
 		}
@@ -105,11 +105,11 @@ public class Restx_ReqAttrs_Test {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
-				attrs.put("p1", "x");
-				attrs.put("p2", "x");
-				attrs.put("p3", "x");
-				attrs.put("p4", "x");
-				attrs.put("p5", "x");
+				attrs.set("p1", "x");
+				attrs.set("p2", "x");
+				attrs.set("p3", "x");
+				attrs.set("p4", "x");
+				attrs.set("p5", "x");
 			}
 			return transform(attrs);
 		}
@@ -124,18 +124,18 @@ public class Restx_ReqAttrs_Test {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
-				attrs.put("p1", "x");
-				attrs.put("p2", "x");
-				attrs.put("p3", "x");
-				attrs.put("p4", "x");
-				attrs.put("p5", "x");
+				attrs.set("p1", "x");
+				attrs.set("p2", "x");
+				attrs.set("p3", "x");
+				attrs.set("p4", "x");
+				attrs.set("p5", "x");
 			}
 			return transform(attrs);
 		}
 
 		private OMap transform(RequestAttributes attrs) {
 			OMap m = new OMap();
-			for (Map.Entry<String,Object> e : attrs.entrySet()) {
+			for (Map.Entry<String,Object> e : attrs.asMap().entrySet()) {
 				if (e.getKey().startsWith("p"))
 					m.put(e.getKey(), e.getValue());
 			}

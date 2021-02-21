@@ -132,7 +132,7 @@ public class SessionArgs {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public SessionArgs properties(OMap value) {
+	public SessionArgs properties(Map<String,Object> value) {
 		this.properties = SessionProperties.create(value);
 		return this;
 	}

@@ -175,7 +175,7 @@ public class DefaultHandler implements ResponseHandler {
 				SerializerSession session = s.createSession(
 					SerializerSessionArgs
 						.create()
-						.properties(req.getAttributes())
+						.properties(req.getAttributes().asMap())
 						.javaMethod(req.getOpContext().getJavaMethod())
 						.locale(req.getLocale())
 						.timeZone(req.getTimeZone().orElse(null))

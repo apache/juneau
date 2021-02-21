@@ -189,7 +189,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	}
 
 	@Override /* GENERATED - SessionArgs */
-	public SerializerSessionArgs properties(OMap value) {
+	public SerializerSessionArgs properties(Map<String,Object> value) {
 		super.properties(value);
 		return this;
 	}

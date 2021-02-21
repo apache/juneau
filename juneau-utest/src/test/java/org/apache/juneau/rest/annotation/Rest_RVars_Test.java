@@ -83,6 +83,6 @@ public class Rest_RVars_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.get("/p2").accept("text/plain").run().assertBody().is("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p1/p2,R1b=/p1,R2=bar,R3=,R4=a1,R5=c,R6=c");
+		a.get("/p2").accept("text/plain").run().assertBody().is("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p1/p2,R1b=/p1,R2=bar,R3=,R4=a1,R5=a2,R6=");
 	}
 }

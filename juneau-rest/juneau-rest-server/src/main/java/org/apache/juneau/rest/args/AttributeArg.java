@@ -14,8 +14,6 @@ package org.apache.juneau.rest.args;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -24,12 +22,12 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters annotated with {@link Attr} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String,Type,Type...) get}(<jv>name</jv>,<jv>type</jv>)</c>.
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getAttributes() getAttributes}().{@link RequestAttributes#get(String) get}(<jv>name</jv>).{@link RequestAttribute#asType(Class) asType}(<jv>type</jv>.
  */
 public class AttributeArg implements RestOperationArg {
 
 	private final String name;
-	private final Type type;
+	private final Class<?> type;
 
 	/**
 	 * Static creator.
@@ -50,7 +48,7 @@ public class AttributeArg implements RestOperationArg {
 	 */
 	protected AttributeArg(ParamInfo paramInfo) {
 		this.name = getName(paramInfo);
-		this.type = paramInfo.getParameterType().innerType();
+		this.type = paramInfo.getParameterType().inner();
 	}
 
 	private String getName(ParamInfo paramInfo) {
@@ -66,6 +64,6 @@ public class AttributeArg implements RestOperationArg {
 
 	@Override /* RestOperationArg */
 	public Object resolve(RestCall call) throws Exception {
-		return call.getRestRequest().getAttributes().get(name, type);
+		return call.getRestRequest().getAttribute(name).asType(type).orElse(null);
 	}
 }

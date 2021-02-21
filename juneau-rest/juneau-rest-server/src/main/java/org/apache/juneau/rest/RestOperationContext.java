@@ -1868,7 +1868,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 				output = methodInvoker.invoke(context.getResource(), args);
 
 				// Handle manual call to req.setDebug().
-				Boolean debug = ObjectUtils.castOrNull(req.getAttribute("Debug"), Boolean.class);
+				Boolean debug = req.getAttribute("Debug").asType(Boolean.class).orElse(null);
 				if (debug == Boolean.TRUE) {
 					call.debug(true);
 				} else if (debug == Boolean.FALSE) {

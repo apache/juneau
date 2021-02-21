@@ -24,6 +24,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -40,6 +41,7 @@ public class RequestHeaders {
 
 	private final RestRequest req;
 	private final boolean caseSensitive;
+	private final VarResolverSession vs ;
 
 	private HttpPartParserSession parser;
 
@@ -49,6 +51,7 @@ public class RequestHeaders {
 	RequestHeaders(RestRequest req, RequestQueryParams query, boolean caseSensitive) {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
+		this.vs = req.getVarResolverSession();
 
 		for (Enumeration<String> e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
 			String name = e.nextElement();
@@ -87,17 +90,19 @@ public class RequestHeaders {
 		parser = copyFrom.parser;
 		list.addAll(copyFrom.list);
 		map.putAll(copyFrom.map);
+		vs = copyFrom.vs;
 	}
 
 	/**
 	 * Subset constructor.
 	 */
-	private RequestHeaders(RestRequest req, Map<String,List<RequestHeader>> headerMap, HttpPartParserSession parser, boolean caseSensitive) {
-		this.req = req;
+	private RequestHeaders(RequestHeaders copyFrom, Map<String,List<RequestHeader>> headerMap) {
+		this.req = copyFrom.req;
 		map.putAll(headerMap);
 		list = headerMap.values().stream().flatMap(List::stream).collect(toList());
-		this.parser = parser;
-		this.caseSensitive = caseSensitive;
+		parser = copyFrom.parser;
+		caseSensitive = copyFrom.caseSensitive;
+		vs = copyFrom.vs;
 	}
 
 	RequestHeaders parser(HttpPartParserSession parser) {
@@ -130,12 +135,25 @@ public class RequestHeaders {
 			if (l == null || hasAllBlanks) {
 				if (hasAllBlanks)
 					list.removeAll(l);
-				RequestHeader x = new RequestHeader(req, name, p.getValue());
+				RequestHeader x = new RequestHeader(req, name, vs.resolve(p.getValue()));
 				list.add(x);
 				map.put(key, AList.of(x));
 			}
 		}
 		return this;
+	}
+
+	/**
+	 * Adds default entries to these headers.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs The default entries.  Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders addDefault(Header...pairs) {
+		return addDefault(Arrays.asList(pairs));
 	}
 
 	/**
@@ -324,7 +342,7 @@ public class RequestHeaders {
 			.filter(map::containsKey)
 			.collect(toMap(Function.identity(),map::get));
 
-		return new RequestHeaders(req, m, parser, caseSensitive);
+		return new RequestHeaders(this, m);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

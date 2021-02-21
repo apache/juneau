@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.collections.*;
 
@@ -39,6 +40,7 @@ public class RequestQueryParams {
 
 	private final RestRequest req;
 	private final boolean caseSensitive;
+	private final VarResolverSession vs;
 	private HttpPartParserSession parser;
 
 	private List<RequestQueryParam> list = new LinkedList<>();
@@ -47,6 +49,7 @@ public class RequestQueryParams {
 	RequestQueryParams(RestRequest req, Map<String,String[]> query, boolean caseSensitive) {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
+		this.vs = req.getVarResolverSession();
 
 		for (Map.Entry<String,String[]> e : query.entrySet()) {
 			String name = e.getKey();
@@ -81,6 +84,7 @@ public class RequestQueryParams {
 		parser = copyFrom.parser;
 		list.addAll(copyFrom.list);
 		map.putAll(copyFrom.map);
+		vs = copyFrom.vs;
 	}
 
 	RequestQueryParams parser(HttpPartParserSession parser) {
@@ -114,12 +118,27 @@ public class RequestQueryParams {
 			if (l == null || hasAllBlanks) {
 				if (hasAllBlanks)
 					list.removeAll(l);
-				RequestQueryParam x = new RequestQueryParam(req, name, p.getValue());
+				RequestQueryParam x = new RequestQueryParam(req, name, vs.resolve(p.getValue()));
 				list.add(x);
 				map.put(key, AList.of(x));
 			}
 		}
 		return this;
+	}
+
+	/**
+	 * Adds default entries to these parameters.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams addDefault(NameValuePair...pairs) {
+		return addDefault(Arrays.asList(pairs));
 	}
 
 	/**

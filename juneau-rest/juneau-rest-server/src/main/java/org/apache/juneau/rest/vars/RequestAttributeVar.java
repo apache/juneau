@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import javax.servlet.http.*;
 
 import org.apache.juneau.http.exception.*;
@@ -72,7 +70,7 @@ public class RequestAttributeVar extends MultipartResolvingVar {
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-		return stringify(req.getAttribute(key));
+		return req.getAttribute(key).asString().orElse(null);
 	}
 
 	@Override /* Var */

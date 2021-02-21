@@ -42,15 +42,15 @@ public class SessionProperties {
 	 * @param inner The initial contents of these properties.
 	 * @return A new instance of this class.
 	 */
-	public static SessionProperties create(OMap inner) {
+	public static SessionProperties create(Map<String,Object> inner) {
 		return new SessionProperties(inner);
 	}
 
 	/**
 	 * Constructor.
 	 */
-	private SessionProperties(OMap inner) {
-		this.map = inner == null ? new OMap() : inner;
+	private SessionProperties(Map<String,Object> inner) {
+		this.map = inner == null ? new OMap() : inner instanceof OMap ? (OMap)inner : new OMap(inner);
 	}
 
 	/**

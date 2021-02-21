@@ -143,7 +143,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	}
 
 	@Override /* GENERATED - SessionArgs */
-	public ParserSessionArgs properties(OMap value) {
+	public ParserSessionArgs properties(Map<String,Object> value) {
 		super.properties(value);
 		return this;
 	}

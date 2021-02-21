@@ -155,7 +155,7 @@ public abstract class MenuItemWidget extends Widget {
 			SerializerSessionArgs args =
 				SerializerSessionArgs
 					.create()
-					.properties(req.getAttributes())
+					.properties(req.getAttributes().asMap())
 					.debug(req.isDebug() ? true : null)
 					.uriContext(req.getUriContext())
 					.useWhitespace(req.isPlainText() ? true : null)
@@ -172,7 +172,7 @@ public abstract class MenuItemWidget extends Widget {
 	}
 
 	private Integer getId(RestRequest req) {
-		Integer id = (Integer)req.getAttribute("LastMenuItemId").orElse(0) + 1;
+		Integer id = req.getAttribute("LastMenuItemId").asType(Integer.class).orElse(0) + 1;
 		req.setAttribute("LastMenuItemId", id);
 		return id;
 	}

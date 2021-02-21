@@ -111,7 +111,7 @@ public class RequestVar extends MultipartResolvingVar {
 			if ("servletURI".equals(key))
 				return req.getUriContext().getRootRelativeServletPath();
 		}
-		return req.getAttributes().getString(key);
+		return req.getAttributes().get(key).asString().orElse(null);
 	}
 
 	@Override /* Var */

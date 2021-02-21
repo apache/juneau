@@ -23,6 +23,7 @@ import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
@@ -36,6 +37,7 @@ public class RequestPathParams {
 	private final RestRequest req;
 	private final boolean caseSensitive;
 	private HttpPartParserSession parser;
+	private final VarResolverSession vs;
 
 	private List<RequestPathParam> list = new LinkedList<>();
 	private Map<String,List<RequestPathParam>> map = new TreeMap<>();
@@ -44,13 +46,13 @@ public class RequestPathParams {
 		this.call = call;
 		this.req = req;
 		this.caseSensitive = caseSensitive;
+		this.vs = req.getVarResolverSession();
 
 		// Add parameters from parent context if any.
 		@SuppressWarnings("unchecked")
-		Map<String,String> parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(null);
-		if (parentVars != null)
-			for (Map.Entry<String,String> e : parentVars.entrySet())
-				add(e.getKey(), e.getValue());
+		Map<String,String> parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(Collections.emptyMap());
+		for (Map.Entry<String,String> e : parentVars.entrySet())
+			add(e.getKey(), e.getValue());
 
 		UrlPathMatch pm = call.getUrlPathMatch();
 		if (pm != null) {
@@ -74,6 +76,7 @@ public class RequestPathParams {
 		parser = copyFrom.parser;
 		list.addAll(copyFrom.list);
 		map.putAll(copyFrom.map);
+		vs = copyFrom.vs;
 	}
 
 	RequestPathParams parser(HttpPartParserSession parser) {
@@ -107,12 +110,27 @@ public class RequestPathParams {
 			if (l == null || hasAllBlanks) {
 				if (hasAllBlanks)
 					list.removeAll(l);
-				RequestPathParam x = new RequestPathParam(req, name, p.getValue());
+				RequestPathParam x = new RequestPathParam(req, name, vs.resolve(p.getValue()));
 				list.add(x);
 				map.put(key, AList.of(x));
 			}
 		}
 		return this;
+	}
+
+	/**
+	 * Adds default entries to these parameters.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs
+	 * 	The default entries.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestPathParams addDefault(NameValuePair...pairs) {
+		return addDefault(Arrays.asList(pairs));
 	}
 
 	/**
