@@ -115,7 +115,7 @@ public final class RestRequest {
 	private final RequestBody body;
 	private final BeanSession beanSession;
 	private final RequestQueryParams queryParams;
-	private final RequestPath pathParams;
+	private final RequestPathParams pathParams;
 	private final RequestHeaders headers;
 	private final RequestAttributes attrs;
 	private final HttpPartSerializerSession partSerializerSession;
@@ -159,8 +159,7 @@ public final class RestRequest {
 			}
 		}
 
-		pathParams = new RequestPath(this);
-		pathParams.putAll(call.getPathVars());
+		pathParams = new RequestPathParams(call, this, true);
 
 		beanSession = opContext.createSession();
 
@@ -1202,10 +1201,10 @@ public final class RestRequest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Request path match.
+	 * Path parameters.
 	 *
 	 * <p>
-	 * Returns a {@link RequestPath} object that encapsulates access to everything related to the URL path.
+	 * Returns a {@link RequestPathParams} object that encapsulates access to URL path parameters.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1213,57 +1212,47 @@ public final class RestRequest {
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to path data.</jc>
-	 * 		RequestPathMatch <jv>pathMatch</jv> = <jv>req</jv>.getPathMatch();
+	 * 		RequestPathParams <jv>pathParams</jv> = <jv>req</jv>.getPathParams();
 	 *
 	 * 		<jc>// Example URL:  /123/qux/true/quux</jc>
 	 *
-	 * 		<jk>int</jk> <jv>foo</jv> = <jv>pathMatch</jv>.getInt(<js>"foo"</js>);  <jc>// =123</jc>
-	 * 		String <jv>bar</jv> = <jv>pathMatch</jv>.getString(<js>"bar"</js>);  <jc>// =qux</jc>
-	 * 		<jk>boolean</jk> <jv>baz</jv> = <jv>pathMatch</jv>.getBoolean(<js>"baz"</js>);  <jc>// =true</jc>
-	 * 		String <jv>remainder</jv> = <jv>pathMatch</jv>.getRemainder();  <jc>// =quux</jc>
+	 * 		<jk>int</jk> <jv>foo</jv> = <jv>pathParams</jv>.get(<js>"foo"</js>).asInteger().orElse(-1);  <jc>// =123</jc>
+	 * 		String <jv>bar</jv> = <jv>pathParams</jv>.get(<js>"bar"</js>).orElse(null);  <jc>// =qux</jc>
+	 * 		<jk>boolean</jk> <jv>baz</jv> = <jv>pathParams</jv>.get(<js>"baz"</js>).asBoolean().orElse(<jk>false</jk>);  <jc>// =true</jc>
+	 * 		String <jv>remainder</jv> = <jv>pathParams</jv>.getRemainder().orElse(<jk>null</jk>);  <jc>// =quux</jc>
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
-	 * 	<li>
-	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
-	 * 	<li>
-	 * 		The {@link RequestPath} object can also be passed as a parameter on the method.
-	 * 	<li>
-	 * 		The {@link Path @Path} annotation can be used to access individual values.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestmRequestPathMatch}
 	 * </ul>
 	 *
 	 * @return
-	 * 	The path data from the URL.
+	 * 	The path parameters.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestPath getPathMatch() {
+	public RequestPathParams getPathParams() {
 		return pathParams;
 	}
 
 	/**
-	 * Shortcut for calling <c>getPathMatch().get(name)</c>.
+	 * Shortcut for calling <c>getPathParams().get(<jv>name</jv>)</c>.
 	 *
-	 * @param name The path variable name.
-	 * @return The path variable value, or <jk>null</jk> if not found.
+	 * @param name The path parameter name.
+	 * @return The path parameter, never <jk>null</jk>.
 	 */
-	public String getPath(String name) {
-		return getPathMatch().get(name);
+	public RequestPathParam getPathParam(String name) {
+		return pathParams.get(name);
 	}
 
 	/**
-	 * Shortcut for calling <c>getPathMatch().getRemainder()</c>.
+	 * Shortcut for calling <c>getPathParams().getRemainder()</c>.
 	 *
-	 * @return The path remainder value, or <jk>null</jk> if not found.
+	 * @return The path remainder value, never <jk>null</jk>.
 	 */
-	public String getPathRemainder() {
-		return getPathMatch().getRemainder();
+	public RequestPathParam getPathRemainder() {
+		return pathParams.getRemainder();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1959,13 +1948,13 @@ public final class RestRequest {
 							if (pt == HttpPartType.BODY)
 								return getBody().schema(schema).asType(type);
 							if (pt == QUERY)
-								return getQueryParams().get(name).parser(pp).schema(schema).asType(type);
+								return getQueryParam(name).parser(pp).schema(schema).asType(type).orElse(null);
 							if (pt == FORMDATA)
-								return getFormParams().get(name).parser(pp).schema(schema).asType(type);
+								return getFormParam(name).parser(pp).schema(schema).asType(type).orElse(null);
 							if (pt == HEADER)
-								return getHeader(name).parser(pp).schema(schema).asType(type);
+								return getHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
 							if (pt == PATH)
-								return getPathMatch().get(pp, schema, name, type);
+								return getPathParam(name).parser(pp).schema(schema).asType(type).orElse(null);
 						}
 						return null;
 					}

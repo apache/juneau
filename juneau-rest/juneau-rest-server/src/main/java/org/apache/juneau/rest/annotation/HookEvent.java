@@ -154,12 +154,12 @@ public enum HookEvent {
 	 * 			<li>{@link RequestHeaders}
 	 * 			<li>{@link RequestQueryParams}
 	 * 			<li>{@link RequestFormParams}
+	 * 			<li>{@link RequestPathParams}
 	 * 			<li>{@link Logger}
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link org.apache.juneau.parser.Parser}
 	 * 			<li>{@link Locale}
 	 * 			<li>{@link Swagger}
-	 * 			<li>{@link RequestPath}
 	 * 			<li>{@link RequestBody}
 	 * 			<li>{@link Config}
 	 * 			<li>{@link UriContext}

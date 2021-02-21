@@ -30,8 +30,8 @@ public class Paths_Test {
 	static OMap getPaths(RestRequest req) {
 		return OMap.create()
 			.a("pathInfo", req.getPathInfo())
-			.a("pathRemainder", req.getPathMatch().getRemainder())
-			.a("pathRemainderUndecoded", req.getPathMatch().getRemainderUndecoded())
+			.a("pathRemainder", req.getPathParams().getRemainder().orElse(null))
+			.a("pathRemainderUndecoded", req.getPathParams().getRemainderUndecoded().orElse(null))
 			.a("requestURI", req.getRequestURI())
 			.a("requestParentURI", req.getUriContext().getRootRelativePathInfoParent())
 			.a("requestURL", req.getRequestURL())

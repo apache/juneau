@@ -109,7 +109,7 @@ public class RestOp_Params_Test {
 			return t != null;
 		}
 		@RestGet
-		public boolean r(RequestPath t) {
+		public boolean r(RequestPathParams t) {
 			return t != null;
 		}
 		@RestGet

@@ -1838,21 +1838,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		call.restOperationContext(this);
 
-		UrlPathMatch pm = call.getUrlPathMatch();
-		if (pm == null)
-			pm = matchPattern(call);
-
-		if (pm == null)
-			throw new NotFound();
-
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
-
-		RequestPath rp = req.getPathMatch();
-		for (Map.Entry<String,String> e : pm.getVars().entrySet())
-			rp.put(e.getKey(), e.getValue());
-		if (pm.getRemainder() != null)
-			rp.remainder(pm.getRemainder());
 
 		context.preCall(call);
 

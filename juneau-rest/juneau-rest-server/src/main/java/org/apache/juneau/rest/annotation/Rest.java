@@ -831,7 +831,7 @@ public @interface Rest {
 	 * <h5 class='topic'>Path variables</h5>
 	 * <p>
 	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters
-	 * or access through the {@link RestRequest#getPathMatch()} method.
+	 * or access through the {@link RestRequest#getPathParams()} method.
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>

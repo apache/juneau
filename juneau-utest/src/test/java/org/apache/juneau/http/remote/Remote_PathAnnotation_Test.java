@@ -410,12 +410,12 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("{x:'1|2'}",x.getX1("1","2"));
 		assertThrown(()->x.getX1()).contains("Minimum number of items not met");
 		assertThrown(()->x.getX1("1","2","3")).contains("Maximum number of items exceeded");
-		assertEquals("{x:null}",x.getX1((String)null));
+		assertEquals("{x:'null'}",x.getX1((String)null));
 		assertEquals("{x:'1'}",x.getX2(new String[]{"1"}));
 		assertEquals("{x:'1|2'}",x.getX2(new String[]{"1","2"}));
 		assertThrown(()->x.getX2(new String[]{})).contains("Minimum number of items not met");
 		assertThrown(()->x.getX2(new String[]{"1","2","3"})).contains("Maximum number of items exceeded");
-		assertEquals("{x:null}",x.getX2(new String[]{null}));
+		assertEquals("{x:'null'}",x.getX2(new String[]{null}));
 		assertEquals("{x:'1|1'}",x.getX3("1","1"));
 		assertEquals("{x:'1|1'}",x.getX4(new String[]{"1","1"}));
 		assertEquals("{x:'1|2'}",x.getX5("1","2"));
@@ -463,12 +463,12 @@ public class Remote_PathAnnotation_Test {
 		assertThrown(()->x.getX3("bar")).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 		assertEquals("{x:'foo'}",x.getX4("foo"));
 		assertThrown(()->x.getX4("bar")).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
-		assertEquals("{x:null}",x.getX4((String)null));
+		assertEquals("{x:'null'}",x.getX4((String)null));
 		assertEquals("{x:'foo123'}",x.getX5("foo123"));
 		assertThrown(()->x.getX5("bar")).contains("Value does not match expected pattern");
 		assertEquals("{x:'foo123'}",x.getX6("foo123"));
 		assertThrown(()->x.getX6("foo")).contains("Value does not match expected pattern");
-		assertEquals("{x:null}",x.getX6((String)null));
+		assertEquals("{x:'null'}",x.getX6((String)null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -586,7 +586,7 @@ public class Remote_PathAnnotation_Test {
 	public static class K  {
 		@RestOp(path="/*")
 		public String get(RestRequest req) throws Exception {
-			return req.getPathMatch().getRemainder();
+			return req.getPathParams().getRemainder().orElse(null);
 		}
 	}
 

@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -28,10 +29,6 @@ import org.apache.juneau.rest.util.*;
 
 /**
  * Resolves method parameters and parameter types annotated with {@link Path} on {@link RestOp}-annotated Java methods.
- *
- * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getPathMatch() getPathMatch}().{@link RequestPath#get(HttpPartParserSession,HttpPartSchema,String,Type,Type...) get}(<jv>parserSession<jv>, <jv>schema</jv>, <jv>name</jv>, <jv>type</jv>)</c>
- * with a {@link HttpPartSchema schema} derived from the {@link Path} annotation.
  */
 public class PathArg implements RestOperationArg {
 	private final HttpPartParser partParser;
@@ -102,7 +99,12 @@ public class PathArg implements RestOperationArg {
 	@Override /* RestOperationArg */
 	public Object resolve(RestCall call) throws Exception {
 		RestRequest req = call.getRestRequest();
+		if (name.equals("*")) {
+			OMap m = new OMap();
+			call.getRestRequest().getPathParams().getAll().stream().forEach(x -> m.put(x.getName(), x.getValue()));
+			return req.getBeanSession().convertToType(m, type);
+		}
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.createPartSession(req.getParserSessionArgs());
-		return call.getRestRequest().getPathMatch().get(ps, schema, name, type);
+		return call.getRestRequest().getPathParams().get(name).parser(ps).schema(schema).asType(type).orElse(null);
 	}
 }

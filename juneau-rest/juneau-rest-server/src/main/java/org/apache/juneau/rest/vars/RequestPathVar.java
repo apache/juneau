@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$RP{key1[,key2...]}"</js>.
  *
  * <p>
- * Used to resolve values returned by {@link RestRequest#getPath(String)}.
+ * Used to resolve values returned by {@link RestRequest#getPathParam(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <h5 class='section'>Example:</h5>
@@ -70,8 +70,8 @@ public class RequestPathVar extends MultipartResolvingVar {
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		if ("REMAINDER".equals(key))
-			return req.getPathRemainder();
-		return req.getPath(key);
+			return req.getPathParams().getRemainder().orElse(null);
+		return req.getPathParam(key).orElse(null);
 	}
 
 	@Override /* Var */

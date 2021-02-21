@@ -17,10 +17,10 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method of type with {@link RequestPath} on {@link RestOp}-annotated Java methods.
+ * Resolves method of type with {@link RequestPathParams} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getPathMatch() getPathMatch}()</c>.
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getRestRequest() getRestRequest}().{@link RestRequest#getPathParams() getPathParams}()</c>.
  */
 public class RequestPathArg extends SimpleRestOperationArg {
 
@@ -28,10 +28,10 @@ public class RequestPathArg extends SimpleRestOperationArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link RequestPathArg}, or <jk>null</jk> if the parameter type is not {@link RequestPath}.
+	 * @return A new {@link RequestPathArg}, or <jk>null</jk> if the parameter type is not {@link RequestPathParams}.
 	 */
 	public static RequestPathArg create(ParamInfo paramInfo) {
-		if (paramInfo.isType(RequestPath.class))
+		if (paramInfo.isType(RequestPathParams.class))
 			return new RequestPathArg();
 		return null;
 	}
@@ -40,6 +40,6 @@ public class RequestPathArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected RequestPathArg() {
-		super((c)->c.getRestRequest().getPathMatch());
+		super((c)->c.getRestRequest().getPathParams());
 	}
 }

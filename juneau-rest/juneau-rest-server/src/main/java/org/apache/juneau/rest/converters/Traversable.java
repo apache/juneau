@@ -49,7 +49,7 @@ public final class Traversable implements RestConverter {
 		if (o == null)
 			return null;
 
-		String pathRemainder = req.getPathMatch().getRemainder();
+		String pathRemainder = req.getPathRemainder().orElse(null);
 
 		if (pathRemainder != null) {
 			try {

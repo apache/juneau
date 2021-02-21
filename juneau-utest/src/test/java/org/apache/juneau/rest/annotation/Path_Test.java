@@ -20,8 +20,8 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
@@ -383,31 +383,31 @@ public class Path_Test {
 	@Rest(path="/f/{a}/{b}")
 	public static class F  {
 		@RestGet(path="/")
-		public String a(RequestPath path) {
-			return format("a: {0}", path);
+		public String a(RequestPathParams path) {
+			return format("a: {0}", path.toString(true));
 		}
 		@RestGet(path="/*")
-		public String b(RequestPath path) {
-			return format("b: {0}", path);
+		public String b(RequestPathParams path) {
+			return format("b: {0}", path.toString(true));
 		}
 		@RestGet(path="/fc")
-		public String c(RequestPath path) {
-			return format("c: {0}", path);
+		public String c(RequestPathParams path) {
+			return format("c: {0}", path.toString(true));
 		}
 		@RestGet(path="/fd/{c}/{d}")
-		public String d(RequestPath path) {
-			return format("d: {0}", path);
+		public String d(RequestPathParams path) {
+			return format("d: {0}", path.toString(true));
 		}
 		@RestGet(path="/fe/{a}/{b}")
-		public String e(RequestPath path) {
-			return format("e: {0}", path);
+		public String e(RequestPathParams path) {
+			return format("e: {0}", path.toString(true));
 		}
 		@RestGet(path="/ff/{c}/{d}/*")
-		public String f(RequestPath path) {
-			return format("f: {0}", path);
+		public String f(RequestPathParams path) {
+			return format("f: {0}", path.toString(true));
 		}
 		private String format(String msg, Object...args) {
-			return SimpleJson.DEFAULT.format(msg, args);
+			return StringUtils.format(msg, args);
 		}
 	}
 
