@@ -18,24 +18,24 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Builder for {@link BeanFactory} objects.
+ * Builder for {@link BeanStore} objects.
  */
 @FluentSetters
-public class BeanFactoryBuilder {
+public class BeanStoreBuilder {
 
-	private Class<? extends BeanFactory> implClass;
+	private Class<? extends BeanStore> implClass;
 	Object outer;
-	BeanFactory parent;
+	BeanStore parent;
 
 	/**
-	 * Create a new {@link BeanFactory} using this builder.
+	 * Create a new {@link BeanStore} using this builder.
 	 *
-	 * @return A new {@link BeanFactory}
+	 * @return A new {@link BeanStore}
 	 */
-	public BeanFactory build() {
+	public BeanStore build() {
 		try {
-			Class<? extends BeanFactory> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return new BeanFactory().addBeans(BeanFactoryBuilder.class, this).createBean(ic);
+			Class<? extends BeanStore> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
+			return new BeanStore().addBeans(BeanStoreBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e.getCause().getMessage(), e.getCause());
 		}
@@ -46,24 +46,24 @@ public class BeanFactoryBuilder {
 	 *
 	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
 	 */
-	protected Class<? extends BeanFactory> getDefaultImplClass() {
-		return BeanFactory.class;
+	protected Class<? extends BeanStore> getDefaultImplClass() {
+		return BeanStore.class;
 	}
 
 	/**
-	 * Specifies a subclass of {@link BeanFactory} to create when the {@link #build()} method is called.
+	 * Specifies a subclass of {@link BeanStore} to create when the {@link #build()} method is called.
 	 *
 	 * @param value The new value for this setting.
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanFactoryBuilder implClass(Class<? extends BeanFactory> value) {
+	public BeanStoreBuilder implClass(Class<? extends BeanStore> value) {
 		this.implClass = value;
 		return this;
 	}
 
 	/**
-	 * Specifies the parent bean factory.
+	 * Specifies the parent bean store.
 	 *
 	 * <p>
 	 * Bean searches are performed recursively up this parent chain.
@@ -72,7 +72,7 @@ public class BeanFactoryBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanFactoryBuilder parent(BeanFactory value) {
+	public BeanStoreBuilder parent(BeanStore value) {
 		this.parent = value;
 		return this;
 	}
@@ -81,7 +81,7 @@ public class BeanFactoryBuilder {
 	 * Specifies the outer bean context.
 	 *
 	 * <p>
-	 * Used when calling {@link BeanFactory#createBean(Class)} on a non-static inner class.
+	 * Used when calling {@link BeanStore#createBean(Class)} on a non-static inner class.
 	 * This should be the instance of the outer object such as the servlet object when constructing inner classes
 	 * of the servlet class.
 	 *
@@ -89,7 +89,7 @@ public class BeanFactoryBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanFactoryBuilder outer(Object value) {
+	public BeanStoreBuilder outer(Object value) {
 		this.outer = value;
 		return this;
 	}

@@ -67,7 +67,7 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicRuntimeException.class,
 		BeanAssertion.class,
 		BeanContextBuilder.class,
-		BeanFactoryBuilder.class,
+		BeanStoreBuilder.class,
 		BeanSessionArgs.class,
 		BeanTraverseBuilder.class,
 		BooleanAssertion.class,

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Instances of this class are created through the {@link VarResolver#createSession()} and
- * {@link VarResolver#createSession(BeanFactory)} methods.
+ * {@link VarResolver#createSession(BeanStore)} methods.
  *
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
 public class VarResolverSession {
 
 	private final VarResolverContext context;
-	private final BeanFactory beanFactory;
+	private final BeanStore beanStore;
 
 	/**
 	 * Constructor.
@@ -52,12 +52,12 @@ public class VarResolverSession {
 	 * @param context
 	 * 	The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with
 	 * 	that resolver.
-	 * @param beanFactory The bean factory to use for resolving beans needed by vars.
+	 * @param beanStore The bean store to use for resolving beans needed by vars.
 	 *
 	 */
-	public VarResolverSession(VarResolverContext context, BeanFactory beanFactory) {
+	public VarResolverSession(VarResolverContext context, BeanStore beanStore) {
 		this.context = context;
-		this.beanFactory = BeanFactory.of(beanFactory);
+		this.beanStore = BeanStore.of(beanStore);
 	}
 
 	/**
@@ -366,7 +366,7 @@ public class VarResolverSession {
 	;
 
 	/**
-	 * Returns the bean from the registered bean factory.
+	 * Returns the bean from the registered bean store.
 	 *
 	 * @param c The bean type.
 	 * @return
@@ -374,9 +374,9 @@ public class VarResolverSession {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public <T> Optional<T> getBean(Class<T> c) {
-		Optional<T> t = beanFactory.getBean(c);
+		Optional<T> t = beanStore.getBean(c);
 		if (! t.isPresent())
-			t = context.beanFactory.getBean(c);
+			t = context.beanStore.getBean(c);
 		return t;
 	}
 
@@ -413,12 +413,12 @@ public class VarResolverSession {
 	 * @return This object (for method chaining).
 	 */
 	public <T> VarResolverSession bean(Class<T> c, T value) {
-		beanFactory.addBean(c, value);
+		beanStore.addBean(c, value);
 		return this;
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return "var=" + this.context.getVarMap().keySet() + ", context.beanFactory=" + this.context.beanFactory + ", session.beanFactory=" + beanFactory;
+		return "var=" + this.context.getVarMap().keySet() + ", context.beanStore=" + this.context.beanStore + ", session.beanStore=" + beanStore;
 	}
 }

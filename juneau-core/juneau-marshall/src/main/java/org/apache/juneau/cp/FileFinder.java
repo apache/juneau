@@ -69,8 +69,8 @@ import java.util.*;
  * Subclasses must provide a public constructor that takes in any of the following arguments:
  * <ul>
  * 	<li>{@link FileFinderBuilder} - The builder object.
- * 	<li>Any beans present in the registered {@link FileFinderBuilder#beanFactory(BeanFactory) bean factory}.
- * 	<li>Any {@link Optional} beans optionally present in the registered {@link FileFinderBuilder#beanFactory(BeanFactory) bean factory}.
+ * 	<li>Any beans present in the registered {@link FileFinderBuilder#beanStore(BeanStore) bean store}.
+ * 	<li>Any {@link Optional} beans optionally present in the registered {@link FileFinderBuilder#beanStore(BeanStore) bean store}.
  * </ul>
  */
 public interface FileFinder {

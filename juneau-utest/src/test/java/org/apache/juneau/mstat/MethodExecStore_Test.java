@@ -80,14 +80,14 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a05_builder_beanFactory() throws Exception {
-		BeanFactory bf = BeanFactory.create().build();
+		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->MethodExecStore.create().beanFactory(bf).implClass(A5b.class).build()).contains("Public constructor found but could not find prerequisites: A5a");
-		assertObject(MethodExecStore.create().beanFactory(bf).implClass(A5c.class).build()).isType(A5c.class);
+		assertThrown(()->MethodExecStore.create().beanStore(bs).implClass(A5b.class).build()).contains("Public constructor found but could not find prerequisites: A5a");
+		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5c.class).build()).isType(A5c.class);
 
-		bf.addBean(A5a.class, new A5a());
-		assertObject(MethodExecStore.create().beanFactory(bf).implClass(A5b.class).build()).isType(A5b.class);
-		assertObject(MethodExecStore.create().beanFactory(bf).implClass(A5c.class).build()).isType(A5c.class);
+		bs.addBean(A5a.class, new A5a());
+		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5b.class).build()).isType(A5b.class);
+		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5c.class).build()).isType(A5c.class);
 	}
 
 
@@ -111,15 +111,15 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a06_builder_statsImplClass() throws Exception {
-		BeanFactory bf = BeanFactory.create().build();
+		BeanStore bs = BeanStore.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
-		assertThrown(()->MethodExecStore.create().beanFactory(bf).statsImplClass(A6b.class).build().getStats(m)).contains("Public constructor found but could not find prerequisites: A6a");
-		assertObject(MethodExecStore.create().beanFactory(bf).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
+		assertThrown(()->MethodExecStore.create().beanStore(bs).statsImplClass(A6b.class).build().getStats(m)).contains("Public constructor found but could not find prerequisites: A6a");
+		assertObject(MethodExecStore.create().beanStore(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
 
-		bf.addBean(A6a.class, new A6a());
-		assertObject(MethodExecStore.create().statsImplClass(A6b.class).beanFactory(bf).build().getStats(m)).isType(A6b.class);
-		assertObject(MethodExecStore.create().statsImplClass(A6c.class).beanFactory(bf).build().getStats(m)).isType(A6c.class);
+		bs.addBean(A6a.class, new A6a());
+		assertObject(MethodExecStore.create().statsImplClass(A6b.class).beanStore(bs).build().getStats(m)).isType(A6b.class);
+		assertObject(MethodExecStore.create().statsImplClass(A6c.class).beanStore(bs).build().getStats(m)).isType(A6c.class);
 	}
 
 	@Test
@@ -133,8 +133,8 @@ public class MethodExecStore_Test {
 		assertObject(store.getThrownStore()).isSameObjectAs(s);
 
 		ThrownStore s2 = ThrownStore.create().build();
-		BeanFactory bf = BeanFactory.create().build().addBean(ThrownStore.class, s2);
-		store = MethodExecStore.create().beanFactory(bf).build();
+		BeanStore bs = BeanStore.create().build().addBean(ThrownStore.class, s2);
+		store = MethodExecStore.create().beanStore(bs).build();
 		assertObject(store.getThrownStore()).isSameObjectAs(s2);
 	}
 

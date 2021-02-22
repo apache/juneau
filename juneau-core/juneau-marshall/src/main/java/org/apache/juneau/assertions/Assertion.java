@@ -123,7 +123,7 @@ public class Assertion {
 			System.err.println(msg);  // NOT DEBUG
 		if (throwable != null) {
 			try {
-				throw BeanFactory.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).addBean(Object[].class, new Object[0]).createBean(throwable);
+				throw BeanStore.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).addBean(Object[].class, new Object[0]).createBean(throwable);
 			} catch (ExecutableException e) {
 				throw new RuntimeException(e);
 			}

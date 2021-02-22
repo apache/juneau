@@ -33,7 +33,7 @@ public class DebugEnablementBuilder {
 	ReflectionMapBuilder<Enablement> mapBuilder = new ReflectionMapBuilder<>();
 	private Class<? extends DebugEnablement> implClass;
 	Enablement defaultEnablement = NEVER;
-	BeanFactory beanFactory;
+	BeanStore beanStore;
 	Predicate<HttpServletRequest> conditionalPredicate = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
 
 	/**
@@ -48,7 +48,7 @@ public class DebugEnablementBuilder {
 	public DebugEnablement build() {
 		try {
 			Class<? extends DebugEnablement> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(DebugEnablementBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(DebugEnablementBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -64,13 +64,13 @@ public class DebugEnablementBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link DebugEnablement} object.
+	 * Specifies the bean store to use for instantiating the {@link DebugEnablement} object.
 	 *
 	 * @param value The new value for this setting.
 	 * @return  This object (for method chaining).
 	 */
-	public DebugEnablementBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public DebugEnablementBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

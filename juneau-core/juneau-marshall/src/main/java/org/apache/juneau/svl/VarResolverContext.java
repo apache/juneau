@@ -32,15 +32,15 @@ public class VarResolverContext {
 
 	private final Var[] vars;
 	private final Map<String,Var> varMap;
-	final BeanFactory beanFactory;
+	final BeanStore beanStore;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param vars The Var classes used for resolving string variables.
-	 * @param beanFactory Used to resolve beans needed by individual vars.
+	 * @param beanStore Used to resolve beans needed by individual vars.
 	 */
-	public VarResolverContext(Var[] vars, BeanFactory beanFactory) {
+	public VarResolverContext(Var[] vars, BeanStore beanStore) {
 
 		this.vars = vars;
 
@@ -49,7 +49,7 @@ public class VarResolverContext {
 			m.put(v.getName(), v);
 
 		this.varMap = AMap.unmodifiable(m);
-		this.beanFactory = BeanFactory.of(beanFactory);
+		this.beanStore = BeanStore.of(beanStore);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class VarResolverContext {
 	 * @return This object (for method chaining).
 	 */
 	public <T> VarResolverContext addBean(Class<T> c, T value) {
-		beanFactory.addBean(c, value);
+		beanStore.addBean(c, value);
 		return this;
 	}
 }

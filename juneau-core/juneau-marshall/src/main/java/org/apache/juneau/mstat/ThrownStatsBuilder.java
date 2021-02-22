@@ -32,7 +32,7 @@ public class ThrownStatsBuilder {
 	ThrownStats causedBy;
 
 	Class<? extends ThrownStats> implClass;
-	BeanFactory beanFactory;
+	BeanStore beanStore;
 
 	/**
 	 * Create a new {@link ThrownStats} using this builder.
@@ -42,7 +42,7 @@ public class ThrownStatsBuilder {
 	public ThrownStats build() {
 		try {
 			Class<? extends ThrownStats> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(ThrownStatsBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(ThrownStatsBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e);
 		}
@@ -58,7 +58,7 @@ public class ThrownStatsBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link ThrownStats} object.
+	 * Specifies the bean store to use for instantiating the {@link ThrownStats} object.
 	 *
 	 * <p>
 	 * Can be used to instantiate {@link ThrownStats} implementations with injected constructor argument beans.
@@ -67,8 +67,8 @@ public class ThrownStatsBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public ThrownStatsBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public ThrownStatsBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

@@ -36,7 +36,7 @@ public class ThrownStore {
 
 	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
 	private final Optional<ThrownStore> parent;
-	private final BeanFactory beanFactory;
+	private final BeanStore beanStore;
 	private final Class<? extends ThrownStats> statsImplClass;
 	private final Set<String> ignoreClasses;
 
@@ -63,7 +63,7 @@ public class ThrownStore {
 	 */
 	public ThrownStore(ThrownStoreBuilder builder) {
 		this.parent = ofNullable(builder.parent);
-		this.beanFactory = ofNullable(builder.beanFactory).orElseGet(BeanFactory::new);
+		this.beanStore = ofNullable(builder.beanStore).orElseGet(BeanStore::new);
 
 		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 
@@ -208,7 +208,7 @@ public class ThrownStore {
 		if (stc == null) {
 			stc = ThrownStats
 				.create()
-				.beanFactory(beanFactory)
+				.beanStore(beanStore)
 				.implClass(statsImplClass)
 				.throwable(t)
 				.hash(hash)

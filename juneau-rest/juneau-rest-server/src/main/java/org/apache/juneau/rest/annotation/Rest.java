@@ -190,15 +190,15 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanFactory</c> class to allow for any
+	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
 	 * Spring beans to be injected into your REST resources.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_beanFactory}
+	 * 	<li class='jf'>{@link RestContext#REST_beanStore}
 	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 */
-	Class<? extends BeanFactory> beanFactory() default BeanFactory.Null.class;
+	Class<? extends BeanStore> beanStore() default BeanStore.Null.class;
 
 	/**
 	 * REST children.

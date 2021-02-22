@@ -27,7 +27,7 @@ public class SwaggerProviderBuilder {
 
 	private Class<? extends SwaggerProvider> implClass;
 
-	BeanFactory beanFactory;
+	BeanStore beanStore;
 	Class<?> resourceClass;
 	VarResolver varResolver;
 	JsonSchemaGenerator jsonSchemaGenerator;
@@ -46,7 +46,7 @@ public class SwaggerProviderBuilder {
 	public SwaggerProvider build() {
 		try {
 			Class<? extends SwaggerProvider> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(SwaggerProviderBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(SwaggerProviderBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -62,13 +62,13 @@ public class SwaggerProviderBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link SwaggerProvider} object.
+	 * Specifies the bean store to use for instantiating the {@link SwaggerProvider} object.
 	 *
 	 * @param value The new value for this setting.
 	 * @return  This object (for method chaining).
 	 */
-	public SwaggerProviderBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public SwaggerProviderBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

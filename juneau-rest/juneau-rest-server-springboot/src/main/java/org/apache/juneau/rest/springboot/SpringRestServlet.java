@@ -31,7 +31,7 @@ public abstract class SpringRestServlet extends RestServlet {
 	private Optional<ApplicationContext> appContext;
 
 	@Override /* RestServlet */
-	public BeanFactory createBeanFactory(Optional<BeanFactory> parent) {
-		return new SpringBeanFactory(appContext, parent, this);
+	public BeanStore createBeanStore(Optional<BeanStore> parent) {
+		return new SpringBeanStore(appContext, parent, this);
 	}
 }

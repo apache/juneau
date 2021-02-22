@@ -2074,13 +2074,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 		this.parsers = pgb.build();
 
-		BeanFactory bf = new BeanFactory()
+		BeanStore bs = new BeanStore()
 			.addBean(ContextProperties.class, cp)
 			.addBean(RestClient.class, this);
 
 		this.urlEncodingSerializer = new SerializerBuilder(cp).build(UrlEncodingSerializer.class);
-		this.partSerializer = cp.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, bf).orElseGet(bf.createBeanSupplier(OpenApiSerializer.class));
-		this.partParser = cp.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bf).orElseGet(bf.createBeanSupplier(OpenApiParser.class));
+		this.partSerializer = cp.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, bs).orElseGet(bs.createBeanSupplier(OpenApiSerializer.class));
+		this.partParser = cp.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bs).orElseGet(bs.createBeanSupplier(OpenApiParser.class));
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
@@ -2112,7 +2112,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				formData.add(BasicNameValuePair.cast(o));
 		}
 
-		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bf).orElseGet(bf.createBeanSupplier(BasicRestCallHandler.class));
+		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.createBeanSupplier(BasicRestCallHandler.class));
 
 		this.interceptors = cp.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 

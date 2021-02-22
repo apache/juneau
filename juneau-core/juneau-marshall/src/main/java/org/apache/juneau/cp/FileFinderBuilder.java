@@ -34,7 +34,7 @@ public class FileFinderBuilder {
 	long cachingLimit = -1;
 	List<Pattern> include = AList.of(Pattern.compile(".*")), exclude = AList.create();
 	private Class<? extends FileFinder> implClass;
-	private BeanFactory beanFactory;
+	private BeanStore beanStore;
 
 	/**
 	 * Create a new {@link FileFinder} using this builder.
@@ -44,7 +44,7 @@ public class FileFinderBuilder {
 	public FileFinder build() {
 		try {
 			Class<? extends FileFinder> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(FileFinderBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(FileFinderBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e.getCause().getMessage(), e.getCause());
 		}
@@ -142,7 +142,7 @@ public class FileFinderBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link FileFinder} object.
+	 * Specifies the bean store to use for instantiating the {@link FileFinder} object.
 	 *
 	 * <p>
 	 * Can be used to instantiate {@link FileFinder} implementations with injected constructor argument beans.
@@ -151,8 +151,8 @@ public class FileFinderBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public FileFinderBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public FileFinderBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

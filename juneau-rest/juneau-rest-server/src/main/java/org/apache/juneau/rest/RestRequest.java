@@ -1791,7 +1791,7 @@ public final class RestRequest {
 		if (varSession == null)
 			varSession = context
 				.getVarResolver()
-				.createSession(call.getBeanFactory())
+				.createSession(call.getBeanStore())
 				.bean(RestRequest.class, this)
 				.bean(RestCall.class, call);
 		return varSession;

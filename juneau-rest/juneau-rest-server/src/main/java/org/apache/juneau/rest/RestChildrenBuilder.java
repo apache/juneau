@@ -28,7 +28,7 @@ public class RestChildrenBuilder {
 
 	final List<RestContext> list = AList.create();
 
-	private BeanFactory beanFactory;
+	private BeanStore beanStore;
 	private Class<? extends RestChildren> implClass;
 
 	/**
@@ -39,7 +39,7 @@ public class RestChildrenBuilder {
 	public RestChildren build() {
 		try {
 			Class<? extends RestChildren> ic = firstNonNull(implClass, getDefaultImplClass());
-			return BeanFactory.of(beanFactory).addBeans(RestChildrenBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(RestChildrenBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -75,8 +75,8 @@ public class RestChildrenBuilder {
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestChildrenBuilder} - This object.
-	 * 	<li>Any beans found in the specified {@link #beanFactory(BeanFactory) bean factory}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanFactory(BeanFactory) bean factory}.
+	 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
 	 * </ul>
 	 *
 	 * @param implClass The implementation class to build.
@@ -88,13 +88,13 @@ public class RestChildrenBuilder {
 	}
 
 	/**
-	 * Specifies a {@link BeanFactory} to use when resolving constructor arguments.
+	 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
 	 *
-	 * @param beanFactory The bean factory to use for resolving constructor arguments.
+	 * @param value The bean store to use for resolving constructor arguments.
 	 * @return This object (for method chaining).
 	 */
-	public RestChildrenBuilder beanFactory(BeanFactory beanFactory) {
-		this.beanFactory = beanFactory;
+	public RestChildrenBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 }

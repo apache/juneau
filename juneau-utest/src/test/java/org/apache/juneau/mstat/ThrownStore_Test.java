@@ -237,14 +237,14 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b05_builder_beanFactory() throws Exception {
-		BeanFactory bf = BeanFactory.create().build();
+		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->ThrownStore.create().beanFactory(bf).implClass(B5b.class).build()).contains("Public constructor found but could not find prerequisites: B5a");
-		assertObject(ThrownStore.create().beanFactory(bf).implClass(B5c.class).build()).isType(B5c.class);
+		assertThrown(()->ThrownStore.create().beanStore(bs).implClass(B5b.class).build()).contains("Public constructor found but could not find prerequisites: B5a");
+		assertObject(ThrownStore.create().beanStore(bs).implClass(B5c.class).build()).isType(B5c.class);
 
-		bf.addBean(B5a.class, new B5a());
-		assertObject(ThrownStore.create().beanFactory(bf).implClass(B5b.class).build()).isType(B5b.class);
-		assertObject(ThrownStore.create().beanFactory(bf).implClass(B5c.class).build()).isType(B5c.class);
+		bs.addBean(B5a.class, new B5a());
+		assertObject(ThrownStore.create().beanStore(bs).implClass(B5b.class).build()).isType(B5b.class);
+		assertObject(ThrownStore.create().beanStore(bs).implClass(B5c.class).build()).isType(B5c.class);
 	}
 
 	public static class B6a {}
@@ -267,17 +267,17 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b06_statsImplClass() throws Exception {
-		BeanFactory bf = BeanFactory.create().build();
+		BeanStore bs = BeanStore.create().build();
 
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		assertThrown(()->ThrownStore.create().beanFactory(bf).statsImplClass(B6b.class).build().add(t1)).contains("Public constructor found but could not find prerequisites: B6a");
-		assertObject(ThrownStore.create().beanFactory(bf).statsImplClass(B6c.class).build().add(t1)).isType(B6c.class);
+		assertThrown(()->ThrownStore.create().beanStore(bs).statsImplClass(B6b.class).build().add(t1)).contains("Public constructor found but could not find prerequisites: B6a");
+		assertObject(ThrownStore.create().beanStore(bs).statsImplClass(B6c.class).build().add(t1)).isType(B6c.class);
 
-		bf.addBean(B6a.class, new B6a());
-		assertObject(ThrownStore.create().statsImplClass(B6b.class).beanFactory(bf).build().add(t1)).isType(B6b.class);
-		assertObject(ThrownStore.create().statsImplClass(B6c.class).beanFactory(bf).build().add(t1)).isType(B6c.class);
+		bs.addBean(B6a.class, new B6a());
+		assertObject(ThrownStore.create().statsImplClass(B6b.class).beanStore(bs).build().add(t1)).isType(B6b.class);
+		assertObject(ThrownStore.create().statsImplClass(B6c.class).beanStore(bs).build().add(t1)).isType(B6c.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

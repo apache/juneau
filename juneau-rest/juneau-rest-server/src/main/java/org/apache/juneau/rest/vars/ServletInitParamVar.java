@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$I{key[,defaultValue]}"</js>.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
  * <p>
  * Values are pulled from the {@link RestServlet#getInitParameter(String)} method.

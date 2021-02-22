@@ -39,9 +39,9 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	 * @param builder The builder containing the settings for this Swagger provider.
 	 */
 	public BasicSwaggerProvider(SwaggerProviderBuilder builder) {
-		BeanFactory bf = builder.beanFactory;
-		this.vr = firstNonNull(builder.varResolver, bf.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
-		this.js = firstNonNull(builder.jsonSchemaGenerator, bf.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
+		BeanStore bs = builder.beanStore;
+		this.vr = firstNonNull(builder.varResolver, bs.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
+		this.js = firstNonNull(builder.jsonSchemaGenerator, bs.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
 		this.messages = builder.messages;
 		this.fileFinder = builder.fileFinder;
 	}

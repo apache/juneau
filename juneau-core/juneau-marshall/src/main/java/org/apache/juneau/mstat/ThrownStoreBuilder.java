@@ -29,7 +29,7 @@ public class ThrownStoreBuilder {
 
 	ThrownStore parent;
 	private Class<? extends ThrownStore> implClass;
-	BeanFactory beanFactory;
+	BeanStore beanStore;
 	Class<? extends ThrownStats> statsImplClass;
 	Set<Class<?>> ignoreClasses;
 
@@ -41,7 +41,7 @@ public class ThrownStoreBuilder {
 	public ThrownStore build() {
 		try {
 			Class<? extends ThrownStore> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(ThrownStoreBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(ThrownStoreBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e);
 		}
@@ -57,7 +57,7 @@ public class ThrownStoreBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link ThrownStore} object.
+	 * Specifies the bean store to use for instantiating the {@link ThrownStore} object.
 	 *
 	 * <p>
 	 * Can be used to instantiate {@link ThrownStore} implementations with injected constructor argument beans.
@@ -66,8 +66,8 @@ public class ThrownStoreBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public ThrownStoreBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public ThrownStoreBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

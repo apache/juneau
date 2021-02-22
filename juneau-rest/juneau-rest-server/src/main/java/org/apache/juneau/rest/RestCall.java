@@ -47,7 +47,7 @@ public class RestCall {
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
 	private RestLogger logger;
-	private BeanFactory beanFactory;
+	private BeanStore beanStore;
 	private Map<String,String[]> queryParams;
 	private String method;
 
@@ -64,8 +64,8 @@ public class RestCall {
 	public RestCall(Object resource, RestContext context, HttpServletRequest req, HttpServletResponse res) {
 		this.context = context;
 		this.resource = resource;
-		beanFactory = BeanFactory.of(context.getRootBeanFactory(), resource);
-		beanFactory.addBean(RestContext.class, context);
+		beanStore = BeanStore.of(context.getRootBeanStore(), resource);
+		beanStore.addBean(RestContext.class, context);
 		request(req).response(res);
 	}
 
@@ -94,7 +94,7 @@ public class RestCall {
 		req = value;
 		urlPath = null;
 		pathInfoUndecoded = null;
-		beanFactory.addBean(HttpServletRequest.class, value);
+		beanStore.addBean(HttpServletRequest.class, value);
 		return this;
 	}
 
@@ -106,7 +106,7 @@ public class RestCall {
 	 */
 	public RestCall response(HttpServletResponse value) {
 		res = value;
-		beanFactory.addBean(HttpServletResponse.class, value);
+		beanStore.addBean(HttpServletResponse.class, value);
 		return this;
 	}
 
@@ -122,11 +122,11 @@ public class RestCall {
 	 */
 	public RestCall restOperationContext(RestOperationContext value) throws Exception {
 		opContext = value;
-		beanFactory.addBean(RestOperationContext.class, value);
+		beanStore.addBean(RestOperationContext.class, value);
 		rreq = context.createRequest(this);
-		beanFactory.addBean(RestRequest.class, rreq);
+		beanStore.addBean(RestRequest.class, rreq);
 		rres = context.createResponse(this);
-		beanFactory.addBean(RestResponse.class, rres);
+		beanStore.addBean(RestResponse.class, rres);
 		return this;
 	}
 
@@ -138,7 +138,7 @@ public class RestCall {
 	 */
 	public RestCall logger(RestLogger value) {
 		logger = value;
-		beanFactory.addBean(RestLogger.class, value);
+		beanStore.addBean(RestLogger.class, value);
 		return this;
 	}
 
@@ -199,7 +199,7 @@ public class RestCall {
 	 */
 	public RestCall exception(Throwable value) {
 		req.setAttribute("Exception", value);
-		beanFactory.addBean(Throwable.class, value);
+		beanStore.addBean(Throwable.class, value);
 		return this;
 	}
 
@@ -235,7 +235,7 @@ public class RestCall {
 	 */
 	public RestCall urlPathMatch(UrlPathMatch value) {
 		urlPathMatch = value;
-		beanFactory.addBean(UrlPathMatch.class, value);
+		beanStore.addBean(UrlPathMatch.class, value);
 		return this;
 	}
 
@@ -291,12 +291,12 @@ public class RestCall {
 	}
 
 	/**
-	 * Returns the bean factory of this call.
+	 * Returns the bean store of this call.
 	 *
-	 * @return The bean factory of this call.
+	 * @return The bean store of this call.
 	 */
-	public BeanFactory getBeanFactory() {
-		return beanFactory;
+	public BeanStore getBeanStore() {
+		return beanStore;
 	}
 
 	/**

@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$SA{contentType,key[,defaultValue]}"</js>.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.

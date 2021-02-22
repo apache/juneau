@@ -29,7 +29,7 @@ public class RestOperationsBuilder  {
 	TreeMap<String,TreeSet<RestOperationContext>> map = new TreeMap<>();
 	Set<RestOperationContext> set = ASet.of();
 
-	private BeanFactory beanFactory;
+	private BeanStore beanStore;
 	private Class<? extends RestOperations> implClass;
 
 	/**
@@ -40,7 +40,7 @@ public class RestOperationsBuilder  {
 	public RestOperations build() {
 		try {
 			Class<? extends RestOperations> ic = firstNonNull(implClass, getDefaultImplClass());
-			return BeanFactory.of(beanFactory).addBeans(RestOperationsBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(RestOperationsBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -91,8 +91,8 @@ public class RestOperationsBuilder  {
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestOperationsBuilder} - This object.
-	 * 	<li>Any beans found in the specified {@link #beanFactory(BeanFactory) bean factory}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanFactory(BeanFactory) bean factory}.
+	 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
 	 * </ul>
 	 *
 	 * @param implClass The implementation class to build.
@@ -104,13 +104,13 @@ public class RestOperationsBuilder  {
 	}
 
 	/**
-	 * Specifies a {@link BeanFactory} to use when resolving constructor arguments.
+	 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
 	 *
-	 * @param beanFactory The bean factory to use for resolving constructor arguments.
+	 * @param beanStore The bean store to use for resolving constructor arguments.
 	 * @return This object (for method chaining).
 	 */
-	public RestOperationsBuilder beanFactory(BeanFactory beanFactory) {
-		this.beanFactory = beanFactory;
+	public RestOperationsBuilder beanStore(BeanStore beanStore) {
+		this.beanStore = beanStore;
 		return this;
 	}
 }

@@ -31,7 +31,7 @@ import org.apache.juneau.svl.*;
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
  * <p>
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver()}.

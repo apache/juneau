@@ -93,7 +93,7 @@ public class RestAnnotation {
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Null.class;
 		Class<? extends RestOperationArg>[] restOperationArgs = new Class[0];
-		Class<? extends BeanFactory> beanFactory = BeanFactory.Null.class;
+		Class<? extends BeanStore> beanStore = BeanStore.Null.class;
 		Class<? extends RestOperationContext> restOperationContextClass = RestOperationContext.Null.class;
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
 		Class<? extends RestOperations> restOperationsClass = RestOperations.Null.class;
@@ -164,13 +164,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#beanFactory()} property on this annotation.
+		 * Sets the {@link Rest#beanStore()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder beanFactory(Class<? extends BeanFactory> value) {
-			this.beanFactory = value;
+		public Builder beanStore(Class<? extends BeanStore> value) {
+			this.beanStore = value;
 			return this;
 		}
 
@@ -706,7 +706,7 @@ public class RestAnnotation {
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends RestOperationArg>[] restOperationArgs;
-		private final Class<? extends BeanFactory> beanFactory;
+		private final Class<? extends BeanStore> beanStore;
 		private final Class<? extends RestOperationContext> restOperationContextClass;
 		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends RestOperations> restOperationsClass;
@@ -722,7 +722,7 @@ public class RestAnnotation {
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
 			this.allowedMethodParams = b.allowedMethodParams;
-			this.beanFactory = b.beanFactory;
+			this.beanStore = b.beanStore;
 			this.callLogger = b.callLogger;
 			this.children = copyOf(b.children);
 			this.clientVersionHeader = b.clientVersionHeader;
@@ -792,8 +792,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends BeanFactory> beanFactory() {
-			return beanFactory;
+		public Class<? extends BeanStore> beanStore() {
+			return beanStore;
 		}
 
 		@Override /* Rest */
@@ -1069,7 +1069,7 @@ public class RestAnnotation {
 			cpb.setIf(a.staticFiles() != StaticFiles.Null.class, REST_staticFiles, a.staticFiles());
 			cpb.setIfNotEmpty(REST_path, trimLeadingSlash(string(a.path())));
 			cpb.setIfNotEmpty(REST_clientVersionHeader, string(a.clientVersionHeader()));
-			cpb.setIf(a.beanFactory() != BeanFactory.Null.class, REST_beanFactory, a.beanFactory());
+			cpb.setIf(a.beanStore() != BeanStore.Null.class, REST_beanStore, a.beanStore());
 			cpb.setIf(a.callLogger() != RestLogger.Null.class, REST_callLogger, a.callLogger());
 			cpb.setIf(a.swaggerProvider() != SwaggerProvider.Null.class, REST_swaggerProvider, a.swaggerProvider());
 			cpb.setIf(a.restOperationContextClass() != RestOperationContext.Null.class, REST_restOperationContextClass, a.restOperationContextClass());

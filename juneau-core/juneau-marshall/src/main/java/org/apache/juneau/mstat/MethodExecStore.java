@@ -29,7 +29,7 @@ import org.apache.juneau.cp.*;
 public class MethodExecStore {
 
 	private final ThrownStore thrownStore;
-	private final BeanFactory beanFactory;
+	private final BeanStore beanStore;
 	private final Class<? extends MethodExecStats> statsImplClass;
 	private final ConcurrentHashMap<Method,MethodExecStats> db = new ConcurrentHashMap<>();
 
@@ -55,8 +55,8 @@ public class MethodExecStore {
 	 * @param builder The store to use for storing thrown exception statistics.
 	 */
 	public MethodExecStore(MethodExecStoreBuilder builder) {
-		this.beanFactory = ofNullable(builder.beanFactory).orElseGet(BeanFactory::new);
-		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanFactory.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
+		this.beanStore = ofNullable(builder.beanStore).orElseGet(BeanStore::new);
+		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
 		this.statsImplClass = builder.statsImplClass;
 	}
 
@@ -74,7 +74,7 @@ public class MethodExecStore {
 		if (stats == null) {
 			stats = MethodExecStats
 				.create()
-				.beanFactory(beanFactory)
+				.beanStore(beanStore)
 				.implClass(statsImplClass)
 				.method(m)
 				.thrownStore(ThrownStore.create().parent(thrownStore).build())

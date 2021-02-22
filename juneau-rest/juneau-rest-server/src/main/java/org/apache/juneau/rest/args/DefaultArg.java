@@ -18,11 +18,11 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Resolves method parameters on {@link RestOp}-annotated Java methods by retrieving them by type from the REST object bean factory.
+ * Resolves method parameters on {@link RestOp}-annotated Java methods by retrieving them by type from the REST object bean store.
  *
  * <p>
- * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getBeanFactory() getBeanFactory}().{@link BeanFactory#getBean(Class) getBean}(<jv>type</jv>)</c>
- * which resolves the object from the registered bean factory (e.g. Spring-injected beans available in the application).
+ * The parameter value is resolved using <c><jv>call</jv>.{@link RestCall#getBeanStore() getBeanStore}().{@link BeanStore#getBean(Class) getBean}(<jv>type</jv>)</c>
+ * which resolves the object from the registered bean store (e.g. Spring-injected beans available in the application).
  *
  * <p>
  * This is the default parameter resolver if no other applicable parameter resolvers could be found.
@@ -54,6 +54,6 @@ public class DefaultArg implements RestOperationArg {
 
 	@Override /* RestOperationArg */
 	public Object resolve(RestCall call) throws Exception {
-		return call.getBeanFactory().getBean(type).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
+		return call.getBeanStore().getBean(type).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}
 }

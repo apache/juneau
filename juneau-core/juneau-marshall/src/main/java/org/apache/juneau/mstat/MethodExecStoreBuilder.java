@@ -26,7 +26,7 @@ public class MethodExecStoreBuilder {
 
 	ThrownStore thrownStore;
 	private Class<? extends MethodExecStore> implClass;
-	BeanFactory beanFactory;
+	BeanStore beanStore;
 	Class<? extends MethodExecStats> statsImplClass;
 
 	/**
@@ -37,7 +37,7 @@ public class MethodExecStoreBuilder {
 	public MethodExecStore build() {
 		try {
 			Class<? extends MethodExecStore> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(MethodExecStoreBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(MethodExecStoreBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
 			throw new RuntimeException(e);
 		}
@@ -53,7 +53,7 @@ public class MethodExecStoreBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link MethodExecStore} object.
+	 * Specifies the bean store to use for instantiating the {@link MethodExecStore} object.
 	 *
 	 * <p>
 	 * Can be used to instantiate {@link MethodExecStore} implementations with injected constructor argument beans.
@@ -62,8 +62,8 @@ public class MethodExecStoreBuilder {
 	 * @return  This object (for method chaining).
 	 */
 	@FluentSetter
-	public MethodExecStoreBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public MethodExecStoreBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

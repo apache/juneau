@@ -14,13 +14,13 @@ package org.apache.juneau.rest.springboot;
 
 import java.util.*;
 
-import org.apache.juneau.cp.BeanFactory;
+import org.apache.juneau.cp.BeanStore;
 import org.springframework.context.*;
 
 /**
- * A bean factory that uses Spring bean resolution to find beans if they're not already in this factory.
+ * A bean store that uses Spring bean resolution to find beans if they're not already in this store.
  */
-public class SpringBeanFactory extends BeanFactory {
+public class SpringBeanStore extends BeanStore {
 
 	private final Optional<ApplicationContext> appContext;
 
@@ -28,10 +28,10 @@ public class SpringBeanFactory extends BeanFactory {
 	 * Constructor.
 	 *
 	 * @param appContext The Spring application context used to resolve beans.
-	 * @param parent The parent REST object bean factory.  Can be <jk>null</jk>.
+	 * @param parent The parent REST object bean store.  Can be <jk>null</jk>.
 	 * @param resource The REST object.  Can be <jk>null</jk>.
 	 */
-	public SpringBeanFactory(Optional<ApplicationContext> appContext, Optional<BeanFactory> parent, Object resource) {
+	public SpringBeanStore(Optional<ApplicationContext> appContext, Optional<BeanStore> parent, Object resource) {
 		super(create().parent(parent.orElse(null)).outer(resource));
 		this.appContext = appContext;
 	}

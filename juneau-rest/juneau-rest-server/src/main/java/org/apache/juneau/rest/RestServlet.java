@@ -68,13 +68,13 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Instantiates the bean factory to use for creating beans for this servlet.
+	 * Instantiates the bean store to use for creating beans for this servlet.
 	 *
-	 * @param parent The parent bean factory.
-	 * @return A new bean factory.
+	 * @param parent The parent bean store.
+	 * @return A new bean store.
 	 */
-	public BeanFactory createBeanFactory(Optional<BeanFactory> parent) {
-		return BeanFactory.of(parent.orElse(null), this);
+	public BeanStore createBeanStore(Optional<BeanStore> parent) {
+		return BeanStore.of(parent.orElse(null), this);
 	}
 
 	/**

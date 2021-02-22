@@ -101,8 +101,8 @@ public class VarResolver {
 	 * @param vars The var classes
 	 * @param contextObjects
 	 */
-	VarResolver(Var[] vars, BeanFactory beanFactory) {
-		this.ctx = new VarResolverContext(vars, beanFactory);
+	VarResolver(Var[] vars, BeanStore beanStore) {
+		this.ctx = new VarResolverContext(vars, beanStore);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class VarResolver {
 	public VarResolverBuilder builder() {
 		return new VarResolverBuilder()
 			.vars(ctx.getVars())
-			.beanFactory(ctx.beanFactory);
+			.beanStore(ctx.beanStore);
 	}
 
 	/**
@@ -135,13 +135,13 @@ public class VarResolver {
 	}
 
 	/**
-	 * Same as {@link #createSession()} except allows you to specify a bean factory for resolving beans.
+	 * Same as {@link #createSession()} except allows you to specify a bean store for resolving beans.
 	 *
-	 * @param beanFactory The bean factory to associate with this session.
+	 * @param beanStore The bean store to associate with this session.
 	 * @return A new resolver session.
 	 */
-	public VarResolverSession createSession(BeanFactory beanFactory) {
-		return new VarResolverSession(ctx, beanFactory);
+	public VarResolverSession createSession(BeanStore beanStore) {
+		return new VarResolverSession(ctx, beanStore);
 	}
 
 	/**

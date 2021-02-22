@@ -39,7 +39,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	RestContext restContext;
 	Method restMethod;
 
-	private BeanFactory beanFactory;
+	private BeanStore beanStore;
 	private Class<? extends RestOperationContext> implClass;
 
 	@Override /* BeanContextBuilder */
@@ -51,7 +51,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 			if (ic == null)
 				ic = cp.getClass(RESTOP_contextClass, RestOperationContext.class).orElse(getDefaultImplClass());
 
-			return BeanFactory.of(beanFactory).addBean(RestOperationContextBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBean(RestOperationContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -70,7 +70,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 
 		this.restContext = context;
 		this.restMethod = method;
-		this.beanFactory = context.getRootBeanFactory();
+		this.beanStore = context.getRootBeanStore();
 
 		MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -107,8 +107,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestOperationContextBuilder} - This object.
-	 * 	<li>Any beans found in the specified {@link #beanFactory(BeanFactory) bean factory}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanFactory(BeanFactory) bean factory}.
+	 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
 	 * </ul>
 	 *
 	 * @param implClass The implementation class to build.
@@ -120,13 +120,13 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Specifies a {@link BeanFactory} to use when resolving constructor arguments.
+	 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
 	 *
-	 * @param beanFactory The bean factory to use for resolving constructor arguments.
+	 * @param beanStore The bean store to use for resolving constructor arguments.
 	 * @return This object (for method chaining).
 	 */
-	public RestOperationContextBuilder beanFactory(BeanFactory beanFactory) {
-		this.beanFactory = beanFactory;
+	public RestOperationContextBuilder beanStore(BeanStore beanStore) {
+		this.beanStore = beanStore;
 		return this;
 	}
 

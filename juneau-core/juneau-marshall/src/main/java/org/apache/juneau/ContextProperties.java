@@ -475,12 +475,12 @@ public final class ContextProperties {
 	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param beanFactory The bean factory to use for instantiating the bean.
+	 * @param beanStore The bean store to use for instantiating the bean.
 	 * @return A new property instance.
 	 */
-	public <T> Optional<T> getInstance(String key, Class<T> type, BeanFactory beanFactory) {
+	public <T> Optional<T> getInstance(String key, Class<T> type, BeanStore beanStore) {
 		Property p = findProperty(key);
-		return Optional.ofNullable(p == null ? null : p.asInstance(type, beanFactory));
+		return Optional.ofNullable(p == null ? null : p.asInstance(type, beanStore));
 	}
 
 	/**
@@ -499,12 +499,12 @@ public final class ContextProperties {
 	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
-	 * @param beanFactory The bean factory to use for instantiating the bean.
+	 * @param beanStore The bean store to use for instantiating the bean.
 	 * @return A new property instance array.
 	 */
-	public <T> Optional<T[]> getInstanceArray(String key, Class<T> type, BeanFactory beanFactory) {
+	public <T> Optional<T[]> getInstanceArray(String key, Class<T> type, BeanStore beanStore) {
 		Property p = findProperty(key);
-		return Optional.ofNullable(p == null ? null : p.asInstanceArray(type, beanFactory));
+		return Optional.ofNullable(p == null ? null : p.asInstanceArray(type, beanStore));
 	}
 
 	/**
@@ -841,18 +841,18 @@ public final class ContextProperties {
 		 * Converts this property to the specified instance type.
 		 *
 		 * @param iType The type to instantiate.
-		 * @param beanFactory The bean factory to use for instantiating beans.
+		 * @param beanStore The bean store to use for instantiating beans.
 		 * @param <T> The type to instantiate.
 		 * @return The instantiated object.
 		 * @throws ConfigException If value could not be instantiated.
 		 */
-		public <T> T asInstance(Class<T> iType, BeanFactory beanFactory) {
+		public <T> T asInstance(Class<T> iType, BeanStore beanStore) {
 			if (value == null)
 				return null;
 			if (type == STRING)
 				return fromString(iType, value.toString());
 			else if (type == OBJECT || type == CLASS) {
-				T t = instantiate(beanFactory, iType, value);
+				T t = instantiate(beanStore, iType, value);
 				if (t != null)
 					return t;
 			}
@@ -863,12 +863,12 @@ public final class ContextProperties {
 		 * Converts this property to an array of specified instance type.
 		 *
 		 * @param eType The entry type to instantiate.
-		 * @param beanFactory The bean factory to use to instantiate beans.
+		 * @param beanStore The bean store to use to instantiate beans.
 		 * @param <T> The type to instantiate.
 		 * @return The instantiated object.
 		 * @throws ConfigException If value could not be instantiated.
 		 */
-		public <T> T[] asInstanceArray(Class<T> eType, BeanFactory beanFactory) {
+		public <T> T[] asInstanceArray(Class<T> eType, BeanStore beanStore) {
 			if (value instanceof Collection) {
 				Collection<?> l = (Collection<?>)value;
 				Object t = Array.newInstance(eType, l.size());
@@ -880,7 +880,7 @@ public final class ContextProperties {
 					else if (type == SET_STRING || type == LIST_STRING)
 						o2 = fromString(eType, o.toString());
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
-						o2 = instantiate(beanFactory, eType, o);
+						o2 = instantiate(beanStore, eType, o);
 					if (o2 == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''.  Entry type: ''{3}''", type, eType, name, o == null ? null : o.getClass().getName());
 					Array.set(t, i++, o2);
@@ -914,16 +914,16 @@ public final class ContextProperties {
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static BeanFactory DEFAULT_BEAN_FACTORY = BeanFactory.create().build();
+	static BeanStore DEFAULT_BEAN_STORE = BeanStore.create().build();
 
-	static <T> T instantiate(BeanFactory beanFactory, Class<T> c, Object value) {
+	static <T> T instantiate(BeanStore beanStore, Class<T> c, Object value) {
 		if (ClassInfo.of(c).isParentOf(value.getClass()))
 			return (T)value;
 		try {
 			if (ClassInfo.of(value.getClass()).isChildOf(Class.class)) {
-				if (beanFactory == null)
-					beanFactory = DEFAULT_BEAN_FACTORY;
-				return beanFactory.createBean((Class<T>)value);
+				if (beanStore == null)
+					beanStore = DEFAULT_BEAN_STORE;
+				return beanStore.createBean((Class<T>)value);
 			}
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not create bean of type ''{0}''.", value);

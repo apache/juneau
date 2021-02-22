@@ -73,18 +73,18 @@ public class MethodInvoker {
 	}
 
 	/**
-	 * Invokes the wrapped method using parameters from the specified bean factory.
+	 * Invokes the wrapped method using parameters from the specified bean store.
 	 *
-	 * @param beanFactory The bean factory to use to resolve parameters.
+	 * @param beanStore The bean store to use to resolve parameters.
 	 * @param o The object to invoke the method on.
 	 * @return The result of invoking the method.
 	 * @throws ExecutableException If error occurred trying to invoke the method.
 	 */
-	public Object invokeUsingFactory(BeanFactory beanFactory, Object o) throws ExecutableException {
+	public Object invokeUsingFactory(BeanStore beanStore, Object o) throws ExecutableException {
 		List<ClassInfo> missing;
-		missing = beanFactory.getMissingParamTypes(m.getParamTypes());
+		missing = beanStore.getMissingParamTypes(m.getParamTypes());
 		if (missing.isEmpty())
-			return invoke(o, beanFactory.getParams(m.getParamTypes()));
+			return invoke(o, beanStore.getParams(m.getParamTypes()));
 		throw new ExecutableException("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 	}
 

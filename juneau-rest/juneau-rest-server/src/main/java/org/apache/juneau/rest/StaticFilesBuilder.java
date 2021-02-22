@@ -79,8 +79,8 @@ public class StaticFilesBuilder extends FileFinderBuilder {
 	// <FluentSetters>
 
 	@Override /* GENERATED - FileFinderBuilder */
-	public StaticFilesBuilder beanFactory(BeanFactory value) {
-		super.beanFactory(value);
+	public StaticFilesBuilder beanStore(BeanStore value) {
+		super.beanStore(value);
 		return this;
 	}
 

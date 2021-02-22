@@ -30,7 +30,7 @@ import org.apache.juneau.svl.vars.*;
 public class VarResolverBuilder {
 
 	private final List<Var> vars = AList.create();
-	private BeanFactory beanFactory = new BeanFactory();
+	private BeanStore beanStore = new BeanStore();
 
 	/**
 	 * Create a new var resolver using the settings in this builder.
@@ -38,7 +38,7 @@ public class VarResolverBuilder {
 	 * @return A new var resolver.
 	 */
 	public VarResolver build() {
-		return new VarResolver(vars.toArray(new Var[vars.size()]), beanFactory);
+		return new VarResolver(vars.toArray(new Var[vars.size()]), beanStore);
 	}
 
 	/**
@@ -127,18 +127,18 @@ public class VarResolverBuilder {
 	}
 
 	/**
-	 * Associates a bean factory with this builder.
+	 * Associates a bean store with this builder.
 	 *
-	 * @param value The bean factory to associate with this var resolver.
+	 * @param value The bean store to associate with this var resolver.
 	 * @return This object (for method chaining).
 	 */
-	public VarResolverBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = BeanFactory.of(value);
+	public VarResolverBuilder beanStore(BeanStore value) {
+		this.beanStore = BeanStore.of(value);
 		return this;
 	}
 
 	/**
-	 * Adds a bean to the bean factory in this session.
+	 * Adds a bean to the bean store in this session.
 	 *
 	 * @param <T> The bean type.
 	 * @param c The bean type.
@@ -146,7 +146,7 @@ public class VarResolverBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public <T> VarResolverBuilder bean(Class<T> c, T value) {
-		beanFactory.addBean(c, value);
+		beanStore.addBean(c, value);
 		return this;
 	}
 }

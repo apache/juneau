@@ -25,7 +25,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Used for finding methods on an object that take in arbitrary parameters and returns bean instances.
  *
- * See {@link BeanFactory#beanCreateMethodFinder(Class, Object)} for usage.
+ * See {@link BeanStore#beanCreateMethodFinder(Class, Object)} for usage.
  *
  * @param <T> The bean type being created.
  */
@@ -33,17 +33,17 @@ public class BeanCreateMethodFinder<T> {
 
 	private Class<T> beanType;
 	private final Object resource;
-	private final BeanFactory beanFactory;
+	private final BeanStore beanStore;
 
 	private MethodInfo method;
 	private Object[] args;
 
 	private Supplier<T> def = ()->null;
 
-	BeanCreateMethodFinder(Class<T> beanType, Object resource, BeanFactory beanFactory) {
+	BeanCreateMethodFinder(Class<T> beanType, Object resource, BeanStore beanStore) {
 		this.beanType = beanType;
 		this.resource = resource;
-		this.beanFactory = beanFactory;
+		this.beanStore = beanStore;
 	}
 
 	/**
@@ -57,15 +57,15 @@ public class BeanCreateMethodFinder<T> {
 	 * 	<li>The method name must match exactly.
 	 * 	<li>The method must not be deprecated or annotated with {@link BeanIgnore}.
 	 * 	<li>The method must have all parameter types specified in <c>requiredParams</c>.
-	 * 	<li>The bean factory must contain beans for all parameter types.
-	 * 	<li>The bean factory may contain beans for all {@link Optional} parameter types.
+	 * 	<li>The bean store must contain beans for all parameter types.
+	 * 	<li>The bean store may contain beans for all {@link Optional} parameter types.
 	 * </ul>
 	 *
 	 * <p>
 	 * This method can be called multiple times with different method names or required parameters until a match is found.
 	 * <br>Once a method is found, subsequent calls to this method will be no-ops.
 	 *
-	 * See {@link BeanFactory#beanCreateMethodFinder(Class, Object)} for usage.
+	 * See {@link BeanStore#beanCreateMethodFinder(Class, Object)} for usage.
 	 *
 	 * @param methodName The method name.
 	 * @param requiredParams Optional required parameters.
@@ -76,10 +76,10 @@ public class BeanCreateMethodFinder<T> {
 			ClassInfo ci = ClassInfo.of(resource);
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(beanType) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
-					List<ClassInfo> missing = beanFactory.getMissingParamTypes(m.getParamTypes());
+					List<ClassInfo> missing = beanStore.getMissingParamTypes(m.getParamTypes());
 					if (missing.isEmpty() && m.hasAllArgs(requiredParams)) {
 						this.method = m;
-						this.args = beanFactory.getParams(m.getParamTypes());
+						this.args = beanStore.getParams(m.getParamTypes());
 					}
 				}
 			}

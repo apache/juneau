@@ -49,7 +49,7 @@ import org.apache.juneau.svl.*;
  * This allows you to place license headers in files without them being serialized to the output.
  *
  * <p>
- * This variable resolver requires that a {@link RestRequest} bean be available in the session bean factory.
+ * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc SvlVariables}

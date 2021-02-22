@@ -40,7 +40,7 @@ public class RestLoggerBuilder {
 	Predicate<HttpServletRequest> enabledTest;
 	RestLoggingDetail requestDetail, responseDetail;
 	Level level;
-	BeanFactory beanFactory;
+	BeanStore beanStore;
 	Class<? extends RestLogger> implClass;
 
 	/**
@@ -55,7 +55,7 @@ public class RestLoggerBuilder {
 	public RestLogger build() {
 		try {
 			Class<? extends RestLogger> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
-			return BeanFactory.of(beanFactory).addBeans(RestLoggerBuilder.class, this).createBean(ic);
+			return BeanStore.of(beanStore).addBeans(RestLoggerBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -71,13 +71,13 @@ public class RestLoggerBuilder {
 	}
 
 	/**
-	 * Specifies the bean factory to use for instantiating the {@link RestLogger} object.
+	 * Specifies the bean store to use for instantiating the {@link RestLogger} object.
 	 *
 	 * @param value The new value for this setting.
 	 * @return  This object (for method chaining).
 	 */
-	public RestLoggerBuilder beanFactory(BeanFactory value) {
-		this.beanFactory = value;
+	public RestLoggerBuilder beanStore(BeanStore value) {
+		this.beanStore = value;
 		return this;
 	}
 

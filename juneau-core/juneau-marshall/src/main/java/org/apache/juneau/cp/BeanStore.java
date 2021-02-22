@@ -27,53 +27,56 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Factory for creating beans.
+ * Java bean store.
+ * 
+ * <p>
+ * Used for bean injection.
  */
-public class BeanFactory {
+public class BeanStore {
 
 	/**
-	 * Non-existent bean factory.
+	 * Non-existent bean store.
 	 */
-	public static final class Null extends BeanFactory {}
+	public static final class Null extends BeanStore {}
 
 	private final Map<Class<?>,Supplier<?>> beanMap = new ConcurrentHashMap<>();
-	private final Optional<BeanFactory> parent;
+	private final Optional<BeanStore> parent;
 	private final Optional<Object> outer;
 
 	/**
 	 * Static creator.
 	 *
-	 * @return A new {@link BeanFactoryBuilder} object.
+	 * @return A new {@link BeanStoreBuilder} object.
 	 */
-	public static BeanFactoryBuilder create() {
-		return new BeanFactoryBuilder();
+	public static BeanStoreBuilder create() {
+		return new BeanStoreBuilder();
 	}
 
 	/**
 	 * Static creator.
 	 *
-	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
-	 * @return A new {@link BeanFactory} object.
+	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
+	 * @return A new {@link BeanStore} object.
 	 */
-	public static BeanFactory of(BeanFactory parent) {
+	public static BeanStore of(BeanStore parent) {
 		return create().parent(parent).build();
 	}
 
 	/**
 	 * Static creator.
 	 *
-	 * @param parent Parent bean factory.  Can be <jk>null</jk> if this is the root resource.
+	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
 	 * @param outer The outer bean used when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return A new {@link BeanFactory} object.
+	 * @return A new {@link BeanStore} object.
 	 */
-	public static BeanFactory of(BeanFactory parent, Object outer) {
+	public static BeanStore of(BeanStore parent, Object outer) {
 		return create().parent(parent).outer(outer).build();
 	}
 
 	/**
 	 * Default constructor.
 	 */
-	public BeanFactory() {
+	public BeanStore() {
 		this.parent = Optional.empty();
 		this.outer = Optional.empty();
 	}
@@ -83,7 +86,7 @@ public class BeanFactory {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public BeanFactory(BeanFactoryBuilder builder) {
+	public BeanStore(BeanStoreBuilder builder) {
 		this.parent = Optional.ofNullable(builder.parent);
 		this.outer = Optional.ofNullable(builder.outer);
 	}
@@ -122,7 +125,7 @@ public class BeanFactory {
 	 * @param t The bean.
 	 * @return This object (for method chaining).
 	 */
-	public <T> BeanFactory addBean(Class<T> c, T t) {
+	public <T> BeanStore addBean(Class<T> c, T t) {
 		if (t == null)
 			beanMap.remove(c);
 		else
@@ -139,7 +142,7 @@ public class BeanFactory {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> BeanFactory addBeans(Class<T> c, T t) {
+	public <T> BeanStore addBeans(Class<T> c, T t) {
 		if (t == null)
 			beanMap.remove(c);
 		else {
@@ -161,7 +164,7 @@ public class BeanFactory {
 	 * @param t The bean supplier.
 	 * @return This object (for method chaining).
 	 */
-	public <T> BeanFactory addBeanSupplier(Class<T> c, Supplier<T> t) {
+	public <T> BeanStore addBeanSupplier(Class<T> c, Supplier<T> t) {
 		if (t == null)
 			beanMap.remove(c);
 		else
@@ -288,7 +291,7 @@ public class BeanFactory {
 	 * 	<jk>public class</jk> B {
 	 *
 	 * 		<jc>// Creator method.</jc>
-	 * 		<jc>// Bean factory must have a C bean and optionally a D bean.</jc>
+	 * 		<jc>// Bean store must have a C bean and optionally a D bean.</jc>
 	 * 		<jk>public</jk> A createA(C <mv>c</mv>, Optional&lt;D&gt; <mv>d</mv>) {
 	 * 			<jk>return new</jk> A(<mv>c</mv>, <mv>d</mv>.orElse(<jk>null</jk>));
 	 * 		}
@@ -297,11 +300,11 @@ public class BeanFactory {
 	 * 	<jc>// Instantiate the bean with the creator method.</jc>
 	 * 	B <mv>b</mv> = <jk>new</jk> B();
 	 *
-	 *  <jc>// Create a bean factory with some mapped beans.</jc>
-	 * 	BeanFactory <mv>beanFactory</mv> = BeanFactory.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
+	 *  <jc>// Create a bean store with some mapped beans.</jc>
+	 * 	BeanStore <mv>beanStore</mv> = BeanStore.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
 	 *
 	 * 	<jc>// Instantiate the bean using the creator method.</jc>
-	 * 	A <mv>a</mv> = <mv>beanFactory</mv>
+	 * 	A <mv>a</mv> = <mv>beanStore</mv>
 	 * 		.beanCreateMethodFinder(A.<jk>class</jk>, <mv>b</mv>)  <jc>// Looking for creator for A on b object.</jc>
 	 * 		.find(<js>"createA"</js>)                         <jc>// Look for method called "createA".</jc>
 	 * 		.thenFind(<js>"createA2"</js>)                    <jc>// Then look for method called "createA2".</jc>

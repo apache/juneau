@@ -98,7 +98,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	final ServletConfig inner;
 	final Class<?> resourceClass;
 	final RestContext parentContext;
-	final BeanFactory beanFactory;
+	final BeanStore beanStore;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
@@ -141,10 +141,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				set(REST_fileFinderDefault, pcp.get(REST_fileFinderDefault).orElse(null));
 			}
 
-			beanFactory = createBeanFactory(parentContext, resource);
-			beanFactory.addBean(RestContextBuilder.class, this);
-			beanFactory.addBean(ServletConfig.class, servletConfig.orElse(this));
-			beanFactory.addBean(ServletContext.class, servletConfig.orElse(this).getServletContext());
+			beanStore = createBeanStore(parentContext, resource);
+			beanStore.addBean(RestContextBuilder.class, this);
+			beanStore.addBean(ServletConfig.class, servletConfig.orElse(this));
+			beanStore.addBean(ServletContext.class, servletConfig.orElse(this).getServletContext());
 
 			varResolverBuilder = new VarResolverBuilder()
 				.defaultVars()
@@ -153,16 +153,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				.bean(FileFinder.class, FileFinder.create().cp(resourceClass,null,true).build());
 
 			VarResolver vr = varResolverBuilder.build();
-			beanFactory.addBean(VarResolver.class, vr);
+			beanStore.addBean(VarResolver.class, vr);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-			config = createConfig(resourceClass, beanFactory);
-			beanFactory.addBean(Config.class, config);
+			config = createConfig(resourceClass, beanStore);
+			beanStore.addBean(Config.class, config);
 
 			// Add our config file to the variable resolver.
 			varResolverBuilder.bean(Config.class, config);
 			vr = varResolverBuilder.build();
-			beanFactory.addBean(VarResolver.class, vr);
+			beanStore.addBean(VarResolver.class, vr);
 
 			// Add the servlet init parameters to our properties.
 			if (servletConfig.isPresent()) {
@@ -185,7 +185,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContext build() {
 		try {
 			Class<? extends RestContext> c = getContextProperties().getClass(REST_contextClass, RestContext.class).orElse(getDefaultImplClass());
-			return BeanFactory.of(beanFactory, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
+			return BeanStore.of(beanStore, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -201,52 +201,52 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Creates the bean factory for this builder.
+	 * Creates the bean store for this builder.
 	 *
 	 * @param parentContext The parent context if there is one.
 	 * @param resource The resource object if it's instantiated at this time.
-	 * @return A new bean factory.
-	 * @throws Exception If bean factory could not be instantiated.
+	 * @return A new bean store.
+	 * @throws Exception If bean store could not be instantiated.
 	 */
-	protected BeanFactory createBeanFactory(Optional<RestContext> parentContext, Optional<Object> resource) throws Exception {
-		BeanFactory x = null;
+	protected BeanStore createBeanStore(Optional<RestContext> parentContext, Optional<Object> resource) throws Exception {
+		BeanStore x = null;
 		if (resource.isPresent()) {
 			Object r = resource.get();
-			x = BeanFactory
-				.of(parentContext.isPresent() ? parentContext.get().getRootBeanFactory() : null, r)
-				.beanCreateMethodFinder(BeanFactory.class, resource)
-				.find("createBeanFactory")
+			x = BeanStore
+				.of(parentContext.isPresent() ? parentContext.get().getRootBeanStore() : null, r)
+				.beanCreateMethodFinder(BeanStore.class, resource)
+				.find("createBeanStore")
 				.run();
 		}
 		if (x == null && parentContext.isPresent()) {
-			x = parentContext.get().getRootBeanFactory();
+			x = parentContext.get().getRootBeanStore();
 		}
-		return BeanFactory.of(x, resource.orElse(null));
+		return BeanStore.of(x, resource.orElse(null));
 	}
 
 	/**
 	 * Creates the config for this builder.
 	 *
 	 * @param resourceClass The resource class.
-	 * @param beanFactory The bean factory to use for creating the config.
-	 * @return A new bean factory.
-	 * @throws Exception If bean factory could not be instantiated.
+	 * @param beanStore The bean store to use for creating the config.
+	 * @return A new bean store.
+	 * @throws Exception If bean store could not be instantiated.
 	 */
-	protected Config createConfig(Class<?> resourceClass, BeanFactory beanFactory) throws Exception {
+	protected Config createConfig(Class<?> resourceClass, BeanStore beanStore) throws Exception {
 		ClassInfo rci = ClassInfo.of(resourceClass);
 		Config x = null;
 		Object o = resource == null ? null : resource.get();
 		if (o instanceof Config)
 			x = (Config)o;
 		if (x == null)
-			x = beanFactory.getBean(Config.class).orElse(null);
+			x = beanStore.getBean(Config.class).orElse(null);
 
 		// Find our config file.  It's the last non-empty @RestResource(config).
 		String configPath = "";
 		for (AnnotationInfo<Rest> r : rci.getAnnotationInfos(Rest.class))
 			if (! r.getAnnotation().config().isEmpty())
 				configPath = r.getAnnotation().config();
-		VarResolver vr = beanFactory.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
+		VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
 		String cf = vr.resolve(configPath);
 
 		if ("SYSTEM_DEFAULT".equals(cf))
@@ -281,12 +281,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		for (MethodInfo m : map.values()) {
 			List<ClassInfo> paramTypes = m.getParamTypes();
 
-			List<ClassInfo> missing = beanFactory.getMissingParamTypes(paramTypes);
+			List<ClassInfo> missing = beanStore.getMissingParamTypes(paramTypes);
 			if (!missing.isEmpty())
 				throw new RestServletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 
 			try {
-				m.invoke(resource, beanFactory.getParams(paramTypes));
+				m.invoke(resource, beanStore.getParams(paramTypes));
 			} catch (Exception e) {
 				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}
@@ -506,7 +506,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Bean factory.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Bean store.
 	 *
 	 * <p>
 	 * The resolver used for resolving instances of child resources and various other beans including:
@@ -518,11 +518,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanFactory</c> class to allow for any
+	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
 	 * Spring beans to be injected into your REST resources.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_beanFactory}
+	 * 	<li class='jf'>{@link RestContext#REST_beanStore}
 	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 *
@@ -532,12 +532,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder beanFactory(Class<? extends BeanFactory> value) {
-		return set(REST_beanFactory, value);
+	public RestContextBuilder beanStore(Class<? extends BeanStore> value) {
+		return set(REST_beanStore, value);
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Bean factory.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Bean store.
 	 *
 	 * <p>
 	 * The resolver used for resolving instances of child resources and various other beans including:
@@ -549,11 +549,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that the <c>Spr÷ingRestServlet</c> classes uses the <c>SpringBeanFactory</c> class to allow for any
+	 * Note that the <c>Spr÷ingRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
 	 * Spring beans to be injected into your REST resources.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_beanFactory}
+	 * 	<li class='jf'>{@link RestContext#REST_beanStore}
 	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 *
@@ -563,8 +563,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder beanFactory(BeanFactory value) {
-		return set(REST_beanFactory, value);
+	public RestContextBuilder beanStore(BeanStore value) {
+		return set(REST_beanStore, value);
 	}
 
 	/**
