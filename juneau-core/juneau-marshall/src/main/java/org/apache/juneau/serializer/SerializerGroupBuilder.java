@@ -30,6 +30,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
  */
+@FluentSetters
 public class SerializerGroupBuilder extends BeanTraverseBuilder {
 
 	private final AList<Object> serializers;

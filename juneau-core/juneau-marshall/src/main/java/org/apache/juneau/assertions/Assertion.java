@@ -21,6 +21,7 @@ import org.apache.juneau.internal.*;
 /**
  * Base class for all assertion objects.
  */
+@FluentSetters
 public class Assertion {
 
 	String msg;

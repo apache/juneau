@@ -30,6 +30,7 @@ import org.apache.juneau.uon.*;
 /**
  * Builder class for building instances of {@link OpenApiParser}.
  */
+@FluentSetters
 public class OpenApiParserBuilder extends UonParserBuilder {
 
 	/**

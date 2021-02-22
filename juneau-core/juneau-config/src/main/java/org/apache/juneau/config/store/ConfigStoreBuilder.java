@@ -17,12 +17,14 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for {@link ConfigStore} objects.
  */
+@FluentSetters
 public abstract class ConfigStoreBuilder extends ContextBuilder {
 
 	/**

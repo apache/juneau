@@ -32,6 +32,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building XML parsers.
  */
+@FluentSetters
 public class XmlParserBuilder extends ReaderParserBuilder {
 
 	/**

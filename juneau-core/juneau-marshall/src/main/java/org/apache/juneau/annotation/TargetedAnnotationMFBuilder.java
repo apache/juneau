@@ -21,6 +21,7 @@ import org.apache.juneau.reflect.*;
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  */
+@FluentSetters
 public class TargetedAnnotationMFBuilder extends TargetedAnnotationBuilder {
 
 	/**

@@ -37,6 +37,7 @@ import org.apache.juneau.internal.*;
  * 		Fluent assertions.
  * </ul>
  */
+@FluentSetters
 public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	private Object content;
 	private boolean cache;

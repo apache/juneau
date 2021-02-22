@@ -19,11 +19,13 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a constructor.
  */
 @BeanIgnore
+@FluentSetters
 public final class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
 
 	private final Constructor<?> c;

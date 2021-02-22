@@ -32,6 +32,7 @@ import org.apache.juneau.internal.*;
  * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
  */
 @Response
+@FluentSetters
 public class HttpException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
@@ -152,11 +153,12 @@ public class HttpException extends BasicRuntimeException {
 	/**
 	 * Set the status code on this exception.
 	 *
-	 * @param status The status code.
+	 * @param value The status code.
 	 * @return This object (for method chaining).
 	 */
-	public HttpException setStatus(int status) {
-		this.status = status;
+	@FluentSetter
+	public HttpException status(int value) {
+		status = value;
 		return this;
 	}
 

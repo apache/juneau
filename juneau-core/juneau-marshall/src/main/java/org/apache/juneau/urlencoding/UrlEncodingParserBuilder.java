@@ -29,6 +29,7 @@ import org.apache.juneau.uon.*;
 /**
  * Builder class for building instances of URL-Encoding parsers.
  */
+@FluentSetters
 public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**

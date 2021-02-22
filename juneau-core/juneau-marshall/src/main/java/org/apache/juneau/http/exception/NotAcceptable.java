@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.NotAcceptable.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 406 (Not Acceptable).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class NotAcceptable extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class NotAcceptable extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public NotAcceptable header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public NotAcceptable status(int value) {
+		super.status(value);
 		return this;
 	}
 

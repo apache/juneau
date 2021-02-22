@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of plain-text serializers.
  */
+@FluentSetters
 public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 
 	/**

@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.InternalServerError.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 500 (Internal Server Error).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class InternalServerError extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class InternalServerError extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public InternalServerError header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public InternalServerError status(int value) {
+		super.status(value);
 		return this;
 	}
 

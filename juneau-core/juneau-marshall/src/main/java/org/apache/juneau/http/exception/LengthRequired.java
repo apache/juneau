@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.LengthRequired.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 411 ().
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request did not specify the length of its content, which is required by the requested resource.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class LengthRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class LengthRequired extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public LengthRequired header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public LengthRequired status(int value) {
+		super.status(value);
 		return this;
 	}
 

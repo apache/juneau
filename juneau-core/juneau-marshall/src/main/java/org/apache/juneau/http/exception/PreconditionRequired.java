@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.PreconditionRequired.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 428 (Precondition Required).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class PreconditionRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class PreconditionRequired extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public PreconditionRequired header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public PreconditionRequired status(int value) {
+		super.status(value);
 		return this;
 	}
 

@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.Continue.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 100 Continue</c> response.
@@ -27,6 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * The response 417 Expectation Failed indicates that the request should be repeated without the Expect header as it indicates that the server doesn't support expectations (this is the case, for example, of HTTP/1.0 servers).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Continue extends HttpResponse {
 
 	/** HTTP status code */

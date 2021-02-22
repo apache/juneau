@@ -27,6 +27,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link FileFinder} objects.
  */
+@FluentSetters
 public class FileFinderBuilder {
 
 	final Set<LocalDir> roots = new LinkedHashSet<>();
@@ -168,5 +169,6 @@ public class FileFinderBuilder {
 	}
 
 	// <FluentSetters>
+
 	// </FluentSetters>
 }

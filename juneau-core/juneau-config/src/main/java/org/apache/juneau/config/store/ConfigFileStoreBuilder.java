@@ -21,12 +21,14 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link ConfigFileStore} objects.
  */
+@FluentSetters
 public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 
 	/**

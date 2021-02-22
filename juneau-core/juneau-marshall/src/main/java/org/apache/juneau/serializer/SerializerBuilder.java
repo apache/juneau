@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of serializers.
  */
+@FluentSetters
 public class SerializerBuilder extends BeanTraverseBuilder {
 
 	/**

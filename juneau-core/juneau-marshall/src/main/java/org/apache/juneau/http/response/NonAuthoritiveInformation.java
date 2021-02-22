@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.NonAuthoritiveInformation.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 203 Non-Authoritative Information</c> response.
@@ -23,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is returning a modified version of the origin's response.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class NonAuthoritiveInformation extends HttpResponse {
 
 	/** HTTP status code */

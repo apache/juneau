@@ -33,6 +33,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Builder class for building instances of RDF serializers.
  */
+@FluentSetters
 public class RdfSerializerBuilder extends WriterSerializerBuilder {
 
 	/**

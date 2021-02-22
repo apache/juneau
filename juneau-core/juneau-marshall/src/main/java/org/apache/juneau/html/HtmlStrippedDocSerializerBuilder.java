@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of HTML Doc serializers.
  */
+@FluentSetters
 public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 
 	/**

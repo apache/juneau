@@ -24,6 +24,7 @@ import org.apache.juneau.json.*;
 /**
  * Runtime arguments common to all bean, serializer, and parser sessions.
  */
+@FluentSetters
 public class SessionArgs {
 
 	SessionProperties properties = SessionProperties.create();

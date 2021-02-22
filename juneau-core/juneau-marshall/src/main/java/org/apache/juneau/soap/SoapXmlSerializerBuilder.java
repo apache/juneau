@@ -29,6 +29,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of soap/xml serializers.
  */
+@FluentSetters
 public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**

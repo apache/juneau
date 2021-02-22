@@ -29,6 +29,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of UON serializers.
  */
+@FluentSetters
 public class UonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**

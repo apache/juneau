@@ -18,6 +18,7 @@ import static org.apache.juneau.http.response.Found.*;
 
 import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 302 Found</c> response.
@@ -31,6 +32,7 @@ import org.apache.juneau.http.annotation.*;
  */
 @Response(code=CODE, description=MESSAGE)
 @BeanIgnore
+@FluentSetters
 public class Found extends HttpResponse {
 
 	/** HTTP status code */

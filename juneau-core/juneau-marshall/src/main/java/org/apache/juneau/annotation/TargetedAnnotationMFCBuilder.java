@@ -21,6 +21,7 @@ import org.apache.juneau.reflect.*;
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  */
+@FluentSetters
 public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder {
 
 	/**
@@ -46,5 +47,24 @@ public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder {
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotationBuilder */
+	public TargetedAnnotationMFCBuilder on(String...values) {
+		super.on(values);
+		return this;
+	}
+
+	@Override /* GENERATED - TargetedAnnotationMFBuilder */
+	public TargetedAnnotationMFCBuilder on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - TargetedAnnotationMFBuilder */
+	public TargetedAnnotationMFCBuilder on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

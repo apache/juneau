@@ -24,6 +24,7 @@ import org.apache.juneau.internal.*;
 /**
  * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.
  */
+@FluentSetters
 public abstract class ExecutableInfo {
 
 	final ClassInfo declaringClass;

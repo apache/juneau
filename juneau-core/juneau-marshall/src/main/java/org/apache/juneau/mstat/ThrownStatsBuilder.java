@@ -23,6 +23,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link ThrownStats} objects.
  */
+@FluentSetters
 public class ThrownStatsBuilder {
 
 	Throwable throwable;
@@ -130,4 +131,8 @@ public class ThrownStatsBuilder {
 		this.causedBy = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

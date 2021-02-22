@@ -120,5 +120,11 @@ public class FluentRequestHeaderAssertion<R> extends FluentBaseAssertion<String,
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentRequestHeaderAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

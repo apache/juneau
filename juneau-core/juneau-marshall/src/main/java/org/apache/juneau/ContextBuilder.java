@@ -43,6 +43,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Base builder class for building instances of any context objects configured through property stores.
  */
+@FluentSetters
 public abstract class ContextBuilder {
 
 	/** Contains all the modifiable settings for the implementation class. */

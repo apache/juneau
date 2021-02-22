@@ -32,6 +32,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of JSON Schema serializers.
  */
+@FluentSetters
 public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**

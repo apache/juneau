@@ -30,6 +30,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Builder class for building instances of UON parsers.
  */
+@FluentSetters
 public class UonParserBuilder extends ReaderParserBuilder {
 
 	/**

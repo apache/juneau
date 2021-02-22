@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Base class for all stream-based serializer builders.
  */
+@FluentSetters
 public class OutputStreamSerializerBuilder extends SerializerBuilder {
 
 	/**

@@ -29,6 +29,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of HTML Doc serializers.
  */
+@FluentSetters
 public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 
 	/**

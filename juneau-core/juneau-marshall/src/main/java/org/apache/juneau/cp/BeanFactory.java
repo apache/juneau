@@ -262,7 +262,7 @@ public class BeanFactory {
 
 	/**
 	 * Same as {@link #createBean(Class)} but returns the bean creation wrapped in a supplier.
-	 * 
+	 *
 	 * @param c The bean type to create.
 	 * @return A supplier for the newly-created bean.
 	 */

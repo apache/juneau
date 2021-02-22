@@ -21,6 +21,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link MethodExecStore} objects.
  */
+@FluentSetters
 public class MethodExecStoreBuilder {
 
 	ThrownStore thrownStore;
@@ -108,5 +109,6 @@ public class MethodExecStoreBuilder {
 	}
 
 	// <FluentSetters>
+
 	// </FluentSetters>
 }

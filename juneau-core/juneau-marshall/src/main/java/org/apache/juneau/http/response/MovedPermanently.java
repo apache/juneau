@@ -18,6 +18,7 @@ import java.net.*;
 
 import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 301 Moved Permanently</c> response.
@@ -27,6 +28,7 @@ import org.apache.juneau.http.annotation.*;
  */
 @Response(code=CODE, description=MESSAGE)
 @BeanIgnore
+@FluentSetters
 public class MovedPermanently extends HttpResponse {
 
 	/** HTTP status code */

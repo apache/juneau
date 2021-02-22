@@ -32,6 +32,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of parsers.
  */
+@FluentSetters
 public class ParserBuilder extends BeanContextBuilder {
 
 	/**

@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.MethodNotAllowed.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 405 (Method Not Allowed).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class MethodNotAllowed extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class MethodNotAllowed extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public MethodNotAllowed header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public MethodNotAllowed status(int value) {
+		super.status(value);
 		return this;
 	}
 

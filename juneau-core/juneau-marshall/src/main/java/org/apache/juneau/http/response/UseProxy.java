@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.UseProxy.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 305 Use Proxy</c> response.
@@ -24,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class UseProxy extends HttpResponse {
 
 	/** HTTP status code */

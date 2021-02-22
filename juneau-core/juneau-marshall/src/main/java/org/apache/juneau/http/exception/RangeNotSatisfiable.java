@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.RangeNotSatisfiable.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 416 (Range Not Satisfiable).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class RangeNotSatisfiable extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class RangeNotSatisfiable extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public RangeNotSatisfiable header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public RangeNotSatisfiable status(int value) {
+		super.status(value);
 		return this;
 	}
 

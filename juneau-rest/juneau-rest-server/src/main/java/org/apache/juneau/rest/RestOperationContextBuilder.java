@@ -33,6 +33,7 @@ import java.lang.reflect.Method;
 /**
  * Builder class for {@link RestOperationContext} objects.
  */
+@FluentSetters
 public class RestOperationContextBuilder extends BeanContextBuilder {
 
 	RestContext restContext;

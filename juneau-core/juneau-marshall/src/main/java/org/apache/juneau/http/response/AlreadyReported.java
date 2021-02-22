@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.AlreadyReported.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 208 Already Reported</c> response.
@@ -23,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class AlreadyReported extends HttpResponse {
 
 	/** HTTP status code */

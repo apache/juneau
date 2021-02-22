@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.ExpectationFailed.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 417 (Expectation Failed).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The server cannot meet the requirements of the Expect request-header field.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class ExpectationFailed extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class ExpectationFailed extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public ExpectationFailed header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public ExpectationFailed status(int value) {
+		super.status(value);
 		return this;
 	}
 

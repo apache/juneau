@@ -33,6 +33,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of HTML Schema serializers.
  */
+@FluentSetters
 public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 
 	/**

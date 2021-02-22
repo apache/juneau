@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of plain-text parsers.
  */
+@FluentSetters
 public class PlainTextParserBuilder extends ReaderParserBuilder {
 
 	/**

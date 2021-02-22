@@ -30,6 +30,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of JSON Schema generators.
  */
+@FluentSetters
 public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 
 	/**

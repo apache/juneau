@@ -28,6 +28,7 @@ import org.apache.juneau.parser.ParseException;
 /**
  * Represents a single HTTP part on an HTTP request.
  */
+@FluentSetters
 public abstract class RequestHttpPart {
 
 	private final HttpPartType partType;
@@ -265,4 +266,8 @@ public abstract class RequestHttpPart {
 	public String toString() {
 		return getName() + ": " + getValue();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

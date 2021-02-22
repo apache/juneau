@@ -120,5 +120,11 @@ public class FluentRequestQueryParamAssertion<R> extends FluentBaseAssertion<Str
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentRequestQueryParamAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }

@@ -19,6 +19,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link TargetedAnnotationImpl} objects.
  */
+@FluentSetters
 public class TargetedAnnotationBuilder extends AnnotationBuilder {
 
 	String[] on = {};

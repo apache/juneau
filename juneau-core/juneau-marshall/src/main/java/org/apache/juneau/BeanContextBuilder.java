@@ -63,6 +63,7 @@ import org.apache.juneau.transform.*;
  * 	<li class='link'>{@doc GlossaryConfigurableProperties}
  * </ul>
  */
+@FluentSetters
 public class BeanContextBuilder extends ContextBuilder {
 
 	/**

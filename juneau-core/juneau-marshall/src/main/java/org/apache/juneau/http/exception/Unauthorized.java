@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.Unauthorized.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 401 (Unauthorized).
@@ -28,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Unauthorized extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -92,6 +94,12 @@ public class Unauthorized extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public Unauthorized header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public Unauthorized status(int value) {
+		super.status(value);
 		return this;
 	}
 

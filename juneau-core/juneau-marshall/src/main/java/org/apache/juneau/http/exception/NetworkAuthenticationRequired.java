@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.NetworkAuthenticationRequired.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 511 (Network Authentication Required).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended for use by intercepting proxies used to control access to the network (e.g., "captive portals" used to require agreement to Terms of Service before granting full Internet access via a Wi-Fi hotspot).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class NetworkAuthenticationRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class NetworkAuthenticationRequired extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public NetworkAuthenticationRequired header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public NetworkAuthenticationRequired status(int value) {
+		super.status(value);
 		return this;
 	}
 

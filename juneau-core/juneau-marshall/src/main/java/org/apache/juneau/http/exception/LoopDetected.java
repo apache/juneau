@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.LoopDetected.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 508 (Loop Detected).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class LoopDetected extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class LoopDetected extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public LoopDetected header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public LoopDetected status(int value) {
+		super.status(value);
 		return this;
 	}
 

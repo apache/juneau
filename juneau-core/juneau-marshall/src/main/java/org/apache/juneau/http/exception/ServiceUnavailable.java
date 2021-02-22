@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.ServiceUnavailable.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 503 (Service Unavailable).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Generally, this is a temporary state.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class ServiceUnavailable extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class ServiceUnavailable extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public ServiceUnavailable header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public ServiceUnavailable status(int value) {
+		super.status(value);
 		return this;
 	}
 

@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.InsufficientStorage.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 507 ().
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The server is unable to store the representation needed to complete the request.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class InsufficientStorage extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class InsufficientStorage extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public InsufficientStorage header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public InsufficientStorage status(int value) {
+		super.status(value);
 		return this;
 	}
 

@@ -19,6 +19,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -35,6 +36,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
+@FluentSetters
 public class SerializedNameValuePair extends BasicNameValuePair implements Headerable {
 	private final Object value;
 	private HttpPartType type;

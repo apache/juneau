@@ -29,6 +29,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of HTML serializers.
  */
+@FluentSetters
 public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**

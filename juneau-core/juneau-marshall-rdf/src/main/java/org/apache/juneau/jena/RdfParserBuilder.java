@@ -31,6 +31,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of RDF parsers.
  */
+@FluentSetters
 public class RdfParserBuilder extends ReaderParserBuilder {
 
 	/**

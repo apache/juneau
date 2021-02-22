@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.HttpVersionNotSupported.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 505 ().
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The server does not support the HTTP protocol version used in the request.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class HttpVersionNotSupported extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class HttpVersionNotSupported extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public HttpVersionNotSupported header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public HttpVersionNotSupported status(int value) {
+		super.status(value);
 		return this;
 	}
 

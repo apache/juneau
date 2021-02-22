@@ -31,6 +31,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * This object specifies information such as session locale or URI context.
  */
+@FluentSetters
 public final class SerializerSessionArgs extends BeanSessionArgs {
 
 	/**

@@ -29,6 +29,7 @@ import org.apache.juneau.uon.*;
 /**
  * Builder class for building instances of URL-Encoding serializers.
  */
+@FluentSetters
 public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**

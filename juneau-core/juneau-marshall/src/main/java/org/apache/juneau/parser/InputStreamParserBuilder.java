@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Base builder class for building instances of stream-based parsers.
  */
+@FluentSetters
 public class InputStreamParserBuilder extends ParserBuilder {
 
 	/**

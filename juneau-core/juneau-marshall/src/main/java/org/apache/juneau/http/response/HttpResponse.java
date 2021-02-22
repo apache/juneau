@@ -26,6 +26,7 @@ import org.apache.juneau.internal.*;
  * Consists simply of a simple string message.
  */
 @Response
+@FluentSetters
 public abstract class HttpResponse {
 
 	private final String message;

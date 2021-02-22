@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.Accepted.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 202 Accepted</c> response.
@@ -24,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Accepted extends HttpResponse {
 
 	/** HTTP status code */

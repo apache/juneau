@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.UnprocessableEntity.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 422 (Unprocessable Entity).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request was well-formed but was unable to be followed due to semantic errors.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class UnprocessableEntity extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class UnprocessableEntity extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public UnprocessableEntity header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public UnprocessableEntity status(int value) {
+		super.status(value);
 		return this;
 	}
 

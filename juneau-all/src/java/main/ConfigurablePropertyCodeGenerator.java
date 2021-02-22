@@ -23,6 +23,7 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
@@ -34,12 +35,15 @@ import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
+import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.assertion.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
@@ -63,6 +67,7 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicRuntimeException.class,
 		BeanAssertion.class,
 		BeanContextBuilder.class,
+		BeanFactoryBuilder.class,
 		BeanSessionArgs.class,
 		BeanTraverseBuilder.class,
 		BooleanAssertion.class,
@@ -86,6 +91,7 @@ public class ConfigurablePropertyCodeGenerator {
 		ExecutableInfo.class,
 		ExpectationFailed.class,
 		FailedDependency.class,
+		FileFinderBuilder.class,
 		FluentArrayAssertion.class,
 		FluentAssertion.class,
 		FluentBaseAssertion.class,
@@ -100,6 +106,14 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentLongAssertion.class,
 		FluentMapAssertion.class,
 		FluentObjectAssertion.class,
+		FluentProtocolVersionAssertion.class,
+		FluentRequestBodyAssertion.class,
+		FluentRequestFormParamAssertion.class,
+		FluentRequestHeaderAssertion.class,
+		FluentRequestLineAssertion.class,
+		FluentRequestQueryParamAssertion.class,
+		FluentResponseBodyAssertion.class,
+		FluentResponseHeaderAssertion.class,
 		FluentStringAssertion.class,
 		FluentThrowableAssertion.class,
 		FluentZonedDateTimeAssertion.class,
@@ -131,10 +145,11 @@ public class ConfigurablePropertyCodeGenerator {
 		LongAssertion.class,
 		LoopDetected.class,
 		MapAssertion.class,
+		MethodExecStatsBuilder.class,
+		MethodExecStoreBuilder.class,
 		MethodInfo.class,
 		MethodNotAllowed.class,
 		MisdirectedRequest.class,
-		MockRestClientBuilder.class,
 		MockRestClientBuilder.class,
 		MovedPermanently.class,
 		MsgPackParserBuilder.class,
@@ -170,6 +185,7 @@ public class ConfigurablePropertyCodeGenerator {
 		RdfSerializerBuilder.class,
 		ReaderParserBuilder.class,
 		RequestHeaderFieldsTooLarge.class,
+		RequestHttpPart.class,
 		ResetContent.class,
 		RestClientBuilder.class,
 		RestContextBuilder.class,
@@ -186,18 +202,22 @@ public class ConfigurablePropertyCodeGenerator {
 		SimpleJsonParserBuilder.class,
 		SimpleJsonSerializerBuilder.class,
 		SoapXmlSerializerBuilder.class,
+		StaticFilesBuilder.class,
 		StringAssertion.class,
 		SwitchingProtocols.class,
 		TargetedAnnotationBuilder.class,
 		TargetedAnnotationCBuilder.class,
 		TargetedAnnotationMBuilder.class,
 		TargetedAnnotationMFBuilder.class,
+		TargetedAnnotationMFCBuilder.class,
 		TargetedAnnotationTBuilder.class,
 		TargetedAnnotationTMBuilder.class,
 		TargetedAnnotationTMFBuilder.class,
 		TargetedAnnotationTMFCBuilder.class,
 		TemporaryRedirect.class,
 		ThrowableAssertion.class,
+		ThrownStatsBuilder.class,
+		ThrownStoreBuilder.class,
 		TooManyRequests.class,
 		Unauthorized.class,
 		UnavailableForLegalReasons.class,
@@ -236,10 +256,12 @@ public class ConfigurablePropertyCodeGenerator {
 		Map<Class<?>, Set<Method>> configMethods = new HashMap<>();
 
 		for (Class<?> c : classes) {
+			System.out.println("Seaching " + c.getName());
 			Set<Method> s = new TreeSet<>(new MethodComparator());
 			for (Method m : c.getDeclaredMethods()) {
 				if (m.getAnnotation(FluentSetter.class) != null) {
 					s.add(m);
+					System.out.println("\tFound: " + m.getName());
 				}
 			}
 			configMethods.put(c, s);
@@ -247,8 +269,13 @@ public class ConfigurablePropertyCodeGenerator {
 
 		for (Class<?> c : classes) {
 			File f = findClassFile(c);
+
 			if (f == null)
-				throw new RuntimeException("Couldn't find class " + c.getName());
+				System.err.println("Couldn't find class " + c.getName());
+
+			if (! c.isAnnotationPresent(FluentSetters.class))
+				System.err.println("@FluentSetters not present on class " + c.getName());
+
 			System.out.println("Processing " + f.getName());
 			String s = IOUtils.read(f);
 

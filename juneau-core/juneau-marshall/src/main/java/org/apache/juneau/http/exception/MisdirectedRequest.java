@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.MisdirectedRequest.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 421 (Misdirected Request).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class MisdirectedRequest extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class MisdirectedRequest extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public MisdirectedRequest header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public MisdirectedRequest status(int value) {
+		super.status(value);
 		return this;
 	}
 

@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.PayloadTooLarge.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 413 (Payload Too Large).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request is larger than the server is willing or able to process.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class PayloadTooLarge extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class PayloadTooLarge extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public PayloadTooLarge header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public PayloadTooLarge status(int value) {
+		super.status(value);
 		return this;
 	}
 

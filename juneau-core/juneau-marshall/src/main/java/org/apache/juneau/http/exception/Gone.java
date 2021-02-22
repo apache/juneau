@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.Gone.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 410 ().
@@ -29,6 +30,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Gone extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -93,6 +95,12 @@ public class Gone extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public Gone header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public Gone status(int value) {
+		super.status(value);
 		return this;
 	}
 

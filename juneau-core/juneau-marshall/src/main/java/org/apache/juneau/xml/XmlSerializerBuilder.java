@@ -29,6 +29,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of XML serializers.
  */
+@FluentSetters
 public class XmlSerializerBuilder extends WriterSerializerBuilder {
 
 	/**

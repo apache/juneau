@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.VariantAlsoNegotiates.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 506 (Variant Also Negotiate).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * Transparent content negotiation for the request results in a circular reference.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class VariantAlsoNegotiates extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class VariantAlsoNegotiates extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public VariantAlsoNegotiates header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public VariantAlsoNegotiates status(int value) {
+		super.status(value);
 		return this;
 	}
 

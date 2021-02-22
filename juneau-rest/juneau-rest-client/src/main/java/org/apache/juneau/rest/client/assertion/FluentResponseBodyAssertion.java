@@ -292,6 +292,11 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 		return this;
 	}
 
+	@Override /* GENERATED - Assertion */
+	public FluentResponseBodyAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
 
 	// </FluentSetters>
 }

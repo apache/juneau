@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 /**
  * Base class for all writer-based serializer builders.
  */
+@FluentSetters
 public class WriterSerializerBuilder extends SerializerBuilder {
 
 	/**

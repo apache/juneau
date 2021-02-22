@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.Created.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 201 Created</c> response.
@@ -23,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The request has been fulfilled, resulting in the creation of a new resource.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Created extends HttpResponse {
 
 	/** HTTP status code */

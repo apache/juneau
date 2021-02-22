@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.UriTooLong.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 414 (URI Too Long).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class UriTooLong extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class UriTooLong extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public UriTooLong header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public UriTooLong status(int value) {
+		super.status(value);
 		return this;
 	}
 

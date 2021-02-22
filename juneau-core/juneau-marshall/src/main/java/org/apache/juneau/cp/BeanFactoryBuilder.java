@@ -20,6 +20,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link BeanFactory} objects.
  */
+@FluentSetters
 public class BeanFactoryBuilder {
 
 	private Class<? extends BeanFactory> implClass;
@@ -92,4 +93,8 @@ public class BeanFactoryBuilder {
 		this.outer = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

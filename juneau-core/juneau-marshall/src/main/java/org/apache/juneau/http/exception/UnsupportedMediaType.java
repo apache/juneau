@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.UnsupportedMediaType.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 415 (Unsupported Media Type).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class UnsupportedMediaType extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class UnsupportedMediaType extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public UnsupportedMediaType header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public UnsupportedMediaType status(int value) {
+		super.status(value);
 		return this;
 	}
 

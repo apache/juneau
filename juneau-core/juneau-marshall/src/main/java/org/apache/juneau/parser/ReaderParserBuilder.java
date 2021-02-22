@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 /**
  * Base builder class for building instances of reader-based parsers.
  */
+@FluentSetters
 public abstract class ReaderParserBuilder extends ParserBuilder {
 
 	/**

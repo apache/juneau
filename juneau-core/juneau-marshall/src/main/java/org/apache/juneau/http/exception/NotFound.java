@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.NotFound.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 404 (Not Found).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Subsequent requests by the client are permissible.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class NotFound extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class NotFound extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public NotFound header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public NotFound status(int value) {
+		super.status(value);
 		return this;
 	}
 

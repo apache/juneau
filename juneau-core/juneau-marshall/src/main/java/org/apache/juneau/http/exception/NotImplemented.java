@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.NotImplemented.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 501 (Not Implemented).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class NotImplemented extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class NotImplemented extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public NotImplemented header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public NotImplemented status(int value) {
+		super.status(value);
 		return this;
 	}
 

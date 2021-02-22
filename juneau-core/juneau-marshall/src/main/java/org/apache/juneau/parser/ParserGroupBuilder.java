@@ -30,6 +30,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for creating instances of {@link ParserGroup}.
  */
+@FluentSetters
 public class ParserGroupBuilder extends BeanContextBuilder {
 
 	private final AList<Object> parsers;

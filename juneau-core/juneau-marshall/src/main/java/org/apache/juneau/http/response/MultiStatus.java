@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.MultiStatus.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 207 Multi-Status</c> response.
@@ -23,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The message body that follows is by default an XML message and can contain a number of separate response codes, depending on how many sub-requests were made.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class MultiStatus extends HttpResponse {
 
 	/** HTTP status code */

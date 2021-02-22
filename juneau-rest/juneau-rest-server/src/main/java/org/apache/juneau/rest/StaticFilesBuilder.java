@@ -26,6 +26,7 @@ import org.apache.juneau.utils.*;
 /**
  * Builder class for {@link BasicStaticFiles} objects.
  */
+@FluentSetters
 public class StaticFilesBuilder extends FileFinderBuilder {
 
 	List<Header> headers = AList.create();
@@ -77,51 +78,51 @@ public class StaticFilesBuilder extends FileFinderBuilder {
 
 	// <FluentSetters>
 
-	@Override
-	public StaticFilesBuilder cp(Class<?> c, String path, boolean recursive) {
-		super.cp(c, path, recursive);
+	@Override /* GENERATED - FileFinderBuilder */
+	public StaticFilesBuilder beanFactory(BeanFactory value) {
+		super.beanFactory(value);
 		return this;
 	}
 
-	@Override
-	public StaticFilesBuilder dir(String path) {
-		super.dir(path);
-		return this;
-	}
-
-	@Override
-	public StaticFilesBuilder path(Path path) {
-		super.path(path);
-		return this;
-	}
-
-	@Override
+	@Override /* GENERATED - FileFinderBuilder */
 	public StaticFilesBuilder caching(long cachingLimit) {
 		super.caching(cachingLimit);
 		return this;
 	}
 
-	@Override
-	public StaticFilesBuilder include(String...patterns) {
-		super.include(patterns);
+	@Override /* GENERATED - FileFinderBuilder */
+	public StaticFilesBuilder cp(Class<?> c, String path, boolean recursive) {
+		super.cp(c, path, recursive);
 		return this;
 	}
 
-	@Override
+	@Override /* GENERATED - FileFinderBuilder */
+	public StaticFilesBuilder dir(String path) {
+		super.dir(path);
+		return this;
+	}
+
+	@Override /* GENERATED - FileFinderBuilder */
 	public StaticFilesBuilder exclude(String...patterns) {
 		super.exclude(patterns);
 		return this;
 	}
 
-	@Override
-	public StaticFilesBuilder implClass(Class<? extends FileFinder> value) {
+	@Override /* GENERATED - FileFinderBuilder */
+	public StaticFilesBuilder implClass(Class<? extends org.apache.juneau.cp.FileFinder> value) {
 		super.implClass(value);
 		return this;
 	}
 
-	@Override
-	public StaticFilesBuilder beanFactory(BeanFactory value) {
-		super.beanFactory(value);
+	@Override /* GENERATED - FileFinderBuilder */
+	public StaticFilesBuilder include(String...patterns) {
+		super.include(patterns);
+		return this;
+	}
+
+	@Override /* GENERATED - FileFinderBuilder */
+	public StaticFilesBuilder path(Path path) {
+		super.path(path);
 		return this;
 	}
 

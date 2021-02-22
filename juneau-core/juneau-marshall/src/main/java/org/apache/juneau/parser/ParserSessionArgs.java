@@ -25,6 +25,7 @@ import org.apache.juneau.internal.*;
 /**
  * Runtime arguments common to all parser sessions.
  */
+@FluentSetters
 public final class ParserSessionArgs extends BeanSessionArgs {
 
 	Method javaMethod;

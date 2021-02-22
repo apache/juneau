@@ -29,6 +29,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of JSON serializers.
  */
+@FluentSetters
 public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 	/**

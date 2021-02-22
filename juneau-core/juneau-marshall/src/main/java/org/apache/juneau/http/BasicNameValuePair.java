@@ -21,6 +21,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -39,6 +40,7 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 @BeanIgnore
+@FluentSetters
 public class BasicNameValuePair implements NameValuePair, Headerable {
 	private final String name;
 	private final Object value;

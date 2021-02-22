@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.Conflict.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 409 (Conflict).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Conflict extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class Conflict extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public Conflict header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public Conflict status(int value) {
+		super.status(value);
 		return this;
 	}
 

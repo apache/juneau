@@ -24,6 +24,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link ThrownStore} objects.
  */
+@FluentSetters
 public class ThrownStoreBuilder {
 
 	ThrownStore parent;
@@ -124,5 +125,6 @@ public class ThrownStoreBuilder {
 	}
 
 	// <FluentSetters>
+
 	// </FluentSetters>
 }

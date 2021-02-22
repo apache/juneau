@@ -40,6 +40,7 @@ import org.apache.juneau.http.header.ContentType;
  * 		Fluent assertions.
  * </ul>
  */
+@FluentSetters
 public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 
 	private final List<Header> headers = AList.create();

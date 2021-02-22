@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.Forbidden.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 403 (Forbidden).
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class Forbidden extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +92,12 @@ public class Forbidden extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public Forbidden header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public Forbidden status(int value) {
+		super.status(value);
 		return this;
 	}
 

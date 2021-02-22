@@ -26,6 +26,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for building instances of bean traversals.
  */
+@FluentSetters
 public class BeanTraverseBuilder extends BeanContextBuilder {
 
 	/**

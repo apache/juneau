@@ -33,7 +33,7 @@ public class HttpException_Test {
 		}
 		@RestGet
 		public void f2() throws HttpException {
-			throw new HttpException("foo").setStatus(225);
+			throw new HttpException("foo").status(225);
 		}
 		@RestGet
 		public void f3() throws HttpException {
@@ -45,7 +45,7 @@ public class HttpException_Test {
 		}
 		@RestGet
 		public void f5() throws HttpException {
-			throw new HttpException(null).setStatus(225).header("Foo", "bar");
+			throw new HttpException(null).status(225).header("Foo", "bar");
 		}
 	}
 

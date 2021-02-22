@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.UpgradeRequired.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 426 (Upgrade Required).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class UpgradeRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class UpgradeRequired extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public UpgradeRequired header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public UpgradeRequired status(int value) {
+		super.status(value);
 		return this;
 	}
 

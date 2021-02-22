@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.PreconditionFailed.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 412 (Precondition Failed).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The server does not meet one of the preconditions that the requester put on the request.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class PreconditionFailed extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class PreconditionFailed extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public PreconditionFailed header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public PreconditionFailed status(int value) {
+		super.status(value);
 		return this;
 	}
 

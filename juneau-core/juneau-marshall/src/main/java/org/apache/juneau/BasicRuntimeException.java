@@ -21,6 +21,7 @@ import org.apache.juneau.internal.*;
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
  */
+@FluentSetters
 public class BasicRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

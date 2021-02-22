@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.BadRequest.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 400 (Bad Request).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class BadRequest extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class BadRequest extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public BadRequest header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public BadRequest status(int value) {
+		super.status(value);
 		return this;
 	}
 

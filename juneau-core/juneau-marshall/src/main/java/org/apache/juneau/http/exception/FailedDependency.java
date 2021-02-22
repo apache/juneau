@@ -17,6 +17,7 @@ import static org.apache.juneau.http.exception.FailedDependency.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 424 (Failed Dependency).
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class FailedDependency extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -89,6 +91,12 @@ public class FailedDependency extends HttpException {
 	@Override /* GENERATED - HttpException */
 	public FailedDependency header(String name, Object val) {
 		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpException */
+	public FailedDependency status(int value) {
+		super.status(value);
 		return this;
 	}
 

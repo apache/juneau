@@ -14,9 +14,12 @@ package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * Builder for {@link AnnotationImpl} objects.
  */
+@FluentSetters
 public class AnnotationBuilder {
 
 	Class<? extends Annotation> annotationType;

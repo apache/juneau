@@ -15,6 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.PartialContent.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 206 Partial Content</c> response.
@@ -24,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
  */
 @Response(code=CODE, description=MESSAGE)
+@FluentSetters
 public class PartialContent extends HttpResponse {
 
 	/** HTTP status code */
