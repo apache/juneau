@@ -149,7 +149,7 @@ public class Assertion {
 	 * @param args The message arguments.
 	 * @return The value.
 	 */
-	protected Object assertNotNull(Object value, String msg, Object...args) {
+	protected <T> T assertNotNull(T value, String msg, Object...args) {
 		if (value == null)
 			throw new BasicAssertionError(format(msg, args));
 		return value;
@@ -162,7 +162,7 @@ public class Assertion {
 	 * @param value The value to check.
 	 * @return The value.
 	 */
-	protected Object assertNotNull(String parameter, Object value) {
+	protected <T> T assertNotNull(String parameter, T value) {
 		return assertNotNull(value, "Parameter ''{0}'' cannot be null.", parameter);
 	}
 

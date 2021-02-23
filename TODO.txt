@@ -1,13 +1,5 @@
-RestCall.exception(...) should accumulate exceptions, not just one.
-Replace RestInfoProvider with Swagger.
-xxx Rework RestCallLogger.
-xxx @Rest(path) should allow you to match against file name (e.g. "favicon.ico")
 Replace @Rest(paths) with just @Rest(path)
-Auto-injection into REST interfaces (via providers?)
-ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
-Re-add @PathRemainder annotation.
-xxx Replace RestResourceResolver with ObjectFactory (or something already predefined?).
-xxx Remove @Rest(properties) and all that stuff.
+ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).Re-add @PathRemainder annotation.
 Add a createConfig() method on RestContext.
 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
 
@@ -17,8 +9,5 @@ Replace @Bean(findFluentSetters) with @FluentSetters.
 Remove @BeanIgnore annotations from classes.
 HttpResponse should use list of Headers and have a headers(Header...) method.
 HttpResponse should allow you to set code.
-Assertion.assertNotNull methods should be generic?
 HttpException subclasses can set status, but does it use code?
 HttpException should use list of Headers and have a headers(Header...) method.
-Add Named bean support by looking for @Named annotations.
-Rename BeanFactory to BeanStore.
