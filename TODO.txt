@@ -1,12 +1,7 @@
-Replace @Rest(paths) with just @Rest(path)
 ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).Re-add @PathRemainder annotation.
-Add a createConfig() method on RestContext.
 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
 
-Instead of PropertyStores, builders should produce settings which are passed to contexts.
-
 Replace @Bean(findFluentSetters) with @FluentSetters.
-Remove @BeanIgnore annotations from classes.
 HttpResponse should use list of Headers and have a headers(Header...) method.
 HttpResponse should allow you to set code.
 HttpException subclasses can set status, but does it use code?

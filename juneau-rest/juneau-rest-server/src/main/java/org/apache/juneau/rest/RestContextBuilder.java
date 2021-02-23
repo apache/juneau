@@ -238,6 +238,15 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		Object o = resource == null ? null : resource.get();
 		if (o instanceof Config)
 			x = (Config)o;
+
+		if (x == null) {
+			x = BeanStore
+				.of(beanStore)
+				.beanCreateMethodFinder(Config.class, resourceClass)
+				.find("createConfig")
+				.run();
+		}
+
 		if (x == null)
 			x = beanStore.getBean(Config.class).orElse(null);
 
@@ -249,7 +258,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
 		String cf = vr.resolve(configPath);
 
-		if ("SYSTEM_DEFAULT".equals(cf))
+		if (x == null && "SYSTEM_DEFAULT".equals(cf))
 			x = Config.getSystemDefault();
 
 		if (x == null) {
