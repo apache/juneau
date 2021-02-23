@@ -15,6 +15,7 @@ package org.apache.juneau.cp;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
+import java.lang.annotation.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -28,7 +29,7 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Java bean store.
- * 
+ *
  * <p>
  * Used for bean injection.
  */
@@ -39,7 +40,7 @@ public class BeanStore {
 	 */
 	public static final class Null extends BeanStore {}
 
-	private final Map<Class<?>,Supplier<?>> beanMap = new ConcurrentHashMap<>();
+	private final Map<String,Supplier<?>> beanMap = new ConcurrentHashMap<>();
 	private final Optional<BeanStore> parent;
 	private final Optional<Object> outer;
 
@@ -92,17 +93,19 @@ public class BeanStore {
 	}
 
 	/**
-	 * Returns the bean of the specified type.
+	 * Returns the named bean of the specified type.
 	 *
 	 * @param <T> The type of bean to return.
 	 * @param c The type of bean to return.
+	 * @param name The bean name.
 	 * @return The bean.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Optional<T> getBean(Class<T> c) {
-		Supplier<?> o = beanMap.get(c);
+	public <T> Optional<T> getBean(String name, Class<T> c) {
+		String key = name == null ? c.getName() : name;
+		Supplier<?> o = beanMap.get(key);
 		if (o == null && parent.isPresent())
-			return parent.get().getBean(c);
+			return parent.get().getBean(name, c);
 		T t = (T)(o == null ? null : o.get());
 		return Optional.ofNullable(t);
 	}
@@ -110,11 +113,12 @@ public class BeanStore {
 	/**
 	 * Returns the bean of the specified type.
 	 *
+	 * @param <T> The type of bean to return.
 	 * @param c The type of bean to return.
 	 * @return The bean.
 	 */
-	public Optional<?> getBean(ClassInfo c) {
-		return getBean(c.inner());
+	public <T> Optional<T> getBean(Class<T> c) {
+		return getBean(c.getName(), c);
 	}
 
 	/**
@@ -126,10 +130,22 @@ public class BeanStore {
 	 * @return This object (for method chaining).
 	 */
 	public <T> BeanStore addBean(Class<T> c, T t) {
+		return addBean(c.getName(), t);
+	}
+
+	/**
+	 * Adds a named bean of the specified type to this factory.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param t The bean.
+	 * @param name The bean name if this is a named bean.
+	 * @return This object (for method chaining).
+	 */
+	public <T> BeanStore addBean(String name, T t) {
 		if (t == null)
-			beanMap.remove(c);
+			beanMap.remove(name);
 		else
-			beanMap.put(c, ()->t);
+			beanMap.put(name, ()->t);
 		return this;
 	}
 
@@ -144,7 +160,7 @@ public class BeanStore {
 	@SuppressWarnings("unchecked")
 	public <T> BeanStore addBeans(Class<T> c, T t) {
 		if (t == null)
-			beanMap.remove(c);
+			beanMap.remove(c.getName());
 		else {
 			addBean(c, t);
 			Class<T> c2 = (Class<T>)t.getClass();
@@ -164,11 +180,23 @@ public class BeanStore {
 	 * @param t The bean supplier.
 	 * @return This object (for method chaining).
 	 */
-	public <T> BeanStore addBeanSupplier(Class<T> c, Supplier<T> t) {
+	public <T> BeanStore addSupplier(Class<T> c, Supplier<T> t) {
+		return addSupplier(c.getName(), t);
+	}
+
+	/**
+	 * Adds a named bean supplier of the specified type to this factory.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param t The bean supplier.
+	 * @param name The bean name.
+	 * @return This object (for method chaining).
+	 */
+	public <T> BeanStore addSupplier(String name, Supplier<T> t) {
 		if (t == null)
-			beanMap.remove(c);
+			beanMap.remove(name);
 		else
-			beanMap.put(c, t);
+			beanMap.put(name, t);
 		return this;
 	}
 
@@ -179,17 +207,21 @@ public class BeanStore {
 	 * @return <jk>true</jk> if this factory contains the specified bean type instance.
 	 */
 	public boolean hasBean(Class<?> c) {
-		return getBean(c).isPresent();
+		return hasBean(c.getName());
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this factory contains the specified bean type instance.
+	 * Returns <jk>true</jk> if this factory contains a bean with the specified name.
 	 *
-	 * @param c The bean type to check.
-	 * @return <jk>true</jk> if this factory contains the specified bean type instance.
+	 * @param name The bean name.
+	 * @return <jk>true</jk> if this factory contains a bean with the specified name.
 	 */
-	public final boolean hasBean(ClassInfo c) {
-		return hasBean(c.inner());
+	public boolean hasBean(String name) {
+		if (getBean(name, Object.class).isPresent())
+			return true;
+		if (parent.isPresent())
+			return parent.get().hasBean(name);
+		return false;
 	}
 
 	/**
@@ -218,7 +250,7 @@ public class BeanStore {
 			if (m.isAll(STATIC, NOT_DEPRECATED) && m.hasReturnType(c) && (!m.hasAnnotation(BeanIgnore.class))) {
 				String n = m.getSimpleName();
 				if (isOneOf(n, "create","getInstance")) {
-					List<ClassInfo> missing = getMissingParamTypes(m.getParamTypes());
+					List<ClassInfo> missing = getMissingParamTypes(m.getParams());
 					if (missing.isEmpty()) {
 						if (m.getParamCount() > matchedCreatorParams) {
 							matchedCreatorParams = m.getParamCount();
@@ -232,7 +264,7 @@ public class BeanStore {
 		}
 
 		if (matchedCreator != null)
-			return matchedCreator.invoke(null, getParams(matchedCreator.getParamTypes()));
+			return matchedCreator.invoke(null, getParams(matchedCreator.getParams()));
 
 		if (ci.isInterface())
 			throw new ExecutableException("Could not instantiate class {0}: {1}.", c.getName(), msg != null ? msg.get() : "Class is an interface");
@@ -243,7 +275,7 @@ public class BeanStore {
 		int matchedConstructorParams = -1;
 
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			List<ClassInfo> missing = getMissingParamTypes(cc.getParamTypes());
+			List<ClassInfo> missing = getMissingParamTypes(cc.getParams());
 			if (missing.isEmpty()) {
 				if (cc.getParamCount() > matchedConstructorParams) {
 					matchedConstructorParams = cc.getParamCount();
@@ -255,7 +287,7 @@ public class BeanStore {
 		}
 
 		if (matchedConstructor != null)
-			return matchedConstructor.invoke(getParams(matchedConstructor.getParamTypes()));
+			return matchedConstructor.invoke(getParams(matchedConstructor.getParams()));
 
 		if (msg == null)
 			msg = () -> "Public constructor or creator not found";
@@ -324,19 +356,24 @@ public class BeanStore {
 	/**
 	 * Given the list of param types, returns a list of types that are missing from this factory.
 	 *
-	 * @param paramTypes The param types to chec.
+	 * @param params The param types to chec.
 	 * @return A list of types that are missing from this factory.
 	 */
-	public List<ClassInfo> getMissingParamTypes(List<ClassInfo> paramTypes) {
+	public List<ClassInfo> getMissingParamTypes(List<ParamInfo> params) {
 		List<ClassInfo> l = AList.create();
-		for (int i = 0; i < paramTypes.size(); i++) {
-			ClassInfo pt = paramTypes.get(i);
+		for (int i = 0; i < params.size(); i++) {
+			ParamInfo pi = params.get(i);
+			ClassInfo pt = pi.getParameterType();
 			ClassInfo ptu = pt.unwrap(Optional.class);
 			if (i == 0 && ptu.isInstance(outer.orElse(null)))
 				continue;
-			if (! hasBean(ptu))
-				if (! pt.is(Optional.class))
-					l.add(pt);
+			if (pt.is(Optional.class))
+				continue;
+			String beanName = findBeanName(pi);
+			if (beanName == null)
+				beanName = ptu.inner().getName();
+			if (! hasBean(beanName))
+				l.add(pt);
 		}
 		return l;
 	}
@@ -344,25 +381,34 @@ public class BeanStore {
 	/**
 	 * Returns the corresponding beans in this factory for the specified param types.
 	 *
-	 * @param paramTypes The param types to get from this factory.
+	 * @param params The parameters to get from this factory.
 	 * @return The corresponding beans in this factory for the specified param types.
 	 */
-	public Object[] getParams(List<ClassInfo> paramTypes) {
-		Object[] o = new Object[paramTypes.size()];
-		for (int i = 0; i < paramTypes.size(); i++) {
-			ClassInfo pt = paramTypes.get(i);
+	public Object[] getParams(List<ParamInfo> params) {
+		Object[] o = new Object[params.size()];
+		for (int i = 0; i < params.size(); i++) {
+			ParamInfo pi = params.get(i);
+			ClassInfo pt = pi.getParameterType();
 			ClassInfo ptu = pt.unwrap(Optional.class);
 			if (i == 0 && ptu.isInstance(outer.orElse(null)))
 				o[i] = outer.get();
 			else {
+				String beanName = findBeanName(pi);
 				if (pt.is(Optional.class)) {
-					o[i] = getBean(ptu);
+					o[i] = getBean(beanName, ptu.inner());
 				} else {
-					o[i] = getBean(ptu).get();
+					o[i] = getBean(beanName, ptu.inner()).get();
 				}
 			}
 		}
 		return o;
+	}
+
+	private String findBeanName(ParamInfo pi) {
+		Optional<Annotation> namedAnnotation = pi.getAnnotations(Annotation.class).stream().filter(x->x.annotationType().getSimpleName().equals("Named")).findFirst();
+		if (namedAnnotation.isPresent())
+			return AnnotationInfo.of((ClassInfo)null, namedAnnotation.get()).getValue(String.class, "value").orElse(null);
+		return null;
 	}
 
 	/**
@@ -377,7 +423,7 @@ public class BeanStore {
 		return OMap
 			.create()
 			.filtered()
-			.a("beanMap", beanMap.keySet().stream().map(x -> x.getSimpleName()).collect(Collectors.toList()))
+			.a("beanMap", beanMap.keySet())
 			.a("outer", ObjectUtils.identity(outer))
 			.a("parent", parent.orElse(null));
 	}

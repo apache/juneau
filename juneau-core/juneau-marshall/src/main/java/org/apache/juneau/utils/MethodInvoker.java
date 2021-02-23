@@ -82,9 +82,9 @@ public class MethodInvoker {
 	 */
 	public Object invokeUsingFactory(BeanStore beanStore, Object o) throws ExecutableException {
 		List<ClassInfo> missing;
-		missing = beanStore.getMissingParamTypes(m.getParamTypes());
+		missing = beanStore.getMissingParamTypes(m.getParams());
 		if (missing.isEmpty())
-			return invoke(o, beanStore.getParams(m.getParamTypes()));
+			return invoke(o, beanStore.getParams(m.getParams()));
 		throw new ExecutableException("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 	}
 

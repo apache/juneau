@@ -279,14 +279,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 		}
 		for (MethodInfo m : map.values()) {
-			List<ClassInfo> paramTypes = m.getParamTypes();
+			List<ParamInfo> params = m.getParams();
 
-			List<ClassInfo> missing = beanStore.getMissingParamTypes(paramTypes);
+			List<ClassInfo> missing = beanStore.getMissingParamTypes(params);
 			if (!missing.isEmpty())
 				throw new RestServletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 
 			try {
-				m.invoke(resource, beanStore.getParams(paramTypes));
+				m.invoke(resource, beanStore.getParams(params));
 			} catch (Exception e) {
 				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}

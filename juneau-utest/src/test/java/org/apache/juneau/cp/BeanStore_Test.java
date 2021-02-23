@@ -17,13 +17,15 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import javax.inject.*;
+
 import org.apache.juneau.annotation.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BeanFactory_Test {
+public class BeanStore_Test {
 
-	private static final String CNAME = BeanFactory_Test.class.getName();
+	private static final String CNAME = BeanStore_Test.class.getName();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests.
@@ -239,6 +241,25 @@ public class BeanFactory_Test {
 		assertThrown(()->bs.createBean(C2d.class)).stderr().is("Could not instantiate class "+CNAME+"$C2d: Class is abstract.");
 	}
 
+	public static class C3a {
+		public A a;
+		public static C3a create(@Named("Foo") A a) {
+			C3a x = new C3a();
+			x.a = a;
+			return x;
+		}
+		private C3a() {}
+	}
+
+	@Test
+	public void c03_createBean_create_withNamedArgs() throws Exception {
+		BeanStore bs = new BeanStore();
+		assertThrown(()->bs.createBean(C3a.class)).stderr().is("Could not instantiate class "+CNAME+"$C3a: Static creator found but could not find prerequisites: A.");
+		bs.addBean("Foo", new A());
+		assertObject(bs.createBean(C3a.class)).exists();
+		assertObject(bs.createBean(C3a.class)).exists();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Construct bean - With args
 	//-----------------------------------------------------------------------------------------------------------------
@@ -269,12 +290,28 @@ public class BeanFactory_Test {
 	@Test
 	public void d01b_createBean_construct_withArgs_inner() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: BeanFactory_Test,A.");
+		assertThrown(()->bs.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: BeanStore_Test,A.");
 		BeanStore bs2 = BeanStore.of(null,this);
 		assertThrown(()->bs2.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: A.");
 		bs2.addBean(A.class, new A());
 		assertObject(bs2.createBean(D1b.class)).exists();
 		assertObject(bs2.createBean(D1b.class)).exists();
+	}
+
+	public static class D2a {
+		public A a;
+		public D2a(@Named("Foo") A a) {
+			this.a = a;
+		}
+	}
+
+	@Test
+	public void d02a_createBean_construct_withNamedArgs() throws Exception {
+		BeanStore bs = new BeanStore();
+		assertThrown(()->bs.createBean(D2a.class)).stderr().is("Could not instantiate class "+CNAME+"$D2a: Public constructor found but could not find prerequisites: A.");
+		bs.addBean("Foo", new A());
+		assertObject(bs.createBean(D2a.class)).exists();
+		assertObject(bs.createBean(D2a.class)).exists();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -348,6 +385,16 @@ public class BeanFactory_Test {
 			e.a = a.orElse(null);
 			return e;
 		}
+
+		public static E createC4(@Named("Foo") A a) {
+			return new E();
+		}
+
+		public static E createC5(@Named("Foo") Optional<A> a) {
+			E e = new E();
+			e.a = a.orElse(null);
+			return e;
+		}
 	}
 
 	@Test
@@ -382,17 +429,27 @@ public class BeanFactory_Test {
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC2").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run().a).exists();
-		bs.addBean(A.class, null);
+		bs.addSupplier(A.class, ()->(A)null);
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC1").run()).doesNotExist();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC2").run()).doesNotExist();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run().a).doesNotExist();
-		bs.addBeanSupplier(A.class, ()->new A());
+		bs.addSupplier(A.class, ()->new A());
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC1").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC2").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run().a).exists();
-		bs.addBeanSupplier(A.class, null);
+
+		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC4").run()).doesNotExist();
+		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC5").run()).exists();
+		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC5").run().a).doesNotExist();
+		bs.addSupplier("Foo", ()->new A());
+		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC4").run()).exists();
+		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC5").run()).exists();
+		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC5").run().a).exists();
+		bs.addSupplier("Foo", null);
+
+		bs.addSupplier(A.class, ()->null);
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC1").run()).doesNotExist();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC2").run()).doesNotExist();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createC3").run()).exists();
@@ -404,12 +461,12 @@ public class BeanFactory_Test {
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createA1", A.class).thenFind("createA1").run()).exists();
 		assertObject(bs.beanCreateMethodFinder(E.class, x).find("createA1", A.class).withDefault(new E()).run()).exists();
 
-		bs.addBeanSupplier(A.class, ()->new A());
+		bs.addSupplier(A.class, ()->new A());
 		assertObject(bs.createBean(A.class)).exists();
 
 		BeanStore bs2 = BeanStore.of(bs, null);
 		assertObject(bs2.beanCreateMethodFinder(E.class, x).find("createA1").run()).exists();
 
-		assertString(bs2.toString()).is("{parent:{beanMap:['A']}}");
+		assertString(bs2.toString()).is("{parent:{beanMap:['"+CNAME+"$A']}}");
 	}
 }

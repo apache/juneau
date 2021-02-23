@@ -76,10 +76,10 @@ public class BeanCreateMethodFinder<T> {
 			ClassInfo ci = ClassInfo.of(resource);
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(beanType) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
-					List<ClassInfo> missing = beanStore.getMissingParamTypes(m.getParamTypes());
+					List<ClassInfo> missing = beanStore.getMissingParamTypes(m.getParams());
 					if (missing.isEmpty() && m.hasAllArgs(requiredParams)) {
 						this.method = m;
-						this.args = beanStore.getParams(m.getParamTypes());
+						this.args = beanStore.getParams(m.getParams());
 					}
 				}
 			}
