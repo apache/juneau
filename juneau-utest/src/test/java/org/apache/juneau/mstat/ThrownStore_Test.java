@@ -364,8 +364,8 @@ public class ThrownStore_Test {
 		db.add(t1);
 		db.add(t2);
 
-		assertObject(db.getStats(t1).get().getStackTrace()).asJson().stderr().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
-		assertObject(db.getStats(t2).get().getStackTrace()).asJson().stderr().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
+		assertObject(db.getStats(t1).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
+		assertObject(db.getStats(t2).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
 
 		assertInteger(db.getStats(t1).get().getCount()).is(2);
 		assertInteger(db.getStats(t2).get().getCount()).is(2);
@@ -375,8 +375,8 @@ public class ThrownStore_Test {
 		db2.add(t1);
 		db2.add(t2);
 
-		assertObject(db2.getStats(t1).get().getStackTrace()).asJson().stderr().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
-		assertObject(db2.getStats(t2).get().getStackTrace()).asJson().stderr().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
+		assertObject(db2.getStats(t1).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
+		assertObject(db2.getStats(t2).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
 
 		assertInteger(db2.getStats(t1).get().getCount()).is(2);
 		assertInteger(db2.getStats(t2).get().getCount()).is(2);

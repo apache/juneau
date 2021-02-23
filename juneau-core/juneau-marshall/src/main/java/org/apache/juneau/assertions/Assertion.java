@@ -14,6 +14,8 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -26,7 +28,7 @@ public class Assertion {
 
 	String msg;
 	Object[] msgArgs;
-	boolean stdout, stderr;
+	PrintStream out = System.err;
 	Class<? extends RuntimeException> throwable;
 
 	/**
@@ -37,8 +39,7 @@ public class Assertion {
 		if (creator != null) {
 			this.msg = creator.msg;
 			this.msgArgs = creator.msgArgs;
-			this.stdout = creator.stdout;
-			this.stderr = creator.stderr;
+			this.out = creator.out;
 			this.throwable = creator.throwable;
 		}
 	}
@@ -67,19 +68,29 @@ public class Assertion {
 	 */
 	@FluentSetter
 	public Assertion stdout() {
-		this.stdout = true;
+		return out(System.out);
+	}
+
+	/**
+	 * If an error occurs, send the error message to the specified stream.
+	 *
+	 * @param value The output stream.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public Assertion out(PrintStream value) {
+		this.out = value;
 		return this;
 	}
 
 	/**
-	 * If an error occurs, send the error message to STDERR.
+	 * Suppresses output.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public Assertion stderr() {
-		this.stderr = true;
-		return this;
+	public Assertion silent() {
+		return out(null);
 	}
 
 	/**
@@ -117,10 +128,8 @@ public class Assertion {
 		msg = format(msg, args);
 		if (this.msg != null)
 			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg).replace("<<<CAUSED-BY>>>", cause == null ? "" : "Caused by: " + cause.getMessage());
-		if (stdout)
-			System.out.println(msg);  // NOT DEBUG
-		if (stderr)
-			System.err.println(msg);  // NOT DEBUG
+		if (out != null)
+			out.println(msg);
 		if (throwable != null) {
 			try {
 				throw BeanStore.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).addBean(Object[].class, new Object[0]).createBean(throwable);

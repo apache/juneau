@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -59,8 +61,14 @@ public class ArrayAssertion extends FluentArrayAssertion<ArrayAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ArrayAssertion stderr() {
-		super.stderr();
+	public ArrayAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ArrayAssertion silent() {
+		super.silent();
 		return this;
 	}
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -53,8 +55,14 @@ public abstract class FluentAssertion<R> extends Assertion {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> stderr() {
-		super.stderr();
+	public FluentAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

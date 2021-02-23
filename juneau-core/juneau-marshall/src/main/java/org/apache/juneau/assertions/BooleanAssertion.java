@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -53,8 +55,14 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BooleanAssertion stderr() {
-		super.stderr();
+	public BooleanAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public BooleanAssertion silent() {
+		super.silent();
 		return this;
 	}
 

@@ -13,6 +13,8 @@
 package org.apache.juneau.assertions;
 
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -77,8 +79,14 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stderr() {
-		super.stderr();
+	public FluentIntegerAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentIntegerAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

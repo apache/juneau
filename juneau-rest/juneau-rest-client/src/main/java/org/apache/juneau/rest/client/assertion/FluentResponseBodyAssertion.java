@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.assertion;
 
+import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
@@ -281,8 +282,14 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentResponseBodyAssertion<R> stderr() {
-		super.stderr();
+	public FluentResponseBodyAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentResponseBodyAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.assertions;
 
+import java.io.*;
+
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.exception.*;
@@ -75,8 +77,14 @@ public class FluentProtocolVersionAssertion<R> extends FluentAssertion<R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentProtocolVersionAssertion<R> stderr() {
-		super.stderr();
+	public FluentProtocolVersionAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentProtocolVersionAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

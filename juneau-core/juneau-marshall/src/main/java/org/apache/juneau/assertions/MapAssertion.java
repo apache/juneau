@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -62,8 +63,14 @@ public class MapAssertion extends FluentMapAssertion<MapAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public MapAssertion stderr() {
-		super.stderr();
+	public MapAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public MapAssertion silent() {
+		super.silent();
 		return this;
 	}
 

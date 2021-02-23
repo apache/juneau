@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -62,8 +63,14 @@ public class CollectionAssertion extends FluentCollectionAssertion<CollectionAss
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion stderr() {
-		super.stderr();
+	public CollectionAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public CollectionAssertion silent() {
+		super.silent();
 		return this;
 	}
 

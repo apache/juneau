@@ -55,6 +55,6 @@ public class ListAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->ListAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ListAssertion.create(null).stdout().stderr();
+		ListAssertion.create(null).stdout().silent();
 	}
 }

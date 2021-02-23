@@ -67,17 +67,17 @@ public class ObjectAssertion_Test {
 
 		int[] x1 = {1,2}, x2 = {2,1};
 		assertObject(x2).asJsonSorted().is("[1,2]");
-		assertThrown(()->assertObject(x2).asJsonSorted().is("[2,1]")).stderr().is("Unexpected value.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x2).asJsonSorted().is("[2,1]")).is("Unexpected value.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
 		assertObject(empty()).asJsonSorted().is("null");
 
 		assertObject(x1).isSameJsonAs(x1);
-		assertThrown(()->assertObject(x1).isSameJsonAs(x2)).stderr().is("Unexpected comparison.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).isSameJsonAs(x2)).is("Unexpected comparison.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
 		assertObject(empty()).isSameJsonAs(null);
 		assertThrown(()->assertObject(new A1()).isSameJsonAs(null)).contains("Could not call getValue() on property 'foo'");
 
 		assertObject(x1).isSameSortedAs(x1);
 		assertObject(x1).isSameSortedAs(x2);
-		assertThrown(()->assertObject(x1).isSameJsonAs(null)).stderr().is("Unexpected comparison.\n\tExpect=[null]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).isSameJsonAs(null)).is("Unexpected comparison.\n\tExpect=[null]\n\tActual=[[1,2]]");
 		assertObject(empty()).isSameSortedAs(null);
 
 		assertObject(x1).doesNotEqual(null);
@@ -87,18 +87,18 @@ public class ObjectAssertion_Test {
 		assertThrown(()->assertObject(x1).doesNotEqual(x1)).is("Unexpected value.\n\tExpected not=[[1,2]]\n\tActual=[[1,2]]");
 
 		assertObject(x1).passes(x->x != null);
-		assertThrown(()->assertObject(x1).passes(x->x == null)).stderr().is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		assertThrown(()->assertObject(x1).passes(x->x == null)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
 
 		assertObject(x1).passes(x->x[0] == 1);
-		assertThrown(()->assertObject(x1).passes(x->x[0]==2)).stderr().is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		assertThrown(()->assertObject(x1).passes(x->x[0]==2)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
 
 		assertObject(x1).isNot(null);
 
 		assertObject(x1).isAny(x1,x2);
-		assertThrown(()->assertObject(x1).isAny(x2)).stderr().is("Expected value not found.\n\tExpect=[[[2,1]]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).isAny(x2)).is("Expected value not found.\n\tExpect=[[[2,1]]]\n\tActual=[[1,2]]");
 
 		assertObject(x1).isNotAny(x2);
-		assertThrown(()->assertObject(x1).isNotAny(x1,x2)).stderr().is("Unexpected value found.\n\tUnexpected=[[1,2]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).isNotAny(x1,x2)).is("Unexpected value found.\n\tUnexpected=[[1,2]]\n\tActual=[[1,2]]");
 
 		Date d1 = new Date(0), d2 = new Date(0);
 		assertObject(d1).is(d2);
@@ -113,7 +113,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->ObjectAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ObjectAssertion.create(null).stdout().stderr();
+		ObjectAssertion.create(null).stdout().silent();
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class ObjectAssertion_Test {
 		assertThrown(()->assertObject("foo").asArray()).contains("Object was not an array");
 
 		assertObject(true).asBoolean().isTrue();
-		assertThrown(()->assertObject("foo").asBoolean()).stderr().contains("Object was not type 'java.lang.Boolean'.  Actual='java.lang.String'");
+		assertThrown(()->assertObject("foo").asBoolean()).contains("Object was not type 'java.lang.Boolean'.  Actual='java.lang.String'");
 
 		assertObject(new byte[]{123}).asByteArray().asJson().is("[123]");
 		assertObject(AList.of(123)).asCollection().asJson().is("[123]");

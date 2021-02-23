@@ -62,7 +62,7 @@ public class RetryAfter_Test {
 		c.get().header(of(INT_VALUE)).run().assertBody().is(INT_VALUE);
 		c.get().header(of(new StringBuilder(INT_VALUE))).run().assertBody().is(INT_VALUE);
 		c.get().header(of(()->INT_VALUE)).run().assertBody().is(INT_VALUE);
-		c.get().header(of(CALENDAR_VALUE)).run().assertBody().stderr().is("Sun, 31 Dec 2000 12:34:56 GMT");
+		c.get().header(of(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
 		c.get().header(of(()->CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
 		c.get().header(new RetryAfter(INT_VALUE)).run().assertBody().is(INT_VALUE);
 	}

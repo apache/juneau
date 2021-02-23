@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.time.*;
 import java.util.*;
 
@@ -178,8 +179,14 @@ public class FluentObjectAssertion<V,R> extends FluentBaseAssertion<V,R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<V,R> stderr() {
-		super.stderr();
+	public FluentObjectAssertion<V,R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentObjectAssertion<V,R> silent() {
+		super.silent();
 		return this;
 	}
 

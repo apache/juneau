@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -171,8 +172,14 @@ public class FluentArrayAssertion<R> extends FluentBaseAssertion<Object,R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentArrayAssertion<R> stderr() {
-		super.stderr();
+	public FluentArrayAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentArrayAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

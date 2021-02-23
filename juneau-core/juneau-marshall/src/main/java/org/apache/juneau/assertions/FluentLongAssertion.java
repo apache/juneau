@@ -13,6 +13,8 @@
 package org.apache.juneau.assertions;
 
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -86,8 +88,14 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentLongAssertion<R> stderr() {
-		super.stderr();
+	public FluentLongAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentLongAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

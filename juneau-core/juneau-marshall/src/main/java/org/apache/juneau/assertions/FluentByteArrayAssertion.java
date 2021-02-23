@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.internal.*;
@@ -136,8 +137,14 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentByteArrayAssertion<R> stderr() {
-		super.stderr();
+	public FluentByteArrayAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentByteArrayAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

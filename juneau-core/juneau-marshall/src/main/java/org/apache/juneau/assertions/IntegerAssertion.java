@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -59,8 +61,14 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public IntegerAssertion stderr() {
-		super.stderr();
+	public IntegerAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public IntegerAssertion silent() {
+		super.silent();
 		return this;
 	}
 

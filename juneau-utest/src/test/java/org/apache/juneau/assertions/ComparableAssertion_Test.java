@@ -29,6 +29,6 @@ public class ComparableAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->ComparableAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ComparableAssertion.create(null).stdout().stderr();
+		ComparableAssertion.create(null).stdout().silent();
 	}
 }

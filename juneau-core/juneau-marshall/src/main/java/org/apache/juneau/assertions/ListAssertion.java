@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -62,8 +63,14 @@ public class ListAssertion extends FluentListAssertion<ListAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ListAssertion stderr() {
-		super.stderr();
+	public ListAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ListAssertion silent() {
+		super.silent();
 		return this;
 	}
 

@@ -14,6 +14,8 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -61,8 +63,14 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public StringAssertion stderr() {
-		super.stderr();
+	public StringAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public StringAssertion silent() {
+		super.silent();
 		return this;
 	}
 

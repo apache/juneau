@@ -148,7 +148,7 @@ public class RestClient_Logging_Test {
 
 		client().logger(l).logRequests(DetailLevel.SIMPLE,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
-		l.assertLastMessage().stderr().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
+		l.assertLastMessage().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
 		l.assertContents().contains("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
 		l.reset();
 
@@ -173,7 +173,7 @@ public class RestClient_Logging_Test {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
-		l.assertContents().stderr().javaStrings().contains(
+		l.assertContents().javaStrings().contains(
 			"WARNING: ",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",

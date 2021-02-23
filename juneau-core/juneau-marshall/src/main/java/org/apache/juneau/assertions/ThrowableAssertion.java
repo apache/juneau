@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -61,8 +63,14 @@ public class ThrowableAssertion<V extends Throwable> extends FluentThrowableAsse
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion<V> stderr() {
-		super.stderr();
+	public ThrowableAssertion<V> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ThrowableAssertion<V> silent() {
+		super.silent();
 		return this;
 	}
 

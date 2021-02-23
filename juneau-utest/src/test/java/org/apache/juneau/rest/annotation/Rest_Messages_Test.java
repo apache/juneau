@@ -106,7 +106,7 @@ public class Rest_Messages_Test {
 	@Test
 	public void b02_subclassed_customName() throws Exception {
 		MockRestClient b2 = MockRestClient.build(B2.class);
-		b2.get("/a").run().assertBody().stderr().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
+		b2.get("/a").run().assertBody().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/b").run().assertBody().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/c?name=key1").run().assertBody().is("value1a");
 		b2.get("/c?name=key2").run().assertBody().is("value2b");
@@ -125,7 +125,7 @@ public class Rest_Messages_Test {
 	@Test
 	public void b03_viaBuilder() throws Exception {
 		MockRestClient b3 = MockRestClient.build(B3.class);
-		b3.get("/a").run().assertBody().stderr().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
+		b3.get("/a").run().assertBody().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
 		b3.get("/b").run().assertBody().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
 		b3.get("/c?name=key1").run().assertBody().is("value1a");
 		b3.get("/c?name=key2").run().assertBody().is("value2b");

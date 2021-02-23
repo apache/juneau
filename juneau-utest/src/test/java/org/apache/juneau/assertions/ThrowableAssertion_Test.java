@@ -80,6 +80,6 @@ public class ThrowableAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->ThrowableAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ThrowableAssertion.create(null).stdout().stderr();
+		ThrowableAssertion.create(null).stdout().silent();
 	}
 }

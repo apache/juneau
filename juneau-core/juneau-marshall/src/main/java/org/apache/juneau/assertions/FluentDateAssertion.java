@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 
+import java.io.*;
 import java.time.temporal.*;
 import java.util.*;
 
@@ -150,8 +151,14 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentDateAssertion<R> stderr() {
-		super.stderr();
+	public FluentDateAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentDateAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

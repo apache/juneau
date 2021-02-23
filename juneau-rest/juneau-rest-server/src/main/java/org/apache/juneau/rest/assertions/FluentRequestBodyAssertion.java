@@ -241,8 +241,14 @@ public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentRequestBodyAssertion<R> stderr() {
-		super.stderr();
+	public FluentRequestBodyAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentRequestBodyAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

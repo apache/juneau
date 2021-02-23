@@ -52,8 +52,8 @@ public class MapAssertion_Test {
 		assertMap((Map<?,?>)null).value("a").asInteger().isNull();
 
 		assertMap(x2).containsKey("a");
-		assertThrown(()->assertMap(x2).containsKey("x")).stderr().is("Map did not contain expected key.\n\tContents: {a:1,b:2}\n\tExpected key: x");
-		assertThrown(()->assertMap((Map<?,?>)null).containsKey("x")).stderr().is("Value was null.");
+		assertThrown(()->assertMap(x2).containsKey("x")).is("Map did not contain expected key.\n\tContents: {a:1,b:2}\n\tExpected key: x");
+		assertThrown(()->assertMap((Map<?,?>)null).containsKey("x")).is("Value was null.");
 
 		assertMap(x2).doesNotContainKey("x");
 		assertThrown(()->assertMap(x2).doesNotContainKey("a")).is("Map contained unexpected key.\n\tContents: {a:1,b:2}\n\tUnexpected key: a");
@@ -63,6 +63,6 @@ public class MapAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->MapAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		MapAssertion.create(null).stdout().stderr();
+		MapAssertion.create(null).stdout().silent();
 	}
 }

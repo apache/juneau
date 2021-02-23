@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -54,8 +56,14 @@ public class ComparableAssertion extends FluentComparableAssertion<Comparable,Co
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ComparableAssertion stderr() {
-		super.stderr();
+	public ComparableAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ComparableAssertion silent() {
+		super.silent();
 		return this;
 	}
 

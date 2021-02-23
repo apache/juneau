@@ -45,6 +45,6 @@ public class BeanAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->BeanAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		BeanAssertion.create(null).stdout().stderr();
+		BeanAssertion.create(null).stdout().silent();
 	}
 }

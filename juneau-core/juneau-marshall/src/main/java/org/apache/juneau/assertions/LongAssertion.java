@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -59,8 +61,14 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public LongAssertion stderr() {
-		super.stderr();
+	public LongAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public LongAssertion silent() {
+		super.silent();
 		return this;
 	}
 

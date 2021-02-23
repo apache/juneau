@@ -81,7 +81,7 @@ public class NameValuePairSupplier_Test {
 		x.add("X5","bar",HttpPartType.QUERY,openApiSession(),null,false);
 		x.add("X6","$S{"+pname+"}",HttpPartType.QUERY,openApiSession(),null,false);
 
-		assertString(x.toString()).stderr().is("X1=bar&X2=y&X3=bar&X4=y&X5=bar&X6=y");
+		assertString(x.toString()).is("X1=bar&X2=y&X3=bar&X4=y&X5=bar&X6=y");
 
 		System.setProperty(pname, "z");
 

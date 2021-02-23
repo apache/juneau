@@ -103,6 +103,6 @@ public class IntegerAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->IntegerAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		IntegerAssertion.create(null).stdout().stderr();
+		IntegerAssertion.create(null).stdout().silent();
 	}
 }

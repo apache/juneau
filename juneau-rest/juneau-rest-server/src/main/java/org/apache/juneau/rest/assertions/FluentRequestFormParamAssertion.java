@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
@@ -109,8 +111,14 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentRequestFormParamAssertion<R> stderr() {
-		super.stderr();
+	public FluentRequestFormParamAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentRequestFormParamAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

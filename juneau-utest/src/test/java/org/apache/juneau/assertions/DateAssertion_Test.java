@@ -76,6 +76,6 @@ public class DateAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->DateAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		DateAssertion.create(null).stdout().stderr();
+		DateAssertion.create(null).stdout().silent();
 	}
 }

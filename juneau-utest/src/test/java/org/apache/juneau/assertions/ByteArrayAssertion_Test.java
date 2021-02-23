@@ -79,6 +79,6 @@ public class ByteArrayAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->ByteArrayAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ByteArrayAssertion.create(null).stdout().stderr();
+		ByteArrayAssertion.create(null).stdout().silent();
 	}
 }

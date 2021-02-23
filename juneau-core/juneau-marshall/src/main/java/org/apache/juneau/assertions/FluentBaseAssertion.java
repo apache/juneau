@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.internal.*;
@@ -421,8 +422,14 @@ public class FluentBaseAssertion<V,R> extends FluentAssertion<R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBaseAssertion<V,R> stderr() {
-		super.stderr();
+	public FluentBaseAssertion<V,R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentBaseAssertion<V,R> silent() {
+		super.silent();
 		return this;
 	}
 

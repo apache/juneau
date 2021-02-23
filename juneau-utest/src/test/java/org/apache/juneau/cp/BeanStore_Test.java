@@ -185,7 +185,7 @@ public class BeanStore_Test {
 	@Test
 	public void c01_createBean_create_withArgs() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(C1a.class)).stderr().is("Could not instantiate class "+CNAME+"$C1a: Static creator found but could not find prerequisites: A.");
+		assertThrown(()->bs.createBean(C1a.class)).is("Could not instantiate class "+CNAME+"$C1a: Static creator found but could not find prerequisites: A.");
 		bs.addBean(A.class, new A());
 		assertObject(bs.createBean(C1a.class)).exists();
 		assertObject(bs.createBean(C1a.class)).exists();
@@ -200,7 +200,7 @@ public class BeanStore_Test {
 	@Test
 	public void c02a_createBean_create_withArgs_interface() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(C2a.class)).stderr().is("Could not instantiate class "+CNAME+"$C2a: Static creator found but could not find prerequisites: A.");
+		assertThrown(()->bs.createBean(C2a.class)).is("Could not instantiate class "+CNAME+"$C2a: Static creator found but could not find prerequisites: A.");
 		bs.addBean(A.class, new A());
 		assertObject(bs.createBean(C2a.class)).exists();
 		assertObject(bs.createBean(C2a.class)).exists();
@@ -215,7 +215,7 @@ public class BeanStore_Test {
 	@Test
 	public void c02b_createBean_create_withArgs_abstractClass() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(C2b.class)).stderr().is("Could not instantiate class "+CNAME+"$C2b: Static creator found but could not find prerequisites: A.");
+		assertThrown(()->bs.createBean(C2b.class)).is("Could not instantiate class "+CNAME+"$C2b: Static creator found but could not find prerequisites: A.");
 		bs.addBean(A.class, new A());
 		assertObject(bs.createBean(C2b.class)).exists();
 		assertObject(bs.createBean(C2b.class)).exists();
@@ -226,9 +226,9 @@ public class BeanStore_Test {
 	@Test
 	public void c02c_createBean_create_withArgs_interface() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(C2c.class)).stderr().is("Could not instantiate class "+CNAME+"$C2c: Class is an interface.");
+		assertThrown(()->bs.createBean(C2c.class)).is("Could not instantiate class "+CNAME+"$C2c: Class is an interface.");
 		bs.addBean(A.class, new A());
-		assertThrown(()->bs.createBean(C2c.class)).stderr().is("Could not instantiate class "+CNAME+"$C2c: Class is an interface.");
+		assertThrown(()->bs.createBean(C2c.class)).is("Could not instantiate class "+CNAME+"$C2c: Class is an interface.");
 	}
 
 	public static abstract class C2d {}
@@ -236,9 +236,9 @@ public class BeanStore_Test {
 	@Test
 	public void c02d_createBean_create_withArgs_abstractClass() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(C2d.class)).stderr().is("Could not instantiate class "+CNAME+"$C2d: Class is abstract.");
+		assertThrown(()->bs.createBean(C2d.class)).is("Could not instantiate class "+CNAME+"$C2d: Class is abstract.");
 		bs.addBean(A.class, new A());
-		assertThrown(()->bs.createBean(C2d.class)).stderr().is("Could not instantiate class "+CNAME+"$C2d: Class is abstract.");
+		assertThrown(()->bs.createBean(C2d.class)).is("Could not instantiate class "+CNAME+"$C2d: Class is abstract.");
 	}
 
 	public static class C3a {
@@ -254,7 +254,7 @@ public class BeanStore_Test {
 	@Test
 	public void c03_createBean_create_withNamedArgs() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(C3a.class)).stderr().is("Could not instantiate class "+CNAME+"$C3a: Static creator found but could not find prerequisites: A.");
+		assertThrown(()->bs.createBean(C3a.class)).is("Could not instantiate class "+CNAME+"$C3a: Static creator found but could not find prerequisites: A.");
 		bs.addBean("Foo", new A());
 		assertObject(bs.createBean(C3a.class)).exists();
 		assertObject(bs.createBean(C3a.class)).exists();
@@ -274,7 +274,7 @@ public class BeanStore_Test {
 	@Test
 	public void d01a_createBean_construct_withArgs() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(D1a.class)).stderr().is("Could not instantiate class "+CNAME+"$D1a: Public constructor found but could not find prerequisites: A.");
+		assertThrown(()->bs.createBean(D1a.class)).is("Could not instantiate class "+CNAME+"$D1a: Public constructor found but could not find prerequisites: A.");
 		bs.addBean(A.class, new A());
 		assertObject(bs.createBean(D1a.class)).exists();
 		assertObject(bs.createBean(D1a.class)).exists();
@@ -290,9 +290,9 @@ public class BeanStore_Test {
 	@Test
 	public void d01b_createBean_construct_withArgs_inner() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: BeanStore_Test,A.");
+		assertThrown(()->bs.createBean(D1b.class)).is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: BeanStore_Test,A.");
 		BeanStore bs2 = BeanStore.of(null,this);
-		assertThrown(()->bs2.createBean(D1b.class)).stderr().is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: A.");
+		assertThrown(()->bs2.createBean(D1b.class)).is("Could not instantiate class "+CNAME+"$D1b: Public constructor found but could not find prerequisites: A.");
 		bs2.addBean(A.class, new A());
 		assertObject(bs2.createBean(D1b.class)).exists();
 		assertObject(bs2.createBean(D1b.class)).exists();
@@ -308,7 +308,7 @@ public class BeanStore_Test {
 	@Test
 	public void d02a_createBean_construct_withNamedArgs() throws Exception {
 		BeanStore bs = new BeanStore();
-		assertThrown(()->bs.createBean(D2a.class)).stderr().is("Could not instantiate class "+CNAME+"$D2a: Public constructor found but could not find prerequisites: A.");
+		assertThrown(()->bs.createBean(D2a.class)).is("Could not instantiate class "+CNAME+"$D2a: Public constructor found but could not find prerequisites: A.");
 		bs.addBean("Foo", new A());
 		assertObject(bs.createBean(D2a.class)).exists();
 		assertObject(bs.createBean(D2a.class)).exists();

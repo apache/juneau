@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.assertions;
 
+import java.io.*;
+
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
@@ -109,8 +111,14 @@ public class FluentRequestHeaderAssertion<R> extends FluentBaseAssertion<String,
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentRequestHeaderAssertion<R> stderr() {
-		super.stderr();
+	public FluentRequestHeaderAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentRequestHeaderAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

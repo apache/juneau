@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.time.*;
 
 import org.apache.juneau.internal.*;
@@ -61,8 +62,14 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ZonedDateTimeAssertion stderr() {
-		super.stderr();
+	public ZonedDateTimeAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ZonedDateTimeAssertion silent() {
+		super.silent();
 		return this;
 	}
 

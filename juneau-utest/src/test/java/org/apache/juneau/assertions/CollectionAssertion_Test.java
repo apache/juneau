@@ -57,6 +57,6 @@ public class CollectionAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->CollectionAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		CollectionAssertion.create(null).stdout().stderr();
+		CollectionAssertion.create(null).stdout().silent();
 	}
 }

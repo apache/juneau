@@ -13,6 +13,8 @@
 package org.apache.juneau.assertions;
 
 
+import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -82,8 +84,14 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBooleanAssertion<R> stderr() {
-		super.stderr();
+	public FluentBooleanAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentBooleanAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

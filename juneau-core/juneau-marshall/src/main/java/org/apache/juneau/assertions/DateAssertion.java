@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -61,8 +62,14 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public DateAssertion stderr() {
-		super.stderr();
+	public DateAssertion out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public DateAssertion silent() {
+		super.silent();
 		return this;
 	}
 

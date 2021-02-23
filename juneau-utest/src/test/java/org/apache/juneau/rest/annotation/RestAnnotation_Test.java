@@ -148,7 +148,7 @@ public class RestAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().stderr().is(""
+		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "allowedHeaderParams:'allowedHeaderParams',"
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"

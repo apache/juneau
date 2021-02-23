@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
@@ -531,8 +532,14 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentStringAssertion<R> stderr() {
-		super.stderr();
+	public FluentStringAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentStringAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 

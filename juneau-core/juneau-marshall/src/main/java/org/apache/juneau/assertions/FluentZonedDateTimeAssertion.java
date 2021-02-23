@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 
+import java.io.*;
 import java.time.*;
 import java.time.temporal.*;
 
@@ -150,8 +151,14 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentZonedDateTimeAssertion<R> stderr() {
-		super.stderr();
+	public FluentZonedDateTimeAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentZonedDateTimeAssertion<R> silent() {
+		super.silent();
 		return this;
 	}
 
