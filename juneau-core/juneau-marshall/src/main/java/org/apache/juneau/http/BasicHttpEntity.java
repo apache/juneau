@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -38,6 +39,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @FluentSetters
+@BeanIgnore
 public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	private Object content;
 	private boolean cache;

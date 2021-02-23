@@ -16,7 +16,6 @@ import static org.apache.juneau.http.response.TemporaryRedirect.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -29,7 +28,6 @@ import org.apache.juneau.internal.*;
  * For example, a POST request should be repeated using another POST request.
  */
 @Response(code=CODE, description=MESSAGE)
-@BeanIgnore
 @FluentSetters
 public class TemporaryRedirect extends HttpResponse {
 

@@ -18,11 +18,13 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 
 /**
  * Implementation of a named object.
  */
+@BeanIgnore
 public class BasicNamedAttribute implements NamedAttribute {
 	private final String name;
 	private final Object value;

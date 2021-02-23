@@ -32,6 +32,7 @@ import org.apache.juneau.internal.*;
  * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
  */
 @Response
+@BeanIgnore
 @FluentSetters
 public class HttpException extends BasicRuntimeException {
 
@@ -191,7 +192,6 @@ public class HttpException extends BasicRuntimeException {
 	 * @return The headers associated with this exception.
 	 */
 	@ResponseHeader("*")
-	@BeanIgnore
 	public Map<String,Object> getHeaders() {
 		return headers;
 	}

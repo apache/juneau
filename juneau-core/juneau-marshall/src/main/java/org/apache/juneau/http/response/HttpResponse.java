@@ -26,6 +26,7 @@ import org.apache.juneau.internal.*;
  * Consists simply of a simple string message.
  */
 @Response
+@BeanIgnore
 @FluentSetters
 public abstract class HttpResponse {
 
@@ -60,7 +61,6 @@ public abstract class HttpResponse {
 	 * @return The headers associated with this exception.
 	 */
 	@ResponseHeader("*")
-	@BeanIgnore
 	public Map<String,Object> getHeaders() {
 		return headers;
 	}

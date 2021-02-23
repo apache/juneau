@@ -17,13 +17,11 @@ import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Represents a change to a config.
  */
-@BeanIgnore
 public class ConfigEvent {
 
 	private final ConfigEventType type;

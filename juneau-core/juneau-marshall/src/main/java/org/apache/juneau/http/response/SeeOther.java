@@ -16,7 +16,6 @@ import static org.apache.juneau.http.response.SeeOther.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -28,7 +27,6 @@ import org.apache.juneau.internal.*;
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
 @Response(code=CODE, description=MESSAGE)
-@BeanIgnore
 @FluentSetters
 public class SeeOther extends HttpResponse {
 

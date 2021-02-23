@@ -24,13 +24,11 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 /**
  * Represents the path parameters in an HTTP request.
  */
-@BeanIgnore
 public class RequestPathParams {
 
 	private final RestCall call;

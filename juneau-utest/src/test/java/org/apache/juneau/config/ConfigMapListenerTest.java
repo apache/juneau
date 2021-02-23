@@ -42,7 +42,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(foo = baz)']");
+				assertObject(events).asString().is("[SET(foo = baz)]");
 			}
 		};
 
@@ -69,7 +69,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(S1/foo = baz)']");
+				assertObject(events).asString().is("[SET(S1/foo = baz)]");
 			}
 		};
 
@@ -98,7 +98,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(k = vb)','SET(S1/k1 = v1b)']");
+				assertObject(events).asString().is("[SET(k = vb), SET(S1/k1 = v1b)]");
 			}
 		};
 
@@ -124,7 +124,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(k^* = kb # C)','SET(S1/k1^* = k1b # C1)']");
+				assertObject(events).asString().is("[SET(k^* = kb # C), SET(S1/k1^* = k1b # C1)]");
 			}
 		};
 
@@ -156,7 +156,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(k^* = kb # Cb)','SET(S1/k1^* = k1b # Cb1)']");
+				assertObject(events).asString().is("[SET(k^* = kb # Cb), SET(S1/k1^* = k1b # Cb1)]");
 			}
 		};
 
@@ -189,7 +189,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']");
+				assertObject(events).asString().is("[REMOVE_ENTRY(k), REMOVE_ENTRY(S1/k1)]");
 			}
 		};
 
@@ -221,7 +221,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']");
+				assertObject(events).asString().is("[REMOVE_ENTRY(k), REMOVE_ENTRY(S1/k1)]");
 			}
 		};
 
@@ -251,7 +251,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(S3/k3 = v3)']");
+				assertObject(events).asString().is("[SET(S3/k3 = v3)]");
 			}
 		};
 
@@ -286,7 +286,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(S3/k3 = v3)']");
+				assertObject(events).asString().is("[SET(S3/k3 = v3)]");
 			}
 		};
 
@@ -331,7 +331,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']");
+				assertObject(events).asString().is("[REMOVE_ENTRY(k), REMOVE_ENTRY(S1/k1), REMOVE_ENTRY(S2/k2)]");
 			}
 		};
 
@@ -362,7 +362,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is("['SET(k = v # cv)','SET(S1/k1 = v1 # cv1)','SET(S2/k2 = v2 # cv2)']");
+				assertObject(events).asString().is("[SET(k = v # cv), SET(S1/k1 = v1 # cv1), SET(S2/k2 = v2 # cv2)]");
 			}
 		};
 
@@ -402,13 +402,13 @@ public class ConfigMapListenerTest {
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-		eventList.add("['SET(S1/k1 = v1b)']");
-		eventList.add("['SET(S2/k2 = v2b)']");
+		eventList.add("[SET(S1/k1 = v1b)]");
+		eventList.add("[SET(S2/k2 = v2b)]");
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is(eventList.poll());
+				assertObject(events).asString().is(eventList.poll());
 			}
 		};
 
@@ -440,13 +440,13 @@ public class ConfigMapListenerTest {
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-		eventList.add("['SET(S1/k1 = v1b)']");
-		eventList.add("['SET(S1/k1 = v1c)']");
+		eventList.add("[SET(S1/k1 = v1b)]");
+		eventList.add("[SET(S1/k1 = v1c)]");
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asJson().is(eventList.poll());
+				assertObject(events).asString().is(eventList.poll());
 			}
 		};
 
@@ -487,13 +487,13 @@ public class ConfigMapListenerTest {
 		try {
 			final CountDownLatch latch = new CountDownLatch(2);
 			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-			eventList.add("['SET(S1/k1 = v1b)']");
-			eventList.add("['SET(S1/k1 = v1c)']");
+			eventList.add("[SET(S1/k1 = v1b)]");
+			eventList.add("[SET(S1/k1 = v1c)]");
 
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(ConfigEvents events) throws Exception {
-					assertObject(events).asJson().is(eventList.poll());
+					assertObject(events).asString().is(eventList.poll());
 				}
 			};
 
@@ -525,21 +525,21 @@ public class ConfigMapListenerTest {
 		try {
 			final CountDownLatch latch = new CountDownLatch(10);
 			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-			eventList.add("['SET(S1/k1 = v1b)']");
-			eventList.add("['SET(S1/k1 = v1c)']");
-			eventList.add("['SET(S1/k1 = v1d)']");
-			eventList.add("['SET(S1/k1 = v1e)']");
-			eventList.add("['SET(S1/k1 = v1f)']");
-			eventList.add("['SET(S1/k1 = v1g)']");
-			eventList.add("['SET(S1/k1 = v1h)']");
-			eventList.add("['SET(S1/k1 = v1i)']");
-			eventList.add("['SET(S1/k1 = v1j)']");
-			eventList.add("['SET(S1/k1 = v1k)']");
+			eventList.add("[SET(S1/k1 = v1b)]");
+			eventList.add("[SET(S1/k1 = v1c)]");
+			eventList.add("[SET(S1/k1 = v1d)]");
+			eventList.add("[SET(S1/k1 = v1e)]");
+			eventList.add("[SET(S1/k1 = v1f)]");
+			eventList.add("[SET(S1/k1 = v1g)]");
+			eventList.add("[SET(S1/k1 = v1h)]");
+			eventList.add("[SET(S1/k1 = v1i)]");
+			eventList.add("[SET(S1/k1 = v1j)]");
+			eventList.add("[SET(S1/k1 = v1k)]");
 
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(ConfigEvents events) throws Exception {
-					assertObject(events).asJson().is(eventList.poll());
+					assertObject(events).asString().is(eventList.poll());
 				}
 			};
 

@@ -15,7 +15,6 @@ package org.apache.juneau.http;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
 
@@ -27,7 +26,6 @@ import org.apache.juneau.collections.*;
  * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
-@BeanIgnore
 public class MediaRange extends MediaType {
 
 	private final NameValuePair[] extensions;

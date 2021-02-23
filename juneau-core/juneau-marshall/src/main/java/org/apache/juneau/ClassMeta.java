@@ -492,7 +492,7 @@ public final class ClassMeta<T> implements Type {
 			for (MethodInfo m : ci.getDeclaredMethods()) {
 				if (bc.hasAnnotation(Example.class, m)) {
 					if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
-						throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
+						throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 					m.setAccessible();
 					exampleMethod = m.inner();
 				}
@@ -943,7 +943,6 @@ public final class ClassMeta<T> implements Type {
 	 * 	<br>Required because the swap used may depend on the media type being serialized or parsed.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
-	@BeanIgnore
 	public ClassMeta<?> getSerializedClassMeta(BeanSession session) {
 		PojoSwap<T,?> ps = getSwap(session);
 		return (ps == null ? this : ps.getSwapClassMeta(session));
@@ -958,7 +957,6 @@ public final class ClassMeta<T> implements Type {
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
-	@BeanIgnore
 	public T getExample(BeanSession session) {
 		try {
 			if (example != null)

@@ -21,7 +21,6 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 
@@ -38,7 +37,6 @@ import org.apache.juneau.http.*;
  * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
-@BeanIgnore
 public class BasicDateHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;

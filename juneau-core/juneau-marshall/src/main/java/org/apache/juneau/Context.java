@@ -365,7 +365,6 @@ public abstract class Context {
 	 *
 	 * @return The property store associated with this context.
 	 */
-	@BeanIgnore
 	public final ContextProperties getContextProperties() {
 		return properties;
 	}

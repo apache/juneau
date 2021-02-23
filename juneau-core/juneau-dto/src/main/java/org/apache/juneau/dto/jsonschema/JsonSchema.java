@@ -95,7 +95,6 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanIgnore
 	public String getName() {
 		return name;
 	}
@@ -106,7 +105,6 @@ public class JsonSchema {
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanIgnore
 	public JsonSchema setName(String name) {
 		this.name = name;
 		return this;
@@ -231,7 +229,6 @@ public class JsonSchema {
 	 * @return
 	 * 	The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
 	 */
-	@BeanIgnore
 	public JsonType getTypeAsJsonType() {
 		return typeJsonType;
 	}
@@ -244,7 +241,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonType}.
 	 */
-	@BeanIgnore
 	public JsonTypeArray getTypeAsJsonTypeArray() {
 		return typeJsonTypeArray;
 	}
@@ -554,7 +550,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
-	@BeanIgnore
 	public JsonSchema getItemsAsSchema() {
 		return itemsSchema;
 	}
@@ -567,7 +562,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
-	@BeanIgnore
 	public JsonSchemaArray getItemsAsSchemaArray() {
 		return itemsSchemaArray;
 	}
@@ -832,7 +826,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
-	@BeanIgnore
 	public Boolean getAdditionalItemsAsBoolean() {
 		return additionalItemsBoolean;
 	}
@@ -846,7 +839,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
-	@BeanIgnore
 	public List<JsonSchema> getAdditionalItemsAsSchemaArray() {
 		return additionalItemsSchemaArray;
 	}
@@ -1112,7 +1104,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
-	@BeanIgnore
 	public Boolean getAdditionalPropertiesAsBoolean() {
 		return additionalPropertiesBoolean;
 	}
@@ -1126,7 +1117,6 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
-	@BeanIgnore
 	public JsonSchema getAdditionalPropertiesAsSchema() {
 		return additionalPropertiesSchema;
 	}

@@ -16,7 +16,6 @@ import static org.apache.juneau.http.response.MovedPermanently.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * This and all future requests should be directed to the given URI.
  */
 @Response(code=CODE, description=MESSAGE)
-@BeanIgnore
 @FluentSetters
 public class MovedPermanently extends HttpResponse {
 

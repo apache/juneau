@@ -419,7 +419,6 @@ public final class BeanPropertyMeta {
 	 *
 	 * @return The bean meta that this property belongs to.
 	 */
-	@BeanIgnore
 	public BeanMeta<?> getBeanMeta() {
 		return beanMeta;
 	}

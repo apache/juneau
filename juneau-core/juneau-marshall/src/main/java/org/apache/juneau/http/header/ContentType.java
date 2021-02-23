@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
@@ -53,7 +52,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Content-Type")
-@BeanIgnore
 public class ContentType extends BasicMediaTypeHeader {
 
 	private static final long serialVersionUID = 1L;

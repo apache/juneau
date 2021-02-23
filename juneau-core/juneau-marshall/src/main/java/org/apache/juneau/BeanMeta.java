@@ -552,7 +552,6 @@ public class BeanMeta<T> {
 	 *
 	 * @return The {@link ClassMeta} of this bean.
 	 */
-	@BeanIgnore
 	public final ClassMeta<T> getClassMeta() {
 		return classMeta;
 	}

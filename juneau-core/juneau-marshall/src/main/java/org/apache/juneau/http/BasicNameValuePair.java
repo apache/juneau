@@ -39,8 +39,8 @@ import org.apache.juneau.reflect.*;
  * 		Fluent assertions.
  * </ul>
  */
-@BeanIgnore
 @FluentSetters
+@BeanIgnore
 public class BasicNameValuePair implements NameValuePair, Headerable {
 	private final String name;
 	private final Object value;

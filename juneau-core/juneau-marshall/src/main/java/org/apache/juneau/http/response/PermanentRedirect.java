@@ -16,7 +16,6 @@ import static org.apache.juneau.http.response.PermanentRedirect.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -28,7 +27,6 @@ import org.apache.juneau.internal.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
 @Response(code=CODE, description=MESSAGE)
-@BeanIgnore
 @FluentSetters
 public class PermanentRedirect extends HttpResponse {
 

@@ -53,7 +53,6 @@ import org.apache.juneau.internal.*;
  * 	}
  * </p>
  */
-@BeanIgnore
 public final class ClassInfo {
 
 	private final Type t;

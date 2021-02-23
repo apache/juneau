@@ -18,12 +18,10 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * Lightweight utility class for introspecting information about a field.
  */
-@BeanIgnore
 public final class FieldInfo implements Comparable<FieldInfo> {
 
 	private final Field f;

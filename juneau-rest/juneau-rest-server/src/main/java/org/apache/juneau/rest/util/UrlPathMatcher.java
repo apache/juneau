@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.FileUtils.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -27,7 +26,6 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Handles aspects of matching and precedence ordering.
  */
-@BeanIgnore
 public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 	/**

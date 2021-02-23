@@ -6064,7 +6064,6 @@ public class RestContext extends BeanContext {
 	 * 	The resource object.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	@BeanIgnore
 	public Object getResource() {
 		return resource.get();
 	}
@@ -7053,7 +7052,6 @@ public class RestContext extends BeanContext {
 	 *
 	 * @return The HTTP request object, or <jk>null</jk> if it hasn't been created.
 	 */
-	@BeanIgnore
 	public RestRequest getRequest() {
 		return getCall().getRestRequest();
 	}
@@ -7063,7 +7061,6 @@ public class RestContext extends BeanContext {
 	 *
 	 * @return The HTTP response object, or <jk>null</jk> if it hasn't been created.
 	 */
-	@BeanIgnore
 	public RestResponse getResponse() {
 		return getCall().getRestResponse();
 	}
@@ -7074,7 +7071,6 @@ public class RestContext extends BeanContext {
 	 * @return The HTTP call for the current request, never <jk>null</jk>?
 	 * @throws InternalServerError If no active request exists on the current thread.
 	 */
-	@BeanIgnore
 	public RestCall getCall() {
 		RestCall rc = call.get();
 		if (rc == null)

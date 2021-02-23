@@ -44,8 +44,8 @@ import org.apache.juneau.reflect.*;
  * 		Fluent assertions.
  * </ul>
  */
-@BeanIgnore
 @FluentSetters
+@BeanIgnore
 public class BasicHeader implements Header, Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 

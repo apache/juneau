@@ -11,3 +11,6 @@ HttpResponse should use list of Headers and have a headers(Header...) method.
 HttpResponse should allow you to set code.
 HttpException subclasses can set status, but does it use code?
 HttpException should use list of Headers and have a headers(Header...) method.
+
+JsonSchema should have fluent getters and setters.
+Assertions should display to stderr by default.

@@ -27,7 +27,6 @@ import org.apache.juneau.internal.*;
 /**
  * Lightweight utility class for introspecting information about a method.
  */
-@BeanIgnore
 @FluentSetters
 public final class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo> {
 

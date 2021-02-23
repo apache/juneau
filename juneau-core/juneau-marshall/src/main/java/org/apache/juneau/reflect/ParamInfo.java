@@ -23,7 +23,6 @@ import org.apache.juneau.annotation.*;
 /**
  * Lightweight utility class for introspecting information about a method parameter.
  */
-@BeanIgnore
 public final class ParamInfo {
 
 	private final ExecutableInfo eInfo;
@@ -235,7 +234,7 @@ public final class ParamInfo {
 
 	/**
 	 * Returns <jk>true</jk> if the parameter type is an exact match for the specified class.
-	 * 
+	 *
 	 * @param c The type to check.
 	 * @return <jk>true</jk> if the parameter type is an exact match for the specified class.
 	 */
