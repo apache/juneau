@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The request entity has a media type which the server or resource does not support.
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class UnsupportedMediaType extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 415;
+	public static final int STATUS_CODE = 415;
 
-	/** Default message */
-	public static final String MESSAGE = "Unsupported Media Type";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Unsupported Media Type";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class UnsupportedMediaType extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UnsupportedMediaType(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class UnsupportedMediaType extends HttpException {
 	 * Constructor.
 	 */
 	public UnsupportedMediaType() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

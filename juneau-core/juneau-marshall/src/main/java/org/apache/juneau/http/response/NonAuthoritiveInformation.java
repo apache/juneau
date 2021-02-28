@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.NonAuthoritiveInformation.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -23,32 +25,47 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is returning a modified version of the origin's response.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class NonAuthoritiveInformation extends HttpResponse {
+public class NonAuthoritiveInformation extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 203;
+	public static final int STATUS_CODE = 203;
 
-	/** Default message */
-	public static final String MESSAGE = "Non-Authoritative Information";
-
-	/** Reusable instance. */
-	public static final NonAuthoritiveInformation INSTANCE = new NonAuthoritiveInformation();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Non-Authoritative Information";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public NonAuthoritiveInformation() {
-		this(MESSAGE);
+	public static final NonAuthoritiveInformation INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static NonAuthoritiveInformation create() {
+		return new NonAuthoritiveInformation();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public NonAuthoritiveInformation(String message) {
-		super(message);
+	public NonAuthoritiveInformation() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public NonAuthoritiveInformation(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -57,9 +74,45 @@ public class NonAuthoritiveInformation extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public NonAuthoritiveInformation header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NonAuthoritiveInformation unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

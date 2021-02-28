@@ -53,11 +53,11 @@ public class SerializedNameValuePair_Test {
 		assertString(x1.getValue()).is("['bar','baz']");
 		SerializedNameValuePair x2 = of("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertString(x2.getValue()).is("bar,baz");
-		SerializedNameValuePair x3 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null,true);
+		SerializedNameValuePair x3 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertString(x3.getValue()).is("['bar','baz']");
-		SerializedNameValuePair x4 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null,false);
+		SerializedNameValuePair x4 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializerIfNotSet((HttpPartSerializerSession)null);
 		assertString(x4.getValue()).is("bar,baz");
-		SerializedNameValuePair x5 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER.createPartSession(null),false);
+		SerializedNameValuePair x5 = of("Foo",list("bar","baz")).serializerIfNotSet(OAPI_SERIALIZER.createPartSession(null));
 		assertString(x5.getValue()).is("bar,baz");
 	}
 

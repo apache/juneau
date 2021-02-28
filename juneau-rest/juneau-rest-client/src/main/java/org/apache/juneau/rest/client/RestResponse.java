@@ -444,10 +444,10 @@ public class RestResponse implements HttpResponse {
 				@Override /* InvocationHandler */
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-					HttpPartParserSession pp = pm.getParser(partParser);
+					HttpPartParserSession pp = pm.getParserSession().orElse(partParser);
 					HttpPartSchema schema = pm.getSchema();
 					HttpPartType pt = pm.getPartType();
-					String name = pm.getPartName();
+					String name = pm.getPartName().orElse(null);
 					ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
 					if (pt == RESPONSE_HEADER)
 						return getResponseHeader(name).parser(pp).schema(schema).asType(type).orElse(null);

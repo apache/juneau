@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request did not specify the length of its content, which is required by the requested resource.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class LengthRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 411;
+	public static final int STATUS_CODE = 411;
 
-	/** Default message */
-	public static final String MESSAGE = "Length Required";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Length Required";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class LengthRequired extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public LengthRequired(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class LengthRequired extends HttpException {
 	 * Constructor.
 	 */
 	public LengthRequired() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

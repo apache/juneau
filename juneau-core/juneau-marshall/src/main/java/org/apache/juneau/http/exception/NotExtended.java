@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * Further extensions to the request are required for the server to fulfill it.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class NotExtended extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 510;
+	public static final int STATUS_CODE = 510;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Extended";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Not Extended";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class NotExtended extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotExtended(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class NotExtended extends HttpException {
 	 * Constructor.
 	 */
 	public NotExtended() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

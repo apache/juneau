@@ -16,6 +16,8 @@ import static org.apache.juneau.http.response.SeeOther.*;
 
 import java.net.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -26,66 +28,47 @@ import org.apache.juneau.internal.*;
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class SeeOther extends HttpResponse {
+public class SeeOther extends BasicLocationHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 303;
+	public static final int STATUS_CODE = 303;
 
-	/** Default message */
-	public static final String MESSAGE = "See Other";
-
-	/** Reusable instance. */
-	public static final SeeOther INSTANCE = new SeeOther();
-
-	private final URI location;
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "See Other";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
+	 */
+	public static final SeeOther INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static SeeOther create() {
+		return new SeeOther();
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public SeeOther() {
-		this(MESSAGE, null);
-	}
-
-	/**
-	 * Constructor with no redirect.
-	 * <p>
-	 * Used for end-to-end interfaces.
-	 *
-	 * @param message Message to send as the response.
-	 */
-	public SeeOther(String message) {
-		super(message);
-		this.location = null;
-	}
-
-	/**
-	 * Constructor using custom message.
-	 *
-	 * @param message Message to send as the response.
-	 * @param location <c>Location</c> header value.
-	 */
-	public SeeOther(String message, URI location) {
-		super(message);
-		this.location = location;
+		this(null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param location <c>Location</c> header value.
+	 * @param body Body of the response.  Can be <jk>null</jk>.
 	 */
-	public SeeOther(URI location) {
-		this(MESSAGE, location);
-	}
-
-	/**
-	 * @return <c>Location</c> header value.
-	 */
-	@ResponseHeader(name="Location", description="Other location.")
-	public URI getLocation() {
-		return location;
+	public SeeOther(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -94,9 +77,57 @@ public class SeeOther extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public SeeOther header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SeeOther unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public SeeOther location(String value) {
+		super.location(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public SeeOther location(URI value) {
+		super.location(value);
 		return this;
 	}
 

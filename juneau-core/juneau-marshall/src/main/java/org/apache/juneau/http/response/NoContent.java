@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.NoContent.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -23,32 +25,47 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server successfully processed the request and is not returning any content.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class NoContent extends HttpResponse {
+public class NoContent extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 204;
+	public static final int STATUS_CODE = 204;
 
-	/** Default message */
-	public static final String MESSAGE = "No Content";
-
-	/** Reusable instance. */
-	public static final NoContent INSTANCE = new NoContent();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "No Content";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public NoContent() {
-		this(MESSAGE);
+	public static final NoContent INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static NoContent create() {
+		return new NoContent();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public NoContent(String message) {
-		super(message);
+	public NoContent() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public NoContent(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -57,9 +74,45 @@ public class NoContent extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public NoContent header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NoContent unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

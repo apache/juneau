@@ -28,16 +28,16 @@ import org.apache.juneau.internal.*;
  * <br>401 semantically means "unauthenticated",i.e. the user does not have the necessary credentials.
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class Unauthorized extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 401;
+	public static final int STATUS_CODE = 401;
 
-	/** Default message */
-	public static final String MESSAGE = "Unauthorized";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Unauthorized";
 
 	/**
 	 * Constructor.
@@ -47,7 +47,7 @@ public class Unauthorized extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Unauthorized(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class Unauthorized extends HttpException {
 	 * Constructor.
 	 */
 	public Unauthorized() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

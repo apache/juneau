@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import java.io.*;
 import java.net.*;
@@ -32,7 +33,7 @@ public class BasicHttpRequestRetryHandler_Test {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public Ok get() {
-			return Ok.OK;
+			return OK;
 		}
 	}
 

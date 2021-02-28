@@ -15,6 +15,7 @@ package org.apache.juneau.httppart.bean;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -89,8 +90,8 @@ public class ResponseBeanPropertyMeta {
 	 *
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
-	public String getPartName() {
-		return schema == null ? null : schema.getName();
+	public Optional<String> getPartName() {
+		return Optional.ofNullable(schema == null ? null : schema.getName());
 	}
 
 	/**
@@ -118,21 +119,19 @@ public class ResponseBeanPropertyMeta {
 	/**
 	 * Returns the serializer to use for serializing the bean property value.
 	 *
-	 * @param _default The default serializer to use if not defined on the annotation.
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public HttpPartSerializerSession getSerializer(HttpPartSerializerSession _default) {
-		return serializer == null ? _default : serializer.createPartSession(null);
+	public Optional<HttpPartSerializerSession> getSerializerSession() {
+		return Optional.ofNullable(serializer == null ? null : serializer.createPartSession(null));
 	}
 
 	/**
 	 * Returns the parser to use for parsing the bean property value.
 	 *
-	 * @param _default The default parser to use if not defined on the annotation.
 	 * @return The parser to use for parsing the bean property value.
 	 */
-	public HttpPartParserSession getParser(HttpPartParserSession _default) {
-		return parser == null ? _default : parser.createPartSession(null);
+	public Optional<HttpPartParserSession> getParserSession() {
+		return Optional.ofNullable(parser == null ? null : parser.createPartSession(null));
 	}
 
 	/**

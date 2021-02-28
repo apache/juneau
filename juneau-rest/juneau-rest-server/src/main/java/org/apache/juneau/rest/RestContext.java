@@ -6768,7 +6768,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest,RestResponse)} method returns
+	 * looking for the first one whose {@link ResponseHandler#handle(RestCall)} method returns
 	 * <jk>true</jk>.
 	 *
 	 * @param call The HTTP call.
@@ -6778,15 +6778,12 @@ public class RestContext extends BeanContext {
 	 */
 	public void handleResponse(RestCall call) throws IOException, HttpException, NotImplemented {
 
-		RestRequest req = call.getRestRequest();
-		RestResponse res = call.getRestResponse();
-
 		// Loop until we find the correct handler for the POJO.
 		for (ResponseHandler h : getResponseHandlers())
-			if (h.handle(req, res))
+			if (h.handle(call))
 				return;
 
-		Object output = res.getOutput().get().orElse(null);
+		Object output = call.getRestResponse().getOutput().get().orElse(null);
 		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
 	}
 

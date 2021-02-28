@@ -13,8 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
-
-import java.net.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -25,10 +24,10 @@ public class MovedPermanently_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public MovedPermanently a1() { return new MovedPermanently(); }
-		@RestGet public MovedPermanently a2() { return new MovedPermanently("foo"); }
-		@RestGet public MovedPermanently a3() { return new MovedPermanently(URI.create("servlet:/foo")); }
-		@RestGet public MovedPermanently a4() { return new MovedPermanently().header("Foo","bar"); }
+		@RestGet public MovedPermanently a1() { return MOVED_PERMANENTLY; }
+		@RestGet public MovedPermanently a2() { return movedPermanently("servlet:/foo").body("foo"); }
+		@RestGet public MovedPermanently a3() { return movedPermanently("servlet:/foo").location("servlet:/foo"); }
+		@RestGet public MovedPermanently a4() { return movedPermanently("servlet:/foo").header("Foo","bar"); }
 	}
 
 	@Test
@@ -46,7 +45,6 @@ public class MovedPermanently_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(301)
-			.assertBody().is("Moved Permanently")
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()

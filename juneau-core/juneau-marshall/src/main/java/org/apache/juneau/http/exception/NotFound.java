@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The requested resource could not be found but may be available in the future.
  * <br>Subsequent requests by the client are permissible.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class NotFound extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 404;
+	public static final int STATUS_CODE = 404;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Found";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Not Found";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class NotFound extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotFound(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class NotFound extends HttpException {
 	 * Constructor.
 	 */
 	public NotFound() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

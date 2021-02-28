@@ -83,6 +83,16 @@ public class BasicNamedAttribute implements NamedAttribute {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyOf The object to copy.
+	 */
+	protected BasicNamedAttribute(BasicNamedAttribute copyOf) {
+		this.name = copyOf.name;
+		this.value = copyOf.value;
+	}
+
+	/**
 	 * Provides an object for performing assertions against the name of this pair.
 	 *
 	 * @return An object for performing assertions against the name of this pair.

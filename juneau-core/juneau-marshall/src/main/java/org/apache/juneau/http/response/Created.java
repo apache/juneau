@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.Created.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -23,32 +25,47 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request has been fulfilled, resulting in the creation of a new resource.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class Created extends HttpResponse {
+public class Created extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 201;
+	public static final int STATUS_CODE = 201;
 
-	/** Default message */
-	public static final String MESSAGE = "Created";
-
-	/** Reusable instance. */
-	public static final Created INSTANCE = new Created();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Created";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public Created() {
-		this(MESSAGE);
+	public static final Created INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static Created create() {
+		return new Created();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public Created(String message) {
-		super(message);
+	public Created() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public Created(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -57,9 +74,45 @@ public class Created extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public Created header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Created unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

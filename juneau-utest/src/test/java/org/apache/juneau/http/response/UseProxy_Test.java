@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class UseProxy_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public UseProxy a1() { return new UseProxy(); }
-		@RestGet public UseProxy a2() { return new UseProxy("foo"); }
-		@RestGet public UseProxy a3() { return new UseProxy().header("Foo","bar"); }
+		@RestGet public UseProxy a1() { return USE_PROXY; }
+		@RestGet public UseProxy a2() { return useProxy().body("foo"); }
+		@RestGet public UseProxy a3() { return useProxy().header("Foo","bar"); }
 	}
 
 	@Test

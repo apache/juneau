@@ -63,6 +63,7 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicHeader.class,
 		BasicHttpEntity.class,
 		BasicHttpResource.class,
+		BasicLocationHttpResponse.class,
 		BasicNameValuePair.class,
 		BasicRuntimeException.class,
 		BeanAssertion.class,
@@ -126,7 +127,7 @@ public class ConfigurablePropertyCodeGenerator {
 		HtmlSerializerBuilder.class,
 		HtmlStrippedDocSerializerBuilder.class,
 		HttpException.class,
-		HttpResponse.class,
+		BasicHttpResponse.class,
 		HttpVersionNotSupported.class,
 		IMUsed.class,
 		InputStreamParserBuilder.class,
@@ -239,7 +240,9 @@ public class ConfigurablePropertyCodeGenerator {
 
 	static Set<Class<?>> ignoreClasses = ASet.of(
 		org.apache.http.entity.AbstractHttpEntity.class,
-		org.apache.http.entity.BasicHttpEntity.class
+		org.apache.http.entity.BasicHttpEntity.class,
+		org.apache.http.message.AbstractHttpMessage.class,
+		org.apache.http.message.BasicHttpResponse.class
 	);
 
 	private static String[] SOURCE_PATHS = {

@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.MultiStatus.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -23,32 +25,47 @@ import org.apache.juneau.internal.*;
  * <p>
  * The message body that follows is by default an XML message and can contain a number of separate response codes, depending on how many sub-requests were made.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class MultiStatus extends HttpResponse {
+public class MultiStatus extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 207;
+	public static final int STATUS_CODE = 207;
 
-	/** Default message */
-	public static final String MESSAGE = "Multi-Status";
-
-	/** Reusable instance. */
-	public static final MultiStatus INSTANCE = new MultiStatus();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Multi-Status";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public MultiStatus() {
-		this(MESSAGE);
+	public static final MultiStatus INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static MultiStatus create() {
+		return new MultiStatus();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public MultiStatus(String message) {
-		super(message);
+	public MultiStatus() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public MultiStatus(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -57,9 +74,45 @@ public class MultiStatus extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public MultiStatus header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MultiStatus unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

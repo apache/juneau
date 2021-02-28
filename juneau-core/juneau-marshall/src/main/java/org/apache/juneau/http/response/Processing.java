@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.Processing.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -25,32 +27,47 @@ import org.apache.juneau.internal.*;
  * This code indicates that the server has received and is processing the request, but no response is available yet.
  * This prevents the client from timing out and assuming the request was lost.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class Processing extends HttpResponse {
+public class Processing extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 102;
+	public static final int STATUS_CODE = 102;
 
-	/** Default message */
-	public static final String MESSAGE = "Processing";
-
-	/** Reusable instance. */
-	public static final Processing INSTANCE = new Processing();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Processing";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public Processing() {
-		this(MESSAGE);
+	public static final Processing INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static Processing create() {
+		return new Processing();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public Processing(String message) {
-		super(message);
+	public Processing() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public Processing(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -59,9 +76,45 @@ public class Processing extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public Processing header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Processing unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

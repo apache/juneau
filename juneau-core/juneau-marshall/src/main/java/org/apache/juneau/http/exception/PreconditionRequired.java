@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The origin server requires the request to be conditional.
  * <br>Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class PreconditionRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 428;
+	public static final int STATUS_CODE = 428;
 
-	/** Default message */
-	public static final String MESSAGE = "Precondition Required";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Precondition Required";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class PreconditionRequired extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PreconditionRequired(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class PreconditionRequired extends HttpException {
 	 * Constructor.
 	 */
 	public PreconditionRequired() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

@@ -8,4 +8,5 @@ HttpException subclasses can set status, but does it use code?
 HttpException should use list of Headers and have a headers(Header...) method.
 
 JsonSchema should have fluent getters and setters.
+Break out @Response bean handling into it's own handler.
 

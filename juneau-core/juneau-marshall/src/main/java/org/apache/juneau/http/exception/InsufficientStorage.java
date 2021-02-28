@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server is unable to store the representation needed to complete the request.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class InsufficientStorage extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 507;
+	public static final int STATUS_CODE = 507;
 
-	/** Default message */
-	public static final String MESSAGE = "Insufficient Storage";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Insufficient Storage";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class InsufficientStorage extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public InsufficientStorage(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class InsufficientStorage extends HttpException {
 	 * Constructor.
 	 */
 	public InsufficientStorage() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

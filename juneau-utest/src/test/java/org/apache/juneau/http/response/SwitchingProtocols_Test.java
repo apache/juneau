@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class SwitchingProtocols_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public SwitchingProtocols a1() { return new SwitchingProtocols(); }
-		@RestGet public SwitchingProtocols a2() { return new SwitchingProtocols("foo"); }
-		@RestGet public SwitchingProtocols a3() { return new SwitchingProtocols().header("Foo","bar"); }
+		@RestGet public SwitchingProtocols a1() { return SWITCHING_PROTOCOLS; }
+		@RestGet public SwitchingProtocols a2() { return switchingProtocols().body("foo"); }
+		@RestGet public SwitchingProtocols a3() { return switchingProtocols().header("Foo","bar"); }
 	}
 
 	@Test

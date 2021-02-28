@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class Accepted_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public Accepted a1() { return new Accepted(); }
-		@RestGet public Accepted a2() { return new Accepted("foo"); }
-		@RestGet public Accepted a3() { return new Accepted().header("Foo","bar"); }
+		@RestGet public Accepted a1() { return ACCEPTED; }
+		@RestGet public Accepted a2() { return accepted().body("foo"); }
+		@RestGet public Accepted a3() { return accepted().header("Foo","bar"); }
 	}
 
 	@Test

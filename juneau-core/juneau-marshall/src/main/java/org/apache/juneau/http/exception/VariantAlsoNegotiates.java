@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * Transparent content negotiation for the request results in a circular reference.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class VariantAlsoNegotiates extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 506;
+	public static final int STATUS_CODE = 506;
 
-	/** Default message */
-	public static final String MESSAGE = "Variant Also Negotiates";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Variant Also Negotiates";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class VariantAlsoNegotiates extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public VariantAlsoNegotiates(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class VariantAlsoNegotiates extends HttpException {
 	 * Constructor.
 	 */
 	public VariantAlsoNegotiates() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

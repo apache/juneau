@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server does not support the HTTP protocol version used in the request.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class HttpVersionNotSupported extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 505;
+	public static final int STATUS_CODE = 505;
 
-	/** Default message */
-	public static final String MESSAGE = "HTTP Version Not Supported";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "HTTP Version Not Supported";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class HttpVersionNotSupported extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public HttpVersionNotSupported(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class HttpVersionNotSupported extends HttpException {
 	 * Constructor.
 	 */
 	public HttpVersionNotSupported() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

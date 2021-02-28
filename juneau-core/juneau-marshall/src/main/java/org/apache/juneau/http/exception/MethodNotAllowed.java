@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class MethodNotAllowed extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 405;
+	public static final int STATUS_CODE = 405;
 
-	/** Default message */
-	public static final String MESSAGE = "Method Not Allowed";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Method Not Allowed";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class MethodNotAllowed extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public MethodNotAllowed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class MethodNotAllowed extends HttpException {
 	 * Constructor.
 	 */
 	public MethodNotAllowed() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

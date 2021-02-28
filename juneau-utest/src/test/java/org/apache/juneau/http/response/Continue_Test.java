@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class Continue_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public Continue a1() { return new Continue(); }
-		@RestGet public Continue a2() { return new Continue("foo"); }
-		@RestGet public Continue a3() { return new Continue().header("Foo","bar"); }
+		@RestGet public Continue a1() { return CONTINUE; }
+		@RestGet public Continue a2() { return _continue().body("foo"); }
+		@RestGet public Continue a3() { return _continue().header("Foo","bar"); }
 	}
 
 	@Test

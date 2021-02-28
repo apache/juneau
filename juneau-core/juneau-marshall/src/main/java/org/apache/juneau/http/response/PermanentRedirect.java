@@ -16,6 +16,8 @@ import static org.apache.juneau.http.response.PermanentRedirect.*;
 
 import java.net.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -26,64 +28,47 @@ import org.apache.juneau.internal.*;
  * The request and all future requests should be repeated using another URI. 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change.
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class PermanentRedirect extends HttpResponse {
+public class PermanentRedirect extends BasicLocationHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 308;
+	public static final int STATUS_CODE = 308;
 
-	/** Default message */
-	public static final String MESSAGE = "Permanent Redirect";
-
-	/** Reusable instance. */
-	public static final PermanentRedirect INSTANCE = new PermanentRedirect();
-
-	private final URI location;
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Permanent Redirect";
 
 	/**
-	 * Constructor using HTTP-standard message.
-	 */
-	public PermanentRedirect() {
-		this(MESSAGE, null);
-	}
-
-	/**
-	 * Constructor with no redirect.
-	 * <p>
-	 * Used for end-to-end interfaces.
+	 * Default unmodifiable instance.
 	 *
-	 * @param message Message to send as the response.
+	 * <br>Response body contains the reason phrase.
 	 */
-	public PermanentRedirect(String message) {
-		super(message);
-		this.location = null;
-	}
+	public static final PermanentRedirect INSTANCE = create().body(REASON_PHRASE).unmodifiable();
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
-	 * @param location <c>Location</c> header value.
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
 	 */
-	public PermanentRedirect(String message, URI location) {
-		super(message);
-		this.location = location;
+	public static PermanentRedirect create() {
+		return new PermanentRedirect();
 	}
 
 	/**
 	 * Constructor.
-	 * @param location <c>Location</c> header value.
 	 */
-	public PermanentRedirect(URI location) {
-		this(MESSAGE, location);
+	public PermanentRedirect() {
+		this(null);
 	}
 
 	/**
-	 * @return <c>Location</c> header value.
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
 	 */
-	@ResponseHeader(name="Location", description="New location of resource.")
-	public URI getLocation() {
-		return location;
+	public PermanentRedirect(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -92,9 +77,57 @@ public class PermanentRedirect extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public PermanentRedirect header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public PermanentRedirect unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public PermanentRedirect location(String value) {
+		super.location(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public PermanentRedirect location(URI value) {
+		super.location(value);
 		return this;
 	}
 

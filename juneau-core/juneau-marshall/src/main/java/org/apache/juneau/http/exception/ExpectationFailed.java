@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server cannot meet the requirements of the Expect request-header field.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class ExpectationFailed extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 417;
+	public static final int STATUS_CODE = 417;
 
-	/** Default message */
-	public static final String MESSAGE = "Expectation Failed";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Expectation Failed";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class ExpectationFailed extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public ExpectationFailed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ExpectationFailed extends HttpException {
 	 * Constructor.
 	 */
 	public ExpectationFailed() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

@@ -134,7 +134,7 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient} <jk>extends</jk> {@link HttpClient}, creates {@link RestRequest} objects.
  * 	<li class='jc'>{@link RestRequest} <jk>extends</jk> {@link HttpUriRequest}, creates {@link RestResponse} objects.
- * 	<li class='jc'>{@link RestResponse} <jk>extends</jk> {@link HttpResponse}, creates {@link ResponseBody} and {@link ResponseHeader} objects.
+ * 	<li class='jc'>{@link RestResponse} creates {@link ResponseBody} and {@link ResponseHeader} objects.
  * 	<li class='jc'>{@link ResponseBody} <jk>extends</jk> {@link HttpEntity}
  * 	<li class='jc'>{@link ResponseHeader} <jk>extends</jk> {@link Header}
  * </ul>
@@ -2121,9 +2121,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private static Object buildBuilders(Object o, HttpPartSerializerSession ss) {
 		if (o instanceof SerializedHeader)
-			return ((SerializedHeader)o).serializer(ss, false);
+			return ((SerializedHeader)o).copy().serializerIfNotSet(ss);
 		if (o instanceof SerializedNameValuePair)
-			return ((SerializedNameValuePair)o).serializer(ss, false);
+			return ((SerializedNameValuePair)o).copy().serializerIfNotSet(ss);
 		return o;
 	}
 

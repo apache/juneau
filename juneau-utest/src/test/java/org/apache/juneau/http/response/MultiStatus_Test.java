@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class MultiStatus_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public MultiStatus a1() { return new MultiStatus(); }
-		@RestGet public MultiStatus a2() { return new MultiStatus("foo"); }
-		@RestGet public MultiStatus a3() { return new MultiStatus().header("Foo","bar"); }
+		@RestGet public MultiStatus a1() { return MULTI_STATUS; }
+		@RestGet public MultiStatus a2() { return multiStatus().body("foo"); }
+		@RestGet public MultiStatus a3() { return multiStatus().header("Foo","bar"); }
 	}
 
 	@Test

@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class NotModified_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public NotModified a1() { return new NotModified(); }
-		@RestGet public NotModified a2() { return new NotModified("foo"); }
-		@RestGet public NotModified a3() { return new NotModified().header("Foo","bar"); }
+		@RestGet public NotModified a1() { return NOT_MODIFIED; }
+		@RestGet public NotModified a2() { return notModified().body("foo"); }
+		@RestGet public NotModified a3() { return notModified().header("Foo","bar"); }
 	}
 
 	@Test

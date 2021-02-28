@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class UnavailableForLegalReasons extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 451;
+	public static final int STATUS_CODE = 451;
 
-	/** Default message */
-	public static final String MESSAGE = "Unavailable For Legal Reasons";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Unavailable For Legal Reasons";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class UnavailableForLegalReasons extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UnavailableForLegalReasons(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class UnavailableForLegalReasons extends HttpException {
 	 * Constructor.
 	 */
 	public UnavailableForLegalReasons() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

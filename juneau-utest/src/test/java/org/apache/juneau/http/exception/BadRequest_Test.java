@@ -13,6 +13,7 @@
 package org.apache.juneau.http.exception;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.exception.BadRequest.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -21,9 +22,6 @@ import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class BadRequest_Test {
-
-	private static final int CODE = BadRequest.CODE;
-	private static final String MESSAGE = BadRequest.MESSAGE;
 
 	@Rest
 	public static class A {
@@ -58,23 +56,23 @@ public class BadRequest_Test {
 		RestClient c = MockRestClient.create(A.class).ignoreErrors().noLog().build();
 
 		c.get("/f1").run()
-			.assertStatus().code().is(CODE)
-			.assertBody().is(MESSAGE);
+			.assertStatus().code().is(STATUS_CODE)
+			.assertBody().is(REASON_PHRASE);
 		c.get("/f2").run()
-			.assertStatus().code().is(CODE)
+			.assertStatus().code().is(STATUS_CODE)
 			.assertBody().is("foo bar");
 		c.get("/f3").run()
-			.assertStatus().code().is(CODE)
+			.assertStatus().code().is(STATUS_CODE)
 			.assertBody().is("baz");
 		c.get("/f4").run()
-			.assertStatus().code().is(CODE)
+			.assertStatus().code().is(STATUS_CODE)
 			.assertBody().is("foo bar");
 		c.get("/f5").run()
-			.assertStatus().code().is(CODE)
-			.assertBody().is(MESSAGE)
+			.assertStatus().code().is(STATUS_CODE)
+			.assertBody().is(REASON_PHRASE)
 			.assertHeader("Foo").is("bar");
 		c.get("/f6").run()
-			.assertStatus().code().is(CODE)
+			.assertStatus().code().is(STATUS_CODE)
 			.assertBody().is("foo");
 	}
 }

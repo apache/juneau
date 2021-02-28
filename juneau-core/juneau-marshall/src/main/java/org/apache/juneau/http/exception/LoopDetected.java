@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class LoopDetected extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 508;
+	public static final int STATUS_CODE = 508;
 
-	/** Default message */
-	public static final String MESSAGE = "Loop Detected";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Loop Detected";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class LoopDetected extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public LoopDetected(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class LoopDetected extends HttpException {
 	 * Constructor.
 	 */
 	public LoopDetected() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

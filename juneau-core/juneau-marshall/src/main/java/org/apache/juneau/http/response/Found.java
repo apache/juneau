@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
-import java.net.*;
-
 import static org.apache.juneau.http.response.Found.*;
 
+import java.net.*;
+
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -29,64 +31,47 @@ import org.apache.juneau.internal.*;
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class Found extends HttpResponse {
+public class Found extends BasicLocationHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 302;
+	public static final int STATUS_CODE = 302;
 
 	/** Default message */
-	public static final String MESSAGE = "Found";
-
-	/** Reusable instance. */
-	public static final Found INSTANCE = new Found();
-
-	private final URI location;
+	public static final String REASON_PHRASE = "Found";
 
 	/**
-	 * Constructor using HTTP-standard message.
-	 */
-	public Found() {
-		this(MESSAGE, null);
-	}
-
-	/**
-	 * Constructor with no redirect.
-	 * <p>
-	 * Used for end-to-end interfaces.
+	 * Default unmodifiable instance.
 	 *
-	 * @param message Message to send as the response.
+	 * <br>Response body contains the reason phrase.
 	 */
-	public Found(String message) {
-		super(message);
-		this.location = null;
-	}
+	public static final Found INSTANCE = create().body(REASON_PHRASE).unmodifiable();
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
-	 * @param location <c>Location</c> header value.
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
 	 */
-	public Found(String message, URI location) {
-		super(message);
-		this.location = location;
+	public static Found create() {
+		return new Found();
 	}
 
 	/**
 	 * Constructor.
-	 * @param location <c>Location</c> header value.
 	 */
-	public Found(URI location) {
-		this(MESSAGE, location);
+	public Found() {
+		this(null);
 	}
 
 	/**
-	 * @return <c>Location</c> header value.
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
 	 */
-	@ResponseHeader(name="Location", description="Location of resource.")
-	public URI getLocation() {
-		return location;
+	public Found(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -95,9 +80,57 @@ public class Found extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public Found header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public Found unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public Found location(String value) {
+		super.location(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public Found location(URI value) {
+		super.location(value);
 		return this;
 	}
 

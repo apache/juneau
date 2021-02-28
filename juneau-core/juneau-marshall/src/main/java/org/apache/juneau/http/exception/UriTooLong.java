@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The URI provided was too long for the server to process.
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class UriTooLong extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 414;
+	public static final int STATUS_CODE = 414;
 
-	/** Default message */
-	public static final String MESSAGE = "URI Too Long";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "URI Too Long";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class UriTooLong extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UriTooLong(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class UriTooLong extends HttpException {
 	 * Constructor.
 	 */
 	public UriTooLong() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

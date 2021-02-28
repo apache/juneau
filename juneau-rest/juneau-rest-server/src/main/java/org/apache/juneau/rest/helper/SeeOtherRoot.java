@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
-import java.net.*;
-
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 
@@ -32,7 +30,8 @@ public class SeeOtherRoot extends SeeOther {
 	 * Constructor.
 	 */
 	public SeeOtherRoot() {
-		super(URI.create("servlet:/"));
+		super();
+		location("servlet:/");
 	}
 
 	/**

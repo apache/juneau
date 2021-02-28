@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -27,6 +28,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
+import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -82,7 +84,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@RestOp(path="/ok")
 		public Ok getOk() {
-			return Ok.OK;
+			return OK;
 		}
 		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
@@ -450,7 +452,7 @@ public class RestClient_Config_RestClient_Test {
 			assertEquals("{f:1}",foo[0].toString());
 			assertEquals("{f:1}",foo[1].toString());
 			res.header("Foo",bean);
-			return Ok.OK;
+			return OK;
 		}
 	}
 

@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class RangeNotSatisfiable extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 416;
+	public static final int STATUS_CODE = 416;
 
-	/** Default message */
-	public static final String MESSAGE = "Range Not Satisfiable";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Range Not Satisfiable";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class RangeNotSatisfiable extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public RangeNotSatisfiable(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class RangeNotSatisfiable extends HttpException {
 	 * Constructor.
 	 */
 	public RangeNotSatisfiable() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

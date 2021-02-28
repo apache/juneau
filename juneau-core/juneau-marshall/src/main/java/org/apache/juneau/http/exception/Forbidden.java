@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The request was valid, but the server is refusing action.
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class Forbidden extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 403;
+	public static final int STATUS_CODE = 403;
 
-	/** Default message */
-	public static final String MESSAGE = "Forbidden";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Forbidden";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class Forbidden extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Forbidden(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class Forbidden extends HttpException {
 	 * Constructor.
 	 */
 	public Forbidden() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

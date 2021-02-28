@@ -13,8 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
-
-import java.net.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -25,10 +24,10 @@ public class TemporaryRedirect_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public TemporaryRedirect a1() { return new TemporaryRedirect(); }
-		@RestGet public TemporaryRedirect a2() { return new TemporaryRedirect("foo"); }
-		@RestGet public TemporaryRedirect a3() { return new TemporaryRedirect(URI.create("servlet:/foo")); }
-		@RestGet public TemporaryRedirect a4() { return new TemporaryRedirect().header("Foo","bar"); }
+		@RestGet public TemporaryRedirect a1() { return TEMPORARY_REDIRECT; }
+		@RestGet public TemporaryRedirect a2() { return temporaryRedirect("servlet:/foo").body("foo"); }
+		@RestGet public TemporaryRedirect a3() { return temporaryRedirect("servlet:/foo"); }
+		@RestGet public TemporaryRedirect a4() { return temporaryRedirect("servlet:/foo").header("Foo","bar"); }
 	}
 
 	@Test
@@ -46,7 +45,6 @@ public class TemporaryRedirect_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(307)
-			.assertBody().is("Temporary Redirect")
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()

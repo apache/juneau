@@ -93,8 +93,7 @@ public interface ResponseHandler {
 	 * Process this response if possible.
 	 * This method should return <jk>false</jk> if it wasn't able to process the response.
 	 *
-	 * @param req The HTTP servlet request.
-	 * @param res The HTTP servlet response;
+	 * @param call The HTTP call.
 	 * @return true If this handler handled the response.
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.
@@ -103,5 +102,5 @@ public interface ResponseHandler {
 	 * 	If some other exception occurred.
 	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
-	boolean handle(RestRequest req, RestResponse res) throws IOException, HttpException;
+	boolean handle(RestCall call) throws IOException, HttpException;
 }

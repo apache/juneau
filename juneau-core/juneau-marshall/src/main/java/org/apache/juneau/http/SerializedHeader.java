@@ -87,6 +87,28 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	protected SerializedHeader(SerializedHeader copyFrom) {
+		super(copyFrom);
+		this.value = copyFrom.value;
+		this.serializer = copyFrom.serializer == null ? serializer : copyFrom.serializer;
+		this.schema = copyFrom.schema == null ? schema : copyFrom.schema;
+		this.skipIfEmpty = copyFrom.skipIfEmpty;
+	}
+
+	/**
+	 * Creates a copy of this object.
+	 *
+	 * @return A new copy of this object.
+	 */
+	public SerializedHeader copy() {
+		return new SerializedHeader(this);
+	}
+
+	/**
 	 * Sets the serializer to use for serializing the value to a string value.
 	 *
 	 * @param value The new value for this property.
@@ -105,19 +127,19 @@ public class SerializedHeader extends BasicHeader {
 	 * @return This object (for method chaining).
 	 */
 	public SerializedHeader serializer(HttpPartSerializerSession value) {
-		return serializer(value, true);
+		serializer = value;
+		return this;
 	}
 
 	/**
-	 * Sets the serializer to use for serializing the value to a string value.
+	 * Sets the serializer to use for serializing the value to a string value if it's not already set on this object.
 	 *
 	 * @param value The new value for this property.
-	 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedHeader serializer(HttpPartSerializerSession value, boolean overwrite) {
-		if (overwrite || serializer == null)
-			this.serializer = value;
+	public SerializedHeader serializerIfNotSet(HttpPartSerializerSession value) {
+		if (serializer == null)
+			serializer = value;
 		return this;
 	}
 
@@ -129,6 +151,18 @@ public class SerializedHeader extends BasicHeader {
 	 */
 	public SerializedHeader schema(HttpPartSchema value) {
 		this.schema = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema object that defines the format of the output if it's not already set on this object.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedHeader schemaIfNotSet(HttpPartSchema value) {
+		if (schema == null)
+			schema = value;
 		return this;
 	}
 

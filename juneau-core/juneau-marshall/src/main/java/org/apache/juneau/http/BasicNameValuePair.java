@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -132,6 +133,17 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	protected BasicNameValuePair(BasicNameValuePair copyFrom) {
+		assertArgNotNull("copyFrom", copyFrom);
+		this.name = copyFrom.name;
+		this.value = copyFrom.value;
+	}
+
+	/**
 	 * Provides an object for performing assertions against the name of this pair.
 	 *
 	 * @return An object for performing assertions against the name of this pair.
@@ -169,7 +181,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @return The raw value of the parameter.
 	 */
-	protected Object getRawValue() {
+	public Object getRawValue() {
 		return unwrap(value);
 	}
 

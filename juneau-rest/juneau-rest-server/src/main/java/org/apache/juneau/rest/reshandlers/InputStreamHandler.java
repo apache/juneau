@@ -34,7 +34,8 @@ import org.apache.juneau.utils.*;
 public final class InputStreamHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res) throws IOException, NotAcceptable, HttpException {
+	public boolean handle(RestCall call) throws IOException, NotAcceptable, HttpException {
+		RestResponse res = call.getRestResponse();
 		if (res.isOutputType(InputStream.class)) {
 			try (OutputStream os = res.getNegotiatedOutputStream()) {
 				IOPipe.create(res.getOutput(InputStream.class), os).run();

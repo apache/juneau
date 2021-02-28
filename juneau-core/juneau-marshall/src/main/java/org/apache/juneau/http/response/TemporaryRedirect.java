@@ -16,6 +16,8 @@ import static org.apache.juneau.http.response.TemporaryRedirect.*;
 
 import java.net.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -27,64 +29,47 @@ import org.apache.juneau.internal.*;
  * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
  * For example, a POST request should be repeated using another POST request.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class TemporaryRedirect extends HttpResponse {
+public class TemporaryRedirect extends BasicLocationHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 307;
+	public static final int STATUS_CODE = 307;
 
-	/** Default message */
-	public static final String MESSAGE = "Temporary Redirect";
-
-	/** Reusable instance. */
-	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect();
-
-	private final URI location;
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Temporary Redirect";
 
 	/**
-	 * Constructor using HTTP-standard message.
-	 */
-	public TemporaryRedirect() {
-		this(MESSAGE, null);
-	}
-
-	/**
-	 * Constructor with no redirect.
-	 * <p>
-	 * Used for end-to-end interfaces.
+	 * Default unmodifiable instance.
 	 *
-	 * @param message Message to send as the response.
+	 * <br>Response body contains the reason phrase.
 	 */
-	public TemporaryRedirect(String message) {
-		super(message);
-		this.location = null;
-	}
+	public static final TemporaryRedirect INSTANCE = create().body(REASON_PHRASE).unmodifiable();
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
-	 * @param location <c>Location</c> header value.
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
 	 */
-	public TemporaryRedirect(String message, URI location) {
-		super(message);
-		this.location = location;
+	public static TemporaryRedirect create() {
+		return new TemporaryRedirect();
 	}
 
 	/**
 	 * Constructor.
-	 * @param location <c>Location</c> header value.
 	 */
-	public TemporaryRedirect(URI location) {
-		this(MESSAGE, location);
+	public TemporaryRedirect() {
+		this(null);
 	}
 
 	/**
-	 * @return <c>Location</c> header value.
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
 	 */
-	@ResponseHeader(name="Location", description="Temporary location of resource.")
-	public URI getLocation() {
-		return location;
+	public TemporaryRedirect(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -93,9 +78,57 @@ public class TemporaryRedirect extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public TemporaryRedirect header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public TemporaryRedirect unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public TemporaryRedirect location(String value) {
+		super.location(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public TemporaryRedirect location(URI value) {
+		super.location(value);
 		return this;
 	}
 

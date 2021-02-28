@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The client needs to authenticate to gain network access.
  * <br>Intended for use by intercepting proxies used to control access to the network (e.g., "captive portals" used to require agreement to Terms of Service before granting full Internet access via a Wi-Fi hotspot).
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class NetworkAuthenticationRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 511;
+	public static final int STATUS_CODE = 511;
 
-	/** Default message */
-	public static final String MESSAGE = "Network Authentication Required";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Network Authentication Required";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class NetworkAuthenticationRequired extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NetworkAuthenticationRequired(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class NetworkAuthenticationRequired extends HttpException {
 	 * Constructor.
 	 */
 	public NetworkAuthenticationRequired() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

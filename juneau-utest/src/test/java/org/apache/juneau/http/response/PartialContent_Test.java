@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class PartialContent_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public PartialContent a1() { return new PartialContent(); }
-		@RestGet public PartialContent a2() { return new PartialContent("foo"); }
-		@RestGet public PartialContent a3() { return new PartialContent().header("Foo","bar"); }
+		@RestGet public PartialContent a1() { return PARTIAL_CONTENT; }
+		@RestGet public PartialContent a2() { return partialContent().body("foo"); }
+		@RestGet public PartialContent a3() { return partialContent().header("Foo","bar"); }
 	}
 
 	@Test

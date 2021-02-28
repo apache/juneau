@@ -162,6 +162,16 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.value = value;
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	protected BasicHeader(BasicHeader copyFrom) {
+		this.name = copyFrom.name;
+		this.value = copyFrom.value;
+	}
+
 	@Override /* Header */
 	public String getName() {
 		return name;
@@ -177,7 +187,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 *
 	 * @return The raw value of the header.
 	 */
-	protected Object getRawValue() {
+	public Object getRawValue() {
 		return unwrap(value);
 	}
 

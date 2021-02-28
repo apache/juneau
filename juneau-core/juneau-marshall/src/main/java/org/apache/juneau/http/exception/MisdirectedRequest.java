@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class MisdirectedRequest extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 421;
+	public static final int STATUS_CODE = 421;
 
-	/** Default message */
-	public static final String MESSAGE = "Misdirected Request";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Misdirected Request";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class MisdirectedRequest extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public MisdirectedRequest(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class MisdirectedRequest extends HttpException {
 	 * Constructor.
 	 */
 	public MisdirectedRequest() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

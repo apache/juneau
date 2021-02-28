@@ -13,8 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
-
-import java.net.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -25,10 +24,10 @@ public class PermanentRedirect_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public PermanentRedirect a1() { return new PermanentRedirect(); }
-		@RestGet public PermanentRedirect a2() { return new PermanentRedirect("foo"); }
-		@RestGet public PermanentRedirect a3() { return new PermanentRedirect(URI.create("servlet:/foo")); }
-		@RestGet public PermanentRedirect a4() { return new PermanentRedirect().header("Foo","bar"); }
+		@RestGet public PermanentRedirect a1() { return PERMANENT_REDIRECT; }
+		@RestGet public PermanentRedirect a2() { return permanentRedirect("servlet:/foo").body("foo"); }
+		@RestGet public PermanentRedirect a3() { return permanentRedirect("servlet:/foo"); }
+		@RestGet public PermanentRedirect a4() { return permanentRedirect("servlet:/foo").header("Foo","bar"); }
 	}
 
 	@Test
@@ -46,7 +45,6 @@ public class PermanentRedirect_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(308)
-			.assertBody().is("Permanent Redirect")
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()

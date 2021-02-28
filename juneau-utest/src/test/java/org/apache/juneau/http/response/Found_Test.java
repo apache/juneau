@@ -13,8 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
-
-import java.net.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -25,10 +24,10 @@ public class Found_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public Found a1() { return new Found(); }
-		@RestGet public Found a2() { return new Found("foo"); }
-		@RestGet public Found a3() { return new Found(URI.create("servlet:/foo")); }
-		@RestGet public Found a4() { return new Found().header("Foo","bar"); }
+		@RestGet public Found a1() { return FOUND; }
+		@RestGet public Found a2() { return found("servlet:/foo").body("foo"); }
+		@RestGet public Found a3() { return found("servlet:/foo"); }
+		@RestGet public Found a4() { return found("servlet:/foo").header("Foo","bar"); }
 	}
 
 	@Test
@@ -46,7 +45,6 @@ public class Found_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(302)
-			.assertBody().is("Found")
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()

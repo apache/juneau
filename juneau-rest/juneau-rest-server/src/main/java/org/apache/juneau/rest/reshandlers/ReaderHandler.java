@@ -31,7 +31,8 @@ import org.apache.juneau.utils.*;
 public final class ReaderHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res) throws IOException, NotAcceptable, HttpException {
+	public boolean handle(RestCall call) throws IOException, NotAcceptable, HttpException {
+		RestResponse res = call.getRestResponse();
 		if (res.isOutputType(Reader.class)) {
 			try (Writer w = res.getNegotiatedWriter()) {
 				IOPipe.create(res.getOutput(Reader.class), w).run();

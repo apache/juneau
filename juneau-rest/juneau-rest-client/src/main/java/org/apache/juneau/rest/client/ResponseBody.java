@@ -648,21 +648,19 @@ public class ResponseBody implements HttpEntity {
 	@SuppressWarnings("unchecked")
 	public <T> T asType(ClassMeta<T> type) throws RestCallException {
 		try {
-			Class<?> ic = type.getInnerClass();
-
-			if (ic.equals(ResponseBody.class) || ic.equals(HttpEntity.class))
+			if (type.is(ResponseBody.class) || type.is(HttpEntity.class))
 				return (T)this;
 
-			if (ic.equals(Reader.class))
+			if (type.is(Reader.class))
 				return (T)asReader();
 
-			if (ic.equals(InputStream.class))
+			if (type.is(InputStream.class))
 				return (T)asInputStream();
 
-			if (type.isType(HttpResponse.class))
+			if (type.is(HttpResponse.class))
 				return (T)response;
 
-			if (type.isType(HttpResource.class)) {
+			if (type.isChildOf(HttpResource.class)) {
 				BasicHttpResource r = BasicHttpResource.of(asInputStream());
 				for (Header h : response.getAllHeaders()) {
 					if (h.getName().equalsIgnoreCase("Content-Type"))
@@ -682,7 +680,7 @@ public class ResponseBody implements HttpEntity {
 
 			MediaType mt = MediaType.of(ct);
 
-			if (parser == null || (mt.toString().equals("text/plain") && ! parser.canHandle(ct))) {
+			if (parser == null || (mt.toString().contains("text/plain") && ! parser.canHandle(ct))) {
 				if (type.hasStringMutater())
 					return type.getStringMutater().mutate(asString());
 			}
@@ -701,7 +699,7 @@ public class ResponseBody implements HttpEntity {
 					T t = parser.createSession(pArgs).parse(in, type);
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
-					if (t == null && ! type.isType(String.class)) {
+					if (t == null && ! type.is(String.class)) {
 						ConstructorInfo c = type.getInfo().getPublicConstructor();
 						if (c != null) {
 							try {

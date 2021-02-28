@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class AlreadyReported_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public AlreadyReported a1() { return new AlreadyReported(); }
-		@RestGet public AlreadyReported a2() { return new AlreadyReported("foo"); }
-		@RestGet public AlreadyReported a3() { return new AlreadyReported().header("Foo","bar"); }
+		@RestGet public AlreadyReported a1() { return ALREADY_REPORTED; }
+		@RestGet public AlreadyReported a2() { return alreadyReported().body("foo"); }
+		@RestGet public AlreadyReported a3() { return alreadyReported().header("Foo","bar"); }
 	}
 
 	@Test

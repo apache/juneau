@@ -831,6 +831,40 @@ public final class RestResponse {
 	}
 
 	/**
+	 * Sets a response header.
+	 *
+	 * <p>
+	 * Any previous header values are removed.
+	 *
+	 * <p>
+	 * Value is added at the end of the headers.
+	 *
+	 * @param header The header.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHeader(Header header) {
+		inner.setHeader(header.getName(), header.getValue());
+		return this;
+	}
+
+	/**
+	 * Adds a response header.
+	 *
+	 * <p>
+	 * Any previous header values are preserved.
+	 *
+	 * <p>
+	 * Value is added at the end of the headers.
+	 *
+	 * @param header The header.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse addHeader(Header header) {
+		inner.addHeader(header.getName(), header.getValue());
+		return this;
+	}
+
+	/**
 	 * Gets the value of the response header with the given name.
 	 *
 	 * <p>

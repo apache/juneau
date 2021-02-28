@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.NotModified.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -24,32 +26,47 @@ import org.apache.juneau.internal.*;
  * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class NotModified extends HttpResponse {
+public class NotModified extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 304;
+	public static final int STATUS_CODE = 304;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Modified";
-
-	/** Reusable instance. */
-	public static final NotModified INSTANCE = new NotModified();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Not Modified";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public NotModified() {
-		this(MESSAGE);
+	public static final NotModified INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static NotModified create() {
+		return new NotModified();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public NotModified(String message) {
-		super(message);
+	public NotModified() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public NotModified(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -58,9 +75,45 @@ public class NotModified extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public NotModified header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public NotModified unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server does not meet one of the preconditions that the requester put on the request.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class PreconditionFailed extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 412;
+	public static final int STATUS_CODE = 412;
 
-	/** Default message */
-	public static final String MESSAGE = "Precondition Failed";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Precondition Failed";
 
 	/**
 	 * Constructor.
@@ -44,14 +44,14 @@ public class PreconditionFailed extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PreconditionFailed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
 	 * Constructor.
 	 */
 	public PreconditionFailed() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class NonAuthoritativeInformation_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public NonAuthoritiveInformation a1() { return new NonAuthoritiveInformation(); }
-		@RestGet public NonAuthoritiveInformation a2() { return new NonAuthoritiveInformation("foo"); }
-		@RestGet public NonAuthoritiveInformation a3() { return new NonAuthoritiveInformation().header("Foo","bar"); }
+		@RestGet public NonAuthoritiveInformation a1() { return NON_AUTHORATIVE_INFORMATION; }
+		@RestGet public NonAuthoritiveInformation a2() { return nonAuthoritiveInformation().body("foo"); }
+		@RestGet public NonAuthoritiveInformation a3() { return nonAuthoritiveInformation().header("Foo","bar"); }
 	}
 
 	@Test

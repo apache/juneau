@@ -1041,6 +1041,26 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified class is an exact match for this metadata.
+	 *
+	 * @param value The value to check against.
+	 * @return <jk>true</jk> if the specified class is an exact match for this metadata.
+	 */
+	public boolean is(Class<?> value) {
+		return eq(innerClass, value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this metadata represents the specified type.
+	 *
+	 * @param c The class to test against.
+	 * @return <jk>true</jk> if this metadata represents the specified type.
+	 */
+	public boolean isChildOf(Class<?> c) {
+		return info.isChildOf(c);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Map}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map}.
@@ -1254,16 +1274,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isLong() {
 		return innerClass == Long.class || innerClass == long.class;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this metadata represents the specified type.
-	 *
-	 * @param c The class to test against.
-	 * @return <jk>true</jk> if this metadata represents the specified type.
-	 */
-	public boolean isType(Class<?> c) {
-		return info.isChildOf(c);
 	}
 
 	/**

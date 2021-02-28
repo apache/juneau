@@ -13,8 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
-
-import java.net.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -25,10 +24,10 @@ public class SeeOther_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public SeeOther a1() { return new SeeOther(); }
-		@RestGet public SeeOther a2() { return new SeeOther("foo"); }
-		@RestGet public SeeOther a3() { return new SeeOther(URI.create("servlet:/foo")); }
-		@RestGet public SeeOther a4() { return new SeeOther().header("Foo","bar"); }
+		@RestGet public SeeOther a1() { return SEE_OTHER; }
+		@RestGet public SeeOther a2() { return seeOther("servlet:/foo").body("foo"); }
+		@RestGet public SeeOther a3() { return seeOther("servlet:/foo"); }
+		@RestGet public SeeOther a4() { return seeOther("servlet:/foo").header("Foo","bar"); }
 	}
 
 	@Test
@@ -46,7 +45,6 @@ public class SeeOther_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(303)
-			.assertBody().is("See Other")
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()

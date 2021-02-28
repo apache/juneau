@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class MultipleChoices_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public MultipleChoices a1() { return new MultipleChoices(); }
-		@RestGet public MultipleChoices a2() { return new MultipleChoices("foo"); }
-		@RestGet public MultipleChoices a3() { return new MultipleChoices().header("Foo","bar"); }
+		@RestGet public MultipleChoices a1() { return MULTIPLE_CHOICES; }
+		@RestGet public MultipleChoices a2() { return multipleChoices().body("foo"); }
+		@RestGet public MultipleChoices a3() { return multipleChoices().header("Foo","bar"); }
 	}
 
 	@Test

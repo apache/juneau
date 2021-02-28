@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class NotAcceptable extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 406;
+	public static final int STATUS_CODE = 406;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Acceptable";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Not Acceptable";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class NotAcceptable extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotAcceptable(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class NotAcceptable extends HttpException {
 	 * Constructor.
 	 */
 	public NotAcceptable() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

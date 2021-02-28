@@ -53,11 +53,14 @@ public class DefaultHandler implements ResponseHandler {
 
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res) throws IOException, InternalServerError, NotAcceptable {
+	public boolean handle(RestCall call) throws IOException, InternalServerError, NotAcceptable {
+		RestRequest req = call.getRestRequest();
+		RestResponse res = call.getRestResponse();
 		SerializerGroup g = res.getOpContext().getSerializers();
 		String accept = req.getHeader("Accept").orElse("*/*");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		HttpPartSchema schema = null;
+		HttpPartSerializerSession ps = req.getPartSerializerSession();
 
 		Optional<Optional<Object>> output = res.getOutput();
 		Object o = output.isPresent() ? output.get().orElse(null) : null;
@@ -68,7 +71,7 @@ public class DefaultHandler implements ResponseHandler {
 
 		if (rm != null) {
 
-			boolean isThrowable = rm.getClassMeta().isType(Throwable.class);
+			boolean isThrowable = rm.getClassMeta().isChildOf(Throwable.class);
 			if (isThrowable && o != null) {
 				Throwable t = (Throwable)o;
 				res.setHeaderSafe("Exception-Name", rm.getClassMeta().getName());
@@ -89,35 +92,57 @@ public class DefaultHandler implements ResponseHandler {
 			}
 
 			for (ResponseBeanPropertyMeta hm : rm.getHeaderMethods()) {
+				String n = hm.getPartName().orElse(null);
 				try {
 					Object ho = hm.getGetter().invoke(o);
-					String n = hm.getPartName();
+					HttpPartSchema partSchema = hm.getSchema();
 					if ("*".equals(n)) {
 						for (Object ho2 : iterate(ho)) {
 							if (ho2 instanceof Map.Entry) {
 								@SuppressWarnings("rawtypes")
-								Map.Entry e = (Map.Entry)ho2;
-								String k = stringify(e.getKey());
-								Object v = e.getValue();
-								HttpPartSchema s = hm.getSchema().getProperty(k);
-								res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializerSession()), v));
+								Map.Entry x = (Map.Entry)ho2;
+								String k = stringify(x.getKey());
+								Object v = x.getValue();
+								res.setHeader(new HttpPart(k, RESPONSE_HEADER, partSchema.getProperty(k), hm.getSerializerSession().orElse(ps), v));
+							} else if (ho2 instanceof SerializedHeader) {
+								SerializedHeader x = ((SerializedHeader)ho2).copy().serializerIfNotSet(ps);
+								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
+								res.setHeader(x.getName(), x.getValue());
+							} else if (ho2 instanceof SerializedNameValuePair) {
+								SerializedNameValuePair x = ((SerializedNameValuePair)ho2).copy().serializerIfNotSet(ps);
+								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
+								res.setHeader(x.getName(), x.getValue());
+							} else if (ho2 instanceof Header) {
+								Header x = (Header)ho2;
+								res.setHeader(x.getName(), x.getValue());
 							} else if (ho2 instanceof NameValuePair) {
-								NameValuePair p = (NameValuePair)ho2;
-								res.setHeader(p.getName(), p.getValue());
+								NameValuePair x = (NameValuePair)ho2;
+								res.setHeader(x.getName(), x.getValue());
 							} else {
-								throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", hm.getPartName(), ho2 == null ? null : ho2.getClass().getName());
+								throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", ho2 == null ? null : ho2.getClass().getName(), n);
 							}
 						}
 					} else {
-						if (ho instanceof NameValuePair) {
-							NameValuePair p = (NameValuePair)ho;
-							res.setHeader(p.getName(), p.getValue());
+						if (ho instanceof SerializedHeader) {
+							SerializedHeader x = ((SerializedHeader)ho).copy().serializerIfNotSet(ps);
+							x.schemaIfNotSet(schema);
+							res.setHeader(x.getName(), x.getValue());
+						} else if (ho instanceof SerializedNameValuePair) {
+							SerializedNameValuePair x = ((SerializedNameValuePair)ho).copy().serializerIfNotSet(ps);
+							x.schemaIfNotSet(schema);
+							res.setHeader(x.getName(), x.getValue());
+						} else if (ho instanceof Header) {
+							Header x = (Header)ho;
+							res.setHeader(x.getName(), x.getValue());
+						} else if (ho instanceof NameValuePair) {
+							NameValuePair x = (NameValuePair)ho;
+							res.setHeader(x.getName(), x.getValue());
 						} else {
-							res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializerSession()), ho));
+							res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializerSession().orElse(ps), ho));
 						}
 					}
 				} catch (Exception e) {
-					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
+					throw new InternalServerError(e, "Could not set header ''{0}''", n);
 				}
 			}
 
@@ -258,7 +283,7 @@ public class DefaultHandler implements ResponseHandler {
 		if (o instanceof Map)
 			return ((Map<?,?>)o).entrySet();
 		if (o.getClass().isArray())
-			return Arrays.asList(o);
+			return Arrays.asList((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;
 		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", o.getClass().getName());

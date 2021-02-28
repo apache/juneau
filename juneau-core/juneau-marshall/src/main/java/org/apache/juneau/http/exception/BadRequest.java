@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class BadRequest extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 400;
+	public static final int STATUS_CODE = 400;
 
-	/** Default message */
-	public static final String MESSAGE = "Bad Request";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Bad Request";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class BadRequest extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public BadRequest(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class BadRequest extends HttpException {
 	 * Constructor.
 	 */
 	public BadRequest() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

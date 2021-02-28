@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class FailedDependency extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 424;
+	public static final int STATUS_CODE = 424;
 
-	/** Default message */
-	public static final String MESSAGE = "Failed Dependency";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Failed Dependency";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class FailedDependency extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public FailedDependency(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class FailedDependency extends HttpException {
 	 * Constructor.
 	 */
 	public FailedDependency() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

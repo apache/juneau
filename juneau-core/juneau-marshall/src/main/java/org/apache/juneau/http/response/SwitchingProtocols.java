@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.SwitchingProtocols.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -23,32 +25,47 @@ import org.apache.juneau.internal.*;
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class SwitchingProtocols extends HttpResponse {
+public class SwitchingProtocols extends BasicHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 101;
+	public static final int STATUS_CODE = 101;
 
-	/** Default message */
-	public static final String MESSAGE = "Switching Protocols";
-
-	/** Reusable instance. */
-	public static final SwitchingProtocols INSTANCE = new SwitchingProtocols();
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Switching Protocols";
 
 	/**
-	 * Constructor using HTTP-standard message.
+	 * Default unmodifiable instance.
+	 *
+	 * <br>Response body contains the reason phrase.
 	 */
-	public SwitchingProtocols() {
-		this(MESSAGE);
+	public static final SwitchingProtocols INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
+	 */
+	public static SwitchingProtocols create() {
+		return new SwitchingProtocols();
 	}
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
+	 * Constructor.
 	 */
-	public SwitchingProtocols(String message) {
-		super(message);
+	public SwitchingProtocols() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 */
+	public SwitchingProtocols(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -57,9 +74,45 @@ public class SwitchingProtocols extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public SwitchingProtocols header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public SwitchingProtocols unmodifiable() {
+		super.unmodifiable();
 		return this;
 	}
 

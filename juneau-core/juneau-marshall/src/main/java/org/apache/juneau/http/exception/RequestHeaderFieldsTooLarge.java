@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class RequestHeaderFieldsTooLarge extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 431;
+	public static final int STATUS_CODE = 431;
 
-	/** Default message */
-	public static final String MESSAGE = "Request Header Fields Too Large";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Request Header Fields Too Large";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class RequestHeaderFieldsTooLarge extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public RequestHeaderFieldsTooLarge(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class RequestHeaderFieldsTooLarge extends HttpException {
 	 * Constructor.
 	 */
 	public RequestHeaderFieldsTooLarge() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class NoContent_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public NoContent a1() { return new NoContent(); }
-		@RestGet public NoContent a2() { return new NoContent("foo"); }
-		@RestGet public NoContent a3() { return new NoContent().header("Foo","bar"); }
+		@RestGet public NoContent a1() { return NO_CONTENT; }
+		@RestGet public NoContent a2() { return noContent().body("foo"); }
+		@RestGet public NoContent a3() { return noContent().header("Foo","bar"); }
 	}
 
 	@Test

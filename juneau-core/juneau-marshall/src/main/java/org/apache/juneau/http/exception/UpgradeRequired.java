@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class UpgradeRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 426;
+	public static final int STATUS_CODE = 426;
 
-	/** Default message */
-	public static final String MESSAGE = "Upgrade Required";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Upgrade Required";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class UpgradeRequired extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UpgradeRequired(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class UpgradeRequired extends HttpException {
 	 * Constructor.
 	 */
 	public UpgradeRequired() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

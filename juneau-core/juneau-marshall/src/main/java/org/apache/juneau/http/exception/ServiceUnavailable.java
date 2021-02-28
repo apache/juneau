@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The server is currently unavailable (because it is overloaded or down for maintenance).
  * <br>Generally, this is a temporary state.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class ServiceUnavailable extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 503;
+	public static final int STATUS_CODE = 503;
 
-	/** Default message */
-	public static final String MESSAGE = "Service Unavailable";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Service Unavailable";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class ServiceUnavailable extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public ServiceUnavailable(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class ServiceUnavailable extends HttpException {
 	 * Constructor.
 	 */
 	public ServiceUnavailable() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

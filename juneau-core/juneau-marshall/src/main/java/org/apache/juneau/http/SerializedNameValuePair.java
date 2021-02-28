@@ -87,13 +87,36 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	protected SerializedNameValuePair(SerializedNameValuePair copyFrom) {
+		super(copyFrom);
+		this.value = copyFrom.value;
+		this.type = copyFrom.type;
+		this.serializer = copyFrom.serializer == null ? serializer : copyFrom.serializer;
+		this.schema = copyFrom.schema == null ? schema : copyFrom.schema;
+		this.skipIfEmpty = copyFrom.skipIfEmpty;
+	}
+
+	/**
+	 * Creates a copy of this object.
+	 *
+	 * @return A new copy of this object.
+	 */
+	public SerializedNameValuePair copy() {
+		return new SerializedNameValuePair(this);
+	}
+
+	/**
 	 * Sets the HTTP part type.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public SerializedNameValuePair type(HttpPartType value) {
-		this.type = value;
+		type = value;
 		return this;
 	}
 
@@ -116,19 +139,19 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @return This object (for method chaining).
 	 */
 	public SerializedNameValuePair serializer(HttpPartSerializerSession value) {
-		return serializer(value, true);
+		serializer = value;
+		return this;
 	}
 
 	/**
-	 * Sets the serializer to use for serializing the value to a string value.
+	 * Sets the serializer to use for serializing the value to a string value if it's not already set on this object.
 	 *
 	 * @param value The new value for this property.
-	 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair serializer(HttpPartSerializerSession value, boolean overwrite) {
-		if (overwrite || serializer == null)
-			this.serializer = value;
+	public SerializedNameValuePair serializerIfNotSet(HttpPartSerializerSession value) {
+		if (serializer == null)
+			serializer = value;
 		return this;
 	}
 
@@ -140,6 +163,18 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 */
 	public SerializedNameValuePair schema(HttpPartSchema value) {
 		this.schema = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema object that defines the format of the output if it's not already set on this object.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair schemaIfNotSet(HttpPartSchema value) {
+		if (schema == null)
+			schema = value;
 		return this;
 	}
 

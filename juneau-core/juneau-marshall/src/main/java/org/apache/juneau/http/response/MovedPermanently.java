@@ -16,6 +16,8 @@ import static org.apache.juneau.http.response.MovedPermanently.*;
 
 import java.net.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -25,64 +27,47 @@ import org.apache.juneau.internal.*;
  * <p>
  * This and all future requests should be directed to the given URI.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class MovedPermanently extends HttpResponse {
+public class MovedPermanently extends BasicLocationHttpResponse {
 
 	/** HTTP status code */
-	public static final int CODE = 301;
+	public static final int STATUS_CODE = 301;
 
-	/** Default message */
-	public static final String MESSAGE = "Moved Permanently";
-
-	/** Reusable instance. */
-	public static final MovedPermanently INSTANCE = new MovedPermanently();
-
-	private final URI location;
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Moved Permanently";
 
 	/**
-	 * Constructor using HTTP-standard message.
-	 */
-	public MovedPermanently() {
-		this(MESSAGE, null);
-	}
-
-	/**
-	 * Constructor with no redirect.
-	 * <p>
-	 * Used for end-to-end interfaces.
+	 * Default unmodifiable instance.
 	 *
-	 * @param message Message to send as the response.
+	 * <br>Response body contains the reason phrase.
 	 */
-	public MovedPermanently(String message) {
-		super(message);
-		this.location = null;
-	}
+	public static final MovedPermanently INSTANCE = create().body(REASON_PHRASE).unmodifiable();
 
 	/**
-	 * Constructor using custom message.
-	 * @param message Message to send as the response.
-	 * @param location <c>Location</c> header value.
+	 * Static creator.
+	 *
+	 * @return A new instance of this bean.
 	 */
-	public MovedPermanently(String message, URI location) {
-		super(message);
-		this.location = location;
+	public static MovedPermanently create() {
+		return new MovedPermanently();
 	}
 
 	/**
 	 * Constructor.
-	 * @param location <c>Location</c> header value.
 	 */
-	public MovedPermanently(URI location) {
-		this(MESSAGE, location);
+	public MovedPermanently() {
+		this(null);
 	}
 
 	/**
-	 * @return <c>Location</c> header value.
+	 * Constructor.
+	 *
+	 * @param body Body of the response.  Can be <jk>null</jk>.
 	 */
-	@ResponseHeader(name="Location", description="New location of resource.")
-	public URI getLocation() {
-		return location;
+	public MovedPermanently(String body) {
+		super(STATUS_CODE, REASON_PHRASE);
+		body(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -91,9 +76,57 @@ public class MovedPermanently extends HttpResponse {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - HttpResponse */
-	public MovedPermanently header(String name, Object val) {
-		super.header(name, val);
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently body(String value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently body(HttpEntity value) {
+		super.body(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently headers(Header...values) {
+		super.headers(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently reasonPhrase(String value) {
+		super.reasonPhrase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently statusCode(int value) {
+		super.statusCode(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResponse */
+	public MovedPermanently unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public MovedPermanently location(String value) {
+		super.location(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicLocationHttpResponse */
+	public MovedPermanently location(URI value) {
+		super.location(value);
 		return this;
 	}
 

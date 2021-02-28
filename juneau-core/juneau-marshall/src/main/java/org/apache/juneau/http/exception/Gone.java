@@ -29,16 +29,16 @@ import org.apache.juneau.internal.*;
  * <br>Clients such as search engines should remove the resource from their indices.
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class Gone extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 410;
+	public static final int STATUS_CODE = 410;
 
-	/** Default message */
-	public static final String MESSAGE = "Gone";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Gone";
 
 	/**
 	 * Constructor.
@@ -48,7 +48,7 @@ public class Gone extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Gone(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class Gone extends HttpException {
 	 * Constructor.
 	 */
 	public Gone() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

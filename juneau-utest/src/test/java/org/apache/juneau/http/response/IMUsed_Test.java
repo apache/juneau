@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.response.StandardResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -23,9 +24,9 @@ public class IMUsed_Test {
 
 	@Rest
 	public static class A {
-		@RestGet public IMUsed a1() { return new IMUsed(); }
-		@RestGet public IMUsed a2() { return new IMUsed("foo"); }
-		@RestGet public IMUsed a3() { return new IMUsed().header("Foo","bar"); }
+		@RestGet public IMUsed a1() { return IM_USED; }
+		@RestGet public IMUsed a2() { return imUsed().body("foo"); }
+		@RestGet public IMUsed a3() { return imUsed().header("Foo","bar"); }
 	}
 
 	@Test

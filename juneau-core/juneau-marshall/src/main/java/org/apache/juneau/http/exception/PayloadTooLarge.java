@@ -25,16 +25,16 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request is larger than the server is willing or able to process.
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class PayloadTooLarge extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 413;
+	public static final int STATUS_CODE = 413;
 
-	/** Default message */
-	public static final String MESSAGE = "Payload Too Large";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Payload Too Large";
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class PayloadTooLarge extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PayloadTooLarge(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class PayloadTooLarge extends HttpException {
 	 * Constructor.
 	 */
 	public PayloadTooLarge() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

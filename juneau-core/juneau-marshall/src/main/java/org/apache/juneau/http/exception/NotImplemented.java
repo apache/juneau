@@ -26,16 +26,16 @@ import org.apache.juneau.internal.*;
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  */
-@Response(code=CODE, description=MESSAGE)
+@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
 public class NotImplemented extends HttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
-	public static final int CODE = 501;
+	public static final int STATUS_CODE = 501;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Implemented";
+	/** Reason phrase */
+	public static final String REASON_PHRASE = "Not Implemented";
 
 	/**
 	 * Constructor.
@@ -45,7 +45,7 @@ public class NotImplemented extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotImplemented(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, msg, args);
+		super(cause, STATUS_CODE, msg, args);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class NotImplemented extends HttpException {
 	 * Constructor.
 	 */
 	public NotImplemented() {
-		this((Throwable)null, MESSAGE);
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.PartialContent.*;
+import java.net.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
@@ -20,99 +20,104 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents an <c>HTTP 206 Partial Content</c> response.
- *
- * <p>
- * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.
- * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
+ * Superclass of all predefined responses in this package that typically include a <c>Location</c> header.
  */
-@Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class PartialContent extends BasicHttpResponse {
+public abstract class BasicLocationHttpResponse extends BasicHttpResponse {
 
-	/** HTTP status code */
-	public static final int STATUS_CODE = 206;
-
-	/** Reason phrase */
-	public static final String REASON_PHRASE = "Partial Content";
-
-	/**
-	 * Default unmodifiable instance.
-	 *
-	 * <br>Response body contains the reason phrase.
-	 */
-	public static final PartialContent INSTANCE = create().body(REASON_PHRASE).unmodifiable();
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new instance of this bean.
-	 */
-	public static PartialContent create() {
-		return new PartialContent();
-	}
+	private URI location;
 
 	/**
 	 * Constructor.
+	 *
+	 * @param statusCode The HTTP status code.
+	 * @param reasonPhrase The HTTP status reason phrase.
 	 */
-	public PartialContent() {
-		this(null);
+	protected BasicLocationHttpResponse(int statusCode, String reasonPhrase) {
+		super(statusCode, reasonPhrase);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 * @param statusLine The HTTP status line.
 	 */
-	public PartialContent(String body) {
-		super(STATUS_CODE, REASON_PHRASE);
-		body(body);
+	protected BasicLocationHttpResponse(StatusLine statusLine) {
+		super(statusLine);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BasicLocationHttpResponse location(URI value) {
+		assertModifiable();
+		this.location = value;
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BasicLocationHttpResponse location(String value) {
+		return location(URI.create(value));
+	}
+
+	/**
+	 * @return <c>Location</c> header value.
+	 */
+	@ResponseHeader(name="Location", description="Location of resource.")
+	public URI getLocation() {
+		return location;
+	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent body(String value) {
+	public BasicLocationHttpResponse body(String value) {
 		super.body(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent body(HttpEntity value) {
+	public BasicLocationHttpResponse body(HttpEntity value) {
 		super.body(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent header(String name, Object value) {
+	public BasicLocationHttpResponse header(String name, Object value) {
 		super.header(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent headers(Header...values) {
+	public BasicLocationHttpResponse headers(Header...values) {
 		super.headers(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent reasonPhrase(String value) {
+	public BasicLocationHttpResponse reasonPhrase(String value) {
 		super.reasonPhrase(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent statusCode(int value) {
+	public BasicLocationHttpResponse statusCode(int value) {
 		super.statusCode(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent unmodifiable() {
+	public BasicLocationHttpResponse unmodifiable() {
 		super.unmodifiable();
 		return this;
 	}
