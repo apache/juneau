@@ -30,7 +30,7 @@ public class VarResolverException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public VarResolverException(Throwable cause, String message, Object... args) {
-		super(cause, getMessage(cause, message, null), args);
+		super(cause, message, args);
 	}
 
 	/**

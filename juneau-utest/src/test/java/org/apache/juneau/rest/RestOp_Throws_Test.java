@@ -762,7 +762,7 @@ public class RestOp_Throws_Test {
 			.json()
 			.run()
 			.assertCode().is(400)
-			.assertBody().is("'foo bar'");
+			.assertBody().is("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

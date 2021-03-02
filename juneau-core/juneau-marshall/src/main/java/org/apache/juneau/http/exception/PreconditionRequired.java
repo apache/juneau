@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.PreconditionRequired.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 428 (Precondition Required).
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * <br>Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class PreconditionRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -37,15 +35,43 @@ public class PreconditionRequired extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Precondition Required";
 
+	/** Reusable unmodifiable instance. */
+	public static final PreconditionRequired INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<PreconditionRequired> create() {
+		return new HttpExceptionBuilder<>(PreconditionRequired.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public PreconditionRequired(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public PreconditionRequired(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public PreconditionRequired() {
+		this(create().build());
 	}
 
 	/**
@@ -54,14 +80,7 @@ public class PreconditionRequired extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public PreconditionRequired(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public PreconditionRequired() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -71,7 +90,7 @@ public class PreconditionRequired extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PreconditionRequired(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -80,26 +99,15 @@ public class PreconditionRequired extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public PreconditionRequired(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public PreconditionRequired header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<PreconditionRequired> builder() {
+		return super.builder(PreconditionRequired.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public PreconditionRequired status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

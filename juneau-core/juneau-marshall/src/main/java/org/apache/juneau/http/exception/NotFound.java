@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.NotFound.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 404 (Not Found).
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * <br>Subsequent requests by the client are permissible.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class NotFound extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -37,15 +35,43 @@ public class NotFound extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Not Found";
 
+	/** Reusable unmodifiable instance. */
+	public static final NotFound INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<NotFound> create() {
+		return new HttpExceptionBuilder<>(NotFound.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public NotFound(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public NotFound(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public NotFound() {
+		this(create().build());
 	}
 
 	/**
@@ -54,14 +80,7 @@ public class NotFound extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public NotFound(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public NotFound() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -71,7 +90,7 @@ public class NotFound extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotFound(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -80,26 +99,15 @@ public class NotFound extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public NotFound(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public NotFound header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<NotFound> builder() {
+		return super.builder(NotFound.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public NotFound status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

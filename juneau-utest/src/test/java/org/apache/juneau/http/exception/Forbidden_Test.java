@@ -14,6 +14,7 @@ package org.apache.juneau.http.exception;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.exception.Forbidden.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -43,7 +44,7 @@ public class Forbidden_Test {
 		}
 		@RestGet
 		public void f5() throws Forbidden {
-			throw new Forbidden().header("Foo", "bar");
+			throw forbidden().header("Foo", "bar").build();
 		}
 		@RestGet
 		public void f6() throws Forbidden {

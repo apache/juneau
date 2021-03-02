@@ -52,7 +52,7 @@ public final class PojoRestException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public PojoRestException(Throwable cause, int status, String message, Object... args) {
-		super(cause, getMessage(cause, message, null), args);
+		super(cause, message, args);
 		this.status = status;
 	}
 

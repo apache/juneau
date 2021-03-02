@@ -60,7 +60,7 @@ public final class Traversable implements RestConverter {
 				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
 				o = p.get(pathRemainder);
 			} catch (PojoRestException e) {
-				throw new HttpException(e, e.getStatus());
+				throw new HttpException(e.getStatus(), e);
 			} catch (Throwable t) {
 				throw toHttpException(t, InternalServerError.class);
 			}

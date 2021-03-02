@@ -38,7 +38,7 @@ public final class InvalidDataConversionException extends BasicRuntimeException 
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public InvalidDataConversionException(Throwable cause, String message, Object... args) {
-		super(cause, getMessage(cause, message, null), args);
+		super(cause, message, args);
 	}
 
 	/**

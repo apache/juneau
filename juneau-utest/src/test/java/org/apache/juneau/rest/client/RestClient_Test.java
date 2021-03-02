@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.client.RestClient.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -34,7 +35,6 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -335,7 +335,7 @@ public class RestClient_Test {
 		@RestGet
 		public String echo(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
 			if (auth == null) {
-				throw new Unauthorized().header("WWW-Authenticate","BASIC realm=\"foo\"");
+				throw unauthorized().header("WWW-Authenticate","BASIC realm=\"foo\"").build();
 			} else {
 				assertEquals("Basic dXNlcjpwdw==",auth);
 				return "OK";

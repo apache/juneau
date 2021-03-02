@@ -14,6 +14,7 @@ package org.apache.juneau.http.exception;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.exception.MisdirectedRequest.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -43,7 +44,7 @@ public class MisdirectedRequest_Test {
 		}
 		@RestGet
 		public void f5() throws MisdirectedRequest {
-			throw new MisdirectedRequest().header("Foo", "bar");
+			throw misdirectedRequest().header("Foo", "bar").build();
 		}
 		@RestGet
 		public void f6() throws MisdirectedRequest {

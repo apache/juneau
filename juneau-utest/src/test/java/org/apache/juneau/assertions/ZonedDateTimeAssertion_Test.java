@@ -18,65 +18,74 @@ import static java.util.Optional.*;
 
 import java.time.*;
 import java.time.temporal.*;
+import java.util.*;
 
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class ZonedDateTimeAssertion_Test {
 
+	private ZonedDateTimeAssertion test(ZonedDateTime value) {
+		return assertZonedDateTime(value).silent();
+	}
+
+	private ZonedDateTimeAssertion test(Optional<ZonedDateTime> value) {
+		return assertZonedDateTime(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 		ZonedDateTime x1 = ZonedDateTime.parse("1950-01-01T12:34:56Z"), x2 = ZonedDateTime.parse("2050-01-01T12:34:56Z");
 		ZonedDateTime now = ZonedDateTime.now();
 
-		assertThrown(()->assertZonedDateTime((ZonedDateTime)null).exists()).is("Value was null.");
-		assertZonedDateTime(x1).exists();
-		assertThrown(()->assertZonedDateTime(empty()).exists()).is("Value was null.");
-		assertZonedDateTime(x1).exists();
+		assertThrown(()->test((ZonedDateTime)null).exists()).is("Value was null.");
+		test(x1).exists();
+		assertThrown(()->test(empty()).exists()).is("Value was null.");
+		test(x1).exists();
 
-		assertZonedDateTime(empty()).doesNotExist();
-		assertThrown(()->assertZonedDateTime(x1).doesNotExist()).is("Value was not null.");
+		test(empty()).doesNotExist();
+		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
 
-		assertZonedDateTime(empty()).isEqual(null);
-		assertZonedDateTime(x1).isEqual(x1);
-		assertZonedDateTime(of(x1)).isEqual(x1);
-		assertZonedDateTime(x1).isEqual(x1, ChronoUnit.DAYS);
-		assertThrown(()->assertZonedDateTime(x2).isEqual(x1, ChronoUnit.DAYS)).contains("Unexpected value.");
+		test(empty()).isEqual(null);
+		test(x1).isEqual(x1);
+		test(of(x1)).isEqual(x1);
+		test(x1).isEqual(x1, ChronoUnit.DAYS);
+		assertThrown(()->test(x2).isEqual(x1, ChronoUnit.DAYS)).contains("Unexpected value.");
 
-		assertZonedDateTime(empty()).isEqual(null);
-		assertZonedDateTime(x1).isEqual(x1);
-		assertZonedDateTime(x1).isEqual(x1, ChronoUnit.DAYS);
-		assertThrown(()->assertZonedDateTime(x2).isEqual(x1, ChronoUnit.DAYS)).contains("Unexpected value.");
+		test(empty()).isEqual(null);
+		test(x1).isEqual(x1);
+		test(x1).isEqual(x1, ChronoUnit.DAYS);
+		assertThrown(()->test(x2).isEqual(x1, ChronoUnit.DAYS)).contains("Unexpected value.");
 
-		assertThrown(()->assertZonedDateTime(empty()).isBefore(x1)).is("Value was null.");
-		assertThrown(()->assertZonedDateTime(x1).isBefore(null)).is("Parameter 'value' cannot be null.");
-		assertZonedDateTime(x1).isBefore(x2);
-		assertThrown(()->assertZonedDateTime(x2).isBefore(x1)).contains("Value was not before expected.");
+		assertThrown(()->test(empty()).isBefore(x1)).is("Value was null.");
+		assertThrown(()->test(x1).isBefore(null)).is("Parameter 'value' cannot be null.");
+		test(x1).isBefore(x2);
+		assertThrown(()->test(x2).isBefore(x1)).contains("Value was not before expected.");
 
-		assertThrown(()->assertZonedDateTime(empty()).isAfter(x1)).is("Value was null.");
-		assertThrown(()->assertZonedDateTime(x1).isAfter(null)).is("Parameter 'value' cannot be null.");
-		assertZonedDateTime(x2).isAfter(x1);
-		assertThrown(()->assertZonedDateTime(x1).isAfter(x2)).contains("Value was not after expected.");
+		assertThrown(()->test(empty()).isAfter(x1)).is("Value was null.");
+		assertThrown(()->test(x1).isAfter(null)).is("Parameter 'value' cannot be null.");
+		test(x2).isAfter(x1);
+		assertThrown(()->test(x1).isAfter(x2)).contains("Value was not after expected.");
 
-		assertThrown(()->assertZonedDateTime(empty()).isBeforeNow()).is("Value was null.");
-		assertZonedDateTime(x1).isBeforeNow();
-		assertThrown(()->assertZonedDateTime(x2).isBeforeNow()).contains("Value was not before expected.");
+		assertThrown(()->test(empty()).isBeforeNow()).is("Value was null.");
+		test(x1).isBeforeNow();
+		assertThrown(()->test(x2).isBeforeNow()).contains("Value was not before expected.");
 
-		assertThrown(()->assertZonedDateTime(empty()).isAfterNow()).is("Value was null.");
-		assertZonedDateTime(x2).isAfterNow();
-		assertThrown(()->assertZonedDateTime(x1).isAfterNow()).contains("Value was not after expected.");
+		assertThrown(()->test(empty()).isAfterNow()).is("Value was null.");
+		test(x2).isAfterNow();
+		assertThrown(()->test(x1).isAfterNow()).contains("Value was not after expected.");
 
-		assertThrown(()->assertZonedDateTime(empty()).isBetween(x1,x2)).is("Value was null.");
-		assertThrown(()->assertZonedDateTime(now).isBetween(null,x2)).is("Parameter 'lower' cannot be null.");
-		assertThrown(()->assertZonedDateTime(now).isBetween(x1,null)).is("Parameter 'upper' cannot be null.");
-		assertZonedDateTime(now).isBetween(x1, x2);
-		assertThrown(()->assertZonedDateTime(x1).isBetween(now,x2)).contains("Value was not after expected.");
-		assertThrown(()->assertZonedDateTime(x2).isBetween(x1,now)).contains("Value was not before expected.");
+		assertThrown(()->test(empty()).isBetween(x1,x2)).is("Value was null.");
+		assertThrown(()->test(now).isBetween(null,x2)).is("Parameter 'lower' cannot be null.");
+		assertThrown(()->test(now).isBetween(x1,null)).is("Parameter 'upper' cannot be null.");
+		test(now).isBetween(x1, x2);
+		assertThrown(()->test(x1).isBetween(now,x2)).contains("Value was not after expected.");
+		assertThrown(()->test(x2).isBetween(x1,now)).contains("Value was not before expected.");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ZonedDateTimeAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ZonedDateTimeAssertion.create(null).stdout().silent();
+		assertThrown(()->test((ZonedDateTime)null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test((ZonedDateTime)null).stdout();
 	}
 }

@@ -29,7 +29,7 @@ public final class ContextRuntimeException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ContextRuntimeException(Throwable cause, String message, Object... args) {
-		super(cause, getMessage(cause, message, null), args);
+		super(cause, message, args);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public final class ContextRuntimeException extends BasicRuntimeException {
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
 	public ContextRuntimeException(String message, Object...args) {
-		this(null, message, args);
+		super(message, args);
 	}
 
 	/**
@@ -48,6 +48,6 @@ public final class ContextRuntimeException extends BasicRuntimeException {
 	 * @param cause The initial cause of the exception.
 	 */
 	public ContextRuntimeException(Throwable cause) {
-		this(cause, null);
+		super(cause);
 	}
 }

@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.LoopDetected.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 508 (Loop Detected).
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class LoopDetected extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,43 @@ public class LoopDetected extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Loop Detected";
 
+	/** Reusable unmodifiable instance. */
+	public static final LoopDetected INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<LoopDetected> create() {
+		return new HttpExceptionBuilder<>(LoopDetected.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public LoopDetected(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public LoopDetected(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public LoopDetected() {
+		this(create().build());
 	}
 
 	/**
@@ -53,14 +79,7 @@ public class LoopDetected extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public LoopDetected(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public LoopDetected() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class LoopDetected extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public LoopDetected(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -79,26 +98,15 @@ public class LoopDetected extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public LoopDetected(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public LoopDetected header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<LoopDetected> builder() {
+		return super.builder(LoopDetected.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public LoopDetected status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

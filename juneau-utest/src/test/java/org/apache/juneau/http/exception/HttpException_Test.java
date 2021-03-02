@@ -14,6 +14,7 @@ package org.apache.juneau.http.exception;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import java.lang.reflect.*;
 
@@ -29,15 +30,15 @@ public class HttpException_Test {
 	public static class A {
 		@RestGet
 		public void f1() throws HttpException {
-			throw new HttpException(new RuntimeException("foo"), 225, "bar {0}", "baz");
+			throw new HttpException(225, new RuntimeException("foo"), "bar {0}", "baz");
 		}
 		@RestGet
 		public void f2() throws HttpException {
-			throw new HttpException("foo").status(225);
+			throw new HttpException(225, "foo");
 		}
 		@RestGet
 		public void f3() throws HttpException {
-			throw new HttpException(new RuntimeException("baz"), 225);
+			throw new HttpException(225, new RuntimeException("baz"));
 		}
 		@RestGet
 		public void f4() throws HttpException {
@@ -45,7 +46,7 @@ public class HttpException_Test {
 		}
 		@RestGet
 		public void f5() throws HttpException {
-			throw new HttpException(null).status(225).header("Foo", "bar");
+			throw httpException().statusCode(225).header("Foo", "bar").build();
 		}
 	}
 
@@ -73,37 +74,37 @@ public class HttpException_Test {
 
 	@Test
 	public void a02_getRootCause() throws Exception {
-		HttpException x = new HttpException(null);
+		HttpException x = new HttpException(100, null);
 		assertObject(x.getRootCause()).doesNotExist();
 
-		x = new HttpException(new HttpException(100,"foo"),100);
+		x = new HttpException(100, new HttpException(100,"foo"));
 		assertObject(x.getRootCause()).doesNotExist();
 
-		x = new HttpException(new RuntimeException("foo"),100);
+		x = new HttpException(100, new RuntimeException("foo"));
 		assertObject(x.getRootCause()).isType(RuntimeException.class);
 
-		x = new HttpException(new HttpException(new RuntimeException("foo"),100),100);
+		x = new HttpException(100, new HttpException(100, new RuntimeException("foo")));
 		assertObject(x.getRootCause()).isType(RuntimeException.class);
 
-		x = new HttpException(new InvocationTargetException(new RuntimeException("foo")),100);
+		x = new HttpException(100, new InvocationTargetException(new RuntimeException("foo")));
 		assertObject(x.getRootCause()).isType(RuntimeException.class);
 	}
 
 	@Test
 	public void a03_getFullStackMessage() throws Exception {
-		HttpException x = new HttpException(null);
-		assertString(x.getFullStackMessage(false)).is("");
-		assertString(x.getFullStackMessage(true)).is("");
+		HttpException x = new HttpException(100, null);
+		assertString(x.getFullStackMessage(false)).is("Continue");
+		assertString(x.getFullStackMessage(true)).is("Continue");
 
-		x = new HttpException("foo<bar>&baz");
+		x = new HttpException(100, "foo<bar>&baz");
 		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz");
 		assertString(x.getFullStackMessage(true)).is("foo bar  baz");
 
-		x = new HttpException(new RuntimeException("foo<bar>&qux"), 100, "foo{0}","<bar>&baz");
+		x = new HttpException(100, new RuntimeException("foo<bar>&qux"), "foo{0}","<bar>&baz");
 		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz\nCaused by (RuntimeException): foo<bar>&qux");
 		assertString(x.getFullStackMessage(true)).is("foo bar  baz\nCaused by (RuntimeException): foo bar  qux");
 
-		x = new HttpException(new RuntimeException(), 100, "foo{0}","<bar>&baz");
+		x = new HttpException(100, new RuntimeException(), "foo{0}","<bar>&baz");
 		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz\nCaused by (RuntimeException)");
 		assertString(x.getFullStackMessage(true)).is("foo bar  baz\nCaused by (RuntimeException)");
 

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.text.*;
 
 import org.apache.juneau.internal.*;
@@ -21,19 +19,29 @@ import org.apache.juneau.internal.*;
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
  */
-@FluentSetters
 public class BasicRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	final boolean unmodifiable;
+
+	/**
+	 * Creates a new builder for this bean.
+	 *
+	 * @return A new builder for this bean.
+	 */
+	public static BasicRuntimeExceptionBuilder create() {
+		return new BasicRuntimeExceptionBuilder();
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param builder The builder containing the settings for this exception.
 	 */
-	public BasicRuntimeException(String message, Object...args) {
-		super(format(message, args));
+	public BasicRuntimeException(BasicRuntimeExceptionBuilder builder) {
+		super(builder.message, builder.causedBy);
+		this.unmodifiable = builder.unmodifiable;
 	}
 
 	/**
@@ -44,24 +52,26 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
-		this(getMessage(cause, message, null), args);
-		initCause(cause);
+		this(create().causedBy(cause).message(message, args));
 	}
 
 	/**
-	 * Finds the message.
+	 * Constructor.
 	 *
-	 * @param cause The cause.
-	 * @param msg The message.
-	 * @param def The default value if both above are <jk>null</jk>.
-	 * @return The resolved message.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected static final String getMessage(Throwable cause, String msg, String def) {
-		if (msg != null)
-			return msg;
-		if (cause != null)
-			return cause.getMessage();
-		return def;
+	public BasicRuntimeException(String message, Object...args) {
+		this(create().message(message, args));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The cause of this exception.
+	 */
+	public BasicRuntimeException(Throwable cause) {
+		this(create().causedBy(cause));
 	}
 
 	/**
@@ -75,7 +85,37 @@ public class BasicRuntimeException extends RuntimeException {
 		return ThrowableUtils.getCause(c, this);
 	}
 
-	// <FluentSetters>
+	@Override /* Throwable */
+	public String getMessage() {
+		String m = super.getMessage();
+		if (m == null && getCause() != null)
+			m = getCause().getMessage();
+		return m;
+	}
 
-	// </FluentSetters>
+	@Override /* Throwable */
+	public synchronized Throwable fillInStackTrace() {
+		assertModifiable();
+		return super.fillInStackTrace();
+	}
+
+	@Override /* Throwable */
+	public synchronized Throwable initCause(Throwable cause) {
+		assertModifiable();
+		return super.initCause(cause);
+	}
+
+	@Override /* Throwable */
+	public void setStackTrace(StackTraceElement[] stackTrace) {
+		assertModifiable();
+		super.setStackTrace(stackTrace);
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
+	}
 }

@@ -15,6 +15,8 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import static java.util.Optional.*;
 
 import org.junit.*;
@@ -22,35 +24,43 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BooleanAssertion_Test {
 
+	private BooleanAssertion test(Boolean value) {
+		return assertBoolean(value).silent();
+	}
+
+	private BooleanAssertion test(Optional<Boolean> value) {
+		return assertBoolean(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 
-		assertThrown(()->assertBoolean((Boolean)null).exists()).is("Value was null.");
-		assertBoolean(true).exists();
-		assertThrown(()->assertBoolean(empty()).exists()).is("Value was null.");
-		assertBoolean(true).exists();
+		assertThrown(()->test((Boolean)null).exists()).is("Value was null.");
+		test(true).exists();
+		assertThrown(()->test(empty()).exists()).is("Value was null.");
+		test(true).exists();
 
-		assertBoolean(empty()).doesNotExist();
-		assertThrown(()->assertBoolean(true).doesNotExist()).is("Value was not null.");
+		test(empty()).doesNotExist();
+		assertThrown(()->test(true).doesNotExist()).is("Value was not null.");
 
-		assertBoolean(empty()).isEqual(null);
-		assertBoolean(true).isEqual(true);
-		assertBoolean(of(true)).isEqual(true);
+		test(empty()).isEqual(null);
+		test(true).isEqual(true);
+		test(of(true)).isEqual(true);
 
-		assertBoolean(true).isTrue();
-		assertThrown(()->assertBoolean(true).isFalse()).is("Value was true.");
-		assertBoolean(false).isFalse();
-		assertThrown(()->assertBoolean(false).isTrue()).is("Value was false.");
+		test(true).isTrue();
+		assertThrown(()->test(true).isFalse()).is("Value was true.");
+		test(false).isFalse();
+		assertThrown(()->test(false).isTrue()).is("Value was false.");
 
-		assertThrown(()->assertBoolean(true).isEqual(false)).contains("Unexpected value.");
-		assertBoolean(empty()).isEqual(null);
+		assertThrown(()->test(true).isEqual(false)).contains("Unexpected value.");
+		test(empty()).isEqual(null);
 
-		assertBoolean(true).isNot("true");
+		test(true).isNot("true");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->BooleanAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		BooleanAssertion.create(null).stdout().silent();
+		assertThrown(()->test((Boolean)null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test((Boolean)null).stdout();
 	}
 }

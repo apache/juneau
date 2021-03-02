@@ -14,6 +14,9 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+
+import java.util.*;
+
 import static java.util.Optional.*;
 
 import org.junit.*;
@@ -21,64 +24,72 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ByteArrayAssertion_Test {
 
+	private ByteArrayAssertion test(byte[] value) {
+		return assertBytes(value).silent();
+	}
+
+	private ByteArrayAssertion test(Optional<byte[]> value) {
+		return assertBytes(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 		byte[] x1={}, x2={'a','b'};
 
-		assertThrown(()->assertBytes((byte[])null).exists()).is("Value was null.");
-		assertBytes(x1).exists();
-		assertThrown(()->assertBytes(empty()).exists()).is("Value was null.");
-		assertBytes(x1).exists();
+		assertThrown(()->test((byte[])null).exists()).is("Value was null.");
+		test(x1).exists();
+		assertThrown(()->test(empty()).exists()).is("Value was null.");
+		test(x1).exists();
 
-		assertBytes((byte[])null).doesNotExist();
-		assertThrown(()->assertBytes(x1).doesNotExist()).is("Value was not null.");
-		assertBytes(empty()).doesNotExist();
-		assertThrown(()->assertBytes(x1).doesNotExist()).is("Value was not null.");
+		test((byte[])null).doesNotExist();
+		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
+		test(empty()).doesNotExist();
+		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
 
-		assertThrown(()->assertBytes(empty()).isSize(0)).is("Value was null.");
-		assertBytes(x1).isSize(0);
-		assertThrown(()->assertBytes(x1).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
-		assertBytes(x2).isSize(2);
-		assertThrown(()->assertBytes(of(x1)).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
-		assertBytes(x2).isSize(2);
-		assertThrown(()->assertBytes(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(empty()).isSize(0)).is("Value was null.");
+		test(x1).isSize(0);
+		assertThrown(()->test(x1).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
+		test(x2).isSize(2);
+		assertThrown(()->test(of(x1)).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
+		test(x2).isSize(2);
+		assertThrown(()->test(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
 
-		assertThrown(()->assertBytes(empty()).isEmpty()).is("Value was null.");
-		assertBytes(x1).isEmpty();
-		assertThrown(()->assertBytes(x2).isEmpty()).is("Array was not empty.");
+		assertThrown(()->test(empty()).isEmpty()).is("Value was null.");
+		test(x1).isEmpty();
+		assertThrown(()->test(x2).isEmpty()).is("Array was not empty.");
 
-		assertThrown(()->assertBytes(empty()).isNotEmpty()).is("Value was null.");
-		assertThrown(()->assertBytes(x1).isNotEmpty()).is("Array was empty.");
-		assertBytes(x2).isNotEmpty();
+		assertThrown(()->test(empty()).isNotEmpty()).is("Value was null.");
+		assertThrown(()->test(x1).isNotEmpty()).is("Array was empty.");
+		test(x2).isNotEmpty();
 
-		assertBytes(empty()).item(0).doesNotExist();
-		assertBytes(x1).item(0).doesNotExist();
-		assertBytes(x2).item(0).exists();
+		test(empty()).item(0).doesNotExist();
+		test(x1).item(0).doesNotExist();
+		test(x2).item(0).exists();
 
-		assertBytes(empty()).asString().isNull();
-		assertBytes(x1).asString().is("");
-		assertBytes(x2).asString().is("ab");
-		assertThrown(()->assertBytes(x2).asString().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[ab]");
+		test(empty()).asString().isNull();
+		test(x1).asString().is("");
+		test(x2).asString().is("ab");
+		assertThrown(()->test(x2).asString().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[ab]");
 
-		assertBytes(empty()).asBase64().isNull();
-		assertBytes(x1).asBase64().is("");
-		assertBytes(x2).asBase64().is("YWI=");
-		assertThrown(()->assertBytes(x2).asBase64().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[YWI=]");
+		test(empty()).asBase64().isNull();
+		test(x1).asBase64().is("");
+		test(x2).asBase64().is("YWI=");
+		assertThrown(()->test(x2).asBase64().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[YWI=]");
 
-		assertBytes(empty()).asHex().isNull();
-		assertBytes(x1).asHex().is("");
-		assertBytes(x2).asHex().is("6162");
-		assertThrown(()->assertBytes(x2).asHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[6162]");
+		test(empty()).asHex().isNull();
+		test(x1).asHex().is("");
+		test(x2).asHex().is("6162");
+		assertThrown(()->test(x2).asHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[6162]");
 
-		assertBytes(empty()).asSpacedHex().isNull();
-		assertBytes(x1).asSpacedHex().is("");
-		assertBytes(x2).asSpacedHex().is("61 62");
-		assertThrown(()->assertBytes(x2).asSpacedHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[61 62]");
+		test(empty()).asSpacedHex().isNull();
+		test(x1).asSpacedHex().is("");
+		test(x2).asSpacedHex().is("61 62");
+		assertThrown(()->test(x2).asSpacedHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[61 62]");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ByteArrayAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ByteArrayAssertion.create(null).stdout().silent();
+		assertThrown(()->test((byte[])null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test((byte[])null).stdout();
 	}
 }

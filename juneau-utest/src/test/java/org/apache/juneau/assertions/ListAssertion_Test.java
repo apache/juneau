@@ -23,38 +23,42 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ListAssertion_Test {
 
+	private ListAssertion test(List<?> value) {
+		return assertList(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 		List<String> x1 = AList.create(), x2 = AList.of("a","b");
 
-		assertThrown(()->assertList(null).exists()).is("Value was null.");
-		assertList(x1).exists();
+		assertThrown(()->test(null).exists()).is("Value was null.");
+		test(x1).exists();
 
-		assertList(null).doesNotExist();
-		assertThrown(()->assertList(x1).doesNotExist()).is("Value was not null.");
+		test(null).doesNotExist();
+		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
 
-		assertThrown(()->assertList(null).isSize(0)).is("Value was null.");
-		assertList(x1).isSize(0);
-		assertThrown(()->assertList(x1).isSize(1)).is("Collection did not have the expected size.  Expect=1, Actual=0.");
-		assertList(x2).isSize(2);
-		assertThrown(()->assertList(x2).isSize(0)).is("Collection did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(null).isSize(0)).is("Value was null.");
+		test(x1).isSize(0);
+		assertThrown(()->test(x1).isSize(1)).is("Collection did not have the expected size.  Expect=1, Actual=0.");
+		test(x2).isSize(2);
+		assertThrown(()->test(x2).isSize(0)).is("Collection did not have the expected size.  Expect=0, Actual=2.");
 
-		assertThrown(()->assertList(null).isEmpty()).is("Value was null.");
-		assertList(x1).isEmpty();
-		assertThrown(()->assertList(x2).isEmpty()).is("Collection was not empty.");
+		assertThrown(()->test(null).isEmpty()).is("Value was null.");
+		test(x1).isEmpty();
+		assertThrown(()->test(x2).isEmpty()).is("Collection was not empty.");
 
-		assertThrown(()->assertList(null).isNotEmpty()).is("Value was null.");
-		assertThrown(()->assertList(x1).isNotEmpty()).is("Collection was empty.");
-		assertList(x2).isNotEmpty();
+		assertThrown(()->test(null).isNotEmpty()).is("Value was null.");
+		assertThrown(()->test(x1).isNotEmpty()).is("Collection was empty.");
+		test(x2).isNotEmpty();
 
-		assertList(null).item(0).doesNotExist();
-		assertList(x1).item(0).doesNotExist();
-		assertList(x2).item(0).exists();
+		test(null).item(0).doesNotExist();
+		test(x1).item(0).doesNotExist();
+		test(x2).item(0).exists();
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ListAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ListAssertion.create(null).stdout().silent();
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test(null).stdout();
 	}
 }

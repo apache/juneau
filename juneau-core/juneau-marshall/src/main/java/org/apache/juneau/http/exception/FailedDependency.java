@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.FailedDependency.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 424 (Failed Dependency).
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class FailedDependency extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,43 @@ public class FailedDependency extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Failed Dependency";
 
+	/** Reusable unmodifiable instance. */
+	public static final FailedDependency INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<FailedDependency> create() {
+		return new HttpExceptionBuilder<>(FailedDependency.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public FailedDependency(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public FailedDependency(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public FailedDependency() {
+		this(create().build());
 	}
 
 	/**
@@ -53,14 +79,7 @@ public class FailedDependency extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public FailedDependency(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public FailedDependency() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class FailedDependency extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public FailedDependency(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -79,26 +98,15 @@ public class FailedDependency extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public FailedDependency(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public FailedDependency header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<FailedDependency> builder() {
+		return super.builder(FailedDependency.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public FailedDependency status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

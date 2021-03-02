@@ -22,64 +22,68 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ThrowableAssertion_Test {
 
+	private <V extends Throwable> ThrowableAssertion<V> test(V value) {
+		return assertThrowable(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 		RuntimeException x1 = new RuntimeException("foo");
 
-		assertThrowable(x1).isType(Exception.class).isType(RuntimeException.class);
-		assertThrown(()->assertThrowable(x1).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[java.lang.RuntimeException]");
-		assertThrown(()->assertThrowable(null).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[null]");
-		assertThrown(()->assertThrowable(x1).isType(null)).is("Parameter 'type' cannot be null.");
+		test(x1).isType(Exception.class).isType(RuntimeException.class);
+		assertThrown(()->test(x1).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[java.lang.RuntimeException]");
+		assertThrown(()->test(null).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[null]");
+		assertThrown(()->test(x1).isType(null)).is("Parameter 'type' cannot be null.");
 
-		assertThrowable(x1).contains("foo");
-		assertThrown(()->assertThrowable(x1).contains("bar")).is("Exception message did not contain expected substring.\n\tSubstring=[bar]\n\tText=[foo]");
-		assertThrown(()->assertThrowable(null).contains("foo")).is("Exception was not thrown.");
-		assertThrown(()->assertThrowable(x1).contains((String[])null)).is("Parameter 'substrings' cannot be null.");
-		assertThrowable(x1).contains((String)null);
+		test(x1).contains("foo");
+		assertThrown(()->test(x1).contains("bar")).is("Exception message did not contain expected substring.\n\tSubstring=[bar]\n\tText=[foo]");
+		assertThrown(()->test(null).contains("foo")).is("Exception was not thrown.");
+		assertThrown(()->test(x1).contains((String[])null)).is("Parameter 'substrings' cannot be null.");
+		test(x1).contains((String)null);
 
-		assertThrowable(null).doesNotExist();
-		assertThrown(()->assertThrowable(x1).doesNotExist()).is("Exception was thrown.");
+		test(null).doesNotExist();
+		assertThrown(()->test(x1).doesNotExist()).is("Exception was thrown.");
 
-		assertThrowable(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->assertThrowable(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		test(x1).passes(x->x.getMessage().equals("foo"));
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
 
-		assertThrowable(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->assertThrowable(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		test(x1).passes(x->x.getMessage().equals("foo"));
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
 
-		assertThrowable(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->assertThrowable(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		test(x1).passes(x->x.getMessage().equals("foo"));
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
 
-		assertThrowable(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->assertThrowable(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		test(x1).passes(x->x.getMessage().equals("foo"));
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
 
-		assertThrowable(x1).message().is("foo");
-		assertThrowable(new RuntimeException()).message().doesNotExist();
-		assertThrowable(null).message().doesNotExist();
+		test(x1).message().is("foo");
+		test(new RuntimeException()).message().doesNotExist();
+		test(null).message().doesNotExist();
 
-		assertThrowable(x1).localizedMessage().is("foo");
-		assertThrowable(new RuntimeException()).localizedMessage().doesNotExist();
-		assertThrowable(null).localizedMessage().doesNotExist();
+		test(x1).localizedMessage().is("foo");
+		test(new RuntimeException()).localizedMessage().doesNotExist();
+		test(null).localizedMessage().doesNotExist();
 
-		assertThrowable(x1).stackTrace().contains("RuntimeException");
-		assertThrowable(new RuntimeException()).stackTrace().contains("RuntimeException");
-		assertThrowable(null).stackTrace().doesNotExist();
+		test(x1).stackTrace().contains("RuntimeException");
+		test(new RuntimeException()).stackTrace().contains("RuntimeException");
+		test(null).stackTrace().doesNotExist();
 
-		assertThrowable(new RuntimeException(x1)).causedBy().message().is("foo");
-		assertThrowable(new RuntimeException()).message().doesNotExist();
-		assertThrowable(null).causedBy().message().doesNotExist();
+		test(new RuntimeException(x1)).causedBy().message().is("foo");
+		test(new RuntimeException()).message().doesNotExist();
+		test(null).causedBy().message().doesNotExist();
 
-		assertThrowable(new RuntimeException(new IOException())).find(RuntimeException.class).exists();
-		assertThrowable(new RuntimeException(new IOException())).find(IOException.class).exists();
-		assertThrowable(new RuntimeException(new IOException())).find(Exception.class).exists();
-		assertThrowable(new RuntimeException(new IOException())).find(FileNotFoundException.class).doesNotExist();
-		assertThrowable(new RuntimeException()).find(RuntimeException.class).exists();
-		assertThrowable(new RuntimeException()).find(IOException.class).doesNotExist();
-		assertThrowable(null).find(RuntimeException.class).doesNotExist();
+		test(new RuntimeException(new IOException())).find(RuntimeException.class).exists();
+		test(new RuntimeException(new IOException())).find(IOException.class).exists();
+		test(new RuntimeException(new IOException())).find(Exception.class).exists();
+		test(new RuntimeException(new IOException())).find(FileNotFoundException.class).doesNotExist();
+		test(new RuntimeException()).find(RuntimeException.class).exists();
+		test(new RuntimeException()).find(IOException.class).doesNotExist();
+		test(null).find(RuntimeException.class).doesNotExist();
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ThrowableAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ThrowableAssertion.create(null).stdout().silent();
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test(null).stdout();
 	}
 }

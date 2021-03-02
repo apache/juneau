@@ -14,6 +14,7 @@ package org.apache.juneau.http.exception;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.exception.PreconditionFailed.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -43,7 +44,7 @@ public class PreconditionFailed_Test {
 		}
 		@RestGet
 		public void f5() throws PreconditionFailed {
-			throw new PreconditionFailed().header("Foo", "bar");
+			throw preconditionFailed().header("Foo", "bar").build();
 		}
 		@RestGet
 		public void f6() throws PreconditionFailed {

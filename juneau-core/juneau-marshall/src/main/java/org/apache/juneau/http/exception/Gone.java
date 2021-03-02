@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.Gone.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 410 ().
@@ -30,7 +29,6 @@ import org.apache.juneau.internal.*;
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class Gone extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -40,15 +38,43 @@ public class Gone extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Gone";
 
+	/** Reusable unmodifiable instance. */
+	public static final Gone INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<Gone> create() {
+		return new HttpExceptionBuilder<>(Gone.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public Gone(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public Gone(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public Gone() {
+		this(create().build());
 	}
 
 	/**
@@ -57,14 +83,7 @@ public class Gone extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public Gone(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public Gone() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -74,7 +93,7 @@ public class Gone extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Gone(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -83,26 +102,15 @@ public class Gone extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public Gone(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public Gone header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<Gone> builder() {
+		return super.builder(Gone.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public Gone status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

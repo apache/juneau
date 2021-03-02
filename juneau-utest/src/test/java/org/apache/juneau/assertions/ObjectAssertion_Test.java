@@ -26,6 +26,14 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ObjectAssertion_Test {
 
+	private <T> ObjectAssertion<T> test(T value) {
+		return assertObject(value).silent();
+	}
+
+	private <T> ObjectAssertion<T> test(Optional<T> value) {
+		return assertObject(value).silent();
+	}
+
 	public static class A1 {
 		public int getFoo() {
 			throw new RuntimeException("foo");
@@ -43,95 +51,95 @@ public class ObjectAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		assertObject((Object)null).doesNotExist();
-		assertObject(empty()).doesNotExist();
-		assertObject(1).exists();
-		assertObject(of(1)).exists();
+		test((Object)null).doesNotExist();
+		test(empty()).doesNotExist();
+		test(1).exists();
+		test(of(1)).exists();
 
-		assertThrown(()->assertObject(empty()).isType(null)).is("Value was null.");
-		assertThrown(()->assertObject("foo").isType(null)).is("Parameter 'parent' cannot be null.");
-		assertObject("foo").isType(String.class);
-		assertObject("foo").isType(CharSequence.class);
-		assertObject("foo").isType(Comparable.class);
-		assertThrown(()->assertObject(1).isType(String.class)).is("Unexpected class.\n\tExpect=[java.lang.String]\n\tActual=[java.lang.Integer]");
+		assertThrown(()->test(empty()).isType(null)).is("Value was null.");
+		assertThrown(()->test("foo").isType(null)).is("Parameter 'parent' cannot be null.");
+		test("foo").isType(String.class);
+		test("foo").isType(CharSequence.class);
+		test("foo").isType(Comparable.class);
+		assertThrown(()->test(1).isType(String.class)).is("Unexpected class.\n\tExpect=[java.lang.String]\n\tActual=[java.lang.Integer]");
 
-		assertObject("foo").asString(JsonSerializer.DEFAULT).is("\"foo\"");
-		assertObject(empty()).asString(JsonSerializer.DEFAULT).is("null");
+		test("foo").asString(JsonSerializer.DEFAULT).is("\"foo\"");
+		test(empty()).asString(JsonSerializer.DEFAULT).is("null");
 
-		assertThrown(()->assertObject(new A1()).asJson()).contains("Could not call getValue() on property 'foo'");
+		assertThrown(()->test(new A1()).asJson()).contains("Could not call getValue() on property 'foo'");
 
-		assertObject("foo").asJson().is("'foo'");
-		assertObject(empty()).asString(JsonSerializer.DEFAULT).is("null");
+		test("foo").asJson().is("'foo'");
+		test(empty()).asString(JsonSerializer.DEFAULT).is("null");
 
-		assertObject(new A2()).asJsonSorted().is("{bar:2,foo:1}");
+		test(new A2()).asJsonSorted().is("{bar:2,foo:1}");
 
 		int[] x1 = {1,2}, x2 = {2,1};
-		assertObject(x2).asJsonSorted().is("[1,2]");
-		assertThrown(()->assertObject(x2).asJsonSorted().is("[2,1]")).is("Unexpected value.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
-		assertObject(empty()).asJsonSorted().is("null");
+		test(x2).asJsonSorted().is("[1,2]");
+		assertThrown(()->test(x2).asJsonSorted().is("[2,1]")).is("Unexpected value.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
+		test(empty()).asJsonSorted().is("null");
 
-		assertObject(x1).isSameJsonAs(x1);
-		assertThrown(()->assertObject(x1).isSameJsonAs(x2)).is("Unexpected comparison.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
-		assertObject(empty()).isSameJsonAs(null);
-		assertThrown(()->assertObject(new A1()).isSameJsonAs(null)).contains("Could not call getValue() on property 'foo'");
+		test(x1).isSameJsonAs(x1);
+		assertThrown(()->test(x1).isSameJsonAs(x2)).is("Unexpected comparison.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
+		test(empty()).isSameJsonAs(null);
+		assertThrown(()->test(new A1()).isSameJsonAs(null)).contains("Could not call getValue() on property 'foo'");
 
-		assertObject(x1).isSameSortedAs(x1);
-		assertObject(x1).isSameSortedAs(x2);
-		assertThrown(()->assertObject(x1).isSameJsonAs(null)).is("Unexpected comparison.\n\tExpect=[null]\n\tActual=[[1,2]]");
-		assertObject(empty()).isSameSortedAs(null);
+		test(x1).isSameSortedAs(x1);
+		test(x1).isSameSortedAs(x2);
+		assertThrown(()->test(x1).isSameJsonAs(null)).is("Unexpected comparison.\n\tExpect=[null]\n\tActual=[[1,2]]");
+		test(empty()).isSameSortedAs(null);
 
-		assertObject(x1).doesNotEqual(null);
-		assertObject(empty()).doesNotEqual(x1);
-		assertObject(x1).doesNotEqual(x2);
-		assertThrown(()->assertObject(empty()).doesNotEqual(null)).is("Unexpected value.\n\tExpected not=[null]\n\tActual=[null]");
-		assertThrown(()->assertObject(x1).doesNotEqual(x1)).is("Unexpected value.\n\tExpected not=[[1,2]]\n\tActual=[[1,2]]");
+		test(x1).doesNotEqual(null);
+		test(empty()).doesNotEqual(x1);
+		test(x1).doesNotEqual(x2);
+		assertThrown(()->test(empty()).doesNotEqual(null)).is("Unexpected value.\n\tExpected not=[null]\n\tActual=[null]");
+		assertThrown(()->test(x1).doesNotEqual(x1)).is("Unexpected value.\n\tExpected not=[[1,2]]\n\tActual=[[1,2]]");
 
-		assertObject(x1).passes(x->x != null);
-		assertThrown(()->assertObject(x1).passes(x->x == null)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		test(x1).passes(x->x != null);
+		assertThrown(()->test(x1).passes(x->x == null)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
 
-		assertObject(x1).passes(x->x[0] == 1);
-		assertThrown(()->assertObject(x1).passes(x->x[0]==2)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		test(x1).passes(x->x[0] == 1);
+		assertThrown(()->test(x1).passes(x->x[0]==2)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
 
-		assertObject(x1).isNot(null);
+		test(x1).isNot(null);
 
-		assertObject(x1).isAny(x1,x2);
-		assertThrown(()->assertObject(x1).isAny(x2)).is("Expected value not found.\n\tExpect=[[[2,1]]]\n\tActual=[[1,2]]");
+		test(x1).isAny(x1,x2);
+		assertThrown(()->test(x1).isAny(x2)).is("Expected value not found.\n\tExpect=[[[2,1]]]\n\tActual=[[1,2]]");
 
-		assertObject(x1).isNotAny(x2);
-		assertThrown(()->assertObject(x1).isNotAny(x1,x2)).is("Unexpected value found.\n\tUnexpected=[[1,2]]\n\tActual=[[1,2]]");
+		test(x1).isNotAny(x2);
+		assertThrown(()->test(x1).isNotAny(x1,x2)).is("Unexpected value found.\n\tUnexpected=[[1,2]]\n\tActual=[[1,2]]");
 
 		Date d1 = new Date(0), d2 = new Date(0);
-		assertObject(d1).is(d2);
+		test(d1).is(d2);
 
-		assertObject(123).asString().is("123");
-		assertObject((Object)null).asString().isNull();
+		test(123).asString().is("123");
+		test((Object)null).asString().isNull();
 
-		assertObject(123).asString(x -> x.toString()).is("123");
-		assertObject(123).asString(Integer.class, x -> String.valueOf(x.intValue())).is("123");
+		test(123).asString(x -> x.toString()).is("123");
+		test(123).asString(Integer.class, x -> String.valueOf(x.intValue())).is("123");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ObjectAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ObjectAssertion.create(null).stdout().silent();
+		assertThrown(()->test((Object)null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test((Object)null).stdout();
 	}
 
 	@Test
 	public void a03_conversions() throws Exception {
-		assertObject(new String[]{"foo"}).asArray().item(0).is("foo");
-		assertThrown(()->assertObject("foo").asArray()).contains("Object was not an array");
+		test(new String[]{"foo"}).asArray().item(0).is("foo");
+		assertThrown(()->test("foo").asArray()).contains("Object was not an array");
 
-		assertObject(true).asBoolean().isTrue();
-		assertThrown(()->assertObject("foo").asBoolean()).contains("Object was not type 'java.lang.Boolean'.  Actual='java.lang.String'");
+		test(true).asBoolean().isTrue();
+		assertThrown(()->test("foo").asBoolean()).contains("Object was not type 'java.lang.Boolean'.  Actual='java.lang.String'");
 
-		assertObject(new byte[]{123}).asByteArray().asJson().is("[123]");
-		assertObject(AList.of(123)).asCollection().asJson().is("[123]");
-		assertObject(123).asComparable().asJson().is("123");
-		assertObject(new Date()).asDate().isType(Date.class);
-		assertObject(123).asInteger().asJson().is("123");
-		assertObject(AList.of(123)).asList().asJson().is("[123]");
-		assertObject(123l).asLong().asJson().is("123");
-		assertObject(AMap.create()).asMap().asJson().is("{}");
-		assertObject(ZonedDateTime.now()).asZonedDateTime().isType(ZonedDateTime.class);
+		test(new byte[]{123}).asByteArray().asJson().is("[123]");
+		test(AList.of(123)).asCollection().asJson().is("[123]");
+		test(123).asComparable().asJson().is("123");
+		test(new Date()).asDate().isType(Date.class);
+		test(123).asInteger().asJson().is("123");
+		test(AList.of(123)).asList().asJson().is("[123]");
+		test(123l).asLong().asJson().is("123");
+		test(AMap.create()).asMap().asJson().is("{}");
+		test(ZonedDateTime.now()).asZonedDateTime().isType(ZonedDateTime.class);
 	}
 }

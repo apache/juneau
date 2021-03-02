@@ -15,6 +15,8 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import static java.util.Optional.*;
 
 import org.junit.*;
@@ -22,87 +24,95 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class IntegerAssertion_Test {
 
+	private IntegerAssertion test(Integer value) {
+		return assertInteger(value).silent();
+	}
+
+	private IntegerAssertion test(Optional<Integer> value) {
+		return assertInteger(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 
-		assertThrown(()->assertInteger((Integer)null).exists()).is("Value was null.");
-		assertInteger(1).exists();
-		assertThrown(()->assertInteger(empty()).exists()).is("Value was null.");
-		assertInteger(1).exists();
+		assertThrown(()->test((Integer)null).exists()).is("Value was null.");
+		test(1).exists();
+		assertThrown(()->test(empty()).exists()).is("Value was null.");
+		test(1).exists();
 
-		assertInteger(empty()).doesNotExist();
-		assertThrown(()->assertInteger(1).doesNotExist()).is("Value was not null.");
+		test(empty()).doesNotExist();
+		assertThrown(()->test(1).doesNotExist()).is("Value was not null.");
 
-		assertInteger(empty()).isEqual(null);
-		assertInteger(1).isEqual(1);
-		assertInteger(of(1)).isEqual(1);
+		test(empty()).isEqual(null);
+		test(1).isEqual(1);
+		test(of(1)).isEqual(1);
 
-		assertThrown(()->assertInteger(1).isEqual(2)).contains("Unexpected value.");
-		assertInteger(empty()).isEqual(null);
+		assertThrown(()->test(1).isEqual(2)).contains("Unexpected value.");
+		test(empty()).isEqual(null);
 
-		assertThrown(()->assertInteger(empty()).isGreaterThan(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGreaterThan(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(2).isGreaterThan(1);
-		assertThrown(()->assertInteger(1).isGreaterThan(2)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
-		assertThrown(()->assertInteger(1).isGreaterThan(1)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
+		assertThrown(()->test(empty()).isGreaterThan(1)).is("Value was null.");
+		assertThrown(()->test(1).isGreaterThan(null)).is("Parameter 'value' cannot be null.");
+		test(2).isGreaterThan(1);
+		assertThrown(()->test(1).isGreaterThan(2)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
+		assertThrown(()->test(1).isGreaterThan(1)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
 
-		assertThrown(()->assertInteger(empty()).isGt(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGt(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(2).isGt(1);
-		assertThrown(()->assertInteger(1).isGt(2)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
-		assertThrown(()->assertInteger(1).isGt(1)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
+		assertThrown(()->test(empty()).isGt(1)).is("Value was null.");
+		assertThrown(()->test(1).isGt(null)).is("Parameter 'value' cannot be null.");
+		test(2).isGt(1);
+		assertThrown(()->test(1).isGt(2)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
+		assertThrown(()->test(1).isGt(1)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
 
-		assertThrown(()->assertInteger(empty()).isGreaterThanOrEqual(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGreaterThanOrEqual(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(2).isGreaterThanOrEqual(1);
-		assertThrown(()->assertInteger(1).isGreaterThanOrEqual(2)).is("Value was not greater than or equals to expected.\n\tExpect=[2]\n\tActual=[1]");
-		assertInteger(1).isGreaterThanOrEqual(1);
+		assertThrown(()->test(empty()).isGreaterThanOrEqual(1)).is("Value was null.");
+		assertThrown(()->test(1).isGreaterThanOrEqual(null)).is("Parameter 'value' cannot be null.");
+		test(2).isGreaterThanOrEqual(1);
+		assertThrown(()->test(1).isGreaterThanOrEqual(2)).is("Value was not greater than or equals to expected.\n\tExpect=[2]\n\tActual=[1]");
+		test(1).isGreaterThanOrEqual(1);
 
-		assertThrown(()->assertInteger(empty()).isGte(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGte(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(2).isGte(1);
-		assertThrown(()->assertInteger(1).isGte(2)).is("Value was not greater than or equals to expected.\n\tExpect=[2]\n\tActual=[1]");
-		assertInteger(1).isGte(1);
+		assertThrown(()->test(empty()).isGte(1)).is("Value was null.");
+		assertThrown(()->test(1).isGte(null)).is("Parameter 'value' cannot be null.");
+		test(2).isGte(1);
+		assertThrown(()->test(1).isGte(2)).is("Value was not greater than or equals to expected.\n\tExpect=[2]\n\tActual=[1]");
+		test(1).isGte(1);
 
-		assertThrown(()->assertInteger(empty()).isLessThan(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLessThan(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(1).isLessThan(2);
-		assertThrown(()->assertInteger(2).isLessThan(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[2]");
-		assertThrown(()->assertInteger(1).isLessThan(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[1]");
+		assertThrown(()->test(empty()).isLessThan(1)).is("Value was null.");
+		assertThrown(()->test(1).isLessThan(null)).is("Parameter 'value' cannot be null.");
+		test(1).isLessThan(2);
+		assertThrown(()->test(2).isLessThan(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[2]");
+		assertThrown(()->test(1).isLessThan(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[1]");
 
-		assertThrown(()->assertInteger(empty()).isLt(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLt(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(1).isLt(2);
-		assertThrown(()->assertInteger(2).isLt(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[2]");
-		assertThrown(()->assertInteger(1).isLt(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[1]");
+		assertThrown(()->test(empty()).isLt(1)).is("Value was null.");
+		assertThrown(()->test(1).isLt(null)).is("Parameter 'value' cannot be null.");
+		test(1).isLt(2);
+		assertThrown(()->test(2).isLt(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[2]");
+		assertThrown(()->test(1).isLt(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[1]");
 
-		assertThrown(()->assertInteger(empty()).isLessThanOrEqual(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLessThanOrEqual(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(1).isLessThanOrEqual(2);
-		assertThrown(()->assertInteger(2).isLessThanOrEqual(1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
-		assertInteger(1).isLessThanOrEqual(1);
+		assertThrown(()->test(empty()).isLessThanOrEqual(1)).is("Value was null.");
+		assertThrown(()->test(1).isLessThanOrEqual(null)).is("Parameter 'value' cannot be null.");
+		test(1).isLessThanOrEqual(2);
+		assertThrown(()->test(2).isLessThanOrEqual(1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
+		test(1).isLessThanOrEqual(1);
 
-		assertThrown(()->assertInteger(empty()).isLte(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLte(null)).is("Parameter 'value' cannot be null.");
-		assertInteger(1).isLte(2);
-		assertThrown(()->assertInteger(2).isLte(1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
-		assertInteger(1).isLte(1);
+		assertThrown(()->test(empty()).isLte(1)).is("Value was null.");
+		assertThrown(()->test(1).isLte(null)).is("Parameter 'value' cannot be null.");
+		test(1).isLte(2);
+		assertThrown(()->test(2).isLte(1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
+		test(1).isLte(1);
 
-		assertThrown(()->assertInteger(empty()).isBetween(1,3)).is("Value was null.");
-		assertThrown(()->assertInteger(2).isBetween(null,3)).is("Parameter 'lower' cannot be null.");
-		assertThrown(()->assertInteger(2).isBetween(1,null)).is("Parameter 'upper' cannot be null.");
-		assertInteger(2).isBetween(1,3);
-		assertInteger(1).isBetween(1,3);
-		assertInteger(3).isBetween(1,3);
-		assertThrown(()->assertInteger(2).isBetween(1,1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
-		assertThrown(()->assertInteger(2).isBetween(3,3)).is("Value was not greater than or equals to expected.\n\tExpect=[3]\n\tActual=[2]");
+		assertThrown(()->test(empty()).isBetween(1,3)).is("Value was null.");
+		assertThrown(()->test(2).isBetween(null,3)).is("Parameter 'lower' cannot be null.");
+		assertThrown(()->test(2).isBetween(1,null)).is("Parameter 'upper' cannot be null.");
+		test(2).isBetween(1,3);
+		test(1).isBetween(1,3);
+		test(3).isBetween(1,3);
+		assertThrown(()->test(2).isBetween(1,1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
+		assertThrown(()->test(2).isBetween(3,3)).is("Value was not greater than or equals to expected.\n\tExpect=[3]\n\tActual=[2]");
 
-		assertInteger(2).isNot("2");
+		test(2).isNot("2");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->IntegerAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		IntegerAssertion.create(null).stdout().silent();
+		assertThrown(()->test((Integer)null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test((Integer)null).stdout();
 	}
 }

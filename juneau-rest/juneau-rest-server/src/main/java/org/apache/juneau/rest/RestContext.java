@@ -6881,7 +6881,7 @@ public class RestContext extends BeanContext {
 			if (r.code().length > 0)
 				code = r.code()[0];
 
-		HttpException e2 = (e instanceof HttpException ? (HttpException)e : new HttpException(e, code));
+		HttpException e2 = (e instanceof HttpException ? (HttpException)e : HttpException.create(HttpException.class).causedBy(e).statusCode(code).build());
 
 		HttpServletRequest req = call.getRequest();
 		HttpServletResponse res = call.getResponse();
@@ -6899,7 +6899,7 @@ public class RestContext extends BeanContext {
 		try {
 			res.setContentType("text/plain");
 			res.setHeader("Content-Encoding", "identity");
-			res.setStatus(e2.getStatus());
+			res.setStatus(e2.getStatusCode());
 
 			PrintWriter w = null;
 			try {
@@ -6909,9 +6909,9 @@ public class RestContext extends BeanContext {
 			}
 
 			try (PrintWriter w2 = w) {
-				String httpMessage = RestUtils.getHttpResponseText(e2.getStatus());
+				String httpMessage = RestUtils.getHttpResponseText(e2.getStatusCode());
 				if (httpMessage != null)
-					w2.append("HTTP ").append(String.valueOf(e2.getStatus())).append(": ").append(httpMessage).append("\n\n");
+					w2.append("HTTP ").append(String.valueOf(e2.getStatusCode())).append(": ").append(httpMessage).append("\n\n");
 				if (isRenderResponseStackTraces())
 					e.printStackTrace(w2);
 				else

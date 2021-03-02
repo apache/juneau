@@ -20,45 +20,49 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ArrayAssertion_Test {
 
+	private ArrayAssertion test(Object value) {
+		return assertArray(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 		String[] x1={}, x2={"foo","bar"};
 
-		assertThrown(()->assertArray(null).exists()).is("Value was null.");
-		assertArray(x1).exists();
+		assertThrown(()->test(null).exists()).is("Value was null.");
+		test(x1).exists();
 
-		assertArray(null).doesNotExist();
-		assertThrown(()->assertArray(x1).doesNotExist()).is("Value was not null.");
+		test(null).doesNotExist();
+		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
 
-		assertThrown(()->assertArray(null).isSize(0)).is("Value was null.");
-		assertArray(x1).isSize(0);
-		assertThrown(()->assertArray(x1).isSize(2)).is("Array did not have the expected size.  Expect=2, Actual=0.");
-		assertArray(x2).isSize(2);
-		assertThrown(()->assertArray(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(null).isSize(0)).is("Value was null.");
+		test(x1).isSize(0);
+		assertThrown(()->test(x1).isSize(2)).is("Array did not have the expected size.  Expect=2, Actual=0.");
+		test(x2).isSize(2);
+		assertThrown(()->test(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
 
-		assertThrown(()->assertArray(null).isEmpty()).is("Value was null.");
-		assertArray(x1).isEmpty();
-		assertThrown(()->assertArray(x2).isEmpty()).is("Array was not empty.");
+		assertThrown(()->test(null).isEmpty()).is("Value was null.");
+		test(x1).isEmpty();
+		assertThrown(()->test(x2).isEmpty()).is("Array was not empty.");
 
-		assertThrown(()->assertArray(null).isNotEmpty()).is("Value was null.");
-		assertThrown(()->assertArray(x1).isNotEmpty()).is("Array was empty.");
-		assertArray(x2).isNotEmpty();
+		assertThrown(()->test(null).isNotEmpty()).is("Value was null.");
+		assertThrown(()->test(x1).isNotEmpty()).is("Array was empty.");
+		test(x2).isNotEmpty();
 
-		assertArray(null).item(0).doesNotExist();
-		assertArray(x1).item(0).doesNotExist();
-		assertArray(x2).item(0).exists();
+		test(null).item(0).doesNotExist();
+		test(x1).item(0).doesNotExist();
+		test(x2).item(0).exists();
 
-		assertArray(x2).contains("foo");
-		assertThrown(()->assertArray(x2).contains("z")).is("Array did not contain expected value.\n\tContents: ['foo','bar']\n\tExpected: z");
+		test(x2).contains("foo");
+		assertThrown(()->test(x2).contains("z")).is("Array did not contain expected value.\n\tContents: ['foo','bar']\n\tExpected: z");
 
-		assertArray(x1).doesNotContain("foo");
-		assertThrown(()->assertArray(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: foo");
-		assertThrown(()->assertArray(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: bar");
+		test(x1).doesNotContain("foo");
+		assertThrown(()->test(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: foo");
+		assertThrown(()->test(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: bar");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ArrayAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ArrayAssertion.create(null).stdout().silent();
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test(null).stdout();
 	}
 }

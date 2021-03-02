@@ -14,73 +14,111 @@ package org.apache.juneau.http.exception;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.http.entity.*;
+import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.BasicHeader;
+import org.apache.juneau.http.BasicStatusLine;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception thrown to trigger an error HTTP status.
  *
  * <p>
- * REST methods on subclasses of <c>RestServlet</c> can throw this exception to trigger an HTTP status other than the
- * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
+ * Note that while the {@link HttpResponse} interface allows you to modify the headers and status line on this
+ * bean, it is more efficient to do so in the builder.
  */
 @Response
 @BeanIgnore
-@FluentSetters
-public class HttpException extends BasicRuntimeException {
+public class HttpException extends BasicRuntimeException implements HttpResponse {
 
 	private static final long serialVersionUID = 1L;
 
-	private int status;
-	private AMap<String,Object> headers = AMap.create();
+	BasicHeaderGroup headers;
+	BasicStatusLine statusLine;
+	HttpEntity body;
 
 	/**
-	 * Constructor.
+	 * Creates a builder for this class.
 	 *
-	 * @param cause The cause of this exception.
-	 * @param status The HTTP status code.
-	 * @param msg The status message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param implClass The subclass that the builder is going to create.
+	 * @return A new builder bean.
 	 */
-	public HttpException(Throwable cause, int status, String msg, Object...args) {
-		super(cause, message(cause, msg, args));
-		this.status = status;
+	public static <T extends HttpException> HttpExceptionBuilder<T> create(Class<T> implClass) {
+		return new HttpExceptionBuilder<>(implClass);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param msg The status message.
+	 * @param builder The builder containing the arguments for this exception.
 	 */
-	public HttpException(String msg) {
-		this((Throwable)null, 0, msg);
-	}
-
-	/**
-	 * Constructor.
-	 * @param cause The root exception.
-	 * @param status The HTTP status code.
-	 */
-	public HttpException(Throwable cause, int status) {
-		this(cause, status, null);
+	public HttpException(HttpExceptionBuilder<?> builder) {
+		super(builder);
+		headers = builder.headers.build();
+		statusLine = builder.statusLine.build();
+		body = builder.body;
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param status The HTTP status code.
-	 * @param msg The status message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param statusCode The HTTP status code.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public HttpException(int status, String msg, Object...args) {
-		this(null, status, msg, args);
+	public HttpException(int statusCode, Throwable cause, String msg, Object...args) {
+		this(create(null).statusCode(statusCode).causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param statusCode The HTTP status code.
+	 */
+	public HttpException(int statusCode) {
+		this(create(null).statusCode(statusCode));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param statusCode The HTTP status code.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 */
+	public HttpException(int statusCode, String msg, Object...args) {
+		this(create(null).statusCode(statusCode).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param statusCode The HTTP status code.
+	 * @param causedBy The cause.  Can be <jk>null</jk>.
+	 */
+	public HttpException(int statusCode, Throwable causedBy) {
+		this(create(null).statusCode(statusCode).causedBy(causedBy));
+	}
+
+	/**
+	 * Creates a builder for this class initialized with the contents of this exception.
+	 *
+	 * @param implClass The subclass that the builder is going to create.
+	 * @return A new builder bean.
+	 */
+	public <T extends HttpException> HttpExceptionBuilder<T> builder(Class<T> implClass) {
+		return create(implClass).copyFrom(this);
 	}
 
 	/**
@@ -103,6 +141,16 @@ public class HttpException extends BasicRuntimeException {
 			t = t.getCause();
 		}
 		return null;
+	}
+
+	/**
+	 * Returns the HTTP status code of this response.
+	 *
+	 * @return The HTTP status code of this response.
+	 */
+	@ResponseStatus
+	public int getStatusCode() {
+		return statusLine.getStatusCode();
 	}
 
 	/**
@@ -139,6 +187,16 @@ public class HttpException extends BasicRuntimeException {
 		return sb.toString();
 	}
 
+	@Override /* Throwable */
+	public String getMessage() {
+		String m = super.getMessage();
+		if (m == null && getCause() != null)
+			m = getCause().getMessage();
+		if (m == null)
+			m = statusLine.getReasonPhrase();
+		return m;
+	}
+
 	@Override /* Object */
 	public int hashCode() {
 		int i = 0;
@@ -151,64 +209,165 @@ public class HttpException extends BasicRuntimeException {
 		return i;
 	}
 
-	/**
-	 * Set the status code on this exception.
-	 *
-	 * @param value The status code.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpException status(int value) {
-		status = value;
-		return this;
-	}
-
-	/**
-	 * Returns the HTTP status code.
-	 *
-	 * @return The HTTP status code.
-	 */
-	@ResponseStatus
-	public int getStatus() {
-		return status;
-	}
-
-	/**
-	 * Add an HTTP header to this exception.
-	 *
-	 * @param name The header name.
-	 * @param val The header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpException header(String name, Object val) {
-		headers.a(name, val);
-		return this;
-	}
-
-	/**
-	 * Returns the headers associated with this exception.
-	 *
-	 * @return The headers associated with this exception.
-	 */
-	@ResponseHeader("*")
-	public Map<String,Object> getHeaders() {
-		return headers;
-	}
-
-	private static String message(Throwable cause, String msg, Object...args) {
-		if (msg == null && cause != null)
-			return firstNonEmpty(cause.getLocalizedMessage(), cause.getClass().getName());
-		return format(msg, args);
-	}
-
-	// When serialized, just serialize the message itself.
 	@Override /* Object */
 	public String toString() {
 		return emptyIfNull(getLocalizedMessage());
 	}
 
-	// <FluentSetters>
+	@Override /* HttpMessage */
+	public ProtocolVersion getProtocolVersion() {
+		return statusLine.getProtocolVersion();
+	}
 
-	// </FluentSetters>
+	@Override /* HttpMessage */
+	public boolean containsHeader(String name) {
+		return headers.containsHeader(name);
+	}
+
+	@Override /* HttpMessage */
+	public Header[] getHeaders(String name) {
+		return headers.getHeaders(name);
+	}
+
+	@Override /* HttpMessage */
+	public Header getFirstHeader(String name) {
+		return headers.getFirstHeader(name).orElse(null);
+	}
+
+	@Override /* HttpMessage */
+	public Header getLastHeader(String name) {
+		return headers.getLastHeader(name).orElse(null);
+	}
+
+	@Override /* HttpMessage */
+	@ResponseHeader("*")
+	public Header[] getAllHeaders() {
+		return headers.getAllHeaders();
+	}
+
+	@Override /* HttpMessage */
+	public void addHeader(Header value) {
+		headers = headersBuilder().add(value).build();
+	}
+
+	@Override /* HttpMessage */
+	public void addHeader(String name, String value) {
+		headers = headersBuilder().add(new BasicHeader(name, value)).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setHeader(Header value) {
+		headers = headersBuilder().update(value).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setHeader(String name, String value) {
+		headers = headersBuilder().update(new BasicHeader(name, value)).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setHeaders(Header[] values) {
+		headers = headersBuilder().set(values).build();
+	}
+
+	@Override /* HttpMessage */
+	public void removeHeader(Header value) {
+		headers = headersBuilder().remove(value).build();
+	}
+
+	@Override /* HttpMessage */
+	public void removeHeaders(String name) {
+		headers = headersBuilder().remove(name).build();
+	}
+
+	@Override /* HttpMessage */
+	public HeaderIterator headerIterator() {
+		return headers.iterator();
+	}
+
+	@Override /* HttpMessage */
+	public HeaderIterator headerIterator(String name) {
+		return headers.iterator(name);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* HttpMessage */
+	public HttpParams getParams() {
+		return null;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* HttpMessage */
+	public void setParams(HttpParams params) {
+	}
+
+	@Override /* HttpMessage */
+	public StatusLine getStatusLine() {
+		return statusLine;
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusLine(StatusLine value) {
+		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusLine(ProtocolVersion ver, int code) {
+		statusLine = statusLineBuilder().protocolVersion(ver).statusCode(code).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
+		statusLine = statusLineBuilder().protocolVersion(ver).reasonPhrase(reason).statusCode(code).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusCode(int code) throws IllegalStateException {
+		statusLine = statusLineBuilder().statusCode(code).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setReasonPhrase(String reason) throws IllegalStateException {
+		statusLine = statusLineBuilder().reasonPhrase(reason).build();
+	}
+
+	@ResponseBody
+	@Override /* HttpMessage */
+	public HttpEntity getEntity() {
+		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
+		if (body == null) {
+			try {
+				String msg = getMessage();
+				if (msg != null)
+					body = new StringEntity(msg);
+			} catch (UnsupportedEncodingException e) {}
+		}
+		return body;
+	}
+
+	@Override /* HttpMessage */
+	public void setEntity(HttpEntity entity) {
+		assertModifiable();
+		this.body = entity;
+	}
+
+	@Override /* HttpMessage */
+	public Locale getLocale() {
+		return statusLine.getLocale();
+	}
+
+	@Override /* HttpMessage */
+	public void setLocale(Locale loc) {
+		statusLine = statusLineBuilder().locale(loc).build();
+	}
+
+	private BasicStatusLineBuilder statusLineBuilder() {
+		assertModifiable();
+		return statusLine.builder();
+	}
+
+	private BasicHeaderGroupBuilder headersBuilder() {
+		assertModifiable();
+		return headers.builder();
+	}
 }

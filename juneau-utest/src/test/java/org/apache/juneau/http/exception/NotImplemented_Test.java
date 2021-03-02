@@ -14,6 +14,7 @@ package org.apache.juneau.http.exception;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.exception.NotImplemented.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -43,7 +44,7 @@ public class NotImplemented_Test {
 		}
 		@RestGet
 		public void f5() throws NotImplemented {
-			throw new NotImplemented().header("Foo", "bar");
+			throw notImplemented().header("Foo", "bar").build();
 		}
 		@RestGet
 		public void f6() throws NotImplemented {

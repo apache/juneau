@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.Unauthorized.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 401 (Unauthorized).
@@ -29,7 +28,6 @@ import org.apache.juneau.internal.*;
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class Unauthorized extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -39,15 +37,43 @@ public class Unauthorized extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Unauthorized";
 
+	/** Reusable unmodifiable instance. */
+	public static final Unauthorized INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<Unauthorized> create() {
+		return new HttpExceptionBuilder<>(Unauthorized.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public Unauthorized(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public Unauthorized(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public Unauthorized() {
+		this(create().build());
 	}
 
 	/**
@@ -56,14 +82,7 @@ public class Unauthorized extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public Unauthorized(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public Unauthorized() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -73,7 +92,7 @@ public class Unauthorized extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Unauthorized(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -82,26 +101,15 @@ public class Unauthorized extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public Unauthorized(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public Unauthorized header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<Unauthorized> builder() {
+		return super.builder(Unauthorized.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public Unauthorized status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

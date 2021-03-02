@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.HttpVersionNotSupported.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 505 ().
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The server does not support the HTTP protocol version used in the request.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class HttpVersionNotSupported extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,43 @@ public class HttpVersionNotSupported extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "HTTP Version Not Supported";
 
+	/** Reusable unmodifiable instance. */
+	public static final HttpVersionNotSupported INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<HttpVersionNotSupported> create() {
+		return new HttpExceptionBuilder<>(HttpVersionNotSupported.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public HttpVersionNotSupported(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public HttpVersionNotSupported(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public HttpVersionNotSupported() {
+		this(create().build());
 	}
 
 	/**
@@ -53,14 +79,7 @@ public class HttpVersionNotSupported extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public HttpVersionNotSupported(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public HttpVersionNotSupported() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class HttpVersionNotSupported extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public HttpVersionNotSupported(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -79,26 +98,15 @@ public class HttpVersionNotSupported extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public HttpVersionNotSupported(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public HttpVersionNotSupported header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<HttpVersionNotSupported> builder() {
+		return super.builder(HttpVersionNotSupported.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public HttpVersionNotSupported status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

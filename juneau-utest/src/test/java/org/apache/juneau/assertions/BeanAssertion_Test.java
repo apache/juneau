@@ -20,6 +20,10 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanAssertion_Test {
 
+	private BeanAssertion<?> test(Object value) {
+		return assertBean(value).silent();
+	}
+
 	public static class A {
 		public int f1 = 1, f2 = 2;
 	}
@@ -28,23 +32,23 @@ public class BeanAssertion_Test {
 	public void a01_basic() throws Exception {
 		A a = new A();
 
-		assertThrown(()->assertBean((Object)null).exists()).is("Value was null.");
-		assertBean(a).exists();
+		assertThrown(()->test((Object)null).exists()).is("Value was null.");
+		test(a).exists();
 
 		assertCollection(null).doesNotExist();
-		assertThrown(()->assertBean(a).doesNotExist()).is("Value was not null.");
+		assertThrown(()->test(a).doesNotExist()).is("Value was not null.");
 
-		assertBean(a).field("f1").asInteger().is(1);
-		assertBean(a).field("x").asInteger().isNull();
-		assertThrown(()->assertBean((Object)null).field("x")).is("Value was null.");
+		test(a).field("f1").asInteger().is(1);
+		test(a).field("x").asInteger().isNull();
+		assertThrown(()->test((Object)null).field("x")).is("Value was null.");
 
-		assertBean(a).fields("f2,f1").asJson().is("{f2:2,f1:1}");
-		assertBean(a).fields("x").asJson().is("{}");
+		test(a).fields("f2,f1").asJson().is("{f2:2,f1:1}");
+		test(a).fields("x").asJson().is("{}");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->BeanAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		BeanAssertion.create(null).stdout().silent();
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test(null).stdout();
 	}
 }

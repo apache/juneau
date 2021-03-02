@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.BadRequest.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 400 (Bad Request).
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class BadRequest extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,43 @@ public class BadRequest extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Bad Request";
 
+	/** Reusable unmodifiable instance. */
+	public static final BadRequest INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<BadRequest> create() {
+		return new HttpExceptionBuilder<>(BadRequest.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public BadRequest(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public BadRequest(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public BadRequest() {
+		this(create().build());
 	}
 
 	/**
@@ -53,14 +79,7 @@ public class BadRequest extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public BadRequest(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public BadRequest() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class BadRequest extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public BadRequest(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -79,26 +98,15 @@ public class BadRequest extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public BadRequest(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public BadRequest header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<BadRequest> builder() {
+		return super.builder(BadRequest.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public BadRequest status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

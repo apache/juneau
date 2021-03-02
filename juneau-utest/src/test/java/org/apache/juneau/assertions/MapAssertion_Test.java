@@ -23,46 +23,50 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class MapAssertion_Test {
 
+	private MapAssertion test(Map<?,?> value) {
+		return assertMap(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
 		Map<String,Integer> x1 = AMap.create(), x2 = AMap.of("a",1,"b",2);
 
-		assertThrown(()->assertMap(null).exists()).is("Value was null.");
-		assertMap(x1).exists();
+		assertThrown(()->test(null).exists()).is("Value was null.");
+		test(x1).exists();
 
 		assertCollection(null).doesNotExist();
-		assertThrown(()->assertMap(x1).doesNotExist()).is("Value was not null.");
+		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
 
-		assertThrown(()->assertMap(null).isSize(0)).is("Value was null.");
-		assertMap(x1).isSize(0);
-		assertThrown(()->assertMap(x1).isSize(1)).is("Map did not have the expected size.  Expect=1, Actual=0.");
-		assertMap(x2).isSize(2);
-		assertThrown(()->assertMap(x2).isSize(0)).is("Map did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(null).isSize(0)).is("Value was null.");
+		test(x1).isSize(0);
+		assertThrown(()->test(x1).isSize(1)).is("Map did not have the expected size.  Expect=1, Actual=0.");
+		test(x2).isSize(2);
+		assertThrown(()->test(x2).isSize(0)).is("Map did not have the expected size.  Expect=0, Actual=2.");
 
-		assertThrown(()->assertMap(null).isEmpty()).is("Value was null.");
-		assertMap(x1).isEmpty();
-		assertThrown(()->assertMap(x2).isEmpty()).is("Map was not empty.");
+		assertThrown(()->test(null).isEmpty()).is("Value was null.");
+		test(x1).isEmpty();
+		assertThrown(()->test(x2).isEmpty()).is("Map was not empty.");
 
-		assertThrown(()->assertMap(null).isNotEmpty()).is("Value was null.");
-		assertThrown(()->assertMap(x1).isNotEmpty()).is("Map was empty.");
-		assertMap(x2).isNotEmpty();
+		assertThrown(()->test(null).isNotEmpty()).is("Value was null.");
+		assertThrown(()->test(x1).isNotEmpty()).is("Map was empty.");
+		test(x2).isNotEmpty();
 
-		assertMap(x2).value("a").asInteger().is(1);
-		assertMap(x2).value("z").asInteger().isNull();
-		assertMap((Map<?,?>)null).value("a").asInteger().isNull();
+		test(x2).value("a").asInteger().is(1);
+		test(x2).value("z").asInteger().isNull();
+		test((Map<?,?>)null).value("a").asInteger().isNull();
 
-		assertMap(x2).containsKey("a");
-		assertThrown(()->assertMap(x2).containsKey("x")).is("Map did not contain expected key.\n\tContents: {a:1,b:2}\n\tExpected key: x");
-		assertThrown(()->assertMap((Map<?,?>)null).containsKey("x")).is("Value was null.");
+		test(x2).containsKey("a");
+		assertThrown(()->test(x2).containsKey("x")).is("Map did not contain expected key.\n\tContents: {a:1,b:2}\n\tExpected key: x");
+		assertThrown(()->test((Map<?,?>)null).containsKey("x")).is("Value was null.");
 
-		assertMap(x2).doesNotContainKey("x");
-		assertThrown(()->assertMap(x2).doesNotContainKey("a")).is("Map contained unexpected key.\n\tContents: {a:1,b:2}\n\tUnexpected key: a");
-		assertThrown(()->assertMap((Map<?,?>)null).containsKey("x")).is("Value was null.");
+		test(x2).doesNotContainKey("x");
+		assertThrown(()->test(x2).doesNotContainKey("a")).is("Map contained unexpected key.\n\tContents: {a:1,b:2}\n\tUnexpected key: a");
+		assertThrown(()->test((Map<?,?>)null).containsKey("x")).is("Value was null.");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->MapAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		MapAssertion.create(null).stdout().silent();
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test(null).stdout();
 	}
 }

@@ -14,6 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.response.StandardResponses.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -264,135 +265,135 @@ public class Remote_CommonInterfaces_Test {
 	public static class E1 implements E {
 		@Override
 		public void badRequest() throws BadRequest {
-			throw new BadRequest();
+			throw BAD_REQUEST;
 		}
 		@Override
 		public void conflict() throws Conflict {
-			throw new Conflict();
+			throw CONFLICT;
 		}
 		@Override
 		public void expectationFailed() throws ExpectationFailed {
-			throw new ExpectationFailed();
+			throw EXPECTATION_FAILED;
 		}
 		@Override
 		public void failedDependency() throws FailedDependency {
-			throw new FailedDependency();
+			throw FAILED_DEPENDENCY;
 		}
 		@Override
 		public void forbidden() throws Forbidden {
-			throw new Forbidden();
+			throw FORBIDDEN;
 		}
 		@Override
 		public void gone() throws Gone {
-			throw new Gone();
+			throw GONE;
 		}
 		@Override
 		public void httpVersionNotSupported() throws HttpVersionNotSupported {
-			throw new HttpVersionNotSupported();
+			throw HTTP_VERSION_NOT_SUPPORTED;
 		}
 		@Override
 		public void insufficientStorage() throws InsufficientStorage {
-			throw new InsufficientStorage();
+			throw INSUFFICIENT_STORAGE;
 		}
 		@Override
 		public void internalServerError() throws InternalServerError {
-			throw new InternalServerError();
+			throw INTERNAL_SERVER_ERROR;
 		}
 		@Override
 		public void lengthRequired() throws LengthRequired {
-			throw new LengthRequired();
+			throw LENGTH_REQUIRED;
 		}
 		@Override
 		public void locked() throws Locked {
-			throw new Locked();
+			throw LOCKED;
 		}
 		@Override
 		public void loopDetected() throws LoopDetected {
-			throw new LoopDetected();
+			throw LOOP_DETECTED;
 		}
 		@Override
 		public void methodNotAllowed() throws MethodNotAllowed {
-			throw new MethodNotAllowed();
+			throw METHOD_NOT_ALLOWED;
 		}
 		@Override
 		public void misdirectedRequest() throws MisdirectedRequest {
-			throw new MisdirectedRequest();
+			throw MISDIRECTED_REQUEST;
 		}
 		@Override
 		public void networkAuthenticationRequired() throws NetworkAuthenticationRequired {
-			throw new NetworkAuthenticationRequired();
+			throw NETWORK_AUTHENTICATION_REQUIRED;
 		}
 		@Override
 		public void notAcceptable() throws NotAcceptable {
-			throw new NotAcceptable();
+			throw NOT_ACCEPTABLE;
 		}
 		@Override
 		public void notExtended() throws NotExtended {
-			throw new NotExtended();
+			throw NOT_EXTENDED;
 		}
 		@Override
 		public void notFound() throws NotFound {
-			throw new NotFound();
+			throw NOT_FOUND;
 		}
 		@Override
 		public void notImplemented() throws NotImplemented {
-			throw new NotImplemented();
+			throw NOT_IMPLEMENTED;
 		}
 		@Override
 		public void payloadTooLarge() throws PayloadTooLarge {
-			throw new PayloadTooLarge();
+			throw PAYLOAD_TOO_LARGE;
 		}
 		@Override
 		public void preconditionFailed() throws PreconditionFailed {
-			throw new PreconditionFailed();
+			throw PRECONDITION_FAILED;
 		}
 		@Override
 		public void preconditionRequired() throws PreconditionRequired {
-			throw new PreconditionRequired();
+			throw PRECONDITION_REQUIRED;
 		}
 		@Override
 		public void rangeNotSatisfiable() throws RangeNotSatisfiable {
-			throw new RangeNotSatisfiable();
+			throw RANGE_NOT_SATISFIABLE;
 		}
 		@Override
 		public void requestHeaderFieldsTooLarge() throws RequestHeaderFieldsTooLarge {
-			throw new RequestHeaderFieldsTooLarge();
+			throw REQUEST_HEADER_FIELDS_TOO_LARGE;
 		}
 		@Override
 		public void serviceUnavailable() throws ServiceUnavailable {
-			throw new ServiceUnavailable();
+			throw SERVICE_UNAVAILABLE;
 		}
 		@Override
 		public void tooManyRequests() throws TooManyRequests {
-			throw new TooManyRequests();
+			throw TOO_MANY_REQUESTS;
 		}
 		@Override
 		public void unauthorized() throws Unauthorized {
-			throw new Unauthorized();
+			throw UNAUTHORIZED;
 		}
 		@Override
 		public void unavailableForLegalReasons() throws UnavailableForLegalReasons {
-			throw new UnavailableForLegalReasons();
+			throw UNAVAILABLE_FOR_LEGAL_REASONS;
 		}
 		@Override
 		public void unprocessableEntity() throws UnprocessableEntity {
-			throw new UnprocessableEntity();
+			throw UNPROCESSABLE_ENTITIY;
 		}
 		@Override
 		public void unsupportedMediaType() throws UnsupportedMediaType {
-			throw new UnsupportedMediaType();
+			throw UNSUPPORTED_MEDIA_TYPE;
 		}
 		@Override
 		public void upgradeRequired() throws UpgradeRequired {
-			throw new UpgradeRequired();
+			throw UPGRADE_REQUIRED;
 		}
 		@Override
 		public void uriTooLong() throws UriTooLong {
-			throw new UriTooLong();
+			throw URI_TOO_LONG;
 		}
 		@Override
 		public void variantAlsoNegotiates() throws VariantAlsoNegotiates {
-			throw new VariantAlsoNegotiates();
+			throw VARIANT_ALSO_NEGOTIATES;
 		}
 	}
 

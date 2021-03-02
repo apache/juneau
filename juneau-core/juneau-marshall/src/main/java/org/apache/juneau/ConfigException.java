@@ -28,7 +28,7 @@ public class ConfigException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ConfigException(Throwable cause, String message, Object... args) {
-		super(cause, getMessage(cause, message, null), args);
+		super(cause, message, args);
 	}
 
 	/**

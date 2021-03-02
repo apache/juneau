@@ -20,15 +20,19 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ComparableAssertion_Test {
 
+	private ComparableAssertion test(Comparable<?> value) {
+		return assertComparable(value).silent();
+	}
+
 	@Test
 	public void a01_basic() throws Exception {
-		assertComparable(null).doesNotExist();
-		assertComparable(1).isGte(1);
+		test(null).doesNotExist();
+		test(1).isGte(1);
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->ComparableAssertion.create(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		ComparableAssertion.create(null).stdout().silent();
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		test(null).stdout().silent();
 	}
 }

@@ -17,7 +17,6 @@ import static org.apache.juneau.http.exception.LengthRequired.*;
 import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 411 ().
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The request did not specify the length of its content, which is required by the requested resource.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class LengthRequired extends HttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,43 @@ public class LengthRequired extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Length Required";
 
+	/** Reusable unmodifiable instance. */
+	public static final LengthRequired INSTANCE = create().unmodifiable(true).build();
+
+	/**
+	 * Creates a builder for this class.
+	 *
+	 * @return A new builder bean.
+	 */
+	public static HttpExceptionBuilder<LengthRequired> create() {
+		return new HttpExceptionBuilder<>(LengthRequired.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
+	 */
+	public LengthRequired(HttpExceptionBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
 	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
+	 * @param args The message arguments.
 	 */
 	public LengthRequired(Throwable cause, String msg, Object...args) {
-		super(cause, STATUS_CODE, msg, args);
+		this(create().causedBy(cause).message(msg, args));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public LengthRequired() {
+		this(create().build());
 	}
 
 	/**
@@ -53,14 +79,7 @@ public class LengthRequired extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public LengthRequired(String msg) {
-		this((Throwable)null, msg);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public LengthRequired() {
-		this((Throwable)null, REASON_PHRASE);
+		this(create().message(msg));
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class LengthRequired extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public LengthRequired(String msg, Object...args) {
-		this(null, msg, args);
+		this(create().message(msg, args));
 	}
 
 	/**
@@ -79,26 +98,15 @@ public class LengthRequired extends HttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public LengthRequired(Throwable cause) {
-		this(cause, null);
+		this(create().causedBy(cause));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - HttpException */
-	public LengthRequired header(String name, Object val) {
-		super.header(name, val);
-		return this;
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	public HttpExceptionBuilder<LengthRequired> builder() {
+		return super.builder(LengthRequired.class).copyFrom(this);
 	}
-
-	@Override /* GENERATED - HttpException */
-	public LengthRequired status(int value) {
-		super.status(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

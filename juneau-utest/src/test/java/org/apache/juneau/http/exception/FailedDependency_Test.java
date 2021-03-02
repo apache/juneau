@@ -14,6 +14,7 @@ package org.apache.juneau.http.exception;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.exception.FailedDependency.*;
+import static org.apache.juneau.http.exception.StandardExceptions.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -43,7 +44,7 @@ public class FailedDependency_Test {
 		}
 		@RestGet
 		public void f5() throws FailedDependency {
-			throw new FailedDependency().header("Foo", "bar");
+			throw failedDependency().header("Foo", "bar").build();
 		}
 		@RestGet
 		public void f6() throws FailedDependency {

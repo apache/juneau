@@ -32,7 +32,7 @@ public class RemoteMetadataException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RemoteMetadataException(Throwable cause, String message, Object... args) {
-		super(cause, getMessage(cause, message, null), args);
+		super(cause, message, args);
 	}
 
 	/**
