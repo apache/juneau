@@ -12,3 +12,4 @@ Break out @Response bean handling into it's own handler.
 Can HeaderGroup be used universally?
 
 @ResponseBody and @ResponseHeaders shouldn't be required on HttpResponse objects.
+HttpRuntimeException?

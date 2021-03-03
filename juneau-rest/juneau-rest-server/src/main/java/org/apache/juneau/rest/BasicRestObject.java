@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}.

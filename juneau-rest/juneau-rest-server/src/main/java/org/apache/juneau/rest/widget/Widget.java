@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.

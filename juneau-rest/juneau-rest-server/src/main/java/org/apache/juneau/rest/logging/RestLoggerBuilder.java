@@ -25,7 +25,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.mstat.*;
 
 /**

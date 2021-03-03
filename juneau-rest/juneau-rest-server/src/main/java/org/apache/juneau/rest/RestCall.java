@@ -21,7 +21,7 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;

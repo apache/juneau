@@ -16,7 +16,7 @@ import java.io.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
 

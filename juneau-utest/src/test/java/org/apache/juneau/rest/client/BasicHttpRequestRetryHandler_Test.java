@@ -22,6 +22,7 @@ import org.apache.http.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.protocol.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.response.HttpException;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;

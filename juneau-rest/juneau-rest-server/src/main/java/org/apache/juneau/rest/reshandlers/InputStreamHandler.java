@@ -15,7 +15,7 @@ package org.apache.juneau.rest.reshandlers;
 import java.io.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.utils.*;
 
 /**

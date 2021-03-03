@@ -27,7 +27,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;

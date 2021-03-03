@@ -19,7 +19,7 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;

@@ -20,7 +20,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 

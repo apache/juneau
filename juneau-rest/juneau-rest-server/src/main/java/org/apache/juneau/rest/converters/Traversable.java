@@ -16,7 +16,7 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 

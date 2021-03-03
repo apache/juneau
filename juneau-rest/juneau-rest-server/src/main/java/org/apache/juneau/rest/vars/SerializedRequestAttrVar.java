@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;

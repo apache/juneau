@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Servlet implementation of a REST resource.

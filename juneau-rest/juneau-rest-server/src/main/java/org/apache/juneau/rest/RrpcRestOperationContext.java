@@ -22,8 +22,8 @@ import java.util.*;
 import javax.servlet.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.parser.*;
 
 /**

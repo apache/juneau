@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.utils.*;
 

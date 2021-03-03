@@ -14,7 +14,6 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.response.StandardResponses.*;
-import static org.apache.juneau.http.exception.StandardExceptions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -27,7 +26,6 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock.*;

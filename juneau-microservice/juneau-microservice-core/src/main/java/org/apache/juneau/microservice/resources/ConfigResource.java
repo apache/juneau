@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+
 import java.io.*;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Shows contents of the microservice configuration file.

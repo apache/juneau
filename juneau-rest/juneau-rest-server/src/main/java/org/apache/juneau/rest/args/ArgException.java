@@ -14,7 +14,7 @@ package org.apache.juneau.rest.args;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.reflect.*;
 
 /**

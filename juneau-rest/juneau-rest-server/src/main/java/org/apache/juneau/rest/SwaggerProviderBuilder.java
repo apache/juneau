@@ -16,7 +16,7 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.svl.*;
 

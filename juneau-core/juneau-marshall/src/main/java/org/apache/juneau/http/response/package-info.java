@@ -13,6 +13,6 @@
  ***************************************************************************************************************************/
 
 /**
- * HTTP Response beans.
+ * HTTP Response Exception Beans
  */
 package org.apache.juneau.http.response;
