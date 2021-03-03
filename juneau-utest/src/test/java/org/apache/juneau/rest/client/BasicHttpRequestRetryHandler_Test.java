@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.response.StandardResponses.*;
+import static org.apache.juneau.http.response.HttpResponses.*;
 
 import java.io.*;
 import java.net.*;

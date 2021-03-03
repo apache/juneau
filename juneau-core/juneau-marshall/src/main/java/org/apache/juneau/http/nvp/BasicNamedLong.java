@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.pair;
+package org.apache.juneau.http.nvp;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
@@ -24,9 +24,9 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 
 /**
- * A {@link NameValuePair} that consists of a single integer value.
+ * A {@link NameValuePair} that consists of a single long value.
  */
-public class BasicNamedInteger extends BasicNameValuePair {
+public class BasicNamedLong extends BasicNameValuePair {
 
 	/**
 	 * Convenience creator.
@@ -36,16 +36,16 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
+	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
+	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedInteger} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedLong} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedInteger of(String name, Object value) {
+	public static BasicNamedLong of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedInteger(name, value);
+		return new BasicNamedLong(name, value);
 	}
 
 	/**
@@ -59,19 +59,19 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
+	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
+	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedInteger} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedLong} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedInteger of(String name, Supplier<?> value) {
+	public static BasicNamedLong of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedInteger(name, value);
+		return new BasicNamedLong(name, value);
 	}
 
-	private Integer parsed;
+	private Long parsed;
 
 	/**
 	 * Constructor.
@@ -81,13 +81,13 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
+	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
+	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedInteger(String name, Object value) {
+	public BasicNamedLong(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
@@ -99,11 +99,11 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	}
 
 	/**
-	 * Returns the parameter value as an integer.
+	 * Returns the parameter value as a long.
 	 *
-	 * @return The parameter value as an integer, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 * @return The parameter value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public Optional<Integer> asInteger() {
+	public Optional<Long> asLong() {
 		return ofNullable(getParsedValue());
 	}
 
@@ -113,32 +113,25 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentIntegerAssertion<BasicNamedInteger> assertInteger() {
-		return new FluentIntegerAssertion<>(getParsedValue(), this);
+	public FluentLongAssertion<BasicNamedLong> assertLong() {
+		return new FluentLongAssertion<>(getParsedValue(), this);
 	}
 
-	private Integer getParsedValue() {
+	private Long getParsedValue() {
 		if (parsed != null)
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		if (o instanceof Integer)
-			return (Integer)o;
 		if (o instanceof Number)
-			return ((Number)o).intValue();
+			return ((Number)o).longValue();
 		String s = o.toString();
 		if (isEmpty(s))
 			return null;
 		try {
-			return Integer.parseInt(s);
+			return Long.parseLong(s);
 		} catch (NumberFormatException e) {
-			try {
-				Long.parseLong(s);
-				return Integer.MAX_VALUE;
-			} catch (NumberFormatException e2) {
-				throw new BasicIllegalArgumentException("Value could not be parsed as an int: {0}", o);
-			}
+			throw new BasicIllegalArgumentException("Value could not be parsed as a long: {0}", o);
 		}
 	}
 }

@@ -21,7 +21,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.pair.*;
+import org.apache.juneau.http.nvp.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 

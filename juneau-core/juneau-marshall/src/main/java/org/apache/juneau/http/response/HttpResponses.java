@@ -15,7 +15,7 @@ package org.apache.juneau.http.response;
 /**
  * Standard predefined HTTP responses.
  */
-public class StandardResponses {
+public class HttpResponses {
 
 	/**
 	 * A synonym for {@link Accepted#INSTANCE}.

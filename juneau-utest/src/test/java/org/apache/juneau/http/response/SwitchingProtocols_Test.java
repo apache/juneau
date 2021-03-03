@@ -13,7 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.response.StandardResponses.*;
+import static org.apache.juneau.http.response.HttpResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;

@@ -10,39 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.pair;
+package org.apache.juneau.http.nvp;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
+import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 
 /**
- * A {@link NameValuePair} that consists of a single string value.
-*/
-public class BasicNamedString extends BasicNameValuePair {
+ * A {@link NameValuePair} that consists of a single URL value.
+ */
+public class BasicNamedUri extends BasicNameValuePair {
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedString} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedString of(String name, Object value) {
+	public static BasicNamedUri of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedString(name, value);
+		return new BasicNamedUri(name, value);
 	}
 
 	/**
@@ -51,28 +52,28 @@ public class BasicNamedString extends BasicNameValuePair {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedString} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedString of(String name, Supplier<?> value) {
+	public static BasicNamedUri of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedString(name, value);
+		return new BasicNamedUri(name, value);
 	}
 
-	private String parsed;
+	private URI parsed;
 
 	/**
 	 * Constructor
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
@@ -81,52 +82,30 @@ public class BasicNamedString extends BasicNameValuePair {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedString(String name, Object value) {
+	public BasicNamedUri(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 * Returns this header as a {@link URI}.
 	 *
-	 * @return A new fluent assertion object.
-	 * @throws AssertionError If assertion failed.
+	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public FluentStringAssertion<BasicNamedString> assertString() {
-		return new FluentStringAssertion<>(getValue(), this);
+	public Optional<URI> asURI() {
+		return ofNullable(getParsedValue());
 	}
 
-	@Override /* Header */
-	public String getValue() {
-		return getParsedValue();
-	}
-
-	/**
-	 * Returns the value of this parameter as a string.
-	 *
-	 * @return The value of this parameter as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
-	 */
-	public Optional<String> asString() {
-		return Optional.ofNullable(getParsedValue());
-	}
-
-	/**
-	 * Return the value if present, otherwise return other.
-	 *
-	 * <p>
-	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
-	 *
-	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
-	 * @return The value, if present, otherwise other.
-	 */
-	public String orElse(String other) {
-		return asString().orElse(other);
-	}
-
-	private String getParsedValue() {
+	private URI getParsedValue() {
 		if (parsed != null)
 			return parsed;
-		return stringify(getRawValue());
+		Object o = getRawValue();
+		if (o == null)
+			return null;
+		String s = o.toString();
+		if (isEmpty(s))
+			return null;
+		return URI.create(s);
 	}
 }

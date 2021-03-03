@@ -10,10 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.pair;
+package org.apache.juneau.http.nvp;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -23,9 +22,9 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 
 /**
- * A {@link NameValuePair} that consists of a single boolean value.
- */
-public class BasicNamedBoolean extends BasicNameValuePair {
+ * A {@link NameValuePair} that consists of a single string value.
+*/
+public class BasicNamedString extends BasicNameValuePair {
 
 	/**
 	 * Convenience creator.
@@ -35,16 +34,15 @@ public class BasicNamedBoolean extends BasicNameValuePair {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedBoolean} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedString} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedBoolean of(String name, Object value) {
+	public static BasicNamedString of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedBoolean(name, value);
+		return new BasicNamedString(name, value);
 	}
 
 	/**
@@ -58,52 +56,35 @@ public class BasicNamedBoolean extends BasicNameValuePair {
 	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedBoolean} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedString} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedBoolean of(String name, Supplier<?> value) {
+	public static BasicNamedString of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedBoolean(name, value);
+		return new BasicNamedString(name, value);
 	}
 
-	private Boolean parsed;
+	private String parsed;
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param name The parameter name.
 	 * @param value
-	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedBoolean(String name, Object value) {
+	public BasicNamedString(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
-	}
-
-	@Override /* NameValuePair */
-	public String getValue() {
-		return stringify(getParsedValue());
-	}
-
-	/**
-	 * Returns the parameter value as a boolean.
-	 *
-	 * @return The parameter value as a boolean.
-	 */
-	public Optional<Boolean> asBoolean() {
-		return ofNullable(getParsedValue());
 	}
 
 	/**
@@ -112,21 +93,40 @@ public class BasicNamedBoolean extends BasicNameValuePair {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentBooleanAssertion<BasicNamedBoolean> assertBoolean() {
-		return new FluentBooleanAssertion<>(getParsedValue(), this);
+	public FluentStringAssertion<BasicNamedString> assertString() {
+		return new FluentStringAssertion<>(getValue(), this);
 	}
 
-	private Boolean getParsedValue() {
+	@Override /* Header */
+	public String getValue() {
+		return getParsedValue();
+	}
+
+	/**
+	 * Returns the value of this parameter as a string.
+	 *
+	 * @return The value of this parameter as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 */
+	public Optional<String> asString() {
+		return Optional.ofNullable(getParsedValue());
+	}
+
+	/**
+	 * Return the value if present, otherwise return other.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
+	 * @return The value, if present, otherwise other.
+	 */
+	public String orElse(String other) {
+		return asString().orElse(other);
+	}
+
+	private String getParsedValue() {
 		if (parsed != null)
 			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Boolean)
-			return (Boolean)o;
-		String s = o.toString();
-		if (isEmpty(s))
-			return null;
-		return Boolean.parseBoolean(s);
+		return stringify(getRawValue());
 	}
 }

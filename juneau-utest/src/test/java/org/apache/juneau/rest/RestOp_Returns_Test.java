@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.apache.juneau.http.response.StandardResponses.*;
+import static org.apache.juneau.http.response.HttpResponses.*;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;

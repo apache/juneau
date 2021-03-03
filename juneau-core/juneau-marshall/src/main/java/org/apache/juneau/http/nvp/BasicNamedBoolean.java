@@ -10,40 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.pair;
+package org.apache.juneau.http.nvp;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
-import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 
 /**
- * A {@link NameValuePair} that consists of a single URL value.
+ * A {@link NameValuePair} that consists of a single boolean value.
  */
-public class BasicNamedUri extends BasicNameValuePair {
+public class BasicNamedBoolean extends BasicNameValuePair {
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The header name.
+	 * @param name The parameter name.
 	 * @param value
-	 * 	The header value.
+	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>{@link Boolean} - As-is.
+	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
+	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedBoolean} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedUri of(String name, Object value) {
+	public static BasicNamedBoolean of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedUri(name, value);
+		return new BasicNamedBoolean(name, value);
 	}
 
 	/**
@@ -52,60 +53,80 @@ public class BasicNamedUri extends BasicNameValuePair {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The header name.
+	 * @param name The parameter name.
 	 * @param value
-	 * 	The header value supplier.
+	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>{@link Boolean} - As-is.
+	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
+	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedBoolean} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedUri of(String name, Supplier<?> value) {
+	public static BasicNamedBoolean of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedUri(name, value);
+		return new BasicNamedBoolean(name, value);
 	}
 
-	private URI parsed;
+	private Boolean parsed;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
-	 * @param name The header name.
+	 * @param name The parameter name.
 	 * @param value
+	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>{@link Boolean} - As-is.
+	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
+	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedUri(String name, Object value) {
+	public BasicNamedBoolean(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
 	}
 
+	@Override /* NameValuePair */
+	public String getValue() {
+		return stringify(getParsedValue());
+	}
+
 	/**
-	 * Returns this header as a {@link URI}.
+	 * Returns the parameter value as a boolean.
 	 *
-	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The parameter value as a boolean.
 	 */
-	public Optional<URI> asURI() {
+	public Optional<Boolean> asBoolean() {
 		return ofNullable(getParsedValue());
 	}
 
-	private URI getParsedValue() {
+	/**
+	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentBooleanAssertion<BasicNamedBoolean> assertBoolean() {
+		return new FluentBooleanAssertion<>(getParsedValue(), this);
+	}
+
+	private Boolean getParsedValue() {
 		if (parsed != null)
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
+		if (o instanceof Boolean)
+			return (Boolean)o;
 		String s = o.toString();
 		if (isEmpty(s))
 			return null;
-		return URI.create(s);
+		return Boolean.parseBoolean(s);
 	}
 }
