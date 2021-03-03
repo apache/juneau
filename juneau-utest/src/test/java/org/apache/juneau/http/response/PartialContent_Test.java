@@ -25,8 +25,8 @@ public class PartialContent_Test {
 	@Rest
 	public static class A {
 		@RestGet public PartialContent a1() { return PARTIAL_CONTENT; }
-		@RestGet public PartialContent a2() { return partialContent().body("foo"); }
-		@RestGet public PartialContent a3() { return partialContent().header("Foo","bar"); }
+		@RestGet public PartialContent a2() { return partialContent().body("foo").build(); }
+		@RestGet public PartialContent a3() { return partialContent().header("Foo","bar").build(); }
 	}
 
 	@Test

@@ -16,6 +16,8 @@ import static org.apache.juneau.http.exception.Unauthorized.*;
 
 import java.text.*;
 
+import org.apache.http.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -37,8 +39,11 @@ public class Unauthorized extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Unauthorized";
 
-	/** Reusable unmodifiable instance. */
-	public static final Unauthorized INSTANCE = create().unmodifiable(true).build();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final Unauthorized INSTANCE = create().unmodifiable().build();
 
 	/**
 	 * Creates a builder for this class.
@@ -46,7 +51,7 @@ public class Unauthorized extends HttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<Unauthorized> create() {
-		return new HttpExceptionBuilder<>(Unauthorized.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+		return new HttpExceptionBuilder<>(Unauthorized.class).statusLine(STATUS_LINE);
 	}
 
 	/**
@@ -73,16 +78,7 @@ public class Unauthorized extends HttpException {
 	 * Constructor.
 	 */
 	public Unauthorized() {
-		this(create().build());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 */
-	public Unauthorized(String msg) {
-		this(create().message(msg));
+		this(create());
 	}
 
 	/**
@@ -102,6 +98,20 @@ public class Unauthorized extends HttpException {
 	 */
 	public Unauthorized(Throwable cause) {
 		this(create().causedBy(cause));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public Unauthorized(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
 
 	/**

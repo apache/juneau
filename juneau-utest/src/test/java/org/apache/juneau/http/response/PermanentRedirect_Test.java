@@ -25,9 +25,9 @@ public class PermanentRedirect_Test {
 	@Rest
 	public static class A {
 		@RestGet public PermanentRedirect a1() { return PERMANENT_REDIRECT; }
-		@RestGet public PermanentRedirect a2() { return permanentRedirect("servlet:/foo").body("foo"); }
-		@RestGet public PermanentRedirect a3() { return permanentRedirect("servlet:/foo"); }
-		@RestGet public PermanentRedirect a4() { return permanentRedirect("servlet:/foo").header("Foo","bar"); }
+		@RestGet public PermanentRedirect a2() { return permanentRedirect("servlet:/foo").body("foo").build(); }
+		@RestGet public PermanentRedirect a3() { return permanentRedirect("servlet:/foo").build(); }
+		@RestGet public PermanentRedirect a4() { return permanentRedirect("servlet:/foo").header("Foo","bar").build(); }
 	}
 
 	@Test

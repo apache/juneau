@@ -25,8 +25,8 @@ public class NotModified_Test {
 	@Rest
 	public static class A {
 		@RestGet public NotModified a1() { return NOT_MODIFIED; }
-		@RestGet public NotModified a2() { return notModified().body("foo"); }
-		@RestGet public NotModified a3() { return notModified().header("Foo","bar"); }
+		@RestGet public NotModified a2() { return notModified().body("foo").build(); }
+		@RestGet public NotModified a3() { return notModified().header("Foo","bar").build(); }
 	}
 
 	@Test

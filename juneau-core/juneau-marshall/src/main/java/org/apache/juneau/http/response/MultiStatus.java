@@ -15,7 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.MultiStatus.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -35,86 +35,41 @@ public class MultiStatus extends BasicHttpResponse {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Multi-Status";
 
-	/**
-	 * Default unmodifiable instance.
-	 *
-	 * <br>Response body contains the reason phrase.
-	 */
-	public static final MultiStatus INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final MultiStatus INSTANCE = create().unmodifiable().build();
 
 	/**
-	 * Static creator.
+	 * Creates a builder for this class.
 	 *
-	 * @return A new instance of this bean.
+	 * @return A new builder bean.
 	 */
-	public static MultiStatus create() {
-		return new MultiStatus();
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public MultiStatus() {
-		this(null);
+	public static HttpResponseBuilder<MultiStatus> create() {
+		return new HttpResponseBuilder<>(MultiStatus.class).statusLine(STATUS_LINE);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
 	 */
-	public MultiStatus(String body) {
-		super(STATUS_CODE, REASON_PHRASE);
-		body(body);
+	public MultiStatus(HttpResponseBuilder<?> builder) {
+		super(builder);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus body(String value) {
-		super.body(value);
-		return this;
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public MultiStatus(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus body(HttpEntity value) {
-		super.body(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus header(String name, Object value) {
-		super.header(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus headers(Header...values) {
-		super.headers(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus reasonPhrase(String value) {
-		super.reasonPhrase(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus statusCode(int value) {
-		super.statusCode(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MultiStatus unmodifiable() {
-		super.unmodifiable();
-		return this;
-	}
-
-	// </FluentSetters>
 }

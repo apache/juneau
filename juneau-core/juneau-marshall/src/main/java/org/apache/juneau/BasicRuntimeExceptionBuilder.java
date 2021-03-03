@@ -68,12 +68,11 @@ public class BasicRuntimeExceptionBuilder {
 	/**
 	 * Specifies whether this exception should be unmodifiable after creation.
 	 *
-	 * @param value The new value for this flag.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicRuntimeExceptionBuilder unmodifiable(boolean value) {
-		unmodifiable = value;
+	public BasicRuntimeExceptionBuilder unmodifiable() {
+		unmodifiable = true;
 		return this;
 	}
 

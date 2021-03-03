@@ -12,253 +12,304 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.assertions.Assertions.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.http.entity.*;
-import org.apache.http.message.*;
+import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.BasicHeader;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
- * Superclass of all predefined responses in this package.
+ * Basic implementation of the {@link HttpResponse} interface.
+ *
+ * <p>
+ * Although this class implements the various setters defined on the {@link HttpResponse} interface, it's in general
+ * going to be more efficient to set the status/headers/content of this bean through the builder.
+ *
+ * <p>
+ * If the <c>unmodifiable</c> flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.
+ *
+ * <p>
+ * Beans are not thread safe unless they're marked as unmodifiable.
  */
 @Response
 @BeanIgnore
-@FluentSetters
-public abstract class BasicHttpResponse extends org.apache.http.message.BasicHttpResponse {
+public class BasicHttpResponse implements HttpResponse {
 
-	private boolean unmodifiable;
+	BasicHeaderGroup headerGroup;
+	BasicStatusLine statusLine;
+	BasicHeaderGroupBuilder headerGroupBuilder;
+	BasicStatusLineBuilder statusLineBuilder;
+	HttpEntity body;
+	final boolean unmodifiable;
 
 	/**
-	 * Constructor.
+	 * Creates a builder for this class.
 	 *
-	 * @param statusCode The HTTP status code.
-	 * @param reasonPhrase The HTTP status reason phrase.
+	 * @param implClass The subclass that the builder is going to create.
+	 * @return A new builder bean.
 	 */
-	protected BasicHttpResponse(int statusCode, String reasonPhrase) {
-		this(new BasicStatusLine(new ProtocolVersion("HTTP",1,1), statusCode, reasonPhrase));
+	public static <T extends BasicHttpResponse> HttpResponseBuilder<T> create(Class<T> implClass) {
+		return new HttpResponseBuilder<>(implClass);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param statusLine The HTTP status line.
+	 * @param builder The builder containing the arguments for this bean.
 	 */
-	protected BasicHttpResponse(StatusLine statusLine) {
-		super(statusLine);
+	public BasicHttpResponse(HttpResponseBuilder<?> builder) {
+		headerGroup = builder.headerGroup();
+		statusLine = builder.statusLine();
+		body = builder.body;
+		unmodifiable = builder.unmodifiable;
 	}
 
 	/**
-	 * Overrides the status code on this response.
-	 *
-	 * @param value The new status code value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpResponse statusCode(int value) {
-		setStatusCode(value);
-		return this;
-	}
-
-	/**
-	 * Overrides the reason phrase on this response.
-	 *
-	 * @param value The new reason value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpResponse reasonPhrase(String value) {
-		setReasonPhrase(value);
-		return this;
-	}
-
-	/**
-	 * Adds a header to this response.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpResponse header(String name, Object value) {
-		addHeader(new BasicHeader(name, value));
-		return this;
-	}
-
-	/**
-	 * Adds headers to this response.
-	 *
-	 * @param values The header values.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpResponse headers(Header...values) {
-		for (Header h : values)
-			if (h != null)
-				addHeader(h);
-		return this;
-	}
-
-	/**
-	 * Sets the entity on this response.
-	 *
-	 * @param value The entity on this response.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpResponse body(HttpEntity value) {
-		setEntity(value);
-		return this;
-	}
-
-	/**
-	 * Sets the entity on this response.
-	 *
-	 * @param value The entity on this response.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpResponse body(String value) {
-		try {
-			setEntity(value == null ? null : new StringEntity(value));
-		} catch (UnsupportedEncodingException e) { /* Not possible */ }
-		return this;
-	}
-
-	/**
-	 * Causes any modifications to this bean to throw an {@link UnsupportedOperationException}.
+	 * Constructor.
 	 *
 	 * <p>
-	 * TODO - Need to make sure headers are not modifiable through various getters.
+	 * This is the constructor used when parsing an HTTP response.
 	 *
-	 * @return This object (for method chaining).
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 */
-	@FluentSetter
-	public BasicHttpResponse unmodifiable() {
-		this.unmodifiable = true;
-		return this;
+	public BasicHttpResponse(HttpResponse response) {
+		this(create(null).copyFrom(response));
+	}
+
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @param implClass The subclass that the builder is going to create.
+	 * @return A new builder bean.
+	 */
+	public <T extends BasicHttpResponse> HttpResponseBuilder<T> builder(Class<T> implClass) {
+		return create(implClass).copyFrom(this);
+	}
+
+	/**
+	 * Returns the HTTP status code of this response.
+	 *
+	 * @return The HTTP status code of this response.
+	 */
+	@ResponseStatus
+	public int getStatusCode() {
+		return statusLine().getStatusCode();
+	}
+
+	/**
+	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
+	 *
+	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If status code is not what was expected.
+	 */
+	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+		assertArgNotNull("response", response);
+		int expected = getStatusLine().getStatusCode();
+		int actual = response.getStatusLine().getStatusCode();
+		assertInteger(actual).msg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		StringBuilder sb = new StringBuilder().append(statusLine()).append(' ').append(headerGroup());
+		if (body != null)
+			sb.append(' ').append(body);
+		return sb.toString();
+	}
+
+	@Override /* HttpMessage */
+	public ProtocolVersion getProtocolVersion() {
+		return statusLine().getProtocolVersion();
+	}
+
+	@Override /* HttpMessage */
+	public boolean containsHeader(String name) {
+		return headerGroup().containsHeader(name);
+	}
+
+	@Override /* HttpMessage */
+	public Header[] getHeaders(String name) {
+		return headerGroup().getHeaders(name);
+	}
+
+	@Override /* HttpMessage */
+	public Header getFirstHeader(String name) {
+		return headerGroup().getFirstHeader(name);
+	}
+
+	@Override /* HttpMessage */
+	public Header getLastHeader(String name) {
+		return headerGroup().getLastHeader(name);
+	}
+
+	@Override /* HttpMessage */
+	@ResponseHeader("*")
+	public Header[] getAllHeaders() {
+		return headerGroup().getAllHeaders();
+	}
+
+	@Override /* HttpMessage */
+	public void addHeader(Header value) {
+		headerGroupBuilder().add(value).build();
+	}
+
+	@Override /* HttpMessage */
+	public void addHeader(String name, String value) {
+		headerGroupBuilder().add(new BasicHeader(name, value)).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setHeader(Header value) {
+		headerGroupBuilder().update(value).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setHeader(String name, String value) {
+		headerGroupBuilder().update(new BasicHeader(name, value)).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setHeaders(Header[] values) {
+		headerGroupBuilder().set(values).build();
+	}
+
+	@Override /* HttpMessage */
+	public void removeHeader(Header value) {
+		headerGroupBuilder().remove(value).build();
+	}
+
+	@Override /* HttpMessage */
+	public void removeHeaders(String name) {
+		headerGroupBuilder().remove(name).build();
+	}
+
+	@Override /* HttpMessage */
+	public HeaderIterator headerIterator() {
+		return headerGroup().iterator();
+	}
+
+	@Override /* HttpMessage */
+	public HeaderIterator headerIterator(String name) {
+		return headerGroup().iterator(name);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* HttpMessage */
+	public HttpParams getParams() {
+		return null;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* HttpMessage */
+	public void setParams(HttpParams params) {
+	}
+
+	@Override /* HttpMessage */
+	public StatusLine getStatusLine() {
+		return statusLine();
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusLine(StatusLine value) {
+		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusLine(ProtocolVersion ver, int code) {
+		statusLineBuilder().protocolVersion(ver).statusCode(code).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
+		statusLineBuilder().protocolVersion(ver).reasonPhrase(reason).statusCode(code).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setStatusCode(int code) throws IllegalStateException {
+		statusLineBuilder().statusCode(code).build();
+	}
+
+	@Override /* HttpMessage */
+	public void setReasonPhrase(String reason) throws IllegalStateException {
+		statusLineBuilder().reasonPhrase(reason).build();
+	}
+
+	@ResponseBody
+	@Override /* HttpMessage */
+	public HttpEntity getEntity() {
+		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
+		if (body == null) {
+			try {
+				String msg = getStatusLine().getReasonPhrase();
+				if (msg != null)
+					body = new StringEntity(msg);
+			} catch (UnsupportedEncodingException e) {}
+		}
+		return body;
+	}
+
+	@Override /* HttpMessage */
+	public void setEntity(HttpEntity entity) {
+		assertModifiable();
+		this.body = entity;
+	}
+
+	@Override /* HttpMessage */
+	public Locale getLocale() {
+		return statusLine().getLocale();
+	}
+
+	@Override /* HttpMessage */
+	public void setLocale(Locale loc) {
+		statusLineBuilder().locale(loc).build();
+	}
+
+	private BasicStatusLine statusLine() {
+		if (statusLine == null) {
+			statusLine = statusLineBuilder.build();
+			statusLineBuilder = null;
+		}
+		return statusLine;
+	}
+
+	private BasicHeaderGroup headerGroup() {
+		if (headerGroup == null) {
+			headerGroup = headerGroupBuilder.build();
+			headerGroupBuilder = null;
+		}
+		return headerGroup;
+	}
+
+	private BasicStatusLineBuilder statusLineBuilder() {
+		assertModifiable();
+		if (statusLineBuilder == null) {
+			statusLineBuilder = statusLine.builder();
+			statusLine = null;
+		}
+		return statusLineBuilder;
+	}
+
+	private BasicHeaderGroupBuilder headerGroupBuilder() {
+		assertModifiable();
+		if (headerGroupBuilder == null) {
+			headerGroupBuilder = headerGroup.builder();
+			headerGroup = null;
+		}
+		return headerGroupBuilder;
 	}
 
 	/**
 	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
 	 */
-	protected void assertModifiable() {
+	protected final void assertModifiable() {
 		if (unmodifiable)
 			throw new UnsupportedOperationException("Bean is read-only");
 	}
-
-	@Override
-	public void setStatusLine(StatusLine value) {
-		assertModifiable();
-		super.setStatusLine(value);
-	}
-
-	@Override
-	public void setStatusLine(ProtocolVersion ver, int code) {
-		assertModifiable();
-		super.setStatusLine(ver, code);
-	}
-
-	@Override
-	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		assertModifiable();
-		super.setStatusLine(ver, code, reason);
-	}
-
-	@Override
-	public void setStatusCode(int value) {
-		assertModifiable();
-		super.setStatusCode(value);
-	}
-
-	@Override
-	public void setReasonPhrase(String value) {
-		assertModifiable();
-		super.setReasonPhrase(value);
-	}
-
-	@Override
-	public void setEntity(HttpEntity value) {
-		assertModifiable();
-		super.setEntity(value);
-	}
-
-	@Override
-	public void setLocale(Locale value) {
-		assertModifiable();
-		super.setLocale(value);
-	}
-
-	@Override
-	public void addHeader(Header value) {
-		assertModifiable();
-		super.addHeader(value);
-	}
-
-	@Override
-	public void addHeader(String name, String value) {
-		assertModifiable();
-		super.addHeader(name, value);
-	}
-
-	@Override
-	public void setHeader(Header value) {
-		assertModifiable();
-		super.setHeader(value);
-	}
-
-	@Override
-	public void setHeader(String name, String value) {
-		assertModifiable();
-		super.setHeader(name, value);
-	}
-
-	@Override
-	public void setHeaders(Header[] value) {
-		assertModifiable();
-		super.setHeaders(value);
-	}
-
-	@Override
-	public void removeHeader(Header value) {
-		assertModifiable();
-		super.removeHeader(value);
-	}
-
-	@Override
-	public void removeHeaders(String name) {
-		assertModifiable();
-		super.removeHeaders(name);
-	}
-
-	@ResponseHeader("*")
-	@Override /* Resource */
-	public Header[] getAllHeaders() {
-		return super.getAllHeaders();
-	}
-
-	/**
-	 * Returns the status code on this response.
-	 *
-	 * @return The status code on this response.
-	 */
-	@ResponseStatus
-	public int getStatusCode() {
-		return super.getStatusLine().getStatusCode();
-	}
-
-	@Override
-	@ResponseBody
-	public HttpEntity getEntity() {
-		return super.getEntity();
-	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

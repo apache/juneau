@@ -15,7 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.PartialContent.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -36,86 +36,41 @@ public class PartialContent extends BasicHttpResponse {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Partial Content";
 
-	/**
-	 * Default unmodifiable instance.
-	 *
-	 * <br>Response body contains the reason phrase.
-	 */
-	public static final PartialContent INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final PartialContent INSTANCE = create().unmodifiable().build();
 
 	/**
-	 * Static creator.
+	 * Creates a builder for this class.
 	 *
-	 * @return A new instance of this bean.
+	 * @return A new builder bean.
 	 */
-	public static PartialContent create() {
-		return new PartialContent();
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public PartialContent() {
-		this(null);
+	public static HttpResponseBuilder<PartialContent> create() {
+		return new HttpResponseBuilder<>(PartialContent.class).statusLine(STATUS_LINE);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
 	 */
-	public PartialContent(String body) {
-		super(STATUS_CODE, REASON_PHRASE);
-		body(body);
+	public PartialContent(HttpResponseBuilder<?> builder) {
+		super(builder);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent body(String value) {
-		super.body(value);
-		return this;
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public PartialContent(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent body(HttpEntity value) {
-		super.body(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent header(String name, Object value) {
-		super.header(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent headers(Header...values) {
-		super.headers(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent reasonPhrase(String value) {
-		super.reasonPhrase(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent statusCode(int value) {
-		super.statusCode(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public PartialContent unmodifiable() {
-		super.unmodifiable();
-		return this;
-	}
-
-	// </FluentSetters>
 }

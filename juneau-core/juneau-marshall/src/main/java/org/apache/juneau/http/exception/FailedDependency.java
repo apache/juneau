@@ -16,6 +16,8 @@ import static org.apache.juneau.http.exception.FailedDependency.*;
 
 import java.text.*;
 
+import org.apache.http.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -34,8 +36,11 @@ public class FailedDependency extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Failed Dependency";
 
-	/** Reusable unmodifiable instance. */
-	public static final FailedDependency INSTANCE = create().unmodifiable(true).build();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final FailedDependency INSTANCE = create().unmodifiable().build();
 
 	/**
 	 * Creates a builder for this class.
@@ -43,7 +48,7 @@ public class FailedDependency extends HttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<FailedDependency> create() {
-		return new HttpExceptionBuilder<>(FailedDependency.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+		return new HttpExceptionBuilder<>(FailedDependency.class).statusLine(STATUS_LINE);
 	}
 
 	/**
@@ -70,16 +75,7 @@ public class FailedDependency extends HttpException {
 	 * Constructor.
 	 */
 	public FailedDependency() {
-		this(create().build());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 */
-	public FailedDependency(String msg) {
-		this(create().message(msg));
+		this(create());
 	}
 
 	/**
@@ -99,6 +95,20 @@ public class FailedDependency extends HttpException {
 	 */
 	public FailedDependency(Throwable cause) {
 		this(create().causedBy(cause));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public FailedDependency(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
 
 	/**

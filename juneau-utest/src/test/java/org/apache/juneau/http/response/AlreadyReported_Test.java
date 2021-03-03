@@ -25,8 +25,8 @@ public class AlreadyReported_Test {
 	@Rest
 	public static class A {
 		@RestGet public AlreadyReported a1() { return ALREADY_REPORTED; }
-		@RestGet public AlreadyReported a2() { return alreadyReported().body("foo"); }
-		@RestGet public AlreadyReported a3() { return alreadyReported().header("Foo","bar"); }
+		@RestGet public AlreadyReported a2() { return alreadyReported().body("foo").build(); }
+		@RestGet public AlreadyReported a3() { return alreadyReported().header("Foo","bar").build(); }
 	}
 
 	@Test

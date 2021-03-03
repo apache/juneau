@@ -16,6 +16,8 @@ import static org.apache.juneau.http.exception.TooManyRequests.*;
 
 import java.text.*;
 
+import org.apache.http.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -35,8 +37,11 @@ public class TooManyRequests extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Too Many Requests";
 
-	/** Reusable unmodifiable instance. */
-	public static final TooManyRequests INSTANCE = create().unmodifiable(true).build();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final TooManyRequests INSTANCE = create().unmodifiable().build();
 
 	/**
 	 * Creates a builder for this class.
@@ -44,7 +49,7 @@ public class TooManyRequests extends HttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<TooManyRequests> create() {
-		return new HttpExceptionBuilder<>(TooManyRequests.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+		return new HttpExceptionBuilder<>(TooManyRequests.class).statusLine(STATUS_LINE);
 	}
 
 	/**
@@ -71,16 +76,7 @@ public class TooManyRequests extends HttpException {
 	 * Constructor.
 	 */
 	public TooManyRequests() {
-		this(create().build());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 */
-	public TooManyRequests(String msg) {
-		this(create().message(msg));
+		this(create());
 	}
 
 	/**
@@ -100,6 +96,20 @@ public class TooManyRequests extends HttpException {
 	 */
 	public TooManyRequests(Throwable cause) {
 		this(create().causedBy(cause));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public TooManyRequests(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
 
 	/**

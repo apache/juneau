@@ -16,6 +16,8 @@ import static org.apache.juneau.http.exception.VariantAlsoNegotiates.*;
 
 import java.text.*;
 
+import org.apache.http.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -34,8 +36,11 @@ public class VariantAlsoNegotiates extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Variant Also Negotiates";
 
-	/** Reusable unmodifiable instance. */
-	public static final VariantAlsoNegotiates INSTANCE = create().unmodifiable(true).build();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final VariantAlsoNegotiates INSTANCE = create().unmodifiable().build();
 
 	/**
 	 * Creates a builder for this class.
@@ -43,7 +48,7 @@ public class VariantAlsoNegotiates extends HttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<VariantAlsoNegotiates> create() {
-		return new HttpExceptionBuilder<>(VariantAlsoNegotiates.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+		return new HttpExceptionBuilder<>(VariantAlsoNegotiates.class).statusLine(STATUS_LINE);
 	}
 
 	/**
@@ -70,16 +75,7 @@ public class VariantAlsoNegotiates extends HttpException {
 	 * Constructor.
 	 */
 	public VariantAlsoNegotiates() {
-		this(create().build());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 */
-	public VariantAlsoNegotiates(String msg) {
-		this(create().message(msg));
+		this(create());
 	}
 
 	/**
@@ -99,6 +95,20 @@ public class VariantAlsoNegotiates extends HttpException {
 	 */
 	public VariantAlsoNegotiates(Throwable cause) {
 		this(create().causedBy(cause));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public VariantAlsoNegotiates(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
 
 	/**

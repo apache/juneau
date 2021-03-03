@@ -25,8 +25,8 @@ public class MultipleChoices_Test {
 	@Rest
 	public static class A {
 		@RestGet public MultipleChoices a1() { return MULTIPLE_CHOICES; }
-		@RestGet public MultipleChoices a2() { return multipleChoices().body("foo"); }
-		@RestGet public MultipleChoices a3() { return multipleChoices().header("Foo","bar"); }
+		@RestGet public MultipleChoices a2() { return multipleChoices().body("foo").build(); }
+		@RestGet public MultipleChoices a3() { return multipleChoices().header("Foo","bar").build(); }
 	}
 
 	@Test

@@ -25,8 +25,8 @@ public class EarlyHints_Test {
 	@Rest
 	public static class A {
 		@RestGet public EarlyHints a1() { return EARLY_HINTS; }
-		@RestGet public EarlyHints a2() { return earlyHints().body("foo"); }
-		@RestGet public EarlyHints a3() { return earlyHints().header("Foo","bar"); }
+		@RestGet public EarlyHints a2() { return earlyHints().body("foo").build(); }
+		@RestGet public EarlyHints a3() { return earlyHints().header("Foo","bar").build(); }
 	}
 
 	@Test

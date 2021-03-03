@@ -25,9 +25,9 @@ public class SeeOther_Test {
 	@Rest
 	public static class A {
 		@RestGet public SeeOther a1() { return SEE_OTHER; }
-		@RestGet public SeeOther a2() { return seeOther("servlet:/foo").body("foo"); }
-		@RestGet public SeeOther a3() { return seeOther("servlet:/foo"); }
-		@RestGet public SeeOther a4() { return seeOther("servlet:/foo").header("Foo","bar"); }
+		@RestGet public SeeOther a2() { return seeOther("servlet:/foo").body("foo").build(); }
+		@RestGet public SeeOther a3() { return seeOther("servlet:/foo").build(); }
+		@RestGet public SeeOther a4() { return seeOther("servlet:/foo").header("Foo","bar").build(); }
 	}
 
 	@Test

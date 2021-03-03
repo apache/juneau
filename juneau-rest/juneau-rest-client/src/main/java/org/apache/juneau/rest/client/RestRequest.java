@@ -49,6 +49,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -87,6 +88,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private Predicate<Integer> errorCodes;
 	private HttpHost target;
 	private HttpContext context;
+	private List<Class<? extends Throwable>> rethrow;
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -687,6 +689,30 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest ignoreErrors() {
 		this.ignoreErrors = true;
+		return this;
+	}
+
+	/**
+	 * Rethrow any of the specified exception types if a matching <c>Exception-Name</c> header is found.
+	 *
+	 * <p>
+	 * Rethrown exceptions will be set on the caused-by exception of {@link RestCallException} when
+	 * thrown from the {@link #run()} method.
+	 *
+	 * <p>
+	 * Can be called multiple times to append multiple rethrows.
+	 *
+	 * @param values The classes to rethrow.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestRequest rethrow(Class<?>...values) {
+		if (rethrow == null)
+			rethrow = new ArrayList<>();
+		for (Class<?> v : values) {
+			if (v != null && Throwable.class.isAssignableFrom(v))
+				rethrow.add((Class<? extends Throwable>)v);
+		}
 		return this;
 	}
 
@@ -2909,6 +2935,28 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			String method = getMethod();
 			int sc = response.getStatusCode();
 
+			if (response.containsHeader("Exception-Name") && rethrow != null) {
+				String exceptionName = response.getStringHeader("Exception-Name").orElse(null);
+				for (Class<? extends Throwable> t : rethrow) {
+					if (t.getName().equals(exceptionName)) {
+						ConstructorInfo c = null;
+						ClassInfo ci = ClassInfo.of(t);
+						c = ci.getPublicConstructor(HttpResponse.class);
+						if (c != null)
+							throw c.<Throwable>invoke(response);
+						c = ci.getPublicConstructor(String.class);
+						if (c != null)
+							throw c.<Throwable>invoke(response.getStringHeader("Exception-Message").orElse(response.getBody().asString()));
+						c = ci.getPublicConstructor(String.class,Throwable.class);
+						if (c != null)
+							throw c.<Throwable>invoke(response.getStringHeader("Exception-Message").orElse(response.getBody().asString()), null);
+						c = ci.getPublicConstructor();
+						if (c != null)
+							throw c.<Throwable>invoke();
+					}
+				}
+			}
+
 			if (errorCodes.test(sc) && ! ignoreErrors) {
 				throw new RestCallException(response, null, "HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}",
 					method, getURI(), sc, response.getReasonPhrase(), response.getBody().asAbbreviatedString(1000));
@@ -2918,7 +2966,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (response != null)
 				response.close();
 			throw e;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			if (response != null)
 				response.close();
 			throw new RestCallException(response, e, "Call failed.");

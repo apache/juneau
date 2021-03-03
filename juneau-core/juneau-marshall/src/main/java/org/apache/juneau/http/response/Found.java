@@ -14,10 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.Found.*;
 
-import java.net.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -33,7 +31,7 @@ import org.apache.juneau.internal.*;
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class Found extends BasicLocationHttpResponse {
+public class Found extends BasicHttpResponse {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 302;
@@ -41,98 +39,41 @@ public class Found extends BasicLocationHttpResponse {
 	/** Default message */
 	public static final String REASON_PHRASE = "Found";
 
-	/**
-	 * Default unmodifiable instance.
-	 *
-	 * <br>Response body contains the reason phrase.
-	 */
-	public static final Found INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final Found INSTANCE = create().unmodifiable().build();
 
 	/**
-	 * Static creator.
+	 * Creates a builder for this class.
 	 *
-	 * @return A new instance of this bean.
+	 * @return A new builder bean.
 	 */
-	public static Found create() {
-		return new Found();
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public Found() {
-		this(null);
+	public static HttpResponseBuilder<Found> create() {
+		return new HttpResponseBuilder<>(Found.class).statusLine(STATUS_LINE);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
 	 */
-	public Found(String body) {
-		super(STATUS_CODE, REASON_PHRASE);
-		body(body);
+	public Found(HttpResponseBuilder<?> builder) {
+		super(builder);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found body(String value) {
-		super.body(value);
-		return this;
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public Found(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found body(HttpEntity value) {
-		super.body(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found header(String name, Object value) {
-		super.header(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found headers(Header...values) {
-		super.headers(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found reasonPhrase(String value) {
-		super.reasonPhrase(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found statusCode(int value) {
-		super.statusCode(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Found unmodifiable() {
-		super.unmodifiable();
-		return this;
-	}
-
-	@Override /* GENERATED - BasicLocationHttpResponse */
-	public Found location(String value) {
-		super.location(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicLocationHttpResponse */
-	public Found location(URI value) {
-		super.location(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

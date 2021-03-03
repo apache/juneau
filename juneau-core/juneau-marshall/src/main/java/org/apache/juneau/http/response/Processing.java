@@ -15,7 +15,7 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.Processing.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -37,86 +37,41 @@ public class Processing extends BasicHttpResponse {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Processing";
 
-	/**
-	 * Default unmodifiable instance.
-	 *
-	 * <br>Response body contains the reason phrase.
-	 */
-	public static final Processing INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final Processing INSTANCE = create().unmodifiable().build();
 
 	/**
-	 * Static creator.
+	 * Creates a builder for this class.
 	 *
-	 * @return A new instance of this bean.
+	 * @return A new builder bean.
 	 */
-	public static Processing create() {
-		return new Processing();
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public Processing() {
-		this(null);
+	public static HttpResponseBuilder<Processing> create() {
+		return new HttpResponseBuilder<>(Processing.class).statusLine(STATUS_LINE);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
 	 */
-	public Processing(String body) {
-		super(STATUS_CODE, REASON_PHRASE);
-		body(body);
+	public Processing(HttpResponseBuilder<?> builder) {
+		super(builder);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing body(String value) {
-		super.body(value);
-		return this;
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public Processing(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing body(HttpEntity value) {
-		super.body(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing header(String name, Object value) {
-		super.header(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing headers(Header...values) {
-		super.headers(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing reasonPhrase(String value) {
-		super.reasonPhrase(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing statusCode(int value) {
-		super.statusCode(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public Processing unmodifiable() {
-		super.unmodifiable();
-		return this;
-	}
-
-	// </FluentSetters>
 }

@@ -92,7 +92,7 @@ public class RemoteOperationMeta {
 
 			String value1 = al.filter(x->x.isType(RemoteOp.class)).getValues(String.class, "value").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
 			String value2 = al.filter(x->!x.isType(RemoteOp.class)).getValues(String.class, "value").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
-			
+
 			if (isNotEmpty(value1)) {
 				int i = value1.indexOf(' ');
 				if (i == -1) {

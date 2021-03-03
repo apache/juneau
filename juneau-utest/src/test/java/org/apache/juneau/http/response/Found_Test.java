@@ -25,9 +25,9 @@ public class Found_Test {
 	@Rest
 	public static class A {
 		@RestGet public Found a1() { return FOUND; }
-		@RestGet public Found a2() { return found("servlet:/foo").body("foo"); }
-		@RestGet public Found a3() { return found("servlet:/foo"); }
-		@RestGet public Found a4() { return found("servlet:/foo").header("Foo","bar"); }
+		@RestGet public Found a2() { return found("servlet:/foo").body("foo").build(); }
+		@RestGet public Found a3() { return found("servlet:/foo").build(); }
+		@RestGet public Found a4() { return found("servlet:/foo").header("Foo","bar").build(); }
 	}
 
 	@Test

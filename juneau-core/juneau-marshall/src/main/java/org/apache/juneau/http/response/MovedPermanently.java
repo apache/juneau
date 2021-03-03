@@ -14,10 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.MovedPermanently.*;
 
-import java.net.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -29,7 +27,7 @@ import org.apache.juneau.internal.*;
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
 @FluentSetters
-public class MovedPermanently extends BasicLocationHttpResponse {
+public class MovedPermanently extends BasicHttpResponse {
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 301;
@@ -37,98 +35,41 @@ public class MovedPermanently extends BasicLocationHttpResponse {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Moved Permanently";
 
-	/**
-	 * Default unmodifiable instance.
-	 *
-	 * <br>Response body contains the reason phrase.
-	 */
-	public static final MovedPermanently INSTANCE = create().body(REASON_PHRASE).unmodifiable();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final MovedPermanently INSTANCE = create().unmodifiable().build();
 
 	/**
-	 * Static creator.
+	 * Creates a builder for this class.
 	 *
-	 * @return A new instance of this bean.
+	 * @return A new builder bean.
 	 */
-	public static MovedPermanently create() {
-		return new MovedPermanently();
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public MovedPermanently() {
-		this(null);
+	public static HttpResponseBuilder<MovedPermanently> create() {
+		return new HttpResponseBuilder<>(MovedPermanently.class).statusLine(STATUS_LINE);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param body Body of the response.  Can be <jk>null</jk>.
+	 * @param builder The builder containing the settings for this exception.
 	 */
-	public MovedPermanently(String body) {
-		super(STATUS_CODE, REASON_PHRASE);
-		body(body);
+	public MovedPermanently(HttpResponseBuilder<?> builder) {
+		super(builder);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently body(String value) {
-		super.body(value);
-		return this;
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public MovedPermanently(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently body(HttpEntity value) {
-		super.body(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently header(String name, Object value) {
-		super.header(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently headers(Header...values) {
-		super.headers(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently reasonPhrase(String value) {
-		super.reasonPhrase(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently statusCode(int value) {
-		super.statusCode(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpResponse */
-	public MovedPermanently unmodifiable() {
-		super.unmodifiable();
-		return this;
-	}
-
-	@Override /* GENERATED - BasicLocationHttpResponse */
-	public MovedPermanently location(String value) {
-		super.location(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicLocationHttpResponse */
-	public MovedPermanently location(URI value) {
-		super.location(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

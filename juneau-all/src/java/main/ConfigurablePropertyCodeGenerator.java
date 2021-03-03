@@ -63,7 +63,7 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicHeaderGroupBuilder.class,
 		BasicHttpEntity.class,
 		BasicHttpResource.class,
-		BasicLocationHttpResponse.class,
+		HttpResponseBuilder.class,
 		BasicNameValuePair.class,
 		BasicRuntimeExceptionBuilder.class,
 		BasicStatusLineBuilder.class,

@@ -30,8 +30,7 @@ public class SeeOtherRoot extends SeeOther {
 	 * Constructor.
 	 */
 	public SeeOtherRoot() {
-		super();
-		location("servlet:/");
+		super(create().location("servlet:/"));
 	}
 
 	/**
@@ -39,9 +38,9 @@ public class SeeOtherRoot extends SeeOther {
 	 * <p>
 	 * Used for end-to-end interfaces.
 	 *
-	 * @param message Message to send as the response.
+	 * @param body Message to send as the response.
 	 */
-	public SeeOtherRoot(String message) {
-		super(message);
+	public SeeOtherRoot(String body) {
+		super(create().location("servlet:/").body(body));
 	}
 }

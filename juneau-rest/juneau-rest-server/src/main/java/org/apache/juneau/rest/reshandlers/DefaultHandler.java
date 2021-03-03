@@ -112,6 +112,9 @@ public class DefaultHandler implements ResponseHandler {
 								SerializedNameValuePair x = ((SerializedNameValuePair)ho2).copy().serializerIfNotSet(ps);
 								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
 								res.setHeader(x.getName(), x.getValue());
+							} else if (ho2 instanceof BasicUriHeader) {
+								BasicUriHeader x = (BasicUriHeader)ho2;
+								res.setHeader(x.getName(), req.getUriResolver().resolve(x.getValue()));
 							} else if (ho2 instanceof Header) {
 								Header x = (Header)ho2;
 								res.setHeader(x.getName(), x.getValue());

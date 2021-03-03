@@ -16,6 +16,8 @@ import static org.apache.juneau.http.exception.RangeNotSatisfiable.*;
 
 import java.text.*;
 
+import org.apache.http.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -35,8 +37,11 @@ public class RangeNotSatisfiable extends HttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Range Not Satisfiable";
 
-	/** Reusable unmodifiable instance. */
-	public static final RangeNotSatisfiable INSTANCE = create().unmodifiable(true).build();
+	/** Default status line */
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+
+	/** Reusable unmodifiable instance */
+	public static final RangeNotSatisfiable INSTANCE = create().unmodifiable().build();
 
 	/**
 	 * Creates a builder for this class.
@@ -44,7 +49,7 @@ public class RangeNotSatisfiable extends HttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<RangeNotSatisfiable> create() {
-		return new HttpExceptionBuilder<>(RangeNotSatisfiable.class).statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE);
+		return new HttpExceptionBuilder<>(RangeNotSatisfiable.class).statusLine(STATUS_LINE);
 	}
 
 	/**
@@ -71,16 +76,7 @@ public class RangeNotSatisfiable extends HttpException {
 	 * Constructor.
 	 */
 	public RangeNotSatisfiable() {
-		this(create().build());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 */
-	public RangeNotSatisfiable(String msg) {
-		this(create().message(msg));
+		this(create());
 	}
 
 	/**
@@ -100,6 +96,20 @@ public class RangeNotSatisfiable extends HttpException {
 	 */
 	public RangeNotSatisfiable(Throwable cause) {
 		this(create().causedBy(cause));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 */
+	public RangeNotSatisfiable(HttpResponse response) {
+		this(create().copyFrom(response));
+		assertStatusCode(response);
 	}
 
 	/**

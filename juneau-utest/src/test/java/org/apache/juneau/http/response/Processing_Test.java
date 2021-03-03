@@ -25,8 +25,8 @@ public class Processing_Test {
 	@Rest
 	public static class A {
 		@RestGet public Processing a1() { return PROCESSING; }
-		@RestGet public Processing a2() { return processing().body("foo"); }
-		@RestGet public Processing a3() { return processing().header("Foo","bar"); }
+		@RestGet public Processing a2() { return processing().body("foo").build(); }
+		@RestGet public Processing a3() { return processing().header("Foo","bar").build(); }
 	}
 
 	@Test

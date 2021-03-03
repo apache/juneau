@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.exception;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -31,11 +32,17 @@ import org.apache.juneau.http.BasicStatusLine;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Exception thrown to trigger an error HTTP status.
+ * Basic implementation of the {@link HttpResponse} interface for error responses.
  *
  * <p>
- * Note that while the {@link HttpResponse} interface allows you to modify the headers and status line on this
- * bean, it is more efficient to do so in the builder.
+ * Although this class implements the various setters defined on the {@link HttpResponse} interface, it's in general
+ * going to be more efficient to set the status/headers/content of this bean through the builder.
+ *
+ * <p>
+ * If the <c>unmodifiable</c> flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.
+ *
+ * <p>
+ * Beans are not thread safe unless they're marked as unmodifiable.
  */
 @Response
 @BeanIgnore
@@ -43,8 +50,10 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 
 	private static final long serialVersionUID = 1L;
 
-	BasicHeaderGroup headers;
+	BasicHeaderGroup headerGroup;
 	BasicStatusLine statusLine;
+	BasicHeaderGroupBuilder headerGroupBuilder;
+	BasicStatusLineBuilder statusLineBuilder;
 	HttpEntity body;
 
 	/**
@@ -64,8 +73,8 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 */
 	public HttpException(HttpExceptionBuilder<?> builder) {
 		super(builder);
-		headers = builder.headers.build();
-		statusLine = builder.statusLine.build();
+		headerGroup = builder.headerGroup();
+		statusLine = builder.statusLine();
 		body = builder.body;
 	}
 
@@ -112,6 +121,18 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response being parsed.
+	 */
+	public HttpException(HttpResponse response) {
+		this(create(null).copyFrom(response));
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this exception.
 	 *
 	 * @param implClass The subclass that the builder is going to create.
@@ -150,7 +171,20 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 */
 	@ResponseStatus
 	public int getStatusCode() {
-		return statusLine.getStatusCode();
+		return statusLine().getStatusCode();
+	}
+
+	/**
+	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
+	 *
+	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If status code is not what was expected.
+	 */
+	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+		assertArgNotNull("response", response);
+		int expected = getStatusLine().getStatusCode();
+		int actual = response.getStatusLine().getStatusCode();
+		assertInteger(actual).msg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 
 	/**
@@ -193,7 +227,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 		if (m == null && getCause() != null)
 			m = getCause().getMessage();
 		if (m == null)
-			m = statusLine.getReasonPhrase();
+			m = statusLine().getReasonPhrase();
 		return m;
 	}
 
@@ -216,78 +250,78 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 
 	@Override /* HttpMessage */
 	public ProtocolVersion getProtocolVersion() {
-		return statusLine.getProtocolVersion();
+		return statusLine().getProtocolVersion();
 	}
 
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
-		return headers.containsHeader(name);
+		return headerGroup().containsHeader(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		return headers.getHeaders(name);
+		return headerGroup().getHeaders(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return headers.getFirstHeader(name).orElse(null);
+		return headerGroup().getFirstHeader(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return headers.getLastHeader(name).orElse(null);
+		return headerGroup().getLastHeader(name);
 	}
 
 	@Override /* HttpMessage */
 	@ResponseHeader("*")
 	public Header[] getAllHeaders() {
-		return headers.getAllHeaders();
+		return headerGroup().getAllHeaders();
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(Header value) {
-		headers = headersBuilder().add(value).build();
+		headerGroupBuilder().add(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headers = headersBuilder().add(new BasicHeader(name, value)).build();
+		headerGroupBuilder().add(new BasicHeader(name, value)).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(Header value) {
-		headers = headersBuilder().update(value).build();
+		headerGroupBuilder().update(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headers = headersBuilder().update(new BasicHeader(name, value)).build();
+		headerGroupBuilder().update(new BasicHeader(name, value)).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] values) {
-		headers = headersBuilder().set(values).build();
+		headerGroupBuilder().set(values).build();
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeader(Header value) {
-		headers = headersBuilder().remove(value).build();
+		headerGroupBuilder().remove(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		headers = headersBuilder().remove(name).build();
+		headerGroupBuilder().remove(name).build();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headers.iterator();
+		return headerGroup().iterator();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headers.iterator(name);
+		return headerGroup().iterator(name);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -303,7 +337,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 
 	@Override /* HttpMessage */
 	public StatusLine getStatusLine() {
-		return statusLine;
+		return statusLine();
 	}
 
 	@Override /* HttpMessage */
@@ -313,22 +347,22 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 
 	@Override /* HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
-		statusLine = statusLineBuilder().protocolVersion(ver).statusCode(code).build();
+		statusLineBuilder().protocolVersion(ver).statusCode(code).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		statusLine = statusLineBuilder().protocolVersion(ver).reasonPhrase(reason).statusCode(code).build();
+		statusLineBuilder().protocolVersion(ver).reasonPhrase(reason).statusCode(code).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
-		statusLine = statusLineBuilder().statusCode(code).build();
+		statusLineBuilder().statusCode(code).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setReasonPhrase(String reason) throws IllegalStateException {
-		statusLine = statusLineBuilder().reasonPhrase(reason).build();
+		statusLineBuilder().reasonPhrase(reason).build();
 	}
 
 	@ResponseBody
@@ -353,21 +387,45 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 
 	@Override /* HttpMessage */
 	public Locale getLocale() {
-		return statusLine.getLocale();
+		return statusLine().getLocale();
 	}
 
 	@Override /* HttpMessage */
 	public void setLocale(Locale loc) {
-		statusLine = statusLineBuilder().locale(loc).build();
+		statusLineBuilder().locale(loc).build();
+	}
+
+	private BasicStatusLine statusLine() {
+		if (statusLine == null) {
+			statusLine = statusLineBuilder.build();
+			statusLineBuilder = null;
+		}
+		return statusLine;
+	}
+
+	private BasicHeaderGroup headerGroup() {
+		if (headerGroup == null) {
+			headerGroup = headerGroupBuilder.build();
+			headerGroupBuilder = null;
+		}
+		return headerGroup;
 	}
 
 	private BasicStatusLineBuilder statusLineBuilder() {
 		assertModifiable();
-		return statusLine.builder();
+		if (statusLineBuilder == null) {
+			statusLineBuilder = statusLine.builder();
+			statusLine = null;
+		}
+		return statusLineBuilder;
 	}
 
-	private BasicHeaderGroupBuilder headersBuilder() {
+	private BasicHeaderGroupBuilder headerGroupBuilder() {
 		assertModifiable();
-		return headers.builder();
+		if (headerGroupBuilder == null) {
+			headerGroupBuilder = headerGroup.builder();
+			headerGroup = null;
+		}
+		return headerGroupBuilder;
 	}
 }

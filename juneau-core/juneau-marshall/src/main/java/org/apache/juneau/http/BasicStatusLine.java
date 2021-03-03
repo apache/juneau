@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.impl.*;
+import org.apache.http.message.*;
 
 /**
  * A basic implementation of the {@link StatusLine} interface.
@@ -89,5 +90,10 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	public Locale getLocale() {
 		return locale;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
 	}
 }

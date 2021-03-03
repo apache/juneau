@@ -10,54 +10,56 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.exception;
+package org.apache.juneau.http.response;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Builder for {@link HttpException} beans.
+ * Builder for {@link HttpResponse} beans.
  *
  * @param <T> The bean type to create for this builder.
  */
-@FluentSetters(returns="HttpExceptionBuilder<T>")
-public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeExceptionBuilder {
+@FluentSetters(returns="HttpResponseBuilder<T>")
+public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	BasicStatusLine statusLine;
 	BasicHeaderGroup headerGroup = BasicHeaderGroup.INSTANCE;
 	BasicStatusLineBuilder statusLineBuilder;
 	BasicHeaderGroupBuilder headerGroupBuilder;
 	HttpEntity body;
-
-	private final Class<? extends HttpException> implClass;
+	boolean unmodifiable;
+	
+	private final Class<? extends BasicHttpResponse> implClass;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param implClass
-	 * 	The subclass of {@link HttpException} to create.
-	 * 	<br>This must contain a public constructor that takes in an {@link HttpExceptionBuilder} object.
+	 * 	The subclass of {@link HttpResponse} to create.
+	 * 	<br>This must contain a public constructor that takes in an {@link HttpResponseBuilder} object.
 	 */
-	public HttpExceptionBuilder(Class<T> implClass) {
+	public HttpResponseBuilder(Class<T> implClass) {
 		this.implClass = implClass;
 	}
 
 	/**
 	 * Instantiates the exception bean from the settings in this builder.
 	 *
-	 * @return A new {@link HttpException} bean.
+	 * @return A new {@link HttpResponse} bean.
 	 */
 	@SuppressWarnings("unchecked")
 	public T build() {
 		try {
-			return (T) implClass.getConstructor(HttpExceptionBuilder.class).newInstance(this);
+			return (T) implClass.getConstructor(HttpResponseBuilder.class).newInstance(this);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -69,10 +71,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param response The response to copy from.  Must not be null.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<?> copyFrom(HttpResponse response) {
-		Header h = response.getLastHeader("Exception-Message");
-		if (h != null)
-			message(h.getValue());
+	public HttpResponseBuilder<?> copyFrom(HttpResponse response) {
 		headers(response.getAllHeaders());
 		body(response.getEntity());
 		return this;
@@ -84,8 +83,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The exception to copy from.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> copyFrom(HttpException value) {
-		super.copyFrom(value);
+	public HttpResponseBuilder<T> copyFrom(BasicHttpResponse value) {
 		statusLine = value.statusLine;
 		headerGroup = value.headerGroup;
 		body = value.body;
@@ -106,6 +104,17 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 		return headerGroup;
 	}
 
+	/**
+	 * Specifies whether this exception should be unmodifiable after creation.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HttpResponseBuilder<T> unmodifiable() {
+		unmodifiable = true;
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicStatusLine setters.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -120,7 +129,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> statusLine(BasicStatusLine value) {
+	public HttpResponseBuilder<T> statusLine(BasicStatusLine value) {
 		statusLine = value;
 		statusLineBuilder = null;
 		return this;
@@ -136,7 +145,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> protocolVersion(ProtocolVersion value) {
+	public HttpResponseBuilder<T> protocolVersion(ProtocolVersion value) {
 		statusLineBuilder().protocolVersion(value);
 		return this;
 	}
@@ -151,7 +160,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> statusCode(int value) {
+	public HttpResponseBuilder<T> statusCode(int value) {
 		statusLineBuilder().statusCode(value);
 		return this;
 	}
@@ -167,7 +176,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> reasonPhrase(String value) {
+	public HttpResponseBuilder<T> reasonPhrase(String value) {
 		statusLineBuilder().reasonPhrase(value);
 		return this;
 	}
@@ -182,7 +191,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
+	public HttpResponseBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
 		statusLineBuilder().reasonPhraseCatalog(value);
 		return this;
 	}
@@ -197,7 +206,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> locale(Locale value) {
+	public HttpResponseBuilder<T> locale(Locale value) {
 		statusLineBuilder().locale(value);
 		return this;
 	}
@@ -216,7 +225,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> headerGroup(BasicHeaderGroup value) {
+	public HttpResponseBuilder<T> headerGroup(BasicHeaderGroup value) {
 		headerGroup = value;
 		headerGroupBuilder = null;
 		return this;
@@ -227,7 +236,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> clearHeaders() {
+	public HttpResponseBuilder<T> clearHeaders() {
 		headerGroupBuilder().clear();
 		return this;
 	}
@@ -238,7 +247,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> header(Header value) {
+	public HttpResponseBuilder<T> header(Header value) {
 		headerGroupBuilder().add(value);
 		return this;
 	}
@@ -250,7 +259,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> header(String name, String value) {
+	public HttpResponseBuilder<T> header(String name, String value) {
 		headerGroupBuilder().add(name, value);
 		return this;
 	}
@@ -261,7 +270,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> headers(Header...values) {
+	public HttpResponseBuilder<T> headers(Header...values) {
 		headerGroupBuilder().add(values);
 		return this;
 	}
@@ -272,7 +281,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> headers(List<Header> values) {
+	public HttpResponseBuilder<T> headers(List<Header> values) {
 		headerGroupBuilder().add(values);
 		return this;
 	}
@@ -283,7 +292,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The header to remove.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> removeHeader(Header value) {
+	public HttpResponseBuilder<T> removeHeader(Header value) {
 		headerGroupBuilder().remove(value);
 		return this;
 	}
@@ -294,7 +303,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> removeHeaders(Header...values) {
+	public HttpResponseBuilder<T> removeHeaders(Header...values) {
 		headerGroupBuilder().remove(values);
 		return this;
 	}
@@ -305,7 +314,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> removeHeaders(List<Header> values) {
+	public HttpResponseBuilder<T> removeHeaders(List<Header> values) {
 		headerGroupBuilder().remove(values);
 		return this;
 	}
@@ -319,7 +328,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> updateHeader(Header value) {
+	public HttpResponseBuilder<T> updateHeader(Header value) {
 		headerGroupBuilder().update(value);
 		return this;
 	}
@@ -333,7 +342,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> updateHeaders(Header...values) {
+	public HttpResponseBuilder<T> updateHeaders(Header...values) {
 		headerGroupBuilder().update(values);
 		return this;
 	}
@@ -347,7 +356,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> updateHeaders(List<Header> values) {
+	public HttpResponseBuilder<T> updateHeaders(List<Header> values) {
 		headerGroupBuilder().update(values);
 		return this;
 	}
@@ -361,7 +370,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to set
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> setHeaders(Header...values) {
+	public HttpResponseBuilder<T> setHeaders(Header...values) {
 		headerGroupBuilder().set(values);
 		return this;
 	}
@@ -375,8 +384,32 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param values The headers to set
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> setHeaders(List<Header> values) {
+	public HttpResponseBuilder<T> setHeaders(List<Header> values) {
 		headerGroupBuilder().set(values);
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HttpResponseBuilder<T> location(URI value) {
+		updateHeader(Location.of(value));
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HttpResponseBuilder<T> location(String value) {
+		updateHeader(Location.of(value));
 		return this;
 	}
 
@@ -390,7 +423,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The body on this response.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> body(String value) {
+	public HttpResponseBuilder<T> body(String value) {
 		try {
 			body(new StringEntity(value));
 		} catch (UnsupportedEncodingException e) { /* Not possible */ }
@@ -403,7 +436,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The body on this response.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> body(HttpEntity value) {
+	public HttpResponseBuilder<T> body(HttpEntity value) {
 		this.body = value;
 		return this;
 	}
@@ -429,30 +462,6 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	}
 
 	// <FluentSetters>
-
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
-	public HttpExceptionBuilder<T> causedBy(Throwable value) {
-		super.causedBy(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
-	public HttpExceptionBuilder<T> copyFrom(BasicRuntimeException value) {
-		super.copyFrom(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
-	public HttpExceptionBuilder<T> message(String msg, Object...args) {
-		super.message(msg, args);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
-	public HttpExceptionBuilder<T> unmodifiable() {
-		super.unmodifiable();
-		return this;
-	}
 
 	// </FluentSetters>
 

@@ -25,8 +25,8 @@ public class Ok_Test {
 	@Rest
 	public static class A {
 		@RestGet public Ok a1() { return OK; }
-		@RestGet public Ok a2() { return ok().body("foo"); }
-		@RestGet public Ok a3() { return ok().header("Foo","bar"); }
+		@RestGet public Ok a2() { return ok().body("foo").build(); }
+		@RestGet public Ok a3() { return ok().header("Foo","bar").build(); }
 	}
 
 	@Test

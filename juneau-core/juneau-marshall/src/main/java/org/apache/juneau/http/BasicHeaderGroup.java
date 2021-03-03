@@ -29,6 +29,9 @@ import org.apache.http.util.*;
  */
 public class BasicHeaderGroup {
 
+	/** Predefined instance. */
+	public static final BasicHeaderGroup INSTANCE = create().build();
+
 	private static final Header[] EMPTY = new Header[] {};
 
 	private final List<Header> headers;
@@ -127,18 +130,18 @@ public class BasicHeaderGroup {
 	 * Header name comparison is case insensitive.
 	 *
 	 * @param name The header name.
-	 * @return The first matching header, never <jk>null</jk>.
+	 * @return The first matching header, or <jk>null</jk> if not found.
 	 */
-	public Optional<Header> getFirstHeader(String name) {
+	public Header getFirstHeader(String name) {
 		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
 		//	 for (Header header : headers)
 		// as that creates an Iterator that needs to be garbage-collected
 		for (int i = 0; i < headers.size(); i++) {
 			Header x = headers.get(i);
 			if (x.getName().equalsIgnoreCase(name))
-				return of(x);
+				return x;
 		}
-		return empty();
+		return null;
 	}
 
 	/**
@@ -148,15 +151,15 @@ public class BasicHeaderGroup {
 	 * Header name comparison is case insensitive.
 	 *
 	 * @param name The header name.
-	 * @return The last matching header, never <jk>null</jk>.
+	 * @return The last matching header, or <jk>null</jk> if not found.
 	 */
-	public Optional<Header> getLastHeader(String name) {
+	public Header getLastHeader(String name) {
 		for (int i = headers.size() - 1; i >= 0; i--) {
 			Header x = headers.get(i);
 			if (x.getName().equalsIgnoreCase(name))
-				return of(x);
+				return x;
 		}
-		return empty();
+		return null;
 	}
 
 	/**

@@ -660,6 +660,15 @@ public class ResponseBody implements HttpEntity {
 			if (type.is(HttpResponse.class))
 				return (T)response;
 
+			ConstructorInfo ci = type.getInfo().getPublicConstructor(HttpResponse.class);
+			if (ci != null) {
+				try {
+					return (T)ci.invoke(response);
+				} catch (ExecutableException e) {
+					throw new RuntimeException(e);
+				}
+			}
+
 			if (type.isChildOf(HttpResource.class)) {
 				BasicHttpResource r = BasicHttpResource.of(asInputStream());
 				for (Header h : response.getAllHeaders()) {

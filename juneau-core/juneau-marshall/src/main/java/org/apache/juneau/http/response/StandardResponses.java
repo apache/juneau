@@ -132,7 +132,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static Accepted accepted() {
+	public static HttpResponseBuilder<Accepted> accepted() {
 		return Accepted.create();
 	}
 
@@ -141,7 +141,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static AlreadyReported alreadyReported() {
+	public static HttpResponseBuilder<AlreadyReported> alreadyReported() {
 		return AlreadyReported.create();
 	}
 
@@ -150,7 +150,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static Continue _continue() {
+	public static HttpResponseBuilder<Continue> _continue() {
 		return Continue.create();
 	}
 
@@ -159,7 +159,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static Created created() {
+	public static HttpResponseBuilder<Created> created() {
 		return Created.create();
 	}
 
@@ -168,7 +168,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static EarlyHints earlyHints() {
+	public static HttpResponseBuilder<EarlyHints> earlyHints() {
 		return EarlyHints.create();
 	}
 
@@ -178,7 +178,7 @@ public class StandardResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static Found found(String location) {
+	public static HttpResponseBuilder<Found> found(String location) {
 		return Found.create().location(location);
 	}
 
@@ -187,7 +187,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static IMUsed imUsed() {
+	public static HttpResponseBuilder<IMUsed> imUsed() {
 		return IMUsed.create();
 	}
 
@@ -197,7 +197,7 @@ public class StandardResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static MovedPermanently movedPermanently(String location) {
+	public static HttpResponseBuilder<MovedPermanently> movedPermanently(String location) {
 		return MovedPermanently.create().location(location);
 	}
 
@@ -206,7 +206,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static MultipleChoices multipleChoices() {
+	public static HttpResponseBuilder<MultipleChoices> multipleChoices() {
 		return MultipleChoices.create();
 	}
 
@@ -215,7 +215,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static MultiStatus multiStatus() {
+	public static HttpResponseBuilder<MultiStatus> multiStatus() {
 		return MultiStatus.create();
 	}
 
@@ -224,7 +224,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static NoContent noContent() {
+	public static HttpResponseBuilder<NoContent> noContent() {
 		return NoContent.create();
 	}
 
@@ -233,7 +233,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static NonAuthoritiveInformation nonAuthoritiveInformation() {
+	public static HttpResponseBuilder<NonAuthoritiveInformation> nonAuthoritiveInformation() {
 		return NonAuthoritiveInformation.create();
 	}
 
@@ -242,7 +242,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static NotModified notModified() {
+	public static HttpResponseBuilder<NotModified> notModified() {
 		return NotModified.create();
 	}
 
@@ -251,7 +251,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static Ok ok() {
+	public static HttpResponseBuilder<Ok> ok() {
 		return Ok.create();
 	}
 
@@ -260,7 +260,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static PartialContent partialContent() {
+	public static HttpResponseBuilder<PartialContent> partialContent() {
 		return PartialContent.create();
 	}
 
@@ -270,7 +270,7 @@ public class StandardResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static PermanentRedirect permanentRedirect(String location) {
+	public static HttpResponseBuilder<PermanentRedirect> permanentRedirect(String location) {
 		return PermanentRedirect.create().location(location);
 	}
 
@@ -279,7 +279,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static Processing processing() {
+	public static HttpResponseBuilder<Processing> processing() {
 		return Processing.create();
 	}
 
@@ -288,7 +288,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static ResetContent resetContent() {
+	public static HttpResponseBuilder<ResetContent> resetContent() {
 		return ResetContent.create();
 	}
 
@@ -298,7 +298,7 @@ public class StandardResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static SeeOther seeOther(String location) {
+	public static HttpResponseBuilder<SeeOther> seeOther(String location) {
 		return SeeOther.create().location(location);
 	}
 
@@ -307,7 +307,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static SwitchingProtocols switchingProtocols() {
+	public static HttpResponseBuilder<SwitchingProtocols> switchingProtocols() {
 		return SwitchingProtocols.create();
 	}
 
@@ -317,7 +317,7 @@ public class StandardResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static TemporaryRedirect temporaryRedirect(String location) {
+	public static HttpResponseBuilder<TemporaryRedirect> temporaryRedirect(String location) {
 		return TemporaryRedirect.create().location(location);
 	}
 
@@ -326,7 +326,7 @@ public class StandardResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static UseProxy useProxy() {
+	public static HttpResponseBuilder<UseProxy> useProxy() {
 		return UseProxy.create();
 	}
 }

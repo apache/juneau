@@ -3167,6 +3167,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		try {
 			Object ret = null;
 			RestResponse res = null;
+			rc.rethrow(RuntimeException.class).rethrow(rom.getExceptions());
 			if (ror.getReturnValue() == RemoteReturn.NONE) {
 				res = rc.complete();
 			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
@@ -3191,15 +3192,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				Object v = res.getBody().asType(ror.getReturnType());
 				if (v == null && rt.isPrimitive())
 					v = ClassInfo.of(rt).getPrimitiveDefault();
-				if (rt.getName().equals(res.getStringHeader("Exception-Name").orElse(null)))
-					res.removeHeaders("Exception-Name");
 				ret = v;
 			}
-
-			ThrowableUtils.throwException(res.getStringHeader("Exception-Name").orElse(null), res.getStringHeader("Exception-Message").orElse(null), rom.getExceptions());
 			return ret;
 		} catch (RestCallException e) {
-			ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), rom.getExceptions());
+			Throwable t = e.getCause();
+			if (t instanceof RuntimeException)
+				throw t;
+			for (Class<?> t2 : method.getExceptionTypes())
+				if (t2.isInstance(t))
+					throw t;
 			throw new RuntimeException(e);
 		}
 	}
@@ -3304,18 +3306,33 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
 
 					String uri = rim.getUri();
+					RestResponse res = null;
 
 					try {
-						RestRequest rc = request("POST", uri, true).serializer(serializer).body(args);
+						RestRequest rc = request("POST", uri, true)
+							.serializer(serializer)
+							.body(args)
+							.rethrow(RuntimeException.class)
+							.rethrow(method.getExceptionTypes());
 
-						Object v = rc.run().getBody().asType(method.getGenericReturnType());
+						res = rc.run();
+
+						Object v = res.getBody().asType(method.getGenericReturnType());
 						if (v == null && method.getReturnType().isPrimitive())
 							v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 						return v;
 
-					} catch (RestCallException e) {
-						// Try to throw original exception if possible.
-						ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), method.getExceptionTypes());
+					} catch (Throwable e) {
+						if (e instanceof RestCallException) {
+							Throwable t = e.getCause();
+							if (t != null)
+								e = t;
+						}
+						if (e instanceof RuntimeException)
+							throw e;
+						for (Class<?> t2 : method.getExceptionTypes())
+							if (t2.isInstance(e))
+								throw e;
 						throw new RuntimeException(e);
 					}
 				}
