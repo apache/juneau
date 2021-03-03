@@ -22,7 +22,7 @@ import org.apache.http.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.protocol.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.http.response.HttpException;
+import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -40,7 +40,7 @@ public class BasicHttpRequestRetryHandler_Test {
 
 	public static class A1 extends HttpRequestExecutor {
 		@Override
-		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, HttpException {
+		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, BasicHttpException {
 			throw new UnknownHostException("foo");
 		}
 	}

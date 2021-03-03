@@ -3375,7 +3375,7 @@ public class RestContext extends BeanContext {
 	private final RestChildren restChildren;
 	private final Logger logger;
 	private final SwaggerProvider swaggerProvider;
-	private final HttpException initException;
+	private final BasicHttpException initException;
 	private final RestContext parentContext;
 	private final BeanStore rootBeanStore;
 	private final BeanStore beanStore;
@@ -3451,7 +3451,7 @@ public class RestContext extends BeanContext {
 
 		REGISTRY.put(builder.resourceClass, this);
 
-		HttpException _initException = null;
+		BasicHttpException _initException = null;
 
 		try {
 			ContextProperties cp = getContextProperties();
@@ -3562,7 +3562,7 @@ public class RestContext extends BeanContext {
 
 			swaggerProvider = createSwaggerProvider(r, cp, bf, ff, m, vr);
 
-		} catch (HttpException e) {
+		} catch (BasicHttpException e) {
 			_initException = e;
 			throw e;
 		} catch (Exception e) {
@@ -6773,10 +6773,10 @@ public class RestContext extends BeanContext {
 	 *
 	 * @param call The HTTP call.
 	 * @throws IOException Thrown by underlying stream.
-	 * @throws HttpException Non-200 response.
+	 * @throws BasicHttpException Non-200 response.
 	 * @throws NotImplemented No registered response handlers could handle the call.
 	 */
-	public void handleResponse(RestCall call) throws IOException, HttpException, NotImplemented {
+	public void handleResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct handler for the POJO.
 		for (ResponseHandler h : getResponseHandlers())
@@ -6881,7 +6881,7 @@ public class RestContext extends BeanContext {
 			if (r.code().length > 0)
 				code = r.code()[0];
 
-		HttpException e2 = (e instanceof HttpException ? (HttpException)e : HttpException.create(HttpException.class).causedBy(e).statusCode(code).build());
+		BasicHttpException e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : BasicHttpException.create(BasicHttpException.class).causedBy(e).statusCode(code).build());
 
 		HttpServletRequest req = call.getRequest();
 		HttpServletResponse res = call.getResponse();
@@ -6927,9 +6927,9 @@ public class RestContext extends BeanContext {
 	 * Called at the start of a request to invoke all {@link HookEvent#START_CALL} methods.
 	 *
 	 * @param call The current request.
-	 * @throws HttpException If thrown from call methods.
+	 * @throws BasicHttpException If thrown from call methods.
 	 */
-	protected void startCall(RestCall call) throws HttpException {
+	protected void startCall(RestCall call) throws BasicHttpException {
 		for (MethodInvoker x : startCallMethods) {
 			try {
 				x.invokeUsingFactory(call.getBeanStore(), call.getContext().getResource());
@@ -6943,9 +6943,9 @@ public class RestContext extends BeanContext {
 	 * Called during a request to invoke all {@link HookEvent#PRE_CALL} methods.
 	 *
 	 * @param call The current request.
-	 * @throws HttpException If thrown from call methods.
+	 * @throws BasicHttpException If thrown from call methods.
 	 */
-	protected void preCall(RestCall call) throws HttpException {
+	protected void preCall(RestCall call) throws BasicHttpException {
 		for (RestOperationInvoker m : preCallMethods)
 			m.invokeFromCall(call, getResource());
 	}
@@ -6954,9 +6954,9 @@ public class RestContext extends BeanContext {
 	 * Called during a request to invoke all {@link HookEvent#POST_CALL} methods.
 	 *
 	 * @param call The current request.
-	 * @throws HttpException If thrown from call methods.
+	 * @throws BasicHttpException If thrown from call methods.
 	 */
-	protected void postCall(RestCall call) throws HttpException {
+	protected void postCall(RestCall call) throws BasicHttpException {
 		for (RestOperationInvoker m : postCallMethods)
 			m.invokeFromCall(call, getResource());
 	}

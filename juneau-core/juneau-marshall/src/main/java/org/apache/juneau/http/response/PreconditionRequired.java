@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class PreconditionRequired extends HttpException {
+public class PreconditionRequired extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

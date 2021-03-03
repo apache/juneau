@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class InternalServerError extends HttpException {
+public class InternalServerError extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

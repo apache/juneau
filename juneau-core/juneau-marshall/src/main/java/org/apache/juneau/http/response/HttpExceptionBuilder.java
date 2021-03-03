@@ -23,12 +23,12 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Builder for {@link HttpException} beans.
+ * Builder for {@link BasicHttpException} beans.
  *
  * @param <T> The bean type to create for this builder.
  */
 @FluentSetters(returns="HttpExceptionBuilder<T>")
-public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeExceptionBuilder {
+public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeExceptionBuilder {
 
 	BasicStatusLine statusLine;
 	BasicHeaderGroup headerGroup = BasicHeaderGroup.INSTANCE;
@@ -36,13 +36,13 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	BasicHeaderGroupBuilder headerGroupBuilder;
 	HttpEntity body;
 
-	private final Class<? extends HttpException> implClass;
+	private final Class<? extends BasicHttpException> implClass;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param implClass
-	 * 	The subclass of {@link HttpException} to create.
+	 * 	The subclass of {@link BasicHttpException} to create.
 	 * 	<br>This must contain a public constructor that takes in an {@link HttpExceptionBuilder} object.
 	 */
 	public HttpExceptionBuilder(Class<T> implClass) {
@@ -52,7 +52,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	/**
 	 * Instantiates the exception bean from the settings in this builder.
 	 *
-	 * @return A new {@link HttpException} bean.
+	 * @return A new {@link BasicHttpException} bean.
 	 */
 	@SuppressWarnings("unchecked")
 	public T build() {
@@ -84,7 +84,7 @@ public class HttpExceptionBuilder<T extends HttpException> extends BasicRuntimeE
 	 * @param value The exception to copy from.
 	 * @return This object (for method chaining).
 	 */
-	public HttpExceptionBuilder<T> copyFrom(HttpException value) {
+	public HttpExceptionBuilder<T> copyFrom(BasicHttpException value) {
 		super.copyFrom(value);
 		statusLine = value.statusLine;
 		headerGroup = value.headerGroup;

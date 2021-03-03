@@ -70,7 +70,7 @@ import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.http.response.HttpException;
+import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
@@ -419,7 +419,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws HttpException If REST call failed.
+	 * @throws BasicHttpException If REST call failed.
 	 */
 	public FluentStringAssertion<RestRequest> assertCharset() {
 		return new FluentStringAssertion<>(getCharset().name(), this);

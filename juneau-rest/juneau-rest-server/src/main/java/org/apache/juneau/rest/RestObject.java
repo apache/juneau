@@ -317,7 +317,7 @@ public abstract class RestObject {
 	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li>
 	 * 		The method can throw any exception.
-	 * 		<br>{@link HttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
+	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
 	 * </ul>
 	 *
@@ -344,7 +344,7 @@ public abstract class RestObject {
 	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li>
 	 * 		The method can throw any exception.
-	 * 		<br>{@link HttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
+	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
 	 * 	<li>
 	 * 		It's advisable not to mess around with the HTTP body itself since you may end up consuming the body

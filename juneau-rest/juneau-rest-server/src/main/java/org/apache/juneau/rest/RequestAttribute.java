@@ -58,7 +58,7 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
-	 * @throws HttpException If value could not be parsed.
+	 * @throws BasicHttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> asType(Class<T> type) {
 		return ofNullable(req.getBeanSession().convertToType(getValue(), type));

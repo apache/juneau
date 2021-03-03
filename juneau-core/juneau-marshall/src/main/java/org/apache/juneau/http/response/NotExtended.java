@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * Further extensions to the request are required for the server to fulfill it.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class NotExtended extends HttpException {
+public class NotExtended extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

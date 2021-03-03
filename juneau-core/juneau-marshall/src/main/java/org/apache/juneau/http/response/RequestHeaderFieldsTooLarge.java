@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class RequestHeaderFieldsTooLarge extends HttpException {
+public class RequestHeaderFieldsTooLarge extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

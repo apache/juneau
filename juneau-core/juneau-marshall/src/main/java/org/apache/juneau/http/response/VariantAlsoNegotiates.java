@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * Transparent content negotiation for the request results in a circular reference.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class VariantAlsoNegotiates extends HttpException {
+public class VariantAlsoNegotiates extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

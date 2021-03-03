@@ -90,7 +90,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 	}
 
 	@Override /* Var */
-	public String resolve(VarResolverSession session, String key) throws HttpException, InternalServerError {
+	public String resolve(VarResolverSession session, String key) throws BasicHttpException, InternalServerError {
 		try {
 			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 			Optional<Swagger> swagger = req.getSwagger();

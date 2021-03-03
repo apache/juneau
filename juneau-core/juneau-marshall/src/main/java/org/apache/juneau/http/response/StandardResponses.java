@@ -403,12 +403,12 @@ public class StandardResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link HttpException#create()}.
+	 * A shortcut for calling {@link BasicHttpException#create()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<HttpException> httpException() {
-		return HttpException.create(HttpException.class);
+	public static HttpExceptionBuilder<BasicHttpException> httpException() {
+		return BasicHttpException.create(BasicHttpException.class);
 	}
 
 	/**

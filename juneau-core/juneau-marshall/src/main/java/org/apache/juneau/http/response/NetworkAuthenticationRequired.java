@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended for use by intercepting proxies used to control access to the network (e.g., "captive portals" used to require agreement to Terms of Service before granting full Internet access via a Wi-Fi hotspot).
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class NetworkAuthenticationRequired extends HttpException {
+public class NetworkAuthenticationRequired extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

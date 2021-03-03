@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class NotAcceptable extends HttpException {
+public class NotAcceptable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

@@ -45,7 +45,7 @@ public final class Traversable implements RestConverter {
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public Object convert(RestRequest req, Object o) throws HttpException, InternalServerError {
+	public Object convert(RestRequest req, Object o) throws BasicHttpException, InternalServerError {
 		if (o == null)
 			return null;
 
@@ -60,7 +60,7 @@ public final class Traversable implements RestConverter {
 				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
 				o = p.get(pathRemainder);
 			} catch (PojoRestException e) {
-				throw new HttpException(e.getStatus(), e);
+				throw new BasicHttpException(e.getStatus(), e);
 			} catch (Throwable t) {
 				throw toHttpException(t, InternalServerError.class);
 			}

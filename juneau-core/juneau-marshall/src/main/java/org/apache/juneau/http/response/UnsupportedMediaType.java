@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class UnsupportedMediaType extends HttpException {
+public class UnsupportedMediaType extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

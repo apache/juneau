@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The server cannot meet the requirements of the Expect request-header field.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class ExpectationFailed extends HttpException {
+public class ExpectationFailed extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

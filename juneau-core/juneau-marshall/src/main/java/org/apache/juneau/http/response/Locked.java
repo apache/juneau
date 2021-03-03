@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The resource that is being accessed is locked.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class Locked extends HttpException {
+public class Locked extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

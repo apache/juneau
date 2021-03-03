@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended for use with rate-limiting schemes.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class TooManyRequests extends HttpException {
+public class TooManyRequests extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

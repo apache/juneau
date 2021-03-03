@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
 public final class InputStreamHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestCall call) throws IOException, NotAcceptable, HttpException {
+	public boolean handle(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
 		RestResponse res = call.getRestResponse();
 		if (res.isOutputType(InputStream.class)) {
 			try (OutputStream os = res.getNegotiatedOutputStream()) {

@@ -21,7 +21,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.HttpException;
+import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.assertions.*;
@@ -238,10 +238,10 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * Parses the value.
 	 *
 	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
-	 * @throws HttpException In case of a parsing error.
+	 * @throws BasicHttpException In case of a parsing error.
 	 */
 	@Override /* Header */
-	public HeaderElement[] getElements() throws HttpException {
+	public HeaderElement[] getElements() throws BasicHttpException {
 		return new HeaderElement[0];
 	}
 

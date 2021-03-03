@@ -47,9 +47,9 @@ public class RestOperationInvoker extends MethodInvoker {
 	 * @param call The REST call.
 	 * @param resource The REST resource object.
 	 * @return The results of the call.
-	 * @throws HttpException If an error occurred during either parameter resolution or method invocation.
+	 * @throws BasicHttpException If an error occurred during either parameter resolution or method invocation.
 	 */
-	public Object invokeFromCall(RestCall call, Object resource) throws HttpException {
+	public Object invokeFromCall(RestCall call, Object resource) throws BasicHttpException {
 		Object[] args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
 			ParamInfo pi = inner().getParam(i);

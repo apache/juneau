@@ -37,7 +37,7 @@ import org.apache.juneau.http.response.*;
  * other purposes like pre-call validation of a request.
  *
  * <p>
- * Implementers should simply throw a {@link HttpException} from the {@link #guard(RestRequest, RestResponse)}
+ * Implementers should simply throw a {@link BasicHttpException} from the {@link #guard(RestRequest, RestResponse)}
  * method to abort processing on the current request.
  *
  * <p>
@@ -72,7 +72,7 @@ import org.apache.juneau.http.response.*;
 public abstract class RestGuard {
 
 	/**
-	 * Checks the current HTTP request and throws a {@link HttpException} if the guard does not permit the request.
+	 * Checks the current HTTP request and throws a {@link BasicHttpException} if the guard does not permit the request.
 	 *
 	 * <p>
 	 * By default, throws an <jsf>SC_FORBIDDEN</jsf> exception if {@link #isRequestAllowed(RestRequest)} returns
@@ -83,12 +83,12 @@ public abstract class RestGuard {
 	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
-	 * @throws HttpException Thrown to abort processing on current request.
+	 * @throws BasicHttpException Thrown to abort processing on current request.
 	 * @return
 	 * 	<jk>true</jk> if request can proceed.
 	 * 	Specify <jk>false</jk> if you're doing something like a redirection to a login page.
 	 */
-	public boolean guard(RestRequest req, RestResponse res) throws HttpException {
+	public boolean guard(RestRequest req, RestResponse res) throws BasicHttpException {
 		if (! isRequestAllowed(req))
 			throw new Forbidden("Access denied by guard");
 		return true;

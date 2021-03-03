@@ -144,9 +144,9 @@ public abstract class RequestHttpPart {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
-	 * @throws HttpException If value could not be parsed.
+	 * @throws BasicHttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(Type type, Type...args) throws HttpException {
+	public <T> Optional<T> asType(Type type, Type...args) throws BasicHttpException {
 		return asType(request.getBeanSession().getClassMeta(type, args));
 	}
 
@@ -156,9 +156,9 @@ public abstract class RequestHttpPart {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
-	 * @throws HttpException If value could not be parsed.
+	 * @throws BasicHttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(Class<T> type) throws HttpException {
+	public <T> Optional<T> asType(Class<T> type) throws BasicHttpException {
 		return asType(request.getBeanSession().getClassMeta(type));
 	}
 
@@ -168,9 +168,9 @@ public abstract class RequestHttpPart {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or {@link Optional#empty()} if the part is not present.
-	 * @throws HttpException If value could not be parsed.
+	 * @throws BasicHttpException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(ClassMeta<T> type) throws HttpException {
+	public <T> Optional<T> asType(ClassMeta<T> type) throws BasicHttpException {
 		try {
 			return Optional.ofNullable(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
@@ -194,9 +194,9 @@ public abstract class RequestHttpPart {
 	 *
 	 * @param pattern The regular expression pattern to match.
 	 * @return The matcher.
-	 * @throws HttpException If a connection error occurred.
+	 * @throws BasicHttpException If a connection error occurred.
 	 */
-	public Matcher asMatcher(Pattern pattern) throws HttpException {
+	public Matcher asMatcher(Pattern pattern) throws BasicHttpException {
 		return pattern.matcher(orElse(""));
 	}
 
@@ -216,9 +216,9 @@ public abstract class RequestHttpPart {
 	 *
 	 * @param regex The regular expression pattern to match.
 	 * @return The matcher.
-	 * @throws HttpException If a connection error occurred.
+	 * @throws BasicHttpException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex) throws HttpException {
+	public Matcher asMatcher(String regex) throws BasicHttpException {
 		return asMatcher(regex, 0);
 	}
 
@@ -239,9 +239,9 @@ public abstract class RequestHttpPart {
 	 * @param regex The regular expression pattern to match.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The matcher.
-	 * @throws HttpException If a connection error occurred.
+	 * @throws BasicHttpException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex, int flags) throws HttpException {
+	public Matcher asMatcher(String regex, int flags) throws BasicHttpException {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 

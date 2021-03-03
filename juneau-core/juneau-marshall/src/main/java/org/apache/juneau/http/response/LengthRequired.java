@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * The request did not specify the length of its content, which is required by the requested resource.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class LengthRequired extends HttpException {
+public class LengthRequired extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */

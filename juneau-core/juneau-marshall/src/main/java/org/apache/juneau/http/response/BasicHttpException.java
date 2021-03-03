@@ -46,7 +46,7 @@ import org.apache.juneau.http.annotation.*;
  */
 @Response
 @BeanIgnore
-public class HttpException extends BasicRuntimeException implements HttpResponse {
+public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 
 	private static final long serialVersionUID = 1L;
 
@@ -62,7 +62,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 * @param implClass The subclass that the builder is going to create.
 	 * @return A new builder bean.
 	 */
-	public static <T extends HttpException> HttpExceptionBuilder<T> create(Class<T> implClass) {
+	public static <T extends BasicHttpException> HttpExceptionBuilder<T> create(Class<T> implClass) {
 		return new HttpExceptionBuilder<>(implClass);
 	}
 
@@ -71,7 +71,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 *
 	 * @param builder The builder containing the arguments for this exception.
 	 */
-	public HttpException(HttpExceptionBuilder<?> builder) {
+	public BasicHttpException(HttpExceptionBuilder<?> builder) {
 		super(builder);
 		headerGroup = builder.headerGroup();
 		statusLine = builder.statusLine();
@@ -86,7 +86,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 * @param args The message arguments.
 	 */
-	public HttpException(int statusCode, Throwable cause, String msg, Object...args) {
+	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
 		this(create(null).statusCode(statusCode).causedBy(cause).message(msg, args));
 	}
 
@@ -95,7 +95,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 *
 	 * @param statusCode The HTTP status code.
 	 */
-	public HttpException(int statusCode) {
+	public BasicHttpException(int statusCode) {
 		this(create(null).statusCode(statusCode));
 	}
 
@@ -106,7 +106,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
-	public HttpException(int statusCode, String msg, Object...args) {
+	public BasicHttpException(int statusCode, String msg, Object...args) {
 		this(create(null).statusCode(statusCode).message(msg, args));
 	}
 
@@ -116,7 +116,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 * @param statusCode The HTTP status code.
 	 * @param causedBy The cause.  Can be <jk>null</jk>.
 	 */
-	public HttpException(int statusCode, Throwable causedBy) {
+	public BasicHttpException(int statusCode, Throwable causedBy) {
 		this(create(null).statusCode(statusCode).causedBy(causedBy));
 	}
 
@@ -128,7 +128,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 *
 	 * @param response The HTTP response being parsed.
 	 */
-	public HttpException(HttpResponse response) {
+	public BasicHttpException(HttpResponse response) {
 		this(create(null).copyFrom(response));
 	}
 
@@ -138,7 +138,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 * @param implClass The subclass that the builder is going to create.
 	 * @return A new builder bean.
 	 */
-	public <T extends HttpException> HttpExceptionBuilder<T> builder(Class<T> implClass) {
+	public <T extends BasicHttpException> HttpExceptionBuilder<T> builder(Class<T> implClass) {
 		return create(implClass).copyFrom(this);
 	}
 
@@ -148,7 +148,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	 * <p>
 	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:
 	 * <ul>
-	 * 	<li>{@link HttpException}
+	 * 	<li>{@link BasicHttpException}
 	 * 	<li>{@link InvocationTargetException}
 	 * </ul>
 	 *
@@ -157,7 +157,7 @@ public class HttpException extends BasicRuntimeException implements HttpResponse
 	public Throwable getRootCause() {
 		Throwable t = this;
 		while(t != null) {
-			if (! (t instanceof HttpException || t instanceof InvocationTargetException))
+			if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))
 				return t;
 			t = t.getCause();
 		}

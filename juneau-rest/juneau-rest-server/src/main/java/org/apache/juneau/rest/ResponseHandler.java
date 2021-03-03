@@ -98,9 +98,9 @@ public interface ResponseHandler {
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.
 	 * 	Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
-	 * @throws HttpException
+	 * @throws BasicHttpException
 	 * 	If some other exception occurred.
 	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
-	boolean handle(RestCall call) throws IOException, HttpException;
+	boolean handle(RestCall call) throws IOException, BasicHttpException;
 }

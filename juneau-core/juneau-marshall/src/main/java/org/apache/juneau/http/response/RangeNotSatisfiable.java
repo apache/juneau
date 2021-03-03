@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-public class RangeNotSatisfiable extends HttpException {
+public class RangeNotSatisfiable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
