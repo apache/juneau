@@ -96,8 +96,8 @@ public class RestClient_Paths_Test {
 		return basicPart(name, val);
 	}
 
-	private static PartSupplier pairs(Object...pairs) {
-		return PartSupplier.ofPairs(pairs);
+	private static PartList pairs(Object...pairs) {
+		return PartList.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

@@ -497,7 +497,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jc'>
  * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
  * 		<li class='jc'>
- * 			{@link PartSupplier} - Converted to a URL-encoded FORM post.
+ * 			{@link PartList} - Converted to a URL-encoded FORM post.
  * 		<li class='jc'>
  * 			{@link Supplier} - A supplier of anything on this list.
  * 	</ul>
@@ -1972,7 +1972,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	static final String RESTCLIENT_httpClientBuilder= PREFIX + "httpClientBuilder.o";
 
 	private final HeaderList headers;
-	private final PartSupplier query, formData;
+	private final PartList query, formData;
 	final CloseableHttpClient httpClient;
 	private final HttpClientConnectionManager connectionManager;
 	private final boolean keepHttpClientOpen, leakDetection;
@@ -2098,23 +2098,25 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 		this.headers = headers.build();
 
-		this.query = PartSupplier.create();
+		PartListBuilder query = PartList.create();
 		for (Object o : cp.getList(RESTCLIENT_query, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
-			if (o instanceof PartSupplier)
-				query.add((PartSupplier)o);
+			if (o instanceof PartList)
+				query.add((PartList)o);
 			else
 				query.add(BasicPart.cast(o));
 		}
+		this.query = query.build();
 
-		this.formData = PartSupplier.create();
+		PartListBuilder formData = PartList.create();
 		for (Object o : cp.getList(RESTCLIENT_formData, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
-			if (o instanceof PartSupplier)
-				formData.add((PartSupplier)o);
+			if (o instanceof PartList)
+				formData.add((PartList)o);
 			else
 				formData.add(BasicPart.cast(o));
 		}
+		this.formData = formData.build();
 
 		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.createBeanSupplier(BasicRestCallHandler.class));
 
@@ -2259,7 +2261,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li>
 	 * 			{@link HttpEntity} / {@link HttpResource} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
-	 * 			{@link PartSupplier} - Converted to a URL-encoded FORM post.
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
 	 * 		<li>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2354,7 +2356,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li>
 	 * 			{@link HttpEntity} / {@link HttpResource} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
-	 * 			{@link PartSupplier} - Converted to a URL-encoded FORM post.
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
 	 * 		<li>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2508,7 +2510,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<ul class='spaced-list'>
 	 * 		<li>{@link NameValuePair} - URL-encoded as a single name-value pair.
 	 * 		<li>{@link NameValuePair} array - URL-encoded as name value pairs.
-	 * 		<li>{@link PartSupplier} - URL-encoded as name value pairs.
+	 * 		<li>{@link PartList} - URL-encoded as name value pairs.
 	 * 		<li>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
 	 * 		<li>{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
@@ -2529,8 +2531,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return req.body(new UrlEncodedFormEntity(AList.of((NameValuePair)body)));
 			if (body instanceof NameValuePair[])
 				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
-			if (body instanceof PartSupplier)
-				return req.body(new UrlEncodedFormEntity((PartSupplier)body));
+			if (body instanceof PartList)
+				return req.body(new UrlEncodedFormEntity((PartList)body));
 			if (body instanceof HttpResource) {
 				for (Header h : ((HttpResource)body).getHeaders())
 					req.header(h);
@@ -2595,7 +2597,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPostPairs(Object uri, Object...parameters) throws RestCallException {
-		return formPost(uri, PartSupplier.ofPairs(parameters));
+		return formPost(uri, PartList.ofPairs(parameters));
 	}
 
 	/**
@@ -2627,7 +2629,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
 	 * 		<li>
-	 * 			{@link PartSupplier} - Converted to a URL-encoded FORM post.
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
 	 * 		<li>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2811,7 +2813,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
 	 * 		<li>
-	 * 			{@link PartSupplier} - Converted to a URL-encoded FORM post.
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
 	 * 		<li>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>

@@ -2030,7 +2030,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link Part}
 	 * 		<li>{@link Partable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link PartSupplier}
+	 * 		<li>{@link PartList}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2043,7 +2043,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder queries(Object...params) {
 		for (Object p : params) {
-			if (BasicPart.canCast(p) || p instanceof PartSupplier) {
+			if (BasicPart.canCast(p) || p instanceof PartList) {
 				appendTo(RESTCLIENT_query, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
@@ -2313,7 +2313,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link Part}
 	 * 		<li>{@link Partable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link PartSupplier}
+	 * 		<li>{@link PartList}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2326,7 +2326,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formDatas(Object...params) {
 		for (Object p : params) {
-			if (BasicPart.canCast(p) || p instanceof PartSupplier) {
+			if (BasicPart.canCast(p) || p instanceof PartList) {
 				appendTo(RESTCLIENT_formData, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())

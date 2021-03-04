@@ -96,8 +96,8 @@ public class Remote_FormDataAnnotation_Test {
 		@RemoteOp(path="a") String postX16(@FormData Reader b);
 		@RemoteOp(path="a") String postX17(@FormData("*") InputStream b);
 		@RemoteOp(path="a") String postX18(@FormData InputStream b);
-		@RemoteOp(path="a") String postX19(@FormData("*") PartSupplier b);
-		@RemoteOp(path="a") String postX20(@FormData PartSupplier b);
+		@RemoteOp(path="a") String postX19(@FormData("*") PartList b);
+		@RemoteOp(path="a") String postX20(@FormData PartList b);
 		@RemoteOp(path="a") String postX21(@FormData NameValuePair b);
 		@RemoteOp(path="a") String postX22(@FormData String b);
 		@RemoteOp(path="a") String postX23(@FormData InputStream b);
@@ -831,28 +831,28 @@ public class Remote_FormDataAnnotation_Test {
 
 	public static class K3a {
 		@FormData
-		public PartSupplier getA() {
+		public PartList getA() {
 			return parts("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@FormData("*")
-		public PartSupplier getB() {
+		public PartList getB() {
 			return parts("b1","true","b2","123","b3","null");
 		}
 		@FormData(n="*")
-		public PartSupplier getC() {
+		public PartList getC() {
 			return parts("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@FormData("*")
-		public PartSupplier getD() {
+		public PartList getD() {
 			return null;
 		}
 		@FormData
 		public NameValuePair[] getE() {
-			return parts("e1","v1","e2",123,"e3",null,"e4","").toArray();
+			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new NameValuePair[0]);
 		}
 		@FormData
 		public BasicPart[] getF() {
-			return parts("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
+			return parts("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicPart[0]);
 		}
 	}
 
@@ -975,8 +975,8 @@ public class Remote_FormDataAnnotation_Test {
 		return basicPart(name,val);
 	}
 
-	private static PartSupplier parts(Object...pairs) {
-		return PartSupplier.ofPairs(pairs);
+	private static PartList parts(Object...pairs) {
+		return PartList.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

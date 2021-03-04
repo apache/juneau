@@ -23,54 +23,52 @@ import org.apache.juneau.oapi.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class PartSupplier_Test {
+public class PartList_Test {
 
 	@Test
 	public void a01_basic() {
-		PartSupplier x = PartSupplier.of();
+		PartListBuilder x = PartList.create();
 
-		assertObject(x.iterator()).asJson().is("[]");
+		assertObject(x.build().iterator()).asJson().is("[]");
 		x.add(part("Foo","bar"));
-		assertObject(x.iterator()).asJson().is("['Foo=bar']");
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar']");
 		x.add(part("Foo","baz"));
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
-		x.add(PartSupplier.of());
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
-		x.add(PartSupplier.of(part("Foo","qux")));
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux']");
-		x.add(PartSupplier.of(part("Foo","q2x"), part("Foo","q3x")));
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x']");
-		x.add(PartSupplier.of(PartSupplier.of(part("Foo","q4x"),part("Foo","q5x"))));
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
-		x.add((PartSupplier)null);
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar','Foo=baz']");
+		x.add(PartList.of());
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar','Foo=baz']");
+		x.add(PartList.of(part("Foo","qux")));
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux']");
+		x.add(PartList.of(part("Foo","q2x"), part("Foo","q3x")));
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x']");
+		x.add(PartList.of(part("Foo","q4x"),part("Foo","q5x")));
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
+		x.add((PartList)null);
+		assertObject(x.build().iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 
-		assertObject(new PartSupplier.Null().iterator()).asJson().is("[]");
+		assertObject(new PartList.Null().iterator()).asJson().is("[]");
 	}
 
 	@Test
 	public void a02_creators() {
-		PartSupplier x;
+		PartList x;
 
-		x = PartSupplier.of(part("Foo","bar"), part("Foo","baz"), null);
+		x = PartList.of(part("Foo","bar"), part("Foo","baz"), null);
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = PartSupplier.of(AList.of(part("Foo","bar"), part("Foo","baz"), null));
+		x = PartList.of(AList.of(part("Foo","bar"), part("Foo","baz"), null));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = PartSupplier.ofPairs("Foo","bar","Foo","baz");
+		x = PartList.ofPairs("Foo","bar","Foo","baz");
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		assertThrown(()->PartSupplier.ofPairs("Foo")).is("Odd number of pairs passed into PartSupplier.ofPairs()");
-
-		assertThrown(()->PartSupplier.of("Foo")).is("Invalid type passed to PartSupplier.of(): java.lang.String");
+		assertThrown(()->PartList.ofPairs("Foo")).is("Odd number of parameters passed into PartList.ofPairs()");
 	}
 
 	@Test
 	public void a03_addMethods() {
 		String pname = "NameValuePairSupplierTest.x";
 
-		PartSupplier x = PartSupplier.create().resolving();
+		PartListBuilder x = PartList.create().resolving();
 		System.setProperty(pname, "y");
 
 		x.add("X1","bar");
@@ -80,23 +78,13 @@ public class PartSupplier_Test {
 		x.add("X5","bar",HttpPartType.QUERY,openApiSession(),null,false);
 		x.add("X6","$S{"+pname+"}",HttpPartType.QUERY,openApiSession(),null,false);
 
-		assertString(x.toString()).is("X1=bar&X2=y&X3=bar&X4=y&X5=bar&X6=y");
+		assertString(x.build().toString()).is("X1=bar&X2=y&X3=bar&X4=y&X5=bar&X6=y");
 
 		System.setProperty(pname, "z");
 
-		assertString(x.toString()).is("X1=bar&X2=z&X3=bar&X4=z&X5=bar&X6=z");
+		assertString(x.build().toString()).is("X1=bar&X2=z&X3=bar&X4=z&X5=bar&X6=z");
 
 		System.clearProperty(pname);
-	}
-
-	@Test
-	public void a04_toArrayMethods() {
-		PartSupplier x = PartSupplier
-			.create()
-			.add("X1","1")
-			.add(PartSupplier.ofPairs("X2","2"));
-		assertObject(x.toArray()).asJson().is("['X1=1','X2=2']");
-		assertObject(x.toArray(new Part[0])).asJson().is("['X1=1','X2=2']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

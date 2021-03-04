@@ -197,8 +197,8 @@ public class RestClient_Query_Test {
 		return basicPart(name, val);
 	}
 
-	private static PartSupplier parts(Object...pairs) {
-		return PartSupplier.ofPairs(pairs);
+	private static PartList parts(Object...pairs) {
+		return PartList.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

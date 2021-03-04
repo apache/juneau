@@ -12,9 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import java.util.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.oapi.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link PartList} objects.
@@ -23,6 +29,10 @@ import org.apache.juneau.internal.*;
 public class PartListBuilder {
 
 	final List<Part> parts = new ArrayList<>();
+	private volatile VarResolver varResolver;
+
+	/** Predefined instance. */
+	private static final PartList EMPTY = new PartList();
 
 	/**
 	 * Constructor.
@@ -35,11 +45,50 @@ public class PartListBuilder {
 	 * @return A new {@link PartList} bean.
 	 */
 	public PartList build() {
-		return new PartList(this);
+		return parts.isEmpty() ? EMPTY : new PartList(this);
 	}
 
 	/**
-	 * Removes any headers already in this builder.
+	 * Allows part values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in part values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartType, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartType,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder resolving() {
+		return resolving(VarResolver.DEFAULT);
+	}
+
+	/**
+	 * Allows part values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in part values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartType, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartType,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder resolving(VarResolver varResolver) {
+		this.varResolver = varResolver;
+		return this;
+	}
+
+	/**
+	 * Removes any parts already in this builder.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -50,9 +99,9 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Adds the specified header to the end of the headers in this builder.
+	 * Adds the specified part to the end of the parts in this builder.
 	 *
-	 * @param value The header to add.  <jk>null</jk> values are ignored.
+	 * @param value The part to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -63,22 +112,76 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Adds the specified header to the end of the headers in this builder.
+	 * Adds the specified part to the end of the parts in this builder.
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param name The part name.
+	 * @param value The part value.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public PartListBuilder add(String name, String value) {
-		parts.add(new BasicPart(name, value));
-		return this;
+		Part x = isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
+		return add(x);
 	}
 
 	/**
-	 * Adds the specified headers to the end of the headers in this builder.
+	 * Appends the specified part to the end of this list.
 	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * <p>
+	 * The part is added as a {@link BasicPart}.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(String name, Object value) {
+		Part x = isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
+		return add(x);
+	}
+
+	/**
+	 * Appends the specified part to the end of this list using a value supplier.
+	 *
+	 * <p>
+	 * The part is added as a {@link BasicPart}.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link BasicPart#getValue()}.
+	 *
+	 * @param name The part name.
+	 * @param value The part value supplier.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(String name, Supplier<?> value) {
+		Part x = isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
+		return add(x);
+	}
+
+	/**
+	 * Appends the specified part to the end of this list.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @param type The HTTP part type.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
+	 * @param schema
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		Part x = isResolving() ? new SerializedPart(name, resolver(value), type, serializer, schema, skipIfEmpty) : new SerializedPart(name, value, type, serializer, schema, skipIfEmpty);
+		return add(x);
+	}
+
+	/**
+	 * Adds the specified parts to the end of the parts in this builder.
+	 *
+	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -89,9 +192,9 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Adds the specified headers to the end of the headers in this builder.
+	 * Adds the specified parts to the end of the parts in this builder.
 	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -102,9 +205,21 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Removes the specified header from this builder.
+	 * Adds the specified parts to the end of the parts in this builder.
 	 *
-	 * @param value The header to remove.  <jk>null</jk> values are ignored.
+	 * @param values The part to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(PartList values) {
+		if (values != null)
+			add(values.getAll());
+		return this;
+	}
+
+	/**
+	 * Removes the specified parts from this builder.
+	 *
+	 * @param value The parts to remove.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -115,9 +230,9 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Removes the specified headers from this builder.
+	 * Removes the specified parts from this builder.
 	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
+	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -128,9 +243,9 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Removes the specified headers from this builder.
+	 * Removes the specified parts from this builder.
 	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
+	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -141,9 +256,9 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Removes the header with the specified name from this builder.
+	 * Removes the part with the specified name from this builder.
 	 *
-	 * @param name The header name.
+	 * @param name The part name.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -155,12 +270,12 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Replaces the first occurrence of the header with the same name.
+	 * Replaces the first occurrence of the part with the same name.
 	 *
 	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
+	 * If no part with the same name is found the given part is added to the end of the list.
 	 *
-	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
+	 * @param value The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -181,12 +296,12 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Replaces the first occurrence of the headers with the same name.
+	 * Replaces the first occurrence of the parts with the same name.
 	 *
 	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
+	 * If no part with the same name is found the given part is added to the end of the list.
 	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
+	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -197,12 +312,12 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Replaces the first occurrence of the headers with the same name.
+	 * Replaces the first occurrence of the parts with the same name.
 	 *
 	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
+	 * If no part with the same name is found the given part is added to the end of the list.
 	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
+	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -213,12 +328,12 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Sets all of the headers contained within this list overriding any existing headers.
+	 * Sets all of the parts contained within this list overriding any existing parts.
 	 *
 	 * <p>
-	 * The headers are added in the order in which they appear in the array.
+	 * The parts are added in the order in which they appear in the array.
 	 *
-	 * @param values The headers to set
+	 * @param values The parts to set
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -229,12 +344,12 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Sets all of the headers contained within this list overriding any existing headers.
+	 * Sets all of the parts contained within this list overriding any existing parts.
 	 *
 	 * <p>
-	 * The headers are added in the order in which they appear in the list.
+	 * The parts are added in the order in which they appear in the list.
 	 *
-	 * @param values The headers to set
+	 * @param values The parts to set
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -245,10 +360,10 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Appends or replaces the header values in this list.
+	 * Appends or replaces the part values in this list.
 	 *
 	 * <p>
-	 * If the header already exists in this list, it will be replaced with the new value.
+	 * If the part already exists in this list, it will be replaced with the new value.
 	 * Otherwise it will be appended to the end of this list.
 	 *
 	 * @param values The values to append or replace in this list.
@@ -273,10 +388,10 @@ public class PartListBuilder {
 
 
 	/**
-	 * Appends or replaces the header values in this list.
+	 * Appends or replaces the part values in this list.
 	 *
 	 * <p>
-	 * If the header already exists in this list, it will be replaced with the new value.
+	 * If the part already exists in this list, it will be replaced with the new value.
 	 * Otherwise it will be appended to the end of this list.
 	 *
 	 * @param values The values to append or replace in this list.
@@ -297,6 +412,20 @@ public class PartListBuilder {
 				add(h);
 		}
 		return this;
+	}
+
+	private boolean isResolving() {
+		return varResolver != null;
+	}
+
+	private Supplier<Object> resolver(Object input) {
+		return ()->(varResolver == null ? unwrap(input) : varResolver.resolve(stringify(unwrap(input))));
+	}
+
+	private Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		return o;
 	}
 
 	// <FluentSetters>

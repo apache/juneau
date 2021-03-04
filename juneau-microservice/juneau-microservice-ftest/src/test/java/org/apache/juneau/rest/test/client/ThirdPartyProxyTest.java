@@ -374,9 +374,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void b12_nameValuePairsQuery() throws Exception {
-		String r = proxy.nameValuePairsQuery(
-			PartSupplier.ofPairs("a","foo","b","","c",null)
+	public void b12_partListQuery() throws Exception {
+		String r = proxy.partListQuery(
+			PartList.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -503,9 +503,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void c10_nameValuePairsFormData() throws Exception {
-		String r = proxy.nameValuePairsFormData(
-			PartSupplier.ofPairs("a","foo","b","","c",null)
+	public void c10_partListFormData() throws Exception {
+		String r = proxy.partListFormData(
+			PartList.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -1726,9 +1726,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("*") NeBean a
 		);
 
-		@RemoteOp(method="GET", path="/nameValuePairsQuery")
-		String nameValuePairsQuery(
-			@Query("*") PartSupplier a
+		@RemoteOp(method="GET", path="/partListQuery")
+		String partListQuery(
+			@Query("*") PartList a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -1824,9 +1824,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("*") NeBean a
 		);
 
-		@RemoteOp(method="POST", path="/nameValuePairsFormData")
-		String nameValuePairsFormData(
-			@FormData("*") PartSupplier a
+		@RemoteOp(method="POST", path="/partListFormData")
+		String partListFormData(
+			@FormData("*") PartList a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------

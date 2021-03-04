@@ -171,7 +171,7 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -214,7 +214,7 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -355,7 +355,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.patch("/bean",body).contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.patch("/bean",body).contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -392,7 +392,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.request("patch","/bean",body).contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.request("patch","/bean",body).contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -440,8 +440,8 @@ public class RestClient_BasicCalls_Test {
 		return basicPart(name, val);
 	}
 
-	private static PartSupplier parts(Object...pairs) {
-		return PartSupplier.ofPairs(pairs);
+	private static PartList parts(Object...pairs) {
+		return PartList.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

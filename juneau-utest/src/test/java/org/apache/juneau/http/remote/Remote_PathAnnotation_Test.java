@@ -76,8 +76,8 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="a/{x}") String getX12(@Path Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX13(@Path(n="x",cf="uon") Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX14(@Path(f="uon") Map<String,Bean> b);
-		@RemoteOp(path="a/{x}") String getX15(@Path("*") PartSupplier b);
-		@RemoteOp(path="a/{x}") String getX16(@Path PartSupplier b);
+		@RemoteOp(path="a/{x}") String getX15(@Path("*") PartList b);
+		@RemoteOp(path="a/{x}") String getX16(@Path PartList b);
 		@RemoteOp(path="a/{x}") String getX17(@Path(n="x",serializer=UonSerializer.class) Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX18(@Path(n="*") NameValuePair b);
 		@RemoteOp(path="a/{x}") String getX19(@Path NameValuePair b);
@@ -687,28 +687,28 @@ public class Remote_PathAnnotation_Test {
 
 	public static class K3a {
 		@Path(n="*",aev=true)
-		public PartSupplier getA() {
+		public PartList getA() {
 			return parts("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Path("/*")
-		public PartSupplier getB() {
+		public PartList getB() {
 			return parts("b1","true","b2","123","b3","null");
 		}
 		@Path(n="*",aev=true)
-		public PartSupplier getC() {
+		public PartList getC() {
 			return parts("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Path("/*")
-		public PartSupplier getD() {
+		public PartList getD() {
 			return null;
 		}
 		@Path(aev=true)
 		public NameValuePair[] getE() {
-			return parts("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
+			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new Part[0]);
 		}
 		@Path(aev=true)
 		public BasicPart[] getF() {
-			return parts("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
+			return parts("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicPart[0]);
 		}
 	}
 
@@ -775,8 +775,8 @@ public class Remote_PathAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static PartSupplier parts(Object...pairs) {
-		return PartSupplier.ofPairs(pairs);
+	private static PartList parts(Object...pairs) {
+		return PartList.ofPairs(pairs);
 	}
 
 	private static NameValuePair part(String key, Object val) {

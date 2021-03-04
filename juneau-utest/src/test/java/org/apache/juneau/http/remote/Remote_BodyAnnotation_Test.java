@@ -132,7 +132,7 @@ public class Remote_BodyAnnotation_Test {
 		String postX7(@Body Reader b);
 		String postX8(@Body InputStream b);
 		String postX9(@Body HttpEntity b);
-		String postX10(@Body PartSupplier b);
+		String postX10(@Body PartList b);
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx")));
-		assertEquals("foo=bar",x.postX10(PartSupplier.ofPairs("foo","bar")));
+		assertEquals("foo=bar",x.postX10(PartList.ofPairs("foo","bar")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -227,7 +227,7 @@ public class Remote_BodyAnnotation_Test {
 		String postX7(@Body Reader b);
 		String postX8(@Body InputStream b);
 		String postX9(@Body HttpEntity b);
-		String postX10(@Body PartSupplier b);
+		String postX10(@Body PartList b);
 	}
 
 	@Test
@@ -242,7 +242,7 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
-		assertEquals("foo=bar",x.postX10(PartSupplier.ofPairs("foo","bar")));
+		assertEquals("foo=bar",x.postX10(PartList.ofPairs("foo","bar")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -308,7 +308,7 @@ public class Remote_BodyAnnotation_Test {
 		String postX7(@Body Reader b);
 		String postX8(@Body InputStream b);
 		String postX9(@Body HttpEntity b);
-		String postX10(@Body PartSupplier b);
+		String postX10(@Body PartList b);
 	}
 
 	@Test
@@ -322,6 +322,6 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
-		assertEquals("foo=bar",x.postX10(PartSupplier.ofPairs("foo","bar")));
+		assertEquals("foo=bar",x.postX10(PartList.ofPairs("foo","bar")));
 	}
 }

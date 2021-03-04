@@ -665,8 +665,8 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		return "OK";
 	}
 
-	@RestGet(path="/nameValuePairsQuery")
-	public String nameValuePairsQuery(
+	@RestGet(path="/partListQuery")
+	public String partListQuery(
 		@Query("a") String a,
 		@Query(n="b",allowEmptyValue=true) String b,
 		@Query("c") String c
@@ -977,8 +977,8 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 		return "OK";
 	}
 
-	@RestPost(path="/nameValuePairsFormData")
-	public String nameValuePairsFormData(
+	@RestPost(path="/partListFormData")
+	public String partListFormData(
 		@FormData("a") String a,
 		@FormData(n="b",aev=true) String b,
 		@FormData("c") String c
