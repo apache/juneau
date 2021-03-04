@@ -358,4 +358,46 @@ public class HttpParts {
 	public static final SerializedPart serializedPart(String name, Supplier<?> value) {
 		return SerializedPart.of(name, value);
 	}
+
+	/**
+	 * Instantiates a new {@link PartListBuilder}.
+	 *
+	 * @return A new empty builder.
+	 */
+	public static final PartListBuilder partListBuilder() {
+		return PartList.create();
+	}
+
+	/**
+	 * Creates a new {@link PartList} initialized with the specified parts.
+	 *
+	 * @param parts The parts to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final PartList partList(List<Part> parts) {
+		return PartList.of(parts);
+	}
+
+	/**
+	 * Creates a new {@link PartList} initialized with the specified parts.
+	 *
+	 * @param parts The parts to add to the list.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final PartList partList(Part...parts) {
+		return PartList.of(parts);
+	}
+
+	/**
+	 * Creates a new {@link PartList} initialized with the specified name/value pairs.
+	 *
+	 * @param pairs
+	 * 	Initial list of pairs.
+	 * 	<br>Must be an even number of parameters representing key/value pairs.
+	 * @throws RuntimeException If odd number of parameters were specified.
+	 * @return A new instance.
+	 */
+	public static PartList partList(Object...pairs) {
+		return PartList.ofPairs(pairs);
+	}
 }

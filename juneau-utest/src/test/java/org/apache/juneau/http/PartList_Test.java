@@ -52,16 +52,16 @@ public class PartList_Test {
 	public void a02_creators() {
 		PartList x;
 
-		x = PartList.of(part("Foo","bar"), part("Foo","baz"), null);
+		x = partList(part("Foo","bar"), part("Foo","baz"), null);
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = PartList.of(AList.of(part("Foo","bar"), part("Foo","baz"), null));
+		x = partList(AList.of(part("Foo","bar"), part("Foo","baz"), null));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = PartList.ofPairs("Foo","bar","Foo","baz");
+		x = partList("Foo","bar","Foo","baz");
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		assertThrown(()->PartList.ofPairs("Foo")).is("Odd number of parameters passed into PartList.ofPairs()");
+		assertThrown(()->partList("Foo")).is("Odd number of parameters passed into PartList.ofPairs()");
 	}
 
 	@Test

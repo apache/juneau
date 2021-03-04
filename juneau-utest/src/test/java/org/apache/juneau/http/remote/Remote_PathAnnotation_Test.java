@@ -776,7 +776,7 @@ public class Remote_PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static PartList parts(Object...pairs) {
-		return PartList.ofPairs(pairs);
+		return partList(pairs);
 	}
 
 	private static NameValuePair part(String key, Object val) {

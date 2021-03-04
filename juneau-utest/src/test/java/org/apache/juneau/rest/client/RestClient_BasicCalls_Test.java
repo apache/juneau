@@ -441,7 +441,7 @@ public class RestClient_BasicCalls_Test {
 	}
 
 	private static PartList parts(Object...pairs) {
-		return PartList.ofPairs(pairs);
+		return partList(pairs);
 	}
 
 	private static RestClientBuilder client() {

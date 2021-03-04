@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -376,7 +377,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void b12_partListQuery() throws Exception {
 		String r = proxy.partListQuery(
-			PartList.ofPairs("a","foo","b","","c",null)
+			partList("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -505,7 +506,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void c10_partListFormData() throws Exception {
 		String r = proxy.partListFormData(
-			PartList.ofPairs("a","foo","b","","c",null)
+			partList("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}

@@ -17,6 +17,7 @@ import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpParts.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
@@ -2597,7 +2598,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPostPairs(Object uri, Object...parameters) throws RestCallException {
-		return formPost(uri, PartList.ofPairs(parameters));
+		return formPost(uri, partList(parameters));
 	}
 
 	/**

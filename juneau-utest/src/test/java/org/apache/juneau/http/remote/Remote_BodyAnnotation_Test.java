@@ -14,6 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.io.*;
 import java.util.*;
@@ -147,7 +148,7 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx")));
-		assertEquals("foo=bar",x.postX10(PartList.ofPairs("foo","bar")));
+		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -242,7 +243,7 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
-		assertEquals("foo=bar",x.postX10(PartList.ofPairs("foo","bar")));
+		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -322,6 +323,6 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
-		assertEquals("foo=bar",x.postX10(PartList.ofPairs("foo","bar")));
+		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
 }
