@@ -53,8 +53,8 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -1843,7 +1843,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return queries(serializedNameValuePair(name, value, QUERY, serializer, schema));
+		return queries(serializedPart(name, value, QUERY, serializer, schema));
 	}
 
 	/**
@@ -1879,7 +1879,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return queries(serializedNameValuePair(name, value, QUERY, serializer, schema));
+		return queries(serializedPart(name, value, QUERY, serializer, schema));
 	}
 
 	/**
@@ -1911,7 +1911,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value, HttpPartSchema schema) {
-		return queries(serializedNameValuePair(name, value, QUERY, null, schema));
+		return queries(serializedPart(name, value, QUERY, null, schema));
 	}
 
 	/**
@@ -1943,7 +1943,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema) {
-		return queries(serializedNameValuePair(name, value, QUERY, null, schema));
+		return queries(serializedPart(name, value, QUERY, null, schema));
 	}
 
 	/**
@@ -1967,7 +1967,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value) {
-		return queries(serializedNameValuePair(name, value, QUERY, null, null));
+		return queries(serializedPart(name, value, QUERY, null, null));
 	}
 
 	/**
@@ -2010,7 +2010,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Supplier<?> value) {
-		return queries(serializedNameValuePair(name, value, QUERY, null, null));
+		return queries(serializedPart(name, value, QUERY, null, null));
 	}
 
 	/**
@@ -2028,10 +2028,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	The query parameters.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link Part}
+	 * 		<li>{@link Partable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link NameValuePairSupplier}
+	 * 		<li>{@link PartSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2044,11 +2044,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder queries(Object...params) {
 		for (Object p : params) {
-			if (BasicNameValuePair.canCast(p) || p instanceof NameValuePairSupplier) {
+			if (BasicPart.canCast(p) || p instanceof PartSupplier) {
 				appendTo(RESTCLIENT_query, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
-					appendTo(RESTCLIENT_query, serializedNameValuePair(e.getKey(), e.getValue(), QUERY, null, null));
+					appendTo(RESTCLIENT_query, serializedPart(e.getKey(), e.getValue(), QUERY, null, null));
 			} else if (p instanceof Collection) {
 				for (Object o : (Collection<?>)p)
 					queries(o);
@@ -2085,7 +2085,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
-			queries(serializedNameValuePair(pairs[i], pairs[i+1], QUERY, null, null));
+			queries(serializedPart(pairs[i], pairs[i+1], QUERY, null, null));
 		return this;
 	}
 
@@ -2126,7 +2126,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return formDatas(serializedNameValuePair(name, value, FORMDATA, serializer, schema));
+		return formDatas(serializedPart(name, value, FORMDATA, serializer, schema));
 	}
 
 	/**
@@ -2162,7 +2162,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return formDatas(serializedNameValuePair(name, value, FORMDATA, serializer, schema));
+		return formDatas(serializedPart(name, value, FORMDATA, serializer, schema));
 	}
 
 	/**
@@ -2194,7 +2194,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema) {
-		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, schema));
+		return formDatas(serializedPart(name, value, FORMDATA, null, schema));
 	}
 
 	/**
@@ -2226,7 +2226,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema) {
-		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, schema));
+		return formDatas(serializedPart(name, value, FORMDATA, null, schema));
 	}
 
 	/**
@@ -2250,7 +2250,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value) {
-		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, null));
+		return formDatas(serializedPart(name, value, FORMDATA, null, null));
 	}
 
 	/**
@@ -2293,7 +2293,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<?> value) {
-		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, null));
+		return formDatas(serializedPart(name, value, FORMDATA, null, null));
 	}
 
 	/**
@@ -2311,10 +2311,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	The form-data parameters.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link Part}
+	 * 		<li>{@link Partable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link NameValuePairSupplier}
+	 * 		<li>{@link PartSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2327,11 +2327,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formDatas(Object...params) {
 		for (Object p : params) {
-			if (BasicNameValuePair.canCast(p) || p instanceof NameValuePairSupplier) {
+			if (BasicPart.canCast(p) || p instanceof PartSupplier) {
 				appendTo(RESTCLIENT_formData, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
-					appendTo(RESTCLIENT_formData, serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, null, null));
+					appendTo(RESTCLIENT_formData, serializedPart(e.getKey(), e.getValue(), FORMDATA, null, null));
 			} else if (p instanceof Collection) {
 				for (Object o : (Collection<?>)p)
 					formDatas(o);
@@ -2368,7 +2368,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			formDatas(serializedNameValuePair(pairs[i], pairs[i+1], FORMDATA, null, null));
+			formDatas(serializedPart(pairs[i], pairs[i+1], FORMDATA, null, null));
 		return this;
 	}
 
@@ -5794,8 +5794,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return (Map<Object,Object>)o;
 	}
 
-	private static SerializedNameValuePair serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return key == null ? null : SerializedNameValuePair.of(stringify(key),value).type(type).serializer(serializer).schema(schema);
+	private static SerializedPart serializedPart(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
+		return key == null ? null : SerializedPart.of(stringify(key),value).type(type).serializer(serializer).schema(schema);
 	}
 
 	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {

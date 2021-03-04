@@ -13,11 +13,12 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.BasicHttpEntity.*;
+import static org.apache.juneau.http.entity.BasicHttpEntity.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 
+import org.apache.juneau.http.entity.*;
 import org.junit.*;
 
 public class BasicHttpEntity_Test {

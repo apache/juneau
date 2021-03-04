@@ -16,7 +16,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 
 
 /**
@@ -52,7 +52,7 @@ public class MediaRange extends MediaType {
 				qValue = Float.parseFloat(p.getValue());
 				foundQ = true;
 			} else if (foundQ) {
-				extensions.add(BasicNameValuePair.of(p.getName(), p.getValue()));
+				extensions.add(BasicPart.of(p.getName(), p.getValue()));
 			}
 		}
 

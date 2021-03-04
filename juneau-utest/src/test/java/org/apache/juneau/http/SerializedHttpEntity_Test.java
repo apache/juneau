@@ -19,6 +19,7 @@ import java.io.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.entity.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -30,7 +31,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.SerializedHttpEntity.*;
+import static org.apache.juneau.http.entity.SerializedHttpEntity.*;
 
 import org.junit.*;
 

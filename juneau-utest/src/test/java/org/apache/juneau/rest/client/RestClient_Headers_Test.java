@@ -23,8 +23,8 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
@@ -109,8 +109,8 @@ public class RestClient_Headers_Test {
 		checkFooClient().headers(header("Foo","bar"),header("Baz","baz")).build().get("/headers").headers(header("Foo","baz"),header("Baz","quux")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(OMap.of("Foo","bar")).build().get("/headers").headers(OMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(AMap.of("Foo","bar")).build().get("/headers").headers(AMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(pair("Foo","bar")).build().get("/headers").headers(pair("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(SerializedNameValuePair.of("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedNameValuePair.of("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers(part("Foo","bar")).build().get("/headers").headers(part("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(SerializedPart.of("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedPart.of("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers(serializedHeader("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedHeader("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers(serializedHeader("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedHeader("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers((Object)new Header[]{header("Foo","baz")}).run().assertBody().is("['bar','baz']");
@@ -347,8 +347,8 @@ public class RestClient_Headers_Test {
 		return new BasicHeader(name, val);
 	}
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private static BasicPart part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 
 	private static RestClientBuilder client() {

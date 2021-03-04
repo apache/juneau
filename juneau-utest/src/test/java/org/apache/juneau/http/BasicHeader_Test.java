@@ -23,6 +23,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -61,16 +62,16 @@ public class BasicHeader_Test {
 
 	@Test
 	public void a03_cast() {
-		BasicNameValuePair x1 = pair("X1","1");
-		SerializedNameValuePair x2 = SerializedNameValuePair.of("X2","2");
+		BasicPart x1 = part("X1","1");
+		SerializedPart x2 = SerializedPart.of("X2","2");
 		Header x3 = header("X3","3");
 		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
-		NameValuePairable x7 = new NameValuePairable() {
+		Partable x7 = new Partable() {
 			@Override
-			public NameValuePair asNameValuePair() {
-				return pair("X7","7");
+			public Part asPart() {
+				return part("X7","7");
 			}
 		};
 		Headerable x8 = new Headerable() {
@@ -79,7 +80,7 @@ public class BasicHeader_Test {
 				return header("X8","8");
 			}
 		};
-		SerializedNameValuePair x9 = SerializedNameValuePair.of("X9",()->"9");
+		SerializedPart x9 = SerializedPart.of("X9",()->"9");
 
 		assertObject(BasicHeader.cast(x1)).isType(Header.class).asJson().is("'X1: 1'");
 		assertObject(BasicHeader.cast(x2)).isType(Header.class).asJson().is("'X2: 2'");
@@ -174,7 +175,7 @@ public class BasicHeader_Test {
 		return basicHeader(name, val);
 	}
 
-	private BasicNameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private BasicPart part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 }

@@ -26,6 +26,7 @@ import org.apache.http.entity.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -166,10 +167,10 @@ public class RestClient_BasicCalls_Test {
 			BasicHttpResource.of("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
-			pairs("f",1)
+			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -209,10 +210,10 @@ public class RestClient_BasicCalls_Test {
 			BasicHttpResource.of("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
-			pairs("f",1)
+			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -307,11 +308,11 @@ public class RestClient_BasicCalls_Test {
 			s2 = () -> new ByteArrayInputStream("f=1".getBytes());
 		List<Object> bodies = AList.of(
 			/*[ 0]*/ bean,
-			/*[ 1]*/ pairs("f","1"),
-			/*[ 2]*/ new NameValuePair[]{pair("f","1")},
+			/*[ 1]*/ parts("f","1"),
+			/*[ 2]*/ new NameValuePair[]{part("f","1")},
 			/*[ 3]*/ new StringEntity("f=1",org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
 			/*[ 4]*/ new StringEntity("f=1",(org.apache.http.entity.ContentType)null),
-			/*[ 5]*/ pair("f","1"),
+			/*[ 5]*/ part("f","1"),
 			/*[ 6]*/ BasicHttpResource.of("f=1"),
 			/*[ 7]*/ BasicHttpResource.of("f=1"),
 			/*[ 8]*/ BasicHttpResource.of("f=1").contentType("application/x-www-form-urlencoded"),
@@ -349,11 +350,11 @@ public class RestClient_BasicCalls_Test {
 			BasicHttpResource.of("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
-			pairs("f",1)
+			parts("f",1)
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.patch("/bean",body).contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.patch("/bean",body).contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -386,11 +387,11 @@ public class RestClient_BasicCalls_Test {
 			BasicHttpResource.of("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
-			pairs("f",1)
+			parts("f",1)
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.request("patch","/bean",body).contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.request("patch","/bean",body).contentType(body instanceof PartSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -434,12 +435,12 @@ public class RestClient_BasicCalls_Test {
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private static NameValuePair part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier parts(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

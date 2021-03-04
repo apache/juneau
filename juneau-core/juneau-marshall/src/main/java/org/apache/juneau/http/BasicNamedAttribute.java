@@ -20,6 +20,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.part.*;
 
 /**
  * Implementation of a named object.
@@ -34,7 +35,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
-	 * @return A new {@link BasicNameValuePair} object.
+	 * @return A new {@link BasicPart} object.
 	 */
 	public static BasicNamedAttribute of(String name, Object value) {
 		return new BasicNamedAttribute(name, value);
@@ -65,7 +66,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
-	 * @return A new {@link BasicNameValuePair} object.
+	 * @return A new {@link BasicPart} object.
 	 */
 	public static BasicNamedAttribute of(String name, Supplier<?> value) {
 		return new BasicNamedAttribute(name, value);

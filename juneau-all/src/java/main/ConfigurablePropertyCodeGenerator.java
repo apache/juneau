@@ -27,7 +27,9 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
@@ -63,7 +65,7 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicHttpEntity.class,
 		BasicHttpResource.class,
 		HttpResponseBuilder.class,
-		BasicNameValuePair.class,
+		Part.class,
 		BasicRuntimeExceptionBuilder.class,
 		BasicStatusLineBuilder.class,
 		BeanAssertion.class,
@@ -172,7 +174,7 @@ public class ConfigurablePropertyCodeGenerator {
 		SeeOther.class,
 		SerializedHeader.class,
 		SerializedHttpEntity.class,
-		SerializedNameValuePair.class,
+		SerializedPart.class,
 		SerializerBuilder.class,
 		SerializerGroupBuilder.class,
 		SerializerSessionArgs.class,

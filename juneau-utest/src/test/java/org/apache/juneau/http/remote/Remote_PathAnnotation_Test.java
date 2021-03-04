@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
@@ -75,8 +75,8 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="a/{x}") String getX12(@Path Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX13(@Path(n="x",cf="uon") Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX14(@Path(f="uon") Map<String,Bean> b);
-		@RemoteOp(path="a/{x}") String getX15(@Path("*") NameValuePairSupplier b);
-		@RemoteOp(path="a/{x}") String getX16(@Path NameValuePairSupplier b);
+		@RemoteOp(path="a/{x}") String getX15(@Path("*") PartSupplier b);
+		@RemoteOp(path="a/{x}") String getX16(@Path PartSupplier b);
 		@RemoteOp(path="a/{x}") String getX17(@Path(n="x",serializer=UonSerializer.class) Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX18(@Path(n="*") NameValuePair b);
 		@RemoteOp(path="a/{x}") String getX19(@Path NameValuePair b);
@@ -686,28 +686,28 @@ public class Remote_PathAnnotation_Test {
 
 	public static class K3a {
 		@Path(n="*",aev=true)
-		public NameValuePairSupplier getA() {
+		public PartSupplier getA() {
 			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Path("/*")
-		public NameValuePairSupplier getB() {
+		public PartSupplier getB() {
 			return pairs("b1","true","b2","123","b3","null");
 		}
 		@Path(n="*",aev=true)
-		public NameValuePairSupplier getC() {
+		public PartSupplier getC() {
 			return pairs("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Path("/*")
-		public NameValuePairSupplier getD() {
+		public PartSupplier getD() {
 			return null;
 		}
 		@Path(aev=true)
 		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new NameValuePair[0]);
+			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
 		}
 		@Path(aev=true)
-		public BasicNameValuePair[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
+		public BasicPart[] getF() {
+			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
 		}
 	}
 
@@ -774,12 +774,12 @@ public class Remote_PathAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier pairs(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static NameValuePair pair(String key, Object val) {
-		return BasicNameValuePair.of(key, val);
+		return BasicPart.of(key, val);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

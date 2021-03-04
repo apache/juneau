@@ -23,9 +23,9 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
@@ -94,8 +94,8 @@ public class Remote_FormDataAnnotation_Test {
 		@RemoteOp(path="a") String postX16(@FormData Reader b);
 		@RemoteOp(path="a") String postX17(@FormData("*") InputStream b);
 		@RemoteOp(path="a") String postX18(@FormData InputStream b);
-		@RemoteOp(path="a") String postX19(@FormData("*") NameValuePairSupplier b);
-		@RemoteOp(path="a") String postX20(@FormData NameValuePairSupplier b);
+		@RemoteOp(path="a") String postX19(@FormData("*") PartSupplier b);
+		@RemoteOp(path="a") String postX20(@FormData PartSupplier b);
 		@RemoteOp(path="a") String postX21(@FormData NameValuePair b);
 		@RemoteOp(path="a") String postX22(@FormData String b);
 		@RemoteOp(path="a") String postX23(@FormData InputStream b);
@@ -829,19 +829,19 @@ public class Remote_FormDataAnnotation_Test {
 
 	public static class K3a {
 		@FormData
-		public NameValuePairSupplier getA() {
+		public PartSupplier getA() {
 			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@FormData("*")
-		public NameValuePairSupplier getB() {
+		public PartSupplier getB() {
 			return pairs("b1","true","b2","123","b3","null");
 		}
 		@FormData(n="*")
-		public NameValuePairSupplier getC() {
+		public PartSupplier getC() {
 			return pairs("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@FormData("*")
-		public NameValuePairSupplier getD() {
+		public PartSupplier getD() {
 			return null;
 		}
 		@FormData
@@ -849,8 +849,8 @@ public class Remote_FormDataAnnotation_Test {
 			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray();
 		}
 		@FormData
-		public BasicNameValuePair[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
+		public BasicPart[] getF() {
+			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
 		}
 	}
 
@@ -970,11 +970,11 @@ public class Remote_FormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name,val);
+		return BasicPart.of(name,val);
 	}
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier pairs(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

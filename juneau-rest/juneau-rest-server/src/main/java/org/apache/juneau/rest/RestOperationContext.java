@@ -44,6 +44,8 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.part.Part;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -659,7 +661,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final HeaderGroup defaultRequestHeaders, defaultResponseHeaders;
-	private final List<NameValuePair> defaultRequestQuery, defaultRequestFormData;
+	private final PartGroup defaultRequestQuery, defaultRequestFormData;
 	private final List<NamedAttribute> defaultRequestAttributes;
 	private final Charset defaultCharset;
 	private final long maxInput;
@@ -747,8 +749,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bs, method, context).build();
 			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bs, method, context).build();
-			defaultRequestQuery = unmodifiableList(createDefaultRequestQuery(r, cp, bs, method));
-			defaultRequestFormData = unmodifiableList(createDefaultRequestFormData(r, cp, bs, method));
+			defaultRequestQuery = createDefaultRequestQuery(r, cp, bs, method).build();
+			defaultRequestFormData = createDefaultRequestFormData(r, cp, bs, method).build();
 			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, cp, bs, method, context));
 
 			int _hierarchyDepth = 0;
@@ -1451,11 +1453,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request query parameters for this method.
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
-	protected NameValuePairList createDefaultRequestQuery(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
+	protected PartGroupBuilder createDefaultRequestQuery(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
 
-		NameValuePairList x = NameValuePairList.create();
+		PartGroupBuilder x = PartGroup.create();
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultQuery, NameValuePair.class, beanStore).orElse(new NameValuePair[0]));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultQuery, Part.class, beanStore).orElse(new Part[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1464,7 +1466,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(BasicNameValuePair.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.appendUnique(BasicPart.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Query annotation");
 						}
@@ -1475,8 +1477,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(NameValuePairList.class, x)
-			.beanCreateMethodFinder(NameValuePairList.class, resource)
+			.addBean(PartGroupBuilder.class, x)
+			.beanCreateMethodFinder(PartGroupBuilder.class, resource)
 			.find("createDefaultRequestQuery", Method.class)
 			.thenFind("createDefaultRequestQuery")
 			.withDefault(x)
@@ -1495,11 +1497,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request form-data parameters for this method.
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
-	protected NameValuePairList createDefaultRequestFormData(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
+	protected PartGroupBuilder createDefaultRequestFormData(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
 
-		NameValuePairList x = NameValuePairList.create();
+		PartGroupBuilder x = PartGroup.create();
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultFormData, NameValuePair.class, beanStore).orElse(new NameValuePair[0]));
+		x.appendUnique(properties.getInstanceArray(RESTOP_defaultFormData, Part.class, beanStore).orElse(new Part[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1508,7 +1510,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(BasicNameValuePair.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.appendUnique(BasicPart.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @FormData annotation");
 						}
@@ -1519,8 +1521,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(NameValuePairList.class, x)
-			.beanCreateMethodFinder(NameValuePairList.class, resource)
+			.addBean(PartGroupBuilder.class, x)
+			.beanCreateMethodFinder(PartGroupBuilder.class, resource)
 			.find("createDefaultRequestFormData", Method.class)
 			.thenFind("createDefaultRequestFormData")
 			.withDefault(x)
@@ -1710,7 +1712,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public List<NameValuePair> getDefaultRequestQuery() {
+	public PartGroup getDefaultRequestQuery() {
 		return defaultRequestQuery;
 	}
 
@@ -1719,7 +1721,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default form data parameters.  Never <jk>null</jk>.
 	 */
-	public List<NameValuePair> getDefaultRequestFormData() {
+	public PartGroup getDefaultRequestFormData() {
 		return defaultRequestFormData;
 	}
 

@@ -24,7 +24,7 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -129,8 +129,8 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 			return ((Headerable)o).asHeader();
 		if (o instanceof NameValuePair)
 			return BasicHeader.of((NameValuePair)o);
-		if (o instanceof NameValuePairable)
-			return BasicHeader.of(((NameValuePairable)o).asNameValuePair());
+		if (o instanceof Partable)
+			return BasicHeader.of(((Partable)o).asPart());
 		if (o instanceof Map.Entry) {
 			Map.Entry e = (Map.Entry)o;
 			return BasicHeader.of(stringify(e.getKey()), e.getValue());
@@ -146,7 +146,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	public static boolean canCast(Object o) {
 		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, Partable.class, Map.Entry.class);
 	}
 
 	/**

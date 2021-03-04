@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -43,7 +43,7 @@ import org.apache.juneau.reflect.*;
  */
 @FluentSetters
 @BeanIgnore
-public class BasicNameValuePair implements NameValuePair, Headerable {
+public class BasicPart implements Part, Headerable {
 	private final String name;
 	private final Object value;
 
@@ -52,10 +52,10 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
-	 * @return A new {@link BasicNameValuePair} object.
+	 * @return A new {@link BasicPart} object.
 	 */
-	public static BasicNameValuePair of(String name, Object value) {
-		return new BasicNameValuePair(name, value);
+	public static BasicPart of(String name, Object value) {
+		return new BasicPart(name, value);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 * @param pair The pair string.
 	 * @return A new {@link NameValuePair} object.
 	 */
-	public static BasicNameValuePair ofPair(String pair) {
+	public static BasicPart ofPair(String pair) {
 		if (pair == null)
 			return null;
 		int i = pair.indexOf(':');
@@ -83,10 +83,10 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
-	 * @return A new {@link BasicNameValuePair} object.
+	 * @return A new {@link BasicPart} object.
 	 */
-	public static BasicNameValuePair of(String name, Supplier<?> value) {
-		return new BasicNameValuePair(name, value);
+	public static BasicPart of(String name, Supplier<?> value) {
+		return new BasicPart(name, value);
 	}
 
 	/**
@@ -97,16 +97,22 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static NameValuePair cast(Object o) {
-		if (o instanceof NameValuePair)
-			return (NameValuePair)o;
-		if (o instanceof NameValuePairable)
-			return ((NameValuePairable)o).asNameValuePair();
-		if (o instanceof Headerable)
-			return ((Headerable)o).asHeader();
+	public static Part cast(Object o) {
+		if (o instanceof Part)
+			return (Part)o;
+		if (o instanceof Partable)
+			return ((Partable)o).asPart();
+		if (o instanceof NameValuePair) {
+			NameValuePair p = (NameValuePair)o;
+			return BasicPart.of(p.getName(), p.getValue());
+		}
+		if (o instanceof Headerable) {
+			Header x = ((Headerable)o).asHeader();
+			return BasicPart.of(x.getName(), x.getValue());
+		}
 		if (o instanceof Map.Entry) {
 			Map.Entry e = (Map.Entry)o;
-			return BasicNameValuePair.of(stringify(e.getKey()), e.getValue());
+			return BasicPart.of(stringify(e.getKey()), e.getValue());
 		}
 		throw new BasicRuntimeException("Object of type {0} could not be converted to a NameValuePair.", o == null ? null : o.getClass().getName());
 	}
@@ -119,7 +125,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 */
 	public static boolean canCast(Object o) {
 		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, Partable.class, Map.Entry.class);
 	}
 
 	/**
@@ -128,7 +134,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 * @param name The parameter name.
 	 * @param value The POJO to serialize to the parameter value.
 	 */
-	public BasicNameValuePair(String name, Object value) {
+	public BasicPart(String name, Object value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -138,7 +144,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	protected BasicNameValuePair(BasicNameValuePair copyFrom) {
+	protected BasicPart(BasicPart copyFrom) {
 		assertArgNotNull("copyFrom", copyFrom);
 		this.name = copyFrom.name;
 		this.value = copyFrom.value;
@@ -149,7 +155,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @return An object for performing assertions against the name of this pair.
 	 */
-	public FluentStringAssertion<BasicNameValuePair> assertName() {
+	public FluentStringAssertion<BasicPart> assertName() {
 		return new FluentStringAssertion<>(getName(), this);
 	}
 
@@ -158,7 +164,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @return An object for performing assertions against the value of this pair.
 	 */
-	public FluentStringAssertion<BasicNameValuePair> assertValue() {
+	public FluentStringAssertion<BasicPart> assertValue() {
 		return new FluentStringAssertion<>(getValue(), this);
 	}
 

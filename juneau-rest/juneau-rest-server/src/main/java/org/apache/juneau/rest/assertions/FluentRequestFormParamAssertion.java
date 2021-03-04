@@ -69,7 +69,7 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @throws AssertionError If object is not a date.
 	 */
 	public FluentDateAssertion<R> asDate() {
-		return new FluentDateAssertion<>(this, value.asNamedDate().asDate().orElse(null), returns());
+		return new FluentDateAssertion<>(this, value.asDatePart().asDate().orElse(null), returns());
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @throws AssertionError If object is not a zoned-datetime.
 	 */
 	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(this, value.asNamedDate().asZonedDateTime().orElse(null), returns());
+		return new FluentZonedDateTimeAssertion<>(this, value.asDatePart().asZonedDateTime().orElse(null), returns());
 	}
 
 	// <FluentSetters>

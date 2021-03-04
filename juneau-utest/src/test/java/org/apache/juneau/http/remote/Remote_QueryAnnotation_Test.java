@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -82,11 +82,11 @@ public class Remote_QueryAnnotation_Test {
 		@RemoteOp(path="a") String getX16(@Query Reader b);
 		@RemoteOp(path="a") String getX17(@Query("*") InputStream b);
 		@RemoteOp(path="a") String getX18(@Query InputStream b);
-		@RemoteOp(path="a") String getX19(@Query("*") NameValuePairSupplier b);
-		@RemoteOp(path="a") String getX20(@Query NameValuePairSupplier b);
+		@RemoteOp(path="a") String getX19(@Query("*") PartSupplier b);
+		@RemoteOp(path="a") String getX20(@Query PartSupplier b);
 		@RemoteOp(path="a") String getX21(@Query NameValuePair b);
 		@RemoteOp(path="a") String getX22(@Query NameValuePair[] b);
-		@RemoteOp(path="a") String getX23(@Query BasicNameValuePair[] b);
+		@RemoteOp(path="a") String getX23(@Query BasicPart[] b);
 		@RemoteOp(path="a") String getX24(@Query String b);
 		@RemoteOp(path="a") String getX25(@Query List<NameValuePair> b);
 	}
@@ -115,8 +115,8 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.getX19(pairs("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX20(pairs("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX21(pair("foo","bar")));
-		assertEquals("{foo:'bar'}",x.getX22(pairs("foo","bar").toArray(new NameValuePair[0])));
-		assertEquals("{foo:'bar'}",x.getX23(pairs("foo","bar").toArray(new BasicNameValuePair[0])));
+		assertEquals("{foo:'bar'}",x.getX22(pairs("foo","bar").toArray(new Part[0])));
+		assertEquals("{foo:'bar'}",x.getX23(pairs("foo","bar").toArray(new BasicPart[0])));
 		assertEquals("{foo:'bar'}",x.getX24("foo=bar"));
 		assertEquals("{}",x.getX24(null));
 		assertEquals("{foo:'bar'}",x.getX25(AList.of(pair("foo","bar"))));
@@ -797,28 +797,28 @@ public class Remote_QueryAnnotation_Test {
 
 	public static class K3a {
 		@Query(aev=true)
-		public NameValuePairSupplier getA() {
+		public PartSupplier getA() {
 			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Query("*")
-		public NameValuePairSupplier getB() {
+		public PartSupplier getB() {
 			return pairs("b1","true","b2","123","b3","null");
 		}
 		@Query(n="*",aev=true)
-		public NameValuePairSupplier getC() {
+		public PartSupplier getC() {
 			return pairs("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Query("*")
-		public NameValuePairSupplier getD() {
+		public PartSupplier getD() {
 			return null;
 		}
 		@Query(aev=true)
 		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new NameValuePair[0]);
+			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
 		}
 		@Query(aev=true)
-		public BasicNameValuePair[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
+		public BasicPart[] getF() {
+			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
 		}
 	}
 
@@ -937,12 +937,12 @@ public class Remote_QueryAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier pairs(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static NameValuePair pair(String key,Object val) {
-		return BasicNameValuePair.of(key,val);
+		return BasicPart.of(key,val);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

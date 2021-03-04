@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.nvp;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
@@ -21,12 +21,11 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
 
 /**
  * A {@link NameValuePair} that consists of a single integer value.
  */
-public class BasicNamedInteger extends BasicNameValuePair {
+public class BasicIntegerPart extends BasicPart {
 
 	/**
 	 * Convenience creator.
@@ -40,12 +39,12 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedInteger} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedInteger of(String name, Object value) {
+	public static BasicIntegerPart of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedInteger(name, value);
+		return new BasicIntegerPart(name, value);
 	}
 
 	/**
@@ -63,12 +62,12 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedInteger} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedInteger of(String name, Supplier<?> value) {
+	public static BasicIntegerPart of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedInteger(name, value);
+		return new BasicIntegerPart(name, value);
 	}
 
 	private Integer parsed;
@@ -87,7 +86,7 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedInteger(String name, Object value) {
+	public BasicIntegerPart(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
@@ -113,7 +112,7 @@ public class BasicNamedInteger extends BasicNameValuePair {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentIntegerAssertion<BasicNamedInteger> assertInteger() {
+	public FluentIntegerAssertion<BasicIntegerPart> assertInteger() {
 		return new FluentIntegerAssertion<>(getParsedValue(), this);
 	}
 

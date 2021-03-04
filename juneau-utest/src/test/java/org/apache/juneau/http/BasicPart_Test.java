@@ -22,37 +22,38 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BasicNameValuePair_Test {
+public class BasicPart_Test {
 
 	@Test
 	public void a01_ofPair() {
-		BasicNameValuePair x = BasicNameValuePair.ofPair("Foo:bar");
+		BasicPart x = BasicPart.ofPair("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = BasicNameValuePair.ofPair(" Foo : bar ");
+		x = BasicPart.ofPair(" Foo : bar ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = BasicNameValuePair.ofPair(" Foo : bar : baz ");
+		x = BasicPart.ofPair(" Foo : bar : baz ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar : baz", x.getValue());
 
-		x = BasicNameValuePair.ofPair("Foo");
+		x = BasicPart.ofPair("Foo");
 		assertEquals("Foo", x.getName());
 		assertEquals("", x.getValue());
 
-		assertNull(BasicNameValuePair.ofPair((String)null));
+		assertNull(BasicPart.ofPair((String)null));
 	}
 
 	@Test
 	public void a02_of() {
-		BasicNameValuePair x;
-		x = pair("Foo","bar");
+		BasicPart x;
+		x = part("Foo","bar");
 		assertObject(x).asJson().is("'Foo=bar'");
 		x = pair("Foo",()->"bar");
 		assertObject(x).asJson().is("'Foo=bar'");
@@ -60,16 +61,16 @@ public class BasicNameValuePair_Test {
 
 	@Test
 	public void a03_cast() {
-		BasicNameValuePair x1 = pair("X1","1");
-		SerializedNameValuePair x2 = SerializedNameValuePair.of("X2","2");
+		BasicPart x1 = part("X1","1");
+		SerializedPart x2 = SerializedPart.of("X2","2");
 		Header x3 = header("X3","3");
 		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
-		NameValuePairable x7 = new NameValuePairable() {
+		Partable x7 = new Partable() {
 			@Override
-			public NameValuePair asNameValuePair() {
-				return pair("X7","7");
+			public Part asPart() {
+				return part("X7","7");
 			}
 		};
 		Headerable x8 = new Headerable() {
@@ -79,40 +80,39 @@ public class BasicNameValuePair_Test {
 			}
 		};
 
-		assertObject(BasicNameValuePair.cast(x1)).isType(NameValuePair.class).asJson().is("'X1=1'");
-		assertObject(BasicNameValuePair.cast(x2)).isType(NameValuePair.class).asJson().is("'X2=2'");
-		assertObject(BasicNameValuePair.cast(x3)).isType(NameValuePair.class).asJson().is("'X3: 3'");
-		assertObject(BasicNameValuePair.cast(x4)).isType(NameValuePair.class).asJson().is("'X4: 4'");
-		assertObject(BasicNameValuePair.cast(x5)).isType(NameValuePair.class).asJson().is("'X5=5'");
-		assertObject(BasicNameValuePair.cast(x6)).isType(NameValuePair.class).asJson().is("{name:'X6',value:'6'}");
-		assertObject(BasicNameValuePair.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
-		assertObject(BasicNameValuePair.cast(x8)).isType(NameValuePair.class).asJson().is("'X8: 8'");
+		assertObject(BasicPart.cast(x1)).isType(NameValuePair.class).asJson().is("'X1=1'");
+		assertObject(BasicPart.cast(x2)).isType(NameValuePair.class).asJson().is("'X2=2'");
+		assertObject(BasicPart.cast(x3)).isType(NameValuePair.class).asJson().is("'X3=3'");
+		assertObject(BasicPart.cast(x4)).isType(NameValuePair.class).asJson().is("'X4=4'");
+		assertObject(BasicPart.cast(x5)).isType(NameValuePair.class).asJson().is("'X5=5'");
+		assertObject(BasicPart.cast(x6)).isType(NameValuePair.class).asJson().is("'X6=6'");
+		assertObject(BasicPart.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
+		assertObject(BasicPart.cast(x8)).isType(NameValuePair.class).asJson().is("'X8=8'");
 
-		assertThrown(()->BasicNameValuePair.cast("X")).is("Object of type java.lang.String could not be converted to a NameValuePair.");
-		assertThrown(()->BasicNameValuePair.cast(null)).is("Object of type null could not be converted to a NameValuePair.");
+		assertThrown(()->BasicPart.cast("X")).is("Object of type java.lang.String could not be converted to a NameValuePair.");
+		assertThrown(()->BasicPart.cast(null)).is("Object of type null could not be converted to a NameValuePair.");
 
-		assertTrue(BasicNameValuePair.canCast(x1));
-		assertTrue(BasicNameValuePair.canCast(x2));
-		assertTrue(BasicNameValuePair.canCast(x3));
-		assertTrue(BasicNameValuePair.canCast(x4));
-		assertTrue(BasicNameValuePair.canCast(x5));
-		assertTrue(BasicNameValuePair.canCast(x6));
-		assertTrue(BasicNameValuePair.canCast(x7));
-		assertTrue(BasicNameValuePair.canCast(x8));
+		assertTrue(BasicPart.canCast(x1));
+		assertTrue(BasicPart.canCast(x2));
+		assertTrue(BasicPart.canCast(x3));
+		assertTrue(BasicPart.canCast(x4));
+		assertTrue(BasicPart.canCast(x5));
+		assertTrue(BasicPart.canCast(x6));
+		assertTrue(BasicPart.canCast(x7));
 
-		assertFalse(BasicNameValuePair.canCast("X"));
-		assertFalse(BasicNameValuePair.canCast(null));
+		assertFalse(BasicPart.canCast("X"));
+		assertFalse(BasicPart.canCast(null));
 	}
 
 	@Test
 	public void a04_asHeader() {
-		BasicNameValuePair x = pair("X1","1");
+		BasicPart x = part("X1","1");
 		assertObject(x.asHeader()).isType(Header.class).asJson().is("'X1: 1'");
 	}
 
 	@Test
 	public void a05_assertions() {
-		BasicNameValuePair x = pair("X1","1");
+		BasicPart x = part("X1","1");
 		x.assertName().is("X1").assertValue().is("1");
 	}
 
@@ -124,11 +124,11 @@ public class BasicNameValuePair_Test {
 		return basicHeader(name, val);
 	}
 
-	private BasicNameValuePair pair(String name, Supplier<?> val) {
-		return BasicNameValuePair.of(name, val);
+	private BasicPart pair(String name, Supplier<?> val) {
+		return BasicPart.of(name, val);
 	}
 
-	private BasicNameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private BasicPart part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 }

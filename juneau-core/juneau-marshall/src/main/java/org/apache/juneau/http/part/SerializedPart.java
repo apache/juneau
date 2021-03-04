@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -38,7 +38,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  */
 @FluentSetters
-public class SerializedNameValuePair extends BasicNameValuePair implements Headerable {
+public class SerializedPart extends BasicPart implements Headerable {
 	private final Object value;
 	private HttpPartType type;
 	private HttpPartSerializerSession serializer;
@@ -50,8 +50,8 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 *
 	 * @return A new instance of this object.
 	 */
-	public static SerializedNameValuePair of(String name, Object value) {
-		return new SerializedNameValuePair(name, value, null, null, null, false);
+	public static SerializedPart of(String name, Object value) {
+		return new SerializedPart(name, value, null, null, null, false);
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 *
 	 * @return A new instance of this object.
 	 */
-	public static SerializedNameValuePair of(String name, Supplier<?> value) {
-		return new SerializedNameValuePair(name, value, null, null, null, false);
+	public static SerializedPart of(String name, Supplier<?> value) {
+		return new SerializedPart(name, value, null, null, null, false);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
-	public SerializedNameValuePair(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+	public SerializedPart(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		super(name, value);
 		this.value = value;
 		this.type = type;
@@ -92,7 +92,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	protected SerializedNameValuePair(SerializedNameValuePair copyFrom) {
+	protected SerializedPart(SerializedPart copyFrom) {
 		super(copyFrom);
 		this.value = copyFrom.value;
 		this.type = copyFrom.type;
@@ -106,8 +106,8 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 *
 	 * @return A new copy of this object.
 	 */
-	public SerializedNameValuePair copy() {
-		return new SerializedNameValuePair(this);
+	public SerializedPart copy() {
+		return new SerializedPart(this);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair type(HttpPartType value) {
+	public SerializedPart type(HttpPartType value) {
 		type = value;
 		return this;
 	}
@@ -127,7 +127,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair serializer(HttpPartSerializer value) {
+	public SerializedPart serializer(HttpPartSerializer value) {
 		if (value != null)
 			return serializer(value.createPartSession(null));
 		return this;
@@ -139,7 +139,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair serializer(HttpPartSerializerSession value) {
+	public SerializedPart serializer(HttpPartSerializerSession value) {
 		serializer = value;
 		return this;
 	}
@@ -150,7 +150,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair serializerIfNotSet(HttpPartSerializerSession value) {
+	public SerializedPart serializerIfNotSet(HttpPartSerializerSession value) {
 		if (serializer == null)
 			serializer = value;
 		return this;
@@ -162,7 +162,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair schema(HttpPartSchema value) {
+	public SerializedPart schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
@@ -173,7 +173,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair schemaIfNotSet(HttpPartSchema value) {
+	public SerializedPart schemaIfNotSet(HttpPartSchema value) {
 		if (schema == null)
 			schema = value;
 		return this;
@@ -184,7 +184,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair skipIfEmpty() {
+	public SerializedPart skipIfEmpty() {
 		return skipIfEmpty(true);
 	}
 
@@ -194,7 +194,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param value The new value of this setting.
 	 * @return This object (for method chaining).
 	 */
-	public SerializedNameValuePair skipIfEmpty(boolean value) {
+	public SerializedPart skipIfEmpty(boolean value) {
 		this.skipIfEmpty = value;
 		return this;
 	}

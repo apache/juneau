@@ -16,14 +16,13 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
@@ -61,54 +60,53 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a02_formData_AddFlag_String_Object() throws Exception {
-		client().formData(pair("foo","bar")).build().post("/formData").formData(APPEND,"foo","baz").run().assertBody().is("foo=bar&foo=baz");
-		client().formData(pair("foo","bar")).build().post("/formData").formData(PREPEND,"foo","baz").run().assertBody().is("foo=baz&foo=bar");
-		client().formData(pair("foo","bar")).build().post("/formData").formData(REPLACE,"foo","baz").run().assertBody().is("foo=baz");
-		client().formData(pair("foo","bar")).build().post("/formData").formData(REPLACE,"bar","baz").run().assertBody().is("foo=bar&bar=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(APPEND,"foo","baz").run().assertBody().is("foo=bar&foo=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(PREPEND,"foo","baz").run().assertBody().is("foo=baz&foo=bar");
+		client().formData(part("foo","bar")).build().post("/formData").formData(REPLACE,"foo","baz").run().assertBody().is("foo=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(REPLACE,"bar","baz").run().assertBody().is("foo=bar&bar=baz");
 	}
 
 	@Test
 	public void a03_formData_NameValuePair() throws Exception {
-		client().formData(pair("foo","bar")).build().post("/formData").formData(pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(part("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
 	}
 
 	@Test
 	public void a04_formDatas_Objects() throws Exception {
-		client().formDatas(pair("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(part("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
 		client().formDatas(OMap.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
 		client().formDatas(AMap.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
-		client().formDatas(pairs("foo","bar","foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
-		client().formDatas(pair("foo","bar"),pair("foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
-		client().formDatas(AList.of(pair("foo","bar"),pair("foo","baz"))).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
-		client().formDatas((Object)new NameValuePair[]{pair("foo","bar")}).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(parts("foo","bar","foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formDatas(part("foo","bar"),part("foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formDatas(AList.of(part("foo","bar"),part("foo","baz"))).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formDatas((Object)new NameValuePair[]{part("foo","bar")}).build().post("/formData").run().assertBody().is("foo=bar");
 
-		client().build().post("/formData").formDatas(pair("foo","bar")).run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(part("foo","bar")).run().assertBody().is("foo=bar");
 		client().build().post("/formData").formDatas(OMap.of("foo","bar")).run().assertBody().is("foo=bar");
 		client().build().post("/formData").formDatas(AMap.of("foo","bar")).run().assertBody().is("foo=bar");
-		client().build().post("/formData").formDatas(pairs("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
-		client().build().post("/formData").formDatas(pair("foo","bar"),pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
-		client().build().post("/formData").formDatas(AList.of(pair("foo","bar"),pair("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
-		client().build().post("/formData").formDatas((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(parts("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formDatas(part("foo","bar"),part("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formDatas(AList.of(part("foo","bar"),part("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formDatas((Object)new NameValuePair[]{part("foo","bar")}).run().assertBody().is("foo=bar");
 
 		client().build().post("/formData").formDatas(ABean.get()).run().assertBody().is("a=1&b=foo");
 
-		client().formDatas(pair("foo","bar"),null).build().post("/formData").run().assertBody().is("foo=bar");
-		client().build().post("/formData").formDatas(pair("foo","bar"),null).run().assertBody().is("foo=bar");
-		client().formDatas(pair("foo",null)).build().post("/formData").run().assertBody().is("");
-		client().formDatas(pair(null,"foo")).build().post("/formData").run().assertBody().is("null=foo");
-		client().formDatas(pair(null,null)).build().post("/formData").run().assertBody().is("");
+		client().formDatas(part("foo","bar"),null).build().post("/formData").run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(part("foo","bar"),null).run().assertBody().is("foo=bar");
+		client().formDatas(part("foo",null)).build().post("/formData").run().assertBody().is("");
+		client().formDatas(part(null,"foo")).build().post("/formData").run().assertBody().is("null=foo");
+		client().formDatas(part(null,null)).build().post("/formData").run().assertBody().is("");
 
-		client().build().post("/formData").formDatas(pair("foo",null)).run().assertBody().is("");
-		client().build().post("/formData").formDatas(pair(null,"foo")).run().assertBody().is("null=foo");
-		client().build().post("/formData").formDatas(pair(null,null)).run().assertBody().is("");
+		client().build().post("/formData").formDatas(part("foo",null)).run().assertBody().is("");
+		client().build().post("/formData").formDatas(part(null,"foo")).run().assertBody().is("null=foo");
+		client().build().post("/formData").formDatas(part(null,null)).run().assertBody().is("");
 
-		client().formDatas(serializedHeader("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
-		client().formDatas(SerializedNameValuePair.of("foo","bar").schema(null)).build().post("/formData").run().assertBody().is("foo=bar");
-		client().formDatas(SerializedNameValuePair.of("foo",null).schema(null)).build().post("/formData").run().assertBody().is("");
-		client().formDatas(SerializedNameValuePair.of("foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(SerializedPart.of("foo","bar").schema(null)).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(SerializedPart.of("foo",null).schema(null)).build().post("/formData").run().assertBody().is("");
+		client().formDatas(SerializedPart.of("foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");
 
 		assertThrown(()->client().build().post("/formData").formDatas("bad")).is("Invalid type passed to formDatas(): java.lang.String");
-		assertThrown(()->client().formDatas(pair("foo","bar"),"baz")).is("Invalid type passed to formData():  java.lang.String");
+		assertThrown(()->client().formDatas(part("foo","bar"),"baz")).is("Invalid type passed to formData():  java.lang.String");
 	}
 
 	@Test
@@ -215,19 +213,19 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a12_badSerialization() throws Exception {
-		assertThrown(()->client().formData(SerializedNameValuePair.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
+		assertThrown(()->client().formData(SerializedPart.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private static NameValuePair part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier parts(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

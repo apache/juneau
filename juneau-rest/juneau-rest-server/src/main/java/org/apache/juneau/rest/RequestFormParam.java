@@ -18,13 +18,10 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 
-import javax.servlet.http.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.nvp.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -34,7 +31,7 @@ import org.apache.juneau.reflect.*;
  */
 public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
-	private final Part part;
+	private final javax.servlet.http.Part part;
 	private String value;
 
 	/**
@@ -43,7 +40,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @param request The request object.
 	 * @param part The HTTP part.
 	 */
-	public RequestFormParam(RestRequest request, Part part) {
+	public RequestFormParam(RestRequest request, javax.servlet.http.Part part) {
 		super(FORMDATA, request, part.getName());
 		this.part = part;
 	}
@@ -82,7 +79,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return The value of this parameter as an integer, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<Integer> asInteger() {
-		return asNamedInteger().asInteger();
+		return asIntegerPart().asInteger();
 	}
 
 	/**
@@ -91,7 +88,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return The value of this parameter as a boolean, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return asNamedBoolean().asBoolean();
+		return asBooleanPart().asBoolean();
 	}
 
 	/**
@@ -100,7 +97,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return The value of this parameter as a long, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<Long> asLong() {
-		return asNamedLong().asLong();
+		return asLongPart().asLong();
 	}
 
 	/**
@@ -109,7 +106,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return The value of this parameter as a date, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<ZonedDateTime> asDate() {
-		return asNamedDate().asZonedDateTime();
+		return asDatePart().asZonedDateTime();
 	}
 
 	/**
@@ -118,17 +115,17 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return The value of this parameter as a list from a comma-delimited string, or {@link Optional#empty()} if the parameter was not present.
 	 */
 	public Optional<List<String>> asCsvArray() {
-		return asNamedCsvArray().asList();
+		return asCsvArrayPart().asList();
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNameValuePair}.
+	 * Returns the value of this parameter as a {@link BasicPart}.
 	 *
-	 * @param c The subclass of {@link BasicNameValuePair} to instantiate.
-	 * @param <T> The subclass of {@link BasicNameValuePair} to instantiate.
+	 * @param c The subclass of {@link BasicPart} to instantiate.
+	 * @param <T> The subclass of {@link BasicPart} to instantiate.
 	 * @return The value of this parameter as a string, never <jk>null</jk>.
 	 */
-	public <T extends BasicNameValuePair> T asNameValuePair(Class<T> c) {
+	public <T extends BasicPart> T asPart(Class<T> c) {
 		try {
 			ClassInfo ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
@@ -144,57 +141,57 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedCsvArray}.
+	 * Returns the value of this parameter as a {@link BasicCsvArrayPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedCsvArray}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicCsvArrayPart}, never <jk>null</jk>.
 	 */
-	public BasicNamedCsvArray asNamedCsvArray() {
-		return new BasicNamedCsvArray(getName(), getValue());
+	public BasicCsvArrayPart asCsvArrayPart() {
+		return new BasicCsvArrayPart(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedDate}.
+	 * Returns the value of this parameter as a {@link BasicDatePart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedDate}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicDatePart}, never <jk>null</jk>.
 	 */
-	public BasicNamedDate asNamedDate() {
-		return new BasicNamedDate(getName(), getValue());
+	public BasicDatePart asDatePart() {
+		return new BasicDatePart(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedInteger}.
+	 * Returns the value of this parameter as a {@link BasicIntegerPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedInteger}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicIntegerPart}, never <jk>null</jk>.
 	 */
-	public BasicNamedInteger asNamedInteger() {
-		return new BasicNamedInteger(getName(), getValue());
+	public BasicIntegerPart asIntegerPart() {
+		return new BasicIntegerPart(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedBoolean}.
+	 * Returns the value of this parameter as a {@link BasicBooleanPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedBoolean}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicBooleanPart}, never <jk>null</jk>.
 	 */
-	public BasicNamedBoolean asNamedBoolean() {
-		return new BasicNamedBoolean(getName(), getValue());
+	public BasicBooleanPart asBooleanPart() {
+		return new BasicBooleanPart(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedLong}.
+	 * Returns the value of this parameter as a {@link BasicLongPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedLong}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicLongPart}, never <jk>null</jk>.
 	 */
-	public BasicNamedLong asNamedLong() {
-		return new BasicNamedLong(getName(), getValue());
+	public BasicLongPart asLongPart() {
+		return new BasicLongPart(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedString}.
+	 * Returns the value of this parameter as a {@link BasicStringPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedString}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicStringPart}, never <jk>null</jk>.
 	 */
-	public BasicNamedString asNamedString() {
-		return new BasicNamedString(getName(), getValue());
+	public BasicStringPart asStringPart() {
+		return new BasicStringPart(getName(), getValue());
 	}
 
 	/**
@@ -202,7 +199,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 *
 	 * @return The value of this parameter as a {@link BasicNamedUri}, never <jk>null</jk>.
 	 */
-	public BasicNamedUri asNamedUri() {
+	public BasicNamedUri asUriPart() {
 		return new BasicNamedUri(getName(), getValue());
 	}
 
@@ -248,7 +245,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentIntegerAssertion<RequestFormParam> assertInteger() {
-		return new FluentIntegerAssertion<>(asNamedInteger().asInteger().orElse(null), this);
+		return new FluentIntegerAssertion<>(asIntegerPart().asInteger().orElse(null), this);
 	}
 
 	/**
@@ -264,7 +261,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentLongAssertion<RequestFormParam> assertLong() {
-		return new FluentLongAssertion<>(asNamedLong().asLong().orElse(null), this);
+		return new FluentLongAssertion<>(asLongPart().asLong().orElse(null), this);
 	}
 
 	/**
@@ -280,7 +277,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentZonedDateTimeAssertion<RequestFormParam> assertDate() {
-		return new FluentZonedDateTimeAssertion<>(asNamedDate().asZonedDateTime().orElse(null), this);
+		return new FluentZonedDateTimeAssertion<>(asDatePart().asZonedDateTime().orElse(null), this);
 	}
 
 	/**
@@ -296,7 +293,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentListAssertion<RequestFormParam> assertCsvArray() {
-		return new FluentListAssertion<>(asNamedCsvArray().asList().orElse(null), this);
+		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

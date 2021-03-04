@@ -10,42 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.nvp;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
+import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
-import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
 
 /**
- * A {@link NameValuePair} that consists of a single long value.
+ * A {@link NameValuePair} that consists of a single URL value.
  */
-public class BasicNamedLong extends BasicNameValuePair {
+public class BasicNamedUri extends BasicPart {
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedLong} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedLong of(String name, Object value) {
+	public static BasicNamedUri of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedLong(name, value);
+		return new BasicNamedUri(name, value);
 	}
 
 	/**
@@ -54,84 +51,60 @@ public class BasicNamedLong extends BasicNameValuePair {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedLong} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedLong of(String name, Supplier<?> value) {
+	public static BasicNamedUri of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedLong(name, value);
+		return new BasicNamedUri(name, value);
 	}
 
-	private Long parsed;
+	private URI parsed;
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedLong(String name, Object value) {
+	public BasicNamedUri(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
 	}
 
-	@Override /* Header */
-	public String getValue() {
-		return stringify(getParsedValue());
-	}
-
 	/**
-	 * Returns the parameter value as a long.
+	 * Returns this header as a {@link URI}.
 	 *
-	 * @return The parameter value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
-	public Optional<Long> asLong() {
+	public Optional<URI> asURI() {
 		return ofNullable(getParsedValue());
 	}
 
-	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public FluentLongAssertion<BasicNamedLong> assertLong() {
-		return new FluentLongAssertion<>(getParsedValue(), this);
-	}
-
-	private Long getParsedValue() {
+	private URI getParsedValue() {
 		if (parsed != null)
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		if (o instanceof Number)
-			return ((Number)o).longValue();
 		String s = o.toString();
 		if (isEmpty(s))
 			return null;
-		try {
-			return Long.parseLong(s);
-		} catch (NumberFormatException e) {
-			throw new BasicIllegalArgumentException("Value could not be parsed as a long: {0}", o);
-		}
+		return URI.create(s);
 	}
 }

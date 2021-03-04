@@ -21,7 +21,7 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.BasicNameValuePair;
+import org.apache.juneau.http.part.BasicPart;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -72,7 +72,7 @@ public class StringRange {
 			if (p.getName().equals("q")) {
 				qValue = Float.parseFloat(p.getValue());
 			} else {
-				extensions.add(BasicNameValuePair.of(p.getName(), p.getValue()));
+				extensions.add(BasicPart.of(p.getName(), p.getValue()));
 			}
 		}
 

@@ -23,10 +23,10 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -375,7 +375,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void b12_nameValuePairsQuery() throws Exception {
 		String r = proxy.nameValuePairsQuery(
-			NameValuePairSupplier.ofPairs("a","foo","b","","c",null)
+			PartSupplier.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -504,7 +504,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void c10_nameValuePairsFormData() throws Exception {
 		String r = proxy.nameValuePairsFormData(
-			NameValuePairSupplier.ofPairs("a","foo","b","","c",null)
+			PartSupplier.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -1727,7 +1727,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteOp(method="GET", path="/nameValuePairsQuery")
 		String nameValuePairsQuery(
-			@Query("*") NameValuePairSupplier a
+			@Query("*") PartSupplier a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -1825,7 +1825,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteOp(method="POST", path="/nameValuePairsFormData")
 		String nameValuePairsFormData(
-			@FormData("*") NameValuePairSupplier a
+			@FormData("*") PartSupplier a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------

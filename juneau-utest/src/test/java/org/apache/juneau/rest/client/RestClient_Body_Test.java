@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.entity.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

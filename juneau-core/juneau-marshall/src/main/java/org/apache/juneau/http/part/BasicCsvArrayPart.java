@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.nvp;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
@@ -22,12 +22,11 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
  */
-public class BasicNamedCsvArray extends BasicNameValuePair {
+public class BasicCsvArrayPart extends BasicPart {
 
 	/**
 	 * Convenience creator.
@@ -43,12 +42,12 @@ public class BasicNamedCsvArray extends BasicNameValuePair {
 	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedCsvArray} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedCsvArray of(String name, Object value) {
+	public static BasicCsvArrayPart of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedCsvArray(name, value);
+		return new BasicCsvArrayPart(name, value);
 	}
 
 	/**
@@ -68,12 +67,12 @@ public class BasicNamedCsvArray extends BasicNameValuePair {
 	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedCsvArray} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedCsvArray of(String name, Supplier<?> value) {
+	public static BasicCsvArrayPart of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedCsvArray(name, value);
+		return new BasicCsvArrayPart(name, value);
 	}
 
 	private List<String> parsed;
@@ -94,7 +93,7 @@ public class BasicNamedCsvArray extends BasicNameValuePair {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedCsvArray(String name, Object value) {
+	public BasicCsvArrayPart(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
@@ -144,7 +143,7 @@ public class BasicNamedCsvArray extends BasicNameValuePair {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentListAssertion<BasicNamedCsvArray> assertList() {
+	public FluentListAssertion<BasicCsvArrayPart> assertList() {
 		return new FluentListAssertion<>(getParsedValue(), this);
 	}
 

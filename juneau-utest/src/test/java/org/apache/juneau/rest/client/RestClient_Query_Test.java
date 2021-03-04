@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
@@ -128,7 +128,7 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a09_query_NameValuePair() throws Exception {
-		client().query(pair("foo","bar")).build().get("/query").query(pair("foo","baz")).run().assertBody().contains("foo=bar&foo=baz");
+		client().query(part("foo","bar")).build().get("/query").query(part("foo","baz")).run().assertBody().contains("foo=bar&foo=baz");
 	}
 
 	public static class A10 {
@@ -137,29 +137,29 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a10_queries_Objects() throws Exception {
-		client().queries(pair("foo","bar")).build().get("/query").run().assertBody().is("foo=bar");
+		client().queries(part("foo","bar")).build().get("/query").run().assertBody().is("foo=bar");
 		client().queries(OMap.of("foo","bar")).build().get("/query").run().assertBody().is("foo=bar");
 		client().queries(AMap.of("foo","bar")).build().get("/query").run().assertBody().is("foo=bar");
-		client().queries(pairs("foo","bar","foo","baz")).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
-		client().queries(pair("foo","bar"),pair("foo","baz")).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
-		client().queries(AList.of(pair("foo","bar"),pair("foo","baz"))).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
-		client().queries((Object)new NameValuePair[]{pair("foo","bar")}).build().get("/query").run().assertBody().is("foo=bar");
+		client().queries(parts("foo","bar","foo","baz")).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
+		client().queries(part("foo","bar"),part("foo","baz")).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
+		client().queries(AList.of(part("foo","bar"),part("foo","baz"))).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
+		client().queries((Object)new NameValuePair[]{part("foo","bar")}).build().get("/query").run().assertBody().is("foo=bar");
 
 
-		client().build().get("/query").queries(pair("foo","bar")).run().assertBody().is("foo=bar");
+		client().build().get("/query").queries(part("foo","bar")).run().assertBody().is("foo=bar");
 		client().build().get("/query").queries(OMap.of("foo","bar")).run().assertBody().is("foo=bar");
 		client().build().get("/query").queries(AMap.of("foo","bar")).run().assertBody().is("foo=bar");
-		client().build().get("/query").queries(pairs("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
-		client().build().get("/query").queries(pair("foo","bar"),pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
-		client().build().get("/query").queries(AList.of(pair("foo","bar"),pair("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
-		client().build().get("/query").queries((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
+		client().build().get("/query").queries(parts("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().get("/query").queries(part("foo","bar"),part("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().get("/query").queries(AList.of(part("foo","bar"),part("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
+		client().build().get("/query").queries((Object)new NameValuePair[]{part("foo","bar")}).run().assertBody().is("foo=bar");
 		client().build().get("/query").queries(new A10()).run().assertBody().is("foo=bar");
 
 		client().queries((Object)null).build().get("/query").queries((Object)null).run().assertBody().is("");
 		assertThrown(()->client().queries("baz")).contains("Invalid type");
 		assertThrown(()->client().build().get("/query").queries("baz")).contains("Invalid type");
 
-		client().queries(pair("foo","bar"),null).build().get("/query").run().assertBody().is("foo=bar");
+		client().queries(part("foo","bar"),null).build().get("/query").run().assertBody().is("foo=bar");
 	}
 
 	@Test
@@ -192,12 +192,12 @@ public class RestClient_Query_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private static BasicPart part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier parts(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

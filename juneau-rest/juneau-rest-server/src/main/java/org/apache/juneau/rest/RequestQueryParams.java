@@ -109,7 +109,7 @@ public class RequestQueryParams {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RequestQueryParams addDefault(List<NameValuePair> pairs) {
+	public RequestQueryParams addDefault(List<? extends NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			String key = key(name);

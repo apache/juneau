@@ -21,12 +21,12 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.FinishablePrintWriter;
 import org.apache.juneau.rest.util.FinishableServletOutputStream;
@@ -109,8 +109,8 @@ public class DefaultHandler implements ResponseHandler {
 								SerializedHeader x = ((SerializedHeader)ho2).copy().serializerIfNotSet(ps);
 								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
 								res.setHeader(x.getName(), x.getValue());
-							} else if (ho2 instanceof SerializedNameValuePair) {
-								SerializedNameValuePair x = ((SerializedNameValuePair)ho2).copy().serializerIfNotSet(ps);
+							} else if (ho2 instanceof SerializedPart) {
+								SerializedPart x = ((SerializedPart)ho2).copy().serializerIfNotSet(ps);
 								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
 								res.setHeader(x.getName(), x.getValue());
 							} else if (ho2 instanceof BasicUriHeader) {
@@ -131,8 +131,8 @@ public class DefaultHandler implements ResponseHandler {
 							SerializedHeader x = ((SerializedHeader)ho).copy().serializerIfNotSet(ps);
 							x.schemaIfNotSet(schema);
 							res.setHeader(x.getName(), x.getValue());
-						} else if (ho instanceof SerializedNameValuePair) {
-							SerializedNameValuePair x = ((SerializedNameValuePair)ho).copy().serializerIfNotSet(ps);
+						} else if (ho instanceof SerializedPart) {
+							SerializedPart x = ((SerializedPart)ho).copy().serializerIfNotSet(ps);
 							x.schemaIfNotSet(schema);
 							res.setHeader(x.getName(), x.getValue());
 						} else if (ho instanceof Header) {

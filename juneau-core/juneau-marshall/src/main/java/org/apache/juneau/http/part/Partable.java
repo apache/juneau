@@ -10,19 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.part;
 
 import org.apache.http.*;
 
 /**
- * Identifies a class that can be converted to a {@link NameValuePair} object.
+ * Identifies a class that can be converted to a {@link Part} object.
  */
-public interface NameValuePairable {
+public interface Partable {
 
 	/**
 	 * Convert the object to a {@link NameValuePair}.
 	 *
 	 * @return The object converted to a {@link NameValuePair}.
 	 */
-	NameValuePair asNameValuePair();
+	Part asPart();
 }

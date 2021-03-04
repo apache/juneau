@@ -18,7 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -60,16 +60,16 @@ public class RestClient_Paths_Test {
 
 	@Test
 	public void a02_path_NameValuePair() throws Exception {
-		client().build().get("/echo/{x}").path(pair("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").path(part("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
 	}
 
 	@Test
 	public void a03_paths_Object() throws Exception {
-		client().build().get("/echo/{x}").paths(pair("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
-		client().build().get("/echo/{x}").paths(AList.of(pair("x","foo"))).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths(part("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths(AList.of(part("x","foo"))).run().assertBody().contains("GET /echo/foo HTTP/1.1");
 		client().build().get("/echo/{x}").paths(pairs("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
 		client().build().get("/echo/{x}").paths(OMap.of("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
-		client().build().get("/echo/{x}").paths((Object)new NameValuePair[]{pair("x","foo")}).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").paths((Object)new NameValuePair[]{part("x","foo")}).run().assertBody().contains("GET /echo/foo HTTP/1.1");
 		client().build().get("/echo/{x}").paths(new A1().init()).run().assertBody().contains("GET /echo/1 HTTP/1.1");
 		assertThrown(()->client().build().get("/echo/{x}").paths("x")).is("Invalid type passed to paths(): java.lang.String");
 		client().build().get("/echo/{x}").paths((Object)null).run().assertBody().contains("GET /echo/%7Bx%7D HTTP/1.1");
@@ -91,12 +91,12 @@ public class RestClient_Paths_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private static BasicPart part(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 
-	private static NameValuePairSupplier pairs(Object...pairs) {
-		return NameValuePairSupplier.ofPairs(pairs);
+	private static PartSupplier pairs(Object...pairs) {
+		return PartSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

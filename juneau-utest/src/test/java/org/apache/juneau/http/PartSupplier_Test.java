@@ -15,63 +15,61 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.http.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class NameValuePairSupplier_Test {
+public class PartSupplier_Test {
 
 	@Test
 	public void a01_basic() {
-		NameValuePairSupplier x = NameValuePairSupplier.of();
+		PartSupplier x = PartSupplier.of();
 
 		assertObject(x.iterator()).asJson().is("[]");
 		x.add(pair("Foo","bar"));
 		assertObject(x.iterator()).asJson().is("['Foo=bar']");
 		x.add(pair("Foo","baz"));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
-		x.add(NameValuePairSupplier.of());
+		x.add(PartSupplier.of());
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
-		x.add(NameValuePairSupplier.of(pair("Foo","qux")));
+		x.add(PartSupplier.of(pair("Foo","qux")));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux']");
-		x.add(NameValuePairSupplier.of(pair("Foo","q2x"), pair("Foo","q3x")));
+		x.add(PartSupplier.of(pair("Foo","q2x"), pair("Foo","q3x")));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x']");
-		x.add(NameValuePairSupplier.of(NameValuePairSupplier.of(pair("Foo","q4x"),pair("Foo","q5x"))));
+		x.add(PartSupplier.of(PartSupplier.of(pair("Foo","q4x"),pair("Foo","q5x"))));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
-		x.add((Header)null);
-		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
-		x.add((NameValuePairSupplier)null);
+		x.add((PartSupplier)null);
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 
-		assertObject(new NameValuePairSupplier.Null().iterator()).asJson().is("[]");
+		assertObject(new PartSupplier.Null().iterator()).asJson().is("[]");
 	}
 
 	@Test
 	public void a02_creators() {
-		NameValuePairSupplier x;
+		PartSupplier x;
 
-		x = NameValuePairSupplier.of(pair("Foo","bar"), pair("Foo","baz"), null);
+		x = PartSupplier.of(pair("Foo","bar"), pair("Foo","baz"), null);
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = NameValuePairSupplier.of(AList.of(pair("Foo","bar"), pair("Foo","baz"), null));
+		x = PartSupplier.of(AList.of(pair("Foo","bar"), pair("Foo","baz"), null));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = NameValuePairSupplier.ofPairs("Foo","bar","Foo","baz");
+		x = PartSupplier.ofPairs("Foo","bar","Foo","baz");
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		assertThrown(()->NameValuePairSupplier.ofPairs("Foo")).is("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
+		assertThrown(()->PartSupplier.ofPairs("Foo")).is("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
 
-		assertThrown(()->NameValuePairSupplier.of("Foo")).is("Invalid type passed to NameValuePairSupplier.of(): java.lang.String");
+		assertThrown(()->PartSupplier.of("Foo")).is("Invalid type passed to NameValuePairSupplier.of(): java.lang.String");
 	}
 
 	@Test
 	public void a03_addMethods() {
 		String pname = "NameValuePairSupplierTest.x";
 
-		NameValuePairSupplier x = NameValuePairSupplier.create().resolving();
+		PartSupplier x = PartSupplier.create().resolving();
 		System.setProperty(pname, "y");
 
 		x.add("X1","bar");
@@ -92,20 +90,20 @@ public class NameValuePairSupplier_Test {
 
 	@Test
 	public void a04_toArrayMethods() {
-		NameValuePairSupplier x = NameValuePairSupplier
+		PartSupplier x = PartSupplier
 			.create()
 			.add("X1","1")
-			.add(NameValuePairSupplier.ofPairs("X2","2"));
+			.add(PartSupplier.ofPairs("X2","2"));
 		assertObject(x.toArray()).asJson().is("['X1=1','X2=2']");
-		assertObject(x.toArray(new NameValuePair[0])).asJson().is("['X1=1','X2=2']");
+		assertObject(x.toArray(new Part[0])).asJson().is("['X1=1','X2=2']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicNameValuePair.of(name, val);
+	private static Part pair(String name, Object val) {
+		return BasicPart.of(name, val);
 	}
 
 	private static HttpPartSerializerSession openApiSession() {

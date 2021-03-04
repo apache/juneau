@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -28,26 +28,26 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Specifies a dynamic supplier of {@link NameValuePair} objects.
+ * Specifies a dynamic supplier of {@link Part} objects.
  *
  * This class is thread safe.
  */
-public class NameValuePairSupplier implements Iterable<NameValuePair> {
+public class PartSupplier implements Iterable<Part> {
 
 	/** Represents no header supplier */
-	public static final class Null extends NameValuePairSupplier {}
+	public static final class Null extends PartSupplier {}
 
-	private final List<Iterable<NameValuePair>> pairs = new CopyOnWriteArrayList<>();
+	private final List<Iterable<Part>> parts = new CopyOnWriteArrayList<>();
 
 	private volatile VarResolver varResolver;
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @return A new {@link NameValuePairSupplier} object.
+	 * @return A new {@link PartSupplier} object.
 	 */
-	public static NameValuePairSupplier create() {
-		return new NameValuePairSupplier();
+	public static PartSupplier create() {
+		return new PartSupplier();
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 *
 	 * @return A new empty instance.
 	 */
-	public static NameValuePairSupplier of() {
-		return new NameValuePairSupplier();
+	public static PartSupplier of() {
+		return new PartSupplier();
 	}
 
 	/**
@@ -65,8 +65,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param pairs The pairs to add to this list.
 	 * @return A new instance.
 	 */
-	public static NameValuePairSupplier of(Collection<NameValuePair> pairs) {
-		return new NameValuePairSupplier().addAll(pairs);
+	public static PartSupplier of(Collection<Part> pairs) {
+		return new PartSupplier().addAll(pairs);
 	}
 
 	/**
@@ -78,8 +78,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static NameValuePairSupplier ofPairs(Object...parameters) {
-		NameValuePairSupplier s = NameValuePairSupplier.create();
+	public static PartSupplier ofPairs(Object...parameters) {
+		PartSupplier s = PartSupplier.create();
 		if (parameters.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
 		for (int i = 0; i < parameters.length; i+=2)
@@ -95,17 +95,17 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}.
-	 * 		<li>{@link NameValuePairSupplier}.
+	 * 		<li>{@link PartSupplier}.
 	 * 	</ul>
-	 * @return A new {@link NameValuePairSupplier} object.
+	 * @return A new {@link PartSupplier} object.
 	 */
-	public static NameValuePairSupplier of(Object...values) {
-		NameValuePairSupplier s = NameValuePairSupplier.create();
+	public static PartSupplier of(Object...values) {
+		PartSupplier s = PartSupplier.create();
 		for (Object v : values) {
-			if (v instanceof NameValuePair)
-				s.add((NameValuePair)v);
-			else if (v instanceof NameValuePairSupplier)
-				s.add((NameValuePairSupplier)v);
+			if (v instanceof Part)
+				s.add((Part)v);
+			else if (v instanceof PartSupplier)
+				s.add((PartSupplier)v);
 			else if (v != null)
 				throw new BasicRuntimeException("Invalid type passed to NameValuePairSupplier.of(): {0}", v.getClass().getName());
 		}
@@ -129,7 +129,7 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier resolving() {
+	public PartSupplier resolving() {
 		return resolving(VarResolver.DEFAULT);
 	}
 
@@ -148,7 +148,7 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param varResolver The variable resolver to use for resolving variables.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier resolving(VarResolver varResolver) {
+	public PartSupplier resolving(VarResolver varResolver) {
 		this.varResolver = varResolver;
 		return this;
 	}
@@ -159,9 +159,9 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param h The name-value pair to add. <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier add(NameValuePair h) {
+	public PartSupplier add(Part h) {
 		if (h != null)
-			pairs.add(Collections.singleton(h));
+			parts.add(Collections.singleton(h));
 		return this;
 	}
 
@@ -171,9 +171,9 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param h The supplier to add. <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier add(NameValuePairSupplier h) {
+	public PartSupplier add(PartSupplier h) {
 		if (h != null)
-			pairs.add(h);
+			parts.add(h);
 		return this;
 	}
 
@@ -183,8 +183,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param pairs The pairs to add to this supplier.
 	 * @return This object(for method chaining).
 	 */
-	private NameValuePairSupplier addAll(Collection<NameValuePair> pairs) {
-		this.pairs.addAll(pairs.stream().filter(x->x != null).map(x->Collections.singleton(x)).collect(Collectors.toList()));
+	private PartSupplier addAll(Collection<Part> pairs) {
+		this.parts.addAll(pairs.stream().filter(x->x != null).map(x->Collections.singleton(x)).collect(Collectors.toList()));
 		return this;
 	}
 
@@ -196,31 +196,31 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * Appends the specified name/value pair to the end of this list.
 	 *
 	 * <p>
-	 * The pair is added as a {@link BasicNameValuePair}.
+	 * The pair is added as a {@link BasicPart}.
 	 *
 	 * @param name The pair name.
 	 * @param value The pair value.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier add(String name, Object value) {
-		return add(new BasicNameValuePair(name, resolver(value)));
+	public PartSupplier add(String name, Object value) {
+		return add(new BasicPart(name, resolver(value)));
 	}
 
 	/**
 	 * Appends the specified name/value pair to the end of this list using a value supplier.
 	 *
 	 * <p>
-	 * The pair is added as a {@link BasicNameValuePair}.
+	 * The pair is added as a {@link BasicPart}.
 	 *
 	 * <p>
-	 * Value is re-evaluated on each call to {@link BasicNameValuePair#getValue()}.
+	 * Value is re-evaluated on each call to {@link BasicPart#getValue()}.
 	 *
 	 * @param name The pair name.
 	 * @param value The pair value supplier.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier add(String name, Supplier<?> value) {
-		return add(new BasicNameValuePair(name, resolver(value)));
+	public PartSupplier add(String name, Supplier<?> value) {
+		return add(new BasicPart(name, resolver(value)));
 	}
 
 	/**
@@ -242,8 +242,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairSupplier add(String name, Object value, HttpPartType partType, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return add(new SerializedNameValuePair(name, resolver(value), partType, serializer, schema, skipIfEmpty));
+	public PartSupplier add(String name, Object value, HttpPartType partType, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		return add(new SerializedPart(name, resolver(value), partType, serializer, schema, skipIfEmpty));
 	}
 
 	/**
@@ -264,8 +264,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	}
 
 	@Override
-	public Iterator<NameValuePair> iterator() {
-		return CollectionUtils.iterator(pairs);
+	public Iterator<Part> iterator() {
+		return CollectionUtils.iterator(parts);
 	}
 
 	/**
@@ -273,11 +273,11 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 *
 	 * @return These pairs as an array.
 	 */
-	public NameValuePair[] toArray() {
-		ArrayList<NameValuePair> l = new ArrayList<>();
-		for (NameValuePair p : this)
+	public Part[] toArray() {
+		ArrayList<Part> l = new ArrayList<>();
+		for (Part p : this)
 			l.add(p);
-		return l.toArray(new NameValuePair[l.size()]);
+		return l.toArray(new Part[l.size()]);
 	}
 
 	/**
@@ -286,9 +286,9 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @param array The array to copy in to.
 	 * @return These pairs as an array.
 	 */
-	public <T extends NameValuePair> T[] toArray(T[] array) {
-		ArrayList<NameValuePair> l = new ArrayList<>();
-		for (NameValuePair p : this)
+	public <T extends Part> T[] toArray(T[] array) {
+		ArrayList<Part> l = new ArrayList<>();
+		for (Part p : this)
 			l.add(p);
 		return l.toArray(array);
 	}

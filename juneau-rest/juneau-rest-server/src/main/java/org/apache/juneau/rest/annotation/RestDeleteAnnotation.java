@@ -23,6 +23,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -462,7 +463,7 @@ public class RestDeleteAnnotation {
 			stringStream(a.defaultRequestHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
 			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
-			stringStream(a.defaultQuery()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
+			stringStream(a.defaultQuery()).map(x -> BasicPart.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
 			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			cpb.prependTo(REST_guards, reverse(a.guards()));
 			cpb.prependTo(RESTOP_matchers, a.matchers());

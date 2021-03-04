@@ -122,7 +122,7 @@ public class RequestFormParams {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RequestFormParams addDefault(List<NameValuePair> pairs) {
+	public RequestFormParams addDefault(List<? extends NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			String key = key(name);

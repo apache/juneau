@@ -22,7 +22,7 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.BasicNameValuePair;
+import org.apache.juneau.http.part.BasicPart;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -141,7 +141,7 @@ public class MediaType implements Comparable<MediaType>  {
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q"))
 				break;
-			parameters.add(BasicNameValuePair.of(p.getName(), p.getValue()));
+			parameters.add(BasicPart.of(p.getName(), p.getValue()));
 		}
 		this.parameters= parameters.toArray(new NameValuePair[parameters.size()]);
 
