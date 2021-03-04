@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.http.HttpParts.*;
+
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.part.*;
 
 
 /**
@@ -52,7 +53,7 @@ public class MediaRange extends MediaType {
 				qValue = Float.parseFloat(p.getValue());
 				foundQ = true;
 			} else if (foundQ) {
-				extensions.add(BasicPart.of(p.getName(), p.getValue()));
+				extensions.add(stringPart(p.getName(), p.getValue()));
 			}
 		}
 

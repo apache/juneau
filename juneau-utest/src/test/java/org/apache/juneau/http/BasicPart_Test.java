@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -31,23 +32,23 @@ public class BasicPart_Test {
 
 	@Test
 	public void a01_ofPair() {
-		BasicPart x = BasicPart.ofPair("Foo:bar");
+		BasicPart x = basicPart("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = BasicPart.ofPair(" Foo : bar ");
+		x = basicPart(" Foo : bar ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = BasicPart.ofPair(" Foo : bar : baz ");
+		x = basicPart(" Foo : bar : baz ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar : baz", x.getValue());
 
-		x = BasicPart.ofPair("Foo");
+		x = basicPart("Foo");
 		assertEquals("Foo", x.getName());
 		assertEquals("", x.getValue());
 
-		assertNull(BasicPart.ofPair((String)null));
+		assertNull(basicPart((String)null));
 	}
 
 	@Test
@@ -55,14 +56,14 @@ public class BasicPart_Test {
 		BasicPart x;
 		x = part("Foo","bar");
 		assertObject(x).asJson().is("'Foo=bar'");
-		x = pair("Foo",()->"bar");
+		x = part("Foo",()->"bar");
 		assertObject(x).asJson().is("'Foo=bar'");
 	}
 
 	@Test
 	public void a03_cast() {
 		BasicPart x1 = part("X1","1");
-		SerializedPart x2 = SerializedPart.of("X2","2");
+		SerializedPart x2 = serializedPart("X2","2");
 		Header x3 = header("X3","3");
 		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
@@ -89,8 +90,8 @@ public class BasicPart_Test {
 		assertObject(BasicPart.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
 		assertObject(BasicPart.cast(x8)).isType(NameValuePair.class).asJson().is("'X8=8'");
 
-		assertThrown(()->BasicPart.cast("X")).is("Object of type java.lang.String could not be converted to a NameValuePair.");
-		assertThrown(()->BasicPart.cast(null)).is("Object of type null could not be converted to a NameValuePair.");
+		assertThrown(()->BasicPart.cast("X")).is("Object of type java.lang.String could not be converted to a Part.");
+		assertThrown(()->BasicPart.cast(null)).is("Object of type null could not be converted to a Part.");
 
 		assertTrue(BasicPart.canCast(x1));
 		assertTrue(BasicPart.canCast(x2));
@@ -124,11 +125,11 @@ public class BasicPart_Test {
 		return basicHeader(name, val);
 	}
 
-	private BasicPart pair(String name, Supplier<?> val) {
-		return BasicPart.of(name, val);
+	private BasicPart part(String name, Supplier<?> val) {
+		return basicPart(name, val);
 	}
 
 	private BasicPart part(String name, Object val) {
-		return BasicPart.of(name, val);
+		return basicPart(name, val);
 	}
 }

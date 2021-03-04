@@ -48,7 +48,11 @@ public class SerializedPart extends BasicPart implements Headerable {
 	/**
 	 * Instantiates a new instance of this object.
 	 *
-	 * @return A new instance of this object.
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value.
+	 * 	<br>Can be any POJO.
+	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
 	 */
 	public static SerializedPart of(String name, Object value) {
 		return new SerializedPart(name, value, null, null, null, false);
@@ -57,7 +61,11 @@ public class SerializedPart extends BasicPart implements Headerable {
 	/**
 	 * Instantiates a new instance of this object.
 	 *
-	 * @return A new instance of this object.
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value supplier.
+	 * 	<br>Can be a supplier of any POJO.
+	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
 	 */
 	public static SerializedPart of(String name, Supplier<?> value) {
 		return new SerializedPart(name, value, null, null, null, false);
@@ -66,8 +74,8 @@ public class SerializedPart extends BasicPart implements Headerable {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
-	 * @param value The POJO to serialize to the parameter value.
+	 * @param name The part name.
+	 * @param value The POJO to serialize to The part value.
 	 * @param type The HTTP part type.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
@@ -220,9 +228,9 @@ public class SerializedPart extends BasicPart implements Headerable {
 				return null;
 			return serializer == null ? stringify(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {
-			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, getName(), value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
 		} catch (SerializeException e) {
-			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", type, getName());
+			throw new BasicRuntimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());
 		}
 	}
 

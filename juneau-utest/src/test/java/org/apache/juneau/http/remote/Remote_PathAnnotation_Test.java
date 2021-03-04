@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.math.*;
 import java.util.*;
@@ -102,15 +103,15 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("x=1",x.getX12(AMap.of("x",Bean.create())));
 		assertEquals("(x=(x=1))",x.getX13(AMap.of("x",Bean.create())));
 		assertEquals("x=1",x.getX14(AMap.of("x",Bean.create())));
-		assertEquals("bar",x.getX15(pairs("x","bar")));
-		assertEquals("bar",x.getX16(pairs("x","bar")));
+		assertEquals("bar",x.getX15(parts("x","bar")));
+		assertEquals("bar",x.getX16(parts("x","bar")));
 		assertEquals("(x=(x=1))",x.getX17(AMap.of("x",Bean.create())));
-		assertEquals("bar",x.getX18(pair("x","bar")));
-		assertEquals("bar",x.getX19(pair("x","bar")));
-		assertEquals("bar",x.getX20(new NameValuePair[]{pair("x","bar")}));
+		assertEquals("bar",x.getX18(part("x","bar")));
+		assertEquals("bar",x.getX19(part("x","bar")));
+		assertEquals("bar",x.getX20(new NameValuePair[]{part("x","bar")}));
 		assertEquals("{x}",x.getX20(null));
 		assertThrown(()->x.getX21("foo")).contains("Invalid value type for path arg 'null': java.lang.String");
-		assertEquals("bar",x.getX22(AList.of(pair("x","bar"))));
+		assertEquals("bar",x.getX22(AList.of(part("x","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -687,15 +688,15 @@ public class Remote_PathAnnotation_Test {
 	public static class K3a {
 		@Path(n="*",aev=true)
 		public PartSupplier getA() {
-			return pairs("a1","v1","a2",123,"a3",null,"a4","");
+			return parts("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Path("/*")
 		public PartSupplier getB() {
-			return pairs("b1","true","b2","123","b3","null");
+			return parts("b1","true","b2","123","b3","null");
 		}
 		@Path(n="*",aev=true)
 		public PartSupplier getC() {
-			return pairs("c1","v1","c2",123,"c3",null,"c4","");
+			return parts("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Path("/*")
 		public PartSupplier getD() {
@@ -703,11 +704,11 @@ public class Remote_PathAnnotation_Test {
 		}
 		@Path(aev=true)
 		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
+			return parts("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
 		}
 		@Path(aev=true)
 		public BasicPart[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
+			return parts("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
 		}
 	}
 
@@ -774,12 +775,12 @@ public class Remote_PathAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static PartSupplier pairs(Object...pairs) {
+	private static PartSupplier parts(Object...pairs) {
 		return PartSupplier.ofPairs(pairs);
 	}
 
-	private static NameValuePair pair(String key, Object val) {
-		return BasicPart.of(key, val);
+	private static NameValuePair part(String key, Object val) {
+		return basicPart(key, val);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

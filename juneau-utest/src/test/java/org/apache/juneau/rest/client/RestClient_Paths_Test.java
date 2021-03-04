@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
@@ -92,7 +93,7 @@ public class RestClient_Paths_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static BasicPart part(String name, Object val) {
-		return BasicPart.of(name, val);
+		return basicPart(name, val);
 	}
 
 	private static PartSupplier pairs(Object...pairs) {

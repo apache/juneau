@@ -29,9 +29,9 @@ public class BasicBooleanPart extends BasicPart {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Boolean} - As-is.
@@ -50,11 +50,11 @@ public class BasicBooleanPart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The part value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Boolean} - As-is.
@@ -74,9 +74,9 @@ public class BasicBooleanPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Boolean} - As-is.
@@ -97,16 +97,16 @@ public class BasicBooleanPart extends BasicPart {
 	}
 
 	/**
-	 * Returns the parameter value as a boolean.
+	 * Returns The part value as a boolean.
 	 *
-	 * @return The parameter value as a boolean.
+	 * @return The part value as a boolean.
 	 */
 	public Optional<Boolean> asBoolean() {
 		return ofNullable(getParsedValue());
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.

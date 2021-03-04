@@ -24,7 +24,7 @@ import org.apache.http.*;
 /**
  * A {@link NameValuePair} that consists of a single URL value.
  */
-public class BasicNamedUri extends BasicPart {
+public class BasicUriPart extends BasicPart {
 
 	/**
 	 * Convenience creator.
@@ -37,19 +37,19 @@ public class BasicNamedUri extends BasicPart {
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedUri of(String name, Object value) {
+	public static BasicUriPart of(String name, Object value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedUri(name, value);
+		return new BasicUriPart(name, value);
 	}
 
 	/**
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -59,12 +59,12 @@ public class BasicNamedUri extends BasicPart {
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicNamedUri} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicNamedUri of(String name, Supplier<?> value) {
+	public static BasicUriPart of(String name, Supplier<?> value) {
 		if (isEmpty(name) || value == null)
 			return null;
-		return new BasicNamedUri(name, value);
+		return new BasicUriPart(name, value);
 	}
 
 	private URI parsed;
@@ -81,7 +81,7 @@ public class BasicNamedUri extends BasicPart {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicNamedUri(String name, Object value) {
+	public BasicUriPart(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();

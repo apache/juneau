@@ -28,9 +28,9 @@ public class BasicStringPart extends BasicPart {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -48,11 +48,11 @@ public class BasicStringPart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The part value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -71,7 +71,7 @@ public class BasicStringPart extends BasicPart {
 	/**
 	 * Constructor
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
@@ -87,7 +87,7 @@ public class BasicStringPart extends BasicPart {
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
@@ -102,9 +102,9 @@ public class BasicStringPart extends BasicPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a string.
+	 * Returns the value of this part as a string.
 	 *
-	 * @return The value of this parameter as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The value of this part as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<String> asString() {
 		return Optional.ofNullable(getParsedValue());

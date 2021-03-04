@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -63,7 +64,7 @@ public class BasicHeader_Test {
 	@Test
 	public void a03_cast() {
 		BasicPart x1 = part("X1","1");
-		SerializedPart x2 = SerializedPart.of("X2","2");
+		SerializedPart x2 = serializedPart("X2","2");
 		Header x3 = header("X3","3");
 		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
@@ -80,7 +81,7 @@ public class BasicHeader_Test {
 				return header("X8","8");
 			}
 		};
-		SerializedPart x9 = SerializedPart.of("X9",()->"9");
+		SerializedPart x9 = serializedPart("X9",()->"9");
 
 		assertObject(BasicHeader.cast(x1)).isType(Header.class).asJson().is("'X1: 1'");
 		assertObject(BasicHeader.cast(x2)).isType(Header.class).asJson().is("'X2: 2'");
@@ -176,6 +177,6 @@ public class BasicHeader_Test {
 	}
 
 	private BasicPart part(String name, Object val) {
-		return BasicPart.of(name, val);
+		return basicPart(name, val);
 	}
 }

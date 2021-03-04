@@ -35,7 +35,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Accept accept(String value) {
+	public static final Accept accept(String value) {
 		return Accept.of(value);
 	}
 
@@ -51,7 +51,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Accept accept(Object value) {
+	public static final Accept accept(Object value) {
 		return Accept.of(value);
 	}
 
@@ -70,7 +70,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Accept accept(Supplier<?> value) {
+	public static final Accept accept(Supplier<?> value) {
 		return Accept.of(value);
 	}
 
@@ -80,7 +80,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptCharset acceptCharset(String value) {
+	public static final AcceptCharset acceptCharset(String value) {
 		return AcceptCharset.of(value);
 	}
 
@@ -97,7 +97,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptCharset acceptCharset(Object value) {
+	public static final AcceptCharset acceptCharset(Object value) {
 		return AcceptCharset.of(value);
 	}
 
@@ -117,7 +117,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptCharset acceptCharset(Supplier<?> value) {
+	public static final AcceptCharset acceptCharset(Supplier<?> value) {
 		return AcceptCharset.of(value);
 	}
 
@@ -127,7 +127,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptEncoding acceptEncoding(String value) {
+	public static final AcceptEncoding acceptEncoding(String value) {
 		return AcceptEncoding.of(value);
 	}
 
@@ -144,7 +144,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptEncoding acceptEncoding(Object value) {
+	public static final AcceptEncoding acceptEncoding(Object value) {
 		return AcceptEncoding.of(value);
 	}
 
@@ -164,7 +164,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptEncoding acceptEncoding(Supplier<?> value) {
+	public static final AcceptEncoding acceptEncoding(Supplier<?> value) {
 		return AcceptEncoding.of(value);
 	}
 
@@ -174,7 +174,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptLanguage acceptLanguage(String value) {
+	public static final AcceptLanguage acceptLanguage(String value) {
 		return AcceptLanguage.of(value);
 	}
 
@@ -191,7 +191,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptLanguage acceptLanguage(Object value) {
+	public static final AcceptLanguage acceptLanguage(Object value) {
 		return AcceptLanguage.of(value);
 	}
 
@@ -211,7 +211,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptLanguage acceptLanguage(Supplier<?> value) {
+	public static final AcceptLanguage acceptLanguage(Supplier<?> value) {
 		return AcceptLanguage.of(value);
 	}
 
@@ -221,7 +221,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptRanges acceptRanges(String value) {
+	public static final AcceptRanges acceptRanges(String value) {
 		return AcceptRanges.of(value);
 	}
 
@@ -237,7 +237,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptRanges acceptRanges(Object value) {
+	public static final AcceptRanges acceptRanges(Object value) {
 		return AcceptRanges.of(value);
 	}
 
@@ -257,7 +257,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static AcceptRanges acceptRanges(Supplier<?> value) {
+	public static final AcceptRanges acceptRanges(Supplier<?> value) {
 		return AcceptRanges.of(value);
 	}
 
@@ -267,7 +267,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Age age(String value) {
+	public static final Age age(String value) {
 		return Age.of(value);
 	}
 
@@ -284,7 +284,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Age age(Object value) {
+	public static final Age age(Object value) {
 		return Age.of(value);
 	}
 
@@ -304,7 +304,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Age age(Supplier<?> value) {
+	public static final Age age(Supplier<?> value) {
 		return Age.of(value);
 	}
 
@@ -314,7 +314,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Allow allow(String value) {
+	public static final Allow allow(String value) {
 		return Allow.of(value);
 	}
 
@@ -333,7 +333,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Allow allow(Object value) {
+	public static final Allow allow(Object value) {
 		return Allow.of(value);
 	}
 
@@ -355,7 +355,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Allow allow(Supplier<?> value) {
+	public static final Allow allow(Supplier<?> value) {
 		return Allow.of(value);
 	}
 
@@ -365,7 +365,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Authorization authorization(String value) {
+	public static final Authorization authorization(String value) {
 		return Authorization.of(value);
 	}
 
@@ -381,7 +381,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Authorization authorization(Object value) {
+	public static final Authorization authorization(Object value) {
 		return Authorization.of(value);
 	}
 
@@ -401,7 +401,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Authorization authorization(Supplier<?> value) {
+	public static final Authorization authorization(Supplier<?> value) {
 		return Authorization.of(value);
 	}
 
@@ -411,7 +411,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static CacheControl cacheControl(String value) {
+	public static final CacheControl cacheControl(String value) {
 		return CacheControl.of(value);
 	}
 
@@ -427,7 +427,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static CacheControl cacheControl(Object value) {
+	public static final CacheControl cacheControl(Object value) {
 		return CacheControl.of(value);
 	}
 
@@ -447,7 +447,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static CacheControl cacheControl(Supplier<?> value) {
+	public static final CacheControl cacheControl(Supplier<?> value) {
 		return CacheControl.of(value);
 	}
 
@@ -457,7 +457,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ClientVersion clientVersion(String value) {
+	public static final ClientVersion clientVersion(String value) {
 		return ClientVersion.of(value);
 	}
 
@@ -473,7 +473,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ClientVersion clientVersion(Object value) {
+	public static final ClientVersion clientVersion(Object value) {
 		return ClientVersion.of(value);
 	}
 
@@ -492,7 +492,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ClientVersion clientVersion(Supplier<?> value) {
+	public static final ClientVersion clientVersion(Supplier<?> value) {
 		return ClientVersion.of(value);
 	}
 
@@ -502,7 +502,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Connection connection(String value) {
+	public static final Connection connection(String value) {
 		return Connection.of(value);
 	}
 
@@ -518,7 +518,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Connection connection(Object value) {
+	public static final Connection connection(Object value) {
 		return Connection.of(value);
 	}
 
@@ -538,7 +538,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Connection connection(Supplier<?> value) {
+	public static final Connection connection(Supplier<?> value) {
 		return Connection.of(value);
 	}
 
@@ -548,7 +548,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentDisposition contentDisposition(String value) {
+	public static final ContentDisposition contentDisposition(String value) {
 		return ContentDisposition.of(value);
 	}
 
@@ -564,7 +564,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentDisposition contentDisposition(Object value) {
+	public static final ContentDisposition contentDisposition(Object value) {
 		return ContentDisposition.of(value);
 	}
 
@@ -583,7 +583,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentDisposition contentDisposition(Supplier<?> value) {
+	public static final ContentDisposition contentDisposition(Supplier<?> value) {
 		return ContentDisposition.of(value);
 	}
 
@@ -593,7 +593,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentEncoding contentEncoding(String value) {
+	public static final ContentEncoding contentEncoding(String value) {
 		return ContentEncoding.of(value);
 	}
 
@@ -609,7 +609,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentEncoding contentEncoding(Object value) {
+	public static final ContentEncoding contentEncoding(Object value) {
 		return ContentEncoding.of(value);
 	}
 
@@ -628,7 +628,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentEncoding contentEncoding(Supplier<?> value) {
+	public static final ContentEncoding contentEncoding(Supplier<?> value) {
 		return ContentEncoding.of(value);
 	}
 
@@ -638,7 +638,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLanguage contentLanguage(String value) {
+	public static final ContentLanguage contentLanguage(String value) {
 		return ContentLanguage.of(value);
 	}
 
@@ -657,7 +657,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLanguage contentLanguage(Object value) {
+	public static final ContentLanguage contentLanguage(Object value) {
 		return ContentLanguage.of(value);
 	}
 
@@ -679,7 +679,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLanguage contentLanguage(Supplier<?> value) {
+	public static final ContentLanguage contentLanguage(Supplier<?> value) {
 		return ContentLanguage.of(value);
 	}
 
@@ -689,7 +689,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLength contentLength(String value) {
+	public static final ContentLength contentLength(String value) {
 		return ContentLength.of(value);
 	}
 
@@ -706,7 +706,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLength contentLength(Object value) {
+	public static final ContentLength contentLength(Object value) {
 		return ContentLength.of(value);
 	}
 
@@ -726,7 +726,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLength contentLength(Supplier<?> value) {
+	public static final ContentLength contentLength(Supplier<?> value) {
 		return ContentLength.of(value);
 	}
 
@@ -736,7 +736,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLocation contentLocation(String value) {
+	public static final ContentLocation contentLocation(String value) {
 		return ContentLocation.of(value);
 	}
 
@@ -752,7 +752,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLocation contentLocation(Object value) {
+	public static final ContentLocation contentLocation(Object value) {
 		return ContentLocation.of(value);
 	}
 
@@ -771,7 +771,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentLocation contentLocation(Supplier<?> value) {
+	public static final ContentLocation contentLocation(Supplier<?> value) {
 		return ContentLocation.of(value);
 	}
 
@@ -781,7 +781,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentRange contentRange(String value) {
+	public static final ContentRange contentRange(String value) {
 		return ContentRange.of(value);
 	}
 
@@ -797,7 +797,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentRange contentRange(Object value) {
+	public static final ContentRange contentRange(Object value) {
 		return ContentRange.of(value);
 	}
 
@@ -816,7 +816,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentRange contentRange(Supplier<?> value) {
+	public static final ContentRange contentRange(Supplier<?> value) {
 		return ContentRange.of(value);
 	}
 
@@ -826,7 +826,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentType contentType(String value) {
+	public static final ContentType contentType(String value) {
 		return ContentType.of(value);
 	}
 
@@ -836,7 +836,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentType contentType(MediaType value) {
+	public static final ContentType contentType(MediaType value) {
 		return ContentType.of(value);
 	}
 
@@ -853,7 +853,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentType contentType(Object value) {
+	public static final ContentType contentType(Object value) {
 		return ContentType.of(value);
 	}
 
@@ -873,7 +873,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ContentType contentType(Supplier<?> value) {
+	public static final ContentType contentType(Supplier<?> value) {
 		return ContentType.of(value);
 	}
 
@@ -883,7 +883,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Date date(String value) {
+	public static final Date date(String value) {
 		return Date.of(value);
 	}
 
@@ -901,7 +901,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Date date(Object value) {
+	public static final Date date(Object value) {
 		return Date.of(value);
 	}
 
@@ -923,7 +923,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Date date(Supplier<?> value) {
+	public static final Date date(Supplier<?> value) {
 		return Date.of(value);
 	}
 
@@ -933,7 +933,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ETag eTag(String value) {
+	public static final ETag eTag(String value) {
 		return ETag.of(value);
 	}
 
@@ -949,7 +949,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ETag eTag(Object value) {
+	public static final ETag eTag(Object value) {
 		return ETag.of(value);
 	}
 
@@ -968,7 +968,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ETag eTag(Supplier<?> value) {
+	public static final ETag eTag(Supplier<?> value) {
 		return ETag.of(value);
 	}
 
@@ -978,7 +978,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Expect expect(String value) {
+	public static final Expect expect(String value) {
 		return Expect.of(value);
 	}
 
@@ -994,7 +994,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Expect expect(Object value) {
+	public static final Expect expect(Object value) {
 		return Expect.of(value);
 	}
 
@@ -1013,7 +1013,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Expect expect(Supplier<?> value) {
+	public static final Expect expect(Supplier<?> value) {
 		return Expect.of(value);
 	}
 
@@ -1023,7 +1023,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Expires expires(String value) {
+	public static final Expires expires(String value) {
 		return Expires.of(value);
 	}
 
@@ -1041,7 +1041,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Expires expires(Object value) {
+	public static final Expires expires(Object value) {
 		return Expires.of(value);
 	}
 
@@ -1062,7 +1062,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Expires expires(Supplier<?> value) {
+	public static final Expires expires(Supplier<?> value) {
 		return Expires.of(value);
 	}
 
@@ -1072,7 +1072,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Forwarded forwarded(String value) {
+	public static final Forwarded forwarded(String value) {
 		return Forwarded.of(value);
 	}
 
@@ -1088,7 +1088,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Forwarded forwarded(Object value) {
+	public static final Forwarded forwarded(Object value) {
 		return Forwarded.of(value);
 	}
 
@@ -1107,7 +1107,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Forwarded forwarded(Supplier<?> value) {
+	public static final Forwarded forwarded(Supplier<?> value) {
 		return Forwarded.of(value);
 	}
 
@@ -1117,7 +1117,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static From from(String value) {
+	public static final From from(String value) {
 		return From.of(value);
 	}
 
@@ -1133,7 +1133,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static From from(Object value) {
+	public static final From from(Object value) {
 		return From.of(value);
 	}
 
@@ -1152,7 +1152,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static From from(Supplier<?> value) {
+	public static final From from(Supplier<?> value) {
 		return From.of(value);
 	}
 
@@ -1162,7 +1162,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Host host(String value) {
+	public static final Host host(String value) {
 		return Host.of(value);
 	}
 
@@ -1178,7 +1178,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Host host(Object value) {
+	public static final Host host(Object value) {
 		return Host.of(value);
 	}
 
@@ -1197,7 +1197,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Host host(Supplier<?> value) {
+	public static final Host host(Supplier<?> value) {
 		return Host.of(value);
 	}
 
@@ -1207,7 +1207,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfMatch ifMatch(String value) {
+	public static final IfMatch ifMatch(String value) {
 		return IfMatch.of(value);
 	}
 
@@ -1225,7 +1225,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfMatch ifMatch(Object value) {
+	public static final IfMatch ifMatch(Object value) {
 		return IfMatch.of(value);
 	}
 
@@ -1246,7 +1246,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfMatch ifMatch(Supplier<?> value) {
+	public static final IfMatch ifMatch(Supplier<?> value) {
 		return IfMatch.of(value);
 	}
 
@@ -1256,7 +1256,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfModifiedSince ifModifiedSince(String value) {
+	public static final IfModifiedSince ifModifiedSince(String value) {
 		return IfModifiedSince.of(value);
 	}
 
@@ -1274,7 +1274,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfModifiedSince ifModifiedSince(Object value) {
+	public static final IfModifiedSince ifModifiedSince(Object value) {
 		return IfModifiedSince.of(value);
 	}
 
@@ -1295,7 +1295,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfModifiedSince ifModifiedSince(Supplier<?> value) {
+	public static final IfModifiedSince ifModifiedSince(Supplier<?> value) {
 		return IfModifiedSince.of(value);
 	}
 
@@ -1305,7 +1305,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfNoneMatch ifNoneMatch(String value) {
+	public static final IfNoneMatch ifNoneMatch(String value) {
 		return IfNoneMatch.of(value);
 	}
 
@@ -1323,7 +1323,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfNoneMatch ifNoneMatch(Object value) {
+	public static final IfNoneMatch ifNoneMatch(Object value) {
 		return IfNoneMatch.of(value);
 	}
 
@@ -1344,7 +1344,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfNoneMatch ifNoneMatch(Supplier<?> value) {
+	public static final IfNoneMatch ifNoneMatch(Supplier<?> value) {
 		return IfNoneMatch.of(value);
 	}
 
@@ -1354,7 +1354,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfRange ifRange(String value) {
+	public static final IfRange ifRange(String value) {
 		return IfRange.of(value);
 	}
 
@@ -1370,7 +1370,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfRange ifRange(Object value) {
+	public static final IfRange ifRange(Object value) {
 		return IfRange.of(value);
 	}
 
@@ -1389,7 +1389,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfRange ifRange(Supplier<?> value) {
+	public static final IfRange ifRange(Supplier<?> value) {
 		return IfRange.of(value);
 	}
 
@@ -1399,7 +1399,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfUnmodifiedSince ifUnmodifiedSince(String value) {
+	public static final IfUnmodifiedSince ifUnmodifiedSince(String value) {
 		return IfUnmodifiedSince.of(value);
 	}
 
@@ -1417,7 +1417,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfUnmodifiedSince ifUnmodifiedSince(Object value) {
+	public static final IfUnmodifiedSince ifUnmodifiedSince(Object value) {
 		return IfUnmodifiedSince.of(value);
 	}
 
@@ -1438,7 +1438,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static IfUnmodifiedSince ifUnmodifiedSince(Supplier<?> value) {
+	public static final IfUnmodifiedSince ifUnmodifiedSince(Supplier<?> value) {
 		return IfUnmodifiedSince.of(value);
 	}
 
@@ -1448,7 +1448,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static LastModified lastModified(String value) {
+	public static final LastModified lastModified(String value) {
 		return LastModified.of(value);
 	}
 
@@ -1466,7 +1466,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static LastModified lastModified(Object value) {
+	public static final LastModified lastModified(Object value) {
 		return LastModified.of(value);
 	}
 
@@ -1487,7 +1487,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static LastModified lastModified(Supplier<?> value) {
+	public static final LastModified lastModified(Supplier<?> value) {
 		return LastModified.of(value);
 	}
 
@@ -1497,7 +1497,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Location location(String value) {
+	public static final Location location(String value) {
 		return Location.of(value);
 	}
 
@@ -1513,7 +1513,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Location location(Object value) {
+	public static final Location location(Object value) {
 		return Location.of(value);
 	}
 
@@ -1532,7 +1532,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Location location(Supplier<?> value) {
+	public static final Location location(Supplier<?> value) {
 		return Location.of(value);
 	}
 
@@ -1542,7 +1542,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static MaxForwards maxForwards(String value) {
+	public static final MaxForwards maxForwards(String value) {
 		return MaxForwards.of(value);
 	}
 
@@ -1559,7 +1559,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static MaxForwards maxForwards(Object value) {
+	public static final MaxForwards maxForwards(Object value) {
 		return MaxForwards.of(value);
 	}
 
@@ -1579,7 +1579,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static MaxForwards maxForwards(Supplier<?> value) {
+	public static final MaxForwards maxForwards(Supplier<?> value) {
 		return MaxForwards.of(value);
 	}
 
@@ -1589,7 +1589,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace noTrace(String value) {
+	public static final NoTrace noTrace(String value) {
 		return NoTrace.of(value);
 	}
 
@@ -1605,7 +1605,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace noTrace(Object value) {
+	public static final NoTrace noTrace(Object value) {
 		return NoTrace.of(value);
 	}
 
@@ -1624,7 +1624,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace noTrace(Supplier<?> value) {
+	public static final NoTrace noTrace(Supplier<?> value) {
 		return NoTrace.of(value);
 	}
 
@@ -1634,7 +1634,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Origin origin(String value) {
+	public static final Origin origin(String value) {
 		return Origin.of(value);
 	}
 
@@ -1650,7 +1650,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Origin origin(Object value) {
+	public static final Origin origin(Object value) {
 		return Origin.of(value);
 	}
 
@@ -1669,7 +1669,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Origin origin(Supplier<?> value) {
+	public static final Origin origin(Supplier<?> value) {
 		return Origin.of(value);
 	}
 
@@ -1679,7 +1679,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Pragma pragma(String value) {
+	public static final Pragma pragma(String value) {
 		return Pragma.of(value);
 	}
 
@@ -1695,7 +1695,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Pragma pragma(Object value) {
+	public static final Pragma pragma(Object value) {
 		return Pragma.of(value);
 	}
 
@@ -1714,7 +1714,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Pragma pragma(Supplier<?> value) {
+	public static final Pragma pragma(Supplier<?> value) {
 		return Pragma.of(value);
 	}
 
@@ -1724,7 +1724,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ProxyAuthenticate proxyAuthenticate(String value) {
+	public static final ProxyAuthenticate proxyAuthenticate(String value) {
 		return ProxyAuthenticate.of(value);
 	}
 
@@ -1740,7 +1740,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ProxyAuthenticate proxyAuthenticate(Object value) {
+	public static final ProxyAuthenticate proxyAuthenticate(Object value) {
 		return ProxyAuthenticate.of(value);
 	}
 
@@ -1759,7 +1759,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ProxyAuthenticate proxyAuthenticate(Supplier<?> value) {
+	public static final ProxyAuthenticate proxyAuthenticate(Supplier<?> value) {
 		return ProxyAuthenticate.of(value);
 	}
 
@@ -1769,7 +1769,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ProxyAuthorization proxyAuthorization(String value) {
+	public static final ProxyAuthorization proxyAuthorization(String value) {
 		return ProxyAuthorization.of(value);
 	}
 
@@ -1785,7 +1785,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ProxyAuthorization proxyAuthorization(Object value) {
+	public static final ProxyAuthorization proxyAuthorization(Object value) {
 		return ProxyAuthorization.of(value);
 	}
 
@@ -1804,7 +1804,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static ProxyAuthorization proxyAuthorization(Supplier<?> value) {
+	public static final ProxyAuthorization proxyAuthorization(Supplier<?> value) {
 		return ProxyAuthorization.of(value);
 	}
 
@@ -1814,7 +1814,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Range range(String value) {
+	public static final Range range(String value) {
 		return Range.of(value);
 	}
 
@@ -1830,7 +1830,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Range range(Object value) {
+	public static final Range range(Object value) {
 		return Range.of(value);
 	}
 
@@ -1849,7 +1849,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Range range(Supplier<?> value) {
+	public static final Range range(Supplier<?> value) {
 		return Range.of(value);
 	}
 
@@ -1859,7 +1859,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Referer referer(String value) {
+	public static final Referer referer(String value) {
 		return Referer.of(value);
 	}
 
@@ -1875,7 +1875,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Referer referer(Object value) {
+	public static final Referer referer(Object value) {
 		return Referer.of(value);
 	}
 
@@ -1894,7 +1894,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Referer referer(Supplier<?> value) {
+	public static final Referer referer(Supplier<?> value) {
 		return Referer.of(value);
 	}
 
@@ -1904,7 +1904,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static RetryAfter retryAfter(String value) {
+	public static final RetryAfter retryAfter(String value) {
 		return RetryAfter.of(value);
 	}
 
@@ -1920,7 +1920,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static RetryAfter retryAfter(Object value) {
+	public static final RetryAfter retryAfter(Object value) {
 		return RetryAfter.of(value);
 	}
 
@@ -1939,7 +1939,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static RetryAfter retryAfter(Supplier<?> value) {
+	public static final RetryAfter retryAfter(Supplier<?> value) {
 		return RetryAfter.of(value);
 	}
 
@@ -1949,7 +1949,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Server server(String value) {
+	public static final Server server(String value) {
 		return Server.of(value);
 	}
 
@@ -1965,7 +1965,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Server server(Object value) {
+	public static final Server server(Object value) {
 		return Server.of(value);
 	}
 
@@ -1984,7 +1984,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Server server(Supplier<?> value) {
+	public static final Server server(Supplier<?> value) {
 		return Server.of(value);
 	}
 
@@ -1994,7 +1994,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static TE te(String value) {
+	public static final TE te(String value) {
 		return TE.of(value);
 	}
 
@@ -2011,7 +2011,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static TE te(Object value) {
+	public static final TE te(Object value) {
 		return TE.of(value);
 	}
 
@@ -2031,7 +2031,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static TE te(Supplier<?> value) {
+	public static final TE te(Supplier<?> value) {
 		return TE.of(value);
 	}
 
@@ -2041,7 +2041,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Trailer trailer(String value) {
+	public static final Trailer trailer(String value) {
 		return Trailer.of(value);
 	}
 
@@ -2051,7 +2051,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Trailer trailer(Object value) {
+	public static final Trailer trailer(Object value) {
 		return Trailer.of(value);
 	}
 
@@ -2070,7 +2070,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Trailer trailer(Supplier<?> value) {
+	public static final Trailer trailer(Supplier<?> value) {
 		return Trailer.of(value);
 	}
 
@@ -2086,7 +2086,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static TransferEncoding transferEncoding(String value) {
+	public static final TransferEncoding transferEncoding(String value) {
 		return TransferEncoding.of(value);
 	}
 
@@ -2102,7 +2102,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static TransferEncoding transferEncoding(Object value) {
+	public static final TransferEncoding transferEncoding(Object value) {
 		return TransferEncoding.of(value);
 	}
 
@@ -2121,7 +2121,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static TransferEncoding transferEncoding(Supplier<?> value) {
+	public static final TransferEncoding transferEncoding(Supplier<?> value) {
 		return TransferEncoding.of(value);
 	}
 
@@ -2131,7 +2131,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Upgrade upgrade(String value) {
+	public static final Upgrade upgrade(String value) {
 		return Upgrade.of(value);
 	}
 
@@ -2150,7 +2150,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Upgrade upgrade(Object value) {
+	public static final Upgrade upgrade(Object value) {
 		return Upgrade.of(value);
 	}
 
@@ -2172,7 +2172,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Upgrade upgrade(Supplier<?> value) {
+	public static final Upgrade upgrade(Supplier<?> value) {
 		return Upgrade.of(value);
 	}
 
@@ -2182,7 +2182,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static UserAgent userAgent(String value) {
+	public static final UserAgent userAgent(String value) {
 		return UserAgent.of(value);
 	}
 
@@ -2198,7 +2198,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static UserAgent userAgent(Object value) {
+	public static final UserAgent userAgent(Object value) {
 		return UserAgent.of(value);
 	}
 
@@ -2217,7 +2217,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static UserAgent userAgent(Supplier<?> value) {
+	public static final UserAgent userAgent(Supplier<?> value) {
 		return UserAgent.of(value);
 	}
 
@@ -2227,7 +2227,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Vary vary(String value) {
+	public static final Vary vary(String value) {
 		return Vary.of(value);
 	}
 
@@ -2243,7 +2243,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Vary vary(Object value) {
+	public static final Vary vary(Object value) {
 		return Vary.of(value);
 	}
 
@@ -2262,7 +2262,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Vary vary(Supplier<?> value) {
+	public static final Vary vary(Supplier<?> value) {
 		return Vary.of(value);
 	}
 
@@ -2272,7 +2272,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Via via(String value) {
+	public static final Via via(String value) {
 		return Via.of(value);
 	}
 
@@ -2291,7 +2291,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Via via(Object value) {
+	public static final Via via(Object value) {
 		return Via.of(value);
 	}
 
@@ -2313,7 +2313,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Via via(Supplier<?> value) {
+	public static final Via via(Supplier<?> value) {
 		return Via.of(value);
 	}
 
@@ -2323,7 +2323,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Warning warning(String value) {
+	public static final Warning warning(String value) {
 		return Warning.of(value);
 	}
 
@@ -2339,7 +2339,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Warning warning(Object value) {
+	public static final Warning warning(Object value) {
 		return Warning.of(value);
 	}
 
@@ -2358,7 +2358,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Warning warning(Supplier<?> value) {
+	public static final Warning warning(Supplier<?> value) {
 		return Warning.of(value);
 	}
 
@@ -2368,7 +2368,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static WwwAuthenticate wwwAuthenticate(String value) {
+	public static final WwwAuthenticate wwwAuthenticate(String value) {
 		return WwwAuthenticate.of(value);
 	}
 
@@ -2384,7 +2384,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static WwwAuthenticate wwwAuthenticate(Object value) {
+	public static final WwwAuthenticate wwwAuthenticate(Object value) {
 		return WwwAuthenticate.of(value);
 	}
 
@@ -2403,7 +2403,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static WwwAuthenticate wwwAuthenticate(Supplier<?> value) {
+	public static final WwwAuthenticate wwwAuthenticate(Supplier<?> value) {
 		return WwwAuthenticate.of(value);
 	}
 
@@ -2418,7 +2418,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicBooleanHeader booleanHeader(String name, String value) {
+	public static final BasicBooleanHeader booleanHeader(String name, String value) {
 		return BasicBooleanHeader.of(name, value);
 	}
 
@@ -2436,7 +2436,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicBooleanHeader booleanHeader(String name, Object value) {
+	public static final BasicBooleanHeader booleanHeader(String name, Object value) {
 		return BasicBooleanHeader.of(name, value);
 	}
 
@@ -2457,7 +2457,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicBooleanHeader booleanHeader(String name, Supplier<?> value) {
+	public static final BasicBooleanHeader booleanHeader(String name, Supplier<?> value) {
 		return BasicBooleanHeader.of(name, value);
 	}
 
@@ -2468,7 +2468,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicCsvArrayHeader csvArrayHeader(String name, String value) {
+	public static final BasicCsvArrayHeader csvArrayHeader(String name, String value) {
 		return BasicCsvArrayHeader.of(name, value);
 	}
 
@@ -2488,7 +2488,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicCsvArrayHeader csvArrayHeader(String name, Object value) {
+	public static final BasicCsvArrayHeader csvArrayHeader(String name, Object value) {
 		return BasicCsvArrayHeader.of(name, value);
 	}
 
@@ -2511,7 +2511,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicCsvArrayHeader csvArrayHeader(String name, Supplier<?> value) {
+	public static final BasicCsvArrayHeader csvArrayHeader(String name, Supplier<?> value) {
 		return BasicCsvArrayHeader.of(name, value);
 	}
 
@@ -2522,7 +2522,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicDateHeader dateHeader(String name, String value) {
+	public static final BasicDateHeader dateHeader(String name, String value) {
 		return BasicDateHeader.of(name, value);
 	}
 
@@ -2541,7 +2541,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicDateHeader dateHeader(String name, Object value) {
+	public static final BasicDateHeader dateHeader(String name, Object value) {
 		return BasicDateHeader.of(name, value);
 	}
 
@@ -2563,7 +2563,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicDateHeader dateHeader(String name, Supplier<?> value) {
+	public static final BasicDateHeader dateHeader(String name, Supplier<?> value) {
 		return BasicDateHeader.of(name, value);
 	}
 
@@ -2573,7 +2573,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug debug(String value) {
+	public static final Debug debug(String value) {
 		return Debug.of(value);
 	}
 
@@ -2589,7 +2589,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug debug(Object value) {
+	public static final Debug debug(Object value) {
 		return Debug.of(value);
 	}
 
@@ -2608,7 +2608,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug debug(Supplier<?> value) {
+	public static final Debug debug(Supplier<?> value) {
 		return Debug.of(value);
 	}
 
@@ -2619,7 +2619,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicEntityTagArrayHeader entityTagArrayHeader(String name, String value) {
+	public static final BasicEntityTagArrayHeader entityTagArrayHeader(String name, String value) {
 		return BasicEntityTagArrayHeader.of(name, value);
 	}
 
@@ -2638,7 +2638,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicEntityTagArrayHeader entityTagArrayHeader(String name, Object value) {
+	public static final BasicEntityTagArrayHeader entityTagArrayHeader(String name, Object value) {
 		return BasicEntityTagArrayHeader.of(name, value);
 	}
 
@@ -2660,7 +2660,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicEntityTagArrayHeader entityTagArrayHeader(String name, Supplier<?> value) {
+	public static final BasicEntityTagArrayHeader entityTagArrayHeader(String name, Supplier<?> value) {
 		return BasicEntityTagArrayHeader.of(name, value);
 	}
 
@@ -2671,7 +2671,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicEntityTagHeader entityTagHeader(String name, String value) {
+	public static final BasicEntityTagHeader entityTagHeader(String name, String value) {
 		return BasicEntityTagHeader.of(name, value);
 	}
 
@@ -2690,7 +2690,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicEntityTagHeader entityTagHeader(String name, Object value) {
+	public static final BasicEntityTagHeader entityTagHeader(String name, Object value) {
 		return BasicEntityTagHeader.of(name, value);
 	}
 
@@ -2712,7 +2712,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicEntityTagHeader entityTagHeader(String name, Supplier<?> value) {
+	public static final BasicEntityTagHeader entityTagHeader(String name, Supplier<?> value) {
 		return BasicEntityTagHeader.of(name, value);
 	}
 
@@ -2723,7 +2723,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicIntegerHeader integerHeader(String name, String value) {
+	public static final BasicIntegerHeader integerHeader(String name, String value) {
 		return BasicIntegerHeader.of(name, value);
 	}
 
@@ -2741,7 +2741,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicIntegerHeader integerHeader(String name, Object value) {
+	public static final BasicIntegerHeader integerHeader(String name, Object value) {
 		return BasicIntegerHeader.of(name, value);
 	}
 
@@ -2762,7 +2762,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicIntegerHeader integerHeader(String name, Supplier<?> value) {
+	public static final BasicIntegerHeader integerHeader(String name, Supplier<?> value) {
 		return BasicIntegerHeader.of(name, value);
 	}
 
@@ -2773,7 +2773,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicLongHeader longHeader(String name, String value) {
+	public static final BasicLongHeader longHeader(String name, String value) {
 		return BasicLongHeader.of(name, value);
 	}
 
@@ -2791,7 +2791,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicLongHeader longHeader(String name, Object value) {
+	public static final BasicLongHeader longHeader(String name, Object value) {
 		return BasicLongHeader.of(name, value);
 	}
 
@@ -2812,7 +2812,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicLongHeader longHeader(String name, Supplier<?> value) {
+	public static final BasicLongHeader longHeader(String name, Supplier<?> value) {
 		return BasicLongHeader.of(name, value);
 	}
 
@@ -2823,7 +2823,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, String value) {
+	public static final BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, String value) {
 		return BasicMediaRangeArrayHeader.of(name, value);
 	}
 
@@ -2840,7 +2840,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, Object value) {
+	public static final BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, Object value) {
 		return BasicMediaRangeArrayHeader.of(name, value);
 	}
 
@@ -2860,7 +2860,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, Supplier<?> value) {
+	public static final BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, Supplier<?> value) {
 		return BasicMediaRangeArrayHeader.of(name, value);
 	}
 
@@ -2871,7 +2871,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicMediaTypeHeader mediaTypeHeader(String name, String value) {
+	public static final BasicMediaTypeHeader mediaTypeHeader(String name, String value) {
 		return BasicMediaTypeHeader.of(name, value);
 	}
 
@@ -2888,7 +2888,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicMediaTypeHeader mediaTypeHeader(String name, Object value) {
+	public static final BasicMediaTypeHeader mediaTypeHeader(String name, Object value) {
 		return BasicMediaTypeHeader.of(name, value);
 	}
 
@@ -2908,7 +2908,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicMediaTypeHeader mediaTypeHeader(String name, Supplier<?> value) {
+	public static final BasicMediaTypeHeader mediaTypeHeader(String name, Supplier<?> value) {
 		return BasicMediaTypeHeader.of(name, value);
 	}
 
@@ -2918,7 +2918,7 @@ public class HttpHeaders {
 	 * @param pair The pair string.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicHeader basicHeader(String pair) {
+	public static final BasicHeader basicHeader(String pair) {
 		return BasicHeader.ofPair(pair);
 	}
 
@@ -2935,7 +2935,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicHeader basicHeader(String name, Object value) {
+	public static final BasicHeader basicHeader(String name, Object value) {
 		return BasicHeader.of(name, value);
 	}
 
@@ -2955,7 +2955,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicHeader basicHeader(String name, Supplier<?> value) {
+	public static final BasicHeader basicHeader(String name, Supplier<?> value) {
 		return BasicHeader.of(name, value);
 	}
 
@@ -2968,7 +2968,7 @@ public class HttpHeaders {
 	 * 	<br>Can be any POJO.
 	 * @return A new header bean.
 	 */
-	public static SerializedHeader serializedHeader(String name, Object value) {
+	public static final SerializedHeader serializedHeader(String name, Object value) {
 		return SerializedHeader.of(name, value);
 	}
 
@@ -2984,7 +2984,7 @@ public class HttpHeaders {
 	 * 	<br>Can be a supplier of any POJO.
 	 * @return A new header bean.
 	 */
-	public static SerializedHeader serializedHeader(String name, Supplier<?> value) {
+	public static final SerializedHeader serializedHeader(String name, Supplier<?> value) {
 		return SerializedHeader.of(name, value);
 	}
 
@@ -2995,7 +2995,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicStringHeader stringHeader(String name, String value) {
+	public static final BasicStringHeader stringHeader(String name, String value) {
 		return BasicStringHeader.of(name, value);
 	}
 
@@ -3012,7 +3012,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicStringHeader stringHeader(String name, Object value) {
+	public static final BasicStringHeader stringHeader(String name, Object value) {
 		return BasicStringHeader.of(name, value);
 	}
 
@@ -3032,7 +3032,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicStringHeader stringHeader(String name, Supplier<?> value) {
+	public static final BasicStringHeader stringHeader(String name, Supplier<?> value) {
 		return BasicStringHeader.of(name, value);
 	}
 
@@ -3043,7 +3043,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicStringRangeArrayHeader stringRangeArrayHeader(String name, String value) {
+	public static final BasicStringRangeArrayHeader stringRangeArrayHeader(String name, String value) {
 		return BasicStringRangeArrayHeader.of(name, value);
 	}
 
@@ -3061,7 +3061,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicStringRangeArrayHeader stringRangeArrayHeader(String name, Object value) {
+	public static final BasicStringRangeArrayHeader stringRangeArrayHeader(String name, Object value) {
 		return BasicStringRangeArrayHeader.of(name, value);
 	}
 
@@ -3082,7 +3082,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicStringRangeArrayHeader stringRangeArrayHeader(String name, Supplier<?> value) {
+	public static final BasicStringRangeArrayHeader stringRangeArrayHeader(String name, Supplier<?> value) {
 		return BasicStringRangeArrayHeader.of(name, value);
 	}
 
@@ -3093,7 +3093,7 @@ public class HttpHeaders {
 	 * @param value The header value.
 	 * @return A new (possibly cached) header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicUriHeader uriHeader(String name, String value) {
+	public static final BasicUriHeader uriHeader(String name, String value) {
 		return BasicUriHeader.of(name, value);
 	}
 
@@ -3110,7 +3110,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicUriHeader uriHeader(String name, Object value) {
+	public static final BasicUriHeader uriHeader(String name, Object value) {
 		return BasicUriHeader.of(name, value);
 	}
 
@@ -3130,7 +3130,7 @@ public class HttpHeaders {
 	 * 	</ul>
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static BasicUriHeader uriHeader(String name, Supplier<?> value) {
+	public static final BasicUriHeader uriHeader(String name, Supplier<?> value) {
 		return BasicUriHeader.of(name, value);
 	}
 }

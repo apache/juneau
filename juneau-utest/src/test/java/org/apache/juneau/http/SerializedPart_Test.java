@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 
@@ -24,7 +25,6 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.part.SerializedPart.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 
@@ -44,49 +44,49 @@ public class SerializedPart_Test {
 
 	@Test
 	public void a02_type() throws Exception {
-		SerializedPart x1 = of("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrown(()->x1.toString()).is("Validation error on request HEADER parameter 'Foo'='2'");
+		SerializedPart x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
+		assertThrown(()->x1.toString()).is("Validation error on request HEADER part 'Foo'='2'");
 	}
 
 	@Test
 	public void a03_serializer() throws Exception {
-		SerializedPart x1 = of("Foo",list("bar","baz")).serializer((HttpPartSerializer)null);
+		SerializedPart x1 = serializedPart("Foo",list("bar","baz")).serializer((HttpPartSerializer)null);
 		assertString(x1.getValue()).is("['bar','baz']");
-		SerializedPart x2 = of("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		SerializedPart x2 = serializedPart("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertString(x2.getValue()).is("bar,baz");
-		SerializedPart x3 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		SerializedPart x3 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertString(x3.getValue()).is("['bar','baz']");
-		SerializedPart x4 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializerIfNotSet((HttpPartSerializerSession)null);
+		SerializedPart x4 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializerIfNotSet((HttpPartSerializerSession)null);
 		assertString(x4.getValue()).is("bar,baz");
-		SerializedPart x5 = of("Foo",list("bar","baz")).serializerIfNotSet(OAPI_SERIALIZER.createPartSession(null));
+		SerializedPart x5 = serializedPart("Foo",list("bar","baz")).serializerIfNotSet(OAPI_SERIALIZER.createPartSession(null));
 		assertString(x5.getValue()).is("bar,baz");
 	}
 
 	@Test
 	public void a04_skipIfEmpty() throws Exception {
-		SerializedPart x1 = of("Foo",null).skipIfEmpty();
+		SerializedPart x1 = serializedPart("Foo",null).skipIfEmpty();
 		assertString(x1.getValue()).isNull();
-		SerializedPart x2 = of("Foo","").skipIfEmpty();
+		SerializedPart x2 = serializedPart("Foo","").skipIfEmpty();
 		assertString(x2.getValue()).isNull();
-		SerializedPart x3 = of("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
+		SerializedPart x3 = serializedPart("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrown(()->x3.getValue()).contains("Empty value not allowed.");
 	}
 
 	@Test
 	public void a05_getValue_defaults() throws Exception {
-		SerializedPart x1 = of("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
+		SerializedPart x1 = serializedPart("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertString(x1.getValue()).is("1");
 
-		SerializedPart x2 = of("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
+		SerializedPart x2 = serializedPart("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
 		assertString(x2.getValue()).isNull();
 
-		SerializedPart x3 = of("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
+		SerializedPart x3 = serializedPart("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
 		assertString(x3.getValue()).isNull();
 
-		SerializedPart x4 = of("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
+		SerializedPart x4 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
 		assertThrown(()->x4.getValue()).contains("Required value not provided.");
 
-		SerializedPart x5 = of("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
+		SerializedPart x5 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
 		assertThrown(()->x5.getValue()).contains("Bad");
 	}
 

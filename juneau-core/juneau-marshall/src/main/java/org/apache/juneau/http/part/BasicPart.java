@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
+ * Subclass of {@link Part} for serializing POJOs as URL-encoded form post entries.
  *
  * Provides the following features:
  * <ul class='spaced-list'>
@@ -50,8 +50,8 @@ public class BasicPart implements Part, Headerable {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
+	 * @param name The part name.
+	 * @param value The part value.
 	 * @return A new {@link BasicPart} object.
 	 */
 	public static BasicPart of(String name, Object value) {
@@ -59,10 +59,10 @@ public class BasicPart implements Part, Headerable {
 	}
 
 	/**
-	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 * Creates a {@link Part} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
 	 *
 	 * @param pair The pair string.
-	 * @return A new {@link NameValuePair} object.
+	 * @return A new {@link Part} object.
 	 */
 	public static BasicPart ofPair(String pair) {
 		if (pair == null)
@@ -79,10 +79,10 @@ public class BasicPart implements Part, Headerable {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
+	 * @param name The part name.
+	 * @param value The part value supplier.
 	 * @return A new {@link BasicPart} object.
 	 */
 	public static BasicPart of(String name, Supplier<?> value) {
@@ -90,11 +90,11 @@ public class BasicPart implements Part, Headerable {
 	}
 
 	/**
-	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
+	 * Utility method for converting an arbitrary object to a {@link Part}.
 	 *
 	 * @param o
-	 * 	The object to cast or convert to a {@link NameValuePair}.
-	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
+	 * 	The object to cast or convert to a {@link Part}.
+	 * @return Either the same object cast as a {@link Part} or converted to a {@link Part}.
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Part cast(Object o) {
@@ -114,7 +114,7 @@ public class BasicPart implements Part, Headerable {
 			Map.Entry e = (Map.Entry)o;
 			return BasicPart.of(stringify(e.getKey()), e.getValue());
 		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a NameValuePair.", o == null ? null : o.getClass().getName());
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
 	}
 
 	/**
@@ -131,8 +131,8 @@ public class BasicPart implements Part, Headerable {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
-	 * @param value The POJO to serialize to the parameter value.
+	 * @param name The part name.
+	 * @param value The POJO to serialize to The part value.
 	 */
 	public BasicPart(String name, Object value) {
 		this.name = name;
@@ -184,9 +184,9 @@ public class BasicPart implements Part, Headerable {
 	}
 
 	/**
-	 * Returns the raw value of the parameter.
+	 * Returns the raw value of the part.
 	 *
-	 * @return The raw value of the parameter.
+	 * @return The raw value of the part.
 	 */
 	public Object getRawValue() {
 		return unwrap(value);

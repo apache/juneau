@@ -72,18 +72,18 @@ public class PartSupplier implements Iterable<Part> {
 	/**
 	 * Creates an instance initialized with the specified pairs.
 	 *
-	 * @param parameters
-	 * 	Initial list of parameters.
-	 * 	<br>Must be an even number of parameters representing key/value pairs.
-	 * @throws RuntimeException If odd number of parameters were specified.
+	 * @param pairs
+	 * 	Initial list of parts.
+	 * 	<br>Must be an even number of parts representing key/value pairs.
+	 * @throws RuntimeException If odd number of parts were specified.
 	 * @return A new instance.
 	 */
-	public static PartSupplier ofPairs(Object...parameters) {
+	public static PartSupplier ofPairs(Object...pairs) {
 		PartSupplier s = PartSupplier.create();
-		if (parameters.length % 2 != 0)
-			throw new BasicRuntimeException("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
-		for (int i = 0; i < parameters.length; i+=2)
-			s.add(stringify(parameters[i]), parameters[i+1]);
+		if (pairs.length % 2 != 0)
+			throw new BasicRuntimeException("Odd number of pairs passed into PartSupplier.ofPairs()");
+		for (int i = 0; i < pairs.length; i+=2)
+			s.add(stringify(pairs[i]), pairs[i+1]);
 		return s;
 	}
 
@@ -107,7 +107,7 @@ public class PartSupplier implements Iterable<Part> {
 			else if (v instanceof PartSupplier)
 				s.add((PartSupplier)v);
 			else if (v != null)
-				throw new BasicRuntimeException("Invalid type passed to NameValuePairSupplier.of(): {0}", v.getClass().getName());
+				throw new BasicRuntimeException("Invalid type passed to PartSupplier.of(): {0}", v.getClass().getName());
 		}
 		return s;
 	}

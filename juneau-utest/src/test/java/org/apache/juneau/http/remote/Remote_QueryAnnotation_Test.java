@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.io.*;
 import java.math.*;
@@ -112,14 +113,14 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{x:'1'}",x.getX16(new StringReader("x=1")));
 		assertEquals("{x:'1'}",x.getX17(new StringInputStream("x=1")));
 		assertEquals("{x:'1'}",x.getX18(new StringInputStream("x=1")));
-		assertEquals("{foo:'bar'}",x.getX19(pairs("foo","bar")));
-		assertEquals("{foo:'bar'}",x.getX20(pairs("foo","bar")));
-		assertEquals("{foo:'bar'}",x.getX21(pair("foo","bar")));
-		assertEquals("{foo:'bar'}",x.getX22(pairs("foo","bar").toArray(new Part[0])));
-		assertEquals("{foo:'bar'}",x.getX23(pairs("foo","bar").toArray(new BasicPart[0])));
+		assertEquals("{foo:'bar'}",x.getX19(parts("foo","bar")));
+		assertEquals("{foo:'bar'}",x.getX20(parts("foo","bar")));
+		assertEquals("{foo:'bar'}",x.getX21(part("foo","bar")));
+		assertEquals("{foo:'bar'}",x.getX22(parts("foo","bar").toArray(new Part[0])));
+		assertEquals("{foo:'bar'}",x.getX23(parts("foo","bar").toArray(new BasicPart[0])));
 		assertEquals("{foo:'bar'}",x.getX24("foo=bar"));
 		assertEquals("{}",x.getX24(null));
-		assertEquals("{foo:'bar'}",x.getX25(AList.of(pair("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.getX25(AList.of(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -798,15 +799,15 @@ public class Remote_QueryAnnotation_Test {
 	public static class K3a {
 		@Query(aev=true)
 		public PartSupplier getA() {
-			return pairs("a1","v1","a2",123,"a3",null,"a4","");
+			return parts("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Query("*")
 		public PartSupplier getB() {
-			return pairs("b1","true","b2","123","b3","null");
+			return parts("b1","true","b2","123","b3","null");
 		}
 		@Query(n="*",aev=true)
 		public PartSupplier getC() {
-			return pairs("c1","v1","c2",123,"c3",null,"c4","");
+			return parts("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Query("*")
 		public PartSupplier getD() {
@@ -814,11 +815,11 @@ public class Remote_QueryAnnotation_Test {
 		}
 		@Query(aev=true)
 		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
+			return parts("e1","v1","e2",123,"e3",null,"e4","").toArray(new Part[0]);
 		}
 		@Query(aev=true)
 		public BasicPart[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
+			return parts("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
 		}
 	}
 
@@ -937,12 +938,12 @@ public class Remote_QueryAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static PartSupplier pairs(Object...pairs) {
+	private static PartSupplier parts(Object...pairs) {
 		return PartSupplier.ofPairs(pairs);
 	}
 
-	private static NameValuePair pair(String key,Object val) {
-		return BasicPart.of(key,val);
+	private static NameValuePair part(String key,Object val) {
+		return basicPart(key,val);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

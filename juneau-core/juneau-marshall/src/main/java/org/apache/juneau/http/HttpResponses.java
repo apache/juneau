@@ -300,7 +300,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<Continue> _continue() {
+	public static final HttpResponseBuilder<Continue> _continue() {
 		return Continue.create();
 	}
 
@@ -309,7 +309,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<Accepted> accepted() {
+	public static final HttpResponseBuilder<Accepted> accepted() {
 		return Accepted.create();
 	}
 
@@ -318,7 +318,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<AlreadyReported> alreadyReported() {
+	public static final HttpResponseBuilder<AlreadyReported> alreadyReported() {
 		return AlreadyReported.create();
 	}
 
@@ -327,7 +327,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<BadRequest> badRequest() {
+	public static final HttpExceptionBuilder<BadRequest> badRequest() {
 		return BadRequest.create();
 	}
 
@@ -336,7 +336,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<Conflict> conflict() {
+	public static final HttpExceptionBuilder<Conflict> conflict() {
 		return Conflict.create();
 	}
 
@@ -345,7 +345,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<Created> created() {
+	public static final HttpResponseBuilder<Created> created() {
 		return Created.create();
 	}
 
@@ -354,7 +354,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<EarlyHints> earlyHints() {
+	public static final HttpResponseBuilder<EarlyHints> earlyHints() {
 		return EarlyHints.create();
 	}
 
@@ -363,7 +363,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<ExpectationFailed> expectationFailed() {
+	public static final HttpExceptionBuilder<ExpectationFailed> expectationFailed() {
 		return ExpectationFailed.create();
 	}
 
@@ -372,7 +372,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<FailedDependency> failedDependency() {
+	public static final HttpExceptionBuilder<FailedDependency> failedDependency() {
 		return FailedDependency.create();
 	}
 
@@ -381,7 +381,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<Forbidden> forbidden() {
+	public static final HttpExceptionBuilder<Forbidden> forbidden() {
 		return Forbidden.create();
 	}
 
@@ -391,7 +391,7 @@ public class HttpResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<Found> found(String location) {
+	public static final HttpResponseBuilder<Found> found(String location) {
 		return Found.create().location(location);
 	}
 
@@ -400,7 +400,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<Gone> gone() {
+	public static final HttpExceptionBuilder<Gone> gone() {
 		return Gone.create();
 	}
 
@@ -409,7 +409,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<BasicHttpException> httpException() {
+	public static final HttpExceptionBuilder<BasicHttpException> httpException() {
 		return BasicHttpException.create(BasicHttpException.class);
 	}
 
@@ -418,7 +418,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<HttpVersionNotSupported> httpVersionNotSupported() {
+	public static final HttpExceptionBuilder<HttpVersionNotSupported> httpVersionNotSupported() {
 		return HttpVersionNotSupported.create();
 	}
 
@@ -427,7 +427,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<IMUsed> imUsed() {
+	public static final HttpResponseBuilder<IMUsed> imUsed() {
 		return IMUsed.create();
 	}
 
@@ -436,7 +436,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<InsufficientStorage> insufficientStorage() {
+	public static final HttpExceptionBuilder<InsufficientStorage> insufficientStorage() {
 		return InsufficientStorage.create();
 	}
 
@@ -445,7 +445,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<InternalServerError> internalServerError() {
+	public static final HttpExceptionBuilder<InternalServerError> internalServerError() {
 		return InternalServerError.create();
 	}
 
@@ -454,7 +454,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<LengthRequired> lengthRequired() {
+	public static final HttpExceptionBuilder<LengthRequired> lengthRequired() {
 		return LengthRequired.create();
 	}
 
@@ -463,7 +463,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<Locked> locked() {
+	public static final HttpExceptionBuilder<Locked> locked() {
 		return Locked.create();
 	}
 
@@ -472,7 +472,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<LoopDetected> loopDetected() {
+	public static final HttpExceptionBuilder<LoopDetected> loopDetected() {
 		return LoopDetected.create();
 	}
 
@@ -481,7 +481,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<MethodNotAllowed> methodNotAllowed() {
+	public static final HttpExceptionBuilder<MethodNotAllowed> methodNotAllowed() {
 		return MethodNotAllowed.create();
 	}
 
@@ -490,7 +490,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<MisdirectedRequest> misdirectedRequest() {
+	public static final HttpExceptionBuilder<MisdirectedRequest> misdirectedRequest() {
 		return MisdirectedRequest.create();
 	}
 	/**
@@ -499,7 +499,7 @@ public class HttpResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<MovedPermanently> movedPermanently(String location) {
+	public static final HttpResponseBuilder<MovedPermanently> movedPermanently(String location) {
 		return MovedPermanently.create().location(location);
 	}
 
@@ -508,7 +508,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<MultipleChoices> multipleChoices() {
+	public static final HttpResponseBuilder<MultipleChoices> multipleChoices() {
 		return MultipleChoices.create();
 	}
 
@@ -517,7 +517,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<MultiStatus> multiStatus() {
+	public static final HttpResponseBuilder<MultiStatus> multiStatus() {
 		return MultiStatus.create();
 	}
 
@@ -526,7 +526,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<NetworkAuthenticationRequired> networkAuthenticationRequired() {
+	public static final HttpExceptionBuilder<NetworkAuthenticationRequired> networkAuthenticationRequired() {
 		return NetworkAuthenticationRequired.create();
 	}
 
@@ -535,7 +535,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<NoContent> noContent() {
+	public static final HttpResponseBuilder<NoContent> noContent() {
 		return NoContent.create();
 	}
 
@@ -544,7 +544,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<NonAuthoritiveInformation> nonAuthoritiveInformation() {
+	public static final HttpResponseBuilder<NonAuthoritiveInformation> nonAuthoritiveInformation() {
 		return NonAuthoritiveInformation.create();
 	}
 
@@ -553,7 +553,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<NotAcceptable> notAcceptable() {
+	public static final HttpExceptionBuilder<NotAcceptable> notAcceptable() {
 		return NotAcceptable.create();
 	}
 
@@ -562,7 +562,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<NotExtended> notExtended() {
+	public static final HttpExceptionBuilder<NotExtended> notExtended() {
 		return NotExtended.create();
 	}
 
@@ -571,7 +571,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<NotFound> notFound() {
+	public static final HttpExceptionBuilder<NotFound> notFound() {
 		return NotFound.create();
 	}
 
@@ -580,7 +580,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<NotImplemented> notImplemented() {
+	public static final HttpExceptionBuilder<NotImplemented> notImplemented() {
 		return NotImplemented.create();
 	}
 
@@ -589,7 +589,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<NotModified> notModified() {
+	public static final HttpResponseBuilder<NotModified> notModified() {
 		return NotModified.create();
 	}
 
@@ -598,7 +598,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<Ok> ok() {
+	public static final HttpResponseBuilder<Ok> ok() {
 		return Ok.create();
 	}
 
@@ -607,7 +607,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<PartialContent> partialContent() {
+	public static final HttpResponseBuilder<PartialContent> partialContent() {
 		return PartialContent.create();
 	}
 
@@ -616,7 +616,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<PayloadTooLarge> payloadTooLarge() {
+	public static final HttpExceptionBuilder<PayloadTooLarge> payloadTooLarge() {
 		return PayloadTooLarge.create();
 	}
 
@@ -626,7 +626,7 @@ public class HttpResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<PermanentRedirect> permanentRedirect(String location) {
+	public static final HttpResponseBuilder<PermanentRedirect> permanentRedirect(String location) {
 		return PermanentRedirect.create().location(location);
 	}
 
@@ -635,7 +635,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<PreconditionFailed> preconditionFailed() {
+	public static final HttpExceptionBuilder<PreconditionFailed> preconditionFailed() {
 		return PreconditionFailed.create();
 	}
 
@@ -644,7 +644,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<PreconditionRequired> preconditionRequired() {
+	public static final HttpExceptionBuilder<PreconditionRequired> preconditionRequired() {
 		return PreconditionRequired.create();
 	}
 
@@ -653,7 +653,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<Processing> processing() {
+	public static final HttpResponseBuilder<Processing> processing() {
 		return Processing.create();
 	}
 
@@ -662,7 +662,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<RangeNotSatisfiable> rangeNotSatisfiable() {
+	public static final HttpExceptionBuilder<RangeNotSatisfiable> rangeNotSatisfiable() {
 		return RangeNotSatisfiable.create();
 	}
 
@@ -671,7 +671,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<RequestHeaderFieldsTooLarge> requestHeaderFieldsTooLarge() {
+	public static final HttpExceptionBuilder<RequestHeaderFieldsTooLarge> requestHeaderFieldsTooLarge() {
 		return RequestHeaderFieldsTooLarge.create();
 	}
 
@@ -680,7 +680,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<ResetContent> resetContent() {
+	public static final HttpResponseBuilder<ResetContent> resetContent() {
 		return ResetContent.create();
 	}
 
@@ -690,7 +690,7 @@ public class HttpResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<SeeOther> seeOther(String location) {
+	public static final HttpResponseBuilder<SeeOther> seeOther(String location) {
 		return SeeOther.create().location(location);
 	}
 
@@ -699,7 +699,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<ServiceUnavailable> serviceUnavailable() {
+	public static final HttpExceptionBuilder<ServiceUnavailable> serviceUnavailable() {
 		return ServiceUnavailable.create();
 	}
 
@@ -708,7 +708,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<SwitchingProtocols> switchingProtocols() {
+	public static final HttpResponseBuilder<SwitchingProtocols> switchingProtocols() {
 		return SwitchingProtocols.create();
 	}
 
@@ -718,7 +718,7 @@ public class HttpResponses {
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<TemporaryRedirect> temporaryRedirect(String location) {
+	public static final HttpResponseBuilder<TemporaryRedirect> temporaryRedirect(String location) {
 		return TemporaryRedirect.create().location(location);
 	}
 
@@ -727,7 +727,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<TooManyRequests> tooManyRequests() {
+	public static final HttpExceptionBuilder<TooManyRequests> tooManyRequests() {
 		return TooManyRequests.create();
 	}
 
@@ -736,7 +736,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<Unauthorized> unauthorized() {
+	public static final HttpExceptionBuilder<Unauthorized> unauthorized() {
 		return Unauthorized.create();
 	}
 
@@ -745,7 +745,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<UnavailableForLegalReasons> unavailableForLegalReasons() {
+	public static final HttpExceptionBuilder<UnavailableForLegalReasons> unavailableForLegalReasons() {
 		return UnavailableForLegalReasons.create();
 	}
 
@@ -754,7 +754,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<UnprocessableEntity> unprocessableEntity() {
+	public static final HttpExceptionBuilder<UnprocessableEntity> unprocessableEntity() {
 		return UnprocessableEntity.create();
 	}
 
@@ -763,7 +763,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<UnsupportedMediaType> unsupportedMediaType() {
+	public static final HttpExceptionBuilder<UnsupportedMediaType> unsupportedMediaType() {
 		return UnsupportedMediaType.create();
 	}
 
@@ -772,7 +772,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<UpgradeRequired> upgradeRequired() {
+	public static final HttpExceptionBuilder<UpgradeRequired> upgradeRequired() {
 		return UpgradeRequired.create();
 	}
 
@@ -781,7 +781,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<UriTooLong> uriTooLong() {
+	public static final HttpExceptionBuilder<UriTooLong> uriTooLong() {
 		return UriTooLong.create();
 	}
 
@@ -790,7 +790,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean.
 	 */
-	public static HttpResponseBuilder<UseProxy> useProxy() {
+	public static final HttpResponseBuilder<UseProxy> useProxy() {
 		return UseProxy.create();
 	}
 
@@ -799,7 +799,7 @@ public class HttpResponses {
 	 *
 	 * @return A new bean builder.
 	 */
-	public static HttpExceptionBuilder<VariantAlsoNegotiates> variantAlsoNegotiates() {
+	public static final HttpExceptionBuilder<VariantAlsoNegotiates> variantAlsoNegotiates() {
 		return VariantAlsoNegotiates.create();
 	}
 }

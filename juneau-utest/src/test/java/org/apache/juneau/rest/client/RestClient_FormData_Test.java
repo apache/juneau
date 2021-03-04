@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.io.*;
 import java.util.*;
@@ -101,9 +102,9 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDatas(part(null,"foo")).run().assertBody().is("null=foo");
 		client().build().post("/formData").formDatas(part(null,null)).run().assertBody().is("");
 
-		client().formDatas(SerializedPart.of("foo","bar").schema(null)).build().post("/formData").run().assertBody().is("foo=bar");
-		client().formDatas(SerializedPart.of("foo",null).schema(null)).build().post("/formData").run().assertBody().is("");
-		client().formDatas(SerializedPart.of("foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(serializedPart("foo","bar").schema(null)).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(serializedPart("foo",null).schema(null)).build().post("/formData").run().assertBody().is("");
+		client().formDatas(serializedPart("foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");
 
 		assertThrown(()->client().build().post("/formData").formDatas("bad")).is("Invalid type passed to formDatas(): java.lang.String");
 		assertThrown(()->client().formDatas(part("foo","bar"),"baz")).is("Invalid type passed to formData():  java.lang.String");
@@ -213,7 +214,7 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a12_badSerialization() throws Exception {
-		assertThrown(()->client().formData(SerializedPart.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
+		assertThrown(()->client().formData(serializedPart("Foo","bar").serializer(new A12())).build().get()).contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -221,7 +222,7 @@ public class RestClient_FormData_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static NameValuePair part(String name, Object val) {
-		return BasicPart.of(name, val);
+		return basicPart(name, val);
 	}
 
 	private static PartSupplier parts(Object...pairs) {

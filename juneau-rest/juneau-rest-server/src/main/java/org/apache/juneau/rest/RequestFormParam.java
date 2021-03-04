@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-
 import java.io.*;
 import java.time.*;
 import java.util.*;
@@ -195,12 +194,12 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicNamedUri}.
+	 * Returns the value of this parameter as a {@link BasicUriPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicNamedUri}, never <jk>null</jk>.
+	 * @return The value of this parameter as a {@link BasicUriPart}, never <jk>null</jk>.
 	 */
-	public BasicNamedUri asUriPart() {
-		return new BasicNamedUri(getName(), getValue());
+	public BasicUriPart asUriPart() {
+		return new BasicUriPart(getName(), getValue());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.http.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 
@@ -22,7 +23,6 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.part.BasicPart;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -141,7 +141,7 @@ public class MediaType implements Comparable<MediaType>  {
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q"))
 				break;
-			parameters.add(BasicPart.of(p.getName(), p.getValue()));
+			parameters.add(stringPart(p.getName(), p.getValue()));
 		}
 		this.parameters= parameters.toArray(new NameValuePair[parameters.size()]);
 

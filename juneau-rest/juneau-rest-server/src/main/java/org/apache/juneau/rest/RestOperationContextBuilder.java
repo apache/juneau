@@ -16,6 +16,7 @@ import static java.util.Arrays.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -26,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -208,7 +208,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultFormData(String name, Object value) {
-		return defaultFormData(BasicPart.of(name, value));
+		return defaultFormData(basicPart(name, value));
 	}
 
 	/**
@@ -227,7 +227,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultFormData(String name, Supplier<?> value) {
-		return defaultFormData(BasicPart.of(name, value));
+		return defaultFormData(basicPart(name, value));
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultQuery(String name, Object value) {
-		return defaultQuery(BasicPart.of(name, value));
+		return defaultQuery(basicPart(name, value));
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultQuery(String name, Supplier<?> value) {
-		return defaultQuery(BasicPart.of(name, value));
+		return defaultQuery(basicPart(name, value));
 	}
 
 	/**

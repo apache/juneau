@@ -32,9 +32,9 @@ public class BasicDatePart extends BasicPart {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
@@ -54,11 +54,11 @@ public class BasicDatePart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The part value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
@@ -79,8 +79,8 @@ public class BasicDatePart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
+	 * @param name The part name.
+	 * @param value The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
@@ -107,9 +107,9 @@ public class BasicDatePart extends BasicPart {
 	}
 
 	/**
-	 * Returns this parameter value as a {@link java.util.Calendar}.
+	 * Returns this part value as a {@link java.util.Calendar}.
 	 *
-	 * @return This parameter value as a {@link java.util.Calendar}, or {@link Optional#empty()} if the parameter could not be parsed.
+	 * @return This part value as a {@link java.util.Calendar}, or {@link Optional#empty()} if the part could not be parsed.
 	 */
 	public Optional<Calendar> asCalendar() {
 		ZonedDateTime zdt = getParsedValue();
@@ -117,9 +117,9 @@ public class BasicDatePart extends BasicPart {
 	}
 
 	/**
-	 * Returns this parameter value as a {@link java.util.Date}.
+	 * Returns this part value as a {@link java.util.Date}.
 	 *
-	 * @return This parameter value as a {@link java.util.Date}, or {@link Optional#empty()} if the parameter could not be parsed.
+	 * @return This part value as a {@link java.util.Date}, or {@link Optional#empty()} if the part could not be parsed.
 	 */
 	public Optional<java.util.Date> asDate() {
 		Calendar c = asCalendar().orElse(null);
@@ -127,16 +127,16 @@ public class BasicDatePart extends BasicPart {
 	}
 
 	/**
-	 * Returns this parameter value as a {@link ZonedDateTime}.
+	 * Returns this part value as a {@link ZonedDateTime}.
 	 *
-	 * @return This parameter value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the parameter could not be parsed.
+	 * @return This part value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the part could not be parsed.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
 		return ofNullable(getParsedValue());
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.

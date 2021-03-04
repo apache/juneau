@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.io.*;
 import java.util.*;
@@ -193,7 +194,7 @@ public class RestClient_Query_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static BasicPart part(String name, Object val) {
-		return BasicPart.of(name, val);
+		return basicPart(name, val);
 	}
 
 	private static PartSupplier parts(Object...pairs) {

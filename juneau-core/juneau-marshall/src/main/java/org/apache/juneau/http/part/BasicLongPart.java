@@ -30,9 +30,9 @@ public class BasicLongPart extends BasicPart {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -51,11 +51,11 @@ public class BasicLongPart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The part value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -75,9 +75,9 @@ public class BasicLongPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -98,16 +98,16 @@ public class BasicLongPart extends BasicPart {
 	}
 
 	/**
-	 * Returns the parameter value as a long.
+	 * Returns The part value as a long.
 	 *
-	 * @return The parameter value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The part value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<Long> asLong() {
 		return ofNullable(getParsedValue());
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.

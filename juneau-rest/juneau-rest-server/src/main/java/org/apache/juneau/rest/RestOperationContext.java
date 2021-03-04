@@ -22,6 +22,7 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -1466,7 +1467,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(BasicPart.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.appendUnique(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Query annotation");
 						}
@@ -1510,7 +1511,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(BasicPart.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.appendUnique(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @FormData annotation");
 						}

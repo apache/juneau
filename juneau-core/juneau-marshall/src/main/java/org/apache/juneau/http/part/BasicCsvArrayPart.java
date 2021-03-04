@@ -31,9 +31,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -54,11 +54,11 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The part value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -80,9 +80,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The part name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The part value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -108,10 +108,10 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this parameter contains the specified value.
+	 * Returns <jk>true</jk> if this part contains the specified value.
 	 *
 	 * @param val The value to check for.
-	 * @return <jk>true</jk> if this parameter contains the specified value.
+	 * @return <jk>true</jk> if this part contains the specified value.
 	 */
 	public boolean contains(String val) {
 		List<String> vv = getParsedValue();
@@ -123,10 +123,10 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this parameter contains the specified value using {@link String#equalsIgnoreCase(String)}.
+	 * Returns <jk>true</jk> if this part contains the specified value using {@link String#equalsIgnoreCase(String)}.
 	 *
 	 * @param val The value to check for.
-	 * @return <jk>true</jk> if this parameter contains the specified value.
+	 * @return <jk>true</jk> if this part contains the specified value.
 	 */
 	public boolean containsIgnoreCase(String val) {
 		List<String> vv = getParsedValue();
@@ -138,7 +138,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
+	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
@@ -148,9 +148,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	/**
-	 * Returns the contents of this parameter as a list of strings.
+	 * Returns the contents of this part as a list of strings.
 	 *
-	 * @return The contents of this parameter as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
+	 * @return The contents of this part as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
 		List<String> l = getParsedValue();

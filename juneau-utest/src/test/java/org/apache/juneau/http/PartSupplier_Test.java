@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
@@ -29,17 +30,17 @@ public class PartSupplier_Test {
 		PartSupplier x = PartSupplier.of();
 
 		assertObject(x.iterator()).asJson().is("[]");
-		x.add(pair("Foo","bar"));
+		x.add(part("Foo","bar"));
 		assertObject(x.iterator()).asJson().is("['Foo=bar']");
-		x.add(pair("Foo","baz"));
+		x.add(part("Foo","baz"));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 		x.add(PartSupplier.of());
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
-		x.add(PartSupplier.of(pair("Foo","qux")));
+		x.add(PartSupplier.of(part("Foo","qux")));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux']");
-		x.add(PartSupplier.of(pair("Foo","q2x"), pair("Foo","q3x")));
+		x.add(PartSupplier.of(part("Foo","q2x"), part("Foo","q3x")));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x']");
-		x.add(PartSupplier.of(PartSupplier.of(pair("Foo","q4x"),pair("Foo","q5x"))));
+		x.add(PartSupplier.of(PartSupplier.of(part("Foo","q4x"),part("Foo","q5x"))));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 		x.add((PartSupplier)null);
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
@@ -51,18 +52,18 @@ public class PartSupplier_Test {
 	public void a02_creators() {
 		PartSupplier x;
 
-		x = PartSupplier.of(pair("Foo","bar"), pair("Foo","baz"), null);
+		x = PartSupplier.of(part("Foo","bar"), part("Foo","baz"), null);
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		x = PartSupplier.of(AList.of(pair("Foo","bar"), pair("Foo","baz"), null));
+		x = PartSupplier.of(AList.of(part("Foo","bar"), part("Foo","baz"), null));
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
 		x = PartSupplier.ofPairs("Foo","bar","Foo","baz");
 		assertObject(x.iterator()).asJson().is("['Foo=bar','Foo=baz']");
 
-		assertThrown(()->PartSupplier.ofPairs("Foo")).is("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
+		assertThrown(()->PartSupplier.ofPairs("Foo")).is("Odd number of pairs passed into PartSupplier.ofPairs()");
 
-		assertThrown(()->PartSupplier.of("Foo")).is("Invalid type passed to NameValuePairSupplier.of(): java.lang.String");
+		assertThrown(()->PartSupplier.of("Foo")).is("Invalid type passed to PartSupplier.of(): java.lang.String");
 	}
 
 	@Test
@@ -102,8 +103,8 @@ public class PartSupplier_Test {
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static Part pair(String name, Object val) {
-		return BasicPart.of(name, val);
+	private static Part part(String name, Object val) {
+		return basicPart(name, val);
 	}
 
 	private static HttpPartSerializerSession openApiSession() {

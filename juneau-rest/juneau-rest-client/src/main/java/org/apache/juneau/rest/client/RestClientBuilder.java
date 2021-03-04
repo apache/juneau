@@ -22,7 +22,6 @@ import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.oapi.OpenApiCommon.*;
 import static org.apache.juneau.uon.UonSerializer.*;
-
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;

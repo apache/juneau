@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-
 import java.time.*;
 import java.util.*;
 

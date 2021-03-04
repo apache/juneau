@@ -16,6 +16,8 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpParts.*;
+
 import java.io.*;
 import java.math.*;
 import java.util.*;
@@ -125,15 +127,15 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{x:'1'}",x.postX16(new StringReader("x=1")));
 		assertEquals("{x:'1'}",x.postX17(new StringInputStream("x=1")));
 		assertEquals("{x:'1'}",x.postX18(new StringInputStream("x=1")));
-		assertEquals("{foo:'bar'}",x.postX19(pairs("foo","bar")));
-		assertEquals("{foo:'bar'}",x.postX20(pairs("foo","bar")));
-		assertEquals("{foo:'bar'}",x.postX21(pair("foo","bar")));
+		assertEquals("{foo:'bar'}",x.postX19(parts("foo","bar")));
+		assertEquals("{foo:'bar'}",x.postX20(parts("foo","bar")));
+		assertEquals("{foo:'bar'}",x.postX21(part("foo","bar")));
 		assertEquals("{foo:'bar'}",x.postX22("foo=bar"));
 		assertEquals("{}",x.postX22(null));
 		assertEquals("{foo:'bar'}",x.postX23(new ByteArrayInputStream("foo=bar".getBytes())));
 		assertEquals("{foo:'bar'}",x.postX24(new StringReader("foo=bar")));
 		assertEquals("{f:'1'}",x.postX25(Bean2.create()));
-		assertEquals("{foo:'bar'}",x.postX26(AList.of(pair("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.postX26(AList.of(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -830,15 +832,15 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K3a {
 		@FormData
 		public PartSupplier getA() {
-			return pairs("a1","v1","a2",123,"a3",null,"a4","");
+			return parts("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@FormData("*")
 		public PartSupplier getB() {
-			return pairs("b1","true","b2","123","b3","null");
+			return parts("b1","true","b2","123","b3","null");
 		}
 		@FormData(n="*")
 		public PartSupplier getC() {
-			return pairs("c1","v1","c2",123,"c3",null,"c4","");
+			return parts("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@FormData("*")
 		public PartSupplier getD() {
@@ -846,11 +848,11 @@ public class Remote_FormDataAnnotation_Test {
 		}
 		@FormData
 		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray();
+			return parts("e1","v1","e2",123,"e3",null,"e4","").toArray();
 		}
 		@FormData
 		public BasicPart[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
+			return parts("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicPart[0]);
 		}
 	}
 
@@ -969,11 +971,11 @@ public class Remote_FormDataAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePair pair(String name, Object val) {
-		return BasicPart.of(name,val);
+	private static Part part(String name, Object val) {
+		return basicPart(name,val);
 	}
 
-	private static PartSupplier pairs(Object...pairs) {
+	private static PartSupplier parts(Object...pairs) {
 		return PartSupplier.ofPairs(pairs);
 	}
 
