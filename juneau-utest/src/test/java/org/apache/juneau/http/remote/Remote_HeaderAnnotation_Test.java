@@ -77,8 +77,8 @@ public class Remote_HeaderAnnotation_Test {
 		@RemoteOp(path="a") String getX12(@Header Map<String,Bean> b);
 		@RemoteOp(path="a") String getX13(@Header(n="x",f="uon") Map<String,Bean> b);
 		@RemoteOp(path="a") String getX14(@Header(format="uon") Map<String,Bean> b);
-		@RemoteOp(path="a") String getX15(@Header("*") HeaderSupplier b);
-		@RemoteOp(path="a") String getX16(@Header HeaderSupplier b);
+		@RemoteOp(path="a") String getX15(@Header("*") HeaderList b);
+		@RemoteOp(path="a") String getX16(@Header HeaderList b);
 		@RemoteOp(path="a") String getX17(@Header org.apache.http.Header b);
 		@RemoteOp(path="a") String getX18(@Header org.apache.http.Header[] b);
 		@RemoteOp(path="a") String getX19(@Header String b);
@@ -794,28 +794,28 @@ public class Remote_HeaderAnnotation_Test {
 
 	public static class K3a {
 		@Header(aev=true)
-		public HeaderSupplier getA() {
+		public HeaderList getA() {
 			return headers("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Header(value="*",aev=true)
-		public HeaderSupplier getB() {
+		public HeaderList getB() {
 			return headers("b1","true","b2","123","b3","null");
 		}
 		@Header(n="*",aev=true)
-		public HeaderSupplier getC() {
+		public HeaderList getC() {
 			return headers("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Header(value="*",aev=true)
-		public HeaderSupplier getD() {
+		public HeaderList getD() {
 			return null;
 		}
 		@Header(aev=true)
 		public org.apache.http.Header[] getE() {
-			return headers("e1","v1","e2",123,"e3",null,"e4","").toArray();
+			return headers("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new org.apache.http.Header[0]);
 		}
 		@Header(aev=true)
 		public BasicHeader[] getF() {
-			return headers("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicHeader[0]);
+			return headers("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicHeader[0]);
 		}
 	}
 
@@ -890,8 +890,8 @@ public class Remote_HeaderAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static HeaderSupplier headers(Object...pairs) {
-		return HeaderSupplier.ofPairs(pairs);
+	private static HeaderList headers(Object...pairs) {
+		return HeaderList.ofPairs(pairs);
 	}
 
 	private static org.apache.http.Header header(String key,Object val) {

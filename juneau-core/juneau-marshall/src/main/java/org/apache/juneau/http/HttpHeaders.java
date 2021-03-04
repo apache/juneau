@@ -3133,4 +3133,46 @@ public class HttpHeaders {
 	public static final BasicUriHeader uriHeader(String name, Supplier<?> value) {
 		return BasicUriHeader.of(name, value);
 	}
+
+	/**
+	 * Instantiates a new {@link HeaderListBuilder}.
+	 *
+	 * @return A new empty builder.
+	 */
+	public static final HeaderListBuilder headerListBuilder() {
+		return HeaderList.create();
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified headers.
+	 *
+	 * @param headers The headers to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final HeaderList headerList(List<Header> headers) {
+		return HeaderList.of(headers);
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified headers.
+	 *
+	 * @param headers The headers to add to the list.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final HeaderList headerList(Header...headers) {
+		return HeaderList.of(headers);
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
+	 *
+	 * @param pairs
+	 * 	Initial list of pairs.
+	 * 	<br>Must be an even number of parameters representing key/value pairs.
+	 * @throws RuntimeException If odd number of parameters were specified.
+	 * @return A new instance.
+	 */
+	public static HeaderList headerList(Object...pairs) {
+		return HeaderList.ofPairs(pairs);
+	}
 }

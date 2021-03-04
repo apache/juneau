@@ -66,17 +66,17 @@ public @interface Remote {
 	String[] headers() default {};
 
 	/**
-	 * Default request header supplier.
+	 * Default request header list.
 	 *
 	 * <p>
-	 * Specifies a dynamic supplier of headers to set on all requests.
+	 * Specifies a supplier of headers to set on all requests.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supplier class must provide a public no-arg constructor.
 	 * </ul>
 	 */
-	Class<? extends HeaderSupplier> headerSupplier() default HeaderSupplier.Null.class;
+	Class<? extends HeaderList> headerList() default HeaderList.Null.class;
 
 	/**
 	 * Specifies the client version of this interface.

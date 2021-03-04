@@ -13,12 +13,16 @@
 package org.apache.juneau.http.header;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Arrays.*;
+
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.*;
+import org.apache.juneau.*;
 
 /**
  * An unmodifiable list of HTTP headers.
@@ -28,8 +32,11 @@ import org.apache.http.util.*;
  */
 public class HeaderList implements Iterable<Header> {
 
+	/** Represents no header supplier in annotations. */
+	public static final class Null extends HeaderList {}
+
 	/** Predefined instance. */
-	public static final HeaderList EMPTY = create().build();
+	public static final HeaderList EMPTY = new HeaderList();
 
 	private final List<Header> headers;
 
@@ -43,12 +50,78 @@ public class HeaderList implements Iterable<Header> {
 	}
 
 	/**
+	 * Creates a new {@link HeaderList} initialized with the specified headers.
+	 *
+	 * @param headers The headers to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static HeaderList of(List<Header> headers) {
+		return headers == null || headers.isEmpty() ? EMPTY : new HeaderList(headers);
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified headers.
+	 *
+	 * @param headers The headers to add to the list.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static HeaderList of(Header...headers) {
+		return headers == null || headers.length == 0 ? EMPTY : new HeaderList(asList(headers));
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
+	 *
+	 * @param pairs
+	 * 	Initial list of pairs.
+	 * 	<br>Must be an even number of parameters representing key/value pairs.
+	 * @throws RuntimeException If odd number of parameters were specified.
+	 * @return A new instance.
+	 */
+	public static HeaderList ofPairs(Object...pairs) {
+		if (pairs.length == 0)
+			return EMPTY;
+		if (pairs.length % 2 != 0)
+			throw new BasicRuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
+		HeaderListBuilder b = create();
+		for (int i = 0; i < pairs.length; i+=2)
+			b.add(stringify(pairs[i]), pairs[i+1]);
+		return new HeaderList(b);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	public HeaderList(HeaderListBuilder builder) {
-		this.headers = new ArrayList<>(builder.headers);
+		this.headers = unmodifiableList(new ArrayList<>(builder.headers));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param headers The initial list of headers.  <jk>null</jk> entries are ignored.
+	 */
+	public HeaderList(List<Header> headers) {
+		if (headers == null || headers.isEmpty())
+			this.headers = emptyList();
+		else {
+			List<Header> l = new ArrayList<>();
+			for (int i = 0; i < headers.size(); i++) {
+				Header x = headers.get(i);
+				if (x != null)
+					l.add(x);
+			}
+			this.headers = unmodifiableList(l);
+		}
+	}
+
+	/**
+	 * Default constructor.
+	 */
+	protected HeaderList() {
+		this.headers = emptyList();
 	}
 
 	/**
@@ -159,7 +232,7 @@ public class HeaderList implements Iterable<Header> {
 	 * @return An unmodifiable list of all the headers in this list, or an empty list if no headers are present.
 	 */
 	public List<Header> getAll() {
-		return unmodifiableList(headers);
+		return headers;
 	}
 
 	/**

@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
@@ -38,7 +37,7 @@ import org.apache.juneau.svl.*;
 public class RemoteMeta {
 
 	private final Map<Method,RemoteOperationMeta> operations;
-	private final HeaderSupplier headerSupplier = HeaderSupplier.create().resolving();
+	private final HeaderList headerList;
 
 	/**
 	 * Constructor.
@@ -54,19 +53,20 @@ public class RemoteMeta {
 				path = trimSlashes(r.path());
 
 		String versionHeader = "Client-Version", clientVersion = null;
+		HeaderListBuilder headerListBuilder = HeaderList.create().resolving();
 
 		for (Remote r : ci.getAnnotations(Remote.class)) {
 			if (! r.path().isEmpty())
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headerSupplier.add(basicHeader(resolve(h)));
+				headerListBuilder.add(basicHeader(resolve(h)));
 			if (! r.version().isEmpty())
 				clientVersion = resolve(r.version());
 			if (! r.versionHeader().isEmpty())
 				versionHeader = resolve(r.versionHeader());
-			if (r.headerSupplier() != HeaderSupplier.Null.class) {
+			if (r.headerList() != HeaderList.Null.class) {
 				try {
-					headerSupplier.add(r.headerSupplier().newInstance());
+					headerListBuilder.add(r.headerList().newInstance().getAll());
 				} catch (Exception e) {
 					throw new RuntimeException("Could not instantiate HeaderSupplier class.", e);
 				}
@@ -74,13 +74,14 @@ public class RemoteMeta {
 		}
 
 		if (clientVersion != null)
-			headerSupplier.add(stringHeader(versionHeader, clientVersion));
+			headerListBuilder.add(stringHeader(versionHeader, clientVersion));
 
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		for (MethodInfo m : ci.getPublicMethods())
 			operations.put(m.inner(), new RemoteOperationMeta(path, m.inner(), "GET"));
 
 		this.operations = operations.unmodifiable();
+		this.headerList = headerListBuilder.build();
 	}
 
 	/**
@@ -98,8 +99,8 @@ public class RemoteMeta {
 	 *
 	 * @return The headers to set on all requests.
 	 */
-	public Iterable<Header> getHeaders() {
-		return headerSupplier;
+	public HeaderList getHeaders() {
+		return headerList;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

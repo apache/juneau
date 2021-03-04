@@ -234,7 +234,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void a10_nameValuePairsHeader() throws Exception {
 		String r = proxy.nameValuePairsHeader(
-			HeaderSupplier.ofPairs("a","foo","b","","c",null)
+			HeaderList.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -1619,7 +1619,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteOp(method="GET", path="/nameValuePairsHeader")
 		String nameValuePairsHeader(
-			@Header(value="*", allowEmptyValue=true) HeaderSupplier a
+			@Header(value="*", allowEmptyValue=true) HeaderList a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------

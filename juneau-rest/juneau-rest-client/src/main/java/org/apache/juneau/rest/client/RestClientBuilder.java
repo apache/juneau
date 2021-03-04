@@ -1280,7 +1280,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link Headerable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link HeaderSupplier}
+	 * 		<li>{@link HeaderList}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1293,7 +1293,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (BasicHeader.canCast(h) || h instanceof HeaderSupplier) {
+			if (BasicHeader.canCast(h) || h instanceof HeaderList) {
 				appendTo(RESTCLIENT_headers, h);
 			} else if (h instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(h).entrySet())

@@ -574,15 +574,18 @@ public class Remote_Test {
 		}
 	}
 
-	@Remote(headers="Foo:bar",headerSupplier=F1b.class,version="1.2.3")
+	@Remote(headers="Foo:bar",headerList=F1b.class,version="1.2.3")
 	public static interface F1a {
 		String[] getHeaders();
 	}
 
-	public static class F1b extends HeaderSupplier {
+	public static class F1b extends HeaderList {
 		public F1b() {
-			add(basicHeader("Foo","baz"));
-			add(HeaderSupplier.of(basicHeader("Foo",()->"qux")));
+			super(
+				create()
+				.add(basicHeader("Foo","baz"))
+				.add(HeaderList.create().add(basicHeader("Foo",()->"qux")).build())
+			);
 		}
 	}
 
@@ -594,12 +597,12 @@ public class Remote_Test {
 		assertEquals("['1.2.3']",SimpleJson.DEFAULT.toString(x.getHeaders()));
 	}
 
-	@Remote(headerSupplier=F2b.class)
+	@Remote(headerList=F2b.class)
 	public static interface F2a {
 		String[] getHeaders();
 	}
 
-	public static class F2b extends HeaderSupplier {
+	public static class F2b extends HeaderList {
 		public F2b() {
 			throw new NullPointerException("foo");
 		}

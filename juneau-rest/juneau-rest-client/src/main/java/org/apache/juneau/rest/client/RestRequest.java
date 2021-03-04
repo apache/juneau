@@ -2166,7 +2166,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link Headerable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link HeaderSupplier}
+	 * 		<li>{@link HeaderList}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2210,7 +2210,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link Headerable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link HeaderSupplier}
+	 * 		<li>{@link HeaderList}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2226,8 +2226,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		for (Object o : headers) {
 			if (BasicHeader.canCast(o)) {
 				l.add(BasicHeader.cast(o));
-			} else if (o instanceof HeaderSupplier) {
-				for (Header h : (HeaderSupplier)o)
+			} else if (o instanceof HeaderList) {
+				for (Header h : (HeaderList)o)
 					l.add(h);
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
@@ -2279,7 +2279,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	RestRequest headerArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
 		flags = AddFlag.orDefault(flags);
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderSupplier || isHeaderArray(value);
+		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti)
 			return innerHeaders(flags, AList.of(serializedHeader(name, value, serializer, schema, flags)));
@@ -2288,9 +2288,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		if (BasicHeader.canCast(value)) {
 			l.add(BasicHeader.cast(value));
-		} else if (value instanceof HeaderSupplier) {
-			for (Object o : (HeaderSupplier)value)
-				l.add(BasicHeader.cast(o));
+		} else if (value instanceof HeaderList) {
+			for (Header o : (HeaderList)value)
+				l.add(o);
 		} else if (value instanceof Collection) {
 			for (Object o : (Collection<?>)value)
 				l.add(BasicHeader.cast(o));

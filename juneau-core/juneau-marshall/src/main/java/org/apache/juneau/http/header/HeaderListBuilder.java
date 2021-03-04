@@ -12,10 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.oapi.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link HeaderList} objects.
@@ -24,6 +30,10 @@ import org.apache.juneau.internal.*;
 public class HeaderListBuilder {
 
 	final List<Header> headers = new ArrayList<>();
+	private volatile VarResolver varResolver;
+
+	/** Predefined instance. */
+	private static final HeaderList EMPTY = new HeaderList();
 
 	/**
 	 * Constructor.
@@ -36,7 +46,46 @@ public class HeaderListBuilder {
 	 * @return A new {@link HeaderList} bean.
 	 */
 	public HeaderList build() {
-		return new HeaderList(this);
+		return headers.isEmpty() ? EMPTY : new HeaderList(this);
+	}
+
+	/**
+	 * Allows header values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in header values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder resolving() {
+		return resolving(VarResolver.DEFAULT);
+	}
+
+	/**
+	 * Allows header values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in header values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder resolving(VarResolver varResolver) {
+		this.varResolver = varResolver;
+		return this;
 	}
 
 	/**
@@ -72,8 +121,61 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder add(String name, String value) {
-		headers.add(new BasicHeader(name, value));
-		return this;
+		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
+		return add(x);
+	}
+
+	/**
+	 * Appends the specified header to the end of this list.
+	 *
+	 * <p>
+	 * The header is added as a {@link BasicHeader}.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(String name, Object value) {
+		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
+		return add(x);
+	}
+
+	/**
+	 * Appends the specified header to the end of this list using a value supplier.
+	 *
+	 * <p>
+	 * The header is added as a {@link BasicHeader}.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(String name, Supplier<?> value) {
+		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
+		return add(x);
+	}
+
+	/**
+	 * Appends the specified header to the end of this list.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
+	 * @param schema
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		Header x = isResolving() ? new SerializedHeader(name, resolver(value), serializer, schema, skipIfEmpty) : new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+		return add(x);
 	}
 
 	/**
@@ -99,6 +201,18 @@ public class HeaderListBuilder {
 	public HeaderListBuilder add(List<Header> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			add(values.get(i));
+		return this;
+	}
+
+	/**
+	 * Adds the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(HeaderList values) {
+		if (values != null)
+			add(values.getAll());
 		return this;
 	}
 
@@ -300,6 +414,20 @@ public class HeaderListBuilder {
 		return this;
 	}
 
+	private boolean isResolving() {
+		return varResolver != null;
+	}
+
+	private Supplier<Object> resolver(Object input) {
+		return ()->(varResolver == null ? unwrap(input) : varResolver.resolve(stringify(unwrap(input))));
+	}
+
+	private Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		return o;
+	}
+	
 	// <FluentSetters>
 
 	// </FluentSetters>

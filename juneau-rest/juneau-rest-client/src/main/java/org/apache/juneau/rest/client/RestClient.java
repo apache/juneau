@@ -1971,7 +1971,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	static final String RESTCLIENT_httpClient = PREFIX + "httpClient.o";
 	static final String RESTCLIENT_httpClientBuilder= PREFIX + "httpClientBuilder.o";
 
-	private final HeaderSupplier headers;
+	private final HeaderList headers;
 	private final PartSupplier query, formData;
 	final CloseableHttpClient httpClient;
 	private final HttpClientConnectionManager connectionManager;
@@ -2088,14 +2088,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
 
-		this.headers = HeaderSupplier.create();
+		HeaderListBuilder headers = HeaderList.create();
 		for (Object o : cp.getList(RESTCLIENT_headers, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
-			if (o instanceof HeaderSupplier)
-				headers.add((HeaderSupplier)o);
+			if (o instanceof HeaderList)
+				headers.add((HeaderList)o);
 			else
 				headers.add(BasicHeader.cast(o));
 		}
+		this.headers = headers.build();
 
 		this.query = PartSupplier.create();
 		for (Object o : cp.getList(RESTCLIENT_query, Object.class).orElse(emptyList())) {
