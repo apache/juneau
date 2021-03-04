@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 
 /**

@@ -20,10 +20,10 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.entity.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;

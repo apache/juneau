@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;

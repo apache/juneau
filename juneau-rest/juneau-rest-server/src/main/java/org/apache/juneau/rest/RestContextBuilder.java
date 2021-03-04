@@ -35,7 +35,6 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;

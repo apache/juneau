@@ -13,13 +13,14 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.BasicHttpResource.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.entity.BasicHttpResource.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 

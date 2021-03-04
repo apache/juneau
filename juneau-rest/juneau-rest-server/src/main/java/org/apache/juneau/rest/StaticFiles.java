@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import java.util.*;
 
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.entity.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.

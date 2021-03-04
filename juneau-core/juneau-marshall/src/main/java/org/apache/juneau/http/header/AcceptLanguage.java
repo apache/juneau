@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.Constants.*;
+import static org.apache.juneau.http.header.Constants.*;
 
 import java.util.function.*;
 

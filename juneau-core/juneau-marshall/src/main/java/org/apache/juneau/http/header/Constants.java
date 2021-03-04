@@ -10,24 +10,20 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.header;
 
 /**
- * A simple named object.
+ * Constants used by classes in this package.
+ *
+ * <ul class='seealso'>
+ * 	<li class='extlink'>{@doc ExtRFC2616}
+ * </ul>
  */
-public interface NamedAttribute {
+class Constants {
 
-	/**
-	 * Returns the attribute name.
-	 *
-	 * @return The attribute name.
-	 */
-	public String getName();
+	/** Use caching of HTTP artifacts. */
+	public static boolean NOCACHE = Boolean.getBoolean("juneau.http.cache.disable");
 
-	/**
-	 * Returns the attribute value.
-	 *
-	 * @return The attribute value.
-	 */
-	public Object getValue();
+	/** Maximum cache size of HTTP artifacts. */
+	public static int CACHE_MAX_SIZE = Integer.getInteger("juneau.http.cache.maxSize", 1000);
 }

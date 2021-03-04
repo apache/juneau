@@ -10,25 +10,17 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.header;
 
-import java.util.*;
+import static org.junit.runners.MethodSorters.*;
 
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.http.annotation.*;
+import org.junit.*;
 
-/**
- * An extension of an {@link HttpEntity} that also includes arbitrary headers.
- */
-@Response
-public interface HttpResource extends HttpEntity {
+@FixMethodOrder(NAME_ASCENDING)
+public class Constants_Test {
 
-	/**
-	 * Returns the list of headers associated with this resource.
-	 *
-	 * @return The list of headers associated with this resource.
-	 */
-	@ResponseHeader("*")
-	List<Header> getHeaders();
+	@Test
+	public void a01_basic() {
+		new Constants();
+	}
 }

@@ -46,7 +46,6 @@ import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;

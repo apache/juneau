@@ -19,7 +19,6 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.svl.*;
 
 /**
