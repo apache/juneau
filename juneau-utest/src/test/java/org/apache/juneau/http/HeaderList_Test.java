@@ -55,16 +55,16 @@ public class HeaderList_Test {
 	public void a02_creators() {
 		HeaderList x;
 
-		x = HeaderList.of(header("Foo","bar"), header("Foo","baz"), null);
+		x = headerList(header("Foo","bar"), header("Foo","baz"), null);
 		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 
-		x = HeaderList.of(AList.of(header("Foo","bar"), header("Foo","baz"), null));
+		x = headerList(AList.of(header("Foo","bar"), header("Foo","baz"), null));
 		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 
-		x = HeaderList.ofPairs("Foo","bar","Foo","baz");
+		x = headerList("Foo","bar","Foo","baz");
 		assertObject(x.iterator()).asJson().is("['Foo: bar','Foo: baz']");
 
-		assertThrown(()->HeaderList.ofPairs("Foo")).is("Odd number of parameters passed into HeaderList.ofPairs()");
+		assertThrown(()->headerList("Foo")).is("Odd number of parameters passed into HeaderList.ofPairs()");
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class HeaderList_Test {
 		HeaderListBuilder x = HeaderList
 			.create()
 			.add("X1","1")
-			.add(HeaderList.ofPairs("X2","2"));
+			.add(headerList("X2","2"));
 		assertObject(x.build().getAll()).asJson().is("['X1: 1','X2: 2']");
 	}
 

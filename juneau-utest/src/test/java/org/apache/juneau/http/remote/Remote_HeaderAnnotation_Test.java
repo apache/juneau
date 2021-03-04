@@ -891,7 +891,7 @@ public class Remote_HeaderAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static HeaderList headers(Object...pairs) {
-		return HeaderList.ofPairs(pairs);
+		return headerList(pairs);
 	}
 
 	private static org.apache.http.Header header(String key,Object val) {

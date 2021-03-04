@@ -103,7 +103,7 @@ public class HeaderList implements Iterable<Header> {
 	 *
 	 * @param headers The initial list of headers.  <jk>null</jk> entries are ignored.
 	 */
-	public HeaderList(List<Header> headers) {
+	protected HeaderList(List<Header> headers) {
 		if (headers == null || headers.isEmpty())
 			this.headers = emptyList();
 		else {

@@ -17,6 +17,7 @@ import static org.apache.juneau.testutils.Constants.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -232,9 +233,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void a10_nameValuePairsHeader() throws Exception {
-		String r = proxy.nameValuePairsHeader(
-			HeaderList.ofPairs("a","foo","b","","c",null)
+	public void a10_headerList() throws Exception {
+		String r = proxy.headerList(
+			headerList("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -1617,8 +1618,8 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("*") NeBean a
 		);
 
-		@RemoteOp(method="GET", path="/nameValuePairsHeader")
-		String nameValuePairsHeader(
+		@RemoteOp(method="GET", path="/headerList")
+		String headerList(
 			@Header(value="*", allowEmptyValue=true) HeaderList a
 		);
 
