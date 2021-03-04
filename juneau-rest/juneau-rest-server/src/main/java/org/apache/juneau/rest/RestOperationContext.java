@@ -661,8 +661,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
-	private final HeaderGroup defaultRequestHeaders, defaultResponseHeaders;
-	private final PartGroup defaultRequestQuery, defaultRequestFormData;
+	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
+	private final PartList defaultRequestQuery, defaultRequestFormData;
 	private final List<NamedAttribute> defaultRequestAttributes;
 	private final Charset defaultCharset;
 	private final long maxInput;
@@ -1350,11 +1350,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderGroupBuilder createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderGroupBuilder x = HeaderGroup.create();
+		HeaderListBuilder x = HeaderList.create();
 
-		x.appendUnique(context.getDefaultRequestHeaders().getAllHeaders());
+		x.appendUnique(context.getDefaultRequestHeaders().getAll());
 
 		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
@@ -1376,8 +1376,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderGroupBuilder.class, x)
-			.beanCreateMethodFinder(HeaderGroupBuilder.class, resource)
+			.addBean(HeaderListBuilder.class, x)
+			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
 			.find("createDefaultRequestHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -1396,18 +1396,18 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderGroupBuilder createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderGroupBuilder x = HeaderGroup.create();
+		HeaderListBuilder x = HeaderList.create();
 
-		x.appendUnique(context.getDefaultResponseHeaders().getAllHeaders());
+		x.appendUnique(context.getDefaultResponseHeaders().getAll());
 
 		x.appendUnique(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderGroupBuilder.class, x)
-			.beanCreateMethodFinder(HeaderGroupBuilder.class, resource)
+			.addBean(HeaderListBuilder.class, x)
+			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
 			.find("createDefaultResponseHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -1454,9 +1454,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request query parameters for this method.
 	 * @throws Exception If default request query parameters could not be instantiated.
 	 */
-	protected PartGroupBuilder createDefaultRequestQuery(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
+	protected PartListBuilder createDefaultRequestQuery(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
 
-		PartGroupBuilder x = PartGroup.create();
+		PartListBuilder x = PartList.create();
 
 		x.appendUnique(properties.getInstanceArray(RESTOP_defaultQuery, Part.class, beanStore).orElse(new Part[0]));
 
@@ -1478,8 +1478,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(PartGroupBuilder.class, x)
-			.beanCreateMethodFinder(PartGroupBuilder.class, resource)
+			.addBean(PartListBuilder.class, x)
+			.beanCreateMethodFinder(PartListBuilder.class, resource)
 			.find("createDefaultRequestQuery", Method.class)
 			.thenFind("createDefaultRequestQuery")
 			.withDefault(x)
@@ -1498,9 +1498,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request form-data parameters for this method.
 	 * @throws Exception If default request form-data parameters could not be instantiated.
 	 */
-	protected PartGroupBuilder createDefaultRequestFormData(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
+	protected PartListBuilder createDefaultRequestFormData(Object resource, ContextProperties properties, BeanStore beanStore, Method method) throws Exception {
 
-		PartGroupBuilder x = PartGroup.create();
+		PartListBuilder x = PartList.create();
 
 		x.appendUnique(properties.getInstanceArray(RESTOP_defaultFormData, Part.class, beanStore).orElse(new Part[0]));
 
@@ -1522,8 +1522,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(PartGroupBuilder.class, x)
-			.beanCreateMethodFinder(PartGroupBuilder.class, resource)
+			.addBean(PartListBuilder.class, x)
+			.beanCreateMethodFinder(PartListBuilder.class, resource)
 			.find("createDefaultRequestFormData", Method.class)
 			.thenFind("createDefaultRequestFormData")
 			.withDefault(x)
@@ -1695,7 +1695,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default request headers.  Never <jk>null</jk>.
 	 */
-	public HeaderGroup getDefaultRequestHeaders() {
+	public HeaderList getDefaultRequestHeaders() {
 		return defaultRequestHeaders;
 	}
 
@@ -1704,7 +1704,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default response headers.  Never <jk>null</jk>.
 	 */
-	public HeaderGroup getDefaultResponseHeaders() {
+	public HeaderList getDefaultResponseHeaders() {
 		return defaultResponseHeaders;
 	}
 
@@ -1713,7 +1713,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public PartGroup getDefaultRequestQuery() {
+	public PartList getDefaultRequestQuery() {
 		return defaultRequestQuery;
 	}
 
@@ -1722,7 +1722,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default form data parameters.  Never <jk>null</jk>.
 	 */
-	public PartGroup getDefaultRequestFormData() {
+	public PartList getDefaultRequestFormData() {
 		return defaultRequestFormData;
 	}
 

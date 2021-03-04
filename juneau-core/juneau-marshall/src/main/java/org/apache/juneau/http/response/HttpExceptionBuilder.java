@@ -32,9 +32,9 @@ import org.apache.juneau.internal.*;
 public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeExceptionBuilder {
 
 	BasicStatusLine statusLine;
-	HeaderGroup headerGroup = HeaderGroup.INSTANCE;
+	HeaderList headerList = HeaderList.EMPTY;
 	BasicStatusLineBuilder statusLineBuilder;
-	HeaderGroupBuilder headerGroupBuilder;
+	HeaderListBuilder headerListBuilder;
 	HttpEntity body;
 
 	private final Class<? extends BasicHttpException> implClass;
@@ -88,7 +88,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	public HttpExceptionBuilder<T> copyFrom(BasicHttpException value) {
 		super.copyFrom(value);
 		statusLine = value.statusLine;
-		headerGroup = value.headerGroup;
+		headerList = value.headerList;
 		body = value.body;
 		return this;
 	}
@@ -99,12 +99,12 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLine;
 	}
 
-	HeaderGroup headerGroup() {
-		if (headerGroupBuilder != null)
-			return headerGroupBuilder.build();
-		if (headerGroup == null)
-			return HeaderGroup.INSTANCE;
-		return headerGroup;
+	HeaderList headerList() {
+		if (headerListBuilder != null)
+			return headerListBuilder.build();
+		if (headerList == null)
+			return HeaderList.EMPTY;
+		return headerList;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -217,9 +217,9 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> headerGroup(HeaderGroup value) {
-		headerGroup = value;
-		headerGroupBuilder = null;
+	public HttpExceptionBuilder<T> headerList(HeaderList value) {
+		headerList = value;
+		headerListBuilder = null;
 		return this;
 	}
 
@@ -229,7 +229,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> clearHeaders() {
-		headerGroupBuilder().clear();
+		headerListBuilder().clear();
 		return this;
 	}
 
@@ -240,7 +240,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> header(Header value) {
-		headerGroupBuilder().add(value);
+		headerListBuilder().add(value);
 		return this;
 	}
 
@@ -252,7 +252,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> header(String name, String value) {
-		headerGroupBuilder().add(name, value);
+		headerListBuilder().add(name, value);
 		return this;
 	}
 
@@ -263,7 +263,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> headers(Header...values) {
-		headerGroupBuilder().add(values);
+		headerListBuilder().add(values);
 		return this;
 	}
 
@@ -274,7 +274,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> headers(List<Header> values) {
-		headerGroupBuilder().add(values);
+		headerListBuilder().add(values);
 		return this;
 	}
 
@@ -285,7 +285,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> removeHeader(Header value) {
-		headerGroupBuilder().remove(value);
+		headerListBuilder().remove(value);
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> removeHeaders(Header...values) {
-		headerGroupBuilder().remove(values);
+		headerListBuilder().remove(values);
 		return this;
 	}
 
@@ -307,7 +307,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> removeHeaders(List<Header> values) {
-		headerGroupBuilder().remove(values);
+		headerListBuilder().remove(values);
 		return this;
 	}
 
@@ -321,7 +321,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeader(Header value) {
-		headerGroupBuilder().update(value);
+		headerListBuilder().update(value);
 		return this;
 	}
 
@@ -335,7 +335,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(Header...values) {
-		headerGroupBuilder().update(values);
+		headerListBuilder().update(values);
 		return this;
 	}
 
@@ -349,7 +349,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(List<Header> values) {
-		headerGroupBuilder().update(values);
+		headerListBuilder().update(values);
 		return this;
 	}
 
@@ -363,7 +363,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> setHeaders(Header...values) {
-		headerGroupBuilder().set(values);
+		headerListBuilder().set(values);
 		return this;
 	}
 
@@ -377,7 +377,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> setHeaders(List<Header> values) {
-		headerGroupBuilder().set(values);
+		headerListBuilder().set(values);
 		return this;
 	}
 
@@ -421,12 +421,12 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLineBuilder;
 	}
 
-	private HeaderGroupBuilder headerGroupBuilder() {
-		if (headerGroupBuilder == null) {
-			headerGroupBuilder = headerGroup == null ? HeaderGroup.create() : headerGroup.builder();
-			headerGroup = null;
+	private HeaderListBuilder headerListBuilder() {
+		if (headerListBuilder == null) {
+			headerListBuilder = headerList == null ? HeaderList.create() : headerList.builder();
+			headerList = null;
 		}
-		return headerGroupBuilder;
+		return headerListBuilder;
 	}
 
 	// <FluentSetters>

@@ -10,33 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http.part;
 
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Builder for {@link HeaderGroup} objects.
+ * Builder for {@link PartList} objects.
  */
 @FluentSetters
-public class HeaderGroupBuilder {
+public class PartListBuilder {
 
-	final List<Header> headers = new ArrayList<>();
+	final List<Part> parts = new ArrayList<>();
 
 	/**
 	 * Constructor.
 	 */
-	public HeaderGroupBuilder() {}
+	public PartListBuilder() {}
 
 	/**
-	 * Creates a new {@link HeaderGroup} bean based on the contents of this builder.
+	 * Creates a new {@link PartList} bean based on the contents of this builder.
 	 *
-	 * @return A new {@link HeaderGroup} bean.
+	 * @return A new {@link PartList} bean.
 	 */
-	public HeaderGroup build() {
-		return new HeaderGroup(this);
+	public PartList build() {
+		return new PartList(this);
 	}
 
 	/**
@@ -45,8 +44,8 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder clear() {
-		headers.clear();
+	public PartListBuilder clear() {
+		parts.clear();
 		return this;
 	}
 
@@ -57,9 +56,9 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder add(Header value) {
+	public PartListBuilder add(Part value) {
 		if (value != null)
-			headers.add(value);
+			parts.add(value);
 		return this;
 	}
 
@@ -71,8 +70,8 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder add(String name, String value) {
-		headers.add(new BasicHeader(name, value));
+	public PartListBuilder add(String name, String value) {
+		parts.add(new BasicPart(name, value));
 		return this;
 	}
 
@@ -83,7 +82,7 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder add(Header...values) {
+	public PartListBuilder add(Part...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
 			add(values[i]);
 		return this;
@@ -96,7 +95,7 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder add(List<Header> values) {
+	public PartListBuilder add(List<Part> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			add(values.get(i));
 		return this;
@@ -109,9 +108,9 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder remove(Header value) {
+	public PartListBuilder remove(Part value) {
 		if (value != null)
-			headers.remove(value);
+			parts.remove(value);
 		return this;
 	}
 
@@ -122,7 +121,7 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder remove(Header...values) {
+	public PartListBuilder remove(Part...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
 			remove(values[i]);
 		return this;
@@ -135,7 +134,7 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder remove(List<Header> values) {
+	public PartListBuilder remove(List<Part> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			remove(values.get(i));
 		return this;
@@ -148,10 +147,10 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder remove(String name) {
-		for (int i = 0; i < headers.size(); i++) /* See HTTPCORE-361 */
-			if (headers.get(i).getName().equalsIgnoreCase(name))
-				headers.remove(i--);
+	public PartListBuilder remove(String name) {
+		for (int i = 0; i < parts.size(); i++) /* See HTTPCORE-361 */
+			if (parts.get(i).getName().equals(name))
+				parts.remove(i--);
 		return null;
 	}
 
@@ -165,19 +164,19 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder update(Header value) {
+	public PartListBuilder update(Part value) {
 		if (value == null)
 			return this;
 
-		for (int i = 0; i < headers.size(); i++) {
-			Header x = headers.get(i);
-			if (x.getName().equalsIgnoreCase(value.getName())) {
-				headers.set(i, value);
+		for (int i = 0; i < parts.size(); i++) {
+			Part x = parts.get(i);
+			if (x.getName().equals(value.getName())) {
+				parts.set(i, value);
 				return this;
 			}
 		}
 
-		headers.add(value);
+		parts.add(value);
 		return this;
 	}
 
@@ -191,7 +190,7 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder update(Header...values) {
+	public PartListBuilder update(Part...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
 			update(values[i]);
 		return this;
@@ -207,14 +206,14 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder update(List<Header> values) {
+	public PartListBuilder update(List<Part> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			update(values.get(i));
 		return this;
 	}
 
 	/**
-	 * Sets all of the headers contained within this group overriding any existing headers.
+	 * Sets all of the headers contained within this list overriding any existing headers.
 	 *
 	 * <p>
 	 * The headers are added in the order in which they appear in the array.
@@ -223,14 +222,14 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder set(Header...values) {
+	public PartListBuilder set(Part...values) {
 		clear();
-		Collections.addAll(headers, values);
+		Collections.addAll(parts, values);
 		return this;
 	}
 
 	/**
-	 * Sets all of the headers contained within this group overriding any existing headers.
+	 * Sets all of the headers contained within this list overriding any existing headers.
 	 *
 	 * <p>
 	 * The headers are added in the order in which they appear in the list.
@@ -239,9 +238,9 @@ public class HeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderGroupBuilder set(List<Header> values) {
+	public PartListBuilder set(List<Part> values) {
 		clear();
-		headers.addAll(values);
+		parts.addAll(values);
 		return this;
 	}
 
@@ -255,12 +254,12 @@ public class HeaderGroupBuilder {
 	 * @param values The values to append or replace in this list.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderGroupBuilder appendUnique(Header...values) {
-		for (Header h : values) {
+	public PartListBuilder appendUnique(Part...values) {
+		for (Part h : values) {
 			boolean replaced = false;
-			for (ListIterator<Header> li = headers.listIterator(); li.hasNext();) {
-				Header h2 = li.next();
-				if (h2.getName().equalsIgnoreCase(h.getName())) {
+			for (ListIterator<Part> li = parts.listIterator(); li.hasNext();) {
+				Part h2 = li.next();
+				if (h2.getName().equals(h.getName())) {
 					li.set(h);
 					replaced = true;
 					break;
@@ -283,12 +282,12 @@ public class HeaderGroupBuilder {
 	 * @param values The values to append or replace in this list.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderGroupBuilder appendUnique(Collection<Header> values) {
-		for (Header h : values) {
+	public PartListBuilder appendUnique(Collection<Part> values) {
+		for (Part h : values) {
 			boolean replaced = false;
-			for (ListIterator<Header> li = headers.listIterator(); li.hasNext();) {
-				Header h2 = li.next();
-				if (h2.getName().equalsIgnoreCase(h.getName())) {
+			for (ListIterator<Part> li = parts.listIterator(); li.hasNext();) {
+				Part h2 = li.next();
+				if (h2.getName().equals(h.getName())) {
 					li.set(h);
 					replaced = true;
 					break;

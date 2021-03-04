@@ -3366,7 +3366,7 @@ public class RestContext extends BeanContext {
 	private final List<MediaType>
 		consumes,
 		produces;
-	private final HeaderGroup defaultRequestHeaders, defaultResponseHeaders;
+	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
 	private final List<NamedAttribute> defaultRequestAttributes;
 	private final List<ResponseHandler> responseHandlers;
 	private final Messages messages;
@@ -5152,16 +5152,16 @@ public class RestContext extends BeanContext {
 	 * @return The default request headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected HeaderGroupBuilder createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected HeaderListBuilder createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
-		HeaderGroupBuilder x = HeaderGroup.create();
+		HeaderListBuilder x = HeaderList.create();
 
 		x.appendUnique(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderGroupBuilder.class, x)
-			.beanCreateMethodFinder(HeaderGroupBuilder.class, resource)
+			.addBean(HeaderListBuilder.class, x)
+			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
 			.find("createDefaultRequestHeaders")
 			.withDefault(x)
 			.run();
@@ -5183,16 +5183,16 @@ public class RestContext extends BeanContext {
 	 * @return The default response headers for this REST object.
 	 * @throws Exception If stack trace store could not be instantiated.
 	 */
-	protected HeaderGroupBuilder createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected HeaderListBuilder createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
-		HeaderGroupBuilder x = HeaderGroup.create();
+		HeaderListBuilder x = HeaderList.create();
 
 		x.appendUnique(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderGroupBuilder.class, x)
-			.beanCreateMethodFinder(HeaderGroupBuilder.class, resource)
+			.addBean(HeaderListBuilder.class, x)
+			.beanCreateMethodFinder(HeaderListBuilder.class, resource)
 			.find("createDefaultResponseHeaders")
 			.withDefault(x)
 			.run();
@@ -6308,7 +6308,7 @@ public class RestContext extends BeanContext {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderGroup getDefaultRequestHeaders() {
+	public HeaderList getDefaultRequestHeaders() {
 		return defaultRequestHeaders;
 	}
 
@@ -6338,7 +6338,7 @@ public class RestContext extends BeanContext {
 	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderGroup getDefaultResponseHeaders() {
+	public HeaderList getDefaultResponseHeaders() {
 		return defaultResponseHeaders;
 	}
 

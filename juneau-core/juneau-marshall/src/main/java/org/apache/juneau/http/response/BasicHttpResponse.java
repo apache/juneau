@@ -43,9 +43,11 @@ import org.apache.juneau.http.header.*;
 @BeanIgnore
 public class BasicHttpResponse implements HttpResponse {
 
-	HeaderGroup headerGroup;
+	private static final Header[] EMPTY_HEADERS = new Header[0];
+
+	HeaderList headerList;
 	BasicStatusLine statusLine;
-	HeaderGroupBuilder headerGroupBuilder;
+	HeaderListBuilder headerListBuilder;
 	BasicStatusLineBuilder statusLineBuilder;
 	HttpEntity body;
 	final boolean unmodifiable;
@@ -66,7 +68,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param builder The builder containing the arguments for this bean.
 	 */
 	public BasicHttpResponse(HttpResponseBuilder<?> builder) {
-		headerGroup = builder.headerGroup();
+		headerList = builder.headerList();
 		statusLine = builder.statusLine();
 		body = builder.body;
 		unmodifiable = builder.unmodifiable;
@@ -119,7 +121,7 @@ public class BasicHttpResponse implements HttpResponse {
 
 	@Override /* Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder().append(statusLine()).append(' ').append(headerGroup());
+		StringBuilder sb = new StringBuilder().append(statusLine()).append(' ').append(headerList());
 		if (body != null)
 			sb.append(' ').append(body);
 		return sb.toString();
@@ -132,73 +134,75 @@ public class BasicHttpResponse implements HttpResponse {
 
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
-		return headerGroup().containsHeader(name);
+		return headerList().contains(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		return headerGroup().getHeaders(name);
+		List<Header> l = headerList().get(name);
+		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
 	}
 
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return headerGroup().getFirstHeader(name);
+		return headerList().getFirst(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return headerGroup().getLastHeader(name);
+		return headerList().getLast(name);
 	}
 
 	@Override /* HttpMessage */
 	@ResponseHeader("*")
 	public Header[] getAllHeaders() {
-		return headerGroup().getAllHeaders().toArray(new Header[0]);
+		List<Header> l = headerList().getAll();
+		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(Header value) {
-		headerGroupBuilder().add(value).build();
+		headerListBuilder().add(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headerGroupBuilder().add(new BasicHeader(name, value)).build();
+		headerListBuilder().add(new BasicHeader(name, value)).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(Header value) {
-		headerGroupBuilder().update(value).build();
+		headerListBuilder().update(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headerGroupBuilder().update(new BasicHeader(name, value)).build();
+		headerListBuilder().update(new BasicHeader(name, value)).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] values) {
-		headerGroupBuilder().set(values).build();
+		headerListBuilder().set(values).build();
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeader(Header value) {
-		headerGroupBuilder().remove(value).build();
+		headerListBuilder().remove(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		headerGroupBuilder().remove(name).build();
+		headerListBuilder().remove(name).build();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headerGroup().iterator();
+		return headerList().headerIterator();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headerGroup().iterator(name);
+		return headerList().headerIterator(name);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -280,12 +284,12 @@ public class BasicHttpResponse implements HttpResponse {
 		return statusLine;
 	}
 
-	private HeaderGroup headerGroup() {
-		if (headerGroup == null) {
-			headerGroup = headerGroupBuilder.build();
-			headerGroupBuilder = null;
+	private HeaderList headerList() {
+		if (headerList == null) {
+			headerList = headerListBuilder.build();
+			headerListBuilder = null;
 		}
-		return headerGroup;
+		return headerList;
 	}
 
 	private BasicStatusLineBuilder statusLineBuilder() {
@@ -297,13 +301,13 @@ public class BasicHttpResponse implements HttpResponse {
 		return statusLineBuilder;
 	}
 
-	private HeaderGroupBuilder headerGroupBuilder() {
+	private HeaderListBuilder headerListBuilder() {
 		assertModifiable();
-		if (headerGroupBuilder == null) {
-			headerGroupBuilder = headerGroup.builder();
-			headerGroup = null;
+		if (headerListBuilder == null) {
+			headerListBuilder = headerList.builder();
+			headerList = null;
 		}
-		return headerGroupBuilder;
+		return headerListBuilder;
 	}
 
 	/**

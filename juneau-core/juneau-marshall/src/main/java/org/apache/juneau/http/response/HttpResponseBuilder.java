@@ -32,9 +32,9 @@ import org.apache.juneau.internal.*;
 public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	BasicStatusLine statusLine;
-	HeaderGroup headerGroup = HeaderGroup.INSTANCE;
+	HeaderList headerList = HeaderList.EMPTY;
 	BasicStatusLineBuilder statusLineBuilder;
-	HeaderGroupBuilder headerGroupBuilder;
+	HeaderListBuilder headerListBuilder;
 	HttpEntity body;
 	boolean unmodifiable;
 	
@@ -85,7 +85,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	public HttpResponseBuilder<T> copyFrom(BasicHttpResponse value) {
 		statusLine = value.statusLine;
-		headerGroup = value.headerGroup;
+		headerList = value.headerList;
 		body = value.body;
 		return this;
 	}
@@ -96,12 +96,12 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		return statusLine;
 	}
 
-	HeaderGroup headerGroup() {
-		if (headerGroupBuilder != null)
-			return headerGroupBuilder.build();
-		if (headerGroup == null)
-			return HeaderGroup.INSTANCE;
-		return headerGroup;
+	HeaderList headerList() {
+		if (headerListBuilder != null)
+			return headerListBuilder.build();
+		if (headerList == null)
+			return HeaderList.EMPTY;
+		return headerList;
 	}
 
 	/**
@@ -225,9 +225,9 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpResponseBuilder<T> headerGroup(HeaderGroup value) {
-		headerGroup = value;
-		headerGroupBuilder = null;
+	public HttpResponseBuilder<T> headerList(HeaderList value) {
+		headerList = value;
+		headerListBuilder = null;
 		return this;
 	}
 
@@ -237,7 +237,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> clearHeaders() {
-		headerGroupBuilder().clear();
+		headerListBuilder().clear();
 		return this;
 	}
 
@@ -248,7 +248,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> header(Header value) {
-		headerGroupBuilder().add(value);
+		headerListBuilder().add(value);
 		return this;
 	}
 
@@ -260,7 +260,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> header(String name, String value) {
-		headerGroupBuilder().add(name, value);
+		headerListBuilder().add(name, value);
 		return this;
 	}
 
@@ -271,7 +271,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> headers(Header...values) {
-		headerGroupBuilder().add(values);
+		headerListBuilder().add(values);
 		return this;
 	}
 
@@ -282,7 +282,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> headers(List<Header> values) {
-		headerGroupBuilder().add(values);
+		headerListBuilder().add(values);
 		return this;
 	}
 
@@ -293,7 +293,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> removeHeader(Header value) {
-		headerGroupBuilder().remove(value);
+		headerListBuilder().remove(value);
 		return this;
 	}
 
@@ -304,7 +304,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> removeHeaders(Header...values) {
-		headerGroupBuilder().remove(values);
+		headerListBuilder().remove(values);
 		return this;
 	}
 
@@ -315,7 +315,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> removeHeaders(List<Header> values) {
-		headerGroupBuilder().remove(values);
+		headerListBuilder().remove(values);
 		return this;
 	}
 
@@ -329,7 +329,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> updateHeader(Header value) {
-		headerGroupBuilder().update(value);
+		headerListBuilder().update(value);
 		return this;
 	}
 
@@ -343,7 +343,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> updateHeaders(Header...values) {
-		headerGroupBuilder().update(values);
+		headerListBuilder().update(values);
 		return this;
 	}
 
@@ -357,7 +357,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> updateHeaders(List<Header> values) {
-		headerGroupBuilder().update(values);
+		headerListBuilder().update(values);
 		return this;
 	}
 
@@ -371,7 +371,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> setHeaders(Header...values) {
-		headerGroupBuilder().set(values);
+		headerListBuilder().set(values);
 		return this;
 	}
 
@@ -385,7 +385,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> setHeaders(List<Header> values) {
-		headerGroupBuilder().set(values);
+		headerListBuilder().set(values);
 		return this;
 	}
 
@@ -453,12 +453,12 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		return statusLineBuilder;
 	}
 
-	private HeaderGroupBuilder headerGroupBuilder() {
-		if (headerGroupBuilder == null) {
-			headerGroupBuilder = headerGroup == null ? HeaderGroup.create() : headerGroup.builder();
-			headerGroup = null;
+	private HeaderListBuilder headerListBuilder() {
+		if (headerListBuilder == null) {
+			headerListBuilder = headerList == null ? HeaderList.create() : headerList.builder();
+			headerList = null;
 		}
-		return headerGroupBuilder;
+		return headerListBuilder;
 	}
 
 	// <FluentSetters>

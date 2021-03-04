@@ -188,12 +188,12 @@ public final class RestRequest {
 		pathParams.parser(partParserSession);
 
 		queryParams
-			.addDefault(opContext.getDefaultRequestQuery().getAllParts())
+			.addDefault(opContext.getDefaultRequestQuery().getAll())
 			.parser(partParserSession);
 
 		headers
-			.addDefault(opContext.getDefaultRequestHeaders().getAllHeaders())
-			.addDefault(context.getDefaultRequestHeaders().getAllHeaders())
+			.addDefault(opContext.getDefaultRequestHeaders().getAll())
+			.addDefault(context.getDefaultRequestHeaders().getAll())
 			.parser(partParserSession);
 
 		body
@@ -1169,7 +1169,7 @@ public final class RestRequest {
 		try {
 			if (formParams == null)
 				formParams = new RequestFormParams(this, true).parser(partParserSession);
-			formParams.addDefault(opContext.getDefaultRequestFormData().getAllParts());
+			formParams.addDefault(opContext.getDefaultRequestFormData().getAll());
 			return formParams;
 		} catch (Exception e) {
 			throw new InternalServerError(e);

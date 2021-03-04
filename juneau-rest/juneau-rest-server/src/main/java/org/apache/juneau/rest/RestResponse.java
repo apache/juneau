@@ -110,9 +110,9 @@ public final class RestResponse {
 			}
 		}
 
-		for (Header e : request.getContext().getDefaultResponseHeaders().getAllHeaders())
+		for (Header e : request.getContext().getDefaultResponseHeaders().getAll())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
-		for (Header e : opContext.getDefaultResponseHeaders().getAllHeaders())
+		for (Header e : opContext.getDefaultResponseHeaders().getAll())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)

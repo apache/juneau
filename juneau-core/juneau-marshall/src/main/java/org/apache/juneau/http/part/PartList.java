@@ -12,17 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static java.util.Collections.*;
+
 import java.util.*;
 
 /**
- * An unmodifiable group of HTTP parts.
+ * An unmodifiable list of HTTP parts.
  */
-public class PartGroup {
+public class PartList implements Iterable<Part> {
 
 	/** Predefined instance. */
-	public static final PartGroup INSTANCE = create().build();
-
-	private static final Part[] EMPTY = new Part[] {};
+	public static final PartList EMPTY = create().build();
 
 	private final List<Part> parts;
 
@@ -31,8 +31,8 @@ public class PartGroup {
 	 *
 	 * @return A new builder.
 	 */
-	public static PartGroupBuilder create() {
-		return new PartGroupBuilder();
+	public static PartListBuilder create() {
+		return new PartListBuilder();
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class PartGroup {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public PartGroup(PartGroupBuilder builder) {
+	public PartList(PartListBuilder builder) {
 		this.parts = new ArrayList<>(builder.parts);
 	}
 
@@ -49,7 +49,7 @@ public class PartGroup {
 	 *
 	 * @return A new builder object.
 	 */
-	public PartGroupBuilder builder() {
+	public PartListBuilder builder() {
 		return create().add(parts);
 	}
 
@@ -66,12 +66,9 @@ public class PartGroup {
 	 *
 	 * @return An array containing all matching headers, or an empty array if none are found.
 	 */
-	public Part[] getParts(final String name) {
-		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
-		//	 for (Part header : headers)
-		// as that creates an Iterator that needs to be garbage-collected
+	public List<Part> get(String name) {
 		List<Part> l = null;
-		for (int i = 0; i < parts.size(); i++) {
+		for (int i = 0; i < parts.size(); i++) {  // See HTTPCORE-361
 			Part x = parts.get(i);
 			if (x.getName().equals(name)) {
 				if (l == null)
@@ -79,7 +76,7 @@ public class PartGroup {
 				l.add(x);
 			}
 		}
-		return l != null ? l.toArray(new Part[l.size()]) : EMPTY;
+		return l == null ? emptyList() : l;
 	}
 
 	/**
@@ -91,11 +88,8 @@ public class PartGroup {
 	 * @param name The header name.
 	 * @return The first matching header, or <jk>null</jk> if not found.
 	 */
-	public Part getFirstPart(String name) {
-		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
-		//	 for (Part header : headers)
-		// as that creates an Iterator that needs to be garbage-collected
-		for (int i = 0; i < parts.size(); i++) {
+	public Part getFirst(String name) {
+		for (int i = 0; i < parts.size(); i++) {  // See HTTPCORE-361
 			Part x = parts.get(i);
 			if (x.getName().equals(name))
 				return x;
@@ -112,7 +106,7 @@ public class PartGroup {
 	 * @param name The header name.
 	 * @return The last matching header, or <jk>null</jk> if not found.
 	 */
-	public Part getLastPart(String name) {
+	public Part getLast(String name) {
 		for (int i = parts.size() - 1; i >= 0; i--) {
 			Part x = parts.get(i);
 			if (x.getName().equals(name))
@@ -122,16 +116,16 @@ public class PartGroup {
 	}
 
 	/**
-	 * Gets all of the headers contained within this group.
+	 * Gets all of the headers contained within this list.
 	 *
-	 * @return An array containing all the headers within this group, or an empty array if no headers are present.
+	 * @return An array containing all the headers within this list, or an empty array if no headers are present.
 	 */
-	public List<Part> getAllParts() {
-		return Collections.unmodifiableList(parts);
+	public List<Part> getAll() {
+		return unmodifiableList(parts);
 	}
 
 	/**
-	 * Tests if headers with the given name are contained within this group.
+	 * Tests if headers with the given name are contained within this list.
 	 *
 	 * <p>
 	 * Part name comparison is case insensitive.
@@ -139,11 +133,8 @@ public class PartGroup {
 	 * @param name The header name.
 	 * @return <jk>true</jk> if at least one header with the name is present.
 	 */
-	public boolean containsPart(String name) {
-		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
-		//	 for (Part header : headers)
-		// as that creates an Iterator that needs to be garbage-collected
-		for (int i = 0; i < parts.size(); i++) {
+	public boolean contains(String name) {
+		for (int i = 0; i < parts.size(); i++) {  // See HTTPCORE-361
 			Part x = parts.get(i);
 			if (x.getName().equals(name))
 				return true;
@@ -159,8 +150,13 @@ public class PartGroup {
 	 *
 	 * @return A copy of this object.
 	 */
-	public PartGroup copy() {
+	public PartList copy() {
 		return builder().build();
+	}
+
+	@Override /* Iterable */
+	public Iterator<Part> iterator() {
+		return getAll().iterator();
 	}
 
 	@Override /* Object */

@@ -118,7 +118,7 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentThrowableAssertion.class,
 		FluentZonedDateTimeAssertion.class,
 		Found.class,
-		HeaderGroupBuilder.class,
+		HeaderListBuilder.class,
 		HtmlDocSerializerBuilder.class,
 		HtmlParserBuilder.class,
 		HtmlSchemaSerializerBuilder.class,

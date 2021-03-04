@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static java.util.Optional.*;
-
+import static java.util.Collections.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -22,17 +21,15 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.*;
 
 /**
- * An unmodifiable group of HTTP headers.
+ * An unmodifiable list of HTTP headers.
  *
  * <p>
- * Similar to {@link HeaderGroup} but uses a builder-based approach for building header groups.
+ * Similar to {@link HeaderGroup} but uses a builder-based approach for building header lists.
  */
-public class HeaderGroup {
+public class HeaderList implements Iterable<Header> {
 
 	/** Predefined instance. */
-	public static final HeaderGroup INSTANCE = create().build();
-
-	private static final Header[] EMPTY = new Header[] {};
+	public static final HeaderList EMPTY = create().build();
 
 	private final List<Header> headers;
 
@@ -41,8 +38,8 @@ public class HeaderGroup {
 	 *
 	 * @return A new builder.
 	 */
-	public static HeaderGroupBuilder create() {
-		return new HeaderGroupBuilder();
+	public static HeaderListBuilder create() {
+		return new HeaderListBuilder();
 	}
 
 	/**
@@ -50,7 +47,7 @@ public class HeaderGroup {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public HeaderGroup(HeaderGroupBuilder builder) {
+	public HeaderList(HeaderListBuilder builder) {
 		this.headers = new ArrayList<>(builder.headers);
 	}
 
@@ -59,7 +56,7 @@ public class HeaderGroup {
 	 *
 	 * @return A new builder object.
 	 */
-	public HeaderGroupBuilder builder() {
+	public HeaderListBuilder builder() {
 		return create().add(headers);
 	}
 
@@ -75,23 +72,23 @@ public class HeaderGroup {
 	 * @param name The header name.
 	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
 	 */
-	public Optional<Header> getCondensedHeader(final String name) {
-		Header[] hdrs = getHeaders(name);
+	public Header getCondensed(String name) {
+		List<Header> hdrs = get(name);
 
-		if (hdrs.length == 0)
-			return empty();
+		if (hdrs.isEmpty())
+			return null;
 
-		if (hdrs.length == 1)
-			return of(hdrs[0]);
+		if (hdrs.size() == 1)
+			return hdrs.get(0);
 
-		CharArrayBuffer valueBuffer = new CharArrayBuffer(128);
-		valueBuffer.append(hdrs[0].getValue());
-		for (int i = 1; i < hdrs.length; i++) {
-			valueBuffer.append(", ");
-			valueBuffer.append(hdrs[i].getValue());
+		CharArrayBuffer sb = new CharArrayBuffer(128);
+		sb.append(hdrs.get(0).getValue());
+		for (int i = 1; i < hdrs.size(); i++) {
+			sb.append(", ");
+			sb.append(hdrs.get(i).getValue());
 		}
 
-		return of(new BasicHeader(name.toLowerCase(Locale.ROOT), valueBuffer.toString()));
+		return new BasicHeader(name.toLowerCase(Locale.ROOT), sb.toString());
 	}
 
 	/**
@@ -107,12 +104,9 @@ public class HeaderGroup {
 	 *
 	 * @return An array containing all matching headers, or an empty array if none are found.
 	 */
-	public Header[] getHeaders(final String name) {
-		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
-		//	 for (Header header : headers)
-		// as that creates an Iterator that needs to be garbage-collected
+	public List<Header> get(String name) {
 		List<Header> l = null;
-		for (int i = 0; i < headers.size(); i++) {
+		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
 			if (x.getName().equalsIgnoreCase(name)) {
 				if (l == null)
@@ -120,7 +114,7 @@ public class HeaderGroup {
 				l.add(x);
 			}
 		}
-		return l != null ? l.toArray(new Header[l.size()]) : EMPTY;
+		return l == null ? emptyList() : l;
 	}
 
 	/**
@@ -132,11 +126,8 @@ public class HeaderGroup {
 	 * @param name The header name.
 	 * @return The first matching header, or <jk>null</jk> if not found.
 	 */
-	public Header getFirstHeader(String name) {
-		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
-		//	 for (Header header : headers)
-		// as that creates an Iterator that needs to be garbage-collected
-		for (int i = 0; i < headers.size(); i++) {
+	public Header getFirst(String name) {
+		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
 			if (x.getName().equalsIgnoreCase(name))
 				return x;
@@ -153,7 +144,7 @@ public class HeaderGroup {
 	 * @param name The header name.
 	 * @return The last matching header, or <jk>null</jk> if not found.
 	 */
-	public Header getLastHeader(String name) {
+	public Header getLast(String name) {
 		for (int i = headers.size() - 1; i >= 0; i--) {
 			Header x = headers.get(i);
 			if (x.getName().equalsIgnoreCase(name))
@@ -163,16 +154,16 @@ public class HeaderGroup {
 	}
 
 	/**
-	 * Gets all of the headers contained within this group.
+	 * Gets all of the headers contained within this list.
 	 *
-	 * @return An array containing all the headers within this group, or an empty array if no headers are present.
+	 * @return An unmodifiable list of all the headers in this list, or an empty list if no headers are present.
 	 */
-	public List<Header> getAllHeaders() {
-		return Collections.unmodifiableList(headers);
+	public List<Header> getAll() {
+		return unmodifiableList(headers);
 	}
 
 	/**
-	 * Tests if headers with the given name are contained within this group.
+	 * Tests if headers with the given name are contained within this list.
 	 *
 	 * <p>
 	 * Header name comparison is case insensitive.
@@ -180,11 +171,8 @@ public class HeaderGroup {
 	 * @param name The header name.
 	 * @return <jk>true</jk> if at least one header with the name is present.
 	 */
-	public boolean containsHeader(String name) {
-		// HTTPCORE-361 : we don't use the for-each syntax, i.e.
-		//	 for (Header header : headers)
-		// as that creates an Iterator that needs to be garbage-collected
-		for (int i = 0; i < headers.size(); i++) {
+	public boolean contains(String name) {
+		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
 			if (x.getName().equalsIgnoreCase(name))
 				return true;
@@ -193,22 +181,22 @@ public class HeaderGroup {
 	}
 
 	/**
-	 * Returns an iterator over this group of headers.
+	 * Returns an iterator over this list of headers.
 	 *
-	 * @return A new iterator over this group of headers.
+	 * @return A new iterator over this list of headers.
 	 */
-	public HeaderIterator iterator() {
-		return new BasicListHeaderIterator(this.headers, null);
+	public HeaderIterator headerIterator() {
+		return new BasicListHeaderIterator(headers, null);
 	}
 
 	/**
-	 * Returns an iterator over the headers with a given name in this group.
+	 * Returns an iterator over the headers with a given name in this list.
 	 *
 	 * @param name The name of the headers over which to iterate, or <jk>null</jk> for all headers
 	 *
-	 * @return A new iterator over the matching headers in this group.
+	 * @return A new iterator over the matching headers in this list.
 	 */
-	public HeaderIterator iterator(String name) {
+	public HeaderIterator headerIterator(String name) {
 		return new BasicListHeaderIterator(headers, name);
 	}
 
@@ -220,8 +208,13 @@ public class HeaderGroup {
 	 *
 	 * @return A copy of this object.
 	 */
-	public HeaderGroup copy() {
+	public HeaderList copy() {
 		return builder().build();
+	}
+
+	@Override /* Iterable */
+	public Iterator<Header> iterator() {
+		return getAll().iterator();
 	}
 
 	@Override /* Object */
