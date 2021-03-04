@@ -14,13 +14,13 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -262,14 +262,6 @@ public class RestClient_Body_Test {
 	}
 
 	private static Header header(String name, Object val) {
-		return BasicHeader.of(name,val);
-	}
-
-	private static ContentType contentType(String val) {
-		return ContentType.of(val);
-	}
-
-	private static ContentEncoding contentEncoding(String val) {
-		return ContentEncoding.of(val);
+		return basicHeader(name, val);
 	}
 }

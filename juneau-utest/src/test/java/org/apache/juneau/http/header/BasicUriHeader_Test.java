@@ -24,7 +24,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.BasicUriHeader.of;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 
@@ -50,25 +50,25 @@ public class BasicUriHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of("","*")).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,"*")).run().assertBody().isEmpty();
+		c.get().header(uriHeader(null,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(uriHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(null,"*")).run().assertBody().isEmpty();
 
-		c.get().header(of(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
 		c.get().header(new BasicUriHeader(HEADER,null)).run().assertBody().isEmpty();
 		c.get().header(new BasicUriHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"foo")).run().assertBody().is("foo");
+		c.get().header(uriHeader(HEADER,"foo")).run().assertBody().is("foo");
 	}
 
 	@Test
 	public void a02_asUri() throws Exception {
-		assertString(of(HEADER,"http://foo").asURI()).is("http://foo");
+		assertString(uriHeader(HEADER,"http://foo").asURI()).is("http://foo");
 		assertString(new BasicUriHeader(HEADER,null).asURI()).doesNotExist();
 	}
 

@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Host.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Host_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().is("localhost");
-		c.get().header(of((Object)null)).run().assertBody().is("localhost");
-		c.get().header(of((Supplier<?>)null)).run().assertBody().is("localhost");
-		c.get().header(of(()->null)).run().assertBody().is("localhost");
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(host((String)null)).run().assertBody().is("localhost");
+		c.get().header(host((Object)null)).run().assertBody().is("localhost");
+		c.get().header(host((Supplier<?>)null)).run().assertBody().is("localhost");
+		c.get().header(host(()->null)).run().assertBody().is("localhost");
+		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(host(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(host(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Host(VALUE)).run().assertBody().is(VALUE);
 	}
 

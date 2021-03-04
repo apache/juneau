@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -165,7 +166,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 		if (sm != null)
 			return sm;
 
-		Accept a = Accept.of(acceptHeader);
+		Accept a = accept(acceptHeader);
 		int match = a.match(mediaRanges);
 		if (match >= 0) {
 			sm = new SerializerMatch(mediaRanges.get(match), mediaTypeRangeSerializers.get(match));

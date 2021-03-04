@@ -127,7 +127,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The header value supplier.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.

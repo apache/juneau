@@ -21,6 +21,7 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -42,6 +43,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -656,7 +658,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
-	private final List<org.apache.http.Header> defaultRequestHeaders, defaultResponseHeaders;
+	private final HeaderGroup defaultRequestHeaders, defaultResponseHeaders;
 	private final List<NameValuePair> defaultRequestQuery, defaultRequestFormData;
 	private final List<NamedAttribute> defaultRequestAttributes;
 	private final Charset defaultCharset;
@@ -743,8 +745,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 			supportedAcceptTypes = unmodifiableList(cp.getList(REST_produces, MediaType.class).orElse(serializers.getSupportedMediaTypes()));
 			supportedContentTypes = unmodifiableList(cp.getList(REST_consumes, MediaType.class).orElse(parsers.getSupportedMediaTypes()));
 
-			defaultRequestHeaders = unmodifiableList(createDefaultRequestHeaders(r, cp, bs, method, context));
-			defaultResponseHeaders = unmodifiableList(createDefaultResponseHeaders(r, cp, bs, method, context));
+			defaultRequestHeaders = createDefaultRequestHeaders(r, cp, bs, method, context).build();
+			defaultResponseHeaders = createDefaultResponseHeaders(r, cp, bs, method, context).build();
 			defaultRequestQuery = unmodifiableList(createDefaultRequestQuery(r, cp, bs, method));
 			defaultRequestFormData = unmodifiableList(createDefaultRequestFormData(r, cp, bs, method));
 			defaultRequestAttributes = unmodifiableList(createDefaultRequestAttributes(r, cp, bs, method, context));
@@ -1345,11 +1347,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderList createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderGroupBuilder createDefaultRequestHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderList x = HeaderList.create();
+		HeaderGroupBuilder x = HeaderGroup.create();
 
-		x.appendUnique(context.getDefaultRequestHeaders());
+		x.appendUnique(context.getDefaultRequestHeaders().getAllHeaders());
 
 		x.appendUnique(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
@@ -1360,7 +1362,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(BasicHeader.of(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.appendUnique(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Header annotation");
 						}
@@ -1371,8 +1373,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderList.class, x)
-			.beanCreateMethodFinder(HeaderList.class, resource)
+			.addBean(HeaderGroupBuilder.class, x)
+			.beanCreateMethodFinder(HeaderGroupBuilder.class, resource)
 			.find("createDefaultRequestHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -1391,18 +1393,18 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @return The default request headers for this method.
 	 * @throws Exception If default request headers could not be instantiated.
 	 */
-	protected HeaderList createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
+	protected HeaderGroupBuilder createDefaultResponseHeaders(Object resource, ContextProperties properties, BeanStore beanStore, Method method, RestContext context) throws Exception {
 
-		HeaderList x = HeaderList.create();
+		HeaderGroupBuilder x = HeaderGroup.create();
 
-		x.appendUnique(context.getDefaultResponseHeaders());
+		x.appendUnique(context.getDefaultResponseHeaders().getAllHeaders());
 
 		x.appendUnique(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(HeaderList.class, x)
-			.beanCreateMethodFinder(HeaderList.class, resource)
+			.addBean(HeaderGroupBuilder.class, x)
+			.beanCreateMethodFinder(HeaderGroupBuilder.class, resource)
 			.find("createDefaultResponseHeaders", Method.class)
 			.withDefault(x)
 			.run();
@@ -1690,7 +1692,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default request headers.  Never <jk>null</jk>.
 	 */
-	public List<org.apache.http.Header> getDefaultRequestHeaders() {
+	public HeaderGroup getDefaultRequestHeaders() {
 		return defaultRequestHeaders;
 	}
 
@@ -1699,7 +1701,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * @return The default response headers.  Never <jk>null</jk>.
 	 */
-	public List<org.apache.http.Header> getDefaultResponseHeaders() {
+	public HeaderGroup getDefaultResponseHeaders() {
 		return defaultResponseHeaders;
 	}
 

@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static java.util.Optional.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -26,7 +27,6 @@ import javax.servlet.http.*;
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.http.header.*;
@@ -110,9 +110,9 @@ public final class RestResponse {
 			}
 		}
 
-		for (Header e : request.getContext().getDefaultResponseHeaders())
+		for (Header e : request.getContext().getDefaultResponseHeaders().getAllHeaders())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
-		for (Header e : opContext.getDefaultResponseHeaders())
+		for (Header e : opContext.getDefaultResponseHeaders().getAllHeaders())
 			setHeaderSafe(e.getName(), stringify(e.getValue()));
 
 		if (charset == null)
@@ -509,7 +509,7 @@ public final class RestResponse {
 		// Tomcat/WAS does.
 		if (name.equalsIgnoreCase("Content-Type")) {
 			inner.setContentType(value);
-			ContentType ct = ContentType.of(value);
+			ContentType ct = contentType(value);
 			if (ct != null && ct.getParameter("charset") != null)
 				inner.setCharacterEncoding(ct.getParameter("charset"));
 		} else {

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -21,6 +21,7 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.BasicNameValuePair;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for

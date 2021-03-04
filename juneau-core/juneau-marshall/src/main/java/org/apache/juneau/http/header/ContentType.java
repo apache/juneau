@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 
@@ -118,7 +117,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link MediaType#of(String)}.
 	 * 		<li>{@link MediaType}.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link AcceptEncoding} object.
 	 */
@@ -140,7 +139,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link MediaType#of(String)}.
 	 * 		<li>{@link MediaType}.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link AcceptEncoding} object.
 	 */

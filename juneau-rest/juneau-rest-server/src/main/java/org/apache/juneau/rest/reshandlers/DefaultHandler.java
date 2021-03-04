@@ -14,6 +14,7 @@ package org.apache.juneau.rest.reshandlers;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -177,7 +178,7 @@ public class DefaultHandler implements ResponseHandler {
 			res.header(e.getContentType()).header(e.getContentEncoding());
 			long contentLength = e.getContentLength();
 			if (contentLength >= 0)
-				res.header(ContentLength.of(contentLength));
+				res.header(contentLength(contentLength));
 			try (OutputStream os = res.getNegotiatedOutputStream()) {
 				e.writeTo(os);
 				os.flush();

@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.ClientVersion.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -29,7 +29,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ClientVersion_Test {
 
-	private static final String HEADER = "X-Client-Version";
+	private static final String HEADER = "Client-Version";
 	private static final String VALUE = "foo";
 
 	@Rest
@@ -48,14 +48,14 @@ public class ClientVersion_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion((String)null)).run().assertBody().isEmpty();
+		c.get().header(clientVersion((Object)null)).run().assertBody().isEmpty();
+		c.get().header(clientVersion((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(clientVersion(()->null)).run().assertBody().isEmpty();
+		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new ClientVersion(VALUE)).run().assertBody().is(VALUE);
 	}
 

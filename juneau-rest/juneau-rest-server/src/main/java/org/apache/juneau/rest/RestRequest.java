@@ -49,7 +49,6 @@ import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.BasicHeader;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -68,6 +67,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.BasicHeader;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.http.response.BasicHttpException;
@@ -192,8 +192,8 @@ public final class RestRequest {
 			.parser(partParserSession);
 
 		headers
-			.addDefault(opContext.getDefaultRequestHeaders())
-			.addDefault(context.getDefaultRequestHeaders())
+			.addDefault(opContext.getDefaultRequestHeaders().getAllHeaders())
+			.addDefault(context.getDefaultRequestHeaders().getAllHeaders())
 			.parser(partParserSession);
 
 		body

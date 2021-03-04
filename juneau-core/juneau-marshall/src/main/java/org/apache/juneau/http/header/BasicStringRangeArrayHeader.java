@@ -18,8 +18,6 @@ import static java.util.Optional.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
-
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
  *
@@ -46,7 +44,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li>{@link StringRanges} - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicLongHeader} object.
 	 */
@@ -68,7 +66,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li>{@link StringRanges} - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicLongHeader} object.
 	 */
@@ -89,7 +87,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */

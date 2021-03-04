@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.reflect.*;
@@ -53,13 +53,13 @@ public class RemoteMeta {
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
-		String versionHeader = "X-Client-Version", clientVersion = null;
+		String versionHeader = "Client-Version", clientVersion = null;
 
 		for (Remote r : ci.getAnnotations(Remote.class)) {
 			if (! r.path().isEmpty())
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headerSupplier.add(BasicHeader.ofPair(resolve(h)));
+				headerSupplier.add(basicHeader(resolve(h)));
 			if (! r.version().isEmpty())
 				clientVersion = resolve(r.version());
 			if (! r.versionHeader().isEmpty())
@@ -74,7 +74,7 @@ public class RemoteMeta {
 		}
 
 		if (clientVersion != null)
-			headerSupplier.add(BasicStringHeader.of(versionHeader, clientVersion));
+			headerSupplier.add(stringHeader(versionHeader, clientVersion));
 
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		for (MethodInfo m : ci.getPublicMethods())

@@ -13,7 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.ServiceUnavailable.*;
-import static org.apache.juneau.http.response.HttpResponses.*;
+import static org.apache.juneau.http.response.StandardHttpResponses.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.rest.annotation.*;

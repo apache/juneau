@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;
@@ -27,7 +28,6 @@ import org.apache.http.entity.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -337,7 +337,7 @@ public class RestClient_Response_Body_Test {
 	}
 
 	private static Header header(String name, Object val) {
-		return BasicStringHeader.of(name, val);
+		return stringHeader(name, val);
 	}
 
 	private static InputStreamEntity inputStreamEntity(String in) {

@@ -20,6 +20,7 @@ import org.apache.http.entity.*;
 import org.apache.http.impl.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -31,9 +32,9 @@ import org.apache.juneau.internal.*;
 public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeExceptionBuilder {
 
 	BasicStatusLine statusLine;
-	BasicHeaderGroup headerGroup = BasicHeaderGroup.INSTANCE;
+	HeaderGroup headerGroup = HeaderGroup.INSTANCE;
 	BasicStatusLineBuilder statusLineBuilder;
-	BasicHeaderGroupBuilder headerGroupBuilder;
+	HeaderGroupBuilder headerGroupBuilder;
 	HttpEntity body;
 
 	private final Class<? extends BasicHttpException> implClass;
@@ -98,11 +99,11 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLine;
 	}
 
-	BasicHeaderGroup headerGroup() {
+	HeaderGroup headerGroup() {
 		if (headerGroupBuilder != null)
 			return headerGroupBuilder.build();
 		if (headerGroup == null)
-			return BasicHeaderGroup.INSTANCE;
+			return HeaderGroup.INSTANCE;
 		return headerGroup;
 	}
 
@@ -216,7 +217,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> headerGroup(BasicHeaderGroup value) {
+	public HttpExceptionBuilder<T> headerGroup(HeaderGroup value) {
 		headerGroup = value;
 		headerGroupBuilder = null;
 		return this;
@@ -420,9 +421,9 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLineBuilder;
 	}
 
-	private BasicHeaderGroupBuilder headerGroupBuilder() {
+	private HeaderGroupBuilder headerGroupBuilder() {
 		if (headerGroupBuilder == null) {
-			headerGroupBuilder = headerGroup == null ? BasicHeaderGroup.create() : headerGroup.builder();
+			headerGroupBuilder = headerGroup == null ? HeaderGroup.create() : headerGroup.builder();
 			headerGroup = null;
 		}
 		return headerGroupBuilder;

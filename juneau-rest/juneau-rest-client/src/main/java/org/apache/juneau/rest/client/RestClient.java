@@ -20,6 +20,7 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -2768,7 +2769,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
 				for (Map.Entry<String,Object> e : OMap.ofJson(headers).entrySet())
-					req.header(BasicHeader.of(e.getKey(), e.getValue()));
+					req.header(basicHeader(e.getKey(), e.getValue()));
 			if (isNotEmpty(content))
 				req.bodyString(content);
 			return req;

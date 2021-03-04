@@ -13,7 +13,8 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.response.HttpResponses.*;
+import static org.apache.juneau.http.response.StandardHttpResponses.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -26,7 +27,6 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.http.response.*;
@@ -204,7 +204,7 @@ public class Remote_CommonInterfaces_Test {
 	public static class D1 implements D {
 		@Override
 		public BasicHttpResource httpResource() throws IOException {
-			return BasicHttpResource.of("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(ETag.of("\"bar\""));
+			return BasicHttpResource.of("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(eTag("\"bar\""));
 		}
 	}
 

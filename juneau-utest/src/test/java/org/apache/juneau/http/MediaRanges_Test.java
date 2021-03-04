@@ -13,13 +13,12 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.header.MediaRanges.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
-
-import static org.apache.juneau.http.MediaRanges.*;
-
+import org.apache.juneau.http.header.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

@@ -18,6 +18,7 @@ import java.util.function.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
 
+import org.apache.juneau.http.header.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

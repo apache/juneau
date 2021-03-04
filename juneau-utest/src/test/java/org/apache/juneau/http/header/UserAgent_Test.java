@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.UserAgent.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class UserAgent_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().contains("Apache");
-		c.get().header(of((Object)null)).run().assertBody().contains("Apache");
-		c.get().header(of((Supplier<?>)null)).run().assertBody().contains("Apache");
-		c.get().header(of(()->null)).run().assertBody().contains("Apache");
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(userAgent((String)null)).run().assertBody().contains("Apache");
+		c.get().header(userAgent((Object)null)).run().assertBody().contains("Apache");
+		c.get().header(userAgent((Supplier<?>)null)).run().assertBody().contains("Apache");
+		c.get().header(userAgent(()->null)).run().assertBody().contains("Apache");
+		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(userAgent(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(userAgent(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new UserAgent(VALUE)).run().assertBody().is(VALUE);
 	}
 

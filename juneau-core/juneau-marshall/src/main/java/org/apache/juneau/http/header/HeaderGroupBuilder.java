@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.header;
 
 import java.util.*;
 
@@ -18,25 +18,25 @@ import org.apache.http.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Builder for {@link BasicHeaderGroup} objects.
+ * Builder for {@link HeaderGroup} objects.
  */
 @FluentSetters
-public class BasicHeaderGroupBuilder {
+public class HeaderGroupBuilder {
 
 	final List<Header> headers = new ArrayList<>();
 
 	/**
 	 * Constructor.
 	 */
-	public BasicHeaderGroupBuilder() {}
+	public HeaderGroupBuilder() {}
 
 	/**
-	 * Creates a new {@link BasicHeaderGroup} bean based on the contents of this builder.
+	 * Creates a new {@link HeaderGroup} bean based on the contents of this builder.
 	 *
-	 * @return A new {@link BasicHeaderGroup} bean.
+	 * @return A new {@link HeaderGroup} bean.
 	 */
-	public BasicHeaderGroup build() {
-		return new BasicHeaderGroup(this);
+	public HeaderGroup build() {
+		return new HeaderGroup(this);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder clear() {
+	public HeaderGroupBuilder clear() {
 		headers.clear();
 		return this;
 	}
@@ -57,7 +57,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder add(Header value) {
+	public HeaderGroupBuilder add(Header value) {
 		if (value != null)
 			headers.add(value);
 		return this;
@@ -71,7 +71,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder add(String name, String value) {
+	public HeaderGroupBuilder add(String name, String value) {
 		headers.add(new BasicHeader(name, value));
 		return this;
 	}
@@ -83,7 +83,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder add(Header...values) {
+	public HeaderGroupBuilder add(Header...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
 			add(values[i]);
 		return this;
@@ -96,7 +96,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder add(List<Header> values) {
+	public HeaderGroupBuilder add(List<Header> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			add(values.get(i));
 		return this;
@@ -109,7 +109,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder remove(Header value) {
+	public HeaderGroupBuilder remove(Header value) {
 		if (value != null)
 			headers.remove(value);
 		return this;
@@ -122,7 +122,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder remove(Header...values) {
+	public HeaderGroupBuilder remove(Header...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
 			remove(values[i]);
 		return this;
@@ -135,7 +135,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder remove(List<Header> values) {
+	public HeaderGroupBuilder remove(List<Header> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			remove(values.get(i));
 		return this;
@@ -148,7 +148,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder remove(String name) {
+	public HeaderGroupBuilder remove(String name) {
 		for (int i = 0; i < headers.size(); i++) /* See HTTPCORE-361 */
 			if (headers.get(i).getName().equalsIgnoreCase(name))
 				headers.remove(i--);
@@ -165,7 +165,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder update(Header value) {
+	public HeaderGroupBuilder update(Header value) {
 		if (value == null)
 			return this;
 
@@ -191,7 +191,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder update(Header...values) {
+	public HeaderGroupBuilder update(Header...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
 			update(values[i]);
 		return this;
@@ -207,7 +207,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder update(List<Header> values) {
+	public HeaderGroupBuilder update(List<Header> values) {
 		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
 			update(values.get(i));
 		return this;
@@ -223,7 +223,7 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder set(Header...values) {
+	public HeaderGroupBuilder set(Header...values) {
 		clear();
 		Collections.addAll(headers, values);
 		return this;
@@ -239,9 +239,64 @@ public class BasicHeaderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BasicHeaderGroupBuilder set(List<Header> values) {
+	public HeaderGroupBuilder set(List<Header> values) {
 		clear();
 		headers.addAll(values);
+		return this;
+	}
+
+	/**
+	 * Appends or replaces the header values in this list.
+	 *
+	 * <p>
+	 * If the header already exists in this list, it will be replaced with the new value.
+	 * Otherwise it will be appended to the end of this list.
+	 *
+	 * @param values The values to append or replace in this list.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderGroupBuilder appendUnique(Header...values) {
+		for (Header h : values) {
+			boolean replaced = false;
+			for (ListIterator<Header> li = headers.listIterator(); li.hasNext();) {
+				Header h2 = li.next();
+				if (h2.getName().equalsIgnoreCase(h.getName())) {
+					li.set(h);
+					replaced = true;
+					break;
+				}
+			}
+			if (! replaced)
+				add(h);
+		}
+		return this;
+	}
+
+
+	/**
+	 * Appends or replaces the header values in this list.
+	 *
+	 * <p>
+	 * If the header already exists in this list, it will be replaced with the new value.
+	 * Otherwise it will be appended to the end of this list.
+	 *
+	 * @param values The values to append or replace in this list.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderGroupBuilder appendUnique(Collection<Header> values) {
+		for (Header h : values) {
+			boolean replaced = false;
+			for (ListIterator<Header> li = headers.listIterator(); li.hasNext();) {
+				Header h2 = li.next();
+				if (h2.getName().equalsIgnoreCase(h.getName())) {
+					li.set(h);
+					replaced = true;
+					break;
+				}
+			}
+			if (! replaced)
+				add(h);
+		}
 		return this;
 	}
 

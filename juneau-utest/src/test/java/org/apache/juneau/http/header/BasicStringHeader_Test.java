@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
-import static org.apache.juneau.http.header.BasicStringHeader.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 
@@ -49,36 +49,36 @@ public class BasicStringHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of("","*")).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,"*")).run().assertBody().isEmpty();
+		c.get().header(stringHeader(null,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(stringHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(null,"*")).run().assertBody().isEmpty();
 
-		c.get().header(of(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"foo")).run().assertBody().is("foo");
-		c.get().header(of(HEADER,()->"foo")).run().assertBody().is("foo");
+		c.get().header(stringHeader(HEADER,"foo")).run().assertBody().is("foo");
+		c.get().header(stringHeader(HEADER,()->"foo")).run().assertBody().is("foo");
 
 		c.get().header(new BasicStringHeader(HEADER,null)).run().assertBody().isEmpty();
 		c.get().header(new BasicStringHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"1")).run().assertBody().is("1");
-		c.get().header(of(HEADER,()->"1")).run().assertBody().is("1");
+		c.get().header(stringHeader(HEADER,"1")).run().assertBody().is("1");
+		c.get().header(stringHeader(HEADER,()->"1")).run().assertBody().is("1");
 
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,1)).run().assertBody().is("1");
-		c.get().header(of(HEADER,()->1)).run().assertBody().is("1");
+		c.get().header(stringHeader(HEADER,1)).run().assertBody().is("1");
+		c.get().header(stringHeader(HEADER,()->1)).run().assertBody().is("1");
 
-		c.get().header(of(HEADER,1.0)).run().assertBody().is("1.0");
-		c.get().header(of(HEADER,()->1.0)).run().assertBody().is("1.0");
+		c.get().header(stringHeader(HEADER,1.0)).run().assertBody().is("1.0");
+		c.get().header(stringHeader(HEADER,()->1.0)).run().assertBody().is("1.0");
 	}
 
 	@Test
 	public void a02_assertString() throws Exception {
-		of(HEADER,1).assertString().is("1");
+		stringHeader(HEADER,1).assertString().is("1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

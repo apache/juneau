@@ -14,16 +14,17 @@ package org.apache.juneau.http;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.SerializedHeader.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 
 import org.junit.*;
@@ -42,49 +43,49 @@ public class SerializedHeader_Test {
 
 	@Test
 	public void a02_type() throws Exception {
-		SerializedHeader x1 = of("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
+		SerializedHeader x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
 		assertThrown(()->x1.toString()).is("Validation error on request HEADER parameter 'Foo'='2'");
 	}
 
 	@Test
 	public void a03_serializer() throws Exception {
-		SerializedHeader x1 = of("Foo",list("bar","baz")).serializer((HttpPartSerializer)null);
+		SerializedHeader x1 = serializedHeader("Foo",list("bar","baz")).serializer((HttpPartSerializer)null);
 		assertString(x1.getValue()).is("['bar','baz']");
-		SerializedHeader x2 = of("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		SerializedHeader x2 = serializedHeader("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertString(x2.getValue()).is("bar,baz");
-		SerializedHeader x3 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		SerializedHeader x3 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertString(x3.getValue()).is("['bar','baz']");
-		SerializedHeader x4 = of("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializerIfNotSet((HttpPartSerializerSession)null);
+		SerializedHeader x4 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializerIfNotSet((HttpPartSerializerSession)null);
 		assertString(x4.getValue()).is("bar,baz");
-		SerializedHeader x5 = of("Foo",list("bar","baz")).serializerIfNotSet(OAPI_SERIALIZER.createPartSession(null));
+		SerializedHeader x5 = serializedHeader("Foo",list("bar","baz")).serializerIfNotSet(OAPI_SERIALIZER.createPartSession(null));
 		assertString(x5.getValue()).is("bar,baz");
 	}
 
 	@Test
 	public void a04_skipIfEmpty() throws Exception {
-		SerializedHeader x1 = of("Foo",null).skipIfEmpty();
+		SerializedHeader x1 = serializedHeader("Foo",null).skipIfEmpty();
 		assertString(x1.getValue()).isNull();
-		SerializedHeader x2 = of("Foo","").skipIfEmpty();
+		SerializedHeader x2 = serializedHeader("Foo","").skipIfEmpty();
 		assertString(x2.getValue()).isNull();
-		SerializedHeader x3 = of("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
+		SerializedHeader x3 = serializedHeader("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrown(()->x3.getValue()).contains("Empty value not allowed.");
 	}
 
 	@Test
 	public void a05_getValue_defaults() throws Exception {
-		SerializedHeader x1 = of("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
+		SerializedHeader x1 = serializedHeader("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertString(x1.getValue()).is("1");
 
-		SerializedHeader x2 = of("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
+		SerializedHeader x2 = serializedHeader("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
 		assertString(x2.getValue()).isNull();
 
-		SerializedHeader x3 = of("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
+		SerializedHeader x3 = serializedHeader("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
 		assertString(x3.getValue()).isNull();
 
-		SerializedHeader x4 = of("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
+		SerializedHeader x4 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
 		assertThrown(()->x4.getValue()).contains("Required value not provided.");
 
-		SerializedHeader x5 = of("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
+		SerializedHeader x5 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
 		assertThrown(()->x5.getValue()).contains("Bad");
 	}
 

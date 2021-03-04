@@ -14,12 +14,11 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.BasicEntityTagHeader.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -49,16 +48,16 @@ public class BasicEntityTagHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(HEADER,(String)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,VALUE)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,()->VALUE)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(HEADER,new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(HEADER,()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,(String)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(null,VALUE)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(null,()->VALUE)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,()->VALUE)).run().assertBody().is(VALUE);
 	}
 
 	@Test

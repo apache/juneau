@@ -15,7 +15,7 @@ package org.apache.juneau.http.header;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Connection.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -49,28 +49,28 @@ public class Connection_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(of((Object)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(of((Supplier<?>)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(of(()->null)).run().assertBody().is("Keep-Alive");
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(connection((String)null)).run().assertBody().is("Keep-Alive");
+		c.get().header(connection((Object)null)).run().assertBody().is("Keep-Alive");
+		c.get().header(connection((Supplier<?>)null)).run().assertBody().is("Keep-Alive");
+		c.get().header(connection(()->null)).run().assertBody().is("Keep-Alive");
+		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(connection(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(connection(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Connection(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertTrue(of("Keep-Alive").isKeepAlive());
-		assertTrue(of("keep-alive").isKeepAlive());
-		assertFalse(of("foo").isKeepAlive());
-		assertTrue(of("Close").isClose());
-		assertTrue(of("close").isClose());
-		assertFalse(of("foo").isClose());
-		assertTrue(of("Upgrade").isUpgrade());
-		assertTrue(of("upgrade").isUpgrade());
-		assertFalse(of("foo").isUpgrade());
+		assertTrue(connection("Keep-Alive").isKeepAlive());
+		assertTrue(connection("keep-alive").isKeepAlive());
+		assertFalse(connection("foo").isKeepAlive());
+		assertTrue(connection("Close").isClose());
+		assertTrue(connection("close").isClose());
+		assertFalse(connection("foo").isClose());
+		assertTrue(connection("Upgrade").isUpgrade());
+		assertTrue(connection("upgrade").isUpgrade());
+		assertFalse(connection("foo").isUpgrade());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

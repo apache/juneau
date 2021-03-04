@@ -16,13 +16,13 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
@@ -895,7 +895,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	private static org.apache.http.Header header(String key,Object val) {
-		return BasicStringHeader.of(key,val);
+		return stringHeader(key,val);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

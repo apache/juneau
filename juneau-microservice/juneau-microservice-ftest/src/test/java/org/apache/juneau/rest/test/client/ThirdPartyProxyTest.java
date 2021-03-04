@@ -26,6 +26,7 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;

@@ -27,6 +27,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
@@ -59,7 +60,6 @@ public class ConfigurablePropertyCodeGenerator {
 		ArrayAssertion.class,
 		Assertion.class,
 		BasicHeader.class,
-		BasicHeaderGroupBuilder.class,
 		BasicHttpEntity.class,
 		BasicHttpResource.class,
 		HttpResponseBuilder.class,
@@ -116,6 +116,7 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentThrowableAssertion.class,
 		FluentZonedDateTimeAssertion.class,
 		Found.class,
+		HeaderGroupBuilder.class,
 		HtmlDocSerializerBuilder.class,
 		HtmlParserBuilder.class,
 		HtmlSchemaSerializerBuilder.class,

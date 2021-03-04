@@ -14,12 +14,11 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.ContentType.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -49,24 +48,24 @@ public class ContentType_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((MediaType)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentType((String)null)).run().assertBody().isEmpty();
+		c.get().header(contentType((Object)null)).run().assertBody().isEmpty();
+		c.get().header(contentType((MediaType)null)).run().assertBody().isEmpty();
+		c.get().header(contentType((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(contentType(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentType(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentType(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentType(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(contentType(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new ContentType(VALUE)).run().assertBody().is(VALUE);
 
-		c.get().header(of(MediaType.JSON)).run().assertBody().is("application/json");
-		c.get().header(of(()->MediaType.JSON)).run().assertBody().is("application/json");
+		c.get().header(contentType(MediaType.JSON)).run().assertBody().is("application/json");
+		c.get().header(contentType(()->MediaType.JSON)).run().assertBody().is("application/json");
 	}
 
 	@Test
 	public void a02_asMediaType() throws Exception {
-		assertString(of(()->MediaType.JSON).asMediaType()).is("application/json");
+		assertString(contentType(()->MediaType.JSON).asMediaType()).is("application/json");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

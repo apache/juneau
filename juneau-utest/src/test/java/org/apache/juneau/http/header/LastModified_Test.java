@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.LastModified.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class LastModified_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(lastModified((String)null)).run().assertBody().isEmpty();
+		c.get().header(lastModified((Object)null)).run().assertBody().isEmpty();
+		c.get().header(lastModified((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(lastModified(()->null)).run().assertBody().isEmpty();
+		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(lastModified(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(lastModified(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new LastModified(VALUE)).run().assertBody().is(VALUE);
 	}
 

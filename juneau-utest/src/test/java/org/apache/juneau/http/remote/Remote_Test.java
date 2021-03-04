@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import java.util.concurrent.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshall.*;
 import org.junit.*;
 
@@ -578,8 +580,8 @@ public class Remote_Test {
 
 	public static class F1b extends HeaderSupplier {
 		public F1b() {
-			add(BasicHeader.of("Foo","baz"));
-			add(HeaderSupplier.of(BasicHeader.of("Foo",()->"qux")));
+			add(basicHeader("Foo","baz"));
+			add(HeaderSupplier.of(basicHeader("Foo",()->"qux")));
 		}
 	}
 
@@ -587,7 +589,7 @@ public class Remote_Test {
 	public void f01_headers() throws Exception {
 		F1a x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
 		assertEquals("['bar','baz','qux']",SimpleJson.DEFAULT.toString(x.getHeaders()));
-		x = client(F.class).header("Check","X-Client-Version").build().getRemote(F1a.class);
+		x = client(F.class).header("Check","Client-Version").build().getRemote(F1a.class);
 		assertEquals("['1.2.3']",SimpleJson.DEFAULT.toString(x.getHeaders()));
 	}
 

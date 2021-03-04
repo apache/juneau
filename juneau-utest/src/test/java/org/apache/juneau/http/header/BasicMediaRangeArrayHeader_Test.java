@@ -13,12 +13,12 @@
 package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -26,7 +26,6 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.BasicMediaRangeArrayHeader.of;
 
 import org.junit.*;
 
@@ -52,52 +51,52 @@ public class BasicMediaRangeArrayHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of("","*")).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,"*")).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(null,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(null,"*")).run().assertBody().isEmpty();
 
-		c.get().header(of(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
 		c.get().header(new BasicMediaRangeArrayHeader(HEADER,null)).run().assertBody().isEmpty();
 		c.get().header(new BasicMediaRangeArrayHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"foo/bar;x=1")).run().assertBody().is("foo/bar;x=1");
+		c.get().header(mediaRangeArrayHeader(HEADER,"foo/bar;x=1")).run().assertBody().is("foo/bar;x=1");
 
-		c.get().header(of(HEADER,MediaRanges.of("foo/bar;x=1"))).run().assertBody().is("foo/bar;x=1");
+		c.get().header(mediaRangeArrayHeader(HEADER,MediaRanges.of("foo/bar;x=1"))).run().assertBody().is("foo/bar;x=1");
 	}
 
 	@Test
 	public void a02_match() throws Exception {
-		assertInteger(Accept.of("text/foo").match(AList.of(MediaType.of("text/foo")))).is(0);
-		assertInteger(Accept.of("text/foo").match(AList.of(MediaType.of("text/bar")))).is(-1);
+		assertInteger(accept("text/foo").match(AList.of(MediaType.of("text/foo")))).is(0);
+		assertInteger(accept("text/foo").match(AList.of(MediaType.of("text/bar")))).is(-1);
 		assertInteger(new Accept((String)null).match(AList.of(MediaType.of("text/bar")))).is(-1);
-		assertInteger(Accept.of("text/foo").match(AList.of(MediaType.of(null)))).is(-1);
-		assertInteger(Accept.of("text/foo").match(null)).is(-1);
+		assertInteger(accept("text/foo").match(AList.of(MediaType.of(null)))).is(-1);
+		assertInteger(accept("text/foo").match(null)).is(-1);
 	}
 
 	@Test
 	public void a03_getRange() throws Exception {
-		assertString(Accept.of("text/foo").getRange(0)).is("text/foo");
-		assertString(Accept.of("text/foo").getRange(1)).isNull();
-		assertString(Accept.of("text/foo").getRange(-1)).isNull();
+		assertString(accept("text/foo").getRange(0)).is("text/foo");
+		assertString(accept("text/foo").getRange(1)).isNull();
+		assertString(accept("text/foo").getRange(-1)).isNull();
 		assertString(new Accept((String)null).getRange(0)).isNull();
 	}
 
 	@Test
 	public void a04_hasSubtypePart() throws Exception {
-		assertBoolean(Accept.of("text/foo").hasSubtypePart("foo")).isTrue();
-		assertBoolean(Accept.of("text/foo").hasSubtypePart("bar")).isFalse();
-		assertBoolean(Accept.of("text/foo").hasSubtypePart(null)).isFalse();
+		assertBoolean(accept("text/foo").hasSubtypePart("foo")).isTrue();
+		assertBoolean(accept("text/foo").hasSubtypePart("bar")).isFalse();
+		assertBoolean(accept("text/foo").hasSubtypePart(null)).isFalse();
 		assertBoolean(new Accept((String)null).hasSubtypePart("foo")).isFalse();
 	}
 
 	@Test
 	public void a05_getRanges() throws Exception {
-		assertObject(Accept.of("text/foo,text/bar").getRanges()).asJson().is("['text/foo','text/bar']");
+		assertObject(accept("text/foo,text/bar").getRanges()).asJson().is("['text/foo','text/bar']");
 		assertObject(new Accept((String)null).getRanges()).asJson().is("[]");
 	}
 

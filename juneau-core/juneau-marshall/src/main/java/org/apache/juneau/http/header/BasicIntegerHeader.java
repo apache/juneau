@@ -20,7 +20,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**

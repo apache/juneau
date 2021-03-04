@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.CacheControl.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class CacheControl_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(cacheControl((String)null)).run().assertBody().isEmpty();
+		c.get().header(cacheControl((Object)null)).run().assertBody().isEmpty();
+		c.get().header(cacheControl((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(cacheControl(()->null)).run().assertBody().isEmpty();
+		c.get().header(cacheControl(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(cacheControl(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(cacheControl(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(cacheControl(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new CacheControl(VALUE)).run().assertBody().is(VALUE);
 	}
 

@@ -18,8 +18,6 @@ import static java.util.Optional.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
-
 /**
  * Category of headers that consist of a single entity validator value.
  *

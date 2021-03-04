@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Authorization.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Authorization_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(authorization((String)null)).run().assertBody().isEmpty();
+		c.get().header(authorization((Object)null)).run().assertBody().isEmpty();
+		c.get().header(authorization((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(authorization(()->null)).run().assertBody().isEmpty();
+		c.get().header(authorization(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(authorization(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(authorization(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(authorization(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Authorization(VALUE)).run().assertBody().is(VALUE);
 	}
 

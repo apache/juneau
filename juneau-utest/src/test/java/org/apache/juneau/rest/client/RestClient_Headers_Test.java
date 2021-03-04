@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 
@@ -24,7 +25,6 @@ import org.apache.http.Header;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
@@ -92,7 +92,7 @@ public class RestClient_Headers_Test {
 	@Test
 	public void a03_header_Header() throws Exception {
 		checkFooClient().header(header("Foo","bar")).build().get("/headers").header(header("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().header(BasicStringHeader.of("Foo","bar")).build().get("/headers").header(BasicStringHeader.of("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().header(stringHeader("Foo","bar")).build().get("/headers").header(stringHeader("Foo","baz")).run().assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -111,8 +111,8 @@ public class RestClient_Headers_Test {
 		checkFooClient().headers(AMap.of("Foo","bar")).build().get("/headers").headers(AMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(pair("Foo","bar")).build().get("/headers").headers(pair("Foo","baz")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(SerializedNameValuePair.of("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedNameValuePair.of("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
-		checkFooClient().headers(SerializedHeader.of("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedHeader.of("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
-		checkFooClient().headers(SerializedHeader.of("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedHeader.of("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers(serializedHeader("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedHeader("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers(serializedHeader("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedHeader("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers((Object)new Header[]{header("Foo","baz")}).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(HeaderSupplier.of(header("Foo","bar"))).build().get("/headers").headers(HeaderSupplier.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(AList.of(header("Foo","bar"))).build().get("/headers").headers(AList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
@@ -121,7 +121,7 @@ public class RestClient_Headers_Test {
 		assertThrown(()->client().headers("Foo")).contains("Invalid type");
 		assertThrown(()->client().build().get("").headers("Foo")).contains("Invalid type");
 
-		checkFooClient().headers(SerializedHeader.of("Foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().get("/headers").run().assertBody().is("['bar']");
+		checkFooClient().headers(serializedHeader("Foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().get("/headers").run().assertBody().is("['bar']");
 	}
 
 	@Test
@@ -201,7 +201,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a12_badSerialization() throws Exception {
-		assertThrown(()->checkFooClient().header(SerializedHeader.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
+		assertThrown(()->checkFooClient().header(serializedHeader("Foo","bar").serializer(new A12())).build().get()).contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -287,7 +287,7 @@ public class RestClient_Headers_Test {
 		checkClient("Accept-Language").header(new AcceptLanguage("en")).build().get("/headers").run().assertBody().is("['en']");
 		checkClient("Authorization").header(new Authorization("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Cache-Control").header(new CacheControl("none")).header("X-Expect","none").build().get("/headers").run().assertBody().is("['none']");
-		checkClient("X-Client-Version").header(new ClientVersion("1")).build().get("/headers").run().assertBody().is("['1']");
+		checkClient("Client-Version").header(new ClientVersion("1")).build().get("/headers").run().assertBody().is("['1']");
 		checkClient("Connection").header(new Connection("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Content-Length").header(new ContentLength(123)).build().get("/headers").run().assertBody().is("['123']");
 		checkClient("Content-Type").header(new ContentType("foo")).build().get("/headers").run().assertBody().is("['foo']");

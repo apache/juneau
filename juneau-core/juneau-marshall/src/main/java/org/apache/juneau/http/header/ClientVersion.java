@@ -20,9 +20,21 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents a parsed <l>X-Client-Version</l> HTTP request header.
+ * Represents a parsed <l>Client-Version</l> HTTP request header.
+ *
+ * <p>
+ * Specifies a client-side version number.
+ *
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode w800'>
+ * 	Client-Version: 2.0.1
+ * </p>
+ *
+ * <p>
+ * Not part of the RFC2616 specification, but provided to allow for HTTP responses to be tailored to specified
+ * known client versions.
  */
-@Header("X-Client-Version")
+@Header("Client-Version")
 public class ClientVersion extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
@@ -53,7 +65,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link ClientVersion} object.
 	 */
@@ -74,7 +86,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link ClientVersion} object.
 	 */
@@ -92,12 +104,12 @@ public class ClientVersion extends BasicStringHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
 	public ClientVersion(Object value) {
-		super("X-Client-Version", value);
+		super("Client-Version", value);
 	}
 
 	/**

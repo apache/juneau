@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.TransferEncoding.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class TransferEncoding_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding((String)null)).run().assertBody().isEmpty();
+		c.get().header(transferEncoding((Object)null)).run().assertBody().isEmpty();
+		c.get().header(transferEncoding((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(transferEncoding(()->null)).run().assertBody().isEmpty();
+		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new TransferEncoding(VALUE)).run().assertBody().is(VALUE);
 	}
 

@@ -15,13 +15,12 @@ package org.apache.juneau.http.header;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.IfRange.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -56,31 +55,31 @@ public class IfRange_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
+		c.get().header(ifRange((String)null)).run().assertBody().isEmpty();
 		c.get().header(new IfRange((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
-		c.get().header(of(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
-		c.get().header(of(new StringBuilder(ETAG_VALUE))).run().assertBody().is(ETAG_VALUE);
-		c.get().header(of(()->ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
-		c.get().header(of(ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(of(ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(of(new StringBuilder(ETAG_VALUE2))).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(of(()->ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(of(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(of(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(of(()->CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
+		c.get().header(ifRange((Object)null)).run().assertBody().isEmpty();
+		c.get().header(ifRange((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(ifRange(()->null)).run().assertBody().isEmpty();
+		c.get().header(ifRange(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
+		c.get().header(ifRange(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
+		c.get().header(ifRange(new StringBuilder(ETAG_VALUE))).run().assertBody().is(ETAG_VALUE);
+		c.get().header(ifRange(()->ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
+		c.get().header(ifRange(ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
+		c.get().header(ifRange(ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
+		c.get().header(ifRange(new StringBuilder(ETAG_VALUE2))).run().assertBody().is(ETAG_VALUE2);
+		c.get().header(ifRange(()->ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
+		c.get().header(ifRange(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
+		c.get().header(ifRange(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
+		c.get().header(ifRange(()->CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
 		c.get().header(new IfRange(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
 	}
 
 	@Test
 	public void a02_asEntityTag() throws Exception {
-		EntityTag x = of(ETAG_VALUE).asEntityTag();
+		EntityTag x = ifRange(ETAG_VALUE).asEntityTag();
 		assertString(x).is("\"foo\"");
-		assertNull(of(()->null).asEntityTag());
-		assertNull(of(()->CALENDAR_VALUE).asEntityTag());
+		assertNull(ifRange(()->null).asEntityTag());
+		assertNull(ifRange(()->CALENDAR_VALUE).asEntityTag());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

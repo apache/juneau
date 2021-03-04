@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Vary.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Vary_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(vary((String)null)).run().assertBody().isEmpty();
+		c.get().header(vary((Object)null)).run().assertBody().isEmpty();
+		c.get().header(vary((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(vary(()->null)).run().assertBody().isEmpty();
+		c.get().header(vary(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(vary(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(vary(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(vary(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Vary(VALUE)).run().assertBody().is(VALUE);
 	}
 

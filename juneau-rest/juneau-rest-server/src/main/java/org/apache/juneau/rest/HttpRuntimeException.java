@@ -72,8 +72,12 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 		ClassInfo ci = ClassInfo.ofc(t);
 
 		// If it's any RuntimeException annotated with @Response, it can be rethrown.
-		if (ci.isRuntimeException() && ci.hasAnnotation(Response.class))
-			return (RuntimeException)t;
+		if (ci.isRuntimeException()) {
+			if (ci.hasAnnotation(Response.class))
+				return (RuntimeException)t;
+			if (ci.isChildOf(BasicHttpException.class))
+				return (RuntimeException)t;
+		}
 
 		// If it's a non-RuntimeException but annotated with @Response, it can be wrapped and rethrown.
 		if (ci.hasAnnotation(Response.class))

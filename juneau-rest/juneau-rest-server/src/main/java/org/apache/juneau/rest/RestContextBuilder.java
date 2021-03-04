@@ -17,6 +17,7 @@ import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
@@ -924,7 +925,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder defaultAccept(String value) {
 		if (isNotEmpty(value))
-			defaultRequestHeaders(Accept.of(value));
+			defaultRequestHeaders(accept(value));
 		return this;
 	}
 
@@ -939,7 +940,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder defaultContentType(String value) {
 		if (isNotEmpty(value))
-			defaultRequestHeaders(ContentType.of(value));
+			defaultRequestHeaders(contentType(value));
 		return this;
 	}
 
@@ -1016,7 +1017,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestHeader(String name, Object value) {
-		return defaultRequestHeaders(BasicHeader.of(name, value));
+		return defaultRequestHeaders(basicHeader(name, value));
 	}
 
 	/**
@@ -1035,7 +1036,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultRequestHeader(String name, Supplier<?> value) {
-		return defaultRequestHeaders(BasicHeader.of(name, value));
+		return defaultRequestHeaders(basicHeader(name, value));
 	}
 
 	/**
@@ -1073,7 +1074,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultResponseHeader(String name, Object value) {
-		return defaultResponseHeaders(BasicHeader.of(name, value));
+		return defaultResponseHeaders(basicHeader(name, value));
 	}
 
 	/**
@@ -1092,7 +1093,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder defaultResponseHeader(String name, Supplier<?> value) {
-		return defaultResponseHeaders(BasicHeader.of(name, value));
+		return defaultResponseHeaders(basicHeader(name, value));
 	}
 
 	/**

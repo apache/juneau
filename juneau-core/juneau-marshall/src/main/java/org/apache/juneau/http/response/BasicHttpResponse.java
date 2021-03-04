@@ -24,6 +24,7 @@ import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Basic implementation of the {@link HttpResponse} interface.
@@ -42,9 +43,9 @@ import org.apache.juneau.http.annotation.*;
 @BeanIgnore
 public class BasicHttpResponse implements HttpResponse {
 
-	BasicHeaderGroup headerGroup;
+	HeaderGroup headerGroup;
 	BasicStatusLine statusLine;
-	BasicHeaderGroupBuilder headerGroupBuilder;
+	HeaderGroupBuilder headerGroupBuilder;
 	BasicStatusLineBuilder statusLineBuilder;
 	HttpEntity body;
 	final boolean unmodifiable;
@@ -152,7 +153,7 @@ public class BasicHttpResponse implements HttpResponse {
 	@Override /* HttpMessage */
 	@ResponseHeader("*")
 	public Header[] getAllHeaders() {
-		return headerGroup().getAllHeaders();
+		return headerGroup().getAllHeaders().toArray(new Header[0]);
 	}
 
 	@Override /* HttpMessage */
@@ -279,7 +280,7 @@ public class BasicHttpResponse implements HttpResponse {
 		return statusLine;
 	}
 
-	private BasicHeaderGroup headerGroup() {
+	private HeaderGroup headerGroup() {
 		if (headerGroup == null) {
 			headerGroup = headerGroupBuilder.build();
 			headerGroupBuilder = null;
@@ -296,7 +297,7 @@ public class BasicHttpResponse implements HttpResponse {
 		return statusLineBuilder;
 	}
 
-	private BasicHeaderGroupBuilder headerGroupBuilder() {
+	private HeaderGroupBuilder headerGroupBuilder() {
 		assertModifiable();
 		if (headerGroupBuilder == null) {
 			headerGroupBuilder = headerGroup.builder();

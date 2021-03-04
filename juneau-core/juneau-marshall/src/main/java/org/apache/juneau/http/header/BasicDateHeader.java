@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.

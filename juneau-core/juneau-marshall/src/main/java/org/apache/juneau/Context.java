@@ -16,7 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -193,7 +193,7 @@ public abstract class Context {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_mediaType CONTEXT_mediaType}
 	 * 	<li><b>Name:</b>  <js>"Context.mediaType.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.MediaType}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.header.MediaType}
 	 * 	<li><b>System property:</b>  <c>Context.mediaType</c>
 	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_MEDIATYPE</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>

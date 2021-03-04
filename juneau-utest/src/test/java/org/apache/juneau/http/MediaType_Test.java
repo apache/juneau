@@ -18,6 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.http.header.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

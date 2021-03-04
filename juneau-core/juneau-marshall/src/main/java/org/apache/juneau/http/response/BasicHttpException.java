@@ -27,9 +27,8 @@ import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.BasicHeader;
-import org.apache.juneau.http.BasicStatusLine;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Basic implementation of the {@link HttpResponse} interface for error responses.
@@ -50,9 +49,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	private static final long serialVersionUID = 1L;
 
-	BasicHeaderGroup headerGroup;
+	HeaderGroup headerGroup;
 	BasicStatusLine statusLine;
-	BasicHeaderGroupBuilder headerGroupBuilder;
+	HeaderGroupBuilder headerGroupBuilder;
 	BasicStatusLineBuilder statusLineBuilder;
 	HttpEntity body;
 
@@ -276,7 +275,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	@Override /* HttpMessage */
 	@ResponseHeader("*")
 	public Header[] getAllHeaders() {
-		return headerGroup().getAllHeaders();
+		return headerGroup().getAllHeaders().toArray(new Header[0]);
 	}
 
 	@Override /* HttpMessage */
@@ -403,7 +402,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return statusLine;
 	}
 
-	private BasicHeaderGroup headerGroup() {
+	private HeaderGroup headerGroup() {
 		if (headerGroup == null) {
 			headerGroup = headerGroupBuilder.build();
 			headerGroupBuilder = null;
@@ -420,7 +419,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return statusLineBuilder;
 	}
 
-	private BasicHeaderGroupBuilder headerGroupBuilder() {
+	private HeaderGroupBuilder headerGroupBuilder() {
 		assertModifiable();
 		if (headerGroupBuilder == null) {
 			headerGroupBuilder = headerGroup.builder();

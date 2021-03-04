@@ -22,7 +22,6 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;

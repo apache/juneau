@@ -15,8 +15,9 @@ package org.apache.juneau.rest.client;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.response.HttpResponses.*;
+import static org.apache.juneau.http.response.StandardHttpResponses.*;
 import static org.apache.juneau.rest.client.RestClient.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -35,7 +36,6 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -487,6 +487,6 @@ public class RestClient_Test {
 	}
 
 	private static Header header(String name, Object val) {
-		return BasicStringHeader.of(name, val);
+		return stringHeader(name, val);
 	}
 }

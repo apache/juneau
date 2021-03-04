@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.WwwAuthenticate.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class WwwAuthenticate_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate((String)null)).run().assertBody().isEmpty();
+		c.get().header(wwwAuthenticate((Object)null)).run().assertBody().isEmpty();
+		c.get().header(wwwAuthenticate((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(wwwAuthenticate(()->null)).run().assertBody().isEmpty();
+		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new WwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
 	}
 

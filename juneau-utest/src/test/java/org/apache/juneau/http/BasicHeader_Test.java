@@ -15,12 +15,14 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -29,23 +31,23 @@ public class BasicHeader_Test {
 
 	@Test
 	public void a01_ofPair() {
-		BasicHeader x = BasicHeader.ofPair("Foo:bar");
+		BasicHeader x = basicHeader("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = BasicHeader.ofPair(" Foo : bar ");
+		x = basicHeader(" Foo : bar ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = BasicHeader.ofPair(" Foo : bar : baz ");
+		x = basicHeader(" Foo : bar : baz ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar : baz", x.getValue());
 
-		x = BasicHeader.ofPair("Foo");
+		x = basicHeader("Foo");
 		assertEquals("Foo", x.getName());
 		assertEquals("", x.getValue());
 
-		assertNull(BasicHeader.ofPair((String)null));
+		assertNull(basicHeader((String)null));
 	}
 
 	@Test
@@ -62,7 +64,7 @@ public class BasicHeader_Test {
 		BasicNameValuePair x1 = pair("X1","1");
 		SerializedNameValuePair x2 = SerializedNameValuePair.of("X2","2");
 		Header x3 = header("X3","3");
-		SerializedHeader x4 = SerializedHeader.of("X4","4");
+		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = new NameValuePairable() {
@@ -165,11 +167,11 @@ public class BasicHeader_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private BasicHeader header(String name, Object val) {
-		return BasicHeader.of(name, val);
+		return basicHeader(name, val);
 	}
 
 	private BasicHeader header(String name, Supplier<?> val) {
-		return BasicHeader.of(name, val);
+		return basicHeader(name, val);
 	}
 
 	private BasicNameValuePair pair(String name, Object val) {

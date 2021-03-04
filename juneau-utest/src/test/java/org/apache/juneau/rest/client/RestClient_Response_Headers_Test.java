@@ -15,13 +15,13 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -169,8 +169,8 @@ public class RestClient_Response_Headers_Test {
 		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertValue().doesNotExist();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertValue().asLong().is(123l);
 		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertValue().asLong().doesNotExist();
-		checkFooClient().build().get("/echo").header(BasicDateHeader.of("Foo",CALENDAR)).run().getResponseHeader("Foo").assertValue().asDate().exists();
-		checkFooClient().build().get("/echo").header(BasicDateHeader.of("Foo",CALENDAR)).run().getResponseHeader("Bar").assertValue().asDate().doesNotExist();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getResponseHeader("Foo").assertValue().asDate().exists();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getResponseHeader("Bar").assertValue().asDate().doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

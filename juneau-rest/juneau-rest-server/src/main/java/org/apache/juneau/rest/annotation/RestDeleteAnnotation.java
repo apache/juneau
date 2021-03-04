@@ -16,13 +16,13 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -459,11 +459,11 @@ public class RestDeleteAnnotation {
 
 			cpb.set(REST_encoders, merge(ConverterUtils.toType(cpb.peek(REST_encoders), Object[].class), a.encoders()));
 			cpb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
-			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
 			stringStream(a.defaultQuery()).map(x -> BasicNameValuePair.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
-			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			cpb.prependTo(REST_guards, reverse(a.guards()));
 			cpb.prependTo(RESTOP_matchers, a.matchers());
 			cpb.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());

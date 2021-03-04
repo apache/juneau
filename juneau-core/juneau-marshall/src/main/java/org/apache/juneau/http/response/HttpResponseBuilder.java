@@ -32,9 +32,9 @@ import org.apache.juneau.internal.*;
 public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	BasicStatusLine statusLine;
-	BasicHeaderGroup headerGroup = BasicHeaderGroup.INSTANCE;
+	HeaderGroup headerGroup = HeaderGroup.INSTANCE;
 	BasicStatusLineBuilder statusLineBuilder;
-	BasicHeaderGroupBuilder headerGroupBuilder;
+	HeaderGroupBuilder headerGroupBuilder;
 	HttpEntity body;
 	boolean unmodifiable;
 	
@@ -96,11 +96,11 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		return statusLine;
 	}
 
-	BasicHeaderGroup headerGroup() {
+	HeaderGroup headerGroup() {
 		if (headerGroupBuilder != null)
 			return headerGroupBuilder.build();
 		if (headerGroup == null)
-			return BasicHeaderGroup.INSTANCE;
+			return HeaderGroup.INSTANCE;
 		return headerGroup;
 	}
 
@@ -225,7 +225,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpResponseBuilder<T> headerGroup(BasicHeaderGroup value) {
+	public HttpResponseBuilder<T> headerGroup(HeaderGroup value) {
 		headerGroup = value;
 		headerGroupBuilder = null;
 		return this;
@@ -453,9 +453,9 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		return statusLineBuilder;
 	}
 
-	private BasicHeaderGroupBuilder headerGroupBuilder() {
+	private HeaderGroupBuilder headerGroupBuilder() {
 		if (headerGroupBuilder == null) {
-			headerGroupBuilder = headerGroup == null ? BasicHeaderGroup.create() : headerGroup.builder();
+			headerGroupBuilder = headerGroup == null ? HeaderGroup.create() : headerGroup.builder();
 			headerGroup = null;
 		}
 		return headerGroupBuilder;

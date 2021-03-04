@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static java.util.Arrays.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -24,6 +25,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -376,7 +378,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultRequestHeader(String name, Object value) {
-		return defaultRequestHeaders(BasicHeader.of(name, value));
+		return defaultRequestHeaders(basicHeader(name, value));
 	}
 
 	/**
@@ -395,7 +397,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultRequestHeader(String name, Supplier<?> value) {
-		return defaultRequestHeaders(BasicHeader.of(name, value));
+		return defaultRequestHeaders(basicHeader(name, value));
 	}
 
 	/**
@@ -433,7 +435,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultResponseHeader(String name, Object value) {
-		return defaultResponseHeaders(BasicHeader.of(name, value));
+		return defaultResponseHeaders(basicHeader(name, value));
 	}
 
 	/**
@@ -452,7 +454,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestOperationContextBuilder defaultResponseHeader(String name, Supplier<?> value) {
-		return defaultResponseHeaders(BasicHeader.of(name, value));
+		return defaultResponseHeaders(basicHeader(name, value));
 	}
 
 	/**

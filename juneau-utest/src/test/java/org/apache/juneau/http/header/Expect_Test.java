@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Expect.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Expect_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(expect((String)null)).run().assertBody().isEmpty();
+		c.get().header(expect((Object)null)).run().assertBody().isEmpty();
+		c.get().header(expect((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(expect(()->null)).run().assertBody().isEmpty();
+		c.get().header(expect(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(expect(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(expect(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(expect(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Expect(VALUE)).run().assertBody().is(VALUE);
 	}
 

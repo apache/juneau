@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.security.*;
@@ -702,7 +703,7 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* HttpServletRequest */
 	public long getDateHeader(String name) {
 		String s = getHeader(name);
-		return s == null ? 0 : org.apache.juneau.http.header.Date.of(s).asZonedDateTime().get().toInstant().toEpochMilli();
+		return s == null ? 0 : date(s).asZonedDateTime().get().toInstant().toEpochMilli();
 	}
 
 	@Override /* HttpServletRequest */

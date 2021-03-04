@@ -19,8 +19,6 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
-
 /**
  * Category of headers that consist of a single URL value.
  *
@@ -47,7 +45,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicUriHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
@@ -69,7 +67,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicUriHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
@@ -89,7 +87,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */

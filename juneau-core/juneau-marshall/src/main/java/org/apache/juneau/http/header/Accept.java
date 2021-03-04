@@ -173,7 +173,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link Accept} object.
 	 */
@@ -194,7 +194,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link Accept} object.
 	 */
@@ -212,7 +212,7 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */

@@ -15,6 +15,7 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.BasicHttpResource.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 
@@ -102,7 +103,7 @@ public class BasicHttpResource_Test {
 		assertLong(of(new StringReader("foo")).getContentLength()).is(-1l);
 		assertLong(of(new StringReader("foo")).contentLength(3).getContentLength()).is(3l);
 
-		x = new BasicHttpResource("foo", ContentType.of("text/plain"), ContentEncoding.of("identity"));
+		x = new BasicHttpResource("foo", contentType("text/plain"), contentEncoding("identity"));
 		assertString(x.getContentType().getValue()).is("text/plain");
 		assertString(x.getContentEncoding().getValue()).is("identity");
 

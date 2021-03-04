@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -151,7 +152,7 @@ public final class ParserGroup extends BeanContext {
 		if (pm != null)
 			return pm;
 
-		ContentType ct = ContentType.of(contentTypeHeader);
+		ContentType ct = contentType(contentTypeHeader);
 		int match = ct.match(mediaTypes);
 
 		if (match >= 0) {

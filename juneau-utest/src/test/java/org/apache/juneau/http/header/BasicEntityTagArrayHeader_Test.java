@@ -18,14 +18,13 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
-import static org.apache.juneau.http.header.BasicEntityTagArrayHeader.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 
@@ -51,33 +50,33 @@ public class BasicEntityTagArrayHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of("","*")).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,"*")).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(null,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(null,"*")).run().assertBody().isEmpty();
 
-		c.get().header(of(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"\"foo\"")).run().assertBody().is("\"foo\"");
-		c.get().header(of(HEADER,()->"\"foo\"")).run().assertBody().is("\"foo\"");
+		c.get().header(entityTagArrayHeader(HEADER,"\"foo\"")).run().assertBody().is("\"foo\"");
+		c.get().header(entityTagArrayHeader(HEADER,()->"\"foo\"")).run().assertBody().is("\"foo\"");
 
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(entityTagArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"\"foo\",\"bar\"")).run().assertBody().is("\"foo\",\"bar\"");
-		c.get().header(of(HEADER,()->"\"foo\",\"bar\"")).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,"\"foo\",\"bar\"")).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,()->"\"foo\",\"bar\"")).run().assertBody().is("\"foo\",\"bar\"");
 
-		c.get().header(of(HEADER,AList.of("\"foo\"","\"bar\""))).run().assertBody().is("\"foo\",\"bar\"");
-		c.get().header(of(HEADER,()->AList.of("\"foo\"","\"bar\""))).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,AList.of("\"foo\"","\"bar\""))).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,()->AList.of("\"foo\"","\"bar\""))).run().assertBody().is("\"foo\",\"bar\"");
 
 		EntityTag[] x1 = new EntityTag[]{EntityTag.of("\"foo\""),EntityTag.of("\"bar\"")};
-		c.get().header(of(HEADER,x1)).run().assertBody().is("\"foo\",\"bar\"");
-		c.get().header(of(HEADER,()->x1)).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,x1)).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,()->x1)).run().assertBody().is("\"foo\",\"bar\"");
 
 		String[] x2 = {"\"foo\"","\"bar\""};
-		c.get().header(of(HEADER,x2)).run().assertBody().is("\"foo\",\"bar\"");
-		c.get().header(of(HEADER,()->x2)).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,x2)).run().assertBody().is("\"foo\",\"bar\"");
+		c.get().header(entityTagArrayHeader(HEADER,()->x2)).run().assertBody().is("\"foo\",\"bar\"");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -14,11 +14,11 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -86,7 +86,7 @@ public class ContentType_Match_Test {
 
 	@Test
 	public void test() throws Exception {
-		ContentType ct = ContentType.of(this.contentType);
+		ContentType ct = contentType(this.contentType);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		assertInteger(ct.match(AList.of(mt))).msg("{0} failed", label).is(expected);
 	}

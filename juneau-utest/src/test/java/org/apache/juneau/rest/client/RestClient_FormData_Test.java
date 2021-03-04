@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;
@@ -101,7 +102,7 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDatas(pair(null,"foo")).run().assertBody().is("null=foo");
 		client().build().post("/formData").formDatas(pair(null,null)).run().assertBody().is("");
 
-		client().formDatas(SerializedHeader.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(serializedHeader("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
 		client().formDatas(SerializedNameValuePair.of("foo","bar").schema(null)).build().post("/formData").run().assertBody().is("foo=bar");
 		client().formDatas(SerializedNameValuePair.of("foo",null).schema(null)).build().post("/formData").run().assertBody().is("");
 		client().formDatas(SerializedNameValuePair.of("foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");

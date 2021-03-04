@@ -21,7 +21,6 @@ import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.ContentType;
 
 /**
  * An extension of an {@link HttpEntity} with support for arbitrary headers.

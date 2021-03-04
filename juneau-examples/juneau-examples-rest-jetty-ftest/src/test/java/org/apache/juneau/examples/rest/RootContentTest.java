@@ -14,7 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import java.util.*;
 
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

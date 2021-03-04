@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.header;
 
 import static java.util.Optional.*;
 
@@ -27,10 +27,10 @@ import org.apache.http.util.*;
  * <p>
  * Similar to {@link HeaderGroup} but uses a builder-based approach for building header groups.
  */
-public class BasicHeaderGroup {
+public class HeaderGroup {
 
 	/** Predefined instance. */
-	public static final BasicHeaderGroup INSTANCE = create().build();
+	public static final HeaderGroup INSTANCE = create().build();
 
 	private static final Header[] EMPTY = new Header[] {};
 
@@ -41,8 +41,8 @@ public class BasicHeaderGroup {
 	 *
 	 * @return A new builder.
 	 */
-	public static BasicHeaderGroupBuilder create() {
-		return new BasicHeaderGroupBuilder();
+	public static HeaderGroupBuilder create() {
+		return new HeaderGroupBuilder();
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class BasicHeaderGroup {
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 */
-	public BasicHeaderGroup(BasicHeaderGroupBuilder builder) {
+	public HeaderGroup(HeaderGroupBuilder builder) {
 		this.headers = new ArrayList<>(builder.headers);
 	}
 
@@ -59,7 +59,7 @@ public class BasicHeaderGroup {
 	 *
 	 * @return A new builder object.
 	 */
-	public BasicHeaderGroupBuilder builder() {
+	public HeaderGroupBuilder builder() {
 		return create().add(headers);
 	}
 
@@ -167,8 +167,8 @@ public class BasicHeaderGroup {
 	 *
 	 * @return An array containing all the headers within this group, or an empty array if no headers are present.
 	 */
-	public Header[] getAllHeaders() {
-		return headers.toArray(new Header[headers.size()]);
+	public List<Header> getAllHeaders() {
+		return Collections.unmodifiableList(headers);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class BasicHeaderGroup {
 	 *
 	 * @return A copy of this object.
 	 */
-	public BasicHeaderGroup copy() {
+	public HeaderGroup copy() {
 		return builder().build();
 	}
 

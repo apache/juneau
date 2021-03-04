@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -48,7 +47,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicMediaTypeHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
@@ -70,7 +69,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicMediaTypeHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
@@ -90,7 +89,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */

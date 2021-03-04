@@ -16,7 +16,6 @@ import static org.apache.juneau.http.Constants.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -125,7 +124,7 @@ public class AcceptEncoding extends BasicStringRangeArrayHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link AcceptEncoding} object.
 	 */
@@ -147,7 +146,7 @@ public class AcceptEncoding extends BasicStringRangeArrayHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 	</ul>
 	 * @return A new {@link AcceptEncoding} object.
 	 */
@@ -166,7 +165,7 @@ public class AcceptEncoding extends BasicStringRangeArrayHeader {
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */

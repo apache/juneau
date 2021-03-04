@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.time.temporal.*;
 import java.util.*;
@@ -25,9 +26,7 @@ import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.BasicHeader;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -174,7 +173,7 @@ public class RestClient_Response_Test {
 	public void c03_response_headerAssertions() throws Exception {
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asInteger().is(123);
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asLong().is(123l);
-		checkFooClient(C.class).build().get().json().header(BasicDateHeader.of("Foo",CALENDAR)).run().assertHeader("Foo").asZonedDateTime().isEqual(((GregorianCalendar)CALENDAR).toZonedDateTime(), ChronoUnit.SECONDS);
+		checkFooClient(C.class).build().get().json().header(dateHeader("Foo",CALENDAR)).run().assertHeader("Foo").asZonedDateTime().isEqual(((GregorianCalendar)CALENDAR).toZonedDateTime(), ChronoUnit.SECONDS);
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertCharset().is("iso-8859-1");
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertHeader("Content-Type").is("application/json;charset=iso-8859-1");
 	}
@@ -191,7 +190,7 @@ public class RestClient_Response_Test {
 		RestResponse r = checkFooClient(C.class).build().get().json().run();
 		r.setHeader("Foo","bar");
 		r.addHeader("Foo","baz");
-		r.addHeader(BasicStringHeader.of("Foo","qux"));
+		r.addHeader(stringHeader("Foo","qux"));
 		assertEquals(3, r.getHeaders("Foo").length);
 		assertEquals(0, r.getHeaders("Bar").length);
 		r.getFirstHeader("Foo").assertValue().is("bar");
@@ -199,11 +198,11 @@ public class RestClient_Response_Test {
 		r.getLastHeader("Foo").assertValue().is("qux");
 		assertFalse(r.getLastHeader("Bar").isPresent());
 
-		r.setHeaders(new Header[]{BasicHeader.of("Foo", "quux")});
+		r.setHeaders(new Header[]{basicHeader("Foo", "quux")});
 		r.getFirstHeader("Foo").assertValue().is("quux");
 		r.getLastHeader("Foo").assertValue().is("quux");
 
-		r.removeHeader(BasicHeader.of("Foo","bar"));
+		r.removeHeader(basicHeader("Foo","bar"));
 		r.getFirstHeader("Foo").assertValue().is("quux");
 		r.getLastHeader("Foo").assertValue().is("quux");
 
@@ -213,10 +212,10 @@ public class RestClient_Response_Test {
 		i = r.headerIterator("Foo");
 		assertEquals("quux", i.nextHeader().getValue());
 
-		r.removeHeader(BasicHeader.of("Foo","quux"));
+		r.removeHeader(basicHeader("Foo","quux"));
 		assertFalse(r.getFirstHeader("Foo").isPresent());
 
-		r.setHeader(BasicHeader.of("Foo","quuux"));
+		r.setHeader(basicHeader("Foo","quuux"));
 		r.getResponseHeader("Foo").assertValue().is("quuux");
 	}
 

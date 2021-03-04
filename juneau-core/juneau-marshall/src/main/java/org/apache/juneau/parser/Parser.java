@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.transform.*;

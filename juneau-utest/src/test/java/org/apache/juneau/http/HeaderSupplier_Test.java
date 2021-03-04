@@ -14,9 +14,11 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
@@ -105,7 +107,7 @@ public class HeaderSupplier_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static Header header(String name, Object val) {
-		return BasicHeader.of(name, val);
+		return basicHeader(name, val);
 	}
 
 	private static HttpPartSerializerSession openApiSession() {

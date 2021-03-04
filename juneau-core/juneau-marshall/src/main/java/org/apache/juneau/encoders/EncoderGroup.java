@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -127,7 +129,7 @@ public final class EncoderGroup {
 		if (em != null)
 			return em;
 
-		AcceptEncoding ae = AcceptEncoding.of(acceptEncoding);
+		AcceptEncoding ae = acceptEncoding(acceptEncoding);
 		int match = ae.match(encodings);
 
 		if (match >= 0) {

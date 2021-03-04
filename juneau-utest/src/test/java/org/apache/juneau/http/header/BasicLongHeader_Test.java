@@ -24,7 +24,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.BasicLongHeader.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 
@@ -50,35 +50,35 @@ public class BasicLongHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of("","*")).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,"*")).run().assertBody().isEmpty();
+		c.get().header(longHeader(null,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(longHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(longHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(null,"*")).run().assertBody().isEmpty();
 
-		c.get().header(of(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"1")).run().assertBody().is("1");
-		c.get().header(of(HEADER,()->"1")).run().assertBody().is("1");
+		c.get().header(longHeader(HEADER,"1")).run().assertBody().is("1");
+		c.get().header(longHeader(HEADER,()->"1")).run().assertBody().is("1");
 
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,1)).run().assertBody().is("1");
-		c.get().header(of(HEADER,()->1)).run().assertBody().is("1");
+		c.get().header(longHeader(HEADER,1)).run().assertBody().is("1");
+		c.get().header(longHeader(HEADER,()->1)).run().assertBody().is("1");
 
-		c.get().header(of(HEADER,1.0)).run().assertBody().is("1");
-		c.get().header(of(HEADER,()->1.0)).run().assertBody().is("1");
+		c.get().header(longHeader(HEADER,1.0)).run().assertBody().is("1");
+		c.get().header(longHeader(HEADER,()->1.0)).run().assertBody().is("1");
 
-		c.get().header(of(HEADER,""+Long.MAX_VALUE)).run().assertBody().is(""+Long.MAX_VALUE);
-		c.get().header(of(HEADER,()->""+Long.MAX_VALUE)).run().assertBody().is(""+Long.MAX_VALUE);
+		c.get().header(longHeader(HEADER,""+Long.MAX_VALUE)).run().assertBody().is(""+Long.MAX_VALUE);
+		c.get().header(longHeader(HEADER,()->""+Long.MAX_VALUE)).run().assertBody().is(""+Long.MAX_VALUE);
 
-		assertThrown(()->of(HEADER,()->"foo").getValue()).contains("Value could not be parsed");
+		assertThrown(()->longHeader(HEADER,()->"foo").getValue()).contains("Value could not be parsed");
 	}
 
 	@Test
 	public void a02_assertLong() throws Exception {
-		of(HEADER,1).assertLong().is(1l);
+		longHeader(HEADER,1).assertLong().is(1l);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

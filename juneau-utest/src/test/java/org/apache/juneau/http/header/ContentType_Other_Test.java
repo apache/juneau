@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 
@@ -22,15 +23,15 @@ public class ContentType_Other_Test {
 
 	@Test
 	public void a01_basic() {
-		ContentType ct = ContentType.of("application/json");
+		ContentType ct = contentType("application/json");
 		assertEquals("application/json", ct.getValue());
 	}
 
 	@Test
 	public void a02_getParameter() {
-		ContentType ct = ContentType.of("application/json;charset=foo");
+		ContentType ct = contentType("application/json;charset=foo");
 		assertEquals("foo", ct.getParameter("charset"));
-		ct = ContentType.of(" application/json ; charset = foo ");
+		ct = contentType(" application/json ; charset = foo ");
 		assertEquals("foo", ct.getParameter("charset"));
 
 		assertNull(ct.getParameter("x"));

@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 
@@ -164,7 +165,7 @@ public class MediaRanges_FindMatch_Test {
 
 	@Test
 	public void test() throws Exception {
-		Accept accept = Accept.of(this.accept);
+		Accept accept = accept(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = accept.match(AList.of(mt));
 		assertInteger(r).msg("{0} failed", label).is(expected);
@@ -172,7 +173,7 @@ public class MediaRanges_FindMatch_Test {
 
 	@Test
 	public void testReversed() throws Exception {
-		Accept accept = Accept.of(this.accept);
+		Accept accept = accept(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		Collections.reverse(Arrays.asList(mt));
 		int r = accept.match(AList.of(mt));

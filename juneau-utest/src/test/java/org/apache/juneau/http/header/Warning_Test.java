@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Warning.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Warning_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(warning((String)null)).run().assertBody().isEmpty();
+		c.get().header(warning((Object)null)).run().assertBody().isEmpty();
+		c.get().header(warning((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(warning(()->null)).run().assertBody().isEmpty();
+		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(warning(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(warning(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Warning(VALUE)).run().assertBody().is(VALUE);
 	}
 

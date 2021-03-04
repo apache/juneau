@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Origin.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Origin_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(origin((String)null)).run().assertBody().isEmpty();
+		c.get().header(origin((Object)null)).run().assertBody().isEmpty();
+		c.get().header(origin((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(origin(()->null)).run().assertBody().isEmpty();
+		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(origin(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(origin(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Origin(VALUE)).run().assertBody().is(VALUE);
 	}
 

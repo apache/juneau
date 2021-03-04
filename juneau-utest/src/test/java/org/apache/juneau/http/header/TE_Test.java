@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.TE.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class TE_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(te((String)null)).run().assertBody().isEmpty();
+		c.get().header(te((Object)null)).run().assertBody().isEmpty();
+		c.get().header(te((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(te(()->null)).run().assertBody().isEmpty();
+		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(te(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(te(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new TE(VALUE)).run().assertBody().is(VALUE);
 	}
 

@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.Expires.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class Expires_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().is("");
-		c.get().header(of((Object)null)).run().assertBody().is("");
-		c.get().header(of((Supplier<?>)null)).run().assertBody().is("");
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(expires((String)null)).run().assertBody().is("");
+		c.get().header(expires((Object)null)).run().assertBody().is("");
+		c.get().header(expires((Supplier<?>)null)).run().assertBody().is("");
+		c.get().header(expires(()->null)).run().assertBody().isEmpty();
+		c.get().header(expires(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(expires(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(expires(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(expires(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new Expires(VALUE)).run().assertBody().is(VALUE);
 	}
 

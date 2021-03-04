@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 
-import static org.apache.juneau.http.header.AcceptEncoding.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -48,14 +48,14 @@ public class AcceptEncoding_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(of((Object)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(of((Supplier<?>)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(of(()->null)).run().assertBody().is("gzip,deflate");
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding((String)null)).run().assertBody().is("gzip,deflate");
+		c.get().header(acceptEncoding((Object)null)).run().assertBody().is("gzip,deflate");
+		c.get().header(acceptEncoding((Supplier<?>)null)).run().assertBody().is("gzip,deflate");
+		c.get().header(acceptEncoding(()->null)).run().assertBody().is("gzip,deflate");
+		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new AcceptEncoding(VALUE)).run().assertBody().is(VALUE);
 	}
 

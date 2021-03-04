@@ -14,12 +14,11 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.ETag.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -49,14 +48,14 @@ public class ETag_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of((String)null)).run().assertBody().isEmpty();
-		c.get().header(of((Object)null)).run().assertBody().isEmpty();
-		c.get().header(of((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(()->null)).run().assertBody().isEmpty();
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(of(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(eTag((String)null)).run().assertBody().isEmpty();
+		c.get().header(eTag((Object)null)).run().assertBody().isEmpty();
+		c.get().header(eTag((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(eTag(()->null)).run().assertBody().isEmpty();
+		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(eTag(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
+		c.get().header(eTag(()->VALUE)).run().assertBody().is(VALUE);
 		c.get().header(new ETag(VALUE)).run().assertBody().is(VALUE);
 	}
 

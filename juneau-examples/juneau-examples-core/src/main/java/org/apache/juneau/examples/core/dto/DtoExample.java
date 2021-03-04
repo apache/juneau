@@ -16,7 +16,7 @@ import org.apache.juneau.dto.atom.Feed;
 import org.apache.juneau.dto.atom.Person;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.HtmlSerializer;
-import org.apache.juneau.http.MediaType;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;

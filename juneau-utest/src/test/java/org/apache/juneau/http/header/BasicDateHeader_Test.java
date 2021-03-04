@@ -27,7 +27,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.BasicDateHeader.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 
@@ -53,39 +53,39 @@ public class BasicDateHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(of(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of("","*")).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,"*")).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(dateHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,"*")).run().assertBody().isEmpty();
 
-		c.get().header(of(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(of(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(of(HEADER,()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(dateHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(dateHeader(HEADER,()->VALUE)).run().assertBody().is(VALUE);
 
-		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,ZonedDateTime.parse("1994-10-29T19:43:31Z"))).run().assertBody().is("Sat, 29 Oct 1994 19:43:31 GMT");
-		c.get().header(of(HEADER,GregorianCalendar.from(ZonedDateTime.parse("1994-10-29T19:43:31Z")))).run().assertBody().is("Sat, 29 Oct 1994 19:43:31 GMT");
+		c.get().header(dateHeader(HEADER,ZonedDateTime.parse("1994-10-29T19:43:31Z"))).run().assertBody().is("Sat, 29 Oct 1994 19:43:31 GMT");
+		c.get().header(dateHeader(HEADER,GregorianCalendar.from(ZonedDateTime.parse("1994-10-29T19:43:31Z")))).run().assertBody().is("Sat, 29 Oct 1994 19:43:31 GMT");
 	}
 
 	@Test
 	public void a02_asCalendar() throws Exception {
-		assertObject(of(HEADER,VALUE).asCalendar()).asString(Calendar.class, x->calendarString(x)).is("1994-10-29T19:43:31Z");
+		assertObject(dateHeader(HEADER,VALUE).asCalendar()).asString(Calendar.class, x->calendarString(x)).is("1994-10-29T19:43:31Z");
 		assertObject(header(HEADER,null).asCalendar()).doesNotExist();
 	}
 
 	@Test
 	public void a03_asDate() throws Exception {
-		assertObject(of(HEADER,VALUE).asDate()).asString().contains("1994");
+		assertObject(dateHeader(HEADER,VALUE).asDate()).asString().contains("1994");
 		assertObject(header(HEADER,null).asDate()).doesNotExist();
 	}
 
 	@Test
 	public void a04_assertZonedDateTime() throws Exception {
-		of(HEADER,VALUE).assertZonedDateTime().asString().is("1994-10-29T19:43:31Z");
+		dateHeader(HEADER,VALUE).assertZonedDateTime().asString().is("1994-10-29T19:43:31Z");
 		header(HEADER,null).assertZonedDateTime().doesNotExist();
 	}
 

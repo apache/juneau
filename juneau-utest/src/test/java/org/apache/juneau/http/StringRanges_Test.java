@@ -17,9 +17,10 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.StringRanges.*;
+import static org.apache.juneau.http.header.StringRanges.*;
 
 import org.junit.*;
 

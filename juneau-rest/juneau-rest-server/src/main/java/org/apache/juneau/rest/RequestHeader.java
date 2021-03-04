@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.httppart.*;

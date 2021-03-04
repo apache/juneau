@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;
@@ -24,7 +25,6 @@ import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 
@@ -94,7 +94,7 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 			return Optional.of(
 				BasicHttpResource
 					.of(is.get())
-					.header(ContentType.of(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
+					.header(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
 					.headers(headers)
 			);
 		} catch (IOException e) {

@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
 
 /**
  * Category of headers that consist of a single string value.
@@ -46,7 +45,7 @@ public class BasicStringHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()}.
 	 * 	</ul>
 	 * @return A new {@link BasicStringHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
@@ -68,7 +67,7 @@ public class BasicStringHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()}.
 	 * 	</ul>
 	 * @return A new {@link BasicStringHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
@@ -88,7 +87,7 @@ public class BasicStringHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */

@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 
@@ -24,7 +25,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -1050,10 +1050,10 @@ public class RestAnnotation {
 			cpb.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			cpb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultRequestAttributes, x));
-			stringStream(a.defaultRequestHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> BasicHeader.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultResponseHeaders, x));
-			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, Accept.of(string(a.defaultAccept())));
-			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, ContentType.of(string(a.defaultContentType())));
+			stringStream(a.defaultRequestHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(REST_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(REST_defaultResponseHeaders, x));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
+			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			cpb.prependTo(REST_responseHandlers, a.responseHandlers());
 			cpb.prependTo(REST_converters, a.converters());
 			cpb.prependTo(REST_guards, reverse(a.guards()));
