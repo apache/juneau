@@ -15,9 +15,9 @@ package org.apache.juneau.rest.client;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.response.StandardHttpResponses.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.rest.client.RestClient.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.concurrent.*;

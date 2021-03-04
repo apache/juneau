@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;

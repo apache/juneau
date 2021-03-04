@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 

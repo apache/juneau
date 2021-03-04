@@ -14,7 +14,6 @@ package org.apache.juneau.http;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 
@@ -25,6 +24,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 
 import org.junit.*;

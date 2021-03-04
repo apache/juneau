@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 import static java.util.Arrays.*;
 
 import java.lang.annotation.*;

@@ -14,3 +14,5 @@ Can HeaderGroup be used universally?
 @ResponseBody and @ResponseHeaders shouldn't be required on HttpResponse objects.
 HttpRuntimeException?
 Add ExceptionHeader
+REST query/formdata/path parts should extend from PartGroup class.
+Eliminate PartSupplier and HeaderSupplier?

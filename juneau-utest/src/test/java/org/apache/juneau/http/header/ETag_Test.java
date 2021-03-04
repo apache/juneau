@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;

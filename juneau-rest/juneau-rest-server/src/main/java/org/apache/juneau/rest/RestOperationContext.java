@@ -16,12 +16,12 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.util.Collections.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;

@@ -10,12 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.response;
+package org.apache.juneau.http;
+
+import org.apache.juneau.http.response.*;
 
 /**
  * Standard predefined HTTP responses.
  */
-public class StandardHttpResponses {
+public class HttpResponses {
 
 	/**
 	 * A synonym for {@link Accepted#INSTANCE}.

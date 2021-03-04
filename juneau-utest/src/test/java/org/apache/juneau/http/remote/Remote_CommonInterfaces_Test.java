@@ -13,8 +13,8 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.response.StandardHttpResponses.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 

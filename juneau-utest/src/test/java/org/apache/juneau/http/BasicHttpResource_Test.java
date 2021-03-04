@@ -14,8 +14,8 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.BasicHttpResource.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 

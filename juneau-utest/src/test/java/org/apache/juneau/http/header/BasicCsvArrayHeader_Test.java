@@ -25,7 +25,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import org.junit.*;
 

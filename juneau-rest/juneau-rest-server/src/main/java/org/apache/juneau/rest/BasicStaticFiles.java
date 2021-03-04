@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.util.*;

@@ -14,13 +14,13 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.lang.reflect.*;

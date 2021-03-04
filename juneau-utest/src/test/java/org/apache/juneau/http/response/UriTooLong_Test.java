@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.StandardHttpResponses.*;
+import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.UriTooLong.*;
 import static org.junit.runners.MethodSorters.*;
 

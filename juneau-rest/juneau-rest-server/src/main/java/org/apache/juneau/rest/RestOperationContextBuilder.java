@@ -13,9 +13,9 @@
 package org.apache.juneau.rest;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.RestOperationContext.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.lang.annotation.*;
 import java.util.*;

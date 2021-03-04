@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -23,9 +24,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

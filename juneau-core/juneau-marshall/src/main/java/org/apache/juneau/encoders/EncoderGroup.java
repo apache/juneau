@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.util.*;
 import java.util.concurrent.*;

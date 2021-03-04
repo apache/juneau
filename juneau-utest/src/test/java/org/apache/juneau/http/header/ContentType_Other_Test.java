@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.junit.*;
 

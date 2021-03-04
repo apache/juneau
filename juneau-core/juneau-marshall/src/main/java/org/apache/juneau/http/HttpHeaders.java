@@ -10,18 +10,20 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http;
 
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.Date;
 
 /**
  * Standard predefined HTTP headers.
  */
-public class StandardHttpHeaders {
+public class HttpHeaders {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Standard HTTP headers

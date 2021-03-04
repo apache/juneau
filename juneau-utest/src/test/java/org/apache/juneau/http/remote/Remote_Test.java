@@ -15,8 +15,9 @@ package org.apache.juneau.http.remote;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+
 import java.util.concurrent.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

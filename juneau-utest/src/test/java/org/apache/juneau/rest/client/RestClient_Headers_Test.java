@@ -13,14 +13,13 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;

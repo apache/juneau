@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.security.*;

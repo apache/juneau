@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.response.StandardHttpResponses.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;

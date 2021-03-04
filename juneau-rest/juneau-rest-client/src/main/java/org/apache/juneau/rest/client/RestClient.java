@@ -16,11 +16,11 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpMethod.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
 import static java.util.Collections.*;
-import static org.apache.juneau.http.header.StandardHttpHeaders.*;
 
 import java.io.*;
 import java.lang.reflect.*;
