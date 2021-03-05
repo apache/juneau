@@ -34,6 +34,20 @@ public final class IOUtils {
 		}
 	};
 
+	/** Reusable empty reader. */
+	public static final Reader EMPTY_READER = new Reader() {
+		@Override
+		public int read() {
+			return -1;  // end of stream
+		}
+		@Override
+		public int read(char[] cbuf, int off, int len) throws IOException {
+			return -1;  // end of stream
+		}
+		@Override
+		public void close() throws IOException {}
+	};
+
 	private static final int BUFF_SIZE = 1024;
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -208,6 +208,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void d01_httpResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);

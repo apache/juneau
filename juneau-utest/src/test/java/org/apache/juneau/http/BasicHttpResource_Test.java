@@ -24,6 +24,7 @@ import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 
+@SuppressWarnings("deprecation")
 public class BasicHttpResource_Test {
 	@Test
 	public void a01_basic() throws Exception {

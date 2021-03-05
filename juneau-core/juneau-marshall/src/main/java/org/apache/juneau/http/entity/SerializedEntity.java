@@ -28,30 +28,39 @@ import org.apache.juneau.serializer.*;
  * HttpEntity for serializing POJOs as the body of HTTP requests.
  */
 @FluentSetters
-public class SerializedHttpEntity extends BasicHttpEntity {
+public class SerializedEntity extends AbstractHttpEntity {
+	private final Supplier<?> content;
 	private final Serializer serializer;
 	private HttpPartSchema schema;
 
 	/**
-	 * Creator.
+	 * Creates a new {@link SerializedEntity} object.
 	 *
-	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
-	 * @param serializer The serializer to use to serialize this response.
-	 * @return A new {@link SerializedHttpEntity} with uninitialized serializer and schema.
+	 * @param content
+	 * 	The Java POJO representing the content.
+	 * 	<br>Can be <jk>null<jk>.
+	 * @param serializer
+	 * 	The serializer to use to serialize the POJO.
+	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
+	 * @return A new {@link SerializedEntity} object.
 	 */
-	public static SerializedHttpEntity of(Object content, Serializer serializer) {
-		return new SerializedHttpEntity(content, serializer);
+	public static SerializedEntity of(Object content, Serializer serializer) {
+		return new SerializedEntity(content, serializer);
 	}
 
 	/**
-	 * Creator.
+	 * Creates a new {@link SerializedEntity} object.
 	 *
-	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
-	 * @param serializer The serializer to use to serialize this response.
-	 * @return A new {@link SerializedHttpEntity} with uninitialized serializer and schema.
+	 * @param content
+	 * 	The supplier for a Java POJO representing the content.
+	 * 	<br>Can be <jk>null<jk>.
+	 * @param serializer
+	 * 	The serializer to use to serialize the POJO.
+	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
+	 * @return A new {@link SerializedEntity} object.
 	 */
-	public static SerializedHttpEntity of(Supplier<?> content, Serializer serializer) {
-		return new SerializedHttpEntity(content, serializer);
+	public static SerializedEntity of(Supplier<?> content, Serializer serializer) {
+		return new SerializedEntity(content == null ? ()->null : content, serializer);
 	}
 
 	/**
@@ -60,9 +69,21 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
 	 */
-	public SerializedHttpEntity(Object content, Serializer serializer) {
-		super(content, ContentType.of(serializer == null ? null : serializer.getResponseContentType()), null);
+	public SerializedEntity(Object content, Serializer serializer) {
+		this(()->content, serializer);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
+	 * @param serializer The serializer to use to serialize this response.
+	 */
+	public SerializedEntity(Supplier<?> content, Serializer serializer) {
+		this.content = content;
 		this.serializer = serializer;
+		if (serializer != null)
+			setContentType(ContentType.of(serializer.getPrimaryMediaType()));
 	}
 
 	/**
@@ -75,122 +96,105 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public SerializedHttpEntity schema(HttpPartSchema value) {
+	public SerializedEntity schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
 
-	@Override /* BasicHttpEntity */
+	@Override /* HttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
-		if (isSerializable()) {
-			try {
-				os = new NoCloseOutputStream(os);
-				Object o = getRawContent();
-				if (serializer == null) {
-					os.write(o.toString().getBytes());
-					os.close();
-				} else {
-					SerializerSessionArgs sArgs = SerializerSessionArgs.create().schema(schema);
-					SerializerSession session = serializer.createSession(sArgs);
-					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
-						session.serialize(o, c);
-					}
+		try {
+			os = new NoCloseOutputStream(os);
+			Object o = content.get();
+			if (serializer == null) {
+				try (Writer w = new OutputStreamWriter(os, UTF8)) {
+					w.write(o.toString());
 				}
-			} catch (SerializeException e) {
-				throw new BasicRuntimeException(e, "Serialization error on request body.");
+			} else {
+				SerializerSessionArgs sArgs = SerializerSessionArgs.create().schema(schema);
+				SerializerSession session = serializer.createSession(sArgs);
+				try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
+					session.serialize(o, c);
+				}
 			}
-		} else {
-			super.writeTo(os);
+		} catch (SerializeException e) {
+			throw new BasicRuntimeException(e, "Serialization error on request body.");
 		}
 	}
 
 	@Override /* BasicHttpEntity */
 	public boolean isRepeatable() {
-		if (isSerializable())
-			return true;
-		return super.isRepeatable();
+		return true;
 	}
 
 	@Override /* BasicHttpEntity */
 	public long getContentLength() {
-		if (isSerializable())
-			return -1;
-		return super.getContentLength();
+		return -1;
 	}
 
 	@Override /* BasicHttpEntity */
 	public InputStream getContent() {
-		if (isSerializable()) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			try {
-				writeTo(baos);
-				return new ByteArrayInputStream(baos.toByteArray());
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			writeTo(baos);
+			return new ByteArrayInputStream(baos.toByteArray());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		return super.getContent();
-	}
-
-	private boolean isSerializable() {
-		Object o = getRawContent();
-		return ! (o instanceof InputStream || o instanceof Reader || o instanceof File);
 	}
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity cache() {
-		super.cache();
+	@Override /* AbstractHttpEntity */
+	public SerializedEntity cache() {
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity cache(boolean value) {
-		super.cache(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity chunked() {
+	public SerializedEntity chunked() {
 		super.chunked();
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity chunked(boolean value) {
+	public SerializedEntity chunked(boolean value) {
 		super.chunked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity contentEncoding(String value) {
+	public SerializedEntity contentEncoding(String value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity contentEncoding(Header value) {
+	public SerializedEntity contentEncoding(Header value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity contentLength(long value) {
+	public SerializedEntity contentLength(long value) {
 		super.contentLength(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity contentType(String value) {
+	public SerializedEntity contentType(String value) {
 		super.contentType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity contentType(Header value) {
+	public SerializedEntity contentType(Header value) {
 		super.contentType(value);
 		return this;
+	}
+
+	@Override
+	public boolean isStreaming() {
+		return false;
 	}
 
 	// </FluentSetters>

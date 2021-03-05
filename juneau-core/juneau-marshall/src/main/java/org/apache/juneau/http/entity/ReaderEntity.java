@@ -16,42 +16,45 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
- * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
+ * A streamed, non-repeatable entity that obtains its content from an {@link Reader}.
  */
-public class InputStreamEntity extends AbstractHttpEntity {
+public class ReaderEntity extends AbstractHttpEntity {
 
-	private final InputStream content;
+	private final Reader content;
 	private final long length;
-	private final AtomicReference<byte[]> cache = new AtomicReference<>();
+	private Charset charset = UTF8;
+	private final AtomicReference<String> cache = new AtomicReference<>();
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link ReaderEntity} object.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link ReaderEntity} object.
 	 */
-	public static InputStreamEntity of(InputStream content) {
-		return new InputStreamEntity(content, -1, null);
+	public static ReaderEntity of(Reader content) {
+		return new ReaderEntity(content, -1, null);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link ReaderEntity} object.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link ReaderEntity} object.
 	 */
-	public static InputStreamEntity of(InputStream content, long length, ContentType contentType) {
-		return new InputStreamEntity(content, length, contentType);
+	public static ReaderEntity of(Reader content, long length, ContentType contentType) {
+		return new ReaderEntity(content, length, contentType);
 	}
 
 	/**
@@ -61,21 +64,36 @@ public class InputStreamEntity extends AbstractHttpEntity {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
 	 */
-	public InputStreamEntity(InputStream content, long length, ContentType contentType) {
-		this.content = content == null ? EMPTY_INPUT_STREAM : content;
+	public ReaderEntity(Reader content, long length, ContentType contentType) {
+		this.content = content == null ? EMPTY_READER : content;
 		this.length = length;
 		setContentType(contentType);
 	}
 
+	/**
+	 * Specifies the charset to use for the output.
+	 *
+	 * <p>
+	 * The default is <js>"UTF-8"</js>.
+	 *
+	 * @param value The new charset, or <js>"UTF-8"</js> if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ReaderEntity charset(Charset value) {
+		this.charset = value == null ? UTF8 : value;
+		return this;
+	}
+
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return new String(asBytes(), UTF8);
+		cache();
+		return cache.get();
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		cache();
-		return cache.get();
+		return asString().getBytes(UTF8);
 	}
 
 	@Override /* HttpEntity */
@@ -90,18 +108,18 @@ public class InputStreamEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		byte[] b = cache.get();
-		return b == null ? content : new ByteArrayInputStream(b);
+		String s = cache.get();
+		return s == null ? new ReaderInputStream(content, charset) : new ReaderInputStream(new StringReader(s), charset);
 	}
 
 	@Override /* AbstractHttpEntity */
-	public InputStreamEntity cache() throws IOException {
-		byte[] b = cache.get();
-		if (b == null) {
-			try (InputStream is = getContent()) {
-				b = readBytes(is, (int)length);
+	public ReaderEntity cache() throws IOException {
+		String s = cache.get();
+		if (s == null) {
+			try (Reader r = content) {
+				s = read(r);
 			}
-			cache.set(b);
+			cache.set(s);
 		}
 		return this;
 	}
@@ -116,14 +134,14 @@ public class InputStreamEntity extends AbstractHttpEntity {
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		byte[] b = cache.get();
-		if (b != null) {
-			pipe(b, out, (int)length);
+		OutputStreamWriter osw = new OutputStreamWriter(out, charset);
+		String s = cache.get();
+		if (s != null) {
+			osw.write(s);
 		} else {
-			try (InputStream is = getContent()) {
-				pipe(is, out, length);
-			}
+			pipe(content, osw);
 		}
+		osw.flush();
 	}
 
 	@Override /* HttpEntity */

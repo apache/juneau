@@ -40,6 +40,7 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters
 @BeanIgnore
+@Deprecated
 public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	private Object content;
 	private boolean cache;
@@ -338,7 +339,6 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void writeTo(OutputStream os) throws IOException {
 		tryCache();
@@ -394,7 +394,6 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	 * @return The byte array contents.
 	 * @throws IOException If object could not be read.
 	 */
-	@SuppressWarnings("deprecation")
 	protected byte[] readBytes(Object o) throws IOException {
 		return IOUtils.readBytes(o);
 	}

@@ -13,10 +13,11 @@
 package org.apache.juneau.http;
 
 import java.io.*;
-import java.nio.charset.*;
+import java.util.function.*;
 
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Standard predefined HTTP entities.
@@ -24,28 +25,102 @@ import org.apache.juneau.http.header.*;
 public class HttpEntities {
 
 	/**
-	 * Creates a new {@link StringEntity} object.
+	 * Creates a new {@link ByteArrayEntity} object.
 	 *
 	 * <p>
-	 * Assumes {@link ContentType#TEXT_PLAIN TEXT/PLAIN} content type and <js>"UTF-8"</js> encoding.
+	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link StringEntity} object.
+	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @return A new {@link ByteArrayEntity} object.
 	 */
-	public static final StringEntity stringEntity(String content) {
-		return StringEntity.of(content);
+	public static final ByteArrayEntity byteArrayEntity(byte[] content) {
+		return ByteArrayEntity.of(content);
 	}
 
 	/**
-	 * Creates a new {@link StringEntity} object.
+	 * Creates a new {@link ByteArrayEntity} object.
+	 *
+	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @return A new {@link ByteArrayEntity} object.
+	 */
+	public static final ByteArrayEntity byteArrayEntity(byte[] content, ContentType contentType) {
+		return ByteArrayEntity.of(content, contentType);
+	}
+
+	/**
+	 * Creates a new {@link FileEntity} object.
+	 *
+	 * <p>
+	 * Assumes no content type.
+	 *
+	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @return A new {@link FileEntity} object.
+	 */
+	public static final FileEntity fileEntity(File content) {
+		return FileEntity.of(content);
+	}
+
+	/**
+	 * Creates a new {@link FileEntity} object.
+	 *
+	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @return A new {@link FileEntity} object.
+	 */
+	public static final FileEntity fileEntity(File content, ContentType contentType) {
+		return FileEntity.of(content, contentType);
+	}
+
+	/**
+	 * Creates a new {@link ReaderEntity} object.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or {@link ContentType#TEXT_PLAIN} if not specified.
-	 * @param charset The content character encoding, or <js>"UTF-8"</js> if not specified.
-	 * @return A new {@link StringEntity} object.
+	 * @return A new {@link ReaderEntity} object.
 	 */
-	public static final StringEntity stringEntity(String content, ContentType contentType, Charset charset) {
-		return StringEntity.of(content, contentType, charset);
+	public static final ReaderEntity readerEntity(Reader content) {
+		return ReaderEntity.of(content);
+	}
+
+	/**
+	 * Creates a new {@link ReaderEntity} object.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @return A new {@link ReaderEntity} object.
+	 */
+	public static final ReaderEntity readerEntity(Reader content, ContentType contentType) {
+		return ReaderEntity.of(content, -1, contentType);
+	}
+
+	/**
+	 * Creates a new {@link SerializedEntity} object.
+	 *
+	 * @param content
+	 * 	The Java POJO representing the content.
+	 * 	<br>Can be <jk>null<jk>.
+	 * @param serializer
+	 * 	The serializer to use to serialize the POJO.
+	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
+	 * @return A new {@link SerializedEntity} object.
+	 */
+	public static final SerializedEntity serializedEntity(Object content, Serializer serializer) {
+		return SerializedEntity.of(content, serializer);
+	}
+
+	/**
+	 * Creates a new {@link SerializedEntity} object.
+	 *
+	 * @param content
+	 * 	The supplier of a Java POJO representing the content.
+	 * 	<br>Can be <jk>null<jk>.
+	 * @param serializer
+	 * 	The serializer to use to serialize the POJO.
+	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
+	 * @return A new {@link SerializedEntity} object.
+	 */
+	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer) {
+		return SerializedEntity.of(content, serializer);
 	}
 
 	/**
@@ -71,5 +146,26 @@ public class HttpEntities {
 	 */
 	public static final InputStreamEntity streamEntity(InputStream content, long length, ContentType contentType) {
 		return InputStreamEntity.of(content, length, contentType);
+	}
+
+	/**
+	 * Creates a new {@link StringEntity} object.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @return A new {@link StringEntity} object.
+	 */
+	public static final StringEntity stringEntity(String content) {
+		return StringEntity.of(content);
+	}
+
+	/**
+	 * Creates a new {@link StringEntity} object.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @return A new {@link StringEntity} object.
+	 */
+	public static final StringEntity stringEntity(String content, ContentType contentType) {
+		return StringEntity.of(content, contentType);
 	}
 }

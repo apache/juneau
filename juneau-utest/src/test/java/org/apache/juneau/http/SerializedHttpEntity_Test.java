@@ -31,7 +31,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.entity.SerializedHttpEntity.*;
+import static org.apache.juneau.http.entity.SerializedEntity.*;
 
 import org.junit.*;
 
@@ -76,29 +76,25 @@ public class SerializedHttpEntity_Test {
 	@Test
 	public void a05_writeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		of(new ByteArrayInputStream("foo".getBytes()), null).writeTo(baos);
+		of("foo", null).writeTo(baos);
 		assertBytes(baos.toByteArray()).asString().is("foo");
 	}
 
 	@Test
 	public void a06_isRepeatable() throws Exception {
 		assertBoolean(of(ABean.get(),null).isRepeatable()).isTrue();
-		assertBoolean(of(new ByteArrayInputStream("foo".getBytes()),null).isRepeatable()).isFalse();
-		assertBoolean(of(new File(""),null).isRepeatable()).isTrue();
-		assertBoolean(of(new StringReader("foo"),null).isRepeatable()).isFalse();
 	}
 
 	@Test
 	public void a07_getContentLength() throws Exception {
 		assertLong(of(ABean.get(),null).getContentLength()).is(-1);
-		assertLong(of(new StringReader("foo"),null).cache().getContentLength()).is(3);
 	}
 
 	@Test
 	public void a08_getContent() throws Exception {
-		assertStream(of(new StringReader("foo"),null).getContent()).asString().is("foo");
+		assertStream(of("foo",null).getContent()).asString().is("foo");
 
-		SerializedHttpEntity x = new SerializedHttpEntity("foo", null) {
+		SerializedEntity x = new SerializedEntity("foo", null) {
 			@Override
 			public void writeTo(OutputStream os) throws IOException {
 				throw new IOException("Bad");
@@ -115,11 +111,6 @@ public class SerializedHttpEntity_Test {
 	@Test
 	public void a10_contentEncoding() throws Exception {
 		checkHeaderClient("Content-Encoding").post("/",of(ABean.get(),null).contentEncoding("identity")).run().assertBody().is("['identity']");
-	}
-
-	@Test
-	public void a11_contentLength() throws Exception {
-		checkHeaderClient("Content-Length").post("/",of(new StringReader("foo"),null).contentLength(3)).run().assertBody().is("['3']");
 	}
 
 	@Test

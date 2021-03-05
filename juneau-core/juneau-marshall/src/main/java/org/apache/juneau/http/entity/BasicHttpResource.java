@@ -39,6 +39,7 @@ import org.apache.juneau.http.header.*;
  * 		Fluent assertions.
  * </ul>
  */
+@SuppressWarnings("deprecation")
 @FluentSetters
 public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 

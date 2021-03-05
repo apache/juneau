@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
 public class FileEntity extends AbstractHttpEntity {
 
 	private final File content;
-	private AtomicReference<byte[]> bytes = new AtomicReference<>();
+	private AtomicReference<byte[]> cache = new AtomicReference<>();
 
 	/**
 	 * Creates a new {@link FileEntity} object.
@@ -72,7 +72,7 @@ public class FileEntity extends AbstractHttpEntity {
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
 		cache();
-		return bytes.get();
+		return cache.get();
 	}
 
 	@Override /* HttpEntity */
@@ -87,16 +87,16 @@ public class FileEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		byte[] b = bytes.get();
+		byte[] b = cache.get();
 		return b == null ? new FileInputStream(content) : new ByteArrayInputStream(b);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public FileEntity cache() throws IOException {
-		byte[] b = bytes.get();
+		byte[] b = cache.get();
 		if (b == null) {
 			b = readBytes(content);
-			bytes.set(b);
+			cache.set(b);
 		}
 		return this;
 	}
@@ -111,7 +111,7 @@ public class FileEntity extends AbstractHttpEntity {
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		byte[] b = bytes.get();
+		byte[] b = cache.get();
 		if (b != null) {
 			out.write(b);
 		} else {

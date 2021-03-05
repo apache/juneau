@@ -13,12 +13,10 @@
 package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.*;
 
@@ -34,51 +32,60 @@ import org.apache.juneau.internal.*;
 public class StringEntity extends AbstractHttpEntity {
 
 	private final String content;
-	private final Charset charset;
-	private final AtomicReference<byte[]> bytes = new AtomicReference<>();
+	private final AtomicReference<byte[]> cache = new AtomicReference<>();
+	private Charset charset = UTF8;
 
 	/**
 	 * Creates a new {@link StringEntity} object.
-	 *
-	 * <p>
-	 * Assumes {@link ContentType#TEXT_PLAIN TEXT/PLAIN} content type and <js>"UTF-8"</js> encoding.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link StringEntity} object.
 	 */
 	public static StringEntity of(String content) {
-		return new StringEntity(content, ContentType.TEXT_PLAIN, IOUtils.UTF8);
+		return new StringEntity(content, null);
 	}
 
 	/**
 	 * Creates a new {@link StringEntity} object.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or {@link ContentType#TEXT_PLAIN} if not specified.
-	 * @param charset The content character encoding, or <js>"UTF-8"</js> if not specified.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringEntity} object.
 	 */
-	public static StringEntity of(String content, ContentType contentType, Charset charset) {
-		return new StringEntity(content, contentType, null);
+	public static StringEntity of(String content, ContentType contentType) {
+		return new StringEntity(content, contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param content The entity content. Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or {@link ContentType#TEXT_PLAIN} if not specified.
-	 * @param charset The content character encoding, or <js>"UTF-8"</js> if not specified.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 */
-	public StringEntity(String content, ContentType contentType, Charset charset) {
+	public StringEntity(String content, ContentType contentType) {
 		this.content = emptyIfNull(content);
 		setContentType(contentType);
-		this.charset = charset;
+	}
+
+	/**
+	 * Specifies the charset to use for the output.
+	 *
+	 * <p>
+	 * The default is <js>"UTF-8"</js>.
+	 *
+	 * @param value The new charset, or <js>"UTF-8"</js> if <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public StringEntity charset(Charset value) {
+		this.charset = value == null ? UTF8 : value;
+		return this;
 	}
 
 	@Override
 	public byte[] asBytes() throws IOException {
 		cache();
-		return bytes.get();
+		return cache.get();
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -110,8 +117,9 @@ public class StringEntity extends AbstractHttpEntity {
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-		out.write(getBytes());
-		out.flush();
+		OutputStreamWriter osw = new OutputStreamWriter(out, charset);
+		osw.write(content);
+		osw.flush();
 	}
 
 	@Override /* HttpEntity */
@@ -120,11 +128,11 @@ public class StringEntity extends AbstractHttpEntity {
 	}
 
 	private byte[] getBytes() {
-		byte[] b = bytes.get();
+		byte[] b = cache.get();
 		if (b == null) {
-			synchronized(bytes) {
-				 b = content.getBytes(charset == null ? IOUtils.UTF8 : charset);
-				 bytes.set(b);
+			synchronized(cache) {
+				 b = content.getBytes(charset);
+				 cache.set(b);
 			}
 		}
 		return b;

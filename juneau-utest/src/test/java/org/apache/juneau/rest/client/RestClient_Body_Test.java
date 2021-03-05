@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpEntities.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -104,8 +105,8 @@ public class RestClient_Body_Test {
 	}
 
 	@Test
-	public void a02_BasicHttpEntity() throws Exception {
-		BasicHttpEntity x1 = httpEntity("foo");
+	public void a02_StringEntity() throws Exception {
+		HttpEntity x1 = stringEntity("foo");
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").doesNotExist()
@@ -113,7 +114,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		BasicHttpEntity x2 = httpEntity("foo").contentType("text/plain").contentEncoding("identity");
+		HttpEntity x2 = stringEntity("foo").contentType("text/plain").contentEncoding("identity");
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -121,7 +122,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		BasicHttpEntity x3 = httpEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
+		HttpEntity x3 = stringEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -129,7 +130,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")
 		;
 
-		BasicHttpEntity x4 = new BasicHttpEntity("foo", contentType("text/plain"), contentEncoding("identity"));
+		HttpEntity x4 = stringEntity("foo", contentType("text/plain")).contentEncoding("identity");
 		client().build().post("/",x4).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -137,17 +138,17 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		BasicHttpEntity x7 = httpEntity(new StringReader("foo"));
+		HttpEntity x7 = readerEntity(new StringReader("foo"));
 		client().build().post("/",x7).run().assertBody().is("foo");
 
-		BasicHttpEntity x8 = httpEntity(new StringReader("foo")).cache();
+		HttpEntity x8 = readerEntity(new StringReader("foo")).cache();
 		client().build().post("/",x8).run().assertBody().is("foo");
 		client().build().post("/",x8).run().assertBody().is("foo");
 
-		BasicHttpEntity x9 = httpEntity(null);
+		HttpEntity x9 = readerEntity(null);
 		client().build().post("/",x9).run().assertBody().isEmpty();
 
-		BasicHttpEntity x12 = httpEntity("foo");
+		AbstractHttpEntity x12 = stringEntity("foo");
 		x12.assertString().is("foo");
 		x12.assertBytes().asString().is("foo");
 	}
@@ -155,9 +156,8 @@ public class RestClient_Body_Test {
 	@Test
 	public void a03_SerializedHttpEntity() throws Exception {
 		Serializer js = JsonSerializer.DEFAULT;
-		File f = File.createTempFile("test", "txt");
 
-		SerializedHttpEntity x1 = serializedHttpEntity(ABean.get(),null);
+		SerializedEntity x1 = serializedEntity(ABean.get(),null);
 		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
@@ -165,61 +165,21 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
-		SerializedHttpEntity x2 = serializedHttpEntity(ABean.get(),js);
+		SerializedEntity x2 = serializedEntity(ABean.get(),js);
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
-		SerializedHttpEntity x3 = SerializedHttpEntity.of(()->ABean.get(),js);
+		SerializedEntity x3 = SerializedEntity.of(()->ABean.get(),js);
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
-		SerializedHttpEntity x4 = serializedHttpEntity(new StringReader("{a:1,b:'foo'}"),null);
-		client().build().post("/",x4).run()
-			.assertHeader("X-Content-Length").doesNotExist()
-			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").doesNotExist()
-			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
-
-		SerializedHttpEntity x5 = serializedHttpEntity(new ByteArrayInputStream("{a:1,b:'foo'}".getBytes()),null);
-		client().build().post("/",x5).run()
-			.assertHeader("X-Content-Length").doesNotExist()
-			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").doesNotExist()
-			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
-
-		SerializedHttpEntity x6 = serializedHttpEntity(f,null);
-		client().build().post("/",x6).run()
-			.assertHeader("X-Content-Length").is("0")
-			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").doesNotExist()
-			.assertBody().asType(ABean.class).asJson().is("{a:0}");
-
-		InputStream x7 = new ByteArrayInputStream("foo".getBytes()) {
-			@Override
-			public int read(byte[] b, int offset, int length) {
-				throw new RuntimeException("bad");
-			}
-		};
-
-		SerializedHttpEntity x8 = new SerializedHttpEntity(x7, null).cache();
-		assertThrown(()->x8.getContent()).contains("bad");
-
-		SerializedHttpEntity x9 = serializedHttpEntity(new StringReader("foo"), null);
-		assertStream(x9.getContent()).asString().is("foo");
-
-		SerializedHttpEntity x10 = serializedHttpEntity(new ByteArrayInputStream("foo".getBytes()), null);
-		assertStream(x10.getContent()).asString().is("foo");
-
-		SerializedHttpEntity x11 = serializedHttpEntity(f, null);
-		assertStream(x11.getContent()).asString().is("");
-
-		SerializedHttpEntity x12 = new SerializedHttpEntity(ABean.get(), null) {
+		SerializedEntity x12 = new SerializedEntity(ABean.get(), null) {
 			@Override
 			public void writeTo(OutputStream os) throws IOException {
 				throw new IOException("bad");
@@ -227,18 +187,6 @@ public class RestClient_Body_Test {
 		};
 
 		assertThrown(()->x12.getContent()).contains("bad");
-
-		SerializedHttpEntity x13 = serializedHttpEntity(new StringReader("foo"), null).chunked();
-		client().build().post("/",x13).run()
-			.assertHeader("X-Transfer-Encoding").is("chunked");
-
-		SerializedHttpEntity x14 = serializedHttpEntity(new StringReader("foo"), null).contentEncoding("identity");
-		client().build().post("/",x14).run()
-			.assertHeader("X-Content-Encoding").is("identity");
-
-		SerializedHttpEntity x15 = serializedHttpEntity(new StringReader("foo"), null).contentLength(3l);
-		client().build().post("/",x15).run()
-			.assertHeader("X-Content-Length").is("3");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -247,14 +195,6 @@ public class RestClient_Body_Test {
 
 	private static BasicHttpResource httpResource(Object val) {
 		return BasicHttpResource.of(val);
-	}
-
-	private static BasicHttpEntity httpEntity(Object val) {
-		return BasicHttpEntity.of(val);
-	}
-
-	private static SerializedHttpEntity serializedHttpEntity(Object val, Serializer s) {
-		return SerializedHttpEntity.of(val, s);
 	}
 
 	private static RestClientBuilder client() {

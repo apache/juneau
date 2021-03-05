@@ -25,7 +25,6 @@ import org.apache.juneau.http.header.*;
 public class ByteArrayEntity extends AbstractHttpEntity {
 
 	private final byte[] content;
-	private final long maxLength;
 
 	/**
 	 * Creates a new {@link ByteArrayEntity} object.
@@ -37,31 +36,28 @@ public class ByteArrayEntity extends AbstractHttpEntity {
 	 * @return A new {@link ByteArrayEntity} object.
 	 */
 	public static ByteArrayEntity of(byte[] content) {
-		return new ByteArrayEntity(content, -1, null);
+		return new ByteArrayEntity(content, null);
 	}
 
 	/**
 	 * Creates a new {@link ByteArrayEntity} object.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @param maxLength The content maximum length, or <c>-1</c> to read the entire byte array.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} object.
 	 */
-	public static ByteArrayEntity of(byte[] content, long maxLength, ContentType contentType) {
-		return new ByteArrayEntity(content, maxLength, contentType);
+	public static ByteArrayEntity of(byte[] content, ContentType contentType) {
+		return new ByteArrayEntity(content, contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param maxLength The content maximum length, or <c>-1</c> to read the entire byte array.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 */
-	public ByteArrayEntity(byte[] content, long maxLength, ContentType contentType) {
+	public ByteArrayEntity(byte[] content, ContentType contentType) {
 		this.content = content == null ? new byte[0] : content;
-		this.maxLength = maxLength;
 		setContentType(contentType);
 	}
 
@@ -99,7 +95,7 @@ public class ByteArrayEntity extends AbstractHttpEntity {
 	@Override
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-		pipe(content, out, (int)maxLength);
+		out.write(content);
 	}
 
 	@Override /* HttpEntity */
