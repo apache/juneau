@@ -13,13 +13,12 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpEntities.*;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
-import org.apache.http.entity.*;
 import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
@@ -250,13 +249,8 @@ public class BasicHttpResponse implements HttpResponse {
 	@Override /* HttpMessage */
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
-		if (body == null) {
-			try {
-				String msg = getStatusLine().getReasonPhrase();
-				if (msg != null)
-					body = new StringEntity(msg);
-			} catch (UnsupportedEncodingException e) {}
-		}
+		if (body == null)
+			body = stringEntity(getStatusLine().getReasonPhrase());
 		return body;
 	}
 

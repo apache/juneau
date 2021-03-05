@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
-import java.io.*;
+import static org.apache.juneau.http.HttpEntities.*;
+
 import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.entity.*;
 import org.apache.http.impl.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
@@ -37,7 +37,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	HeaderListBuilder headerListBuilder;
 	HttpEntity body;
 	boolean unmodifiable;
-	
+
 	private final Class<? extends BasicHttpResponse> implClass;
 
 	/**
@@ -424,10 +424,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> body(String value) {
-		try {
-			body(new StringEntity(value));
-		} catch (UnsupportedEncodingException e) { /* Not possible */ }
-		return this;
+		return body(stringEntity(value));
 	}
 
 	/**

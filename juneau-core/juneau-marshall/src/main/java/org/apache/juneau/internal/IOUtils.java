@@ -29,6 +29,14 @@ public final class IOUtils {
 	/** UTF-8 charset */
 	public static final Charset UTF8 = Charset.forName("UTF-8");
 
+	/** Reusable empty input stream. */
+	public static final InputStream EMPTY_INPUT_STREAM = new InputStream() {
+		@Override
+		public int read() {
+			return -1;  // end of stream
+		}
+	};
+
 	/**
 	 * Reads the contents of a file into a string.
 	 *

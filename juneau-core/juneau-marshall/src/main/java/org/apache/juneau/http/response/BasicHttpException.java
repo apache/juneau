@@ -14,15 +14,14 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.HttpEntities.*;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
-import org.apache.http.entity.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -371,13 +370,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	@Override /* HttpMessage */
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
-		if (body == null) {
-			try {
-				String msg = getMessage();
-				if (msg != null)
-					body = new StringEntity(msg);
-			} catch (UnsupportedEncodingException e) {}
-		}
+		if (body == null)
+			body = stringEntity(getMessage());
 		return body;
 	}
 

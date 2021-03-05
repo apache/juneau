@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.http.HttpEntities.*;
 
 import java.io.*;
 import java.net.*;
@@ -23,7 +24,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.client.utils.*;
-import org.apache.http.entity.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.entity.*;
@@ -34,6 +34,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
+import org.apache.juneau.http.header.ContentType;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class RestClient_BasicCalls_Test {
@@ -167,7 +168,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			new StringEntity("{f:1}"),
+			stringEntity("{f:1}"),
 			parts("f",1)
 		);
 		for (Object body : bodies) {
@@ -210,7 +211,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			new StringEntity("{f:1}"),
+			stringEntity("{f:1}"),
 			parts("f",1)
 		);
 		for (Object body : bodies) {
@@ -311,8 +312,8 @@ public class RestClient_BasicCalls_Test {
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
 			/*[ 2]*/ new NameValuePair[]{part("f","1")},
-			/*[ 3]*/ new StringEntity("f=1",org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
-			/*[ 4]*/ new StringEntity("f=1",(org.apache.http.entity.ContentType)null),
+			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED, null),
+			/*[ 4]*/ stringEntity("f=1", null, null),
 			/*[ 5]*/ part("f","1"),
 			/*[ 6]*/ BasicHttpResource.of("f=1"),
 			/*[ 7]*/ BasicHttpResource.of("f=1"),
@@ -350,7 +351,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			new StringEntity("{f:1}"),
+			stringEntity("{f:1}"),
 			parts("f",1)
 		);
 		RestClient x = client().build();
@@ -387,7 +388,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			new StringEntity("{f:1}"),
+			stringEntity("{f:1}"),
 			parts("f",1)
 		);
 		RestClient x = client().build();

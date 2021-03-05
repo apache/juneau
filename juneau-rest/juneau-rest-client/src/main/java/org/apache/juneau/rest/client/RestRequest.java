@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.http.HttpEntities.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -32,9 +33,7 @@ import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.concurrent.*;
-import org.apache.http.entity.*;
 import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.entity.ContentType;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
@@ -69,7 +68,7 @@ import org.apache.juneau.xml.*;
  */
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable {
 
-	private static final ContentType TEXT_PLAIN = ContentType.create("text/plain");
+	private static final ContentType TEXT_PLAIN = ContentType.TEXT_PLAIN;
 
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
@@ -2906,9 +2905,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (input2 instanceof HttpEntity)
 					entity = (HttpEntity)input2;
 				else if (input2 instanceof Reader)
-					entity = new StringEntity(IOUtils.read((Reader)input2), getRequestContentType(TEXT_PLAIN));
+					entity = stringEntity(IOUtils.read((Reader)input2), getRequestContentType(TEXT_PLAIN), null);
 				else if (input2 instanceof InputStream)
-					entity = new InputStreamEntity((InputStream)input2, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
+					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (serializer != null)
 					entity = SerializedHttpEntity.of(input2, serializer).schema(requestBodySchema).contentType(contentType);
 				else {
@@ -2919,7 +2918,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					}
 					if (input2 == null)
 						input2 = "";
-					entity = new StringEntity(BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
+					entity = stringEntity(BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN), null);
 				}
 
 				request2.setEntity(entity);
@@ -3465,7 +3464,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (h != null) {
 			String s = h.getValue();
 			if (! isEmpty(s))
-				return ContentType.create(s);
+				return ContentType.of(s);
 		}
 		return def;
 	}

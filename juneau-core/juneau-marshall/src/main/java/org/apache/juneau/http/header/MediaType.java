@@ -14,15 +14,14 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.header.Constants.*;
+import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -104,6 +103,25 @@ public class MediaType implements Comparable<MediaType>  {
 	}
 
 	/**
+	 * Same as {@link #of(String)} but allows you to specify the parameters.
+	 *
+	 *
+	 * @param value
+	 * 	The media type string.
+	 * 	Will be lowercased.
+	 * 	Returns <jk>null</jk> if input is null or empty.
+	 * @param parameters The media type parameters.  If <jk>null</jk>, they're pulled from the media type string.
+	 * @return A new media type object, cached if parameters were not specified.
+	 */
+	public static MediaType of(String value, NameValuePair...parameters) {
+		if (parameters.length == 0)
+			return of(value);
+		if (isEmpty(value))
+			return null;
+		return new MediaType(value, parameters);
+	}
+
+	/**
 	 * Same as {@link #of(String)} but allows you to construct an array of <c>MediaTypes</c> from an
 	 * array of strings.
 	 *
@@ -132,18 +150,43 @@ public class MediaType implements Comparable<MediaType>  {
 	/**
 	 * Constructor.
 	 *
+	 * @param mt The media type string.
+	 * @param parameters The media type parameters.  If <jk>null</jk>, they're pulled from the media type string.
+	 */
+	public MediaType(String mt, NameValuePair[] parameters) {
+		this(parse(mt), parameters);
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param e The parsed media type string.
 	 */
 	public MediaType(HeaderElement e) {
+		this(e, null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param e The parsed media type string.
+	 * @param parameters Optional parameters.
+	 */
+	public MediaType(HeaderElement e, NameValuePair[] parameters) {
 		mediaType = e.getName();
 
-		List<NameValuePair> parameters = AList.create();
-		for (NameValuePair p : e.getParameters()) {
-			if (p.getName().equals("q"))
-				break;
-			parameters.add(stringPart(p.getName(), p.getValue()));
+		if (parameters == null) {
+			parameters = e.getParameters();
+			for (int i = 0; i < parameters.length; i++) {
+				if (parameters[i].getName().equals("q")) {
+					parameters = Arrays.copyOfRange(parameters, 0, i);
+					break;
+				}
+			}
 		}
-		this.parameters= parameters.toArray(new NameValuePair[parameters.size()]);
+		for (int i = 0; i < parameters.length; i++)
+			parameters[i] = stringPart(parameters[i].getName(), parameters[i].getValue());
+		this.parameters = parameters;
 
 		String x = mediaType.replace(' ', '+');
 		int i = x.indexOf('/');

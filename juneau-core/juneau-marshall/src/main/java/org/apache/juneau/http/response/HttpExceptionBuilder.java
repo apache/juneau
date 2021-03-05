@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
-import java.io.*;
+import static org.apache.juneau.http.HttpEntities.*;
+
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.entity.*;
 import org.apache.http.impl.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
@@ -392,9 +392,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> body(String value) {
-		try {
-			body(new StringEntity(value));
-		} catch (UnsupportedEncodingException e) { /* Not possible */ }
+		body(stringEntity(value));
 		return this;
 	}
 
