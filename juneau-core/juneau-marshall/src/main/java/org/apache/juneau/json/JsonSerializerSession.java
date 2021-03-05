@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -152,8 +153,10 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			serializeCollection(out, (Collection) o, eType);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
-		} else if (sType.isReader() || sType.isInputStream()) {
-			IOUtils.pipe(o, out);
+		} else if (sType.isReader()) {
+			pipe((Reader)o, out);
+		} else if (sType.isInputStream()) {
+			pipe((InputStream)o, out);
 		} else {
 			out.stringValue(toString(o));
 		}

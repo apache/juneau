@@ -35,7 +35,7 @@ public class StringEntity extends AbstractHttpEntity {
 
 	private final String content;
 	private final Charset charset;
-	private AtomicReference<byte[]> bytes = new AtomicReference<>();
+	private final AtomicReference<byte[]> bytes = new AtomicReference<>();
 
 	/**
 	 * Creates a new {@link StringEntity} object.
@@ -122,8 +122,10 @@ public class StringEntity extends AbstractHttpEntity {
 	private byte[] getBytes() {
 		byte[] b = bytes.get();
 		if (b == null) {
-			 b = content.getBytes(charset == null ? IOUtils.UTF8 : charset);
-			 bytes.set(b);
+			synchronized(bytes) {
+				 b = content.getBytes(charset == null ? IOUtils.UTF8 : charset);
+				 bytes.set(b);
+			}
 		}
 		return b;
 	}

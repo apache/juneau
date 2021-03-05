@@ -522,7 +522,7 @@ public class RequestBody {
 	 */
 	public RequestBody cache() throws IOException {
 		if (body == null)
-			body = readBytes(getInputStream(), 1024);
+			body = readBytes(getInputStream());
 		return this;
 	}
 

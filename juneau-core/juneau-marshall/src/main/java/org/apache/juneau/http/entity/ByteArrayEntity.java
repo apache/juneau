@@ -16,119 +16,94 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
- * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
+ * A repeatable entity that obtains its content from a byte array.
  */
-public class InputStreamEntity extends AbstractHttpEntity {
+public class ByteArrayEntity extends AbstractHttpEntity {
 
-	private final InputStream content;
-	private final long length;
-	private final AtomicReference<byte[]> bytes = new AtomicReference<>();
+	private final byte[] content;
+	private final long maxLength;
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link ByteArrayEntity} object.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link ByteArrayEntity} object.
 	 */
-	public static InputStreamEntity of(InputStream content) {
-		return new InputStreamEntity(content, -1, null);
+	public static ByteArrayEntity of(byte[] content) {
+		return new ByteArrayEntity(content, -1, null);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link ByteArrayEntity} object.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param maxLength The content maximum length, or <c>-1</c> to read the entire byte array.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link ByteArrayEntity} object.
 	 */
-	public static InputStreamEntity of(InputStream content, long length, ContentType contentType) {
-		return new InputStreamEntity(content, length, contentType);
+	public static ByteArrayEntity of(byte[] content, long maxLength, ContentType contentType) {
+		return new ByteArrayEntity(content, maxLength, contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param maxLength The content maximum length, or <c>-1</c> to read the entire byte array.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
 	 */
-	public InputStreamEntity(InputStream content, long length, ContentType contentType) {
-		this.content = content == null ? IOUtils.EMPTY_INPUT_STREAM : content;
-		this.length = length;
+	public ByteArrayEntity(byte[] content, long maxLength, ContentType contentType) {
+		this.content = content == null ? new byte[0] : content;
+		this.maxLength = maxLength;
 		setContentType(contentType);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return new String(asBytes(), UTF8);
+		return new String(content, UTF8);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		cache();
-		return bytes.get();
+		return content;
 	}
 
 	@Override /* HttpEntity */
 	public boolean isRepeatable() {
-		return false;
+		return true;
 	}
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return length;
+		return content.length;
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		byte[] b = bytes.get();
-		return b == null ? content : new ByteArrayInputStream(b);
-	}
-
-	@Override /* AbstractHttpEntity */
-	public InputStreamEntity cache() throws IOException {
-		byte[] b = bytes.get();
-		if (b == null) {
-			try (InputStream is = getContent()) {
-				b = readBytes(is, (int)length);
-			}
-			bytes.set(b);
-		}
-		return this;
+		return new ByteArrayInputStream(content);
 	}
 
 	/**
-	 * Writes bytes from the {@code InputStream} this entity was constructed
-	 * with to an {@code OutputStream}.  The content length
-	 * determines how many bytes are written.  If the length is unknown ({@code -1}), the
-	 * stream will be completely consumed (to the end of the stream).
+	 * Writes the contents of the byte array directly to the output stream.
+	 *
+	 * The content length determines how many bytes are written.
+	 * If the length is unknown ({@code -1}), the stream will be completely consumed (to the end of the stream).
 	 */
 	@Override
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-
-		byte[] b = bytes.get();
-		if (b != null) {
-			pipe(b, out, (int)length);
-		} else {
-			try (InputStream is = getContent()) {
-				pipe(is, out, length);
-			}
-		}
+		pipe(content, out, (int)maxLength);
 	}
 
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
-		return bytes.get() == null;
+		return false;
 	}
 }

@@ -17,6 +17,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
@@ -24,7 +25,6 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.helper.*;
@@ -212,7 +212,7 @@ public class Remote_CommonInterfaces_Test {
 	public void d01_httpResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
 		BasicHttpResource sr = x.httpResource();
-		assertEquals("foo",IOUtils.read(sr.getContent()));
+		assertEquals("foo",read(sr.getContent()));
 		assertEquals("foo",sr.getStringHeader("Foo"));
 		assertEquals("\"bar\"",sr.getStringHeader("ETag"));
 		assertEquals("text/foo",sr.getContentType().getValue().toString());
@@ -846,8 +846,8 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void g01_reader_inputStream() throws Exception {
 		G x = MockRestClient.build(G1.class).getRemote(G.class);
-		assertEquals("foo",IOUtils.read(x.reader()));
-		assertEquals("foo",IOUtils.read(x.inputStream()));
+		assertEquals("foo",read(x.reader()));
+		assertEquals("foo",read(x.inputStream()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

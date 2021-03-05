@@ -15,7 +15,6 @@ package org.apache.juneau.microservice.jetty.resources;
 import java.io.*;
 
 import org.apache.juneau.html.annotation.HtmlDocConfig;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -71,7 +70,7 @@ public class DebugResource extends BasicRestServlet {
 	public String createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		String dump = JettyMicroservice.getInstance().getServer().dump();
 		try (FileWriter fw = new FileWriter(req.getConfig().getString("Logging/logDir") + "/jetty-thread-dump.log")) {
-			IOUtils.pipe(dump, fw);
+			fw.write(dump);
 		}
 		return "OK";
 	}

@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -23,7 +24,6 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -288,7 +288,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (sType.isReader() || sType.isInputStream()) {
 				pop();
 				indent -= xIndent;
-				IOUtils.pipe(o, out);
+				if (sType.isReader())
+					pipe((Reader)o, out);
+				else
+					pipe((InputStream)o, out);
 				return ContentResult.CR_MIXED;
 			}
 

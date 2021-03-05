@@ -15,6 +15,7 @@ package org.apache.juneau.cp;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static java.util.Arrays.*;
 import static java.util.stream.Collectors.*;
 
@@ -100,18 +101,18 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* FileFinder */
 	public final Optional<String> getString(String name) throws IOException {
-		return Optional.ofNullable(IOUtils.read(find(name, null).orElse(null), IOUtils.UTF8));
+		return Optional.ofNullable(read(find(name, null).orElse(null)));
 	}
 
 	@Override /* FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
-		return Optional.ofNullable(IOUtils.read(find(name, locale).orElse(null), IOUtils.UTF8));
+		return Optional.ofNullable(read(find(name, locale).orElse(null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Implementation methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * The main implementation method for finding files.
 	 *
@@ -168,7 +169,7 @@ public class BasicFileFinder implements FileFinder {
 
 		return Optional.of(lf.read());
 	}
-	
+
 	/**
 	 * Returns the candidate file names for the specified file name in the specified locale.
 	 *

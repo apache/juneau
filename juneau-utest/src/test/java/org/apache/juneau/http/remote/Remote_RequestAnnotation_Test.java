@@ -14,6 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
@@ -23,7 +24,6 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.*;
@@ -41,7 +41,7 @@ public class Remote_RequestAnnotation_Test {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
-				"body",IOUtils.read(r),
+				"body",read(r),
 				"header",h,
 				"query",q,
 				"path",p
@@ -90,7 +90,7 @@ public class Remote_RequestAnnotation_Test {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
-				"body",IOUtils.read(r),
+				"body",read(r),
 				"header",h,
 				"query",q,
 				"path",p
@@ -146,7 +146,7 @@ public class Remote_RequestAnnotation_Test {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
-				"body",IOUtils.read(r),
+				"body",read(r),
 				"header",h,
 				"query",q,
 				"path",p
@@ -202,7 +202,7 @@ public class Remote_RequestAnnotation_Test {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
-				"body",IOUtils.read(r),
+				"body",read(r),
 				"header",h,
 				"query",q,
 				"path",p
@@ -250,7 +250,7 @@ public class Remote_RequestAnnotation_Test {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return OMap.of(
-				"body",IOUtils.read(r),
+				"body",read(r),
 				"header",h,
 				"query",q,
 				"path",p

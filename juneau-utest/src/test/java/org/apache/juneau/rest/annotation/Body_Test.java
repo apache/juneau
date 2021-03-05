@@ -14,6 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -23,7 +24,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.HasQuery;
 import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.client.*;
@@ -89,11 +89,11 @@ public class Body_Test {
 		}
 		@RestPut(path="/InputStream")
 		public String k(@Body InputStream b) throws Exception {
-			return IOUtils.read(b);
+			return read(b);
 		}
 		@RestPut(path="/Reader")
 		public String l(@Body Reader b) throws Exception {
-			return IOUtils.read(b);
+			return read(b);
 		}
 		@RestPut(path="/InputStreamTransform")
 		public A14 m(@Body A14 b) throws Exception {
@@ -101,7 +101,7 @@ public class Body_Test {
 		}
 		public static class A14 {
 			String s;
-			public A14(InputStream in) throws Exception { this.s = IOUtils.read(in); }
+			public A14(InputStream in) throws Exception { this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
@@ -110,7 +110,7 @@ public class Body_Test {
 		}
 		public static class A15 {
 			private String s;
-			public A15(Reader in) throws Exception { this.s = IOUtils.read(in); }
+			public A15(Reader in) throws Exception { this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/StringTransform")
@@ -452,7 +452,7 @@ public class Body_Test {
 		@Body
 		public static class B4 {
 			String s;
-			public B4(InputStream in) throws Exception { this.s = IOUtils.read(in); }
+			public B4(InputStream in) throws Exception { this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
@@ -462,7 +462,7 @@ public class Body_Test {
 		@Body
 		public static class B5 {
 			private String s;
-			public B5(Reader in) throws Exception { this.s = IOUtils.read(in); }
+			public B5(Reader in) throws Exception { this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 	}
@@ -538,7 +538,7 @@ public class Body_Test {
 		}
 		public static class D2 {
 			String s;
-			public D2(InputStream in) throws Exception { this.s = IOUtils.read(in); }
+			public D2(InputStream in) throws Exception { this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
@@ -547,7 +547,7 @@ public class Body_Test {
 		}
 		public static class D3 {
 			private String s;
-			public D3(Reader in) throws Exception{ this.s = IOUtils.read(in); }
+			public D3(Reader in) throws Exception{ this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/StringTransformBodyOnPojo")
@@ -567,7 +567,7 @@ public class Body_Test {
 		@Body
 		public static class D5 {
 			String s;
-			public D5(InputStream in) throws Exception { this.s = IOUtils.read(in); }
+			public D5(InputStream in) throws Exception { this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 
@@ -578,7 +578,7 @@ public class Body_Test {
 		@Body
 		public static class D6 {
 			private String s;
-			public D6(Reader in) throws Exception{ this.s = IOUtils.read(in); }
+			public D6(Reader in) throws Exception{ this.s = read(in); }
 			@Override public String toString() { return s; }
 		}
 	}

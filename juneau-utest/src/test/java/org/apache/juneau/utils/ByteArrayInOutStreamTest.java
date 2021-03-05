@@ -31,7 +31,7 @@ public class ByteArrayInOutStreamTest {
 	public void testBasic() throws Exception {
 		InputStream is = new ByteArrayInputStream("foobar".getBytes(UTF8));
 		ByteArrayInOutStream baios = new ByteArrayInOutStream();
-		IOPipe.create(is, baios).run();
+		pipe(is, baios);
 		assertEquals("foobar", read(baios.getInputStream()));
 	}
 }

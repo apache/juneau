@@ -13,11 +13,10 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Identifies a file located either on the classpath or file system.
@@ -92,7 +91,7 @@ public class LocalFile {
 	 */
 	public LocalFile cache() throws IOException {
 		synchronized(this) {
-			this.cache = IOUtils.readBytes(read());
+			this.cache = readBytes(read());
 		}
 		return this;
 	}

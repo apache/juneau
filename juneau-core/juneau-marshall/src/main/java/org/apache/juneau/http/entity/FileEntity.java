@@ -22,37 +22,35 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
- * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
+ * A repeatable entity that obtains its content from a {@link File}.
  */
-public class InputStreamEntity extends AbstractHttpEntity {
+public class FileEntity extends AbstractHttpEntity {
 
-	private final InputStream content;
-	private final long length;
-	private final AtomicReference<byte[]> bytes = new AtomicReference<>();
+	private final File content;
+	private AtomicReference<byte[]> bytes = new AtomicReference<>();
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link FileEntity} object.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link FileEntity} object.
 	 */
-	public static InputStreamEntity of(InputStream content) {
-		return new InputStreamEntity(content, -1, null);
+	public static FileEntity of(File content) {
+		return new FileEntity(content, null);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link FileEntity} object.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link FileEntity} object.
 	 */
-	public static InputStreamEntity of(InputStream content, long length, ContentType contentType) {
-		return new InputStreamEntity(content, length, contentType);
+	public static FileEntity of(File content, ContentType contentType) {
+		return new FileEntity(content, contentType);
 	}
 
 	/**
@@ -60,17 +58,15 @@ public class InputStreamEntity extends AbstractHttpEntity {
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
 	 */
-	public InputStreamEntity(InputStream content, long length, ContentType contentType) {
-		this.content = content == null ? IOUtils.EMPTY_INPUT_STREAM : content;
-		this.length = length;
+	public FileEntity(File content, ContentType contentType) {
+		this.content = content;
 		setContentType(contentType);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return new String(asBytes(), UTF8);
+		return read(content);
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -81,27 +77,25 @@ public class InputStreamEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public boolean isRepeatable() {
-		return false;
+		return true;
 	}
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return length;
+		return content == null ? 0 : content.length();
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
 		byte[] b = bytes.get();
-		return b == null ? content : new ByteArrayInputStream(b);
+		return b == null ? new FileInputStream(content) : new ByteArrayInputStream(b);
 	}
 
 	@Override /* AbstractHttpEntity */
-	public InputStreamEntity cache() throws IOException {
+	public FileEntity cache() throws IOException {
 		byte[] b = bytes.get();
 		if (b == null) {
-			try (InputStream is = getContent()) {
-				b = readBytes(is, (int)length);
-			}
+			b = readBytes(content);
 			bytes.set(b);
 		}
 		return this;
@@ -119,16 +113,16 @@ public class InputStreamEntity extends AbstractHttpEntity {
 
 		byte[] b = bytes.get();
 		if (b != null) {
-			pipe(b, out, (int)length);
+			out.write(b);
 		} else {
 			try (InputStream is = getContent()) {
-				pipe(is, out, length);
+				IOUtils.pipe(is, out);
 			}
 		}
 	}
 
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
-		return bytes.get() == null;
+		return false;
 	}
 }

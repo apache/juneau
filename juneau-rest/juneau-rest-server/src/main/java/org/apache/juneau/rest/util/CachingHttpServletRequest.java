@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.IOException;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
-import org.apache.juneau.internal.IOUtils;
 
 /**
  * Wraps an {@link HttpServletRequest} and preloads the body into memory for debugging purposes.
@@ -48,7 +48,7 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	 */
 	protected CachingHttpServletRequest(HttpServletRequest req) throws IOException {
 		super(req);
-		this.body = IOUtils.readBytes(req.getInputStream());
+		this.body = readBytes(req.getInputStream());
 	}
 
 	@Override

@@ -15,6 +15,7 @@ package org.apache.juneau.rest.reshandlers;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -31,7 +32,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.FinishablePrintWriter;
 import org.apache.juneau.rest.util.FinishableServletOutputStream;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Response handler for POJOs not handled by other handlers.
@@ -253,13 +253,11 @@ public class DefaultHandler implements ResponseHandler {
 				res.setContentType("text/plain");
 			if (o instanceof InputStream) {
 				try (OutputStream os = res.getNegotiatedOutputStream()) {
-					IOPipe.create(o, os).run();
-					os.flush();
+					pipe((InputStream)o, os);
 				}
 			} else if (o instanceof Reader) {
 				try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
-					IOPipe.create(o, w).run();
-					w.flush();
+					pipe((Reader)o, w);
 					w.finish();
 				}
 			} else {

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -473,9 +474,9 @@ public class BeanSession extends Session {
 
 			if (to.isByteArray()) {
 				if (from.isInputStream())
-					return (T)IOUtils.readBytes((InputStream)value, 1024);
+					return (T)readBytes((InputStream)value);
 				if (from.isReader())
-					return (T)IOUtils.read((Reader)value).getBytes();
+					return (T)read((Reader)value).getBytes();
 				if (to.hasMutaterFrom(from))
 					return to.mutateFrom(value);
 				if (from.hasMutaterTo(to))
@@ -1153,9 +1154,9 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Creates either an {@link OMap} or {@link AMap} depending on whether the key type is 
+	 * Creates either an {@link OMap} or {@link AMap} depending on whether the key type is
 	 * String or something else.
-	 * 
+	 *
 	 * @param mapMeta The metadata of the map to create.
 	 * @return A new map.
 	 */
@@ -1503,7 +1504,7 @@ public class BeanSession extends Session {
 		return super.toMap()
 			.a("Context", ctx.toMap())
 			.a(
-				"BeanSession", 
+				"BeanSession",
 				OMap
 					.create()
 					.filtered()

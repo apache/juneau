@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -22,7 +24,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.rest.*;
@@ -108,13 +109,13 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 */
 	public JettyMicroserviceBuilder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
 		if (jettyXml instanceof String)
-			this.jettyXml = IOUtils.read(resolveFile(jettyXml.toString()));
+			this.jettyXml = read(resolveFile(jettyXml.toString()));
 		else if (jettyXml instanceof File)
-			this.jettyXml = IOUtils.read((File)jettyXml);
+			this.jettyXml = read((File)jettyXml);
 		else if (jettyXml instanceof InputStream)
-			this.jettyXml = IOUtils.read((InputStream)jettyXml);
+			this.jettyXml = read((InputStream)jettyXml);
 		else if (jettyXml instanceof Reader)
-			this.jettyXml = IOUtils.read((Reader)jettyXml);
+			this.jettyXml = read((Reader)jettyXml);
 		else
 			throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object)", jettyXml == null ? null : jettyXml.getClass().getName());
 		this.jettyXmlResolveVars = resolveVars;

@@ -13,11 +13,11 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -91,12 +91,15 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 	/**
 	 * Convert the specified input stream to a byte array.
 	 *
-	 * @param is The input stream to convert to bytes.
+	 * @param is
+	 * 	The input stream to convert to bytes.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>The stream is automatically closed.
 	 * @return The byte array.
 	 * @throws IOException Thrown by input stream.
 	 */
 	protected byte[] toBytes(InputStream is) throws IOException {
-		return IOUtils.readBytes(is);
+		return readBytes(is);
 	}
 
 

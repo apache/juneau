@@ -14,6 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -21,7 +22,6 @@ import java.util.concurrent.*;
 import org.apache.http.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
@@ -147,19 +147,19 @@ public class Remote_RemoteOpAnnotation_Test {
 		B1 x = remote(B.class,B1.class);
 		x.x1();
 		assertEquals("foo",x.x2());
-		assertEquals("foo",IOUtils.read(x.x3().getEntity().getContent()));
-		assertEquals("foo",IOUtils.read(x.x4()));
-		assertEquals("foo",IOUtils.read(x.x5()));
+		assertEquals("foo",read(x.x3().getEntity().getContent()));
+		assertEquals("foo",read(x.x4()));
+		assertEquals("foo",read(x.x5()));
 		x.x6().get();
 		assertEquals("foo",x.x7().get());
-		assertEquals("foo",IOUtils.read(x.x8().get().getEntity().getContent()));
-		assertEquals("foo",IOUtils.read(x.x9().get()));
-		assertEquals("foo",IOUtils.read(x.x10().get()));
+		assertEquals("foo",read(x.x8().get().getEntity().getContent()));
+		assertEquals("foo",read(x.x9().get()));
+		assertEquals("foo",read(x.x10().get()));
 		x.x11().get();
 		assertEquals("foo",x.x12().get());
-		assertEquals("foo",IOUtils.read(x.x13().get().getEntity().getContent()));
-		assertEquals("foo",IOUtils.read(x.x14().get()));
-		assertEquals("foo",IOUtils.read(x.x15().get()));
+		assertEquals("foo",read(x.x13().get().getEntity().getContent()));
+		assertEquals("foo",read(x.x14().get()));
+		assertEquals("foo",read(x.x15().get()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -194,17 +194,17 @@ public class Remote_RemoteOpAnnotation_Test {
 	public void c01_returnTypes_json() throws Exception {
 		C1 x = MockRestClient.buildJson(C.class).getRemote(C1.class);
 		assertEquals("foo",x.postX1("foo"));
-		assertEquals("'foo'",IOUtils.read(x.postX2("foo").getEntity().getContent()));
-		assertEquals("'foo'",IOUtils.read(x.postX3("foo")));
-		assertEquals("'foo'",IOUtils.read(x.postX4("foo")));
+		assertEquals("'foo'",read(x.postX2("foo").getEntity().getContent()));
+		assertEquals("'foo'",read(x.postX3("foo")));
+		assertEquals("'foo'",read(x.postX4("foo")));
 		assertEquals("foo",x.postX5("foo").get());
-		assertEquals("'foo'",IOUtils.read(x.postX6("foo").get().getEntity().getContent()));
-		assertEquals("'foo'",IOUtils.read(x.postX7("foo").get()));
-		assertEquals("'foo'",IOUtils.read(x.postX8("foo").get()));
+		assertEquals("'foo'",read(x.postX6("foo").get().getEntity().getContent()));
+		assertEquals("'foo'",read(x.postX7("foo").get()));
+		assertEquals("'foo'",read(x.postX8("foo").get()));
 		assertEquals("foo",x.postX9("foo").get());
-		assertEquals("'foo'",IOUtils.read(x.postX10("foo").get().getEntity().getContent()));
-		assertEquals("'foo'",IOUtils.read(x.postX11("foo").get()));
-		assertEquals("'foo'",IOUtils.read(x.postX12("foo").get()));
+		assertEquals("'foo'",read(x.postX10("foo").get().getEntity().getContent()));
+		assertEquals("'foo'",read(x.postX11("foo").get()));
+		assertEquals("'foo'",read(x.postX12("foo").get()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -239,17 +239,17 @@ public class Remote_RemoteOpAnnotation_Test {
 	public void d01_returnTypes_partSerialization() throws Exception {
 		D1 x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
 		assertEquals("foo",x.postX1("foo"));
-		assertEquals("foo",IOUtils.read(x.postX2("foo").getEntity().getContent()));
-		assertEquals("foo",IOUtils.read(x.postX3("foo")));
-		assertEquals("foo",IOUtils.read(x.postX4("foo")));
+		assertEquals("foo",read(x.postX2("foo").getEntity().getContent()));
+		assertEquals("foo",read(x.postX3("foo")));
+		assertEquals("foo",read(x.postX4("foo")));
 		assertEquals("foo",x.postX5("foo").get());
-		assertEquals("foo",IOUtils.read(x.postX6("foo").get().getEntity().getContent()));
-		assertEquals("foo",IOUtils.read(x.postX7("foo").get()));
-		assertEquals("foo",IOUtils.read(x.postX8("foo").get()));
+		assertEquals("foo",read(x.postX6("foo").get().getEntity().getContent()));
+		assertEquals("foo",read(x.postX7("foo").get()));
+		assertEquals("foo",read(x.postX8("foo").get()));
 		assertEquals("foo",x.postX9("foo").get());
-		assertEquals("foo",IOUtils.read(x.postX10("foo").get().getEntity().getContent()));
-		assertEquals("foo",IOUtils.read(x.postX11("foo").get()));
-		assertEquals("foo",IOUtils.read(x.postX12("foo").get()));
+		assertEquals("foo",read(x.postX10("foo").get().getEntity().getContent()));
+		assertEquals("foo",read(x.postX11("foo").get()));
+		assertEquals("foo",read(x.postX12("foo").get()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

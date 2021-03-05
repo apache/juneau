@@ -157,7 +157,7 @@ public final class ParserPipe implements Closeable {
 
 		if (input instanceof InputStream) {
 			if (debug) {
-				byte[] b = readBytes((InputStream)input, 1024);
+				byte[] b = readBytes((InputStream)input);
 				inputString = toHex(b);
 				inputStream = new ByteArrayInputStream(b);
 			} else {
@@ -275,7 +275,7 @@ public final class ParserPipe implements Closeable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Reader getBufferedReader() throws IOException {
-		return IOUtils.getBufferedReader(getReader());
+		return toBufferedReader(getReader());
 	}
 
 	/**
@@ -298,7 +298,7 @@ public final class ParserPipe implements Closeable {
 	 */
 	public String asString() throws IOException {
 		if (inputString == null)
-			inputString = IOUtils.read(getReader());
+			inputString = read(getReader());
 		return inputString;
 	}
 

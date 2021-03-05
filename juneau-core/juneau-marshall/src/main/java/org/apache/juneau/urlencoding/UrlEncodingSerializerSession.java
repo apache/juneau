@@ -13,14 +13,14 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
@@ -127,8 +127,10 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		} else if (sType.isCollection() || sType.isArray()) {
 			Map m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
 			serializeCollectionMap(out, m, getClassMeta(Map.class, Integer.class, Object.class));
-		} else if (sType.isReader() || sType.isInputStream()) {
-			IOUtils.pipe(o, out);
+		} else if (sType.isReader()) {
+			pipe((Reader)o, out);
+		} else if (sType.isInputStream()) {
+			pipe((InputStream)o, out);
 		} else {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.

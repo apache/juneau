@@ -14,6 +14,7 @@ package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.security.*;
@@ -553,13 +554,8 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* HttpServletRequest */
 	public Map<String,String[]> getParameterMap() {
 		if ("POST".equalsIgnoreCase(method)) {
-			if (formDataMap == null) {
-				try {
-					formDataMap = RestUtils.parseQuery(IOUtils.read(body));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			if (formDataMap == null)
+				formDataMap = RestUtils.parseQuery(read(body));
 			return formDataMap;
 		}
 		return queryDataMap;
@@ -933,9 +929,9 @@ public class MockServletRequest implements HttpServletRequest {
 			if (value instanceof byte[])
 				this.body = (byte[])value;
 			else if (value instanceof Reader)
-				this.body = IOUtils.read((Reader)value).getBytes();
+				this.body = readBytes((Reader)value);
 			else if (value instanceof InputStream)
-				this.body = IOUtils.readBytes((InputStream)value, 1024);
+				this.body = readBytes((InputStream)value);
 			else if (value instanceof CharSequence)
 				this.body = ((CharSequence)value).toString().getBytes();
 			else if (value != null)

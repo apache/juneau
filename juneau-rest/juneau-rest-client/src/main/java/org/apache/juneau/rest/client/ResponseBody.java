@@ -200,7 +200,7 @@ public class ResponseBody implements HttpEntity {
 				return new ByteArrayInputStream(body);
 
 			if (cached) {
-				body = IOUtils.readBytes(entity.getContent());
+				body = readBytes(entity.getContent());
 				response.close();
 				return new ByteArrayInputStream(body);
 			}
@@ -314,7 +314,11 @@ public class ResponseBody implements HttpEntity {
 	public byte[] asBytes() throws RestCallException {
 		if (body == null) {
 			try {
-				body = IOUtils.readBytes(entity.getContent());
+				if (entity instanceof AbstractHttpEntity) {
+					body = ((AbstractHttpEntity)entity).asBytes();
+				} else {
+					body = readBytes(entity.getContent());
+				}
 			} catch (IOException e) {
 				throw new RestCallException(response, e, "Could not read response body.");
 			} finally {
@@ -345,7 +349,7 @@ public class ResponseBody implements HttpEntity {
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(OutputStream os) throws IOException {
-		IOPipe.create(asInputStream(), os).run();
+		pipe(asInputStream(), os);
 		return response;
 	}
 
@@ -450,7 +454,10 @@ public class ResponseBody implements HttpEntity {
 	 * @throws IOException If an IO exception occurred.
 	 */
 	public RestResponse pipeTo(Writer w, Charset charset, boolean byLines) throws IOException {
-		IOPipe.create(asReader(charset), w).byLines(byLines).run();
+		if (byLines)
+			pipeLines(asReader(charset), w);
+		else
+			pipe(asReader(charset), w);
 		return response;
 	}
 
@@ -868,7 +875,7 @@ public class ResponseBody implements HttpEntity {
 	public String asString() throws RestCallException {
 		cache();
 		try (Reader r = asReader()) {
-			return read(r).toString();
+			return read(r);
 		} catch (IOException e) {
 			response.close();
 			throw new RestCallException(response, e, "Could not read response body.");

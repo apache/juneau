@@ -64,7 +64,7 @@ public class InputStreamBase64SwapTest extends OneWayStringSwapTest<InputStream>
 				"[2] null",
 				null,
 				SWAP,
-				null,
+				"",
 				BS
 			},
 		});

@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -28,7 +29,6 @@ import org.apache.http.entity.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -149,7 +149,7 @@ public class RestClient_Response_Body_Test {
 		assertReader(r).is("{f:1}");
 
 		x.entity(inputStreamEntity("{f:1}"));
-		r = x.get("/bean").run().getBody().asReader(IOUtils.UTF8);
+		r = x.get("/bean").run().getBody().asReader(UTF8);
 		assertReader(r).is("{f:1}");
 
 		x.entity(inputStreamEntity("{f:1}"));
@@ -179,7 +179,7 @@ public class RestClient_Response_Body_Test {
 		assertString(sw.toString()).is("{f:1}");
 
 		sw = new StringWriter();
-		client().build().get("/bean").run().getBody().pipeTo(sw,IOUtils.UTF8);
+		client().build().get("/bean").run().getBody().pipeTo(sw,UTF8);
 		assertString(sw.toString()).is("{f:1}");
 	}
 
@@ -187,7 +187,7 @@ public class RestClient_Response_Body_Test {
 		String x;
 		public static A7a fromReader(Reader r) throws IOException {
 			A7a x = new A7a();
-			x.x = IOUtils.read(r);
+			x.x = read(r);
 			return x;
 		}
 	}
@@ -196,7 +196,7 @@ public class RestClient_Response_Body_Test {
 		String x;
 		public static A7b fromInputStream(InputStream is) throws IOException {
 			A7b x = new A7b();
-			x.x = IOUtils.read(is);
+			x.x = read(is);
 			return x;
 		}
 	}

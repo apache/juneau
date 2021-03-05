@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -43,7 +44,6 @@ import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -1411,9 +1411,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		try {
 			String q = null;
 			if (value instanceof Reader)
-				q = IOUtils.read((Reader)value);
+				q = read((Reader)value);
 			else if (value instanceof InputStream)
-				q = IOUtils.read((InputStream)value);
+				q = read((InputStream)value);
 			else
 				q = stringify(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
@@ -2905,7 +2905,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (input2 instanceof HttpEntity)
 					entity = (HttpEntity)input2;
 				else if (input2 instanceof Reader)
-					entity = stringEntity(IOUtils.read((Reader)input2), getRequestContentType(TEXT_PLAIN), null);
+					entity = stringEntity(read((Reader)input2), getRequestContentType(TEXT_PLAIN), null);
 				else if (input2 instanceof InputStream)
 					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (serializer != null)

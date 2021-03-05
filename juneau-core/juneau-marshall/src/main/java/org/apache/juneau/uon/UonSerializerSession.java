@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -161,8 +163,11 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
 		}
-		else if (sType.isReader() || sType.isInputStream()) {
-			IOUtils.pipe(o, out);
+		else if (sType.isReader()) {
+			pipe((Reader)o, out);
+		}
+		else if (sType.isInputStream()) {
+			pipe((InputStream)o, out);
 		}
 		else {
 			out.appendObject(o, false);

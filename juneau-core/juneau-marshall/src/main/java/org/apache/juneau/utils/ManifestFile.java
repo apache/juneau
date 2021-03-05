@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.jar.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for working with Jar manifest files.
@@ -91,7 +90,7 @@ public class ManifestFile extends OMap {
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
 	public ManifestFile(Reader r) throws IOException {
-		load(new Manifest(IOUtils.toInputStream(r)));
+		load(new Manifest(new ByteArrayInputStream(read(r).getBytes(UTF8))));
 	}
 
 	/**

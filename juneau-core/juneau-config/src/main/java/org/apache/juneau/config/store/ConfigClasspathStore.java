@@ -86,7 +86,7 @@ public class ConfigClasspathStore extends ConfigStore {
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		try (InputStream in = cl.getResourceAsStream(name)) {
 			if (in != null)
-				cache.put(name, IOUtils.read(in, IOUtils.UTF8));
+				cache.put(name, IOUtils.read(in));
 		}
 		return emptyIfNull(cache.get(name));
 	}

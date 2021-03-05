@@ -20,7 +20,6 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
@@ -158,14 +157,11 @@ public class TestMicroservice {
 	private static int dumpCount = 0;
 
 	public static void jettyDump(RequestLine rl, StatusLine sl) {
-		try {
+		try (FileWriter fw = new FileWriter(microservice.getConfig().getString("Logging/logDir") + "/jetty-thread-dump-"+(dumpCount++)+".log")) {
 			String dump = microservice.getServer().dump();
-			FileWriter fw = new FileWriter(microservice.getConfig().getString("Logging/logDir") + "/jetty-thread-dump-"+(dumpCount++)+".log");
 			fw.append("RequestLine = [" + rl + "]\n");
 			fw.append("StatusLine = [" + sl + "]\n");
-			IOUtils.pipe(dump, fw);
-			fw.flush();
-			fw.close();
+			fw.append(dump);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

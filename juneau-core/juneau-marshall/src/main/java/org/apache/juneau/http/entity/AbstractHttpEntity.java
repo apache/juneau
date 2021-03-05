@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 
 import org.apache.http.*;
@@ -149,7 +151,7 @@ public abstract class AbstractHttpEntity extends org.apache.http.entity.Abstract
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
 	public String asString() throws IOException {
-		return IOUtils.read(getContent());
+		return read(getContent());
 	}
 
 	/**
@@ -159,9 +161,7 @@ public abstract class AbstractHttpEntity extends org.apache.http.entity.Abstract
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
 	public byte[] asBytes() throws IOException {
-		try (InputStream o = getContent()) {
-			return o == null ? null : IOUtils.readBytes(o);
-		}
+		return readBytes(getContent());
 	}
 
 	/**

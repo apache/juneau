@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.io.*;
 import java.nio.charset.*;
+import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -37,251 +34,394 @@ public final class IOUtils {
 		}
 	};
 
+	private static final int BUFF_SIZE = 1024;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Piping utilities.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Reads the contents of a file into a string.
+	 * Pipes the contents of the specified <c>Reader</c> to the specified file.
 	 *
-	 * @param path The path of the file to read using default character encoding.
-	 * @return The contents of the reader as a string, or <jk>null</jk> if file does not exist.
-	 * @throws IOException If a problem occurred trying to read from the reader.
+	 * @param in
+	 * 	The reader to pipe from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Reader is automatically closed.
+	 * @param out
+	 * 	The file to write the output to.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	The number of characters piped.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static String readFile(String path) throws IOException {
-		return read(new File(path));
+	public static long pipe(Reader in, File out) throws IOException {
+		if (out == null || in == null)
+			return 0;
+		try (Writer w = FileWriterBuilder.create(out).build()) {
+			return pipe(in, w);
+		}
 	}
 
 	/**
-	 * Reads the specified object to a <c>String</c>.
+	 * Pipes the contents of the specified <c>Reader</c> to the specified <c>Writer</c>.
+	 *
+	 * @param in
+	 * 	The reader to pipe from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Reader is automatically closed.
+	 * @param out
+	 * 	The file to write the output to.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Writer is flushed but not automatically closed.
+	 * @return
+	 * 	The number of characters piped.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static long pipe(Reader in, Writer out) throws IOException {
+		if (out == null || in == null)
+			return 0;
+		long total = 0;
+		try (Reader in2 = in) {
+			char[] buffer = new char[buffSize(-1)];
+			int readLen;
+			while ((readLen = in.read(buffer)) != -1) {
+				out.write(buffer, 0, readLen);
+				total += readLen;
+			}
+		}
+		out.flush();
+		return total;
+	}
+
+	/**
+	 * Pipes the contents of the specified <c>Reader</c> to the specified <c>Writer</c> a line at a time.
 	 *
 	 * <p>
-	 * Can be any of the following object types:
-	 * <ul>
-	 * 	<li>{@link CharSequence}
-	 * 	<li>{@link File}
-	 * 	<li>{@link Reader}
-	 * 	<li>{@link InputStream}
-	 * 	<li><code><jk>byte</jk>[]</code>
-	 * </ul>
+	 * Writer is flushed after every line.  Typically useful when writing to consoles.
 	 *
-	 * @param in The object to read.
-	 * @return The object serialized to a string, or <jk>null</jk> if it wasn't a supported type.
+	 * @param in
+	 * 	The reader to pipe from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Reader is automatically closed.
+	 * @param out
+	 * 	The file to write the output to.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Writer is flushed but not automatically closed.
+	 * @return
+	 * 	The number of characters piped.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static String read(Object in) throws IOException {
-		if (in == null)
-			return null;
-		if (in instanceof CharSequence)
-			return in.toString();
-		if (in instanceof File)
-			return read((File)in);
-		if (in instanceof Reader)
-			return read((Reader)in);
-		if (in instanceof InputStream)
-			return read((InputStream)in);
-		if (in instanceof byte[])
-			return read(new ByteArrayInputStream((byte[])in));
-		throw new IOException("Cannot convert object of type '"+in.getClass().getName()+"' to a String.");
+	public static long pipeLines(Reader in, Writer out) throws IOException {
+		if (in == null || out == null)
+			return 0;
+		long total = 0;
+		try (Reader in2 = in) {
+			try (Scanner s = new Scanner(in2)) {
+				while (s.hasNextLine()) {
+					String l = s.nextLine();
+					if (l != null) {
+						out.write(l);
+						out.write("\n");
+						out.flush();
+						total += l.length() + 1;
+					}
+				}
+			}
+		}
+		return total;
 	}
 
 	/**
-	 * Same as {@link #read(Object)} but appends all the input into a single String.
+	 * Pipes the contents of the specified input stream to the writer.
 	 *
-	 * @param in The objects to read.
-	 * @return The objects serialized to a string, never <jk>null</jk>.
+	 * @param in
+	 * 	The stream to pipe from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Streams is automatically closed.
+	 * @param out
+	 * 	The writer to pipe to.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @return
+	 * 	The number of bytes written.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static String readAll(Object...in) throws IOException {
-		if (in.length == 1)
-			return read(in[0]);
-		StringWriter sw = new StringWriter();
-		for (Object o : in)
-			sw.write(emptyIfNull(read(o)));
-		return sw.toString();
+	public static long pipe(InputStream in, Writer out) throws IOException {
+		if (in == null || out == null)
+			return 0;
+		return pipe(new InputStreamReader(in, UTF8), out);
+	}
+
+	/**
+	 * Pipes the contents of the specified object into the output stream.
+	 *
+	 * <p>
+	 * The input stream is closed, the output stream is not.
+	 *
+	 * @param in
+	 * 	The input to pipe from.
+	 * @param out
+	 * 	The writer to pipe to.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	@Deprecated
+	public static void pipe(Object in, OutputStream out) throws IOException {
+		IOPipe.create(in, out).run();
+	}
+
+	/**
+	 * Pipes the specified input stream to the specified output stream.
+	 *
+	 * <p>
+	 * Either stream is not automatically closed.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param out
+	 * 	The output stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @return The number of bytes written.
+	 * @throws IOException If thrown from either stream.
+	 */
+	public static long pipe(InputStream in, OutputStream out) throws IOException {
+		try (InputStream in2 = in) {
+			return pipe(in, out, -1);
+		}
+	}
+
+	/**
+	 * Pipes the specified input stream to the specified output stream.
+	 *
+	 * <p>
+	 * Either stream is not automatically closed.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param out
+	 * 	The output stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param maxBytes
+	 * 	The maximum number of bytes or <c>-1</c> to read the entire input stream.
+	 * @return The number of bytes written.
+	 * @throws IOException If thrown from either stream.
+	 */
+	public static long pipe(InputStream in, OutputStream out, long maxBytes) throws IOException {
+		if (in == null || out == null)
+			return 0;
+		byte[] buffer = new byte[buffSize(maxBytes)];
+		int readLen;
+		long total = 0;
+		if (maxBytes < 0) {
+			while ((readLen = in.read(buffer)) != -1) {
+				out.write(buffer, 0, readLen);
+				total += readLen;
+			}
+		} else {
+			long remaining = maxBytes;
+			while (remaining > 0) {
+				readLen = in.read(buffer, 0, buffSize(remaining));
+				if (readLen == -1)
+					break;
+				out.write(buffer, 0, readLen);
+				total += readLen;
+				remaining -= readLen;
+			}
+		}
+		out.flush();
+		return total;
+	}
+
+	/**
+	 * Pipes the specified reader to the specified output stream.
+	 *
+	 * @param in
+	 * 	The input reader.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param out
+	 * 	The output stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @return The number of bytes written.
+	 * @throws IOException If thrown from output stream.
+	 */
+	public static long pipe(Reader in, OutputStream out) throws IOException {
+		if (in == null || out == null)
+			return 0;
+		long total = 0;
+		try (Reader in2 = in) {
+			OutputStreamWriter osw = new OutputStreamWriter(out, UTF8);
+			int i;
+			char[] b = new char[BUFF_SIZE];
+			while ((i = in.read(b)) > 0) {
+				total += i;
+				osw.write(b, 0, i);
+			}
+			osw.flush();
+		}
+		return total;
+	}
+
+	/**
+	 * Pipes the specified byte array to the specified output stream.
+	 *
+	 * @param in
+	 * 	The input byte array.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param out
+	 * 	The output stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param maxBytes
+	 * 	The maximum number of bytes or <c>-1</c> to read the entire byte array.
+	 * @return The number of bytes written.
+	 * @throws IOException If thrown from output stream.
+	 */
+	public static final long pipe(byte[] in, OutputStream out, int maxBytes) throws IOException {
+		if (in == null || out == null)
+			return 0;
+		int length = (maxBytes < 0 || maxBytes > in.length ) ? in.length : maxBytes;
+		out.write(in, 0, length);
+		return length;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Reading utilities.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Reads the specified byte array containing UTF-8 into a string.
+	 *
+	 * @param in
+	 * 	The input.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The new string, or <jk>null</jk> if the input was null.
+	 */
+	public static String read(byte[] in) {
+		return read(in, UTF8);
+	}
+
+	/**
+	 * Reads the specified byte array into a string.
+	 *
+	 * @param in
+	 * 	The input.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param charset The character set to use for decoding.
+	 * @return The new string, or <jk>null</jk> if the input was null.
+	 */
+	public static String read(byte[] in, Charset charset) {
+		if (in == null)
+			return null;
+		return new String(in, charset);
 	}
 
 	/**
 	 * Reads the contents of a file into a string.
 	 *
-	 * @param in The file to read using default character encoding.
-	 * @return The contents of the reader as a string, or <jk>null</jk> if file does not exist.
+	 * <p>
+	 * Assumes default character encoding.
+	 *
+	 * @param in
+	 * 	The file to read.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	The contents of the reader as a string, or <jk>null</jk> if file does not exist.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public static String read(File in) throws IOException {
 		if (in == null || ! in.exists())
 			return null;
 		try (Reader r = FileReaderBuilder.create(in).build()) {
-			return read(r, 0, 1024);
+			return read(r, in.length());
 		}
 	}
 
 	/**
 	 * Reads the contents of a reader into a string.
 	 *
-	 * @param in The input reader.
-	 * @return The contents of the reader as a string.
+	 * @param in
+	 * 	The input reader.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @return
+	 * 	The contents of the reader as a string, or <jk>null</jk> if the reader was <jk>null</jk>.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public static String read(Reader in) throws IOException {
-		return read(in, 0, 1024);
-	}
-
-	/**
-	 * Reads the contents of an input stream into a string using the specified charset.
-	 *
-	 * @param in The input stream.
-	 * @param cs The charset of the contents of the input stream.
-	 * @return The contents of the reader as a string.  <jk>null</jk> if input stream was null.
-	 * @throws IOException If a problem occurred trying to read from the input stream.
-	 */
-	public static String read(InputStream in, Charset cs) throws IOException {
-		if (in == null)
-			return null;
-		return read(new InputStreamReader(in, cs));
-	}
-
-	/**
-	 * Reads the contents of an input stream into a string using the system default charset.
-	 *
-	 * @param in The input stream.
-	 * @return The contents of the reader as a string, or <jk>null</jk> if the input stream is null.
-	 * @throws IOException If a problem occurred trying to read from the input stream.
-	 */
-	public static String read(InputStream in) throws IOException {
-		if (in == null)
-			return null;
-		return read(new InputStreamReader(in, Charset.defaultCharset()));
+		try (Reader in2 = in) {
+			return read(in, -1);
+		}
 	}
 
 	/**
 	 * Reads the specified input into a {@link String} until the end of the input is reached.
 	 *
-	 * <p>
-	 * The {@code Reader} is automatically closed.
-	 *
-	 * <p>
-	 * If the {@code Reader} is not an instance of a {@code BufferedReader}, then it gets wrapped in a
-	 * {@code BufferedReader}.
-	 *
-	 * @param in The input reader.
-	 * @param length Specify a positive number if the length of the input is known.
-	 * @param bufferSize Specify the buffer size to use.
-	 * @return The contents of the reader as a string.  <jk>null</jk> if reader was null.
+	 * @param in
+	 * 	The input reader.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>String is automatically closed.
+	 * @param expectedLength
+	 * 	Specify a positive number if the length of the input is known, or <c>-1</c> if unknown.
+	 * @return
+	 * 	The contents of the reader as a string, or <jk>null</jk> if the reader was <jk>null</jk>.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	public static String read(Reader in, int length, int bufferSize) throws IOException {
+	public static String read(Reader in, long expectedLength) throws IOException {
 		if (in == null)
 			return null;
-		if (bufferSize == 0)
-			bufferSize = 1024;
-		length = (length <= 0 ? bufferSize : length);
-		StringBuilder sb = new StringBuilder(length); // Assume they're ASCII characters.
-		try {
-			char[] buf = new char[Math.min(bufferSize, length)];
+		try (Reader in2 = in) {
+			StringBuilder sb = new StringBuilder(buffSize(expectedLength)); // Assume they're ASCII characters.
+			char[] buf = new char[buffSize(expectedLength)];
 			int i = 0;
-			while ((i = in.read(buf)) != -1)
+			while ((i = in2.read(buf)) != -1)
 				sb.append(buf, 0, i);
 			return sb.toString();
-		} finally {
-			in.close();
 		}
 	}
 
 	/**
-	 * Read the specified object into a byte array.
+	 * Reads the contents of an input stream into a string.
+	 *
+	 * <p>
+	 * Assumes UTF-8 encoding.
 	 *
 	 * @param in
-	 * 	The object to read into a byte array.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link File}
-	 * 	</ul>
-	 * @param buffSize
-	 * 	The buffer size to use.
-	 * @return The contents of the stream as a byte array.
-	 * @throws IOException Thrown by underlying stream or if object is not a supported type.
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @return
+	 * 	The contents of the reader as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
+	 * @throws IOException If a problem occurred trying to read from the input stream.
 	 */
-	public static byte[] readBytes(Object in, int buffSize) throws IOException {
+	public static String read(InputStream in) throws IOException {
+		return read(in, UTF8);
+	}
+
+	/**
+	 * Reads the contents of an input stream into a string using the specified charset.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param cs
+	 * 	The charset of the contents of the input stream.
+	 * @return
+	 * 	The contents of the reader as a string or <jk>null</jk> if input stream was <jk>null</jk>.
+	 * @throws IOException If a problem occurred trying to read from the input stream.
+	 */
+	public static String read(InputStream in, Charset cs) throws IOException {
 		if (in == null)
-			return new byte[0];
-		if (in instanceof byte[])
-			return (byte[])in;
-		if (in instanceof CharSequence)
-			return in.toString().getBytes(UTF8);
-		if (in instanceof InputStream)
-			return readBytes((InputStream)in, buffSize);
-		if (in instanceof Reader)
-			return read((Reader)in, 0, buffSize).getBytes(UTF8);
-		if (in instanceof File)
-			return readBytes((File)in, buffSize);
-		throw new IOException("Cannot convert object of type '"+in.getClass().getName()+"' to a byte array.");
-	}
-
-	/**
-	 * Read the specified input stream into a byte array.
-	 *
-	 * @param in
-	 * 	The stream to read into a byte array.
-	 * @return The contents of the stream as a byte array.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static byte[] readBytes(InputStream in) throws IOException {
-		return in == null ? null : readBytes(in, 1024);
-	}
-
-	/**
-	 * Read the specified input stream into a byte array.
-	 *
-	 * @param in
-	 * 	The stream to read into a byte array.
-	 * @param buffSize
-	 * 	The buffer size to use.
-	 * @return The contents of the stream as a byte array.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static byte[] readBytes(InputStream in, int buffSize) throws IOException {
-		if (buffSize == 0)
-			buffSize = 1024;
-		ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize);
-		int nRead;
-		byte[] b = new byte[buffSize];
-		while ((nRead = in.read(b, 0, b.length)) != -1)
-			buff.write(b, 0, nRead);
-		buff.flush();
-		return buff.toByteArray();
-	}
-
-	/**
-	 * Read the specified file into a byte array.
-	 *
-	 * @param in
-	 * 	The file to read into a byte array.
-	 * @return The contents of the file as a byte array.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static byte[] readBytes(File in) throws IOException {
-		return readBytes(in, 1024);
-	}
-
-	/**
-	 * Read the specified file into a byte array.
-	 *
-	 * @param in
-	 * 	The file to read into a byte array.
-	 * @param buffSize
-	 * 	The buffer size to use.
-	 * @return The contents of the file as a byte array.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static byte[] readBytes(File in, int buffSize) throws IOException {
-		if (buffSize == 0)
-			buffSize = 1024;
-		if (! (in.exists() && in.canRead()))
-			return new byte[0];
-		buffSize = Math.min((int)in.length(), buffSize);
-		try (FileInputStream fis = new FileInputStream(in)) {
-			return readBytes(fis, buffSize);
+			return null;
+		try (InputStreamReader isr = new InputStreamReader(in, cs)) {
+			return read(isr);
 		}
 	}
 
@@ -301,96 +441,114 @@ public final class IOUtils {
 	 * @return The contents of the stream as a byte array.
 	 * @throws IOException Thrown by underlying stream or if object is not a supported type.
 	 */
+	@Deprecated
 	public static byte[] readBytes(Object in) throws IOException {
-		return readBytes(in, 1024);
+		if (in == null)
+			return new byte[0];
+		if (in instanceof byte[])
+			return (byte[])in;
+		if (in instanceof CharSequence)
+			return in.toString().getBytes(UTF8);
+		if (in instanceof InputStream)
+			return readBytes((InputStream)in);
+		if (in instanceof Reader)
+			return read((Reader)in, 0).getBytes(UTF8);
+		if (in instanceof File)
+			return readBytes((File)in);
+		throw new IOException("Cannot convert object of type '"+in.getClass().getName()+"' to a byte array.");
 	}
 
 	/**
-	 * Same as {@link #readBytes(Object)} but appends all the input into a single byte array.
+	 * Reads the specified input stream into the specified byte array.
 	 *
-	 * @param in The objects to read.
-	 * @return The objects serialized to a byte array, never <jk>null</jk>.
+	 * @param in
+	 * 	The input stream to read.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @return A byte array containing the contents.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static byte[] readBytes(Object...in) throws IOException {
-		if (in.length == 1)
-			return readBytes(in[0]);
-        try (final ByteArrayOutputStream buff = new ByteArrayOutputStream(1024)) {
-			for (Object o : in) {
-				byte[] bo = readBytes(o);
-				if (bo != null)
-					buff.write(bo);
-			}
-			buff.flush();
-			return buff.toByteArray();
-        }
-	}
-
-	/**
-	 * Writes the contents of the specified <c>Reader</c> to the specified file.
-	 *
-	 * @param out The file to write the output to.
-	 * @param in The reader to pipe from.
-	 * @return The number of characters written to the file.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static int write(File out, Reader in) throws IOException {
-		assertFieldNotNull(out, "out");
-		assertFieldNotNull(in, "in");
-		try (Writer w = FileWriterBuilder.create(out).build()) {
-			return IOPipe.create(in, w).run();
+	public static byte[] readBytes(InputStream in) throws IOException {
+		try (InputStream in2 = in) {
+			return readBytes(in2, -1);
 		}
 	}
 
 	/**
-	 * Writes the contents of the specified <c>InputStream</c> to the specified file.
+	 * Reads the specified input stream into the specified byte array.
 	 *
-	 * @param out The file to write the output to.
-	 * @param in The input stream to pipe from.
-	 * @return The number of characters written to the file.
+	 * @param in
+	 * 	The input stream to read.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param maxBytes
+	 * 	The maximum number of bytes or <c>-1</c> to read the entire stream.
+	 * @return A byte array containing the contents.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static int write(File out, InputStream in) throws IOException {
-		assertFieldNotNull(out, "out");
-		assertFieldNotNull(in, "in");
-		try (OutputStream os = new FileOutputStream(out)) {
-			return IOPipe.create(in, os).run();
+	public static byte[] readBytes(InputStream in, int maxBytes) throws IOException {
+		if (in == null)
+			return new byte[0];
+		ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize(maxBytes));
+		int nRead;
+		byte[] b = new byte[buffSize(maxBytes)];
+		while ((nRead = in.read(b, 0, b.length)) != -1)
+			buff.write(b, 0, nRead);
+		buff.flush();
+		return buff.toByteArray();
+	}
+
+	/**
+	 * Read the specified file into a byte array.
+	 *
+	 * @param in
+	 * 	The file to read into a byte array.
+	 * @return The contents of the file as a byte array.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static byte[] readBytes(File in) throws IOException {
+		return readBytes(in, -1);
+	}
+
+	/**
+	 * Read the specified file into a byte array.
+	 *
+	 * @param in
+	 * 	The file to read into a byte array.
+	 * @param maxBytes
+	 * 	The maximum number of bytes to read, or <jk>-1</jk> to read all bytes.
+	 * @return The contents of the file as a byte array.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static byte[] readBytes(File in, int maxBytes) throws IOException {
+		if (in == null || ! (in.exists() && in.canRead()))
+			return new byte[0];
+		try (FileInputStream is = new FileInputStream(in)) {
+			return readBytes(is, maxBytes);
 		}
 	}
 
 	/**
-	 * Pipes the contents of the specified object into the writer.
-	 *
-	 * <p>
-	 * The reader is closed, the writer is not.
+	 * Reads the specified input stream into the specified byte array.
 	 *
 	 * @param in
-	 * 	The input to pipe from.
-	 * 	Can be any of the types defined by {@link #toReader(Object)}.
-	 * @param out
-	 * 	The writer to pipe to.
+	 * 	The input stream to read.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @return A byte array containing the contents.  Never <jk>null</jk>.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static void pipe(Object in, Writer out) throws IOException {
-		IOPipe.create(in, out).run();
+	public static byte[] readBytes(Reader in) throws IOException {
+		if (in == null)
+			return new byte[0];
+		try (Reader in2 = in) {
+			return read(in2, -1).getBytes();
+		}
 	}
 
-	/**
-	 * Pipes the contents of the specified object into the output stream.
-	 *
-	 * <p>
-	 * The input stream is closed, the output stream is not.
-	 *
-	 * @param in
-	 * 	The input to pipe from.
-	 * 	Can be any of the types defined by {@link #toInputStream(Object)}.
-	 * @param out
-	 * 	The writer to pipe to.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static void pipe(Object in, OutputStream out) throws IOException {
-		IOPipe.create(in, out).run();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other utilities.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Wraps the specified reader in a buffered reader.
@@ -400,7 +558,7 @@ public final class IOUtils {
 	 * 	The reader wrapped in a {@link BufferedReader}, or the original {@link Reader} if it's already a buffered
 	 * 	reader.
 	 */
-	public static Reader getBufferedReader(Reader r) {
+	public static Reader toBufferedReader(Reader r) {
 		if (r == null || r instanceof BufferedReader || r instanceof StringReader)
 			return r;
 		return new BufferedReader(r);
@@ -414,7 +572,8 @@ public final class IOUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static long count(InputStream is) throws IOException {
-		assertFieldNotNull(is, "is");
+		if (is == null)
+			return 0;
 		long c = 0;
 		long i;
 		try {
@@ -434,7 +593,8 @@ public final class IOUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static long count(Reader r) throws IOException {
-		assertFieldNotNull(r, "r");
+		if (r == null)
+			return 0;
 		long c = 0;
 		long i;
 		try {
@@ -444,31 +604,6 @@ public final class IOUtils {
 			r.close();
 		}
 		return c;
-	}
-
-	/**
-	 * Given the specified <js>"Content-Length"</js> header value, return an appropriate buffer size.
-	 *
-	 * <p>
-	 * The maximum buffer size is 1MB.
-	 *
-	 * @param contentLength The value of the <js>"Content-Length"</js> header.
-	 * @return The appropriate buffer size.
-	 */
-	public static int getBufferSize(String contentLength) {
-		try {
-			if (isNotEmpty(contentLength)) {
-				long l = Long.decode(contentLength);
-				if (l > 1048576)
-					return 1048576;
-				if (l <= 0)
-					return 8192;
-				return (int)l;
-			}
-		} catch (Exception e) {
-			return 8192;
-		}
-		return 8192;
 	}
 
 	/**
@@ -602,85 +737,6 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Converts an object to a <c>Reader</c>.
-	 *
-	 * @param o
-	 * 	The object to convert to a reader.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence}
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li><code><jk>null</jk></code> - Returns <jk>null</jk>.
-	 * 	</ul>
-	 * @return The object converted to a reader.
-	 * @throws IOException If file could not be read.
-	 * @throws IllegalArgumentException If invalid object passed in.
-	 */
-	public static Reader toReader(Object o) throws IOException {
-		if (o == null)
-			return null;
-		if (o instanceof CharSequence)
-			return new StringReader(o.toString());
-		if (o instanceof File)
-			return new FileReader((File)o);
-		if (o instanceof Reader)
-			return (Reader)o;
-		if (o instanceof InputStream)
-			return new InputStreamReader((InputStream)o, "UTF-8");
-		if (o instanceof byte[])
-			return new InputStreamReader(new ByteArrayInputStream((byte[])o), "UTF-8");
-		throw new BasicIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toReader(Object)", o.getClass());
-	}
-
-	/**
-	 * Converts an object to an <c>InputStream</c>.
-	 *
-	 * @param o
-	 * 	The object to convert to an input stream.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} - Converted to UTF-8 stream.
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li><code><jk>null</jk></code> - Returns <jk>null</jk>.
-	 * 	</ul>
-	 * @return The object converted to an input stream.
-	 * @throws IOException If file could not be read.
-	 * @throws IllegalArgumentException If invalid object passed in.
-	 */
-	public static InputStream toInputStream(Object o) throws IOException {
-		if (o == null)
-			return null;
-		if (o instanceof InputStream)
-			return (InputStream)o;
-		if (o instanceof File)
-			return new FileInputStream((File)o);
-		if (o instanceof byte[])
-			return new ByteArrayInputStream((byte[])o);
-		if (o instanceof CharSequence)
-			return new ByteArrayInputStream(((CharSequence)o).toString().getBytes(UTF8));
-		if (o instanceof Reader)
-			return new ByteArrayInputStream(IOUtils.read((Reader)o).getBytes(UTF8));
-		throw new BasicIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toInputStream(Object)", o.getClass());
-	}
-
-	/**
-	 * Writes the specified string to the specified file.
-	 *
-	 * @param path The file path.
-	 * @param contents The new file contents.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static void write(String path, String contents) throws IOException {
-		write(new File(path), new StringReader(contents));
-	}
-
-	/**
 	 * Loads a text file from either the file system or classpath.
 	 *
 	 * @param name The file name.
@@ -712,5 +768,9 @@ public final class IOUtils {
 			}
 		}
 		return null;
+	}
+
+	private static final int buffSize(long max) {
+		return (max > 0 && max < BUFF_SIZE) ? (int)max : BUFF_SIZE;
 	}
 }

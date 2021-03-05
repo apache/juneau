@@ -37,7 +37,7 @@ public class IOUtilsTest {
 
 		in = new TestReader("foobar");
 		out = new TestWriter();
-		IOPipe.create(in, out).run();
+		pipe(in, out);
 		assertTrue(in.closed);
 		assertFalse(out.closed);
 		assertEquals("foobar", out.toString());

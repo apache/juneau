@@ -17,8 +17,9 @@ import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -469,8 +470,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
 					this.indent++;
-			} else if (sType.isReader() || sType.isInputStream()) {
-				IOUtils.pipe(o, out);
+			} else if (sType.isReader()) {
+				pipe((Reader)o, out);
+			} else if (sType.isInputStream()) {
+				pipe((InputStream)o, out);
 			} else {
 				if (isXmlText(format, sType))
 					out.append(toString(o));

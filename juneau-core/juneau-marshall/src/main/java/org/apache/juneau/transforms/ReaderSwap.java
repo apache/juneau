@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -28,6 +29,6 @@ public class ReaderSwap extends StringSwap<Reader> {
 	 */
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, Reader r) throws Exception {
-		return IOUtils.read(r);
+		return read(r);
 	}
 }

@@ -14,8 +14,9 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import org.apache.jena.rdf.model.*;
@@ -266,8 +267,10 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				default: n = serializeToContainer(c, eType, m.createSeq());
 			}
 
-		} else if (sType.isReader() || sType.isInputStream()) {
-			n = m.createLiteral(encodeTextInvalidChars(IOUtils.read(o)));
+		} else if (sType.isReader()) {
+			n = m.createLiteral(encodeTextInvalidChars(read((Reader)o)));
+		} else if (sType.isInputStream()) {
+			n = m.createLiteral(encodeTextInvalidChars(read((InputStream)o)));
 
 		} else {
 			n = m.createLiteral(encodeTextInvalidChars(toString(o)));

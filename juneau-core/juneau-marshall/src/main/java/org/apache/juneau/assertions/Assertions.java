@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Main class for creation of assertions for testing.
@@ -36,7 +37,7 @@ public class Assertions {
 	 * @param value The date being wrapped.
 	 * @return A new {@link DateAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static DateAssertion assertDate(Date value) {
+	public static final DateAssertion assertDate(Date value) {
 		return DateAssertion.create(value);
 	}
 
@@ -52,7 +53,7 @@ public class Assertions {
 	 * @param value The date being wrapped.
 	 * @return A new {@link DateAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static DateAssertion assertDate(Optional<Date> value) {
+	public static final DateAssertion assertDate(Optional<Date> value) {
 		assertArgNotNull("value", value);
 		return assertDate(value.orElse(null));
 	}
@@ -69,7 +70,7 @@ public class Assertions {
 	 * @param value The date being wrapped.
 	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ZonedDateTimeAssertion assertZonedDateTime(ZonedDateTime value) {
+	public static final ZonedDateTimeAssertion assertZonedDateTime(ZonedDateTime value) {
 		return ZonedDateTimeAssertion.create(value);
 	}
 
@@ -85,7 +86,7 @@ public class Assertions {
 	 * @param value The date being wrapped.
 	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ZonedDateTimeAssertion assertZonedDateTime(Optional<ZonedDateTime> value) {
+	public static final ZonedDateTimeAssertion assertZonedDateTime(Optional<ZonedDateTime> value) {
 		assertArgNotNull("value", value);
 		return assertZonedDateTime(value.orElse(null));
 	}
@@ -102,7 +103,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link IntegerAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static IntegerAssertion assertInteger(Integer value) {
+	public static final IntegerAssertion assertInteger(Integer value) {
 		return IntegerAssertion.create(value);
 	}
 
@@ -118,7 +119,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link IntegerAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static IntegerAssertion assertInteger(Optional<Integer> value) {
+	public static final IntegerAssertion assertInteger(Optional<Integer> value) {
 		assertArgNotNull("value", value);
 		return assertInteger(value.orElse(null));
 	}
@@ -135,7 +136,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static LongAssertion assertLong(Long value) {
+	public static final LongAssertion assertLong(Long value) {
 		return LongAssertion.create(value);
 	}
 
@@ -151,7 +152,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static LongAssertion assertLong(Optional<Long> value) {
+	public static final LongAssertion assertLong(Optional<Long> value) {
 		assertArgNotNull("value", value);
 		return assertLong(value.orElse(null));
 	}
@@ -168,7 +169,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ComparableAssertion assertComparable(Comparable<?> value) {
+	public static final ComparableAssertion assertComparable(Comparable<?> value) {
 		return ComparableAssertion.create(value);
 	}
 
@@ -184,7 +185,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static <V> ObjectAssertion<V> assertObject(V value) {
+	public static final <V> ObjectAssertion<V> assertObject(V value) {
 		return ObjectAssertion.create(value);
 	}
 
@@ -200,7 +201,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static <V> ObjectAssertion<V> assertObject(Optional<V> value) {
+	public static final <V> ObjectAssertion<V> assertObject(Optional<V> value) {
 		assertArgNotNull("value", value);
 		return assertObject(value.orElse(null));
 	}
@@ -217,7 +218,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static <V> BeanAssertion<V> assertBean(V value) {
+	public static final <V> BeanAssertion<V> assertBean(V value) {
 		return BeanAssertion.create(value);
 	}
 
@@ -233,7 +234,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static <V> BeanAssertion<V> assertBean(Optional<V> value) {
+	public static final <V> BeanAssertion<V> assertBean(Optional<V> value) {
 		assertArgNotNull("value", value);
 		return assertBean(value.orElse(null));
 	}
@@ -250,7 +251,7 @@ public class Assertions {
 	 * @param value The string being wrapped.
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static StringAssertion assertString(Object value) {
+	public static final StringAssertion assertString(Object value) {
 		return StringAssertion.create(value);
 	}
 
@@ -266,7 +267,7 @@ public class Assertions {
 	 * @param value The string being wrapped.
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static StringAssertion assertString(Optional<?> value) {
+	public static final StringAssertion assertString(Optional<?> value) {
 		assertArgNotNull("value", value);
 		return assertString(value.orElse(null));
 	}
@@ -283,7 +284,7 @@ public class Assertions {
 	 * @param value The boolean being wrapped.
 	 * @return A new {@link BooleanAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static BooleanAssertion assertBoolean(Boolean value) {
+	public static final BooleanAssertion assertBoolean(Boolean value) {
 		return BooleanAssertion.create(value);
 	}
 
@@ -299,7 +300,7 @@ public class Assertions {
 	 * @param value The boolean being wrapped.
 	 * @return A new {@link BooleanAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static BooleanAssertion assertBoolean(Optional<Boolean> value) {
+	public static final BooleanAssertion assertBoolean(Optional<Boolean> value) {
 		assertArgNotNull("value", value);
 		return assertBoolean(value.orElse(null));
 	}
@@ -316,7 +317,7 @@ public class Assertions {
 	 * @param value The throwable being wrapped.
 	 * @return A new {@link ThrowableAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static <V extends Throwable> ThrowableAssertion<V> assertThrowable(V value) {
+	public static final <V extends Throwable> ThrowableAssertion<V> assertThrowable(V value) {
 		return ThrowableAssertion.create(value);
 	}
 
@@ -332,7 +333,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ArrayAssertion assertArray(Object value) {
+	public static final ArrayAssertion assertArray(Object value) {
 		return ArrayAssertion.create(value);
 	}
 
@@ -348,7 +349,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link CollectionAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static CollectionAssertion assertCollection(Collection<?> value) {
+	public static final CollectionAssertion assertCollection(Collection<?> value) {
 		return CollectionAssertion.create(value);
 	}
 
@@ -364,7 +365,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ListAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ListAssertion assertList(List<?> value) {
+	public static final ListAssertion assertList(List<?> value) {
 		return ListAssertion.create(value);
 	}
 
@@ -381,7 +382,7 @@ public class Assertions {
 	 * @return A new {@link MapAssertion} object.  Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static MapAssertion assertMap(Map value) {
+	public static final MapAssertion assertMap(Map value) {
 		return MapAssertion.create(value);
 	}
 
@@ -400,7 +401,7 @@ public class Assertions {
 	 * @param snippet The snippet of code to execute.
 	 * @return A new assertion object.  Never <jk>null</jk>.
 	 */
-	public static ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
+	public static final ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
 		return assertThrown(Throwable.class, snippet);
 	}
 
@@ -421,7 +422,7 @@ public class Assertions {
 	 * @return A new assertion object.  Never <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Throwable> ThrowableAssertion<Throwable> assertThrown(Class<T> type, Snippet snippet) {
+	public static final <T extends Throwable> ThrowableAssertion<Throwable> assertThrown(Class<T> type, Snippet snippet) {
 		try {
 			snippet.run();
 		} catch (Throwable e) {
@@ -441,12 +442,15 @@ public class Assertions {
 	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
-	 * @param value The input stream being wrapped.
+	 * @param value
+	 * 	The input stream being wrapped.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
 	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
 	 * @throws IOException If thrown while reading contents from stream.
 	 */
-	public static ByteArrayAssertion assertStream(InputStream value) throws IOException {
-		return assertBytes(value == null ? null : IOUtils.readBytes(value));
+	public static final ByteArrayAssertion assertStream(InputStream value) throws IOException {
+		return assertBytes(value == null ? null : readBytes(value));
 	}
 
 	/**
@@ -462,7 +466,7 @@ public class Assertions {
 	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
 	 * @throws IOException If thrown while reading contents from stream.
 	 */
-	public static ByteArrayAssertion assertStream(Optional<InputStream> value) throws IOException {
+	public static final ByteArrayAssertion assertStream(Optional<InputStream> value) throws IOException {
 		assertArgNotNull("value", value);
 		return assertStream(value.orElse(null));
 	}
@@ -479,7 +483,7 @@ public class Assertions {
 	 * @param value The byte array being wrapped.
 	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ByteArrayAssertion assertBytes(byte[] value) {
+	public static final ByteArrayAssertion assertBytes(byte[] value) {
 		return ByteArrayAssertion.create(value);
 	}
 
@@ -495,7 +499,7 @@ public class Assertions {
 	 * @param value The byte array being wrapped.
 	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ByteArrayAssertion assertBytes(Optional<byte[]> value) {
+	public static final ByteArrayAssertion assertBytes(Optional<byte[]> value) {
 		assertArgNotNull("value", value);
 		return assertBytes(value.orElse(null));
 	}
@@ -513,8 +517,8 @@ public class Assertions {
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 * @throws IOException If thrown while reading contents from reader.
 	 */
-	public static StringAssertion assertReader(Reader value) throws IOException {
-		return assertString(value == null ? null : IOUtils.read(value));
+	public static final StringAssertion assertReader(Reader value) throws IOException {
+		return assertString(read(value));
 	}
 
 	/**
@@ -530,7 +534,7 @@ public class Assertions {
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 * @throws IOException If thrown while reading contents from reader.
 	 */
-	public static StringAssertion assertReader(Optional<Reader> value) throws IOException {
+	public static final StringAssertion assertReader(Optional<Reader> value) throws IOException {
 		assertArgNotNull("value", value);
 		return assertReader(value.orElse(null));
 	}
@@ -544,7 +548,7 @@ public class Assertions {
 	 * @return The same argument.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	public static <T> T assertArgNotNull(String arg, T o) throws IllegalArgumentException {
+	public static final <T> T assertArgNotNull(String arg, T o) throws IllegalArgumentException {
 		if (o == null)
 			throw new BasicIllegalArgumentException("Argument ''{0}'' cannot be null", arg);
 		return o;

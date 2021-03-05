@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
@@ -147,7 +148,7 @@ public abstract class MenuItemWidget extends Widget {
 		Object o = getContent(req, res);
 		if (o instanceof Reader) {
 			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
-				IOUtils.pipe(r, w);
+				pipe(r, w);
 			}
 		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);

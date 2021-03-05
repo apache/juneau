@@ -17,13 +17,13 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -214,8 +214,8 @@ public class OpenApiPartParser_Test {
 		HttpPartSchema s = T_BYTE;
 		String in = base64Encode("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
-		assertEquals("foo", IOUtils.read(parse(s, in, InputStream.class)));
-		assertEquals("foo", IOUtils.read(parse(s, in, Reader.class)));
+		assertEquals("foo", read(parse(s, in, InputStream.class)));
+		assertEquals("foo", read(parse(s, in, Reader.class)));
 		assertEquals("C1-foo", parse(s, in, C1.class).toString());
 	}
 
@@ -224,8 +224,8 @@ public class OpenApiPartParser_Test {
 		HttpPartSchema s = T_BINARY;
 		String in = toHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
-		assertEquals("foo", IOUtils.read(parse(s, in, InputStream.class)));
-		assertEquals("foo", IOUtils.read(parse(s, in, Reader.class)));
+		assertEquals("foo", read(parse(s, in, InputStream.class)));
+		assertEquals("foo", read(parse(s, in, Reader.class)));
 		assertEquals("C1-foo", parse(s, in, C1.class).toString());
 	}
 
@@ -234,8 +234,8 @@ public class OpenApiPartParser_Test {
 		HttpPartSchema s = T_BINARY_SPACED;
 		String in = toSpacedHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
-		assertEquals("foo", IOUtils.read(parse(s, in, InputStream.class)));
-		assertEquals("foo", IOUtils.read(parse(s, in, Reader.class)));
+		assertEquals("foo", read(parse(s, in, InputStream.class)));
+		assertEquals("foo", read(parse(s, in, Reader.class)));
 		assertEquals("C1-foo", parse(s, in, C1.class).toString());
 	}
 

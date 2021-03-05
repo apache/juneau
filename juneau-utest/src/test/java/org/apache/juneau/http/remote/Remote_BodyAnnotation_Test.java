@@ -15,6 +15,8 @@ package org.apache.juneau.http.remote;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.IOUtils.*;
+
 
 import java.io.*;
 import java.util.*;
@@ -25,7 +27,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
@@ -100,25 +101,25 @@ public class Remote_BodyAnnotation_Test {
 		@RestPost
 		public String x7(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("text/plain",ct);
-			return IOUtils.read(b);
+			return read(b);
 		}
 
 		@RestPost
 		public String x8(@Body InputStream b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("application/octet-stream",ct);
-			return IOUtils.read(b);
+			return read(b);
 		}
 
 		@RestPost
 		public String x9(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertTrue(ct.startsWith("text/plain"));
-			return IOUtils.read(b);
+			return read(b);
 		}
 
 		@RestPost
 		public String x10(@Body Reader b, @Header("Content-Type") String ct) throws IOException {
 			assertEquals("application/x-www-form-urlencoded",ct);
-			return IOUtils.read(b);
+			return read(b);
 		}
 	}
 

@@ -11,6 +11,8 @@
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
@@ -251,7 +253,7 @@ public class ConfigurablePropertyCodeGenerator {
 				System.err.println("@FluentSetters not present on class " + c.getName());
 
 			System.out.println("Processing " + f.getName());
-			String s = IOUtils.read(f);
+			String s = read(f);
 
 			int i1 = s.indexOf("<FluentSetters>"), i2 = s.indexOf("</FluentSetters>");
 			String cpSection = null;
@@ -348,7 +350,7 @@ public class ConfigurablePropertyCodeGenerator {
 			}
 
 			s = s.substring(0, i1+15) + sb.toString() + "\n\n\t// " + s.substring(i2);
-			IOUtils.write(f, new StringReader(s));
+			pipe(new StringReader(s), f);
 		}
 
 		System.out.println("DONE");

@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -30,7 +31,6 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -1764,7 +1764,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public Config load(Reader contents, boolean synchronous) throws IOException, InterruptedException {
 		checkWrite();
-		configMap.load(IOUtils.read(contents), synchronous);
+		configMap.load(read(contents), synchronous);
 		return this;
 	}
 

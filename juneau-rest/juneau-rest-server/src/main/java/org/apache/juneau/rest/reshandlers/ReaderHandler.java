@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.reshandlers;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Response handler for {@link Reader} objects.
@@ -34,8 +35,8 @@ public final class ReaderHandler implements ResponseHandler {
 	public boolean handle(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
 		RestResponse res = call.getRestResponse();
 		if (res.isOutputType(Reader.class)) {
-			try (Writer w = res.getNegotiatedWriter()) {
-				IOPipe.create(res.getOutput(Reader.class), w).run();
+			try (Reader r = res.getOutput(Reader.class); Writer w = res.getNegotiatedWriter()) {
+				pipe(r, w);
 			}
 			return true;
 		}

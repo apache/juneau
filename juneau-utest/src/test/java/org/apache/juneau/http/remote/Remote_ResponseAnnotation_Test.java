@@ -15,12 +15,12 @@ package org.apache.juneau.http.remote;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.annotation.*;
@@ -75,7 +75,7 @@ public class Remote_ResponseAnnotation_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		A1a x = remote(A.class,A1b.class).get();
-		assertEquals("foo",IOUtils.read(x.getBody()));
+		assertEquals("foo",read(x.getBody()));
 		assertEquals("x",x.getHeader());
 		assertEquals(201,x.getStatus());
 	}
@@ -93,7 +93,7 @@ public class Remote_ResponseAnnotation_Test {
 	@Test
 	public void a02_unannotatedMethod() throws Exception {
 		A2a x = remote(A.class,A2b.class).get();
-		assertEquals("foo",IOUtils.read(x.getBody()));
+		assertEquals("foo",read(x.getBody()));
 	}
 
 	@Rest

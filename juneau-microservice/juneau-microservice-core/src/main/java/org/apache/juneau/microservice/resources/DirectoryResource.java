@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -29,7 +30,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.helper.*;
-import org.apache.juneau.utils.*;
 
 /**
  * REST resource that allows access to a file system directory.
@@ -191,7 +191,7 @@ public class DirectoryResource extends BasicRestServlet {
 		File f = getFile(path);
 
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
-			IOPipe.create(is, os).run();
+			pipe(is, os);
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}
