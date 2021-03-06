@@ -18,6 +18,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.http.HttpEntities.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
@@ -2543,7 +2544,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.contentType("application/x-www-form-urlencoded").body(body);
-			return req.body(SerializedEntity.of(body, urlEncodingSerializer));
+			return req.body(serializedEntity(body, urlEncodingSerializer, null).build());
 		} catch (IOException e) {
 			throw new RestCallException(null, e, "Could not read form post body.");
 		}

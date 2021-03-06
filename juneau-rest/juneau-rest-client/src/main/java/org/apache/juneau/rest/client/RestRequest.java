@@ -2909,7 +2909,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (input2 instanceof InputStream)
 					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM)).build();
 				else if (serializer != null)
-					entity = SerializedEntity.of(input2, serializer).schema(requestBodySchema).contentType(contentType);
+					entity = serializedEntity(input2, serializer, requestBodySchema).contentType(contentType).build();
 				else {
 					if (client.hasSerializers()) {
 						if (contentType == null)

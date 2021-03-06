@@ -14,11 +14,11 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -27,33 +27,17 @@ import org.apache.juneau.internal.*;
 public class ReaderEntity extends BasicHttpEntity2 {
 
 	private final Reader content;
-	private final long length;
+	private final long contentLength;
 	private final Charset charset;
 	private final byte[] cache;
 
 	/**
 	 * Creates a new {@link ReaderEntity} builder.
 	 *
-	 * <p>
-	 * Assumes no content type.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @return A new {@link ReaderEntity} builder.
 	 */
-	public static HttpEntityBuilder<ReaderEntity> of(Reader content) {
-		return new HttpEntityBuilder<>(ReaderEntity.class).content(content);
-	}
-
-	/**
-	 * Creates a new {@link ReaderEntity} builder.
-	 *
-	 * @param content The entity builder.  Can be <jk>null<jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link ReaderEntity} builder.
-	 */
-	public static HttpEntityBuilder<ReaderEntity> of(Reader content, long length, ContentType contentType) {
-		return new HttpEntityBuilder<>(ReaderEntity.class).content(content).contentLength(length).contentType(contentType);
+	public static HttpEntityBuilder<ReaderEntity> create() {
+		return new HttpEntityBuilder<>(ReaderEntity.class);
 	}
 
 	/**
@@ -64,10 +48,10 @@ public class ReaderEntity extends BasicHttpEntity2 {
 	 */
 	public ReaderEntity(HttpEntityBuilder<?> builder) throws IOException {
 		super(builder);
-		this.content = builder.content == null ? EMPTY_READER : (Reader)builder.content;
-		this.charset = builder.charset == null ? UTF8 : builder.charset;
-		this.cache = builder.cached ? readBytes(this.content) : null;
-		this.length = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
+		content = contentOrElse(EMPTY_READER);
+		charset = firstNonNull(builder.charset, UTF8);
+		cache = builder.cached ? readBytes(this.content) : null;
+		contentLength = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -87,7 +71,7 @@ public class ReaderEntity extends BasicHttpEntity2 {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return length;
+		return contentLength;
 	}
 
 	@Override /* HttpEntity */

@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
@@ -33,6 +34,8 @@ import org.apache.juneau.http.header.*;
  * 		Fluent setters.
  * 	<li>
  * 		Fluent assertions.
+ * 	<li>
+ * 		Externally-supplied/dynamic content.
  * </ul>
  */
 @BeanIgnore
@@ -40,6 +43,7 @@ public abstract class BasicHttpEntity2 implements HttpEntity {
 
 	final boolean cached, chunked;
 	final Object content;
+	final Supplier<?> contentSupplier;
 	final ContentType contentType;
 	final ContentEncoding contentEncoding;
 	final Charset charset;
@@ -64,6 +68,7 @@ public abstract class BasicHttpEntity2 implements HttpEntity {
 		this.cached = builder.cached;
 		this.chunked = builder.chunked;
 		this.content = builder.content;
+		this.contentSupplier = builder.contentSupplier;
 		this.contentType = builder.contentType;
 		this.contentEncoding = builder.contentEncoding;
 		this.charset = builder.charset;
@@ -73,18 +78,23 @@ public abstract class BasicHttpEntity2 implements HttpEntity {
 	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
-	 * @param implClass The subclass that the builder is going to create.
+	 * <p>
+	 * Allows you to create a modifiable copy of this bean.
+	 *
 	 * @return A new builder bean.
 	 */
-	public <T extends BasicHttpEntity2> HttpEntityBuilder<T> builder(Class<T> implClass) {
-		return create(implClass).copyFrom(this);
+	public HttpEntityBuilder<? extends BasicHttpEntity2> builder() {
+		return new HttpEntityBuilder<>(this);
 	}
 
 	/**
-	 * Converts the contents of this entity as a byte array.
+	 * Converts the contents of this entity as a string.
 	 *
-	 * @return The contents of this entity as a byte array.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return The contents of this entity as a string.
+	 * @throws IOException If a problem occurred while trying to read the content.
 	 */
 	public String asString() throws IOException {
 		return read(getContent());
@@ -93,8 +103,11 @@ public abstract class BasicHttpEntity2 implements HttpEntity {
 	/**
 	 * Converts the contents of this entity as a byte array.
 	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
 	 * @return The contents of this entity as a byte array.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 * @throws IOException If a problem occurred while trying to read the content.
 	 */
 	public byte[] asBytes() throws IOException {
 		return readBytes(getContent());
@@ -102,6 +115,9 @@ public abstract class BasicHttpEntity2 implements HttpEntity {
 
 	/**
 	 * Returns an assertion on the contents of this entity.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
 	 *
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
@@ -113,11 +129,41 @@ public abstract class BasicHttpEntity2 implements HttpEntity {
 	/**
 	 * Returns an assertion on the contents of this entity.
 	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
 	public FluentByteArrayAssertion<BasicHttpEntity2> assertBytes() throws IOException {
 		return new FluentByteArrayAssertion<>(asBytes(), this);
+	}
+
+	/**
+	 * Returns the content of this entity.
+	 *
+	 * @param def The default value if <jk>null</jk>.
+	 * @return The content object.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> T contentOrElse(T def) {
+		Object o = content;
+		if (o == null && contentSupplier != null)
+			o = contentSupplier.get();
+		return (o == null ? def : (T)o);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the contents of this entity are provided through an external supplier.
+	 * 
+	 * <p>
+	 * Externally supplied content generally means the content length cannot be reliably determined
+	 * based on the content.
+	 *
+	 * @return <jk>true</jk> if the contents of this entity are provided through an external supplier.
+	 */
+	protected boolean isSupplied() {
+		return contentSupplier != null;
 	}
 
 	@Override /* HttpEntity */

@@ -17,40 +17,22 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.header.*;
-
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
  */
 public class InputStreamEntity extends BasicHttpEntity2 {
 
 	private final InputStream content;
-	private final long length;
+	private final long maxLength;
 	private final byte[] cache;
 
 	/**
 	 * Creates a new {@link InputStreamEntity} builder.
 	 *
-	 * <p>
-	 * Assumes no content type.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @return A new {@link InputStreamEntity} builder.
 	 */
-	public static HttpEntityBuilder<InputStreamEntity> of(InputStream content) {
-		return new HttpEntityBuilder<>(InputStreamEntity.class).content(content);
-	}
-
-	/**
-	 * Creates a new {@link InputStreamEntity} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} builder.
-	 */
-	public static HttpEntityBuilder<InputStreamEntity> of(InputStream content, long length, ContentType contentType) {
-		return new HttpEntityBuilder<>(InputStreamEntity.class).content(content).contentLength(length).contentType(contentType);
+	public static HttpEntityBuilder<InputStreamEntity> create() {
+		return new HttpEntityBuilder<>(InputStreamEntity.class);
 	}
 
 	/**
@@ -61,9 +43,9 @@ public class InputStreamEntity extends BasicHttpEntity2 {
 	 */
 	public InputStreamEntity(HttpEntityBuilder<?> builder) throws IOException {
 		super(builder);
-		this.content = builder.content == null ? EMPTY_INPUT_STREAM : (InputStream)builder.content;
-		this.cache = builder.cached ? readBytes(this.content) : null;
-		this.length = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
+		content = contentOrElse(EMPTY_INPUT_STREAM);
+		cache = builder.cached ? readBytes(content) : null;
+		maxLength = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -83,7 +65,7 @@ public class InputStreamEntity extends BasicHttpEntity2 {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return length;
+		return maxLength;
 	}
 
 	@Override /* HttpEntity */
@@ -102,10 +84,10 @@ public class InputStreamEntity extends BasicHttpEntity2 {
 		assertArgNotNull("out", out);
 
 		if (cache != null) {
-			pipe(cache, out, (int)length);
+			pipe(cache, out, (int)maxLength);
 		} else {
 			try (InputStream is = getContent()) {
-				pipe(is, out, length);
+				pipe(is, out, maxLength);
 			}
 		}
 	}

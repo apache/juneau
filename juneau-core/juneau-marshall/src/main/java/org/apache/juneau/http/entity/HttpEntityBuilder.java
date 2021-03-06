@@ -14,6 +14,7 @@ package org.apache.juneau.http.entity;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
@@ -29,12 +30,14 @@ public class HttpEntityBuilder<T extends BasicHttpEntity2> {
 
 	boolean cached, chunked;
 	Object content;
+	Supplier<?> contentSupplier;
 	ContentType contentType;
 	ContentEncoding contentEncoding;
 	Charset charset;
 	long contentLength = -1;
 
-	private final Class<? extends BasicHttpEntity2> implClass;
+	/** The HttpEntity implementation class. */
+	protected final Class<? extends BasicHttpEntity2> implClass;
 
 	/**
 	 * Constructor.
@@ -45,6 +48,24 @@ public class HttpEntityBuilder<T extends BasicHttpEntity2> {
 	 */
 	public HttpEntityBuilder(Class<T> implClass) {
 		this.implClass = implClass;
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param impl
+	 * 	The implementation object of {@link HttpEntity} to copy from.
+	 * 	<br>This must contain a public constructor that takes in an {@link HttpEntityBuilder} object.
+	 */
+	public HttpEntityBuilder(T impl) {
+		implClass = impl.getClass();
+		cached = impl.cached;
+		content = impl.content;
+		contentSupplier = impl.contentSupplier;
+		contentType = impl.contentType;
+		contentEncoding = impl.contentEncoding;
+		charset = impl.charset;
+		contentLength = impl.length;
 	}
 
 	/**
@@ -62,22 +83,6 @@ public class HttpEntityBuilder<T extends BasicHttpEntity2> {
 	}
 
 	/**
-	 * Copies the values from the specified entity bean.
-	 *
-	 * @param value The exception to copy from.
-	 * @return This object (for method chaining).
-	 */
-	public HttpEntityBuilder<T> copyFrom(BasicHttpEntity2 value) {
-		this.cached = value.cached;
-		this.content = value.content;
-		this.contentType = value.contentType;
-		this.contentEncoding = value.contentEncoding;
-		this.charset = value.charset;
-		this.contentLength = value.length;
-		return this;
-	}
-
-	/**
 	 * Sets the content on this entity bean.
 	 *
 	 * @param value The entity content, can be <jk>null</jk>.
@@ -86,6 +91,22 @@ public class HttpEntityBuilder<T extends BasicHttpEntity2> {
 	@FluentSetter
 	public HttpEntityBuilder<T> content(Object value) {
 		this.content = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content on this entity bean from a supplier.
+	 *
+	 * <p>
+	 * Repeatable entities such as {@link StringEntity} use this to allow the entity content to be resolved at
+	 * serialization time.
+	 *
+	 * @param value The entity content, can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HttpEntityBuilder<T> contentSupplier(Supplier<?> value) {
+		this.contentSupplier = value == null ? ()->null : value;
 		return this;
 	}
 

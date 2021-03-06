@@ -17,37 +17,20 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.header.*;
-
 /**
  * A repeatable entity that obtains its content from a byte array.
  */
 public class ByteArrayEntity extends BasicHttpEntity2 {
 
-	private final byte[] content;
+	private static final byte[] EMPTY = new byte[0];
 
 	/**
 	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
-	 * <p>
-	 * Assumes no content type.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static HttpEntityBuilder<ByteArrayEntity> of(byte[] content) {
-		return new HttpEntityBuilder<>(ByteArrayEntity.class).content(content);
-	}
-
-	/**
-	 * Creates a new {@link ByteArrayEntity} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link ByteArrayEntity} builder.
-	 */
-	public static HttpEntityBuilder<ByteArrayEntity> of(byte[] content, ContentType contentType) {
-		return new HttpEntityBuilder<>(ByteArrayEntity.class).content(content).contentType(contentType);
+	public static HttpEntityBuilder<ByteArrayEntity> create() {
+		return new HttpEntityBuilder<>(ByteArrayEntity.class);
 	}
 
 	/**
@@ -57,17 +40,20 @@ public class ByteArrayEntity extends BasicHttpEntity2 {
 	 */
 	public ByteArrayEntity(HttpEntityBuilder<?> builder) {
 		super(builder);
-		this.content = builder.content == null ? new byte[0] : (byte[])builder.content;
+	}
+
+	private byte[] bytes() {
+		return contentOrElse(EMPTY);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return new String(content, UTF8);
+		return new String(bytes(), UTF8);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return content;
+		return bytes();
 	}
 
 	@Override /* HttpEntity */
@@ -77,17 +63,17 @@ public class ByteArrayEntity extends BasicHttpEntity2 {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return content.length;
+		return isSupplied() ? super.getContentLength() : bytes().length;
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return new ByteArrayInputStream(content);
+		return new ByteArrayInputStream(bytes());
 	}
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-		out.write(content);
+		out.write(bytes());
 	}
 }

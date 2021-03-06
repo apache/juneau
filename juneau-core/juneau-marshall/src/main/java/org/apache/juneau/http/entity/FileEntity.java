@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -31,25 +30,10 @@ public class FileEntity extends BasicHttpEntity2 {
 	/**
 	 * Creates a new {@link FileEntity} builder.
 	 *
-	 * <p>
-	 * Assumes no content type.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @return A new {@link FileEntity} builder.
 	 */
-	public static HttpEntityBuilder<FileEntity> of(File content) {
-		return new HttpEntityBuilder<>(FileEntity.class).content(content);
-	}
-
-	/**
-	 * Creates a new {@link FileEntity} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link FileEntity} builder.
-	 */
-	public static HttpEntityBuilder<FileEntity> of(File content, ContentType contentType) {
-		return new HttpEntityBuilder<>(FileEntity.class).content(content).contentType(contentType);
+	public static HttpEntityBuilder<FileEntity> create() {
+		return new HttpEntityBuilder<>(FileEntity.class);
 	}
 
 	/**
@@ -60,8 +44,8 @@ public class FileEntity extends BasicHttpEntity2 {
 	 */
 	public FileEntity(HttpEntityBuilder<?> builder) throws IOException {
 		super(builder);
-		this.content = (File)builder.content;
-		cache = builder.cached ? readBytes(this.content) : null;
+		content = contentOrElse(null);
+		cache = builder.cached ? readBytes(content) : null;
 	}
 
 	@Override /* AbstractHttpEntity */

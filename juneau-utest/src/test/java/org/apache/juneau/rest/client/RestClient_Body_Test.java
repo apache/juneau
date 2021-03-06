@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.junit.runners.MethodSorters.*;
@@ -157,7 +156,7 @@ public class RestClient_Body_Test {
 	public void a03_SerializedHttpEntity() throws Exception {
 		Serializer js = JsonSerializer.DEFAULT;
 
-		SerializedEntity x1 = serializedEntity(ABean.get(),null);
+		SerializedEntity x1 = serializedEntity(ABean.get(),null,null).build();
 		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
@@ -165,28 +164,19 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
-		SerializedEntity x2 = serializedEntity(ABean.get(),js);
+		SerializedEntity x2 = serializedEntity(ABean.get(),js,null).build();
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
 
-		SerializedEntity x3 = SerializedEntity.of(()->ABean.get(),js);
+		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null).build();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
-
-		SerializedEntity x12 = new SerializedEntity(ABean.get(), null) {
-			@Override
-			public void writeTo(OutputStream os) throws IOException {
-				throw new IOException("bad");
-			}
-		};
-
-		assertThrown(()->x12.getContent()).contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

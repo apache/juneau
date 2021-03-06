@@ -14,11 +14,11 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
 
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -26,29 +26,18 @@ import org.apache.juneau.internal.*;
  */
 public class StringEntity extends BasicHttpEntity2 {
 
-	private final String content;
+	private static final String EMPTY = "";
+
 	private final byte[] cache;
 	private final Charset charset;
 
 	/**
 	 * Creates a new {@link StringEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link StringEntity} builder.
 	 */
-	public static HttpEntityBuilder<StringEntity> of(String content) {
-		return new HttpEntityBuilder<>(StringEntity.class).content(content);
-	}
-
-	/**
-	 * Creates a new {@link StringEntity} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link StringEntity} builder.
-	 */
-	public static HttpEntityBuilder<StringEntity> of(String content, ContentType contentType) {
-		return new HttpEntityBuilder<>(StringEntity.class).content(content).contentType(contentType);
+	public static HttpEntityBuilder<StringEntity> create() {
+		return new HttpEntityBuilder<>(StringEntity.class);
 	}
 
 	/**
@@ -58,14 +47,22 @@ public class StringEntity extends BasicHttpEntity2 {
 	 */
 	public StringEntity(HttpEntityBuilder<?> builder) {
 		super(builder);
-		content = builder.content == null ? "" : (String)builder.content;
-		charset = builder.charset == null ? UTF8 : builder.charset;
-		cache = builder.cached ? this.content.getBytes(charset) : null;
+		charset = firstNonNull(builder.charset, UTF8);
+		cache = builder.cached ? string().getBytes(charset) : null;
+	}
+
+	@Override
+	public HttpEntityBuilder<StringEntity> builder() {
+		return new HttpEntityBuilder<>(this);
+	}
+
+	private String string() {
+		return contentOrElse(EMPTY);
 	}
 
 	@Override
 	public byte[] asBytes() throws IOException {
-		return cache == null ? content.getBytes() : cache;
+		return cache == null ? string().getBytes() : cache;
 	}
 
 	@Override /* HttpEntity */
@@ -78,18 +75,19 @@ public class StringEntity extends BasicHttpEntity2 {
 		if (cache != null)
 			return cache.length;
 		long l = super.getContentLength();
-		if (l != -1)
+		if (l != -1 || isSupplied())
 			return l;
+		String s = string();
 		if (charset == UTF8)
-			for (int i = 0; i < content.length(); i++)
-				if (content.charAt(i) > 127)
+			for (int i = 0; i < s.length(); i++)
+				if (s.charAt(i) > 127)
 					return -1;
-		return content.length();
+		return s.length();
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return cache == null ? new ReaderInputStream(new StringReader(content), charset) : new ByteArrayInputStream(cache);
+		return cache == null ? new ReaderInputStream(new StringReader(string()), charset) : new ByteArrayInputStream(cache);
 	}
 
 	@Override /* HttpEntity */
@@ -99,7 +97,7 @@ public class StringEntity extends BasicHttpEntity2 {
 			out.write(cache);
 		} else {
 			OutputStreamWriter osw = new OutputStreamWriter(out, charset);
-			osw.write(content);
+			osw.write(string());
 			osw.flush();
 		}
 	}

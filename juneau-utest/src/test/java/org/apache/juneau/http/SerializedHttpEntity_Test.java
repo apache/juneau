@@ -17,9 +17,9 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.http.HttpEntities.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.entity.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -31,8 +31,6 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.entity.SerializedEntity.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -52,70 +50,62 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		of(ABean.get(),JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
-		of(()->ABean.get(),JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
-		of(ABean.get(),null).assertString().is("{a:1,b:'foo'}");
-		of(null,JsonSerializer.DEFAULT).assertString().is("null");
+		serializedEntity(ABean.get(),JsonSerializer.DEFAULT).build().assertString().is("{\"a\":1,\"b\":\"foo\"}");
+		serializedEntity(()->ABean.get(),JsonSerializer.DEFAULT).build().assertString().is("{\"a\":1,\"b\":\"foo\"}");
+		serializedEntity(ABean.get(),null).build().assertString().is("{a:1,b:'foo'}");
+		serializedEntity(null,JsonSerializer.DEFAULT).build().assertString().is("null");
 	}
 
 	@Test
 	public void a02_schema() throws Exception {
-		of(AList.of("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).assertString().is("foo|bar");
+		serializedEntity(AList.of("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).build().assertString().is("foo|bar");
 	}
 
 	@Test
 	public void a03_serializer_streaming() throws Exception {
-		of(ABean.get(),MsgPackSerializer.DEFAULT).assertBytes().asSpacedHex().is("82 A1 61 01 A1 62 A3 66 6F 6F");
+		serializedEntity(ABean.get(),MsgPackSerializer.DEFAULT).build().assertBytes().asSpacedHex().is("82 A1 61 01 A1 62 A3 66 6F 6F");
 	}
 
 	@Test
 	public void a04_serializer_bad() throws Exception {
-		assertThrown(()->of(null,OpenApiSerializer.DEFAULT).schema(schema().required().build()).asString()).contains("Required value not provided.");
+		assertThrown(()->serializedEntity(null,OpenApiSerializer.DEFAULT).schema(schema().required().build()).build().asString()).contains("Required value not provided.");
 	}
 
 	@Test
 	public void a05_writeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		of("foo", null).writeTo(baos);
+		serializedEntity("foo", null).build().writeTo(baos);
 		assertBytes(baos.toByteArray()).asString().is("foo");
 	}
 
 	@Test
 	public void a06_isRepeatable() throws Exception {
-		assertBoolean(of(ABean.get(),null).isRepeatable()).isTrue();
+		assertBoolean(serializedEntity(ABean.get(),null).build().isRepeatable()).isTrue();
 	}
 
 	@Test
 	public void a07_getContentLength() throws Exception {
-		assertLong(of(ABean.get(),null).getContentLength()).is(-1);
+		assertLong(serializedEntity(ABean.get(),null).build().getContentLength()).is(-1);
 	}
 
 	@Test
 	public void a08_getContent() throws Exception {
-		assertStream(of("foo",null).getContent()).asString().is("foo");
-
-		SerializedEntity x = new SerializedEntity("foo", null) {
-			@Override
-			public void writeTo(OutputStream os) throws IOException {
-				throw new IOException("Bad");
-			}
-		};
-		assertThrown(()->x.getContent()).contains("Bad");
+		assertStream(serializedEntity("foo",null).build().getContent()).asString().is("foo");
 	}
 
 	@Test
 	public void a09_chunked() throws Exception {
-		checkHeaderClient("Transfer-Encoding").post("/",of(ABean.get(),null).chunked()).run().assertBody().is("['chunked']");
+		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).chunked().build()).run().assertBody().is("['chunked']");
 	}
 
 	@Test
 	public void a10_contentEncoding() throws Exception {
-		checkHeaderClient("Content-Encoding").post("/",of(ABean.get(),null).contentEncoding("identity")).run().assertBody().is("['identity']");
+		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).contentEncoding("identity").build()).run().assertBody().is("['identity']");
 	}
 
 	@Test
 	public void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",of(new StringReader("foo"),null).contentType("text/foo")).run().assertBody().is("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(new StringReader("foo"),null).contentType("text/foo").build()).run().assertBody().is("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
