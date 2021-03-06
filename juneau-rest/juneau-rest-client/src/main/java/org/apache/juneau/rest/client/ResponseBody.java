@@ -314,8 +314,8 @@ public class ResponseBody implements HttpEntity {
 	public byte[] asBytes() throws RestCallException {
 		if (body == null) {
 			try {
-				if (entity instanceof AbstractHttpEntity) {
-					body = ((AbstractHttpEntity)entity).asBytes();
+				if (entity instanceof BasicHttpEntity2) {
+					body = ((BasicHttpEntity2)entity).asBytes();
 				} else {
 					body = readBytes(entity.getContent());
 				}
