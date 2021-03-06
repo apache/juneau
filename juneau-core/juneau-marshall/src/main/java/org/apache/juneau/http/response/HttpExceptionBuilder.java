@@ -392,7 +392,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> body(String value) {
-		body(stringEntity(value));
+		body(stringEntity(value).build());
 		return this;
 	}
 

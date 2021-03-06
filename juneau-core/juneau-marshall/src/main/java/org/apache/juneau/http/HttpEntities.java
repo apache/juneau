@@ -25,71 +25,71 @@ import org.apache.juneau.serializer.*;
 public class HttpEntities {
 
 	/**
-	 * Creates a new {@link ByteArrayEntity} object.
+	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link ByteArrayEntity} object.
+	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static final ByteArrayEntity byteArrayEntity(byte[] content) {
+	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(byte[] content) {
 		return ByteArrayEntity.of(content);
 	}
 
 	/**
-	 * Creates a new {@link ByteArrayEntity} object.
+	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link ByteArrayEntity} object.
+	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static final ByteArrayEntity byteArrayEntity(byte[] content, ContentType contentType) {
+	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(byte[] content, ContentType contentType) {
 		return ByteArrayEntity.of(content, contentType);
 	}
 
 	/**
-	 * Creates a new {@link FileEntity} object.
+	 * Creates a new {@link FileEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link FileEntity} object.
+	 * @return A new {@link FileEntity} builder.
 	 */
-	public static final FileEntity fileEntity(File content) {
+	public static final HttpEntityBuilder<FileEntity> fileEntity(File content) {
 		return FileEntity.of(content);
 	}
 
 	/**
-	 * Creates a new {@link FileEntity} object.
+	 * Creates a new {@link FileEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link FileEntity} object.
+	 * @return A new {@link FileEntity} builder.
 	 */
-	public static final FileEntity fileEntity(File content, ContentType contentType) {
+	public static final HttpEntityBuilder<FileEntity> fileEntity(File content, ContentType contentType) {
 		return FileEntity.of(content, contentType);
 	}
 
 	/**
-	 * Creates a new {@link ReaderEntity} object.
+	 * Creates a new {@link ReaderEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link ReaderEntity} object.
+	 * @return A new {@link ReaderEntity} builder.
 	 */
-	public static final ReaderEntity readerEntity(Reader content) {
+	public static final HttpEntityBuilder<ReaderEntity> readerEntity(Reader content) {
 		return ReaderEntity.of(content);
 	}
 
 	/**
-	 * Creates a new {@link ReaderEntity} object.
+	 * Creates a new {@link ReaderEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link ReaderEntity} object.
+	 * @return A new {@link ReaderEntity} builder.
 	 */
-	public static final ReaderEntity readerEntity(Reader content, ContentType contentType) {
+	public static final HttpEntityBuilder<ReaderEntity> readerEntity(Reader content, ContentType contentType) {
 		return ReaderEntity.of(content, -1, contentType);
 	}
 
@@ -124,48 +124,48 @@ public class HttpEntities {
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link InputStreamEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link InputStreamEntity} builder.
 	 */
-	public static final InputStreamEntity streamEntity(InputStream content) {
+	public static final HttpEntityBuilder<InputStreamEntity> streamEntity(InputStream content) {
 		return InputStreamEntity.of(content);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link InputStreamEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link InputStreamEntity} builder.
 	 */
-	public static final InputStreamEntity streamEntity(InputStream content, long length, ContentType contentType) {
+	public static final HttpEntityBuilder<InputStreamEntity> streamEntity(InputStream content, long length, ContentType contentType) {
 		return InputStreamEntity.of(content, length, contentType);
 	}
 
 	/**
-	 * Creates a new {@link StringEntity} object.
+	 * Creates a new builder for a {@link StringEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link StringEntity} object.
+	 * @return A new {@link StringEntity} builder.
 	 */
-	public static final StringEntity stringEntity(String content) {
+	public static final HttpEntityBuilder<StringEntity> stringEntity(String content) {
 		return StringEntity.of(content);
 	}
 
 	/**
-	 * Creates a new {@link StringEntity} object.
+	 * Creates a new builder for a {@link StringEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link StringEntity} object.
+	 * @return A new {@link StringEntity} builder.
 	 */
-	public static final StringEntity stringEntity(String content, ContentType contentType) {
+	public static final HttpEntityBuilder<StringEntity> stringEntity(String content, ContentType contentType) {
 		return StringEntity.of(content, contentType);
 	}
 }

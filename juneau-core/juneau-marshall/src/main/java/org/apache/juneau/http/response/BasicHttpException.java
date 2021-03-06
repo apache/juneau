@@ -371,7 +371,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
 		if (body == null)
-			body = stringEntity(getMessage());
+			body = stringEntity(getMessage()).build();
 		return body;
 	}
 

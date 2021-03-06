@@ -16,7 +16,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -24,44 +23,45 @@ import org.apache.juneau.internal.*;
 /**
  * A repeatable entity that obtains its content from a {@link File}.
  */
-public class FileEntity extends AbstractHttpEntity {
+public class FileEntity extends BasicHttpEntity2 {
 
 	private final File content;
-	private AtomicReference<byte[]> cache = new AtomicReference<>();
+	private final byte[] cache;
 
 	/**
-	 * Creates a new {@link FileEntity} object.
+	 * Creates a new {@link FileEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link FileEntity} object.
+	 * @return A new {@link FileEntity} builder.
 	 */
-	public static FileEntity of(File content) {
-		return new FileEntity(content, null);
+	public static HttpEntityBuilder<FileEntity> of(File content) {
+		return new HttpEntityBuilder<>(FileEntity.class).content(content);
 	}
 
 	/**
-	 * Creates a new {@link FileEntity} object.
+	 * Creates a new {@link FileEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link FileEntity} object.
+	 * @return A new {@link FileEntity} builder.
 	 */
-	public static FileEntity of(File content, ContentType contentType) {
-		return new FileEntity(content, contentType);
+	public static HttpEntityBuilder<FileEntity> of(File content, ContentType contentType) {
+		return new HttpEntityBuilder<>(FileEntity.class).content(content).contentType(contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @param builder The entity builder.
+	 * @throws IOException If file could not be read.
 	 */
-	public FileEntity(File content, ContentType contentType) {
-		this.content = content;
-		setContentType(contentType);
+	public FileEntity(HttpEntityBuilder<?> builder) throws IOException {
+		super(builder);
+		this.content = (File)builder.content;
+		cache = builder.cached ? readBytes(this.content) : null;
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -71,8 +71,7 @@ public class FileEntity extends AbstractHttpEntity {
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		cache();
-		return cache.get();
+		return cache == null ? readBytes(this.content) : cache;
 	}
 
 	@Override /* HttpEntity */
@@ -87,42 +86,19 @@ public class FileEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		byte[] b = cache.get();
-		return b == null ? new FileInputStream(content) : new ByteArrayInputStream(b);
+		return cache == null ? new FileInputStream(content) : new ByteArrayInputStream(cache);
 	}
 
-	@Override /* AbstractHttpEntity */
-	public FileEntity cache() throws IOException {
-		byte[] b = cache.get();
-		if (b == null) {
-			b = readBytes(content);
-			cache.set(b);
-		}
-		return this;
-	}
-
-	/**
-	 * Writes bytes from the {@code InputStream} this entity was constructed
-	 * with to an {@code OutputStream}.  The content length
-	 * determines how many bytes are written.  If the length is unknown ({@code -1}), the
-	 * stream will be completely consumed (to the end of the stream).
-	 */
-	@Override
+	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		byte[] b = cache.get();
-		if (b != null) {
-			out.write(b);
+		if (cache != null) {
+			out.write(cache);
 		} else {
 			try (InputStream is = getContent()) {
 				IOUtils.pipe(is, out);
 			}
 		}
-	}
-
-	@Override /* HttpEntity */
-	public boolean isStreaming() {
-		return false;
 	}
 }

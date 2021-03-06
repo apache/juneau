@@ -250,7 +250,7 @@ public class BasicHttpResponse implements HttpResponse {
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
 		if (body == null)
-			body = stringEntity(getStatusLine().getReasonPhrase());
+			body = stringEntity(getStatusLine().getReasonPhrase()).build();
 		return body;
 	}
 

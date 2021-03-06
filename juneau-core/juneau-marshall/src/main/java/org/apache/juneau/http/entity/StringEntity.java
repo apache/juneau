@@ -14,84 +14,58 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
  * A self contained, repeatable entity that obtains its content from a {@link String}.
- *
- * Similar to {@link org.apache.http.entity.StringEntity} but delays converting to an internal byte array until
- * actually used.
  */
-public class StringEntity extends AbstractHttpEntity {
+public class StringEntity extends BasicHttpEntity2 {
 
 	private final String content;
-	private final AtomicReference<byte[]> cache = new AtomicReference<>();
-	private Charset charset = UTF8;
+	private final byte[] cache;
+	private final Charset charset;
 
 	/**
-	 * Creates a new {@link StringEntity} object.
+	 * Creates a new {@link StringEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link StringEntity} object.
+	 * @return A new {@link StringEntity} builder.
 	 */
-	public static StringEntity of(String content) {
-		return new StringEntity(content, null);
+	public static HttpEntityBuilder<StringEntity> of(String content) {
+		return new HttpEntityBuilder<>(StringEntity.class).content(content);
 	}
 
 	/**
-	 * Creates a new {@link StringEntity} object.
+	 * Creates a new {@link StringEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link StringEntity} object.
+	 * @return A new {@link StringEntity} builder.
 	 */
-	public static StringEntity of(String content, ContentType contentType) {
-		return new StringEntity(content, contentType);
+	public static HttpEntityBuilder<StringEntity> of(String content, ContentType contentType) {
+		return new HttpEntityBuilder<>(StringEntity.class).content(content).contentType(contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param content The entity content. Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @param builder The entity builder.
 	 */
-	public StringEntity(String content, ContentType contentType) {
-		this.content = emptyIfNull(content);
-		setContentType(contentType);
-	}
-
-	/**
-	 * Specifies the charset to use for the output.
-	 *
-	 * <p>
-	 * The default is <js>"UTF-8"</js>.
-	 *
-	 * @param value The new charset, or <js>"UTF-8"</js> if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public StringEntity charset(Charset value) {
-		this.charset = value == null ? UTF8 : value;
-		return this;
+	public StringEntity(HttpEntityBuilder<?> builder) {
+		super(builder);
+		content = builder.content == null ? "" : (String)builder.content;
+		charset = builder.charset == null ? UTF8 : builder.charset;
+		cache = builder.cached ? this.content.getBytes(charset) : null;
 	}
 
 	@Override
 	public byte[] asBytes() throws IOException {
-		cache();
-		return cache.get();
-	}
-
-	@Override /* AbstractHttpEntity */
-	public StringEntity cache() {
-		getBytes();
-		return this;
+		return cache == null ? content.getBytes() : cache;
 	}
 
 	@Override /* HttpEntity */
@@ -101,41 +75,38 @@ public class StringEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		long len = super.getContentLength();
-		if (len == -1) {
-			len = getBytes().length;
-			contentLength(len);
-		}
-		return len;
+		if (cache != null)
+			return cache.length;
+		long l = super.getContentLength();
+		if (l != -1)
+			return l;
+		if (charset == UTF8)
+			for (int i = 0; i < content.length(); i++)
+				if (content.charAt(i) > 127)
+					return -1;
+		return content.length();
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return new ByteArrayInputStream(getBytes());
+		return cache == null ? new ReaderInputStream(new StringReader(content), charset) : new ByteArrayInputStream(cache);
 	}
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-		OutputStreamWriter osw = new OutputStreamWriter(out, charset);
-		osw.write(content);
-		osw.flush();
+		if (cache != null) {
+			out.write(cache);
+		} else {
+			OutputStreamWriter osw = new OutputStreamWriter(out, charset);
+			osw.write(content);
+			osw.flush();
+		}
 	}
 
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
 		return false;
-	}
-
-	private byte[] getBytes() {
-		byte[] b = cache.get();
-		if (b == null) {
-			synchronized(cache) {
-				 b = content.getBytes(charset);
-				 cache.set(b);
-			}
-		}
-		return b;
 	}
 }
 

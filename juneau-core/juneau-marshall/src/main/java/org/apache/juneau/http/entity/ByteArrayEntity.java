@@ -22,43 +22,42 @@ import org.apache.juneau.http.header.*;
 /**
  * A repeatable entity that obtains its content from a byte array.
  */
-public class ByteArrayEntity extends AbstractHttpEntity {
+public class ByteArrayEntity extends BasicHttpEntity2 {
 
 	private final byte[] content;
 
 	/**
-	 * Creates a new {@link ByteArrayEntity} object.
+	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link ByteArrayEntity} object.
+	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static ByteArrayEntity of(byte[] content) {
-		return new ByteArrayEntity(content, null);
+	public static HttpEntityBuilder<ByteArrayEntity> of(byte[] content) {
+		return new HttpEntityBuilder<>(ByteArrayEntity.class).content(content);
 	}
 
 	/**
-	 * Creates a new {@link ByteArrayEntity} object.
+	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link ByteArrayEntity} object.
+	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static ByteArrayEntity of(byte[] content, ContentType contentType) {
-		return new ByteArrayEntity(content, contentType);
+	public static HttpEntityBuilder<ByteArrayEntity> of(byte[] content, ContentType contentType) {
+		return new HttpEntityBuilder<>(ByteArrayEntity.class).content(content).contentType(contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @param builder The entity builder.
 	 */
-	public ByteArrayEntity(byte[] content, ContentType contentType) {
-		this.content = content == null ? new byte[0] : content;
-		setContentType(contentType);
+	public ByteArrayEntity(HttpEntityBuilder<?> builder) {
+		super(builder);
+		this.content = builder.content == null ? new byte[0] : (byte[])builder.content;
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -86,20 +85,9 @@ public class ByteArrayEntity extends AbstractHttpEntity {
 		return new ByteArrayInputStream(content);
 	}
 
-	/**
-	 * Writes the contents of the byte array directly to the output stream.
-	 *
-	 * The content length determines how many bytes are written.
-	 * If the length is unknown ({@code -1}), the stream will be completely consumed (to the end of the stream).
-	 */
-	@Override
+	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 		out.write(content);
-	}
-
-	@Override /* HttpEntity */
-	public boolean isStreaming() {
-		return false;
 	}
 }

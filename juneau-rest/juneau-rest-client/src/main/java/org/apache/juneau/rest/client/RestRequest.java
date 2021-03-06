@@ -2905,9 +2905,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (input2 instanceof HttpEntity)
 					entity = (HttpEntity)input2;
 				else if (input2 instanceof Reader)
-					entity = stringEntity(read((Reader)input2), getRequestContentType(TEXT_PLAIN));
+					entity = readerEntity((Reader)input2, getRequestContentType(TEXT_PLAIN)).build();
 				else if (input2 instanceof InputStream)
-					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
+					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM)).build();
 				else if (serializer != null)
 					entity = SerializedEntity.of(input2, serializer).schema(requestBodySchema).contentType(contentType);
 				else {
@@ -2918,7 +2918,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					}
 					if (input2 == null)
 						input2 = "";
-					entity = stringEntity(BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
+					entity = stringEntity(BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN)).build();
 				}
 
 				request2.setEntity(entity);

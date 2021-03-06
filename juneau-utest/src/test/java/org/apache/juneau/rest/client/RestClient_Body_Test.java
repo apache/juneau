@@ -106,7 +106,7 @@ public class RestClient_Body_Test {
 
 	@Test
 	public void a02_StringEntity() throws Exception {
-		HttpEntity x1 = stringEntity("foo");
+		HttpEntity x1 = stringEntity("foo").build();
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").doesNotExist()
@@ -114,7 +114,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		HttpEntity x2 = stringEntity("foo").contentType("text/plain").contentEncoding("identity");
+		HttpEntity x2 = stringEntity("foo").contentType("text/plain").contentEncoding("identity").build();
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -122,7 +122,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		HttpEntity x3 = stringEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
+		HttpEntity x3 = stringEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked().build();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -130,7 +130,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")
 		;
 
-		HttpEntity x4 = stringEntity("foo", contentType("text/plain")).contentEncoding("identity");
+		HttpEntity x4 = stringEntity("foo", contentType("text/plain")).contentEncoding("identity").build();
 		client().build().post("/",x4).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -138,17 +138,17 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		HttpEntity x7 = readerEntity(new StringReader("foo"));
+		HttpEntity x7 = readerEntity(new StringReader("foo")).build();
 		client().build().post("/",x7).run().assertBody().is("foo");
 
-		HttpEntity x8 = readerEntity(new StringReader("foo")).cache();
+		HttpEntity x8 = readerEntity(new StringReader("foo")).cached().build();
 		client().build().post("/",x8).run().assertBody().is("foo");
 		client().build().post("/",x8).run().assertBody().is("foo");
 
-		HttpEntity x9 = readerEntity(null);
+		HttpEntity x9 = readerEntity(null).build();
 		client().build().post("/",x9).run().assertBody().isEmpty();
 
-		AbstractHttpEntity x12 = stringEntity("foo");
+		BasicHttpEntity2 x12 = stringEntity("foo").build();
 		x12.assertString().is("foo");
 		x12.assertBytes().asString().is("foo");
 	}

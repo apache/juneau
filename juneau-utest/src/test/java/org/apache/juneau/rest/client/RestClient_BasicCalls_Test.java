@@ -168,7 +168,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			stringEntity("{f:1}"),
+			stringEntity("{f:1}").build(),
 			parts("f",1)
 		);
 		for (Object body : bodies) {
@@ -211,7 +211,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			stringEntity("{f:1}"),
+			stringEntity("{f:1}").build(),
 			parts("f",1)
 		);
 		for (Object body : bodies) {
@@ -312,8 +312,8 @@ public class RestClient_BasicCalls_Test {
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
 			/*[ 2]*/ new NameValuePair[]{part("f","1")},
-			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED),
-			/*[ 4]*/ stringEntity("f=1", null),
+			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED).build(),
+			/*[ 4]*/ stringEntity("f=1", null).build(),
 			/*[ 5]*/ part("f","1"),
 			/*[ 6]*/ BasicHttpResource.of("f=1"),
 			/*[ 7]*/ BasicHttpResource.of("f=1"),
@@ -351,7 +351,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			stringEntity("{f:1}"),
+			stringEntity("{f:1}").build(),
 			parts("f",1)
 		);
 		RestClient x = client().build();
@@ -388,7 +388,7 @@ public class RestClient_BasicCalls_Test {
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			BasicHttpResource.of("{f:1}"),
 			bean,
-			stringEntity("{f:1}"),
+			stringEntity("{f:1}").build(),
 			parts("f",1)
 		);
 		RestClient x = client().build();

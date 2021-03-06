@@ -16,55 +16,54 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.header.*;
 
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
  */
-public class InputStreamEntity extends AbstractHttpEntity {
+public class InputStreamEntity extends BasicHttpEntity2 {
 
 	private final InputStream content;
 	private final long length;
-	private final AtomicReference<byte[]> cache = new AtomicReference<>();
+	private final byte[] cache;
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link InputStreamEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link InputStreamEntity} builder.
 	 */
-	public static InputStreamEntity of(InputStream content) {
-		return new InputStreamEntity(content, -1, null);
+	public static HttpEntityBuilder<InputStreamEntity> of(InputStream content) {
+		return new HttpEntityBuilder<>(InputStreamEntity.class).content(content);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} object.
+	 * Creates a new {@link InputStreamEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null<jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} object.
+	 * @return A new {@link InputStreamEntity} builder.
 	 */
-	public static InputStreamEntity of(InputStream content, long length, ContentType contentType) {
-		return new InputStreamEntity(content, length, contentType);
+	public static HttpEntityBuilder<InputStreamEntity> of(InputStream content, long length, ContentType contentType) {
+		return new HttpEntityBuilder<>(InputStreamEntity.class).content(content).contentLength(length).contentType(contentType);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @param length The content length, or <c>-1</c> if not known.
+	 * @param builder The entity builder.
+	 * @throws IOException If stream could not be read.
 	 */
-	public InputStreamEntity(InputStream content, long length, ContentType contentType) {
-		this.content = content == null ? EMPTY_INPUT_STREAM : content;
-		this.length = length;
-		setContentType(contentType);
+	public InputStreamEntity(HttpEntityBuilder<?> builder) throws IOException {
+		super(builder);
+		this.content = builder.content == null ? EMPTY_INPUT_STREAM : (InputStream)builder.content;
+		this.cache = builder.cached ? readBytes(this.content) : null;
+		this.length = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
 	}
 
 	@Override /* AbstractHttpEntity */
@@ -74,13 +73,12 @@ public class InputStreamEntity extends AbstractHttpEntity {
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		cache();
-		return cache.get();
+		return cache == null ? readBytes(content) : cache;
 	}
 
 	@Override /* HttpEntity */
 	public boolean isRepeatable() {
-		return cache.get() != null;
+		return cache != null;
 	}
 
 	@Override /* HttpEntity */
@@ -90,20 +88,7 @@ public class InputStreamEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		byte[] b = cache.get();
-		return b == null ? content : new ByteArrayInputStream(b);
-	}
-
-	@Override /* AbstractHttpEntity */
-	public InputStreamEntity cache() throws IOException {
-		byte[] b = cache.get();
-		if (b == null) {
-			try (InputStream is = getContent()) {
-				b = readBytes(is, (int)length);
-			}
-			cache.set(b);
-		}
-		return this;
+		return cache == null ? content : new ByteArrayInputStream(cache);
 	}
 
 	/**
@@ -116,9 +101,8 @@ public class InputStreamEntity extends AbstractHttpEntity {
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		byte[] b = cache.get();
-		if (b != null) {
-			pipe(b, out, (int)length);
+		if (cache != null) {
+			pipe(cache, out, (int)length);
 		} else {
 			try (InputStream is = getContent()) {
 				pipe(is, out, length);
@@ -128,6 +112,6 @@ public class InputStreamEntity extends AbstractHttpEntity {
 
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
-		return cache.get() == null;
+		return cache == null;
 	}
 }

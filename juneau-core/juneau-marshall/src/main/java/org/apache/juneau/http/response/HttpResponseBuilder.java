@@ -424,7 +424,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> body(String value) {
-		return body(stringEntity(value));
+		return body(stringEntity(value).build());
 	}
 
 	/**
