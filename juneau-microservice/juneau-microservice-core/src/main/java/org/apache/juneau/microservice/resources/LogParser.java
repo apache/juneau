@@ -170,6 +170,8 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 		public String getText() {
 			if (additionalText == null)
 				return text;
+			if (text == null)
+				return "";
 			int i = text.length();
 			for (String s : additionalText)
 				i += s.length() + 1;
