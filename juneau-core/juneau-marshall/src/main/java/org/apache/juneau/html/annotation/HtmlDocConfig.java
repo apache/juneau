@@ -143,6 +143,92 @@ public @interface HtmlDocConfig {
 	String asideFloat() default "DEFAULT";
 
 	/**
+	 * Configuration property: A hash algorithm defined in
+	 * <a href="https://www.w3.org/TR/CSP2/#intro">Content Security Policy</a> for
+	 * the elements {@code script} and {@code style}.
+	 * <p>
+	 * The possible algorithm names from {@link CspHash} are:
+	 * <ul>
+	 *   <li><js>"sha256"</js>
+	 *   <li><js>"sha384"</js>
+	 *   <li><js>"sha512"</js>
+	 * </ul>
+	 * </p>
+	 * <p>
+	 * Adds the HTTP header in the form:
+	 * <p class='bcode w800'>
+	 * <ja>Content-Security-Policy: script-src 'ALGORITHM-base64 encoded hash'</ja>
+	 * </p>
+	 * Note that the header can carry the directives:
+	 * <ul>
+	 *   <li>{@code script-src}, {@code script-src-attr}, and {@code script-src-elem}</li>
+	 *   <li>{@code style-src}, {@code style-src-attr}, and {@code style-src-elem}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p>
+	 * The annotation:
+	 * <p class='bcode w800'>
+	 * <ja>@HtmlDocConfig</ja>(
+	 *   cspHash=<js>"sha256"</js>
+	 * )
+	 * </p>
+	 * For the SHA-256 hash for the script {@code alert('Hello, world.');} is
+	 * {@code qznLcsROx4GACP2dm0UCKCzCG+HiZ1guq6ZZDob/Tng=}.
+	 * </p>
+	 * Generates the HTTP header:
+	 * <p class='bcode w800'>
+	 * <ja>Content-Security-Policy: script-src 'sha256-qznLcsROx4GACP2dm0UCKCzCG+HiZ1guq6ZZDob/Tng='</ja>
+	 * </p>
+	 * </p>
+	 * 
+	 * @since 9.0.0
+	 */
+	CspHash cspHash() default CspHash.DEFAULT;
+	
+	/**
+	 * Configuration property:  Nonce algorithms defined for use with
+	 * <a href="https://www.w3.org/TR/CSP2/#intro">Content Security Policy</a>
+	 * for the elements {@code script} and {@code style}.
+	 * <p>
+	 * The possible algorithm names from {@link CspNonce} are:
+	 * <ul>
+	 *   <li><js>"SecureRandom"</js>
+	 * </ul>
+	 * </p>
+	 * <p>
+	 * Adds the HTTP header in the form:
+	 * <p class='bcode w800'>
+	 * <ja>Content-Security-Policy: script-src 'nonce-$RANDOM'</ja>
+	 * </p>
+	 * Note that the header can carry the directives:
+	 * <ul>
+	 *   <li>{@code script-src}, {@code script-src-attr}, and {@code script-src-elem}</li>
+	 *   <li>{@code style-src}, {@code style-src-attr}, and {@code style-src-elem}</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p>
+	 * The annotation:
+	 * <p class='bcode w800'>
+	 * <ja>@HtmlDocConfig</ja>(
+	 *   cspNonce=<js>"SecureRandom"</js>
+	 * )
+	 * </p>
+	 * </p>
+	 * Generates the HTTP header like:
+	 * <p class='bcode w800'>
+	 * <ja>Content-Security-Policy: script-src 'nonce-Nc3n83cnSAd3wc3Sasdfn939hc3'</ja>
+	 * </p>
+	 * </p>
+	 * 
+	 * @since 9.0.0
+	 */
+	CspNonce cspNonce() default CspNonce.DEFAULT;
+	
+	/**
 	 * Configuration property:  Footer section contents.
 	 *
 	 * <p>
