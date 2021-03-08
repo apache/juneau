@@ -33,6 +33,7 @@ public final class IOUtils {
 		}
 	};
 
+	private static final int BUFF_SIZE = 1024;
 	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
 	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
 
@@ -60,8 +61,6 @@ public final class IOUtils {
 		@Override
 		public void close() throws IOException {}
 	};
-
-	private static final int BUFF_SIZE = 1024;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Piping utilities.
