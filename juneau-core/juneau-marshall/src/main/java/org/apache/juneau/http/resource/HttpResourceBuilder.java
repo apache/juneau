@@ -267,7 +267,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpResourceBuilder<T> headerList(HeaderList value) {
+	public HttpResourceBuilder<T> headers(HeaderList value) {
 		headers = value;
 		headersBuilder = null;
 		return this;

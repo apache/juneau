@@ -49,9 +49,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	private static final long serialVersionUID = 1L;
 	private static final Header[] EMPTY_HEADERS = new Header[0];
 
-	HeaderList headerList;
+	HeaderList headers;
 	BasicStatusLine statusLine;
-	HeaderListBuilder headerListBuilder;
+	HeaderListBuilder headersBuilder;
 	BasicStatusLineBuilder statusLineBuilder;
 	HttpEntity body;
 
@@ -72,7 +72,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException(HttpExceptionBuilder<?> builder) {
 		super(builder);
-		headerList = builder.headerList();
+		headers = builder.headers();
 		statusLine = builder.statusLine();
 		body = builder.body;
 	}
@@ -253,75 +253,75 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
-		return headerList().contains(name);
+		return headers().contains(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		List<Header> l = headerList().get(name);
+		List<Header> l = headers().get(name);
 		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
 	}
 
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return headerList().getFirst(name);
+		return headers().getFirst(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return headerList().getLast(name);
+		return headers().getLast(name);
 	}
 
 	@Override /* HttpMessage */
 	@ResponseHeader("*")
 	public Header[] getAllHeaders() {
-		List<Header> l = headerList().getAll();
+		List<Header> l = headers().getAll();
 		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(Header value) {
-		headerListBuilder().add(value).build();
+		headersBuilder().add(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headerListBuilder().add(new BasicHeader(name, value)).build();
+		headersBuilder().add(new BasicHeader(name, value)).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(Header value) {
-		headerListBuilder().update(value).build();
+		headersBuilder().update(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headerListBuilder().update(new BasicHeader(name, value)).build();
+		headersBuilder().update(new BasicHeader(name, value)).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] values) {
-		headerListBuilder().set(values).build();
+		headersBuilder().set(values).build();
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeader(Header value) {
-		headerListBuilder().remove(value).build();
+		headersBuilder().remove(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		headerListBuilder().remove(name).build();
+		headersBuilder().remove(name).build();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headerList().headerIterator();
+		return headers().headerIterator();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headerList().headerIterator(name);
+		return headers().headerIterator(name);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -398,12 +398,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return statusLine;
 	}
 
-	private HeaderList headerList() {
-		if (headerList == null) {
-			headerList = headerListBuilder.build();
-			headerListBuilder = null;
+	private HeaderList headers() {
+		if (headers == null) {
+			headers = headersBuilder.build();
+			headersBuilder = null;
 		}
-		return headerList;
+		return headers;
 	}
 
 	private BasicStatusLineBuilder statusLineBuilder() {
@@ -415,12 +415,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return statusLineBuilder;
 	}
 
-	private HeaderListBuilder headerListBuilder() {
+	private HeaderListBuilder headersBuilder() {
 		assertModifiable();
-		if (headerListBuilder == null) {
-			headerListBuilder = headerList.copy();
-			headerList = null;
+		if (headersBuilder == null) {
+			headersBuilder = headers.copy();
+			headers = null;
 		}
-		return headerListBuilder;
+		return headersBuilder;
 	}
 }

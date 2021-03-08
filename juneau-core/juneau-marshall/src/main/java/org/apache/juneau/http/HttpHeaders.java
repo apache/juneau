@@ -3139,7 +3139,7 @@ public class HttpHeaders {
 	 *
 	 * @return A new empty builder.
 	 */
-	public static final HeaderListBuilder headerListBuilder() {
+	public static final HeaderListBuilder headerList() {
 		return HeaderList.create();
 	}
 

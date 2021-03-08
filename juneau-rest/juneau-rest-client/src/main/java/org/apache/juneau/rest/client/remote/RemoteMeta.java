@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
 public class RemoteMeta {
 
 	private final Map<Method,RemoteOperationMeta> operations;
-	private final HeaderList headerList;
+	private final HeaderList headers;
 
 	/**
 	 * Constructor.
@@ -53,20 +53,20 @@ public class RemoteMeta {
 				path = trimSlashes(r.path());
 
 		String versionHeader = "Client-Version", clientVersion = null;
-		HeaderListBuilder headerListBuilder = HeaderList.create().resolving();
+		HeaderListBuilder headersBuilder = HeaderList.create().resolving();
 
 		for (Remote r : ci.getAnnotations(Remote.class)) {
 			if (! r.path().isEmpty())
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headerListBuilder.add(basicHeader(resolve(h)));
+				headersBuilder.add(basicHeader(resolve(h)));
 			if (! r.version().isEmpty())
 				clientVersion = resolve(r.version());
 			if (! r.versionHeader().isEmpty())
 				versionHeader = resolve(r.versionHeader());
 			if (r.headerList() != HeaderList.Null.class) {
 				try {
-					headerListBuilder.add(r.headerList().newInstance().getAll());
+					headersBuilder.add(r.headerList().newInstance().getAll());
 				} catch (Exception e) {
 					throw new RuntimeException("Could not instantiate HeaderSupplier class.", e);
 				}
@@ -74,14 +74,14 @@ public class RemoteMeta {
 		}
 
 		if (clientVersion != null)
-			headerListBuilder.add(stringHeader(versionHeader, clientVersion));
+			headersBuilder.add(stringHeader(versionHeader, clientVersion));
 
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		for (MethodInfo m : ci.getPublicMethods())
 			operations.put(m.inner(), new RemoteOperationMeta(path, m.inner(), "GET"));
 
 		this.operations = operations.unmodifiable();
-		this.headerList = headerListBuilder.build();
+		this.headers = headersBuilder.build();
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class RemoteMeta {
 	 * @return The headers to set on all requests.
 	 */
 	public HeaderList getHeaders() {
-		return headerList;
+		return headers;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

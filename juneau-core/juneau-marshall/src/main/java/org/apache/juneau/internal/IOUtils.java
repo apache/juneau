@@ -16,8 +16,6 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.apache.juneau.utils.*;
-
 /**
  * Various I/O related utility methods.
  */
@@ -164,23 +162,6 @@ public final class IOUtils {
 		if (in == null || out == null)
 			return 0;
 		return pipe(new InputStreamReader(in, UTF8), out);
-	}
-
-	/**
-	 * Pipes the contents of the specified object into the output stream.
-	 *
-	 * <p>
-	 * The input stream is closed, the output stream is not.
-	 *
-	 * @param in
-	 * 	The input to pipe from.
-	 * @param out
-	 * 	The writer to pipe to.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	@Deprecated
-	public static void pipe(Object in, OutputStream out) throws IOException {
-		IOPipe.create(in, out).run();
 	}
 
 	/**

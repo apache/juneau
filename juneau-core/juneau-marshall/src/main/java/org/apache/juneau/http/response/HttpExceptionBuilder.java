@@ -32,9 +32,9 @@ import org.apache.juneau.internal.*;
 public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeExceptionBuilder {
 
 	BasicStatusLine statusLine;
-	HeaderList headerList = HeaderList.EMPTY;
+	HeaderList headers = HeaderList.EMPTY;
 	BasicStatusLineBuilder statusLineBuilder;
-	HeaderListBuilder headerListBuilder;
+	HeaderListBuilder headersBuilder;
 	HttpEntity body;
 
 	private final Class<? extends BasicHttpException> implClass;
@@ -59,7 +59,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		super(copyFrom);
 		implClass = copyFrom.getClass();
 		statusLine = copyFrom.statusLine;
-		headerList = copyFrom.headerList;
+		headers = copyFrom.headers;
 		body = copyFrom.body;
 	}
 
@@ -98,12 +98,12 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLine;
 	}
 
-	HeaderList headerList() {
-		if (headerListBuilder != null)
-			return headerListBuilder.build();
-		if (headerList == null)
+	HeaderList headers() {
+		if (headersBuilder != null)
+			return headersBuilder.build();
+		if (headers == null)
 			return HeaderList.EMPTY;
-		return headerList;
+		return headers;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -216,9 +216,9 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HttpExceptionBuilder<T> headerList(HeaderList value) {
-		headerList = value;
-		headerListBuilder = null;
+	public HttpExceptionBuilder<T> headers(HeaderList value) {
+		headers = value;
+		headersBuilder = null;
 		return this;
 	}
 
@@ -228,7 +228,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> clearHeaders() {
-		headerListBuilder().clear();
+		headersBuilder().clear();
 		return this;
 	}
 
@@ -239,7 +239,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> header(Header value) {
-		headerListBuilder().add(value);
+		headersBuilder().add(value);
 		return this;
 	}
 
@@ -251,7 +251,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> header(String name, String value) {
-		headerListBuilder().add(name, value);
+		headersBuilder().add(name, value);
 		return this;
 	}
 
@@ -262,7 +262,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> headers(Header...values) {
-		headerListBuilder().add(values);
+		headersBuilder().add(values);
 		return this;
 	}
 
@@ -273,7 +273,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> headers(List<Header> values) {
-		headerListBuilder().add(values);
+		headersBuilder().add(values);
 		return this;
 	}
 
@@ -284,7 +284,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> removeHeader(Header value) {
-		headerListBuilder().remove(value);
+		headersBuilder().remove(value);
 		return this;
 	}
 
@@ -295,7 +295,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> removeHeaders(Header...values) {
-		headerListBuilder().remove(values);
+		headersBuilder().remove(values);
 		return this;
 	}
 
@@ -306,7 +306,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> removeHeaders(List<Header> values) {
-		headerListBuilder().remove(values);
+		headersBuilder().remove(values);
 		return this;
 	}
 
@@ -320,7 +320,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeader(Header value) {
-		headerListBuilder().update(value);
+		headersBuilder().update(value);
 		return this;
 	}
 
@@ -334,7 +334,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(Header...values) {
-		headerListBuilder().update(values);
+		headersBuilder().update(values);
 		return this;
 	}
 
@@ -348,7 +348,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(List<Header> values) {
-		headerListBuilder().update(values);
+		headersBuilder().update(values);
 		return this;
 	}
 
@@ -362,7 +362,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> setHeaders(Header...values) {
-		headerListBuilder().set(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -376,7 +376,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> setHeaders(List<Header> values) {
-		headerListBuilder().set(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -418,12 +418,12 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return statusLineBuilder;
 	}
 
-	private HeaderListBuilder headerListBuilder() {
-		if (headerListBuilder == null) {
-			headerListBuilder = headerList == null ? HeaderList.create() : headerList.copy();
-			headerList = null;
+	private HeaderListBuilder headersBuilder() {
+		if (headersBuilder == null) {
+			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
+			headers = null;
 		}
-		return headerListBuilder;
+		return headersBuilder;
 	}
 
 	// <FluentSetters>
