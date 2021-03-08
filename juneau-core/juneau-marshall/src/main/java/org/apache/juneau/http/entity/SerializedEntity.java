@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * HttpEntity for serializing POJOs as the body of HTTP requests.
  */
-public class SerializedEntity extends BasicHttpEntity2 {
+public class SerializedEntity extends BasicHttpEntity {
 	final Serializer serializer;
 	HttpPartSchema schema;
 

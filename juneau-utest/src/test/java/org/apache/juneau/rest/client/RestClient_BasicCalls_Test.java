@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.http.HttpResources.*;
 
 import java.io.*;
 import java.net.*;
@@ -26,7 +27,6 @@ import org.apache.http.*;
 import org.apache.http.client.utils.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
@@ -166,7 +166,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			BasicHttpResource.of("{f:1}"),
+			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
 			parts("f",1)
@@ -209,7 +209,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			BasicHttpResource.of("{f:1}"),
+			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
 			parts("f",1)
@@ -315,10 +315,10 @@ public class RestClient_BasicCalls_Test {
 			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED).build(),
 			/*[ 4]*/ stringEntity("f=1", null).build(),
 			/*[ 5]*/ part("f","1"),
-			/*[ 6]*/ BasicHttpResource.of("f=1"),
-			/*[ 7]*/ BasicHttpResource.of("f=1"),
-			/*[ 8]*/ BasicHttpResource.of("f=1").contentType("application/x-www-form-urlencoded"),
-			/*[ 9]*/ BasicHttpResource.of("f=1").contentType("application/x-www-form-urlencoded"),
+			/*[ 6]*/ stringResource("f=1").build(),
+			/*[ 7]*/ stringResource("f=1").build(),
+			/*[ 8]*/ stringResource("f=1").contentType("application/x-www-form-urlencoded").build(),
+			/*[ 9]*/ stringResource("f=1").contentType("application/x-www-form-urlencoded").build(),
 			/*[14]*/ s1,
 			/*[15]*/ s2
 		);
@@ -349,7 +349,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			BasicHttpResource.of("{f:1}"),
+			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
 			parts("f",1)
@@ -386,7 +386,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			BasicHttpResource.of("{f:1}"),
+			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
 			parts("f",1)

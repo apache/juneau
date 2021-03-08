@@ -20,7 +20,7 @@ import java.io.*;
 /**
  * A repeatable entity that obtains its content from a byte array.
  */
-public class ByteArrayEntity extends BasicHttpEntity2 {
+public class ByteArrayEntity extends BasicHttpEntity {
 
 	private static final byte[] EMPTY = new byte[0];
 
@@ -40,6 +40,16 @@ public class ByteArrayEntity extends BasicHttpEntity2 {
 	 */
 	public ByteArrayEntity(HttpEntityBuilder<?> builder) {
 		super(builder);
+	}
+
+	/**
+	 * Creates a new {@link ByteArrayEntity} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link ByteArrayEntity} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicHttpEntity */
+	public HttpEntityBuilder<ByteArrayEntity> copy() {
+		return new HttpEntityBuilder<>(this);
 	}
 
 	private byte[] bytes() {

@@ -10,25 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.entity;
+package org.apache.juneau.http.resource;
 
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.http.annotation.*;
+import java.io.*;
+import org.apache.juneau.http.entity.*;
 
 /**
- * An extension of an {@link HttpEntity} that also includes arbitrary headers.
+ * A repeatable resource that obtains its content from a {@link File}.
  */
-@Response
-public interface HttpResource extends HttpEntity {
+public class FileResource extends BasicResource {
 
 	/**
-	 * Returns the list of headers associated with this resource.
+	 * Creates a new {@link FileResource} builder.
 	 *
-	 * @return The list of headers associated with this resource.
+	 * @return A new {@link FileResource} builder.
 	 */
-	@ResponseHeader("*")
-	List<Header> getHeaders();
+	public static HttpResourceBuilder<FileResource> create() {
+		return new HttpResourceBuilder<>(FileResource.class, FileEntity.class);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The resource builder.
+	 */
+	public FileResource(HttpResourceBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Creates a new {@link FileResource} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link FileResource} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicResource */
+	public HttpResourceBuilder<FileResource> copy() {
+		return new HttpResourceBuilder<>(this);
+	}
 }

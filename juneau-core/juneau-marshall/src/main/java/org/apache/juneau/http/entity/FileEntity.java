@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
 /**
  * A repeatable entity that obtains its content from a {@link File}.
  */
-public class FileEntity extends BasicHttpEntity2 {
+public class FileEntity extends BasicHttpEntity {
 
 	private final File content;
 	private final byte[] cache;
@@ -46,6 +46,16 @@ public class FileEntity extends BasicHttpEntity2 {
 		super(builder);
 		content = contentOrElse(null);
 		cache = builder.cached ? readBytes(content) : null;
+	}
+
+	/**
+	 * Creates a new {@link FileEntity} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link FileEntity} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicHttpEntity */
+	public HttpEntityBuilder<FileEntity> copy() {
+		return new HttpEntityBuilder<>(this);
 	}
 
 	@Override /* AbstractHttpEntity */

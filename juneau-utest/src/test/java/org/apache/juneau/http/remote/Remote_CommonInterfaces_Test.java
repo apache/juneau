@@ -15,6 +15,7 @@ package org.apache.juneau.http.remote;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.http.HttpResources.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -24,7 +25,7 @@ import java.io.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.helper.*;
@@ -170,7 +171,7 @@ public class Remote_CommonInterfaces_Test {
 
 		// HttpClient goes into loop if status code is less than 200 so we can't test those.
 
-		C x = MockRestClient.create(C1.class).json().disableRedirectHandling().debug().build().getRemote(C.class);
+		C x = MockRestClient.create(C1.class).json().disableRedirectHandling().build().getRemote(C.class);
 		assertObject(x.ok()).asString().contains("HTTP/1.1 200 OK");
 		assertObject(x.accepted()).asString().contains("HTTP/1.1 202 Accepted");
 		assertObject(x.alreadyReported()).asString().contains("HTTP/1.1 208 Already Reported");
@@ -198,24 +199,23 @@ public class Remote_CommonInterfaces_Test {
 	@Remote
 	@Rest
 	public static interface D extends BasicSimpleJsonRest {
-		BasicHttpResource httpResource() throws IOException ;
+		BasicResource httpResource() throws IOException ;
 	}
 
 	public static class D1 implements D {
 		@Override
-		public BasicHttpResource httpResource() throws IOException {
-			return BasicHttpResource.of("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(eTag("\"bar\""));
+		public BasicResource httpResource() throws IOException {
+			return byteArrayResource("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(eTag("\"bar\"")).build();
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void d01_httpResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
-		BasicHttpResource sr = x.httpResource();
+		BasicResource sr = x.httpResource();
 		assertEquals("foo",read(sr.getContent()));
-		assertEquals("foo",sr.getStringHeader("Foo"));
-		assertEquals("\"bar\"",sr.getStringHeader("ETag"));
+		assertEquals("foo",sr.getLastHeader("Foo").getValue());
+		assertEquals("\"bar\"",sr.getLastHeader("ETag").getValue());
 		assertEquals("text/foo",sr.getContentType().getValue().toString());
 	}
 

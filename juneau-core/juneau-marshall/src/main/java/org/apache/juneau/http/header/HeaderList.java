@@ -181,7 +181,7 @@ public class HeaderList implements Iterable<Header> {
 		List<Header> l = null;
 		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
-			if (x.getName().equalsIgnoreCase(name)) {
+			if (isEqualsIc(x.getName(), name)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(x);
@@ -202,7 +202,7 @@ public class HeaderList implements Iterable<Header> {
 	public Header getFirst(String name) {
 		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
-			if (x.getName().equalsIgnoreCase(name))
+			if (isEqualsIc(x.getName(), name))
 				return x;
 		}
 		return null;
@@ -220,7 +220,7 @@ public class HeaderList implements Iterable<Header> {
 	public Header getLast(String name) {
 		for (int i = headers.size() - 1; i >= 0; i--) {
 			Header x = headers.get(i);
-			if (x.getName().equalsIgnoreCase(name))
+			if (isEqualsIc(x.getName(), name))
 				return x;
 		}
 		return null;
@@ -247,7 +247,7 @@ public class HeaderList implements Iterable<Header> {
 	public boolean contains(String name) {
 		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
-			if (x.getName().equalsIgnoreCase(name))
+			if (isEqualsIc(x.getName(), name))
 				return true;
 		}
 		return false;

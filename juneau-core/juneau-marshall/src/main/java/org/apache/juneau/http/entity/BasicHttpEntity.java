@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
+import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -22,260 +25,105 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
- * An extension of {@link org.apache.http.entity.BasicHttpEntity} with additional features.
+ * A basic {@link org.apache.http.HttpEntity} implementation with additional features.
  *
  * Provides the following features:
  * <ul class='spaced-list'>
- * 	<li>
- * 		Default support for various streams and readers.
- * 	<li>
- * 		Content from {@link Supplier Suppliers}.
  * 	<li>
  * 		Caching.
  * 	<li>
  * 		Fluent setters.
  * 	<li>
  * 		Fluent assertions.
+ * 	<li>
+ * 		Externally-supplied/dynamic content.
  * </ul>
  */
-@FluentSetters
 @BeanIgnore
-@Deprecated
-public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
-	private Object content;
-	private boolean cache;
+public class BasicHttpEntity implements HttpEntity {
 
 	/**
-	 * Creator.
-	 *
-	 * @param content
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 * @return A new empty {@link BasicHttpEntity} object.
+	 * An empty HttpEntity.
 	 */
-	public static BasicHttpEntity of(Object content) {
-		return new BasicHttpEntity(content);
-	}
+	public static final BasicHttpEntity EMPTY = create(BasicHttpEntity.class).build();
+
+	final boolean cached, chunked;
+	final Object content;
+	final Supplier<?> contentSupplier;
+	final ContentType contentType;
+	final ContentEncoding contentEncoding;
+	final Charset charset;
+	final long length;
 
 	/**
-	 * Creator.
+	 * Creates a builder for this class.
 	 *
-	 * @param content
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 * @return A new empty {@link BasicHttpEntity} object.
+	 * @param implClass The subclass that the builder is going to create.
+	 * @return A new builder bean.
 	 */
-	public static BasicHttpEntity of(Supplier<?> content) {
-		return new BasicHttpEntity(content);
-	}
-
-	/**
-	 * Creates a new basic entity.
-	 *
-	 * @param content
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 */
-	public BasicHttpEntity(Object content) {
-		this(content, null, null);
+	public static <T extends BasicHttpEntity> HttpEntityBuilder<T> create(Class<T> implClass) {
+		return new HttpEntityBuilder<>(implClass);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param content
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 * @param contentType
-	 * 	The content type of the contents.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param contentEncoding
-	 * 	The content encoding of the contents.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param builder The builder containing the arguments for this bean.
 	 */
-	public BasicHttpEntity(Object content, ContentType contentType, ContentEncoding contentEncoding) {
-		super();
-		this.content = content;
-		contentType(contentType);
-		contentEncoding(contentEncoding);
+	public BasicHttpEntity(HttpEntityBuilder<?> builder) {
+		this.cached = builder.cached;
+		this.chunked = builder.chunked;
+		this.content = builder.content;
+		this.contentSupplier = builder.contentSupplier;
+		this.contentType = builder.contentType;
+		this.contentEncoding = builder.contentEncoding;
+		this.charset = builder.charset;
+		this.length = builder.contentLength;
 	}
 
 	/**
-	 * Shortcut for calling {@link #setContentType(String)}.
+	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
-	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
+	 * <p>
+	 * Allows you to create a modifiable copy of this bean.
+	 *
+	 * @return A new builder bean.
 	 */
-	@FluentSetter
-	public BasicHttpEntity contentType(String value) {
-		super.setContentType(value);
-		return this;
+	public HttpEntityBuilder<? extends BasicHttpEntity> copy() {
+		return new HttpEntityBuilder<>(this);
 	}
 
 	/**
-	 * Shortcut for calling {@link #setContentType(Header)}.
+	 * Converts the contents of this entity as a string.
 	 *
-	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity contentType(Header value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	/**
-	 * Shortcut for calling {@link #setContentLength(long)}.
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
 	 *
-	 * @param value The new <c>Content-Length</c> header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity contentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	/**
-	 * Shortcut for calling {@link #setContentEncoding(String)}.
-	 *
-	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity contentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	/**
-	 * Shortcut for calling {@link #setContentEncoding(Header)}.
-	 *
-	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity contentEncoding(Header value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	/**
-	 * Shortcut for calling {@link #setChunked(boolean)} with <jk>true</jk>.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>If the {@link #getContentLength()} method returns a negative value, the HttpClient code will always
-	 * 		use chunked encoding.
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity chunked() {
-		return chunked(true);
-	}
-
-	/**
-	 * Shortcut for calling {@link #setChunked(boolean)}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>If the {@link #getContentLength()} method returns a negative value, the HttpClient code will always
-	 * 		use chunked encoding.
-	 * </ul>
-	 *
-	 * @param value The new value for this flag.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity chunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	/**
-	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
-	 * be read multiple times.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity cache() {
-		return cache(true);
-	}
-
-	/**
-	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
-	 * be read multiple times.
-	 *
-	 * @param value The new value for this flag.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity cache(boolean value) {
-		this.cache = value;
-		return this;
-	}
-
-	/**
-	 * Converts the contents of this entity as a byte array.
-	 *
-	 * @return The contents of this entity as a byte array.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 * @return The contents of this entity as a string.
+	 * @throws IOException If a problem occurred while trying to read the content.
 	 */
 	public String asString() throws IOException {
-		return IOUtils.read(getContent());
+		return read(getContent());
 	}
 
 	/**
 	 * Converts the contents of this entity as a byte array.
 	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
 	 * @return The contents of this entity as a byte array.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 * @throws IOException If a problem occurred while trying to read the content.
 	 */
 	public byte[] asBytes() throws IOException {
-		try (InputStream o = getContent()) {
-			return o == null ? null : IOUtils.readBytes(o);
-		}
+		return readBytes(getContent());
 	}
 
 	/**
 	 * Returns an assertion on the contents of this entity.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
 	 *
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
@@ -287,6 +135,9 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	/**
 	 * Returns an assertion on the contents of this entity.
 	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
 	 * @return A new fluent assertion.
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
@@ -294,121 +145,73 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 		return new FluentByteArrayAssertion<>(asBytes(), this);
 	}
 
+	/**
+	 * Returns the content of this entity.
+	 *
+	 * @param def The default value if <jk>null</jk>.
+	 * @return The content object.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> T contentOrElse(T def) {
+		Object o = content;
+		if (o == null && contentSupplier != null)
+			o = contentSupplier.get();
+		return (o == null ? def : (T)o);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the contents of this entity are provided through an external supplier.
+	 *
+	 * <p>
+	 * Externally supplied content generally means the content length cannot be reliably determined
+	 * based on the content.
+	 *
+	 * @return <jk>true</jk> if the contents of this entity are provided through an external supplier.
+	 */
+	protected boolean isSupplied() {
+		return contentSupplier != null;
+	}
+
+	@Override /* HttpEntity */
+	public long getContentLength() {
+		return length;
+	}
+
 	@Override
 	public boolean isRepeatable() {
-		Object o = getRawContent();
-		return cache || o instanceof File || o instanceof CharSequence || o instanceof byte[];
+		return false;
 	}
 
 	@Override
-	public long getContentLength() {
-		long x = super.getContentLength();
-		if (x != -1)
-			return x;
-		try {
-			tryCache();
-		} catch (IOException e) {}
-		Object o = getRawContent();
-		if (o instanceof byte[])
-			return ((byte[])o).length;
-		if (o instanceof File)
-			return ((File)o).length();
-		if (o instanceof CharSequence)
-			return ((CharSequence)o).length();
-		return -1;
+	public boolean isChunked() {
+		return chunked;
 	}
 
 	@Override
-	public InputStream getContent() {
-		try {
-			tryCache();
-			Object o = getRawContent();
-			if (o == null)
-				return null;
-			if (o instanceof File)
-				return new FileInputStream((File)o);
-			if (o instanceof byte[])
-				return new ByteArrayInputStream((byte[])o);
-			if (o instanceof Reader)
-				return new ReaderInputStream((Reader)o, IOUtils.UTF8);
-			if (o instanceof InputStream)
-				return (InputStream)o;
-			return new ReaderInputStream(new StringReader(o.toString()),IOUtils.UTF8);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public Header getContentType() {
+		return contentType;
 	}
 
 	@Override
-	public void writeTo(OutputStream os) throws IOException {
-		tryCache();
-		Object o = getRawContent();
-		if (o != null) {
-			IOUtils.pipe(o, os);
-		}
-		os.flush();
+	public Header getContentEncoding() {
+		return contentEncoding;
 	}
 
 	@Override
 	public boolean isStreaming() {
-		Object o = getRawContent();
-		return (o instanceof InputStream || o instanceof Reader);
+		return false;
 	}
 
-	/**
-	 * Returns the raw content of this resource.
-	 *
-	 * @return The raw content of this resource.
-	 */
-	protected Object getRawContent() {
-		return unwrap(content);
+	@Override
+	public void consumeContent() throws IOException {}
+
+	@Override
+	public InputStream getContent() throws IOException, UnsupportedOperationException {
+		return IOUtils.EMPTY_INPUT_STREAM;
 	}
 
-	private void tryCache() throws IOException {
-		Object o = getRawContent();
-		if (cache && isCacheable(o))
-			this.content = readBytes(o);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is cachable as a byte array.
-	 *
-	 * <p>
-	 * The default implementation returns <jk>true</jk> for the following types:
-	 * <ul>
-	 * 	<li>{@link File}
-	 * 	<li>{@link InputStream}
-	 * 	<li>{@link Reader}
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is cachable as a byte array.
-	 */
-	protected boolean isCacheable(Object o) {
-		return (o instanceof File || o instanceof InputStream || o instanceof Reader);
-	}
-
-	/**
-	 * Reads the contents of the specified object as a byte array.
-	 *
-	 * @param o The object to read.
-	 * @return The byte array contents.
-	 * @throws IOException If object could not be read.
-	 */
-	protected byte[] readBytes(Object o) throws IOException {
-		return IOUtils.readBytes(o);
-	}
-
-	/**
-	 * If the specified object is a {@link Supplier}, returns the supplied value, otherwise the same value.
-	 *
-	 * @param o The object to unwrap.
-	 * @return The unwrapped object.
-	 */
-	protected Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
-		return o;
-	}
+	@Override
+	public void writeTo(OutputStream outStream) throws IOException {}
 
 	// <FluentSetters>
 

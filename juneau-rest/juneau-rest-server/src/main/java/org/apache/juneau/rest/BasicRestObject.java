@@ -20,7 +20,7 @@ import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 
 /**

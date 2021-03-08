@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
@@ -24,7 +25,7 @@ import javax.activation.*;
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 
@@ -32,7 +33,7 @@ import org.apache.juneau.internal.*;
  * API for retrieving localized static files from either the classpath or file system.
  *
  * <p>
- * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link BasicHttpResource}
+ * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link HttpResource}
  * objects with arbitrary headers.
  */
 public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
@@ -86,16 +87,16 @@ public class BasicStaticFiles extends BasicFileFinder implements StaticFiles {
 	 * @return The resource, or <jk>null</jk> if not found.
 	 */
 	@Override /* StaticFiles */
-	public Optional<BasicHttpResource> resolve(String path, Locale locale) {
+	public Optional<HttpResource> resolve(String path, Locale locale) {
 		try {
 			Optional<InputStream> is = getStream(path);
 			if (! is.isPresent())
 				return Optional.empty();
 			return Optional.of(
-				BasicHttpResource
-					.of(is.get())
+				streamResource(is.get())
 					.header(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
 					.headers(headers)
+					.build()
 			);
 		} catch (IOException e) {
 			throw new InternalServerError(e);

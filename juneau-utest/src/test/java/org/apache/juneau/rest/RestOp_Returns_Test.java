@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -24,7 +25,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.junit.*;
 
@@ -122,32 +123,28 @@ public class RestOp_Returns_Test {
 	@Rest
 	public static class B {
 		@RestGet
-		public BasicHttpResource a() throws Exception {
-			return BasicHttpResource.of("foo");
+		public HttpResource a() throws Exception {
+			return stringResource("foo").build();
 		}
 		@RestGet
-		public BasicHttpResource b() throws Exception {
-			return BasicHttpResource.of(null).header("Foo", "Bar");
+		public HttpResource b() throws Exception {
+			return readerResource(null).header("Foo", "Bar").build();
 		}
 		@RestGet
-		public BasicHttpResource c() throws Exception {
-			return BasicHttpResource.of(null).contentType("application/json");
+		public HttpResource c() throws Exception {
+			return readerResource(null).contentType("application/json").build();
 		}
 		@RestGet
-		public BasicHttpResource d(RestRequest req) throws Exception {
-			return BasicHttpResource.of(()->req.getVarResolverSession().resolve("$RQ{foo}"));
+		public HttpResource d(RestRequest req) throws Exception {
+			return stringResource(()->req.getVarResolverSession().resolve("$RQ{foo}")).build();
 		}
 		@RestGet
-		public BasicHttpResource e() throws Exception {
-			return BasicHttpResource.of(new ByteArrayInputStream("foo".getBytes()));
+		public HttpResource e() throws Exception {
+			return streamResource(new ByteArrayInputStream("foo".getBytes())).build();
 		}
 		@RestGet
-		public BasicHttpResource f() throws Exception {
-			return BasicHttpResource.of(new StringReader("foo"));
-		}
-		@RestGet
-		public BasicHttpResource g() throws Exception {
-			return BasicHttpResource.of(new StringBuilder("foo"));
+		public HttpResource f() throws Exception {
+			return readerResource(new StringReader("foo")).build();
 		}
 	}
 
@@ -170,9 +167,6 @@ public class RestOp_Returns_Test {
 			.run()
 			.assertBody().is("foo");
 		b.get("/f")
-			.run()
-			.assertBody().is("foo");
-		b.get("/g")
 			.run()
 			.assertBody().is("foo");
 	}

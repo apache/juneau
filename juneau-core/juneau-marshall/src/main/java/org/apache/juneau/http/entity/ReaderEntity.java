@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link Reader}.
  */
-public class ReaderEntity extends BasicHttpEntity2 {
+public class ReaderEntity extends BasicHttpEntity {
 
 	private final Reader content;
 	private final long contentLength;
@@ -52,6 +52,16 @@ public class ReaderEntity extends BasicHttpEntity2 {
 		charset = firstNonNull(builder.charset, UTF8);
 		cache = builder.cached ? readBytes(this.content) : null;
 		contentLength = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
+	}
+
+	/**
+	 * Creates a new {@link ReaderEntity} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link ReaderEntity} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicHttpEntity */
+	public HttpEntityBuilder<ReaderEntity> copy() {
+		return new HttpEntityBuilder<>(this);
 	}
 
 	@Override /* AbstractHttpEntity */

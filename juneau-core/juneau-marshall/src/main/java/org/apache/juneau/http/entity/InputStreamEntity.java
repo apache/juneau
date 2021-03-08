@@ -20,7 +20,7 @@ import java.io.*;
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
  */
-public class InputStreamEntity extends BasicHttpEntity2 {
+public class InputStreamEntity extends BasicHttpEntity {
 
 	private final InputStream content;
 	private final long maxLength;
@@ -46,6 +46,16 @@ public class InputStreamEntity extends BasicHttpEntity2 {
 		content = contentOrElse(EMPTY_INPUT_STREAM);
 		cache = builder.cached ? readBytes(content) : null;
 		maxLength = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
+	}
+
+	/**
+	 * Creates a new {@link InputStreamEntity} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link InputStreamEntity} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicHttpEntity */
+	public HttpEntityBuilder<InputStreamEntity> copy() {
+		return new HttpEntityBuilder<>(this);
 	}
 
 	@Override /* AbstractHttpEntity */

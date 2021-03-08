@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * @param <T> The bean type to create for this builder.
  */
 @FluentSetters(returns="HttpEntityBuilder<T>")
-public class HttpEntityBuilder<T extends BasicHttpEntity2> {
+public class HttpEntityBuilder<T extends BasicHttpEntity> {
 
 	boolean cached, chunked;
 	Object content;
@@ -37,7 +37,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity2> {
 	long contentLength = -1;
 
 	/** The HttpEntity implementation class. */
-	protected final Class<? extends BasicHttpEntity2> implClass;
+	protected final Class<? extends BasicHttpEntity> implClass;
 
 	/**
 	 * Constructor.

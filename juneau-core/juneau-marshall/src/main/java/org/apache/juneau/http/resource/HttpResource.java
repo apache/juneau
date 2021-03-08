@@ -10,35 +10,45 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.http.resource;
 
 import java.util.*;
 
-import org.apache.juneau.http.resource.*;
+import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.juneau.http.annotation.*;
 
 /**
- * API for retrieving localized static files from either the classpath or file system.
+ * An extension of an {@link HttpEntity} that also includes arbitrary headers.
+ *
+ * <p>
+ * While {@link HttpEntity} beans support <c>Content-Type</c>, <c>Content-Encoding</c>, and <c>Content-Length</c>
+ * headers, this interface allows you to add any number of arbitrary headers to an entity.
+ *
+ * <p>
+ * For example, you might want to be able to create an entity with a <c>Cache-Control</c> header.
+ *
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+ *
+ *	<jc>// Create a resource with dynamic content and a no-cache header.</jc>
+ * 	HttpResource <jv>myResource</jv> = <jsm>stringResource</jsm>(()-&gt;<jsm>getMyContent</jsm>(), ContentType.<jsf>TEXT_PLAIN</jsf>)
+ * 		.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
+ * 		.build();
+ * </p>
  */
-public interface StaticFiles {
-
-	/** Represents no static files */
-	public abstract class Null implements StaticFiles {}
+@Response
+public interface HttpResource extends HttpEntity {
 
 	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder for this object.
+	 * Returns the list of headers associated with this resource.
+	 * 
+	 * <p>
+	 * Note that this typically does NOT include headers associated with {@link HttpEntity}
+	 * (e.g. <c>Content-Type</c>, <c>Content-Encoding</c>, and <c>Content-Length</c>).
+	 * 
+	 * @return The list of headers associated with this resource.
 	 */
-	public static StaticFilesBuilder create() {
-		return new StaticFilesBuilder();
-	}
-
-	/**
-	 * Resolve the specified path.
-	 *
-	 * @param path The path to resolve to a static file.
-	 * @param locale Optional locale.
-	 * @return The resource, or <jk>null</jk> if not found.
-	 */
-	public Optional<HttpResource> resolve(String path, Locale locale);
+	@ResponseHeader("*")
+	List<Header> getHeaders();
 }

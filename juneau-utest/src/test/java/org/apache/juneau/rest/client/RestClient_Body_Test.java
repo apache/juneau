@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.http.HttpResources.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -21,6 +22,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -48,7 +50,7 @@ public class RestClient_Body_Test {
 
 	@Test
 	public void a01_BasicHttpResource() throws Exception {
-		BasicHttpResource x1 = httpResource("foo");
+		HttpResource x1 = stringResource("foo").build();
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").doesNotExist()
@@ -56,7 +58,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		BasicHttpResource x2 = httpResource("foo").contentType("text/plain").contentEncoding("identity");
+		HttpResource x2 = stringResource("foo").contentType("text/plain").contentEncoding("identity").build();
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -64,7 +66,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		BasicHttpResource x3 = httpResource("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
+		HttpResource x3 = stringResource("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked().build();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -72,7 +74,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")
 		;
 
-		BasicHttpResource x4 = new BasicHttpResource("foo", contentType("text/plain"), contentEncoding("identity"));
+		HttpResource x4 = stringResource("foo", contentType("text/plain")).contentEncoding("identity").build();
 		client().build().post("/",x4).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -80,26 +82,26 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		BasicHttpResource x5 = httpResource("foo").header("Foo","bar").header(header("Baz","qux"));
+		HttpResource x5 = stringResource("foo").header("Foo","bar").header(header("Baz","qux")).build();
 		client().build().post("/",x5).run()
 			.assertHeader("X-Foo").is("bar")
 			.assertHeader("X-Baz").is("qux")
 		;
 
-		BasicHttpResource x6 = httpResource("foo").headers(Arrays.asList(header("Foo","bar"),header("Baz","qux")));
+		HttpResource x6 = stringResource("foo").headers(Arrays.asList(header("Foo","bar"),header("Baz","qux"))).build();
 		client().build().post("/",x6).run()
 			.assertHeader("X-Foo").is("bar")
 			.assertHeader("X-Baz").is("qux")
 		;
 
-		BasicHttpResource x7 = httpResource(new StringReader("foo"));
+		HttpResource x7 = readerResource(new StringReader("foo")).build();
 		client().build().post("/",x7).run().assertBody().is("foo");
 
-		BasicHttpResource x8 = httpResource(new StringReader("foo")).cache();
+		HttpResource x8 = readerResource(new StringReader("foo")).cached().build();
 		client().build().post("/",x8).run().assertBody().is("foo");
 		client().build().post("/",x8).run().assertBody().is("foo");
 
-		BasicHttpResource x9 = httpResource(null);
+		HttpResource x9 = readerResource(null).build();
 		client().build().post("/",x9).run().assertBody().isEmpty();
 	}
 
@@ -147,7 +149,7 @@ public class RestClient_Body_Test {
 		HttpEntity x9 = readerEntity(null).build();
 		client().build().post("/",x9).run().assertBody().isEmpty();
 
-		BasicHttpEntity2 x12 = stringEntity("foo").build();
+		BasicHttpEntity x12 = stringEntity("foo").build();
 		x12.assertString().is("foo");
 		x12.assertBytes().asString().is("foo");
 	}
@@ -182,10 +184,6 @@ public class RestClient_Body_Test {
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
-
-	private static BasicHttpResource httpResource(Object val) {
-		return BasicHttpResource.of(val);
-	}
 
 	private static RestClientBuilder client() {
 		return MockRestClient.create(A.class).simpleJson();

@@ -21,7 +21,7 @@ import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 

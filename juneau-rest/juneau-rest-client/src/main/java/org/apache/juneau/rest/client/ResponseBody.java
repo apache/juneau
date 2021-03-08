@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
@@ -314,8 +315,8 @@ public class ResponseBody implements HttpEntity {
 	public byte[] asBytes() throws RestCallException {
 		if (body == null) {
 			try {
-				if (entity instanceof BasicHttpEntity2) {
-					body = ((BasicHttpEntity2)entity).asBytes();
+				if (entity instanceof BasicHttpEntity) {
+					body = ((BasicHttpEntity)entity).asBytes();
 				} else {
 					body = readBytes(entity.getContent());
 				}
@@ -522,7 +523,8 @@ public class ResponseBody implements HttpEntity {
 	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
+	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
 	 * 	<li>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
@@ -583,7 +585,8 @@ public class ResponseBody implements HttpEntity {
 	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
+	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
 	 * 	<li>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
@@ -668,6 +671,9 @@ public class ResponseBody implements HttpEntity {
 			if (type.is(HttpResponse.class))
 				return (T)response;
 
+			if (type.is(HttpResource.class))
+				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
+				
 			ConstructorInfo ci = type.getInfo().getPublicConstructor(HttpResponse.class);
 			if (ci != null) {
 				try {
@@ -675,19 +681,6 @@ public class ResponseBody implements HttpEntity {
 				} catch (ExecutableException e) {
 					throw new RuntimeException(e);
 				}
-			}
-
-			if (type.isChildOf(HttpResource.class)) {
-				BasicHttpResource r = BasicHttpResource.of(asInputStream());
-				for (Header h : response.getAllHeaders()) {
-					if (h.getName().equalsIgnoreCase("Content-Type"))
-						r.contentType(h);
-					else if (h.getName().equalsIgnoreCase("Content-Encoding"))
-						r.contentEncoding(h);
-					else
-						r.header(h);
-				}
-				return (T)r;
 			}
 
 			String ct = firstNonEmpty(response.getResponseHeader("Content-Type").orElse("text/plain"));

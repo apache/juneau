@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
 /**
  * A self contained, repeatable entity that obtains its content from a {@link String}.
  */
-public class StringEntity extends BasicHttpEntity2 {
+public class StringEntity extends BasicHttpEntity {
 
 	private static final String EMPTY = "";
 
@@ -51,8 +51,13 @@ public class StringEntity extends BasicHttpEntity2 {
 		cache = builder.cached ? string().getBytes(charset) : null;
 	}
 
-	@Override
-	public HttpEntityBuilder<StringEntity> builder() {
+	/**
+	 * Creates a new {@link StringEntity} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link StringEntity} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicHttpEntity */
+	public HttpEntityBuilder<StringEntity> copy() {
 		return new HttpEntityBuilder<>(this);
 	}
 
@@ -87,7 +92,12 @@ public class StringEntity extends BasicHttpEntity2 {
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return cache == null ? new ReaderInputStream(new StringReader(string()), charset) : new ByteArrayInputStream(cache);
+		if (cache != null)
+			return new ByteArrayInputStream(cache);
+		String s = string();
+		if (s == null)
+			return IOUtils.EMPTY_INPUT_STREAM;
+		return new ReaderInputStream(new StringReader(s), charset);
 	}
 
 	@Override /* HttpEntity */

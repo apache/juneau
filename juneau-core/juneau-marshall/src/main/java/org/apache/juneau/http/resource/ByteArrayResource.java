@@ -10,35 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.http.resource;
 
-import java.util.*;
-
-import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.entity.*;
 
 /**
- * API for retrieving localized static files from either the classpath or file system.
+ * A repeatable resource that obtains its content from a byte array.
  */
-public interface StaticFiles {
-
-	/** Represents no static files */
-	public abstract class Null implements StaticFiles {}
+public class ByteArrayResource extends BasicResource {
 
 	/**
-	 * Creates a new builder for this object.
+	 * Creates a new {@link ByteArrayResource} builder.
 	 *
-	 * @return A new builder for this object.
+	 * @return A new {@link ByteArrayResource} builder.
 	 */
-	public static StaticFilesBuilder create() {
-		return new StaticFilesBuilder();
+	public static HttpResourceBuilder<ByteArrayResource> create() {
+		return new HttpResourceBuilder<>(ByteArrayResource.class, ByteArrayEntity.class);
 	}
 
 	/**
-	 * Resolve the specified path.
+	 * Constructor.
 	 *
-	 * @param path The path to resolve to a static file.
-	 * @param locale Optional locale.
-	 * @return The resource, or <jk>null</jk> if not found.
+	 * @param builder The resource builder.
 	 */
-	public Optional<HttpResource> resolve(String path, Locale locale);
+	public ByteArrayResource(HttpResourceBuilder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Creates a new {@link ByteArrayResource} builder initialized with the contents of this entity.
+	 *
+	 * @return A new {@link ByteArrayResource} builder initialized with the contents of this entity.
+	 */
+	@Override /* BasicResource */
+	public HttpResourceBuilder<ByteArrayResource> copy() {
+		return new HttpResourceBuilder<>(this);
+	}
 }
