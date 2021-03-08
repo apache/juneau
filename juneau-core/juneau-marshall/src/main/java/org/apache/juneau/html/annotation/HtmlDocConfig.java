@@ -185,7 +185,7 @@ public @interface HtmlDocConfig {
 	 * 
 	 * @since 9.0.0
 	 */
-	CspHash cspHash() default CspHash.DEFAULT;
+	String cspHash() default "DEFAULT";
 	
 	/**
 	 * Configuration property:  Nonce algorithms defined for use with
@@ -226,7 +226,7 @@ public @interface HtmlDocConfig {
 	 * 
 	 * @since 9.0.0
 	 */
-	CspNonce cspNonce() default CspNonce.DEFAULT;
+	String cspNonce() default "DEFAULT";
 	
 	/**
 	 * Configuration property:  Footer section contents.

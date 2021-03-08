@@ -12,19 +12,48 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_aside;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_asideFloat;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_cspHash;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_cspNonce;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_footer;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_head;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_header;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_nav;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_navlinks;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_navlinks_add;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_noResultsMessage;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_nowrap;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_script;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_script_add;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_style;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_style_add;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_stylesheet;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_stylesheet_add;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_template;
+import static org.apache.juneau.html.HtmlDocSerializer.HTMLDOC_widgets;
 
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-import java.util.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
-import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.ContextProperties;
+import org.apache.juneau.UriContext;
+import org.apache.juneau.UriRelativity;
+import org.apache.juneau.UriResolution;
+import org.apache.juneau.UriResolver;
+import org.apache.juneau.Visibility;
+import org.apache.juneau.html.annotation.CspHash;
+import org.apache.juneau.html.annotation.CspNonce;
+import org.apache.juneau.http.header.MediaType;
+import org.apache.juneau.internal.FluentSetter;
+import org.apache.juneau.internal.FluentSetters;
+import org.apache.juneau.reflect.AnnotationList;
+import org.apache.juneau.svl.VarResolverSession;
+import org.apache.juneau.xml.Namespace;
 
 /**
  * Builder class for building instances of HTML Doc serializers.
@@ -621,6 +650,98 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlDocSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Content Security Policy (CSP) Hash algorithm name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_cspHash HTMLDOC_cspHash}
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.cspHash.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.annotation.CspHash}
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.cspHash</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_CSPHASH</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.annotation.CspHash#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#cspHash()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#cspHash(org.apache.juneau.html.annotation.CspHash)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to set a CSP Hash algorithm name.
+	 *
+	 * <p>
+	 * By default, this feature is disabled.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		cspHash=<js>"sha256"</js>
+	 * 	)
+	 * </p>
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 * @since 9.0.0
+	 */
+	@FluentSetter
+	public HtmlDocSerializerBuilder cspHash(CspHash value) {
+		set(HTMLDOC_cspHash, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Content Security Policy (CSP) nonce algorithm name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_cspNonce HTMLDOC_cspNonce}
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.cspNonce.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.annotation.CspNonce}
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.cspNonce</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_CSPNONCE</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.annotation.CspNonce#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#cspNonce()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#cspNonce(org.apache.juneau.html.annotation.CspNonce)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to set a CSP nonce algorithm name.
+	 *
+	 * <p>
+	 * By default, this feature is disabled.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		cspNonce=<js>"SecureRandom"</js>
+	 * 	)
+	 * </p>
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 * @since 9.0.0
+	 */
+	@FluentSetter
+	public HtmlDocSerializerBuilder cspNonce(CspNonce value) {
+		set(HTMLDOC_cspNonce, value);
 		return this;
 	}
 

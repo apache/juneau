@@ -60,6 +60,9 @@ public class HtmlDocConfigAnnotation_Test {
 
 	@HtmlDocConfig(
 		aside="$X{foo}",
+		asideFloat="DEFAULT",
+		cspHash="sha256",
+ 		cspNonce="SECURE_RANDOM",
 		footer="$X{foo}",
 		head="$X{foo}",
 		header="$X{foo}",
@@ -80,6 +83,9 @@ public class HtmlDocConfigAnnotation_Test {
 		AnnotationList al = a.getAnnotationList();
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("foo", x.getAside());
+		check("RIGHT", x.getAsideFloat());
+		check("SHA256", x.getCspHash());
+		check("SECURE_RANDOM", x.getCspNonce());
 		check("foo", x.getFooter());
 		check("foo", x.getHead());
 		check("foo", x.getHeader());
@@ -106,6 +112,7 @@ public class HtmlDocConfigAnnotation_Test {
 		AnnotationList al = b.getAnnotationList();
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("", x.getAside());
+		check("RIGHT", x.getAsideFloat());
 		check("", x.getFooter());
 		check("", x.getHead());
 		check("", x.getHeader());
@@ -131,6 +138,9 @@ public class HtmlDocConfigAnnotation_Test {
 		AnnotationList al = c.getAnnotationList();
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("", x.getAside());
+		check("RIGHT", x.getAsideFloat());
+		check("DEFAULT", x.getCspHash());
+		check("DEFAULT", x.getCspNonce());
 		check("", x.getFooter());
 		check("", x.getHead());
 		check("", x.getHeader());

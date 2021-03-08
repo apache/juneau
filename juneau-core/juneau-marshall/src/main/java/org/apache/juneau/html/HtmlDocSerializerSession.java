@@ -19,6 +19,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.html.annotation.CspHash;
+import org.apache.juneau.html.annotation.CspNonce;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -40,6 +42,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	private final AsideFloat asideFloat;
 	private final Set<String> style, stylesheet, script;
 	private final boolean nowrap;
+	private final CspHash cspHash;
+	private final CspNonce cspNonce;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -67,6 +71,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		style = ASet.of(sp.get(HTMLDOC_style, String[].class).orElse(ctx.getStyle()));
 		stylesheet = ASet.of(sp.get(HTMLDOC_stylesheet, String[].class).orElse(ctx.getStylesheet()));
 		script = ASet.of(sp.get(HTMLDOC_script, String[].class).orElse(ctx.getScript()));
+		
+		cspHash = sp.get(HTMLDOC_cspHash, CspHash.class).orElse(ctx.getCspHash());
+		cspNonce = sp.get(HTMLDOC_cspNonce, CspNonce.class).orElse(ctx.getCspNonce());
 
 		head = sp.get(HTMLDOC_head, String[].class).orElse(ctx.getHead());
 		nowrap = sp.get(HTMLDOC_nowrap, boolean.class).orElse(ctx.isNowrap());
@@ -140,6 +147,30 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	protected final AsideFloat getAsideFloat() {
 		return asideFloat;
+	}
+
+	/**
+	 * Configuration property:  CSP hash algorithm name.
+	 *
+	 * @see HtmlDocSerializer#HTMLDOC_cspHash
+	 * @return
+	 * 	CSP hash algorithm name.
+	 * @since 9.0.0
+	 */
+	protected final CspHash getCspHash() {
+		return cspHash;
+	}
+
+	/**
+	 * Configuration property:  CSP nonce algorithm name.
+	 *
+	 * @see HtmlDocSerializer#HTMLDOC_cspNonce
+	 * @return
+	 * 	CSP nonce algorithm name.
+	 * @since 9.0.0
+	 */
+	protected final CspNonce getCspNonce() {
+		return cspNonce;
 	}
 
 	/**
@@ -294,8 +325,11 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 					.a("navlinks", navlinks)
 					.a("script", script)
 					.a("style", style)
+					.a("cspHash", cspHash)
+					.a("cspNonce", cspNonce)
 					.a("stylesheet", stylesheet)
 					.a("varResolver", getVarResolver())
 			);
 	}
+
 }
