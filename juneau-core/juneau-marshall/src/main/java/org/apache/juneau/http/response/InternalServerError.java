@@ -116,7 +116,8 @@ public class InternalServerError extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<InternalServerError> builder() {
-		return super.builder(InternalServerError.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<InternalServerError> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

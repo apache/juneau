@@ -2180,8 +2180,8 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	@Override /* Context */
-	public BeanContextBuilder builder() {
-		return new BeanContextBuilder(getContextProperties());
+	public BeanContextBuilder copy() {
+		return new BeanContextBuilder(this);
 	}
 
 	/**

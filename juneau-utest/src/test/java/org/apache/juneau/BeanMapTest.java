@@ -34,7 +34,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanMapTest {
 
-	JsonSerializer serializer = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+	JsonSerializer serializer = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
 	BeanContext bc = BeanContext.create()
 			.dictionary(MyBeanDictionaryMap.class)
@@ -1090,7 +1090,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testPropertyNameFactoryDashedLC1_usingConfig() throws Exception {
-		BeanMap<P1c> m = bc.builder().applyAnnotations(P1cConfig.class).build().createSession().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
+		BeanMap<P1c> m = bc.copy().applyAnnotations(P1cConfig.class).build().createSession().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
 		assertEquals(3, m.get("bing-boo-url"));
@@ -1830,7 +1830,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testHiddenProperties_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(UcConfig.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
 		BeanMeta bm = s.getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
@@ -1844,7 +1844,7 @@ public class BeanMapTest {
 		assertEquals("{a:'a',b:'b'}", r);
 
 		// Make sure setters are used if present.
-		t = JsonParser.DEFAULT.builder().applyAnnotations(Uc.class).build().parse(r, Uc.class);
+		t = JsonParser.DEFAULT.copy().applyAnnotations(Uc.class).build().parse(r, Uc.class);
 		assertEquals("b(setter)", t.b);
 	}
 

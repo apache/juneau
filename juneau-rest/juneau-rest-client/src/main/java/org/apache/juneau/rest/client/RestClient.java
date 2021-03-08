@@ -2010,12 +2010,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @return A new {@link RestClientBuilder} object.
 	 */
 	public static RestClientBuilder create() {
-		return new RestClientBuilder(ContextProperties.DEFAULT);
+		return new RestClientBuilder();
 	}
 
 	@Override /* Context */
-	public RestClientBuilder builder() {
-		return new RestClientBuilder(getContextProperties());
+	public RestClientBuilder copy() {
+		return new RestClientBuilder(this);
 	}
 
 	private static final
@@ -2081,7 +2081,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			.addBean(ContextProperties.class, cp)
 			.addBean(RestClient.class, this);
 
-		this.urlEncodingSerializer = new SerializerBuilder(cp).build(UrlEncodingSerializer.class);
+		this.urlEncodingSerializer = UrlEncodingSerializer.create().apply(cp).build();
 		this.partSerializer = cp.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, bs).orElseGet(bs.createBeanSupplier(OpenApiSerializer.class));
 		this.partParser = cp.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bs).orElseGet(bs.createBeanSupplier(OpenApiParser.class));
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);

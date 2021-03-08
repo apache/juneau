@@ -117,7 +117,8 @@ public class ServiceUnavailable extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<ServiceUnavailable> builder() {
-		return super.builder(ServiceUnavailable.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<ServiceUnavailable> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

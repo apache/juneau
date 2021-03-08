@@ -62,7 +62,7 @@ public abstract class ComboRoundTripTest {
 		if (s2 == null) {
 			s2 = applySettings(s);
 			if (! comboInput.swaps.isEmpty())
-				s2 = s2.builder().swaps(comboInput.swaps.toArray()).build();
+				s2 = s2.copy().swaps(comboInput.swaps.toArray()).build();
 			serializerMap.put(s, s2);
 		}
 		return s2;
@@ -73,7 +73,7 @@ public abstract class ComboRoundTripTest {
 		if (p2 == null) {
 			p2 = applySettings(p);
 			if (! comboInput.swaps.isEmpty())
-				p2 = p2.builder().swaps(comboInput.swaps.toArray()).build();
+				p2 = p2.copy().swaps(comboInput.swaps.toArray()).build();
 			parserMap.put(p, p2);
 		}
 		return p2;
@@ -96,7 +96,7 @@ public abstract class ComboRoundTripTest {
 
 			OMap properties = comboInput.properties;
 			if (properties != null) {
-				s = s.builder().add(properties).build();
+				s = s.copy().add(properties).build();
 			}
 
 			String r = s.serializeToString(comboInput.in.get());
@@ -146,8 +146,8 @@ public abstract class ComboRoundTripTest {
 
 			OMap properties = comboInput.properties;
 			if (properties != null) {
-				s = s.builder().add(properties).build();
-				p = p.builder().add(properties).build();
+				s = s.copy().add(properties).build();
+				p = p.copy().add(properties).build();
 			}
 
 			String r = s.serializeToString(comboInput.in.get());
@@ -187,8 +187,8 @@ public abstract class ComboRoundTripTest {
 
 			OMap properties = comboInput.properties;
 			if (properties != null) {
-				s = s.builder().add(properties).build();
-				p = p.builder().add(properties).build();
+				s = s.copy().add(properties).build();
+				p = p.copy().add(properties).build();
 			}
 
 			String r = s.serializeToString(comboInput.in.get());
@@ -217,9 +217,9 @@ public abstract class ComboRoundTripTest {
 
 			OMap properties = comboInput.properties;
 			if (properties != null) {
-				s = (OutputStreamSerializer)s.builder().add(properties).build();
-				p = (InputStreamParser)p.builder().add(properties).build();
-				sJson = (WriterSerializer)sJson.builder().add(properties).build();
+				s = (OutputStreamSerializer)s.copy().add(properties).build();
+				p = (InputStreamParser)p.copy().add(properties).build();
+				sJson = (WriterSerializer)sJson.copy().add(properties).build();
 			}
 
 			String r = s.serializeToString(comboInput.in.get());
@@ -250,7 +250,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJson = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sJson = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 	ReaderParser pJson = JsonParser.DEFAULT;
 
 	@Test
@@ -292,7 +292,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJsonR = SimpleJsonSerializer.DEFAULT_READABLE.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sJsonR = SimpleJsonSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType().build();
 	ReaderParser pJsonR = JsonParser.DEFAULT;
 
 	@Test
@@ -313,7 +313,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// XML
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sXml = XmlSerializer.DEFAULT_SQ.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sXml = XmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType().build();
 	ReaderParser pXml = XmlParser.DEFAULT;
 
 	@Test
@@ -355,7 +355,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// XML - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sXmlR = XmlSerializer.DEFAULT_SQ_READABLE.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sXmlR = XmlSerializer.DEFAULT_SQ_READABLE.copy().addBeanTypes().addRootType().build();
 	ReaderParser pXmlR = XmlParser.DEFAULT;
 
 	@Test
@@ -376,7 +376,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// XML - Namespaces
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sXmlNs = XmlSerializer.DEFAULT_NS_SQ.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sXmlNs = XmlSerializer.DEFAULT_NS_SQ.copy().addBeanTypes().addRootType().build();
 	ReaderParser pXmlNs = XmlParser.DEFAULT;
 
 	@Test
@@ -397,7 +397,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTML
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sHtml = HtmlSerializer.DEFAULT_SQ.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sHtml = HtmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType().build();
 	ReaderParser pHtml = HtmlParser.DEFAULT;
 
 	@Test
@@ -439,7 +439,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTML - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sHtmlR = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sHtmlR = HtmlSerializer.DEFAULT_SQ_READABLE.copy().addBeanTypes().addRootType().build();
 	ReaderParser pHtmlR = HtmlParser.DEFAULT;
 
 	@Test
@@ -460,7 +460,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// UON
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sUon = UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sUon = UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 	ReaderParser pUon = UonParser.DEFAULT;
 
 	@Test
@@ -502,7 +502,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// UON - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sUonR = UonSerializer.DEFAULT_READABLE.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sUonR = UonSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType().build();
 	ReaderParser pUonR = UonParser.DEFAULT;
 
 	@Test
@@ -523,7 +523,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// UrlEncoding
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sUrlEncoding = UrlEncodingSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sUrlEncoding = UrlEncodingSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 	ReaderParser pUrlEncoding = UrlEncodingParser.DEFAULT;
 
 	@Test
@@ -565,7 +565,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// UrlEncoding - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingR = UrlEncodingSerializer.DEFAULT_READABLE.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sUrlEncodingR = UrlEncodingSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType().build();
 	ReaderParser pUrlEncodingR = UrlEncodingParser.DEFAULT;
 
 	@Test
@@ -638,7 +638,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// RdfXml
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sRdfXml = RdfXmlAbbrevSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sRdfXml = RdfXmlAbbrevSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 	ReaderParser pRdfXml = RdfXmlParser.DEFAULT;
 
 	@Test

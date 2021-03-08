@@ -117,7 +117,8 @@ public class PreconditionRequired extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<PreconditionRequired> builder() {
-		return super.builder(PreconditionRequired.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<PreconditionRequired> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

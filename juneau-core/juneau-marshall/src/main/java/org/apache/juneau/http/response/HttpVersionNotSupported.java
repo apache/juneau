@@ -125,7 +125,8 @@ public class HttpVersionNotSupported extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<HttpVersionNotSupported> builder() {
-		return super.builder(HttpVersionNotSupported.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<HttpVersionNotSupported> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

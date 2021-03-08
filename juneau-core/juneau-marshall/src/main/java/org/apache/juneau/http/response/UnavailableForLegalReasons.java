@@ -116,7 +116,8 @@ public class UnavailableForLegalReasons extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<UnavailableForLegalReasons> builder() {
-		return super.builder(UnavailableForLegalReasons.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<UnavailableForLegalReasons> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

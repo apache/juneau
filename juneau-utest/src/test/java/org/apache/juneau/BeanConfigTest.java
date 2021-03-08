@@ -432,7 +432,7 @@ public class BeanConfigTest {
 
 	@Test
 	public void testReadOnlyProperties_usingConfig() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(ReadOnlyPerson2Config.class).build().createSession();
+		BeanSession session = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build().createSession();
 		Object o;
 
 		// Bean to String

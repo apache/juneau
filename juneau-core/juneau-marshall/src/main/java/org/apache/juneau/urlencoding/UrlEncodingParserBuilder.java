@@ -40,12 +40,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public UrlEncodingParserBuilder(ContextProperties cp) {
-		super(cp);
+	public UrlEncodingParserBuilder(UrlEncodingParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

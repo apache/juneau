@@ -89,8 +89,8 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	}
 
 	@Override /* Context */
-	public HtmlStrippedDocSerializerBuilder builder() {
-		return new HtmlStrippedDocSerializerBuilder(getContextProperties());
+	public HtmlStrippedDocSerializerBuilder copy() {
+		return new HtmlStrippedDocSerializerBuilder(this);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	 * This is equivalent to simply calling <code><jk>new</jk> HtmlStrippedDocSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link HtmlStrippedDocSerializerBuilder} object.

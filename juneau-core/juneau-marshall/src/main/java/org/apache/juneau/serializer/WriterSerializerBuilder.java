@@ -39,12 +39,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public WriterSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public WriterSerializerBuilder(WriterSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

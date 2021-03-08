@@ -117,7 +117,8 @@ public class NotFound extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<NotFound> builder() {
-		return super.builder(NotFound.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<NotFound> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

@@ -38,12 +38,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public CsvSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public CsvSerializerBuilder(CsvSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

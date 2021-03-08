@@ -84,7 +84,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	 */
 	public OpenApiSerializer(ContextProperties cp, String produces, String accept) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(UON_encoding, false)
 				.build(),
 			produces,
@@ -105,15 +105,15 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	}
 
 	@Override /* Context */
-	public OpenApiSerializerBuilder builder() {
-		return new OpenApiSerializerBuilder(getContextProperties());
+	public OpenApiSerializerBuilder copy() {
+		return new OpenApiSerializerBuilder(this);
 	}
 
 	/**
 	 * Instantiates a new clean-slate {@link OpenApiSerializerBuilder} object.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link OpenApiSerializerBuilder} object.

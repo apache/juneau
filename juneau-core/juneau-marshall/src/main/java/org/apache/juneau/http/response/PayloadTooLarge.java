@@ -116,7 +116,8 @@ public class PayloadTooLarge extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<PayloadTooLarge> builder() {
-		return super.builder(PayloadTooLarge.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<PayloadTooLarge> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

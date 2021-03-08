@@ -104,8 +104,8 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 
 
 	@Override /* Context */
-	public PlainTextSerializerBuilder builder() {
-		return new PlainTextSerializerBuilder(getContextProperties());
+	public PlainTextSerializerBuilder copy() {
+		return new PlainTextSerializerBuilder(this);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	 * This is equivalent to simply calling <code><jk>new</jk> PlainTextSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link PlainTextSerializerBuilder} object.

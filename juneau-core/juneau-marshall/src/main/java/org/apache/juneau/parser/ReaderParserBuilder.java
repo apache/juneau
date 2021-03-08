@@ -39,12 +39,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public ReaderParserBuilder(ContextProperties cp) {
-		super(cp);
+	public ReaderParserBuilder(ReaderParser copyFrom) {
+		super(copyFrom);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

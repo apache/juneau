@@ -116,7 +116,8 @@ public class LengthRequired extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<LengthRequired> builder() {
-		return super.builder(LengthRequired.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<LengthRequired> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

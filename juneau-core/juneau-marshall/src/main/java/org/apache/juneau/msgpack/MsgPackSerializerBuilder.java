@@ -37,12 +37,12 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public MsgPackSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public MsgPackSerializerBuilder(MsgPackSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

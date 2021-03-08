@@ -74,12 +74,12 @@ Configurable Properties
 </p>
 <p>
 	For performance reasons, serializers and parsers are immutable.
-	However, they can be 'copied' and modified using the <c>builder()</c> method.
+	However, they can be 'copied' and modified using the <c>copy()</c> method.
 </p>
 <p class='bpcode w800'>
 	<jc>// Clone and customize an existing serializer.</jc>
 	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
-		.builder()  <jc>// Create a new builder with copied settings.</jc>
+		.copy()  <jc>// Create a new builder with copied settings.</jc>
 		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		.build();
 </p>

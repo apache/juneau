@@ -432,8 +432,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	@Override /* Context */
-	public ConfigBuilder builder() {
-		return new ConfigBuilder(getContextProperties());
+	public ConfigBuilder copy() {
+		return new ConfigBuilder(this);
 	}
 
 	/**
@@ -455,7 +455,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		beanSession = parser.createBeanSession();
 		encoder = cp.getInstance(CONFIG_encoder, ConfigEncoder.class).orElse(ConfigXorEncoder.INSTANCE);
 		varSession = cp.getInstance(CONFIG_varResolver, VarResolver.class).orElse(VarResolver.DEFAULT)
-			.builder()
+			.copy()
 			.vars(ConfigVar.class)
 			.bean(Config.class, this)
 			.build()

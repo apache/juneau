@@ -38,12 +38,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public OutputStreamSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public OutputStreamSerializerBuilder(OutputStreamSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

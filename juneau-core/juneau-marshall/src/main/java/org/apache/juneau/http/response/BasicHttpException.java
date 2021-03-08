@@ -132,13 +132,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	/**
-	 * Creates a builder for this class initialized with the contents of this exception.
+	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
-	 * @param implClass The subclass that the builder is going to create.
 	 * @return A new builder bean.
 	 */
-	public <T extends BasicHttpException> HttpExceptionBuilder<T> builder(Class<T> implClass) {
-		return create(implClass).copyFrom(this);
+	public HttpExceptionBuilder<? extends BasicHttpException> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 
 	/**
@@ -410,7 +409,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	private BasicStatusLineBuilder statusLineBuilder() {
 		assertModifiable();
 		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine.builder();
+			statusLineBuilder = statusLine.copy();
 			statusLine = null;
 		}
 		return statusLineBuilder;
@@ -419,7 +418,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	private HeaderListBuilder headerListBuilder() {
 		assertModifiable();
 		if (headerListBuilder == null) {
-			headerListBuilder = headerList.builder();
+			headerListBuilder = headerList.copy();
 			headerList = null;
 		}
 		return headerListBuilder;

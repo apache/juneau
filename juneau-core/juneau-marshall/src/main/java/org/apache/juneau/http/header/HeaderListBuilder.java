@@ -29,7 +29,7 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class HeaderListBuilder {
 
-	final List<Header> headers = new ArrayList<>();
+	final List<Header> headers;
 	private volatile VarResolver varResolver;
 
 	/** Predefined instance. */
@@ -38,7 +38,18 @@ public class HeaderListBuilder {
 	/**
 	 * Constructor.
 	 */
-	public HeaderListBuilder() {}
+	public HeaderListBuilder() {
+		headers = new ArrayList<>();
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public HeaderListBuilder(HeaderList copyFrom) {
+		headers = new ArrayList<>(copyFrom.headers);
+	}
 
 	/**
 	 * Creates a new {@link HeaderList} bean based on the contents of this builder.
@@ -427,7 +438,7 @@ public class HeaderListBuilder {
 			o = ((Supplier<?>)o).get();
 		return o;
 	}
-	
+
 	// <FluentSetters>
 
 	// </FluentSetters>

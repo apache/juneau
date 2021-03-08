@@ -116,7 +116,8 @@ public class RequestHeaderFieldsTooLarge extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<RequestHeaderFieldsTooLarge> builder() {
-		return super.builder(RequestHeaderFieldsTooLarge.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<RequestHeaderFieldsTooLarge> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

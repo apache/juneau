@@ -41,12 +41,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public UonParserBuilder(ContextProperties cp) {
-		super(cp);
+	public UonParserBuilder(UonParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

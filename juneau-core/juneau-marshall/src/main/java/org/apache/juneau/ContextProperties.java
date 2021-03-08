@@ -246,7 +246,7 @@ public final class ContextProperties {
 	 *
 	 * @return A new property store builder.
 	 */
-	public ContextPropertiesBuilder builder() {
+	public ContextPropertiesBuilder copy() {
 		return new ContextPropertiesBuilder(this);
 	}
 
@@ -614,7 +614,7 @@ public final class ContextProperties {
 			this.hashCode = this.properties.hashCode();
 		}
 
-		PropertyGroupBuilder builder() {
+		PropertyGroupBuilder copy() {
 			return new PropertyGroupBuilder(properties);
 		}
 

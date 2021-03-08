@@ -41,12 +41,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public JsonSchemaGeneratorBuilder(ContextProperties cp) {
-		super(cp);
+	public JsonSchemaGeneratorBuilder(JsonSchemaGenerator copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

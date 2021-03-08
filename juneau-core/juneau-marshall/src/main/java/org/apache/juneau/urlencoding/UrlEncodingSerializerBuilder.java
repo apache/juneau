@@ -40,12 +40,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public UrlEncodingSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public UrlEncodingSerializerBuilder(UrlEncodingSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

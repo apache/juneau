@@ -83,7 +83,7 @@ import org.apache.juneau.serializer.*;
  * 	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
  *
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
- * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
+ * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.copy().sq().build();
  *
  * 	<jc>// Serialize a POJO to JSON</jc>
  * 	String json = serializer.serialize(someObject);
@@ -297,7 +297,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 */
 		public Readable(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
+				cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -315,7 +315,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 */
 		public ReadableSafe(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -384,8 +384,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	}
 
 	@Override /* Context */
-	public JsonSerializerBuilder builder() {
-		return new JsonSerializerBuilder(getContextProperties());
+	public JsonSerializerBuilder copy() {
+		return new JsonSerializerBuilder(this);
 	}
 
 	/**
@@ -404,14 +404,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * Returns the schema serializer based on the settings of this serializer.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return The schema serializer.
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = builder().build(JsonSchemaSerializer.class);
+			schemaSerializer = copy().build(JsonSchemaSerializer.class);
 		return schemaSerializer;
 	}
 

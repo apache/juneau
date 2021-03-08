@@ -56,15 +56,15 @@ public class DefaultSwapsTest {
 	}
 
 	private void test(String expected, Object o, Class<?> configClass) throws Exception {
-		assertEquals(expected, SERIALIZER.builder().applyAnnotations(configClass).build().serialize(o));
+		assertEquals(expected, SERIALIZER.copy().applyAnnotations(configClass).build().serialize(o));
 	}
 
 	private void test(String expected, Object o, PojoSwap<?,?> swap) throws Exception {
-		assertEquals(expected, SERIALIZER.builder().swaps(swap).build().serializeToString(o));
+		assertEquals(expected, SERIALIZER.copy().swaps(swap).build().serializeToString(o));
 	}
 
 	private void test(String expected, Object o, PojoSwap<?,?> swap, Class<?> configClass) throws Exception {
-		assertEquals(expected, SERIALIZER.builder().swaps(swap).applyAnnotations(configClass).build().serializeToString(o));
+		assertEquals(expected, SERIALIZER.copy().swaps(swap).applyAnnotations(configClass).build().serializeToString(o));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -100,7 +100,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 	 * @return A new {@link SerializerGroupBuilder} initialized to this group.
 	 */
 	@Override /* Context */
-	public SerializerGroupBuilder builder() {
+	public SerializerGroupBuilder copy() {
 		return new SerializerGroupBuilder(this);
 	}
 

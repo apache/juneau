@@ -218,7 +218,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Expanded(ContextProperties cp) {
-			super(cp.builder().setDefault(URLENC_expandedParams, true).build());
+			super(cp.copy().setDefault(URLENC_expandedParams, true).build());
 		}
 	}
 
@@ -233,7 +233,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Readable(ContextProperties cp) {
-			super(cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
+			super(cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -248,7 +248,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public PlainText(ContextProperties cp) {
-			super(cp.builder().setDefault(UON_paramFormat, "PLAINTEXT").build());
+			super(cp.copy().setDefault(UON_paramFormat, "PLAINTEXT").build());
 		}
 	}
 
@@ -300,7 +300,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 */
 	public UrlEncodingSerializer(ContextProperties cp, String produces, String accept) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(UON_encoding, true)
 				.build(),
 			produces,
@@ -310,8 +310,8 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	}
 
 	@Override /* Context */
-	public UrlEncodingSerializerBuilder builder() {
-		return new UrlEncodingSerializerBuilder(getContextProperties());
+	public UrlEncodingSerializerBuilder copy() {
+		return new UrlEncodingSerializerBuilder(this);
 	}
 
 	/**
@@ -321,7 +321,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * This is equivalent to simply calling <code><jk>new</jk> UrlEncodingSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link UrlEncodingSerializerBuilder} object.

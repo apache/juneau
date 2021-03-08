@@ -161,7 +161,7 @@ public class TestUtils {
 	 * Test whitespace and generated schema.
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
-		s = s.builder().ws().ns().addNamespaceUrisToRoot().build();
+		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		String xml = s.serialize(o);
 
 		try {

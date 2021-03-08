@@ -36,7 +36,7 @@ public class NTripleSerializer extends RdfSerializer {
 	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link RdfSerializerBuilder} object.
@@ -52,7 +52,7 @@ public class NTripleSerializer extends RdfSerializer {
 	 */
 	public NTripleSerializer(ContextProperties cp) {
 		super(
-			cp.builder()
+			cp.copy()
 				.set(RDF_language, LANG_NTRIPLE)
 				.build(),
 			"text/n-triple", (String)null

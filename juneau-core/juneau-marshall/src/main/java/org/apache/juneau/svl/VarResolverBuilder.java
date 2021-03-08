@@ -29,8 +29,26 @@ import org.apache.juneau.svl.vars.*;
  */
 public class VarResolverBuilder {
 
-	private final List<Var> vars = AList.create();
+	private final List<Var> vars;
 	private BeanStore beanStore = new BeanStore();
+
+	/**
+	 * Constructor.
+	 */
+	public VarResolverBuilder() {
+		vars = AList.create();
+		beanStore = new BeanStore();
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public VarResolverBuilder(VarResolver copyFrom) {
+		vars = new ArrayList<>(Arrays.asList(copyFrom.ctx.vars));
+		beanStore = BeanStore.of(copyFrom.ctx.beanStore);
+	}
 
 	/**
 	 * Create a new var resolver using the settings in this builder.

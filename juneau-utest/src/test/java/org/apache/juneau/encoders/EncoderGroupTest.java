@@ -71,11 +71,11 @@ public class EncoderGroupTest {
 		g = gb.build();
 		assertObject(g.getSupportedEncodings()).asJson().is("['E1','E2','E2a']");
 
-		gb = g.builder().append(E3.class, E4.class);
+		gb = g.copy().append(E3.class, E4.class);
 		g = gb.build();
 		assertObject(g.getSupportedEncodings()).asJson().is("['E3','E4','E4a','E1','E2','E2a']");
 
-		gb = g.builder().append(E5.class);
+		gb = g.copy().append(E5.class);
 		g = gb.build();
 		assertObject(g.getSupportedEncodings()).asJson().is("['E5','E3','E4','E4a','E1','E2','E2a']");
 	}

@@ -335,8 +335,8 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	@Override /* Context */
-	public RdfSerializerBuilder builder() {
-		return new RdfSerializerBuilder(getContextProperties());
+	public RdfSerializerBuilder copy() {
+		return new RdfSerializerBuilder(this);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * This is equivalent to simply calling <code><jk>new</jk> RdfSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link RdfSerializerBuilder} object.

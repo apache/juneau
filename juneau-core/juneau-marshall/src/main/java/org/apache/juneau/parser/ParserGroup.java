@@ -106,7 +106,7 @@ public final class ParserGroup extends BeanContext {
 	 * @return A new {@link ParserGroupBuilder} initialized to this group.
 	 */
 	@Override /* Context */
-	public ParserGroupBuilder builder() {
+	public ParserGroupBuilder copy() {
 		return new ParserGroupBuilder(this);
 	}
 

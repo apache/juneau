@@ -62,7 +62,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		 */
 		public Readable(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -78,7 +78,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	 */
 	public SimpleJsonSerializer(ContextProperties cp) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(JSON_simpleMode, true)
 				.setDefault(WSERIALIZER_quoteChar, '\'')
 				.build(),
@@ -87,8 +87,8 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	}
 
 	@Override /* Context */
-	public SimpleJsonSerializerBuilder builder() {
-		return new SimpleJsonSerializerBuilder(getContextProperties());
+	public SimpleJsonSerializerBuilder copy() {
+		return new SimpleJsonSerializerBuilder(this);
 	}
 
 	/**

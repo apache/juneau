@@ -221,7 +221,7 @@ public class JsonParserTest {
 	//====================================================================================================
 	@Test
 	public void testStreamsAutoClose() throws Exception {
-		ReaderParser p = JsonParser.DEFAULT.builder().autoCloseStreams().build();
+		ReaderParser p = JsonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
 

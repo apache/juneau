@@ -1187,7 +1187,7 @@ public class ConfigTest {
 	//====================================================================================================
 	@Test
 	public void testHex() throws Exception {
-		Config cf = init().builder().binaryFormat(BinaryFormat.HEX).build();
+		Config cf = init().copy().binaryFormat(BinaryFormat.HEX).build();
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("626172", cf.get("foo"));
@@ -1199,7 +1199,7 @@ public class ConfigTest {
 	//====================================================================================================
 	@Test
 	public void testSpacedHex() throws Exception {
-		Config cf = init().builder().binaryFormat(BinaryFormat.SPACED_HEX).build();
+		Config cf = init().copy().binaryFormat(BinaryFormat.SPACED_HEX).build();
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("62 61 72", cf.get("foo"));
@@ -1472,7 +1472,7 @@ public class ConfigTest {
 		assertEquals("$D{X}", cf.getString("e"));
 
 		// Create new resolver that addx $C and overrides $A
-		VarResolver vr2 = vr.builder().vars(AUVar.class, DUVar.class).build();
+		VarResolver vr2 = vr.copy().vars(AUVar.class, DUVar.class).build();
 
 		// true == augment by adding existing as parent to the new resolver
 		cf = cf.resolving(vr2.createSession());

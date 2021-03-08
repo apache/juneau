@@ -116,7 +116,8 @@ public class UnprocessableEntity extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<UnprocessableEntity> builder() {
-		return super.builder(UnprocessableEntity.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<UnprocessableEntity> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

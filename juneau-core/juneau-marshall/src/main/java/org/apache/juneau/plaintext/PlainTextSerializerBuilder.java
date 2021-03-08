@@ -38,12 +38,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public PlainTextSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public PlainTextSerializerBuilder(PlainTextSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

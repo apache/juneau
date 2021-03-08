@@ -27,10 +27,10 @@ public class BasicStatusLine implements StatusLine {
 
 	private ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
 
-	private final ProtocolVersion protocolVersion;
-	private final int statusCode;
-	private final String reasonPhrase;
-	private final Locale locale;
+	final ProtocolVersion protocolVersion;
+	final int statusCode;
+	final String reasonPhrase;
+	final Locale locale;
 
 	/**
 	 * Instantiates a new builder for this bean.
@@ -64,8 +64,8 @@ public class BasicStatusLine implements StatusLine {
 	 *
 	 * @return A new builder object.
 	 */
-	public BasicStatusLineBuilder builder() {
-		return create().protocolVersion(protocolVersion).statusCode(statusCode).reasonPhrase(reasonPhrase);
+	public BasicStatusLineBuilder copy() {
+		return new BasicStatusLineBuilder(this);
 	}
 
 	@Override /* StatusLine */

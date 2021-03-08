@@ -36,6 +36,18 @@ public class BasicStatusLineBuilder {
 	public BasicStatusLineBuilder() {}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public BasicStatusLineBuilder(BasicStatusLine copyFrom) {
+		protocolVersion = copyFrom.protocolVersion;
+		statusCode = copyFrom.statusCode;
+		reasonPhrase = copyFrom.reasonPhrase;
+		locale = copyFrom.locale;
+	}
+
+	/**
 	 * Creates a new {@link BasicStatusLine} bean based on the contents of this builder.
 	 *
 	 * @return A new {@link BasicStatusLine} bean.

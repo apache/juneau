@@ -116,7 +116,8 @@ public class Conflict extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<Conflict> builder() {
-		return super.builder(Conflict.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<Conflict> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

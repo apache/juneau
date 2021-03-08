@@ -268,7 +268,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	private static ContextProperties preInit(ContextProperties cp) {
 		try {
-			ContextPropertiesBuilder cpb = cp.builder();
+			ContextPropertiesBuilder cpb = cp.copy();
 			Object restBean = cp.getInstance(MOCKRESTCLIENT_restBean, Object.class).orElse(null);
 			String contextPath = cp.get(MOCKRESTCLIENT_contextPath, String.class).orElse(null);
 			String servletPath = cp.get(MOCKRESTCLIENT_servletPath, String.class).orElse(null);

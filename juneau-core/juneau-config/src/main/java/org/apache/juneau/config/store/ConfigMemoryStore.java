@@ -58,8 +58,8 @@ public class ConfigMemoryStore extends ConfigStore {
 	}
 
 	@Override /* Context */
-	public ConfigMemoryStoreBuilder builder() {
-		return new ConfigMemoryStoreBuilder(getContextProperties());
+	public ConfigMemoryStoreBuilder copy() {
+		return new ConfigMemoryStoreBuilder(this);
 	}
 
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();

@@ -116,7 +116,8 @@ public class NotAcceptable extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<NotAcceptable> builder() {
-		return super.builder(NotAcceptable.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<NotAcceptable> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

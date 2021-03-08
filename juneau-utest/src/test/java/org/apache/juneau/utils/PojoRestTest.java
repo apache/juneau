@@ -86,7 +86,7 @@ public class PojoRestTest {
 		Address a3 = (Address)model.get("/person1/addresses/1");
 		assertEquals("city B", a3.city);
 
-		serializer = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+		serializer = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 		p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)

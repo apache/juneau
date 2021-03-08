@@ -79,7 +79,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='jc'>{@link RestClient}
  * 	<ul>
  * 		<li class='jm'>{@link RestClient#create() create()} - Create from scratch.
- * 		<li class='jm'>{@link RestClient#builder() builder()} - Copy settings from an existing client.
+ * 		<li class='jm'>{@link RestClient#copy() copy()} - Copy settings from an existing client.
  * 	</ul>
  * </ul>
  *
@@ -98,12 +98,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	private boolean pooled;
 
 	/**
-	 * Constructor.
-	 * @param cp
-	 * 	Initial configuration properties for this builder.
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
 	 */
-	protected RestClientBuilder(ContextProperties cp) {
-		super(cp);
+	protected RestClientBuilder(RestClient copyFrom) {
+		super(copyFrom);
 		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
 	}

@@ -77,7 +77,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 */
 		public Readable(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
+				cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -92,7 +92,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 */
 		public Simple(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
@@ -109,7 +109,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 */
 		public SimpleReadable(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
@@ -131,7 +131,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	 */
 	public HtmlSchemaSerializer(ContextProperties cp) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(BEANTRAVERSE_detectRecursions, true)
 				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
@@ -142,8 +142,8 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	}
 
 	@Override /* Context */
-	public HtmlSchemaSerializerBuilder builder() {
-		return new HtmlSchemaSerializerBuilder(getContextProperties());
+	public HtmlSchemaSerializerBuilder copy() {
+		return new HtmlSchemaSerializerBuilder(this);
 	}
 
 	@Override /* Context */

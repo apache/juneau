@@ -116,7 +116,8 @@ public class UpgradeRequired extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<UpgradeRequired> builder() {
-		return super.builder(UpgradeRequired.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<UpgradeRequired> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

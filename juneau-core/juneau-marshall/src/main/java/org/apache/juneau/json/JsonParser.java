@@ -184,7 +184,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Strict(ContextProperties cp) {
-			super(cp.builder().setDefault(PARSER_strict, true).setDefault(JSON_validateEnd, true).build());
+			super(cp.copy().setDefault(PARSER_strict, true).setDefault(JSON_validateEnd, true).build());
 		}
 	}
 
@@ -219,8 +219,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	}
 
 	@Override /* Context */
-	public JsonParserBuilder builder() {
-		return new JsonParserBuilder(getContextProperties());
+	public JsonParserBuilder copy() {
+		return new JsonParserBuilder(this);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 * This is equivalent to simply calling <code><jk>new</jk> JsonParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link JsonParserBuilder} object.

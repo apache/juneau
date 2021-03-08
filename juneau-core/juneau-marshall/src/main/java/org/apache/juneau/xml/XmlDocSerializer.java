@@ -46,7 +46,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Ns(ContextProperties cp) {
-			super(cp.builder().setDefault(XML_enableNamespaces, true).build());
+			super(cp.copy().setDefault(XML_enableNamespaces, true).build());
 		}
 	}
 

@@ -67,13 +67,12 @@ import org.apache.http.protocol.*;
 public class MockRestClientBuilder extends RestClientBuilder {
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp
-	 * 	Initial configuration properties for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	protected MockRestClientBuilder(ContextProperties cp) {
-		super(cp);
+	protected MockRestClientBuilder(MockRestClient copyFrom) {
+		super(copyFrom);
 		connectionManager(new MockHttpClientConnectionManager());
 	}
 

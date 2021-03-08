@@ -74,7 +74,7 @@ import org.apache.juneau.xml.*;
  * 	HtmlSerializer serializer = <jk>new</jk> HtmlSerializerBuider().ws().build();
  *
  * 	<jc>// Same as above, except uses cloning</jc>
- * 	HtmlSerializer serializer = HtmlSerializer.<jsf>DEFAULT</jsf>.builder().ws().build();
+ * 	HtmlSerializer serializer = HtmlSerializer.<jsf>DEFAULT</jsf>.copy().ws().build();
  *
  * 	<jc>// Serialize POJOs to HTML</jc>
  *
@@ -634,7 +634,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		 */
 		public Sq(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 			);
@@ -651,7 +651,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		 */
 		public SqReadable(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
@@ -724,8 +724,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	@Override /* Context */
-	public HtmlSerializerBuilder builder() {
-		return new HtmlSerializerBuilder(getContextProperties());
+	public HtmlSerializerBuilder copy() {
+		return new HtmlSerializerBuilder(this);
 	}
 
 	/**
@@ -735,7 +735,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * This is equivalent to simply calling <code><jk>new</jk> HtmlSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link HtmlSerializerBuilder} object.
@@ -761,7 +761,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = builder().build(HtmlSchemaSerializer.class);
+			schemaSerializer = copy().build(HtmlSchemaSerializer.class);
 		return schemaSerializer;
 	}
 

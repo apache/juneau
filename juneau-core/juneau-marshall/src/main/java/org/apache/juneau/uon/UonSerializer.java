@@ -309,7 +309,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Readable(ContextProperties cp) {
-			super(cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
+			super(cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -324,7 +324,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Encoding(ContextProperties cp) {
-			super(cp.builder().setDefault(UON_encoding, true).build());
+			super(cp.copy().setDefault(UON_encoding, true).build());
 		}
 	}
 
@@ -418,8 +418,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	@Override /* Context */
-	public UonSerializerBuilder builder() {
-		return new UonSerializerBuilder(getContextProperties());
+	public UonSerializerBuilder copy() {
+		return new UonSerializerBuilder(this);
 	}
 
 	/**
@@ -429,7 +429,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * This is equivalent to simply calling <code><jk>new</jk> UonSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link UonSerializerBuilder} object.

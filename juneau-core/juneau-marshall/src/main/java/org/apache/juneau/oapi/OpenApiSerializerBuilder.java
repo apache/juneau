@@ -41,12 +41,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public OpenApiSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public OpenApiSerializerBuilder(OpenApiSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

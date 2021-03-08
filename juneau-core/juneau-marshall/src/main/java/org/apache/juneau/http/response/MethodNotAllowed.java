@@ -116,7 +116,8 @@ public class MethodNotAllowed extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<MethodNotAllowed> builder() {
-		return super.builder(MethodNotAllowed.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<MethodNotAllowed> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

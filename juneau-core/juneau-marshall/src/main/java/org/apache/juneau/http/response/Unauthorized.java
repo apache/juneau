@@ -119,7 +119,8 @@ public class Unauthorized extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<Unauthorized> builder() {
-		return super.builder(Unauthorized.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<Unauthorized> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

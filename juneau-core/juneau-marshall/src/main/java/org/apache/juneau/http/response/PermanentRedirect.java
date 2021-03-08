@@ -73,4 +73,14 @@ public class PermanentRedirect extends BasicHttpResponse {
 		this(create().copyFrom(response));
 		assertStatusCode(response);
 	}
+
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * @return A new builder bean.
+	 */
+	@Override /* BasicHttpResponse */
+	public HttpResponseBuilder<PermanentRedirect> copy() {
+		return new HttpResponseBuilder<>(this);
+	}
 }

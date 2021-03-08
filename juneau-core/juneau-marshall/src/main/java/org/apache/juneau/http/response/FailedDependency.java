@@ -116,7 +116,8 @@ public class FailedDependency extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<FailedDependency> builder() {
-		return super.builder(FailedDependency.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<FailedDependency> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

@@ -117,7 +117,8 @@ public class NotImplemented extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<NotImplemented> builder() {
-		return super.builder(NotImplemented.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<NotImplemented> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

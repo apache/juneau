@@ -48,7 +48,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
-		super(copyFrom.getContextProperties());
+		super(copyFrom);
 		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
 	}
 

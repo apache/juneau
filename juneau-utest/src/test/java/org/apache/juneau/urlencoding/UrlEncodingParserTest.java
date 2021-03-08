@@ -799,7 +799,7 @@ public class UrlEncodingParserTest {
 	public void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
 		UrlEncodingParser p;
 		String in;
-		p = UrlEncodingParser.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build();
+		p = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"

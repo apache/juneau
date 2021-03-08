@@ -62,8 +62,8 @@ public class ConfigClasspathStore extends ConfigStore {
 	}
 
 	@Override /* Context */
-	public ConfigClasspathStoreBuilder builder() {
-		return new ConfigClasspathStoreBuilder(getContextProperties());
+	public ConfigClasspathStoreBuilder copy() {
+		return new ConfigClasspathStoreBuilder(this);
 	}
 
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();

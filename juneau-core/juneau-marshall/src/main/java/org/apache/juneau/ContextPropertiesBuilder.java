@@ -50,13 +50,13 @@ public class ContextPropertiesBuilder {
 	// Previously-created property store.
 	private volatile ContextProperties properties;
 
-	// Called by ContextProperties.builder()
+	/** Default Constructor */
+	ContextPropertiesBuilder() {}
+
+	/** Copy Constructor */
 	ContextPropertiesBuilder(ContextProperties cp) {
 		apply(cp);
 	}
-
-	// Called by ContextProperties.create()
-	ContextPropertiesBuilder() {}
 
 	/**
 	 * Creates a new {@link ContextProperties} based on the values in this builder.
@@ -95,7 +95,7 @@ public class ContextPropertiesBuilder {
 				PropertyGroupBuilder g1 = this.groups.get(gName);
 				PropertyGroup g2 = e.getValue();
 				if (g1 == null)
-					this.groups.put(gName, g2.builder());
+					this.groups.put(gName, g2.copy());
 				else
 					g1.apply(g2);
 			}

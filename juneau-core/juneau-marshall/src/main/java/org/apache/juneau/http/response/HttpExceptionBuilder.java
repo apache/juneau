@@ -51,6 +51,19 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public HttpExceptionBuilder(T copyFrom) {
+		super(copyFrom);
+		implClass = copyFrom.getClass();
+		statusLine = copyFrom.statusLine;
+		headerList = copyFrom.headerList;
+		body = copyFrom.body;
+	}
+
+	/**
 	 * Instantiates the exception bean from the settings in this builder.
 	 *
 	 * @return A new {@link BasicHttpException} bean.
@@ -76,20 +89,6 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 			message(h.getValue());
 		headers(response.getAllHeaders());
 		body(response.getEntity());
-		return this;
-	}
-
-	/**
-	 * Copies the values from the specified exception.
-	 *
-	 * @param value The exception to copy from.
-	 * @return This object (for method chaining).
-	 */
-	public HttpExceptionBuilder<T> copyFrom(BasicHttpException value) {
-		super.copyFrom(value);
-		statusLine = value.statusLine;
-		headerList = value.headerList;
-		body = value.body;
 		return this;
 	}
 
@@ -413,7 +412,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 
 	private BasicStatusLineBuilder statusLineBuilder() {
 		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.builder();
+			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
 			statusLine = null;
 		}
 		return statusLineBuilder;
@@ -421,7 +420,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 
 	private HeaderListBuilder headerListBuilder() {
 		if (headerListBuilder == null) {
-			headerListBuilder = headerList == null ? HeaderList.create() : headerList.builder();
+			headerListBuilder = headerList == null ? HeaderList.create() : headerList.copy();
 			headerList = null;
 		}
 		return headerListBuilder;
@@ -432,12 +431,6 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
 	public HttpExceptionBuilder<T> causedBy(Throwable value) {
 		super.causedBy(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicRuntimeExceptionBuilder */
-	public HttpExceptionBuilder<T> copyFrom(BasicRuntimeException value) {
-		super.copyFrom(value);
 		return this;
 	}
 

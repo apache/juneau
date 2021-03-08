@@ -57,8 +57,8 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	}
 
 	@Override /* Context */
-	public CsvSerializerBuilder builder() {
-		return new CsvSerializerBuilder(getContextProperties());
+	public CsvSerializerBuilder copy() {
+		return new CsvSerializerBuilder(this);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	 * This is equivalent to simply calling <code><jk>new</jk> CsvSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link CsvSerializerBuilder} object.
@@ -121,7 +121,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"CsvSerializer", 
+				"CsvSerializer",
 				OMap
 					.create()
 					.filtered()

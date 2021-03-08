@@ -43,7 +43,7 @@ public class AutoObjectSwapTest {
 	}
 
 	private static BeanContext bc(Class<?> applyAnnotations) {
-		return BeanContext.DEFAULT.builder().applyAnnotations(applyAnnotations).build();
+		return BeanContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

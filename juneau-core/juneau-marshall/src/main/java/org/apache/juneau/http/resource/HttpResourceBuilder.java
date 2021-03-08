@@ -457,7 +457,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 
 	private HeaderListBuilder headersBuilder() {
 		if (headersBuilder == null) {
-			headersBuilder = headers == null ? HeaderList.create() : headers.builder();
+			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
 			headers = null;
 		}
 		return headersBuilder;

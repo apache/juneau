@@ -61,8 +61,8 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	}
 
 	@Override /* Context */
-	public JsoParserBuilder builder() {
-		return new JsoParserBuilder(getContextProperties());
+	public JsoParserBuilder copy() {
+		return new JsoParserBuilder(this);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	 * This is equivalent to simply calling <code><jk>new</jk> JsoParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link JsoParserBuilder} object.

@@ -38,7 +38,7 @@ public class HeaderList implements Iterable<Header> {
 	/** Predefined instance. */
 	public static final HeaderList EMPTY = new HeaderList();
 
-	private final List<Header> headers;
+	final List<Header> headers;
 
 	/**
 	 * Instantiates a new builder for this bean.
@@ -129,8 +129,8 @@ public class HeaderList implements Iterable<Header> {
 	 *
 	 * @return A new builder object.
 	 */
-	public HeaderListBuilder builder() {
-		return create().add(headers);
+	public HeaderListBuilder copy() {
+		return new HeaderListBuilder(this);
 	}
 
 	/**
@@ -271,18 +271,6 @@ public class HeaderList implements Iterable<Header> {
 	 */
 	public HeaderIterator headerIterator(String name) {
 		return new BasicListHeaderIterator(headers, name);
-	}
-
-	/**
-	 * Returns a copy of this object.
-	 *
-	 * <p>
-	 * Individual header values are not cloned.
-	 *
-	 * @return A copy of this object.
-	 */
-	public HeaderList copy() {
-		return builder().build();
 	}
 
 	@Override /* Iterable */

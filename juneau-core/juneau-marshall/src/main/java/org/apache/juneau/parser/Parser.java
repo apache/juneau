@@ -552,8 +552,8 @@ public abstract class Parser extends BeanContext {
 	}
 
 	@Override /* Context */
-	public ParserBuilder builder() {
-		return new ParserBuilder(getContextProperties());
+	public ParserBuilder copy() {
+		return new ParserBuilder(this);
 	}
 
 	/**
@@ -563,13 +563,13 @@ public abstract class Parser extends BeanContext {
 	 * This is equivalent to simply calling <code><jk>new</jk> ParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link ParserBuilder} object.
 	 */
 	public static ParserBuilder create() {
-		return new ParserBuilder(ContextProperties.DEFAULT);
+		return new ParserBuilder();
 	}
 
 

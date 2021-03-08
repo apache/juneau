@@ -316,7 +316,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @param cp Initialize with the specified config property store.
 	 */
 	public JsonSchemaGenerator(ContextProperties cp) {
-		super(cp.builder().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
+		super(cp.copy().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
 
 		useBeanDefs = cp.getBoolean(JSONSCHEMA_useBeanDefs).orElse(false);
 		allowNestedExamples = cp.getBoolean(JSONSCHEMA_allowNestedExamples).orElse(false);
@@ -334,8 +334,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	@Override /* Context */
-	public JsonSchemaGeneratorBuilder builder() {
-		return new JsonSchemaGeneratorBuilder(getContextProperties());
+	public JsonSchemaGeneratorBuilder copy() {
+		return new JsonSchemaGeneratorBuilder(this);
 	}
 
 	/**

@@ -59,7 +59,7 @@ VarResolvers and VarResolverSessions
 	<li class='jm'>{@link oaj.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
 </ul>
 <p>
-	Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#builder()} method.
+	Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#copy()} method.
 	Cloning a resolver will copy it's {@link oaj.svl.Var} class names and context objects.
 </p>
 
@@ -67,7 +67,7 @@ VarResolvers and VarResolverSessions
 <p class='bpcode w800'>
 	<jc>// Create a resolver that copies the default resolver and adds $C and $A vars.</jc>
 	VarResolver <jv>myVarResolver</jv> = VarResolver.<jsf>DEFAULT</jsf>
-		.builder()
+		.copy()
 		.vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
 		.build();
 </p>

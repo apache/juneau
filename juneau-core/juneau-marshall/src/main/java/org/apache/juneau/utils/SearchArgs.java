@@ -28,7 +28,7 @@ public class SearchArgs {
 	/**
 	 * Default search args.
 	 */
-	public static SearchArgs DEFAULT = SearchArgs.builder().build();
+	public static SearchArgs DEFAULT = SearchArgs.create().build();
 
 	private final Map<String,String> search;
 	private final List<String> view;
@@ -50,7 +50,7 @@ public class SearchArgs {
 	 *
 	 * @return A new builder for {@link SearchArgs}
 	 */
-	public static Builder builder() {
+	public static Builder create() {
 		return new Builder();
 	}
 

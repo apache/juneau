@@ -30,7 +30,7 @@ import org.apache.juneau.cp.*;
  */
 public class VarResolverContext {
 
-	private final Var[] vars;
+	final Var[] vars;
 	private final Map<String,Var> varMap;
 	final BeanStore beanStore;
 

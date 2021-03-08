@@ -88,8 +88,8 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	}
 
 	@Override /* Context */
-	public PlainTextParserBuilder builder() {
-		return new PlainTextParserBuilder(getContextProperties());
+	public PlainTextParserBuilder copy() {
+		return new PlainTextParserBuilder(this);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	 * This is equivalent to simply calling <code><jk>new</jk> PlainTextParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link PlainTextParserBuilder} object.

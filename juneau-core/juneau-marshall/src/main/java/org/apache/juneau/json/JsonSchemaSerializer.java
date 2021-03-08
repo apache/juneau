@@ -74,7 +74,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 */
 		public Readable(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
+				cp.copy().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -89,7 +89,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 */
 		public Simple(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
@@ -107,7 +107,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 */
 		public SimpleReadable(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(JSON_simpleMode, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -132,7 +132,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	 */
 	public JsonSchemaSerializer(ContextProperties cp) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(BEANTRAVERSE_detectRecursions, true)
 				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
@@ -143,8 +143,8 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	}
 
 	@Override /* Context */
-	public JsonSchemaSerializerBuilder builder() {
-		return new JsonSchemaSerializerBuilder(getContextProperties());
+	public JsonSchemaSerializerBuilder copy() {
+		return new JsonSchemaSerializerBuilder(this);
 	}
 
 	/**

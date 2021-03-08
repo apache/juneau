@@ -264,31 +264,31 @@ public class MaxIndentTest {
 
 	@Test
 	public void a1_serializeJson() throws Exception {
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT_READABLE.builder().maxIndent(input.maxDepth).build();
+		WriterSerializer s = SimpleJsonSerializer.DEFAULT_READABLE.copy().maxIndent(input.maxDepth).build();
 		testSerialize("json", s, input.json);
 	}
 
 	@Test
 	public void b11_serializeXml() throws Exception {
-		WriterSerializer s = XmlSerializer.DEFAULT_SQ_READABLE.builder().maxIndent(input.maxDepth).build();
+		WriterSerializer s = XmlSerializer.DEFAULT_SQ_READABLE.copy().maxIndent(input.maxDepth).build();
 		testSerialize("xml", s, input.xml);
 	}
 
 	@Test
 	public void c11_serializeHtml() throws Exception {
-		WriterSerializer s = HtmlSerializer.DEFAULT_SQ_READABLE.builder().maxIndent(input.maxDepth).build();
+		WriterSerializer s = HtmlSerializer.DEFAULT_SQ_READABLE.copy().maxIndent(input.maxDepth).build();
 		testSerialize("html", s, input.html);
 	}
 
 	@Test
 	public void d11_serializeUon() throws Exception {
-		WriterSerializer s = UonSerializer.DEFAULT_READABLE.builder().maxIndent(input.maxDepth).build();
+		WriterSerializer s = UonSerializer.DEFAULT_READABLE.copy().maxIndent(input.maxDepth).build();
 		testSerialize("uon", s, input.uon);
 	}
 
 	@Test
 	public void e11_serializeUrlEncoding() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT_READABLE.builder().maxIndent(input.maxDepth).build();
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT_READABLE.copy().maxIndent(input.maxDepth).build();
 		testSerialize("urlEncoding", s, input.urlEnc);
 	}
 

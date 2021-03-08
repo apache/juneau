@@ -374,7 +374,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 */
 		public Sq(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
@@ -391,7 +391,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 */
 		public SqReadable(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
@@ -409,7 +409,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 */
 		public Ns(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(XML_enableNamespaces, true)
 					.build(),
 				"text/xml",
@@ -428,7 +428,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 */
 		public NsSq(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(XML_enableNamespaces, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
@@ -446,7 +446,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 */
 		public NsSqReadable(ContextProperties cp) {
 			super(
-				cp.builder()
+				cp.copy()
 					.setDefault(XML_enableNamespaces, true)
 					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.setDefault(WSERIALIZER_useWhitespace, true)
@@ -522,8 +522,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	@Override /* Context */
-	public XmlSerializerBuilder builder() {
-		return new XmlSerializerBuilder(getContextProperties());
+	public XmlSerializerBuilder copy() {
+		return new XmlSerializerBuilder(this);
 	}
 
 	/**
@@ -533,7 +533,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * This is equivalent to simply calling <code><jk>new</jk> XmlSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link XmlSerializerBuilder} object.

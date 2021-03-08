@@ -25,8 +25,8 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class UrlEncodingSerializerTest {
 
-	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.builder().addRootType().build();
-	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE.builder().addRootType().build();
+	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.copy().addRootType().build();
+	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE.copy().addRootType().build();
 
 
 	//====================================================================================================
@@ -377,7 +377,7 @@ public class UrlEncodingSerializerTest {
 		DTOs2.B t = DTOs2.B.create();
 		String r;
 
-		s = UrlEncodingSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build();
+		s = UrlEncodingSerializer.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
 		r = s.serialize(t);
 		String e = ""
 			+ "f01=@(a,b)"
@@ -494,7 +494,7 @@ public class UrlEncodingSerializerTest {
 		DTOs2.C t = DTOs2.C.create();
 		String r;
 
-		s = UrlEncodingSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build();
+		s = UrlEncodingSerializer.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
 		r = s.serialize(t);
 		String e = ""
 			+ "f01=a&f01=b"
@@ -565,7 +565,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	@Test
 	public void testPlainTextParams() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT.builder().paramFormatPlain().build();
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
 
 		assertEquals("_value=foo", s.serialize("foo"));
 		assertEquals("_value='foo'", s.serialize("'foo'"));

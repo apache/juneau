@@ -293,7 +293,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		return s.builder().keepNullProperties().build();
+		return s.copy().keepNullProperties().build();
 	}
 
 	public static class BeanWithReaderField {

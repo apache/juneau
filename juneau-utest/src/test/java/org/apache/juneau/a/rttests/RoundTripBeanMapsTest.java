@@ -280,8 +280,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
-		Parser p = getParser().builder().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
+		Serializer s = getSerializer().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
+		Parser p = getParser().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
 
 		C1 c1 = C1.create();
 		Object r = s.serialize(c1);
@@ -395,8 +395,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
-		Parser p = getParser().builder().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		Serializer s = getSerializer().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		Parser p = getParser().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
 
 		CA1 c1 = CA1.create();
 		Object r = s.serialize(c1);
@@ -472,8 +472,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanProperties(D2.class, "f3,f2").build();
-		Parser p = getParser().builder().beanProperties(D2.class, "f3,f2").build();
+		Serializer s = getSerializer().copy().beanProperties(D2.class, "f3,f2").build();
+		Parser p = getParser().copy().beanProperties(D2.class, "f3,f2").build();
 
 		D2 d = new D2().init();
 		Object r = s.serialize(d);
@@ -530,8 +530,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanPropertiesExcludes(E2.class, "f2").build();
-		Parser p = getParser().builder().beanPropertiesExcludes(E2.class, "f2").build();
+		Serializer s = getSerializer().copy().beanPropertiesExcludes(E2.class, "f2").build();
+		Parser p = getParser().copy().beanPropertiesExcludes(E2.class, "f2").build();
 
 		E2 e = new E2().init();
 		Object r = s.serialize(e);
@@ -586,8 +586,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testInterfaceClassUsingBeanFilter() throws Exception {
-		SerializerBuilder s = getSerializer().builder();
-		ParserBuilder p = getParser() == null ? null : getParser().builder();
+		SerializerBuilder s = getSerializer().copy();
+		ParserBuilder p = getParser() == null ? null : getParser().copy();
 		FB2 t;
 		Object r;
 

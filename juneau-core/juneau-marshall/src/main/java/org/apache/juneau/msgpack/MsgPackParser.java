@@ -63,7 +63,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 */
 		public SpacedHex(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(ISPARSER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+				cp.copy().setDefault(ISPARSER_binaryFormat, BinaryFormat.SPACED_HEX).build()
 			);
 		}
 	}
@@ -78,7 +78,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 */
 		public Base64(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(ISPARSER_binaryFormat, BinaryFormat.BASE64).build()
+				cp.copy().setDefault(ISPARSER_binaryFormat, BinaryFormat.BASE64).build()
 			);
 		}
 	}
@@ -100,8 +100,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	}
 
 	@Override /* Context */
-	public MsgPackParserBuilder builder() {
-		return new MsgPackParserBuilder(getContextProperties());
+	public MsgPackParserBuilder copy() {
+		return new MsgPackParserBuilder(this);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	 * This is equivalent to simply calling <code><jk>new</jk> MsgPackParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link MsgPackParserBuilder} object.

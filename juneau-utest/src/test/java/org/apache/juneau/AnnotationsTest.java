@@ -122,7 +122,7 @@ public class AnnotationsTest {
 
 	@Test
 	public void testBeanWithExplicitProperties_usingConfig() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(PersonConfig.class).build().createSession();
+		BeanSession session = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build().createSession();
 		BeanMap bm = null;
 
 		// Basic test

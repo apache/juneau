@@ -117,7 +117,8 @@ public class TooManyRequests extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<TooManyRequests> builder() {
-		return super.builder(TooManyRequests.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<TooManyRequests> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

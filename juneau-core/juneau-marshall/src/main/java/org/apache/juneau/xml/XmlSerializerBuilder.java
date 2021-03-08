@@ -40,12 +40,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public XmlSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public XmlSerializerBuilder(XmlSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

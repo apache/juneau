@@ -845,8 +845,8 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	@Override /* Context */
-	public SerializerBuilder builder() {
-		return null;
+	public SerializerBuilder copy() {
+		throw new UnsupportedOperationException();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

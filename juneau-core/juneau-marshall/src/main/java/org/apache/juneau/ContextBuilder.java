@@ -58,39 +58,12 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Constructor that takes in an initial set of configuration properties.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public ContextBuilder(ContextProperties cp) {
-		if (cp == null)
-			cp = ContextProperties.DEFAULT;
-		this.cpb = cp.builder();
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Used in cases where multiple context builder are sharing the same property store builder.
-	 * <br>(e.g. <c>HtmlDocBuilder</c>)
-	 *
-	 * @param cpb The property store builder to use.
-	 */
-	protected ContextBuilder(ContextPropertiesBuilder cpb) {
-		this.cpb = cpb;
-	}
-
-	/**
-	 * Returns access to the inner property store builder.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link #ContextBuilder(ContextPropertiesBuilder)} when builders share property store builders.
-	 *
-	 * @return The inner property store builder.
-	 */
-	protected ContextPropertiesBuilder getContextPropertiesBuilder() {
-		return cpb;
+	public ContextBuilder(Context copyFrom) {
+		this.cpb = copyFrom == null ? ContextProperties.DEFAULT.copy() : copyFrom.properties.copy();
 	}
 
 	/**

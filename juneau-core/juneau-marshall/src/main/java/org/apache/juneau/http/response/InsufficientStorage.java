@@ -116,7 +116,8 @@ public class InsufficientStorage extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<InsufficientStorage> builder() {
-		return super.builder(InsufficientStorage.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<InsufficientStorage> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

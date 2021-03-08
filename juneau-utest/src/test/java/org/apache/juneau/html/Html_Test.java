@@ -348,7 +348,7 @@ public class Html_Test {
 
 	@Test
 	public void d02_testNoTableHeaders_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyMap2Config.class).build();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyMap2Config.class).build();
 		Object o = null;
 		String r;
 
@@ -386,7 +386,7 @@ public class Html_Test {
 
 	@Test
 	public void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyBean2Config.class).build();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyBean2Config.class).build();
 		Object o = null;
 		String r;
 
@@ -405,7 +405,7 @@ public class Html_Test {
 
 	@Test
 	public void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
 		Object o = null;
 		String r;
 

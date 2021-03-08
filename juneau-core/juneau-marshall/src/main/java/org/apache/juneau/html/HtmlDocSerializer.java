@@ -782,8 +782,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* Context */
-	public HtmlDocSerializerBuilder builder() {
-		return new HtmlDocSerializerBuilder(getContextProperties());
+	public HtmlDocSerializerBuilder copy() {
+		return new HtmlDocSerializerBuilder(this);
 	}
 
 	/**
@@ -793,7 +793,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * This is equivalent to simply calling <code><jk>new</jk> HtmlDocSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link HtmlDocSerializerBuilder} object.
@@ -815,7 +815,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	@Override /* XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = builder().build(HtmlSchemaDocSerializer.class);
+			schemaSerializer = copy().build(HtmlSchemaDocSerializer.class);
 		return schemaSerializer;
 	}
 

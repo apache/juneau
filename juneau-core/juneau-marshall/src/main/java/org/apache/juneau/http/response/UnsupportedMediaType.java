@@ -117,7 +117,8 @@ public class UnsupportedMediaType extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<UnsupportedMediaType> builder() {
-		return super.builder(UnsupportedMediaType.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<UnsupportedMediaType> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

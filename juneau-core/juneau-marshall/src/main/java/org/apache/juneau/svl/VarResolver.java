@@ -110,10 +110,8 @@ public class VarResolver {
 	 *
 	 * @return A new var resolver builder.
 	 */
-	public VarResolverBuilder builder() {
-		return new VarResolverBuilder()
-			.vars(ctx.getVars())
-			.beanStore(ctx.beanStore);
+	public VarResolverBuilder copy() {
+		return new VarResolverBuilder(this);
 	}
 
 	/**

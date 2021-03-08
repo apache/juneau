@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class PartListBuilder {
 
-	final List<Part> parts = new ArrayList<>();
+	final List<Part> parts;
 	private volatile VarResolver varResolver;
 
 	/** Predefined instance. */
@@ -37,7 +37,19 @@ public class PartListBuilder {
 	/**
 	 * Constructor.
 	 */
-	public PartListBuilder() {}
+	public PartListBuilder() {
+		parts = new ArrayList<>();
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public PartListBuilder(PartList copyFrom) {
+		parts = new ArrayList<>(copyFrom.parts);
+
+	}
 
 	/**
 	 * Creates a new {@link PartList} bean based on the contents of this builder.

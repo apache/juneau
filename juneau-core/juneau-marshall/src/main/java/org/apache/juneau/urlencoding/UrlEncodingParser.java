@@ -129,7 +129,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 */
 	public UrlEncodingParser(ContextProperties cp) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(UON_decoding, true)
 				.build(),
 			"application/x-www-form-urlencoded"
@@ -138,8 +138,8 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	}
 
 	@Override /* Context */
-	public UrlEncodingParserBuilder builder() {
-		return new UrlEncodingParserBuilder(getContextProperties());
+	public UrlEncodingParserBuilder copy() {
+		return new UrlEncodingParserBuilder(this);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 * This is equivalent to simply calling <code><jk>new</jk> UrlEncodingParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link UrlEncodingParserBuilder} object.

@@ -120,7 +120,8 @@ public class Gone extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<Gone> builder() {
-		return super.builder(Gone.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<Gone> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

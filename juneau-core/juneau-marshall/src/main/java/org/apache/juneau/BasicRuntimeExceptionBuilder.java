@@ -27,16 +27,19 @@ public class BasicRuntimeExceptionBuilder {
 	boolean unmodifiable;
 
 	/**
-	 * Copies the values from the specified exception.
-	 *
-	 * @param value The exception to copy from.
-	 * @return This object (for method chaining).
+	 * Default constructor.
 	 */
-	public BasicRuntimeExceptionBuilder copyFrom(BasicRuntimeException value) {
-		message = value.getMessage();
-		causedBy = value.getCause();
-		unmodifiable = value.unmodifiable;
-		return this;
+	public BasicRuntimeExceptionBuilder() {}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public BasicRuntimeExceptionBuilder(BasicRuntimeException copyFrom) {
+		message = copyFrom.getMessage();
+		causedBy = copyFrom.getCause();
+		unmodifiable = copyFrom.unmodifiable;
 	}
 
 	/**

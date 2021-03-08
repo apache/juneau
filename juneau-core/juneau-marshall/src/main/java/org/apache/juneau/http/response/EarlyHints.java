@@ -14,7 +14,6 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.EarlyHints.*;
 
-import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
@@ -60,16 +59,12 @@ public class EarlyHints extends BasicHttpResponse {
 	}
 
 	/**
-	 * Constructor.
+	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @return A new builder bean.
 	 */
-	public EarlyHints(HttpResponse response) {
-		this(create().copyFrom(response));
-		assertStatusCode(response);
+	@Override /* BasicHttpResponse */
+	public HttpResponseBuilder<EarlyHints> copy() {
+		return new HttpResponseBuilder<>(this);
 	}
 }

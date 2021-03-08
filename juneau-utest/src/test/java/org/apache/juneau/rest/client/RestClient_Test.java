@@ -78,8 +78,8 @@ public class RestClient_Test {
 	public void a01_basic_overrideHttpClient() {
 		HttpClientBuilder cb = HttpClientBuilder.create();
 		CloseableHttpClient hc = HttpClientBuilder.create().build();
-		RestClient.create().httpClientBuilder(cb).build().builder().build();
-		RestClient.create().httpClient(hc).build().builder().build();
+		RestClient.create().httpClientBuilder(cb).build().copy().build();
+		RestClient.create().httpClient(hc).build().copy().build();
 	}
 
 	public static class A2 extends RestClientBuilder {}

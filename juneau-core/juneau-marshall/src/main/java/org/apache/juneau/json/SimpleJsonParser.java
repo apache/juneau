@@ -45,8 +45,8 @@ public class SimpleJsonParser extends JsonParser {
 	}
 
 	@Override /* Context */
-	public SimpleJsonParserBuilder builder() {
-		return new SimpleJsonParserBuilder(getContextProperties());
+	public SimpleJsonParserBuilder copy() {
+		return new SimpleJsonParserBuilder(this);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class SimpleJsonParser extends JsonParser {
 	 * This is equivalent to simply calling <code><jk>new</jk> SimpleJsonParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link SimpleJsonParserBuilder} object.

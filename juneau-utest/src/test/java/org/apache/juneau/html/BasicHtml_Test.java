@@ -37,10 +37,10 @@ public class BasicHtml_Test {
 		BeanWithWhitespaceTextFields2Config.class, BeanWithWhitespaceTextPwsFields2Config.class, BeanWithWhitespaceMixedFields2Config.class, BeanWithWhitespaceMixedPwsFields2Config.class, LinkBeanCConfig.class
 	};
 	private static final HtmlSerializer
-		s1 = HtmlSerializer.DEFAULT_SQ.builder().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
-		s2 = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
-		s3 = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(ANNOTATED_CLASSES).build();
-	private static final HtmlParser parser = HtmlParser.DEFAULT.builder().applyAnnotations(ANNOTATED_CLASSES).build();
+		s1 = HtmlSerializer.DEFAULT_SQ.copy().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
+		s2 = HtmlSerializer.DEFAULT_SQ_READABLE.copy().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
+		s3 = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(ANNOTATED_CLASSES).build();
+	private static final HtmlParser parser = HtmlParser.DEFAULT.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

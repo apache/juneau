@@ -116,7 +116,8 @@ public class LoopDetected extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<LoopDetected> builder() {
-		return super.builder(LoopDetected.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<LoopDetected> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

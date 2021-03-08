@@ -116,7 +116,8 @@ public class Locked extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<Locked> builder() {
-		return super.builder(Locked.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<Locked> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

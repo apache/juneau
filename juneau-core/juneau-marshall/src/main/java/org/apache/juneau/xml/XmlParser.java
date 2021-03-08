@@ -260,8 +260,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	}
 
 	@Override /* Context */
-	public XmlParserBuilder builder() {
-		return new XmlParserBuilder(getContextProperties());
+	public XmlParserBuilder copy() {
+		return new XmlParserBuilder(this);
 	}
 
 	/**
@@ -271,7 +271,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * This is equivalent to simply calling <code><jk>new</jk> XmlParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link XmlParserBuilder} object.

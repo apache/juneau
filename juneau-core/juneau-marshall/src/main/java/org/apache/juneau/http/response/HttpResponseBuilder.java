@@ -52,6 +52,18 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public HttpResponseBuilder(T copyFrom) {
+		implClass = copyFrom.getClass();
+		statusLine = copyFrom.statusLine;
+		headerList = copyFrom.headerList;
+		body = copyFrom.body;
+	}
+
+	/**
 	 * Instantiates the exception bean from the settings in this builder.
 	 *
 	 * @return A new {@link HttpResponse} bean.
@@ -74,19 +86,6 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	public HttpResponseBuilder<?> copyFrom(HttpResponse response) {
 		headers(response.getAllHeaders());
 		body(response.getEntity());
-		return this;
-	}
-
-	/**
-	 * Copies the values from the specified exception.
-	 *
-	 * @param value The exception to copy from.
-	 * @return This object (for method chaining).
-	 */
-	public HttpResponseBuilder<T> copyFrom(BasicHttpResponse value) {
-		statusLine = value.statusLine;
-		headerList = value.headerList;
-		body = value.body;
 		return this;
 	}
 
@@ -444,7 +443,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	private BasicStatusLineBuilder statusLineBuilder() {
 		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.builder();
+			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
 			statusLine = null;
 		}
 		return statusLineBuilder;
@@ -452,7 +451,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	private HeaderListBuilder headerListBuilder() {
 		if (headerListBuilder == null) {
-			headerListBuilder = headerList == null ? HeaderList.create() : headerList.builder();
+			headerListBuilder = headerList == null ? HeaderList.create() : headerList.copy();
 			headerList = null;
 		}
 		return headerListBuilder;

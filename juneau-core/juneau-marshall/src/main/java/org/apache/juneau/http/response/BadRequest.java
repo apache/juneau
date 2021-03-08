@@ -116,7 +116,8 @@ public class BadRequest extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<BadRequest> builder() {
-		return super.builder(BadRequest.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<BadRequest> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

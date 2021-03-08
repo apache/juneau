@@ -167,8 +167,8 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	@Override /* Context */
-	public RdfParserBuilder builder() {
-		return new RdfParserBuilder(getContextProperties());
+	public RdfParserBuilder copy() {
+		return new RdfParserBuilder(this);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * This is equivalent to simply calling <code><jk>new</jk> RdfParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link RdfParserBuilder} object.

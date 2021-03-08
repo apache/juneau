@@ -80,8 +80,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	}
 
 	@Override /* Context */
-	public OpenApiParserBuilder builder() {
-		return new OpenApiParserBuilder(getContextProperties());
+	public OpenApiParserBuilder copy() {
+		return new OpenApiParserBuilder(this);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	 * This is equivalent to simply calling <code><jk>new</jk> UonPartParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link OpenApiParserBuilder} object.

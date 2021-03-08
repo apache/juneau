@@ -117,7 +117,8 @@ public class Forbidden extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<Forbidden> builder() {
-		return super.builder(Forbidden.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<Forbidden> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

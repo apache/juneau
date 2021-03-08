@@ -218,8 +218,8 @@ public class ConfigFileStore extends ConfigStore {
 	}
 
 	@Override /* Context */
-	public ConfigFileStoreBuilder builder() {
-		return new ConfigFileStoreBuilder(getContextProperties());
+	public ConfigFileStoreBuilder copy() {
+		return new ConfigFileStoreBuilder(this);
 	}
 
 	private final File dir;

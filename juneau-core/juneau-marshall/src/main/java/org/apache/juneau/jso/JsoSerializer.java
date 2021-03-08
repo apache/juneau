@@ -63,8 +63,8 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	}
 
 	@Override /* Context */
-	public JsoSerializerBuilder builder() {
-		return new JsoSerializerBuilder(getContextProperties());
+	public JsoSerializerBuilder copy() {
+		return new JsoSerializerBuilder(this);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	 * This is equivalent to simply calling <code><jk>new</jk> JsoSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link JsoSerializerBuilder} object.

@@ -57,15 +57,15 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommo
 	}
 
 	@Override /* Context */
-	public CsvParserBuilder builder() {
-		return new CsvParserBuilder(getContextProperties());
+	public CsvParserBuilder copy() {
+		return new CsvParserBuilder(this);
 	}
 
 	/**
 	 * Instantiates a new clean-slate {@link CsvParserBuilder} object.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link CsvParserBuilder} object.
@@ -118,7 +118,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommo
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"CsvParser", 
+				"CsvParser",
 				OMap
 					.create()
 					.filtered()

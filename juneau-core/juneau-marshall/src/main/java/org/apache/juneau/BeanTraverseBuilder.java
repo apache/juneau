@@ -37,12 +37,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public BeanTraverseBuilder(ContextProperties cp) {
-		super(cp);
+	public BeanTraverseBuilder(BeanTraverseContext copyFrom) {
+		super(copyFrom);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

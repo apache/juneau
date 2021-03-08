@@ -42,7 +42,7 @@ SVL Variables
 	<jc>// Next create a var resolver that extends the existing DEFAULT resolver
 	// that supports resolving system properties.</jc>
 	VarResolver <jv>varResolver</jv> = VarResolver.<jsf>DEFAULT</jsf>
-		.builder()
+		.copy()
 		.vars(UrlEncodeVar.<jk>class</jk>)
 		.build();
 	

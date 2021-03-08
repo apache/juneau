@@ -320,7 +320,7 @@ public abstract class Context {
 	public static final String CONTEXT_timeZone = PREFIX + ".timeZone.s";
 
 
-	private final ContextProperties properties;
+	final ContextProperties properties;
 	private final int identityCode;
 
 	private final boolean debug;
@@ -377,8 +377,8 @@ public abstract class Context {
 	 *
 	 * @return A new ContextBuilder object.
 	 */
-	public ContextBuilder builder() {
-		return null;
+	public ContextBuilder copy() {
+		throw new UnsupportedOperationException();  // Can't copy an abstract class.
 	}
 
 	/**

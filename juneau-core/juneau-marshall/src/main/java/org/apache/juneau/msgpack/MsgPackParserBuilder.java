@@ -37,12 +37,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cpb The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public MsgPackParserBuilder(ContextProperties cpb) {
-		super(cpb);
+	public MsgPackParserBuilder(MsgPackParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

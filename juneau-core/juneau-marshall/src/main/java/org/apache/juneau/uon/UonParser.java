@@ -162,7 +162,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * @param cp The property store containing all the settings for this object.
 		 */
 		public Decoding(ContextProperties cp) {
-			super(cp.builder().setDefault(UON_decoding, true).build());
+			super(cp.copy().setDefault(UON_decoding, true).build());
 		}
 	}
 
@@ -262,8 +262,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	@Override /* Context */
-	public UonParserBuilder builder() {
-		return new UonParserBuilder(getContextProperties());
+	public UonParserBuilder copy() {
+		return new UonParserBuilder(this);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * This is equivalent to simply calling <code><jk>new</jk> UonParserBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link UonParserBuilder} object.

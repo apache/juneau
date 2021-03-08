@@ -65,7 +65,7 @@ public class BeanIgnore_Test {
 
 	@Test
 	public void testBeanIgnoreOnProperties_usingConfig() throws Exception {
-		assertObject(new Ac()).asString(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
+		assertObject(new Ac()).asString(SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ public class BeanIgnore_Test {
 
 	@Test
 	public void testBeanIgnoreOnBean_usingConfig() throws Exception {
-		assertObject(new Bc()).asString(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
+		assertObject(new Bc()).asString(SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 }
 

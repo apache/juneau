@@ -87,7 +87,7 @@ Serializers
 	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
 	
 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
-	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
+	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.copy().sq().build();
 	
 	<jc>// Serialize a POJO to JSON</jc>
 	String <jv>json</jv> = <jv>serializer</jv>.serialize(someObject);

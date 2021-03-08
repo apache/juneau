@@ -86,7 +86,7 @@ public final class EncoderGroup {
 	 *
 	 * @return A new {@link EncoderGroupBuilder} initialized to this group.
 	 */
-	public EncoderGroupBuilder builder() {
+	public EncoderGroupBuilder copy() {
 		return new EncoderGroupBuilder(this);
 	}
 

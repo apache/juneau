@@ -100,7 +100,7 @@ public @interface Beanc {
 	 * <p class='bpcode w800'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
 	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
-	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.builder().applyAnnotations(MyConfig.<jk>class</jk>).build().parse(<jv>json</jv>);
+	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.copy().applyAnnotations(MyConfig.<jk>class</jk>).build().parse(<jv>json</jv>);
 	 *		String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
 	 *		<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
 	 * </p>

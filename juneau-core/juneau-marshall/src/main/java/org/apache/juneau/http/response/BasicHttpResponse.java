@@ -88,11 +88,10 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
-	 * @param implClass The subclass that the builder is going to create.
 	 * @return A new builder bean.
 	 */
-	public <T extends BasicHttpResponse> HttpResponseBuilder<T> builder(Class<T> implClass) {
-		return create(implClass).copyFrom(this);
+	public HttpResponseBuilder<? extends BasicHttpResponse> copy() {
+		return new HttpResponseBuilder<>(this);
 	}
 
 	/**
@@ -289,7 +288,7 @@ public class BasicHttpResponse implements HttpResponse {
 	private BasicStatusLineBuilder statusLineBuilder() {
 		assertModifiable();
 		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine.builder();
+			statusLineBuilder = statusLine.copy();
 			statusLine = null;
 		}
 		return statusLineBuilder;
@@ -298,7 +297,7 @@ public class BasicHttpResponse implements HttpResponse {
 	private HeaderListBuilder headerListBuilder() {
 		assertModifiable();
 		if (headerListBuilder == null) {
-			headerListBuilder = headerList.builder();
+			headerListBuilder = headerList.copy();
 			headerList = null;
 		}
 		return headerListBuilder;

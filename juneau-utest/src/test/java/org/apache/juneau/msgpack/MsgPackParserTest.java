@@ -34,7 +34,7 @@ public class MsgPackParserTest {
 	//====================================================================================================
 	@Test
 	public void testStreamsAutoClose() throws Exception {
-		InputStreamParser p = MsgPackParser.DEFAULT.builder().autoCloseStreams().build();
+		InputStreamParser p = MsgPackParser.DEFAULT.copy().autoCloseStreams().build();
 		Object r;
 		InputStream is;
 

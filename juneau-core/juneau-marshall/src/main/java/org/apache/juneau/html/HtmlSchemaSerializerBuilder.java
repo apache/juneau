@@ -44,12 +44,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlSchemaSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public HtmlSchemaSerializerBuilder(HtmlSchemaSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

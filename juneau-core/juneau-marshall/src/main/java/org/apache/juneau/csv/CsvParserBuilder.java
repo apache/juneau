@@ -38,12 +38,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public CsvParserBuilder(ContextProperties cp) {
-		super(cp);
+	public CsvParserBuilder(CsvParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

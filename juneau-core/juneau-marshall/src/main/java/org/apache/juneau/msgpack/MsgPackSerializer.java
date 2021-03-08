@@ -99,7 +99,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 */
 		public SpacedHex(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+				cp.copy().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX).build()
 			);
 		}
 	}
@@ -114,7 +114,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 */
 		public Base64(ContextProperties cp) {
 			super(
-				cp.builder().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.BASE64).build()
+				cp.copy().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.BASE64).build()
 			);
 		}
 	}
@@ -139,8 +139,8 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	}
 
 	@Override /* Context */
-	public MsgPackSerializerBuilder builder() {
-		return new MsgPackSerializerBuilder(getContextProperties());
+	public MsgPackSerializerBuilder copy() {
+		return new MsgPackSerializerBuilder(this);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 * This is equivalent to simply calling <code><jk>new</jk> MsgPackSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link MsgPackSerializerBuilder} object.

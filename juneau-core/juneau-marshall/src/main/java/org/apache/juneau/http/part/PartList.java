@@ -31,7 +31,7 @@ public class PartList implements Iterable<Part> {
 	/** Predefined instance. */
 	public static final PartList EMPTY = create().build();
 
-	private final List<Part> parts;
+	final List<Part> parts;
 
 	/**
 	 * Instantiates a new builder for this bean.
@@ -122,8 +122,8 @@ public class PartList implements Iterable<Part> {
 	 *
 	 * @return A new builder object.
 	 */
-	public PartListBuilder builder() {
-		return create().add(parts);
+	public PartListBuilder copy() {
+		return new PartListBuilder(this);
 	}
 
 	/**
@@ -213,18 +213,6 @@ public class PartList implements Iterable<Part> {
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns a copy of this object.
-	 *
-	 * <p>
-	 * Individual header values are not cloned.
-	 *
-	 * @return A copy of this object.
-	 */
-	public PartList copy() {
-		return builder().build();
 	}
 
 	@Override /* Iterable */

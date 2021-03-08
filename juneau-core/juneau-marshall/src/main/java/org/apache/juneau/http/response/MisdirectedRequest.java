@@ -116,7 +116,8 @@ public class MisdirectedRequest extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<MisdirectedRequest> builder() {
-		return super.builder(MisdirectedRequest.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<MisdirectedRequest> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

@@ -41,7 +41,7 @@ public class AutoListSwapTest {
 	}
 
 	private static BeanContext bc(Class<?> applyAnnotations) {
-		return BeanContext.DEFAULT.builder().applyAnnotations(applyAnnotations).build();
+		return BeanContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ public class AutoListSwapTest {
 
 	@Test
 	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(BeanContext.DEFAULT.builder().applyAnnotations(E01Config.class).build(), E01c.class));
+		assertNull(find(BeanContext.DEFAULT.copy().applyAnnotations(E01Config.class).build(), E01c.class));
 	}
 
 	@Test

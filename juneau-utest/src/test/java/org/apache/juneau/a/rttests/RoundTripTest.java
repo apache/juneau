@@ -256,21 +256,21 @@ public abstract class RoundTripTest {
 	}
 
 	protected void swaps(Object...c) {
-		s = s.builder().swaps(c).build();
+		s = s.copy().swaps(c).build();
 		if (p != null)
-			p = p.builder().swaps(c).build();
+			p = p.copy().swaps(c).build();
 	}
 
 	protected void dictionary(Object...c) {
-		s = s.builder().dictionary(c).build();
+		s = s.copy().dictionary(c).build();
 		if (p != null)
-			p = p.builder().dictionary(c).build();
+			p = p.copy().dictionary(c).build();
 	}
 
 	protected void applyAnnotations(Class<?>...fromClasses) {
-		s = s.builder().applyAnnotations(fromClasses).build();
+		s = s.copy().applyAnnotations(fromClasses).build();
 		if (p != null)
-			p = p.builder().applyAnnotations(fromClasses).build();
+			p = p.copy().applyAnnotations(fromClasses).build();
 	}
 
 	public boolean isValidationOnly() {

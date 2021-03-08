@@ -42,12 +42,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public RdfParserBuilder(ContextProperties cp) {
-		super(cp);
+	public RdfParserBuilder(RdfParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

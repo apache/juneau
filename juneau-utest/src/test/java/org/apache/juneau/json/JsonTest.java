@@ -228,8 +228,8 @@ public class JsonTest {
 
 	@Test
 	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(A2Config.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(A2Config.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
+		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 		String r;
 
 		A2 t = A2.create();
@@ -310,8 +310,8 @@ public class JsonTest {
 
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B2Config.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(B2Config.class).build();;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
+		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();;
 		String r;
 
 		B2 t = B2.create();

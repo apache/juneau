@@ -278,8 +278,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	}
 
 	@Override /* Context */
-	public BeanTraverseBuilder builder() {
-		return null;
+	public BeanTraverseBuilder copy() {
+		return new BeanTraverseBuilder(this);
 	}
 
 	@Override /* Context */

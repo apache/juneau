@@ -39,12 +39,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public SerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public SerializerBuilder(Serializer copyFrom) {
+		super(copyFrom);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

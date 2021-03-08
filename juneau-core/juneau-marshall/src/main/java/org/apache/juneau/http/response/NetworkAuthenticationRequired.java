@@ -117,7 +117,8 @@ public class NetworkAuthenticationRequired extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<NetworkAuthenticationRequired> builder() {
-		return super.builder(NetworkAuthenticationRequired.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<NetworkAuthenticationRequired> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

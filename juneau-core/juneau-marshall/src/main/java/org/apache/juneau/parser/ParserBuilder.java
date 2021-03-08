@@ -43,12 +43,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public ParserBuilder(ContextProperties cp) {
-		super(cp);
+	public ParserBuilder(Parser copyFrom) {
+		super(copyFrom);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -116,7 +116,8 @@ public class PreconditionFailed extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<PreconditionFailed> builder() {
-		return super.builder(PreconditionFailed.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<PreconditionFailed> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

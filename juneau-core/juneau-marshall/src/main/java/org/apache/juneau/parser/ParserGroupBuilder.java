@@ -43,12 +43,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Clone an existing parser group builder.
+	 * Copy constructor.
 	 *
-	 * @param copyFrom The parser group that we're copying settings and parsers from.
+	 * @param copyFrom The bean to copy from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
-		super(copyFrom.getContextProperties());
+		super(copyFrom);
 		this.parsers = AList.create().appendReverse(copyFrom.getParsers());
 	}
 

@@ -41,12 +41,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public OpenApiParserBuilder(ContextProperties cp) {
-		super(cp);
+	public OpenApiParserBuilder(OpenApiParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

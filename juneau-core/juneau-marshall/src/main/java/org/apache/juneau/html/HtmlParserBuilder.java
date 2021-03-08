@@ -41,12 +41,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlParserBuilder(ContextProperties cp) {
-		super(cp);
+	public HtmlParserBuilder(HtmlParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

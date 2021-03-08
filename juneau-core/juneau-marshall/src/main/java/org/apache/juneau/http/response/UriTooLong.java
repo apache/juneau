@@ -117,7 +117,8 @@ public class UriTooLong extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<UriTooLong> builder() {
-		return super.builder(UriTooLong.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<UriTooLong> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

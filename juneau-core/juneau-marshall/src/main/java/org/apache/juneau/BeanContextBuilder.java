@@ -76,12 +76,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public BeanContextBuilder(ContextProperties cp) {
-		super(cp);
+	public BeanContextBuilder(BeanContext copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

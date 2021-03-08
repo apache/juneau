@@ -29,7 +29,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypes() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 		JsonParser p = JsonParser.DEFAULT;
 
 		A1 a1 = new A1();
@@ -87,7 +87,7 @@ public class BeanFilterTest {
 
 	@Test
 	public void testSubTypes_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
 		JsonParser p = JsonParser.create().applyAnnotations(EConfig2.class).build();
 
 		E1 e1 = new E1();

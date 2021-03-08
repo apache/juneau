@@ -80,7 +80,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 */
 	public HtmlSchemaDocSerializer(ContextProperties cp, String produces, String accept) {
 		super(
-			cp.builder()
+			cp.copy()
 				.setDefault(BEANTRAVERSE_detectRecursions, true)
 				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),

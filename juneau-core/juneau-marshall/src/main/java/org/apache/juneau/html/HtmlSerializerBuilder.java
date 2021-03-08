@@ -40,12 +40,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public HtmlSerializerBuilder(HtmlSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

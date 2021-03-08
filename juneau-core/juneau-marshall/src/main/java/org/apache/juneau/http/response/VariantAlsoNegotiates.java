@@ -116,7 +116,8 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<VariantAlsoNegotiates> builder() {
-		return super.builder(VariantAlsoNegotiates.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<VariantAlsoNegotiates> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

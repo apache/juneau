@@ -49,7 +49,7 @@ Non-Tree Models and Recursion Detection
 </p>
 <p class='bpcode w800'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
+	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.copy().detectRecursions(<jk>true</jk>).build();
 
 	<jc>// Create a recursive loop.</jc>
 	A <jv>a</jv> = <jk>new</jk> A();

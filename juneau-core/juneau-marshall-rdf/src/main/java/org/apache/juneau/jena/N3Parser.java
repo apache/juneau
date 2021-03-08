@@ -36,7 +36,7 @@ public class N3Parser extends RdfParser {
 	 * Instantiates a new clean-slate {@link RdfParserBuilder} object.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link RdfParserBuilder} object.
@@ -52,7 +52,7 @@ public class N3Parser extends RdfParser {
 	 */
 	public N3Parser(ContextProperties cp) {
 		super(
-			cp.builder()
+			cp.copy()
 				.set(RDF_language, LANG_N3)
 				.build(),
 			"text/n3"

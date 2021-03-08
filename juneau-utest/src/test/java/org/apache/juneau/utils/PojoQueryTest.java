@@ -41,19 +41,19 @@ public class PojoQueryTest {
 
 		PojoQuery q = new PojoQuery(in, BeanContext.DEFAULT.createSession());
 
-		sa = SearchArgs.builder().search("f=foo").build();
+		sa = SearchArgs.create().search("f=foo").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:'foo'}]");
 
-		sa = SearchArgs.builder().search("f=fo*").build();
+		sa = SearchArgs.create().search("f=fo*").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:'foo'}]");
 
-		sa = SearchArgs.builder().search("f=*ar").build();
+		sa = SearchArgs.create().search("f=*ar").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:'bar'}]");
 
-		sa = SearchArgs.builder().search("f=foo bar").build();
+		sa = SearchArgs.create().search("f=foo bar").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:'foo'},{f:'bar'}]");
 	}
@@ -88,15 +88,15 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=2011").build();
+		sa = SearchArgs.create().search("f=2011").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f=2011.01").build();
+		sa = SearchArgs.create().search("f=2011.01").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f=2011.01.01").build();
+		sa = SearchArgs.create().search("f=2011.01.01").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T00:00:00'}]", s.serialize(results));
 
@@ -108,7 +108,7 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=2011.01.01.12").build();
+		sa = SearchArgs.create().search("f=2011.01.01.12").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]", s.serialize(results));
 
@@ -119,7 +119,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 31, 00)
 		};
 		q = new PojoQuery(in, session);
-		sa = SearchArgs.builder().search("f=2011.01.01.12.30").build();
+		sa = SearchArgs.create().search("f=2011.01.01.12.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]", s.serialize(results));
 
@@ -129,7 +129,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 30, 31)
 		};
 		q = new PojoQuery(in, session);
-		sa = SearchArgs.builder().search("f=2011.01.01.12.30.30").build();
+		sa = SearchArgs.create().search("f=2011.01.01.12.30.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:30:30'}]", s.serialize(results));
 
@@ -141,19 +141,19 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f>2000").build();
+		sa = SearchArgs.create().search("f>2000").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2001-01-01T00:00:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f>=2001").build();
+		sa = SearchArgs.create().search("f>=2001").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2001-01-01T00:00:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f<2001").build();
+		sa = SearchArgs.create().search("f<2001").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2000-12-31T00:00:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f<=2000").build();
+		sa = SearchArgs.create().search("f<=2000").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2000-12-31T00:00:00'}]", s.serialize(results));
 
@@ -163,11 +163,11 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f>=2011.01.01.12.30").build();
+		sa = SearchArgs.create().search("f>=2011.01.01.12.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:30:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f<2011.01.01.12.30").build();
+		sa = SearchArgs.create().search("f<2011.01.01.12.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:29:59'}]", s.serialize(results));
 
@@ -177,11 +177,11 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f>2011.01.01.12.30").build();
+		sa = SearchArgs.create().search("f>2011.01.01.12.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:31:00'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().search("f<=2011.01.01.12.30").build();
+		sa = SearchArgs.create().search("f<=2011.01.01.12.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2011-01-01T12:30:59'}]", s.serialize(results));
 
@@ -195,7 +195,7 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=2001 - 2003.06.30").build();
+		sa = SearchArgs.create().search("f=2001 - 2003.06.30").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]", s.serialize(results));
 
@@ -209,7 +209,7 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=2001 2003 2005").build();
+		sa = SearchArgs.create().search("f=2001 2003 2005").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2001-01-01T00:00:00'},{f:'2001-12-31T00:00:00'}]", s.serialize(results));
 
@@ -221,7 +221,7 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=2001 2003 2005").build();
+		sa = SearchArgs.create().search("f=2001 2003 2005").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2003-01-01T00:00:00'},{f:'2003-12-31T00:00:00'}]", s.serialize(results));
 
@@ -233,7 +233,7 @@ public class PojoQueryTest {
 		};
 		q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=2001 2003 2005").build();
+		sa = SearchArgs.create().search("f=2001 2003 2005").build();
 		results = q.filter(sa);
 		assertEquals("[{f:'2005-01-01T00:00:00'},{f:'2005-12-31T00:00:00'}]", s.serialize(results));
 	}
@@ -265,27 +265,27 @@ public class PojoQueryTest {
 
 		PojoQuery q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().search("f=1").build();
+		sa = SearchArgs.create().search("f=1").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:1}]");
 
-		sa = SearchArgs.builder().search("f>1").build();
+		sa = SearchArgs.create().search("f>1").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:2},{f:3}]");
 
-		sa = SearchArgs.builder().search("f>=2").build();
+		sa = SearchArgs.create().search("f>=2").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:2},{f:3}]");
 
-		sa = SearchArgs.builder().search("f<=2").build();
+		sa = SearchArgs.create().search("f<=2").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:1},{f:2}]");
 
-		sa = SearchArgs.builder().search("f<2").build();
+		sa = SearchArgs.create().search("f<2").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:1}]");
 
-		sa = SearchArgs.builder().search("f=1 3").build();
+		sa = SearchArgs.create().search("f=1 3").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f:1},{f:3}]");
 	}
@@ -313,19 +313,19 @@ public class PojoQueryTest {
 
 		PojoQuery q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().view("f1").build();
+		sa = SearchArgs.create().view("f1").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]");
 
-		sa = SearchArgs.builder().view("f2").build();
+		sa = SearchArgs.create().view("f2").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f2:1},{f2:2},{f2:3}]");
 
-		sa = SearchArgs.builder().view("f3").build();
+		sa = SearchArgs.create().view("f3").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f3:true},{f3:false},{f3:true}]");
 
-		sa = SearchArgs.builder().view("f3,f2,f1").build();
+		sa = SearchArgs.create().view("f3,f2,f1").build();
 		results = q.filter(sa);
 		assertObject(results).asJson().is("[{f3:true,f2:1,f1:'foo'},{f3:false,f2:2,f1:'bar'},{f3:true,f2:3,f1:'baz'}]");
 	}
@@ -363,39 +363,39 @@ public class PojoQueryTest {
 
 		PojoQuery q = new PojoQuery(in, session);
 
-		sa = SearchArgs.builder().sort("f2").view("f1, f2").build();
+		sa = SearchArgs.create().sort("f2").view("f1, f2").build();
 		results = q.filter(sa);
 		assertEquals("[{f1:2,f2:'bar'},{f1:3,f2:'baz'},{f1:1,f2:'foo'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f2-").view("f1,f2").build();
+		sa = SearchArgs.create().sort("f2-").view("f1,f2").build();
 		results = q.filter(sa);
 		assertEquals("[{f1:1,f2:'foo'},{f1:3,f2:'baz'},{f1:2,f2:'bar'}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f3").view("f1,f3").build();
+		sa = SearchArgs.create().sort("f3").view("f1,f3").build();
 		results = q.filter(sa);
 		assertEquals("[{f1:2,f3:false},{f1:1,f3:true},{f1:3,f3:true}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f3,f1+").view("f1,f3").build();
+		sa = SearchArgs.create().sort("f3,f1+").view("f1,f3").build();
 		results = q.filter(sa);
 		assertEquals("[{f1:2,f3:false},{f1:1,f3:true},{f1:3,f3:true}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f3,f1-").view("f1,f3").build();
+		sa = SearchArgs.create().sort("f3,f1-").view("f1,f3").build();
 		results = q.filter(sa);
 		assertEquals("[{f1:2,f3:false},{f1:3,f3:true},{f1:1,f3:true}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f1").view("f1").limit(1).position(0).build();
+		sa = SearchArgs.create().sort("f1").view("f1").limit(1).position(0).build();
 		results = q.filter(sa);
 		assertEquals("[{f1:1}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f1").view("f1").limit(3).position(0).build();
+		sa = SearchArgs.create().sort("f1").view("f1").limit(3).position(0).build();
 		results = q.filter(sa);
 		assertEquals("[{f1:1},{f1:2},{f1:3}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f1").view("f1").limit(1).position(2).build();
+		sa = SearchArgs.create().sort("f1").view("f1").limit(1).position(2).build();
 		results = q.filter(sa);
 		assertEquals("[{f1:3}]", s.serialize(results));
 
-		sa = SearchArgs.builder().sort("f1").view("f1").limit(100).position(2).build();
+		sa = SearchArgs.create().sort("f1").view("f1").limit(100).position(2).build();
 		results = q.filter(sa);
 		assertEquals("[{f1:3}]", s.serialize(results));
 	}

@@ -35,12 +35,12 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public ConfigClasspathStoreBuilder(ContextProperties cp) {
-		super(cp);
+	public ConfigClasspathStoreBuilder(ConfigClasspathStore copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

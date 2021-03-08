@@ -38,12 +38,12 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public HtmlStrippedDocSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public HtmlStrippedDocSerializerBuilder(HtmlStrippedDocSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

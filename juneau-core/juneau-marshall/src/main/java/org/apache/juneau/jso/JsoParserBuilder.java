@@ -37,12 +37,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public JsoParserBuilder(ContextProperties cp) {
-		super(cp);
+	public JsoParserBuilder(JsoParser copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

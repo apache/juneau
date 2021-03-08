@@ -1552,7 +1552,7 @@ public class ContextPropertiesTest {
 
 		b.set("A.foo", "bar");
 		ContextProperties cp = b.build();
-		b = cp.builder();
+		b = cp.copy();
 		assertObject(b.build()).asJson().is("{A:{foo:'bar'}}");
 	}
 
@@ -1692,7 +1692,7 @@ public class ContextPropertiesTest {
 		b.set("A.foo.smo/put.foo", StringBuilder.class);
 		ContextProperties cp = b.build();
 
-		b = cp.builder();
+		b = cp.copy();
 		cp = b.build();
 
 		assertObject(cp).asJson().is("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.smc':{foo:'java.lang.String'},'foo.smi':{foo:123},'foo.smo':{foo:'java.lang.StringBuilder'},'foo.sms':{foo:'bar'},'foo.ss':['bar']}}");

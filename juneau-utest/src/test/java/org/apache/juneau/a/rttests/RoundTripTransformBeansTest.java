@@ -286,7 +286,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypeWithGenerics() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+		JsonSerializer s = JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
 		C1 c1 = C3.create();
 		String r = s.serialize(c1);
@@ -434,8 +434,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSurrogatesThroughAnnotation_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(E1cConfig.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(E1cConfig.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
+		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		Object r;
 		E1c x = E1c.create();
 
@@ -546,8 +546,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(F1cConfig.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(F1cConfig.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
+		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
 
 		F1c x = F1c.create();
 		String r = null;
@@ -630,8 +630,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField_Inherited_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(F2ac.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(F2ac.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(F2ac.class).build();
+		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(F2ac.class).build();
 
 		F2 x = F2.create();
 		String r = null;

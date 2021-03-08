@@ -117,7 +117,8 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpExceptionBuilder<RangeNotSatisfiable> builder() {
-		return super.builder(RangeNotSatisfiable.class).copyFrom(this);
+	@Override /* BasicHttpException */
+	public HttpExceptionBuilder<RangeNotSatisfiable> copy() {
+		return new HttpExceptionBuilder<>(this);
 	}
 }

@@ -513,7 +513,7 @@ public class UonParserTest {
 	//====================================================================================================
 	@Test
 	public void testStreamsAutoClose() throws Exception {
-		ReaderParser p = UonParser.DEFAULT.builder().autoCloseStreams().build();
+		ReaderParser p = UonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
 

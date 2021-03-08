@@ -86,8 +86,8 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	}
 
 	@Override /* Context */
-	public SoapXmlSerializerBuilder builder() {
-		return new SoapXmlSerializerBuilder(getContextProperties());
+	public SoapXmlSerializerBuilder copy() {
+		return new SoapXmlSerializerBuilder(this);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	 * This is equivalent to simply calling <code><jk>new</jk> SoapXmlSerializerBuilder()</code>.
 	 *
 	 * <p>
-	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies
 	 * the settings of the object called on.
 	 *
 	 * @return A new {@link SoapXmlSerializerBuilder} object.

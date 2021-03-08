@@ -37,12 +37,12 @@ public class SimpleJsonSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public SimpleJsonSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public SimpleJsonSerializerBuilder(SimpleJsonSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

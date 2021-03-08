@@ -40,12 +40,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public UonSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public UonSerializerBuilder(UonSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

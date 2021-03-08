@@ -44,12 +44,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param cp The initial configuration settings for this builder.
+	 * @param copyFrom The bean to copy from.
 	 */
-	public RdfSerializerBuilder(ContextProperties cp) {
-		super(cp);
+	public RdfSerializerBuilder(RdfSerializer copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override /* ContextBuilder */

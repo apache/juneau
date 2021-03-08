@@ -71,7 +71,7 @@ public abstract class ComboSerializeTest {
 
 			OMap properties = comboInput.properties;
 			if (properties != null) {
-				s = s.builder().add(properties).build();
+				s = s.copy().add(properties).build();
 			}
 
 			boolean isRdf = s instanceof RdfSerializer;

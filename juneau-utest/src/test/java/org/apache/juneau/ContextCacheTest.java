@@ -119,10 +119,10 @@ public class ContextCacheTest {
 		assertTrue(b.getContextProperties() == b2.getContextProperties());
 		assertTrue(c.getContextProperties() == c2.getContextProperties());
 
-		a2 = ContextCache.INSTANCE.create(A.class, a.getContextProperties().builder().set("A.f1", "foo").build());
+		a2 = ContextCache.INSTANCE.create(A.class, a.getContextProperties().copy().set("A.f1", "foo").build());
 		assertTrue(a == a2);
 
-		a2 = ContextCache.INSTANCE.create(A.class, a.getContextProperties().builder().set("A.f1", "bar").build());
+		a2 = ContextCache.INSTANCE.create(A.class, a.getContextProperties().copy().set("A.f1", "bar").build());
 		assertTrue(a != a2);
 	}
 
