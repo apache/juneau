@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -57,7 +56,7 @@ public final class ArrayUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] append(T[] array, Collection<T> newElements) {
-		assertFieldNotNull(array, "array");
+		assertArgNotNull("array", array);
 		if (newElements.size() == 0)
 			return array;
 		T[] a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.size());
@@ -77,7 +76,7 @@ public final class ArrayUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] combine(T[]...arrays) {
-		assertFieldNotNull(arrays, "arrays");
+		assertArgNotNull("arrays", arrays);
 		int l = 0;
 		T[] a1 = null;
 		for (T[] a : arrays) {
@@ -143,7 +142,7 @@ public final class ArrayUtils {
 	 * @return The new set.
 	 */
 	public static <T> Set<T> asSet(final T[] array) {
-		assertFieldNotNull(array, "array");
+		assertArgNotNull("array", array);
 		return new AbstractSet<T>() {
 
 			@Override /* Set */

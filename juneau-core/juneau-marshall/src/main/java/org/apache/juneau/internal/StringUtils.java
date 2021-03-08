@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
@@ -2471,7 +2472,7 @@ public final class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static int parseIntWithSuffix(String s) {
-		assertFieldNotNull(s, "s");
+		assertArgNotNull("s", s);
 		int m = 1;
 		if (s.endsWith("G")) {
 			m = 1024*1024*1024;
@@ -2501,7 +2502,7 @@ public final class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static long parseLongWithSuffix(String s) {
-		assertFieldNotNull(s, "s");
+		assertArgNotNull("s", s);
 		int m = 1;
 		if (s.endsWith("G")) {
 			m = 1024*1024*1024;

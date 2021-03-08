@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -103,13 +102,13 @@ public abstract class ComboSerializeTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		}
 	}
 

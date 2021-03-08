@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.util.*;
 
 /**
@@ -44,7 +43,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * @return This object (for method chaining).
 	 */
 	public MultiSet<E> append(Collection<E> c) {
-		assertFieldNotNull(c, "c");
+		assertArgNotNull("c", c);
 		l.add(c);
 		return this;
 	}

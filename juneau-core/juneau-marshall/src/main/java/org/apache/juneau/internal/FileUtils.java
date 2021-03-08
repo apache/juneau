@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -34,7 +34,7 @@ public class FileUtils {
 	 * @throws RuntimeException if directory could not be created.
 	 */
 	public static File mkdirs(File f, boolean clean) {
-		assertFieldNotNull(f, "f");
+		assertArgNotNull("f", f);
 		if (f.exists()) {
 			if (clean) {
 				if (! delete(f))
@@ -56,7 +56,7 @@ public class FileUtils {
 	 * @return The directory.
 	 */
 	public static File mkdirs(String path, boolean clean) {
-		assertFieldNotNull(path, "path");
+		assertArgNotNull("path", path);
 		return mkdirs(new File(path), clean);
 	}
 

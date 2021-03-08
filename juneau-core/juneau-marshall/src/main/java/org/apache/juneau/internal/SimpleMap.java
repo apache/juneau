@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
@@ -49,8 +50,8 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SimpleMap(K[] keys, V[] values) {
-		assertFieldNotNull(keys, "keys");
-		assertFieldNotNull(values, "values");
+		assertArgNotNull("keys", keys);
+		assertArgNotNull("values", values);
 		if (keys.length != values.length)
 			illegalArg("keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 

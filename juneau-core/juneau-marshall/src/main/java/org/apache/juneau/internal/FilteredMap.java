@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -38,8 +37,8 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
 	public FilteredMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
-		assertFieldNotNull(innerMap, "innerMap");
-		assertFieldNotNull(keys, "keys");
+		assertArgNotNull("innerMap", innerMap);
+		assertArgNotNull("keys", keys);
 
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;

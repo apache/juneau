@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.util.*;
 
 /**
@@ -43,7 +42,7 @@ public class MultiIterable<E> implements Iterable<E> {
 	 * @return This object (for method chaining).
 	 */
 	public MultiIterable<E> append(Iterator<E> iterator) {
-		assertFieldNotNull(iterator, "iterator");
+		assertArgNotNull("iterator", iterator);
 		this.iterators.add(iterator);
 		return this;
 	}

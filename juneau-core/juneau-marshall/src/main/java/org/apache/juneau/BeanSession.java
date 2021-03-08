@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -829,8 +830,8 @@ public class BeanSession extends Session {
 	 * class.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
-		assertFieldNotNull(o, "o");
-		assertFieldNotNull(c, "c");
+		assertArgNotNull("o", o);
+		assertArgNotNull("c", c);
 
 		if (! c.isInstance(o))
 			illegalArg("The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", c.getName(), o.getClass().getName(), 0);
@@ -1014,7 +1015,7 @@ public class BeanSession extends Session {
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
-		assertFieldNotNull(classes, "classes");
+		assertArgNotNull("classes", classes);
 		ClassMeta[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)
 			cm[i] = getClassMeta(classes[i]);

@@ -15,8 +15,6 @@ package org.apache.juneau;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -123,14 +121,14 @@ public abstract class ComboRoundTripTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 
 			}
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		}
 	}
 
@@ -167,13 +165,13 @@ public abstract class ComboRoundTripTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		} catch (Throwable e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		}
 	}
 
@@ -198,13 +196,13 @@ public abstract class ComboRoundTripTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		}
 	}
 
@@ -229,13 +227,13 @@ public abstract class ComboRoundTripTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
+			assertThrowable(e).contains(comboInput.exceptionMsg);
 		}
 	}
 

@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.beans.*;
@@ -572,7 +572,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public Config set(String key, String value) {
 		checkWrite();
-		assertFieldNotNull(key, "key");
+		assertArgNotNull("key", key);
 		String sname = sname(key);
 		String skey = skey(key);
 
@@ -679,7 +679,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
-		assertFieldNotNull(key, "key");
+		assertArgNotNull("key", key);
 		String sname = sname(key);
 		String skey = skey(key);
 
@@ -1117,7 +1117,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException {
-		assertFieldNotNull(type, "type");
+		assertArgNotNull("type", type);
 		return parse(getString(key), parser, type, args);
 	}
 
@@ -1172,7 +1172,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException {
-		assertFieldNotNull(type, "c");
+		assertArgNotNull("c", type);
 		return parse(getString(key), parser, type);
 	}
 
@@ -1206,7 +1206,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException {
-		assertFieldNotNull(type, "c");
+		assertArgNotNull("type", type);
 		T t = parse(getString(key), parser, type);
 		return (t == null ? def : t);
 	}
@@ -1253,7 +1253,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException {
-		assertFieldNotNull(type, "type");
+		assertArgNotNull("type", type);
 		T t = parse(getString(key), parser, type, args);
 		return (t == null ? def : t);
 	}
@@ -1335,7 +1335,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		checkWrite();
-		assertFieldNotNull(bean, "bean");
+		assertArgNotNull("bean", bean);
 		section = section(section);
 
 		Set<String> keys = configMap.getKeys(section);
@@ -1414,7 +1414,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		assertFieldNotNull(c, "c");
+		assertArgNotNull("c", c);
 		section = section(section);
 
 		if (! configMap.hasSection(section))
@@ -1534,7 +1534,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getSectionAsInterface(String section, final Class<T> c) {
-		assertFieldNotNull(c, "c");
+		assertArgNotNull("c", c);
 		final String section2 = section(section);
 
 		if (! c.isInterface())
@@ -1958,7 +1958,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	private String sname(String key) {
-		assertFieldNotNull(key, "key");
+		assertArgNotNull("key", key);
 		int i = key.indexOf('/');
 		if (i == -1)
 			return "";
@@ -1973,7 +1973,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	private String section(String section) {
-		assertFieldNotNull(section, "section");
+		assertArgNotNull("section", section);
 		if (isEmpty(section))
 			return "";
 		return section;
