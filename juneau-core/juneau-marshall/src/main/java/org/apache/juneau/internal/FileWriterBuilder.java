@@ -22,7 +22,7 @@ public final class FileWriterBuilder {
 
 	private File file;
 	private Charset cs = Charset.defaultCharset();
-	private boolean append;
+	private boolean append, buffered;
 
 	/**
 	 * Creates a new builder.
@@ -112,12 +112,25 @@ public final class FileWriterBuilder {
 	}
 
 	/**
+	 * Sets the buffer mode on the writer to <jk>true</jk>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public FileWriterBuilder buffered() {
+		this.buffered = true;
+		return this;
+	}
+
+	/**
 	 * Creates a new File writer.
 	 *
 	 * @return A new File writer.
 	 * @throws FileNotFoundException If file could not be found.
 	 */
 	public Writer build() throws FileNotFoundException {
-		return new OutputStreamWriter(new FileOutputStream(file, append), cs);
+		OutputStream os = new FileOutputStream(file, append);
+		if (buffered)
+			os = new BufferedOutputStream(os);
+		return new OutputStreamWriter(os, cs);
 	}
 }

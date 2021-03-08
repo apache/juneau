@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 /**
  * Various I/O related utility methods.
@@ -31,6 +32,20 @@ public final class IOUtils {
 			return -1;  // end of stream
 		}
 	};
+
+	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
+	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
+
+	static final AtomicInteger cacheHits = new AtomicInteger();
+
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				System.out.println("I/O buffer cache hits: " + cacheHits.get());
+			}
+		});
+	}
 
 	/** Reusable empty reader. */
 	public static final Reader EMPTY_READER = new Reader() {
@@ -69,7 +84,7 @@ public final class IOUtils {
 	public static long pipe(Reader in, File out) throws IOException {
 		if (out == null || in == null)
 			return 0;
-		try (Writer w = FileWriterBuilder.create(out).build()) {
+		try (Writer w = FileWriterBuilder.create(out).buffered().build()) {
 			return pipe(in, w);
 		}
 	}
@@ -94,7 +109,7 @@ public final class IOUtils {
 			return 0;
 		long total = 0;
 		try (Reader in2 = in) {
-			char[] buffer = new char[buffSize(-1)];
+			char[] buffer = charBuffer(-1);
 			int readLen;
 			while ((readLen = in.read(buffer)) != -1) {
 				out.write(buffer, 0, readLen);
@@ -209,7 +224,7 @@ public final class IOUtils {
 	public static long pipe(InputStream in, OutputStream out, long maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		byte[] buffer = new byte[buffSize(maxBytes)];
+		byte[] buffer = byteBuffer((int)maxBytes);
 		int readLen;
 		long total = 0;
 		if (maxBytes < 0) {
@@ -253,7 +268,7 @@ public final class IOUtils {
 		try (Reader in2 = in) {
 			OutputStreamWriter osw = new OutputStreamWriter(out, UTF8);
 			int i;
-			char[] b = new char[BUFF_SIZE];
+			char[] b = charBuffer(-1);
 			while ((i = in.read(b)) > 0) {
 				total += i;
 				osw.write(b, 0, i);
@@ -373,7 +388,7 @@ public final class IOUtils {
 			return null;
 		try (Reader in2 = in) {
 			StringBuilder sb = new StringBuilder(buffSize(expectedLength)); // Assume they're ASCII characters.
-			char[] buf = new char[buffSize(expectedLength)];
+			char[] buf = charBuffer((int)expectedLength);
 			int i = 0;
 			while ((i = in2.read(buf)) != -1)
 				sb.append(buf, 0, i);
@@ -421,39 +436,6 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Shortcut for calling <c>readBytes(in, 1024);</c>
-	 *
-	 * @param in
-	 * 	The object to read into a byte array.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link File}
-	 * 	</ul>
-	 * @return The contents of the stream as a byte array.
-	 * @throws IOException Thrown by underlying stream or if object is not a supported type.
-	 */
-	@Deprecated
-	public static byte[] readBytes(Object in) throws IOException {
-		if (in == null)
-			return new byte[0];
-		if (in instanceof byte[])
-			return (byte[])in;
-		if (in instanceof CharSequence)
-			return in.toString().getBytes(UTF8);
-		if (in instanceof InputStream)
-			return readBytes((InputStream)in);
-		if (in instanceof Reader)
-			return read((Reader)in, 0).getBytes(UTF8);
-		if (in instanceof File)
-			return readBytes((File)in);
-		throw new IOException("Cannot convert object of type '"+in.getClass().getName()+"' to a byte array.");
-	}
-
-	/**
 	 * Reads the specified input stream into the specified byte array.
 	 *
 	 * @param in
@@ -486,7 +468,7 @@ public final class IOUtils {
 			return new byte[0];
 		ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize(maxBytes));
 		int nRead;
-		byte[] b = new byte[buffSize(maxBytes)];
+		byte[] b = byteBuffer(maxBytes);
 		while ((nRead = in.read(b, 0, b.length)) != -1)
 			buff.write(b, 0, nRead);
 		buff.flush();
@@ -763,6 +745,34 @@ public final class IOUtils {
 			}
 		}
 		return null;
+	}
+
+	private static final byte[] byteBuffer(int maxBytes) {
+		if (BYTE_BUFFER_CACHE != null) {
+			byte[] x = BYTE_BUFFER_CACHE.get();
+			if (x == null) {
+				 x = new byte[BUFF_SIZE];
+				 BYTE_BUFFER_CACHE.set(x);
+			} else {
+				cacheHits.incrementAndGet();
+			}
+			return x;
+		}
+		return new byte[buffSize(maxBytes)];
+	}
+
+	private static final char[] charBuffer(int maxChars) {
+		if (CHAR_BUFFER_CACHE != null) {
+			char[] x = CHAR_BUFFER_CACHE.get();
+			if (x == null) {
+				 x = new char[BUFF_SIZE];
+				 CHAR_BUFFER_CACHE.set(x);
+			} else {
+				cacheHits.incrementAndGet();
+			}
+			return x;
+		}
+		return new char[buffSize(maxChars)];
 	}
 
 	private static final int buffSize(long max) {
