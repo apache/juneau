@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.util.*;
 
@@ -84,9 +85,9 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<?> copyFrom(HttpResponse response) {
-		Header h = response.getLastHeader("Exception-Message");
+		Header h = response.getLastHeader("Thrown");
 		if (h != null)
-			message(h.getValue());
+			message(thrown(h.getValue()).message().orElse(null));
 		headers(response.getAllHeaders());
 		body(response.getEntity());
 		return this;

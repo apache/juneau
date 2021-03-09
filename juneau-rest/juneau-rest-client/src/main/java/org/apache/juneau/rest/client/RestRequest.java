@@ -2940,10 +2940,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			String method = getMethod();
 			int sc = response.getStatusCode();
 
-			if (response.containsHeader("Exception-Name") && rethrow != null) {
-				String exceptionName = response.getStringHeader("Exception-Name").orElse(null);
+			Thrown thrown = response.getHeader("Thrown").asHeader(Thrown.class);
+			if (thrown.isPresent() && rethrow != null) {
+				String className = thrown.className().orElse(null);
 				for (Class<? extends Throwable> t : rethrow) {
-					if (t.getName().equals(exceptionName)) {
+					if (t.getName().equals(className)) {
 						ConstructorInfo c = null;
 						ClassInfo ci = ClassInfo.of(t);
 						c = ci.getPublicConstructor(HttpResponse.class);
@@ -2951,10 +2952,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 							throw c.<Throwable>invoke(response);
 						c = ci.getPublicConstructor(String.class);
 						if (c != null)
-							throw c.<Throwable>invoke(response.getStringHeader("Exception-Message").orElse(response.getBody().asString()));
+							throw c.<Throwable>invoke(thrown.message().orElse(response.getBody().asString()));
 						c = ci.getPublicConstructor(String.class,Throwable.class);
 						if (c != null)
-							throw c.<Throwable>invoke(response.getStringHeader("Exception-Message").orElse(response.getBody().asString()), null);
+							throw c.<Throwable>invoke(thrown.message().orElse(response.getBody().asString()), null);
 						c = ci.getPublicConstructor();
 						if (c != null)
 							throw c.<Throwable>invoke();

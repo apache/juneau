@@ -209,21 +209,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The header value, never <jk>null</jk>
 	 */
 	public Optional<String> getStringHeader(String name) {
-		return getResponseHeader(name).asString();
-	}
-
-	/**
-	 * Returns the last header with the specified name.
-	 *
-	 * Unlike {@link #getFirstHeader(String)} and {@link #getLastHeader(String)}, this method returns an empty
-	 * {@link ResponseHeader} object instead of returning <jk>null</jk>.  This allows it to be used more easily
-	 * in fluent calls.
-	 *
-	 * @param name The header name.
-	 * @return The header.  Never <jk>null</jk>.
-	 */
-	public ResponseHeader getResponseHeader(String name) {
-		return new ResponseHeader(request, this, getLastHeader(name)).parser(partParser);
+		return getHeader(name).asString();
 	}
 
 	/**
@@ -250,7 +236,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public Optional<ContentType> getContentType() throws RestCallException {
-		return getResponseHeader("Content-Type").asType(ContentType.class);
+		return getHeader("Content-Type").asType(ContentType.class);
 	}
 
 	/**
@@ -330,7 +316,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentResponseHeaderAssertion<RestResponse> assertHeader(String name) {
-		return new FluentResponseHeaderAssertion<>(getLastHeader(name), this);
+		return new FluentResponseHeaderAssertion<>(getHeader(name), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -450,7 +436,7 @@ public class RestResponse implements HttpResponse {
 					String name = pm.getPartName().orElse(null);
 					ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
 					if (pt == RESPONSE_HEADER)
-						return getResponseHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
+						return getHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
 					if (pt == RESPONSE_STATUS)
 						return getStatusCode();
 					return getBody().schema(schema).asType(type);
@@ -672,8 +658,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
-		Header h = response.getFirstHeader(name);
-		return new ResponseHeader(request, this, h).parser(partParser);
+		return new ResponseHeader(request, this, response.getFirstHeader(name)).parser(partParser);
 	}
 
 	/**
@@ -689,8 +674,17 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
-		Header h = response.getLastHeader(name);
-		return new ResponseHeader(request, this, h).parser(partParser);
+		return new ResponseHeader(request, this, response.getLastHeader(name)).parser(partParser);
+	}
+
+	/**
+	 * A synonym for {@link #getLastHeader(String)}.
+	 *
+	 * @param name The name of the header to return.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	public ResponseHeader getHeader(String name) {
+		return getLastHeader(name);
 	}
 
 	/**

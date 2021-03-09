@@ -6892,8 +6892,8 @@ public class RestContext extends BeanContext {
 		if (t == null)
 			t = e2.getRootCause();
 		if (t != null) {
-			res.setHeader("Exception-Name", stripInvalidHttpHeaderChars(t.getClass().getName()));
-			res.setHeader("Exception-Message", stripInvalidHttpHeaderChars(t.getMessage()));
+			Thrown t2 = thrown(t);
+			res.setHeader(t2.getName(), t2.getValue());
 		}
 
 		try {

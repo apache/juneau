@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
 
 import org.apache.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -26,7 +27,8 @@ public final class RestCallException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 
-	private RestResponse response;
+	private final RestResponse response;
+	private final Thrown thrown;
 
 	/**
 	 * Constructor.
@@ -39,24 +41,16 @@ public final class RestCallException extends HttpException {
 	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
 		super(format(message,args),cause);
 		this.response = response;
+		this.thrown = response == null ? Thrown.EMPTY : response.getHeader("Thrown").asHeader(Thrown.class);
 	}
 
 	/**
-	 * Returns the value of the <js>"Exception-Name"</js> header on the response.
+	 * Returns the value of the <js>"Thrown"</js> header on the response.
 	 *
-	 * @return The value of the <js>"Exception-Name"</js> header on the response, or <jk>null</jk> if not found.
+	 * @return The value of the <js>"Thrown"</js> header on the response, never <jk>null</jk>.
 	 */
-	public String getServerExceptionName() {
-		return response == null ? null : response.getStringHeader("Exception-Name").orElse(null);
-	}
-
-	/**
-	 * Returns the value of the <js>"Exception-Message"</js> header on the response.
-	 *
-	 * @return The value of the <js>"Exception-Message"</js> header on the response, or <jk>null</jk> if not found.
-	 */
-	public String getServerExceptionMessage() {
-		return response == null ? null : response.getStringHeader("Exception-Message").orElse(null);
+	public Thrown getThrown() {
+		return thrown;
 	}
 
 	/**

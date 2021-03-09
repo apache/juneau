@@ -68,8 +68,8 @@ public class RestCallException_Test {
 		}
 
 		RestCallException e = new RestCallException(null, null, null);
-		assertNull(e.getServerExceptionMessage());
-		assertNull(e.getServerExceptionName());
+		assertNotNull(e.getThrown());
+		assertFalse(e.getThrown().isPresent());
 		assertEquals(0, e.getResponseCode());
 	}
 

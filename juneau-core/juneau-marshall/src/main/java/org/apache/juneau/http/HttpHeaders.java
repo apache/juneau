@@ -2036,6 +2036,28 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link Thrown} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static final Thrown thrown(Throwable value) {
+		return Thrown.of(value);
+	}
+
+	/**
+	 * Creates a new {@link Thrown} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static final Thrown thrown(String value) {
+		return Thrown.of(value);
+	}
+
+	/**
 	 * Creates a new {@link Trailer} header.
 	 *
 	 * @param value The header value.

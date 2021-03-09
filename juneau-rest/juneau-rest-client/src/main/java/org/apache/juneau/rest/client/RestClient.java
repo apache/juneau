@@ -577,7 +577,6 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponse#getResponseHeader(String) getHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
  * 		<li class='jm'><c>{@link RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link ResponseHeader}[]</c>
  * 		<li class='jm'><c>{@link RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
  * 		<li class='jm'><c>{@link RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link ResponseHeader}</c>
@@ -588,14 +587,13 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <p class='w900'>
- * Unlike {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)}, the {@link RestResponse#getResponseHeader(String)}
- * method returns an empty {@link ResponseHeader} object instead of returning <jk>null</jk>.
+ * The {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)} methods return an empty {@link ResponseHeader} object instead of<jk>null</jk>.
  * This allows it to be used more easily in fluent calls.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// See if response contains Location header.</jc>
- * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = client.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
+ * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = client.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
  * </p>
  *
  * <p class='w900'>

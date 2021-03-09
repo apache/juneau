@@ -52,8 +52,8 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void a01_exists() throws Exception {
-		assertFalse(checkFooClient().build().get("/echo").run().getResponseHeader("Foo").isPresent());
-		assertTrue(checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").isPresent());
+		assertFalse(checkFooClient().build().get("/echo").run().getHeader("Foo").isPresent());
+		assertTrue(checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").isPresent());
 	}
 
 	public static class A2 extends BasicHeader {
@@ -66,95 +66,95 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void a02_asHeader() throws Exception {
-		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertValue().is("bar");
+		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertValue().is("bar");
 		assertTrue(h instanceof BasicStringHeader);
 
-		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getResponseHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("\"bar\"");
+		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asHeader(Age.class)).contains("Value could not be parsed");
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asHeader(A2.class)).contains("Could not determine a method to construct type");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).contains("Value could not be parsed");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).contains("Could not determine a method to construct type");
 
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","*").run().getResponseHeader("Foo").asEntityTagArrayHeader().assertName().is("Foo").assertValue().is("*");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asStringRangeArrayHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asStringHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asUriHeader().assertName().is("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagArrayHeader().assertName().is("Foo").assertValue().is("*");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringRangeArrayHeader().assertName().is("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringHeader().assertName().is("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asUriHeader().assertName().is("Foo").assertValue().is("bar");
 	}
 
 	@Test
 	public void a03_asString() throws Exception {
-		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString().orElse(null);
+		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
 		Mutable<String> m = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString(m);
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString(m);
 		assertEquals("bar", m.get());
 
-		Optional<String> o = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString();
+		Optional<String> o = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString();
 		assertEquals("bar", o.get());
-		o = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asString();
+		o = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").asString();
 		assertFalse(o.isPresent());
 
-		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").asString().orElse("baz");
+		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse("baz");
 		assertEquals("bar", s);
-		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").asString().orElse("baz");
+		s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").asString().orElse("baz");
 		assertEquals("baz", s);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void a04_asType() throws Exception {
-		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").asType(Integer.class).orElse(null);
+		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").asType(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
 		Mutable<Integer> m1 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").asType(m1,Integer.class);
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").asType(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
-		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asType(LinkedList.class,Integer.class).get();
+		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(LinkedList.class,Integer.class).get();
 		assertObject(l).asJson().is("[1,2]");
 
 		Mutable<Integer> m2 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asType(m2,LinkedList.class,Integer.class);
+		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m2,LinkedList.class,Integer.class);
 
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
 		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
 
-		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asType(cm1).get();
+		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(cm1).get();
 		assertObject(l).asJson().is("[1,2]");
 
 		Mutable<LinkedList<Integer>> m3 = Mutable.create();
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asType(m3,cm1);
+		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m3,cm1);
 		assertObject(m3.get()).asJson().is("[1,2]");
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asType(m2,cm1)).contains("Invalid number");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asType(m2,cm1)).contains("Invalid number");
 
-		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Foo").asType(LinkedList.class,Integer.class);
+		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(LinkedList.class,Integer.class);
 		assertObject(o1.get()).asJson().is("[1,2]");
-		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getResponseHeader("Bar").asType(LinkedList.class,Integer.class);
+		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").asType(LinkedList.class,Integer.class);
 		assertFalse(o1.isPresent());
 
-		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").asType(Integer.class);
+		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").asType(Integer.class);
 		assertEquals(1, o2.get().intValue());
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Bar").asType(Integer.class);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").asType(Integer.class);
 		assertFalse(o2.isPresent());
 
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Foo").asType(cm2);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").asType(cm2);
 		assertEquals(1, o2.get().intValue());
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getResponseHeader("Bar").asType(cm2);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").asType(cm2);
 		assertFalse(o2.isPresent());
 
-		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher("foo").matches());
-		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher("foo").matches());
-		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Foo").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
-		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getResponseHeader("Bar").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
+		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asMatcher("foo").matches());
+		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Bar").asMatcher("foo").matches());
+		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
+		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Bar").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
 	}
 
 	@Test
 	public void a05_toResponse() throws Exception {
 		RestResponse r = checkFooClient().build().get("/echo").header("Foo","123").run();
-		assertTrue(r == r.getResponseHeader("Foo").response());
+		assertTrue(r == r.getHeader("Foo").response());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -163,14 +163,14 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void b01_assertions() throws Exception {
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getResponseHeader("Bar").assertValue().doesNotExist();
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertValue().asInteger().is(123);
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertValue().doesNotExist();
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Foo").assertValue().asLong().is(123l);
-		checkFooClient().build().get("/echo").header("Foo","123").run().getResponseHeader("Bar").assertValue().asLong().doesNotExist();
-		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getResponseHeader("Foo").assertValue().asDate().exists();
-		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getResponseHeader("Bar").assertValue().asDate().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").assertValue().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asInteger().is(123);
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asLong().is(123l);
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().asLong().doesNotExist();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getHeader("Foo").assertValue().asDate().exists();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getHeader("Bar").assertValue().asDate().doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -179,12 +179,12 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void c01_getElements() throws Exception {
-		HeaderElement[] e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getResponseHeader("Foo").getElements();
+		HeaderElement[] e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getHeader("Foo").getElements();
 		assertEquals("bar", e[0].getName());
 		assertEquals("baz", e[0].getValue());
 		assertEquals("quux", e[0].getParameterByName("qux").getValue());
 
-		e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getResponseHeader("Bar").getElements();
+		e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getHeader("Bar").getElements();
 		assertEquals(0, e.length);
 	}
 

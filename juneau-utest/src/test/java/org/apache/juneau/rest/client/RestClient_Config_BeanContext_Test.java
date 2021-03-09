@@ -107,7 +107,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("1")
 			.assertHeader("X").is("1");
 		assertEquals(1,x.getBody().asType(A2a.class).f);
-		assertEquals(1,x.getResponseHeader("X").asType(A2a.class).get().f);
+		assertEquals(1,x.getHeader("X").asType(A2a.class).get().f);
 	}
 
 	public static class A3 {
@@ -137,7 +137,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals(2,x.getBody().asType(A3.class).f2);
-		assertEquals(2,x.getResponseHeader("X").asType(A3.class).get().f2);
+		assertEquals(2,x.getHeader("X").asType(A3.class).get().f2);
 	}
 
 	public static interface A4a {
@@ -182,7 +182,7 @@ public class RestClient_Config_BeanContext_Test {
 			.is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().asType(A4b.class).f2);
-		assertEquals(0,x.getResponseHeader("X").asType(A4b.class).get().f2);
+		assertEquals(0,x.getHeader("X").asType(A4b.class).get().f2);
 
 		x = client(A2b.class)
 			.beanProperties(A4b.class,"f1")
@@ -194,7 +194,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().asType(A4b.class).f2);
-		assertEquals(0,x.getResponseHeader("X").asType(A4b.class).get().f2);
+		assertEquals(0,x.getHeader("X").asType(A4b.class).get().f2);
 
 		x = client(A2b.class)
 			.beanProperties(A4b.class,"f1")
@@ -206,7 +206,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().asType(A4b.class).f2);
-		assertEquals(0,x.getResponseHeader("X").asType(A4b.class).get().f2);
+		assertEquals(0,x.getHeader("X").asType(A4b.class).get().f2);
 
 		x = client(A2b.class)
 			.beanProperties(A4b.class,"f1")
@@ -218,7 +218,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals(0,x.getBody().asType(A4b.class).f2);
-		assertEquals(0,x.getResponseHeader("X").asType(A4b.class).get().f2);
+		assertEquals(0,x.getHeader("X").asType(A4b.class).get().f2);
 
 		x = client(A2b.class)
 			.interfaces(A4a.class)
@@ -230,7 +230,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f3:3}")
 			.assertHeader("X").is("f3=3");
 		assertEquals(3,x.getBody().asType(A4b.class).f3);
-		assertEquals(3,x.getResponseHeader("X").asType(A4b.class).get().f3);
+		assertEquals(3,x.getHeader("X").asType(A4b.class).get().f3);
 	}
 
 	public static class A5  {
@@ -271,7 +271,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals(2,x.getBody().asType(A5.class).f2);
-		assertEquals(2,x.getResponseHeader("X").asType(A5.class).get().f2);
+		assertEquals(2,x.getHeader("X").asType(A5.class).get().f2);
 	}
 
 	public static class A6 {}
@@ -422,7 +422,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().asType(A9.class).toString());
-		assertEquals("1/0",x.getResponseHeader("X").asType(A9.class).get().toString());
+		assertEquals("1/0",x.getHeader("X").asType(A9.class).get().toString());
 
 		x = client(A2b.class)
 			.beanPropertiesReadOnly(A9.class,"f2")
@@ -434,7 +434,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().asType(A9.class).toString());
-		assertEquals("1/0",x.getResponseHeader("X").asType(A9.class).get().toString());
+		assertEquals("1/0",x.getHeader("X").asType(A9.class).get().toString());
 
 		x = client(A2b.class)
 			.beanPropertiesReadOnly("O9","f2")
@@ -446,7 +446,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0",x.getBody().asType(A9.class).toString());
-		assertEquals("1/0",x.getResponseHeader("X").asType(A9.class).get().toString());
+		assertEquals("1/0",x.getHeader("X").asType(A9.class).get().toString());
 	}
 
 	@Test
@@ -463,7 +463,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().asType(A9.class).toString());
-		assertEquals("1/0",x.getResponseHeader("X").asType(A9.class).get().toString());
+		assertEquals("1/0",x.getHeader("X").asType(A9.class).get().toString());
 
 		x = client(A2b.class)
 			.beanPropertiesWriteOnly(A9.class,"f2")
@@ -475,7 +475,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().asType(A9.class).toString());
-		assertEquals("1/0",x.getResponseHeader("X").asType(A9.class).get().toString());
+		assertEquals("1/0",x.getHeader("X").asType(A9.class).get().toString());
 
 		x = client(A2b.class)
 			.beanPropertiesWriteOnly("A9","f2")
@@ -487,7 +487,7 @@ public class RestClient_Config_BeanContext_Test {
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1");
 		assertEquals("1/0",x.getBody().asType(A9.class).toString());
-		assertEquals("1/0",x.getResponseHeader("X").asType(A9.class).get().toString());
+		assertEquals("1/0",x.getHeader("X").asType(A9.class).get().toString());
 	}
 
 	@Test

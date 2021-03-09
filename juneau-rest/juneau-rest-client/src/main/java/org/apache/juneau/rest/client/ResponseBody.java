@@ -673,7 +673,7 @@ public class ResponseBody implements HttpEntity {
 
 			if (type.is(HttpResource.class))
 				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
-				
+
 			ConstructorInfo ci = type.getInfo().getPublicConstructor(HttpResponse.class);
 			if (ci != null) {
 				try {
@@ -683,7 +683,7 @@ public class ResponseBody implements HttpEntity {
 				}
 			}
 
-			String ct = firstNonEmpty(response.getResponseHeader("Content-Type").orElse("text/plain"));
+			String ct = firstNonEmpty(response.getHeader("Content-Type").orElse("text/plain"));
 
 			if (parser == null)
 				parser = client.getMatchingParser(ct);

@@ -75,8 +75,7 @@ public class DefaultHandler implements ResponseHandler {
 			boolean isThrowable = rm.getClassMeta().isChildOf(Throwable.class);
 			if (isThrowable && o != null) {
 				Throwable t = (Throwable)o;
-				res.setHeaderSafe("Exception-Name", rm.getClassMeta().getName());
-				res.setHeaderSafe("Exception-Message", t.getMessage());
+				res.setHeader(Thrown.of(t));
 				if (req.isDebug())
 					t.printStackTrace();
 			}
