@@ -23,6 +23,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 
@@ -271,7 +272,6 @@ public class RestCall {
 		return Optional.ofNullable(rreq).orElseThrow(()->new InternalServerError("RestRequest object has not yet been created."));
 	}
 
-
 	/**
 	 * Returns the REST response of this REST call.
 	 *
@@ -279,6 +279,15 @@ public class RestCall {
 	 */
 	public RestResponse getRestResponse() {
 		return Optional.ofNullable(rres).orElseThrow(()->new InternalServerError("RestResponse object has not yet been created."));
+	}
+
+	/**
+	 * Returns information about the output POJO.
+	 *
+	 * @return The metadata on the object returned by the REST Java method, or {@link ClassInfo#OBJECT} if nothing was set.
+	 */
+	public ClassInfo getOutputInfo() {
+		return getRestResponse().getOutputInfo().orElse(ClassInfo.OBJECT);
 	}
 
 	/**

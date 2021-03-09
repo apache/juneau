@@ -29,6 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logging.*;
@@ -64,6 +65,7 @@ public final class RestResponse {
 	private final RestRequest request;
 
 	private Optional<Optional<Object>> output = empty();  // The POJO being sent to the output.
+	private Optional<ClassInfo> outputInfo = empty();
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
@@ -165,7 +167,7 @@ public final class RestResponse {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
 	 * 	<li class='link'>{@doc RestmReturnTypes}
 	 * </ul>
 	 *
@@ -174,6 +176,7 @@ public final class RestResponse {
 	 */
 	public RestResponse setOutput(Object output) {
 		this.output = of(ofNullable(output));
+		this.outputInfo = ofNullable(ClassInfo.ofc(output));
 		return this;
 	}
 
@@ -199,26 +202,6 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Shortcut method that allows you to use var-args to simplify setting array output.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Instead of...</jc>
-	 * 	<jv>response</jv>.setOutput(<jk>new</jk> Object[]{<jv>x</jv>,<jv>y</jv>,<jv>z</jv>});
-	 *
-	 * 	<jc>// ...call this...</jc>
-	 * 	<jv>response</jv>.setOutput(<jv>x</jv>,<jv>y</jv>,<jv>z</jv>);
-	 * </p>
-	 *
-	 * @param output The output to serialize to the connection.
-	 * @return This object (for method chaining).
-	 */
-	public RestResponse setOutputs(Object...output) {
-		this.output = of(of(output));
-		return this;
-	}
-
-	/**
 	 * Returns the output that was set by calling {@link #setOutput(Object)}.
 	 *
 	 * <p>
@@ -230,6 +213,15 @@ public final class RestResponse {
 	 */
 	public Optional<Optional<Object>> getOutput() {
 		return output;
+	}
+
+	/**
+	 * Returns metadata about the output object.
+	 *
+	 * @return Metadata about the output object.
+	 */
+	public Optional<ClassInfo> getOutputInfo() {
+		return outputInfo;
 	}
 
 	/**

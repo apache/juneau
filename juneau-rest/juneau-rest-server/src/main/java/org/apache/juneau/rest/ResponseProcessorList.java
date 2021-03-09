@@ -15,9 +15,9 @@ package org.apache.juneau.rest;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link ResponseHandler} objects.
+ * A list of {@Link ResponseProcessor} objects.
  */
-public class ResponseHandlerList extends AList<ResponseHandler> {
+public class ResponseProcessorList extends AList<ResponseProcessor> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,16 +27,16 @@ public class ResponseHandlerList extends AList<ResponseHandler> {
 	 * @return An empty list.
 	 */
 	@SuppressWarnings("unchecked")
-	public static ResponseHandlerList create() {
-		return new ResponseHandlerList();
+	public static ResponseProcessorList create() {
+		return new ResponseProcessorList();
 	}
 
 	/**
-	 * Returns the contents of this list as a {@link ResponseHandler} array.
+	 * Returns the contents of this list as a {@link ResponseProcessor} array.
 	 *
-	 * @return The contents of this list as a {@link ResponseHandler} array.
+	 * @return The contents of this list as a {@link ResponseProcessor} array.
 	 */
-	public ResponseHandler[] asArray() {
-		return asArrayOf(ResponseHandler.class);
+	public ResponseProcessor[] asArray() {
+		return asArrayOf(ResponseProcessor.class);
 	}
 }

@@ -13,6 +13,6 @@
  ***************************************************************************************************************************/
 
 /**
- * HTTP Response Handlers
+ * HTTP Response Processors
  */
-package org.apache.juneau.rest.reshandlers;
+package org.apache.juneau.rest.processors;

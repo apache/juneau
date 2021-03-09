@@ -909,17 +909,17 @@ public @interface Rest {
 	String renderResponseStackTraces() default "";
 
 	/**
-	 * Response handlers.
+	 * Response processors.
 	 *
 	 * <p>
-	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
 	 * </ul>
 	 */
-	Class<? extends ResponseHandler>[] responseHandlers() default {};
+	Class<? extends ResponseProcessor>[] responseProcessors() default {};
 
 	/**
 	 * REST children class.

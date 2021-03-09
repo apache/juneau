@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.reshandlers;
+package org.apache.juneau.rest.processors;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
@@ -34,7 +34,7 @@ import org.apache.juneau.rest.util.FinishableServletOutputStream;
 import org.apache.juneau.serializer.*;
 
 /**
- * Response handler for POJOs not handled by other handlers.
+ * Response processor for POJOs not handled by other processors.
  *
  * <p>
  * This uses the serializers defined on the response to serialize the POJO.
@@ -50,11 +50,11 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'>{@doc RestmReturnTypes}
  * </ul>
  */
-public class DefaultHandler implements ResponseHandler {
+public class DefaultProcessor implements ResponseProcessor {
 
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
-	public boolean handle(RestCall call) throws IOException, InternalServerError, NotAcceptable {
+	public boolean process(RestCall call) throws IOException, InternalServerError, NotAcceptable {
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
 		SerializerGroup g = res.getOpContext().getSerializers();

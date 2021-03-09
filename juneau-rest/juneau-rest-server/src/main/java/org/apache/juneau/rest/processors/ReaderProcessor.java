@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.reshandlers;
+package org.apache.juneau.rest.processors;
 
 import static org.apache.juneau.internal.IOUtils.*;
 
@@ -20,7 +20,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.http.response.*;
 
 /**
- * Response handler for {@link Reader} objects.
+ * Response processor for {@link Reader} objects.
  *
  * <p>
  * Simply pipes the contents of the {@link Reader} to {@link RestResponse#getNegotiatedWriter()}.
@@ -29,12 +29,12 @@ import org.apache.juneau.http.response.*;
  * 	<li class='link'>{@doc RestmReturnTypes}
  * </ul>
  */
-public final class ReaderHandler implements ResponseHandler {
+public final class ReaderProcessor implements ResponseProcessor {
 
-	@Override /* ResponseHandler */
-	public boolean handle(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		RestResponse res = call.getRestResponse();
-		if (res.isOutputType(Reader.class)) {
+	@Override /* ResponseProcessor */
+	public boolean process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
+		if (call.getOutputInfo().isChildOf(Reader.class)) {
+			RestResponse res = call.getRestResponse();
 			try (Reader r = res.getOutput(Reader.class); Writer w = res.getNegotiatedWriter()) {
 				pipe(r, w);
 			}

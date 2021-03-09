@@ -55,6 +55,9 @@ import org.apache.juneau.internal.*;
  */
 public final class ClassInfo {
 
+	/** Reusable ClassInfo for Object class. */
+	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
+
 	private final Type t;
 	final Class<?> c;
 	private final boolean isParameterizedType;

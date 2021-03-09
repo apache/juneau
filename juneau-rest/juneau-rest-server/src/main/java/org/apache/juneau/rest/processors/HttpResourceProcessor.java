@@ -10,39 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.reshandlers;
+package org.apache.juneau.rest.processors;
 
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.http.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 
 /**
- * Response handler for {@link InputStream} objects.
- *
- * <p>
- * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
- *
- * <p>
- * Sets the <c>Content-Type</c> response header to whatever was set via {@link RestResponse#setContentType(String)}.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmReturnTypes}
- * </ul>
+ * Response handler for {@link HttpResource} objects.
  */
-public final class InputStreamHandler implements ResponseHandler {
+public final class HttpResourceProcessor implements ResponseProcessor {
 
-	@Override /* ResponseHandler */
-	public boolean handle(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		RestResponse res = call.getRestResponse();
-		if (res.isOutputType(InputStream.class)) {
-			try (InputStream is = res.getOutput(InputStream.class); OutputStream os = res.getNegotiatedOutputStream()) {
-				pipe(is, os);
+	@Override /* ResponseProcessor */
+	public boolean process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
+		if (call.getOutputInfo().isChildOf(HttpResource.class)) {
+			RestResponse res = call.getRestResponse();
+			HttpResource e = res.getOutput(HttpResource.class);
+
+			res.header(e.getContentType()).header(e.getContentEncoding());
+			long contentLength = e.getContentLength();
+			if (contentLength >= 0)
+				res.header(contentLength(contentLength));
+			for (Header h : e.getHeaders())
+				res.addHeader(h);
+			try (OutputStream os = res.getNegotiatedOutputStream()) {
+				e.writeTo(os);
+				os.flush();
 			}
 			return true;
 		}
 		return false;
 	}
 }
+

@@ -44,7 +44,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logging.*;
-import org.apache.juneau.rest.reshandlers.*;
+import org.apache.juneau.rest.processors.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -125,10 +125,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			partSerializer(OpenApiSerializer.class);
 			partParser(OpenApiParser.class);
 			encoders(IdentityEncoder.INSTANCE);
-			responseHandlers(
-				ReaderHandler.class,
-				InputStreamHandler.class,
-				DefaultHandler.class
+			responseProcessors(
+				ReaderProcessor.class,
+				InputStreamProcessor.class,
+				HttpResourceProcessor.class,
+				HttpEntityProcessor.class,
+				DefaultProcessor.class
 			);
 
 			// Pass-through default values.
@@ -1571,40 +1573,40 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response handlers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response processors.
 	 *
 	 * <p>
-	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder responseHandlers(Class<?>...values) {
-		return prependTo(REST_responseHandlers, values);
+	public RestContextBuilder responseProcessors(Class<?>...values) {
+		return prependTo(REST_responseProcessors, values);
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response handlers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response processors.
 	 *
 	 * <p>
-	 * Same as {@link #responseHandlers(Class...)} except input is pre-constructed instances.
+	 * Same as {@link #responseProcessors(Class...)} except input is pre-constructed instances.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
 	 * </ul>
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder responseHandlers(ResponseHandler...values) {
-		return prependTo(REST_responseHandlers, values);
+	public RestContextBuilder responseProcessors(ResponseProcessor...values) {
+		return prependTo(REST_responseProcessors, values);
 	}
 
 	/**

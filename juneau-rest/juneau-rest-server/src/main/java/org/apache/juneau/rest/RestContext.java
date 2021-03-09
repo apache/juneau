@@ -63,9 +63,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.args.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.processors.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
@@ -2267,46 +2267,48 @@ public class RestContext extends BeanContext {
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
 
 	/**
-	 * Configuration property:  Response handlers.
+	 * Configuration property:  Response processors.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}
-	 * 	<li><b>Name:</b>  <js>"RestContext.responseHandlers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.ResponseHandler}|Class&lt;{@link org.apache.juneau.rest.ResponseHandler}&gt;&gt;</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_responseProcessors REST_responseHandlers}
+	 * 	<li><b>Name:</b>  <js>"RestContext.responseProcessors.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.ResponseProcessor}|Class&lt;{@link org.apache.juneau.rest.ResponseProcessor}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseHandlers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseProcessors()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseHandlers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseProcessors(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseProcessors(ResponseProcessor...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <p>
 	 * By default, the following response handlers are provided out-of-the-box:
 	 * <ul>
-	 * 	<li class='jc'>{@link ReaderHandler} - {@link Reader} objects.
-	 * 	<li class='jc'>{@link InputStreamHandler} - {@link InputStream} objects.
-	 * 	<li class='jc'>{@link DefaultHandler} - All other POJOs.
+	 * 	<li class='jc'>{@link ReaderProcessor}
+	 * 	<li class='jc'>{@link InputStreamProcessor}
+	 * 	<li class='jc'>{@link HttpResourceProcessor}
+	 * 	<li class='jc'>{@link HttpEntityProcessor}
+	 * 	<li class='jc'>{@link DefaultProcessor}
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Our custom response handler for MySpecialObject objects. </jc>
-	 * 	<jk>public class</jk> MyResponseHandler <jk>implements</jk> ResponseHandler {
+	 * 	<jc>// Our custom response processor for MySpecialObject objects. </jc>
+	 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public boolean</jk> handle(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, Object <jv>output</jv>) <jk>throws</jk> IOException, RestException {
+	 * 		<jk>public boolean</jk> process(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, Object <jv>output</jv>) <jk>throws</jk> IOException, RestException {
 	 * 			<jk>if</jk> (output <jk>instanceof</jk> MySpecialObject) {
 	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
 	 * 					<jc>//Pipe it to the writer ourselves.</jc>
@@ -2318,23 +2320,23 @@ public class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@Rest</ja>(responseHandlers=MyResponseHandler.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 *
 	 * 			<jc>// Using method on builder.</jc>
-	 * 			<jv>builder</jv>.responseHandlers(MyResponseHandler.<jk>class</jk>);
+	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			<jv>builder</jv>.addTo(<jsf>REST_responseHandlers</jsf>, MyResponseHandler.<jk>class</jk>);
+	 * 			<jv>builder</jv>.addTo(<jsf>REST_responseProcessors</jsf>, MyResponseProcessor.<jk>class</jk>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jv>builder</jv>.responseHandlers(MyResponseHandler.<jk>class</jk>);
+	 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
 	 * 		}
 	 *
 	 * 		<ja>@RestGet</ja>(...)
@@ -2347,7 +2349,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Response handlers resolvers are always inherited from ascendant resources.
+	 * 		Response processors are always inherited from ascendant resources.
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -2360,7 +2362,7 @@ public class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
-	public static final String REST_responseHandlers = PREFIX + ".responseHandlers.lo";
+	public static final String REST_responseProcessors = PREFIX + ".responseProcessors.lo";
 
 	/**
 	 * Configuration property:  REST children class.
@@ -3367,7 +3369,7 @@ public class RestContext extends BeanContext {
 		produces;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
 	private final List<NamedAttribute> defaultRequestAttributes;
-	private final List<ResponseHandler> responseHandlers;
+	private final List<ResponseProcessor> responseProcessors;
 	private final Messages messages;
 	private final Config config;
 	private final VarResolver varResolver;
@@ -3490,7 +3492,7 @@ public class RestContext extends BeanContext {
 			config = builder.config.resolving(vr.createSession());
 			bf.addBean(Config.class, config);
 
-			responseHandlers = unmodifiableList(createResponseHandlers(r, cp, bf));
+			responseProcessors = unmodifiableList(createResponseProcessors(r, cp, bf));
 
 			callLogger = createCallLogger(r, cp, bf, l, ts);
 			bf.addBean(RestLogger.class, callLogger);
@@ -4119,12 +4121,12 @@ public class RestContext extends BeanContext {
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_responseHandlers} value set via any of the following:
+	 * 	<li>Looks for {@link #REST_responseProcessors} value set via any of the following:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#responseHandlers(Class...)}/{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
-	 * 			<li>{@link Rest#responseHandlers()}.
+	 * 			<li>{@link RestContextBuilder#responseProcessors(Class...)}/{@link RestContextBuilder#responseProcessors(ResponseProcessor...)}
+	 * 			<li>{@link Rest#responseProcessors()}.
 	 * 		</ul>
-	 * 	<li>Looks for a static or non-static <c>createResponseHandlers()</> method that returns <c>{@link ResponseHandler}[]</c> on the
+	 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</> method that returns <c>{@link ResponseProcessor}[]</c> on the
 	 * 		resource class with any of the following arguments:
 	 * 		<ul>
 	 * 			<li>{@link RestContext}
@@ -4132,11 +4134,11 @@ public class RestContext extends BeanContext {
 	 * 			<li>Any {@doc RestInjection injected beans}.
 	 * 		</ul>
 	 * 	<li>Resolves it via the bean store registered in this context.
-	 * 	<li>Instantiates a <c>ResponseHandler[0]</c>.
+	 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_responseHandlers}
+	 * 	<li class='jf'>{@link #REST_responseProcessors}
 	 * </ul>
 	 *
 	 * @param resource
@@ -4150,20 +4152,20 @@ public class RestContext extends BeanContext {
 	 * @return The response handlers for this REST resource.
 	 * @throws Exception If response handlers could not be instantiated.
 	 */
-	protected ResponseHandlerList createResponseHandlers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
+	protected ResponseProcessorList createResponseProcessors(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
-		ResponseHandlerList x = ResponseHandlerList.create();
+		ResponseProcessorList x = ResponseProcessorList.create();
 
-		x.append(properties.getInstanceArray(REST_responseHandlers, ResponseHandler.class, beanStore).orElse(new ResponseHandler[0]));
+		x.append(properties.getInstanceArray(REST_responseProcessors, ResponseProcessor.class, beanStore).orElse(new ResponseProcessor[0]));
 
 		if (x.isEmpty())
-			x.append(beanStore.getBean(ResponseHandlerList.class).orElse(null));
+			x.append(beanStore.getBean(ResponseProcessorList.class).orElse(null));
 
 		x = BeanStore
 			.of(beanStore, resource)
-			.addBean(ResponseHandlerList.class, x)
-			.beanCreateMethodFinder(ResponseHandlerList.class, resource)
-			.find("createResponseHandlers")
+			.addBean(ResponseProcessorList.class, x)
+			.beanCreateMethodFinder(ResponseProcessorList.class, resource)
+			.find("createResponseProcessors")
 			.withDefault(x)
 			.run();
 
@@ -6342,18 +6344,18 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the response handlers associated with this resource.
+	 * Returns the response processors associated with this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * 	<li class='jf'>{@link RestContext#REST_responseProcessors}
 	 * </ul>
 	 *
 	 * @return
-	 * 	The response handlers associated with this resource.
+	 * 	The response processors associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	protected List<ResponseHandler> getResponseHandlers() {
-		return responseHandlers;
+	protected List<ResponseProcessor> getResponseProcessors() {
+		return responseProcessors;
 	}
 
 	/**
@@ -6731,7 +6733,7 @@ public class RestContext extends BeanContext {
 			if (call.getOutput().isPresent()) {
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
-				handleResponse(call);
+				processResponse(call);
 			}
 
 
@@ -6768,23 +6770,23 @@ public class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseHandler#handle(RestCall)} method returns
+	 * looking for the first one whose {@link ResponseProcessor#process(RestCall)} method returns
 	 * <jk>true</jk>.
 	 *
 	 * @param call The HTTP call.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws BasicHttpException Non-200 response.
-	 * @throws NotImplemented No registered response handlers could handle the call.
+	 * @throws NotImplemented No registered response processors could handle the call.
 	 */
-	public void handleResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
+	public void processResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
 
-		// Loop until we find the correct handler for the POJO.
-		for (ResponseHandler h : getResponseHandlers())
-			if (h.handle(call))
+		// Loop until we find the correct processor for the POJO.
+		for (ResponseProcessor x : getResponseProcessors())
+			if (x.process(call))
 				return;
 
 		Object output = call.getRestResponse().getOutput().get().orElse(null);
-		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
+		throw new NotImplemented("No response processors found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
 	}
 
 	/**
@@ -7133,7 +7135,7 @@ public class RestContext extends BeanContext {
 					.a("partSerializer", partSerializer)
 					.a("produces", produces)
 					.a("renderResponseStackTraces", renderResponseStackTraces)
-					.a("responseHandlers", responseHandlers)
+					.a("responseProcessors", responseProcessors)
 					.a("serializers", serializers)
 					.a("staticFiles", staticFiles)
 					.a("swaggerProvider", swaggerProvider)

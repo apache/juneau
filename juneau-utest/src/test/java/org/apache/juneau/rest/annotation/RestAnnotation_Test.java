@@ -72,7 +72,7 @@ public class RestAnnotation_Test {
 		.path("path")
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
-		.responseHandlers(ResponseHandler.class)
+		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
 		.restOperationContextClass(RestOperationContext.class)
 		.restOperationArgs(RestOperationArg.class)
@@ -127,7 +127,7 @@ public class RestAnnotation_Test {
 		.path("path")
 		.produces("produces")
 		.renderResponseStackTraces("renderResponseStackTraces")
-		.responseHandlers(ResponseHandler.class)
+		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
 		.restOperationContextClass(RestOperationContext.class)
 		.restOperationArgs(RestOperationArg.class)
@@ -185,7 +185,7 @@ public class RestAnnotation_Test {
 				+ "path:'path',"
 				+ "produces:['produces'],"
 				+ "renderResponseStackTraces:'renderResponseStackTraces',"
-				+ "responseHandlers:['org.apache.juneau.rest.ResponseHandler'],"
+				+ "responseProcessors:['org.apache.juneau.rest.ResponseProcessor'],"
 				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
 				+ "restOperationArgs:['org.apache.juneau.rest.RestOperationArg'],"
 				+ "restOperationContextClass:'org.apache.juneau.rest.RestOperationContext',"
@@ -285,7 +285,7 @@ public class RestAnnotation_Test {
 		path="path",
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
-		responseHandlers=ResponseHandler.class,
+		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
 		restOperationContextClass=RestOperationContext.class,
 		restOperationArgs=RestOperationArg.class,
@@ -342,7 +342,7 @@ public class RestAnnotation_Test {
 		path="path",
 		produces="produces",
 		renderResponseStackTraces="renderResponseStackTraces",
-		responseHandlers=ResponseHandler.class,
+		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
 		restOperationContextClass=RestOperationContext.class,
 		restOperationArgs=RestOperationArg.class,

@@ -18,42 +18,39 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.reshandlers.*;
+import org.apache.juneau.rest.processors.*;
 
 /**
- * Defines the interface for handlers that convert POJOs to appropriate HTTP responses.
+ * Defines the interface for processors that convert POJOs to appropriate HTTP responses.
  *
  * <p>
- * The REST Server API uses the concept of registered response handlers for converting objects returned by REST
+ * The REST Server API uses the concept of registered response processors for converting objects returned by REST
  * methods or set through {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
  *
  * <p>
- * Response handlers can be associated with REST resources via the following:
+ * Response processors can be associated with REST resources via the following:
  * <ul>
- * 	<li class='ja'>{@link Rest#responseHandlers}
- * 	<li class='jm'>{@link RestContextBuilder#responseHandlers(Class...)}
- * 	<li class='jm'>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+ * 	<li class='ja'>{@link Rest#responseProcessors}
+ * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(Class...)}
+ * 	<li class='jm'>{@link RestContextBuilder#responseProcessors(ResponseProcessor...)}
  * </ul>
  *
  * <p>
- * By default, REST resources are registered with the following response handlers:
+ * By default, REST resources are registered with the following response processors:
  * <ul class='spaced-list'>
- * 	<li class='jc'>
- * 		{@link DefaultHandler} - Serializes POJOs using the Juneau serializer API.
- * 	<li class='jc'>
- * 		{@link ReaderHandler} - Pipes the output of {@link Reader Readers} to the response writer
- * 		({@link RestResponse#getWriter()}).
- * 	<li class='jc'>
- * 		{@link InputStreamHandler} - Pipes the output of {@link InputStream InputStreams} to the response output
- * 		stream ({@link RestResponse#getOutputStream()}).
+ * 	<li class='jc'>{@link ReaderProcessor}
+ * 	<li class='jc'>{@link InputStreamProcessor}
+ * 	<li class='jc'>{@link HttpResourceProcessor}
+ * 	<li class='jc'>{@link HttpEntityProcessor}
+ * 	<li class='jc'>{@link DefaultProcessor}
  * </ul>
  *
  * <p>
- * Response handlers can be used to process POJOs that cannot normally be handled through Juneau serializers, or
- * because it's simply easier to define response handlers for special cases.
+ * Response processors can be used to process POJOs that cannot normally be handled through Juneau serializers, or
+ * because it's simply easier to define response processors for special cases.
  *
  * <p>
- * The following example shows how to create a response handler to handle special <c>Foo</c> objects outside the
+ * The following example shows how to create a response processor to handle special <c>Foo</c> objects outside the
  * normal Juneau architecture.
  * <p class='bcode w800'>
  * 	<ja>@Rest</ja>(
@@ -87,14 +84,14 @@ import org.apache.juneau.rest.reshandlers.*;
  * 	<li class='link'>{@doc RestmReturnTypes}
  * </ul>
  */
-public interface ResponseHandler {
+public interface ResponseProcessor {
 
 	/**
 	 * Process this response if possible.
 	 * This method should return <jk>false</jk> if it wasn't able to process the response.
 	 *
 	 * @param call The HTTP call.
-	 * @return true If this handler handled the response.
+	 * @return true If this processor handled the response.
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.
 	 * 	Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
@@ -102,5 +99,5 @@ public interface ResponseHandler {
 	 * 	If some other exception occurred.
 	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
-	boolean handle(RestCall call) throws IOException, BasicHttpException;
+	boolean process(RestCall call) throws IOException, BasicHttpException;
 }

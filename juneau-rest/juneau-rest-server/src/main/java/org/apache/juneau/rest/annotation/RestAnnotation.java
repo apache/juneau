@@ -85,7 +85,7 @@ public class RestAnnotation {
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Null.class;
 		Class<? extends FileFinder> fileFinder = FileFinder.Null.class;
 		Class<? extends StaticFiles> staticFiles = StaticFiles.Null.class;
-		Class<? extends ResponseHandler>[] responseHandlers = new Class[0];
+		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
 		Class<? extends RestLogger> callLogger = RestLogger.Null.class;
 		Class<? extends RestContext> contextClass = RestContext.Null.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
@@ -482,13 +482,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#responseHandlers()} property on this annotation.
+		 * Sets the {@link Rest#responseProcessors()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder responseHandlers(Class<? extends ResponseHandler>...value) {
-			this.responseHandlers = value;
+		public Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
+			this.responseProcessors = value;
 			return this;
 		}
 
@@ -698,7 +698,7 @@ public class RestAnnotation {
 		private final Class<? extends HttpPartSerializer> partSerializer;
 		private final Class<? extends FileFinder> fileFinder;
 		private final Class<? extends StaticFiles> staticFiles;
-		private final Class<? extends ResponseHandler>[] responseHandlers;
+		private final Class<? extends ResponseProcessor>[] responseProcessors;
 		private final Class<? extends RestLogger> callLogger;
 		private final Class<? extends RestContext> contextClass;
 		private final Class<? extends RestConverter>[] converters;
@@ -750,7 +750,7 @@ public class RestAnnotation {
 			this.path = b.path;
 			this.produces = copyOf(b.produces);
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
-			this.responseHandlers = copyOf(b.responseHandlers);
+			this.responseProcessors = copyOf(b.responseProcessors);
 			this.restChildrenClass = b.restChildrenClass;
 			this.restOperationContextClass = b.restOperationContextClass;
 			this.restOperationsClass = b.restOperationsClass;
@@ -936,8 +936,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends ResponseHandler>[] responseHandlers() {
-			return responseHandlers;
+		public Class<? extends ResponseProcessor>[] responseProcessors() {
+			return responseProcessors;
 		}
 
 		@Override /* Rest */
@@ -1053,7 +1053,7 @@ public class RestAnnotation {
 			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(REST_defaultResponseHeaders, x));
 			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
-			cpb.prependTo(REST_responseHandlers, a.responseHandlers());
+			cpb.prependTo(REST_responseProcessors, a.responseProcessors());
 			cpb.prependTo(REST_converters, a.converters());
 			cpb.prependTo(REST_guards, reverse(a.guards()));
 			cpb.prependTo(REST_children, a.children());
