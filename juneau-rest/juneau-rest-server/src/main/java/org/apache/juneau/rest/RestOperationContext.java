@@ -1886,13 +1886,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 						res.setOutput(output);
 				}
 			} catch (ExecutableException e) {
-				Throwable e2 = e.unwrap();		// Get the throwable thrown from the doX() method.
-				res.setStatus(500);
-				ResponsePartMeta rpm = getResponseBodyMeta(e2);
-				ResponseBeanMeta rbm = getResponseBeanMeta(e2);
-				if (rpm != null || rbm != null) {
+				Throwable e2 = e.unwrap();  // Get the throwable thrown from the doX() method.
+				res.setStatus(500);  // May be overridden later.
+				Class<?> c = e2.getClass();
+				if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(ResponseBody.class) != null) {
 					res.setOutput(e2);
-					res.setResponseMeta(rbm);
 				} else {
 					throw e;
 				}

@@ -105,8 +105,8 @@ public class DefaultProcessor implements ResponseProcessor {
 								Object v = x.getValue();
 								res.setHeader(new HttpPart(k, RESPONSE_HEADER, partSchema.getProperty(k), hm.getSerializerSession().orElse(ps), v));
 							} else if (ho2 instanceof SerializedHeader) {
-								SerializedHeader x = ((SerializedHeader)ho2).copy().serializerIfNotSet(ps);
-								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
+								SerializedHeader x = ((SerializedHeader)ho2);
+								x = x.copyWithSerializerAndSchema(ps, partSchema.getProperty(x.getName()));
 								res.setHeader(x.getName(), x.getValue());
 							} else if (ho2 instanceof SerializedPart) {
 								SerializedPart x = ((SerializedPart)ho2).copy().serializerIfNotSet(ps);
@@ -127,8 +127,7 @@ public class DefaultProcessor implements ResponseProcessor {
 						}
 					} else {
 						if (ho instanceof SerializedHeader) {
-							SerializedHeader x = ((SerializedHeader)ho).copy().serializerIfNotSet(ps);
-							x.schemaIfNotSet(schema);
+							SerializedHeader x = ((SerializedHeader)ho).copyWithSerializerAndSchema(ps, schema);
 							res.setHeader(x.getName(), x.getValue());
 						} else if (ho instanceof SerializedPart) {
 							SerializedPart x = ((SerializedPart)ho).copy().serializerIfNotSet(ps);

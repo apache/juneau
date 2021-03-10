@@ -6910,7 +6910,8 @@ public class RestContext extends BeanContext {
 		try {
 			res.setContentType("text/plain");
 			res.setHeader("Content-Encoding", "identity");
-			res.setStatus(e2.getStatusCode());
+			int statusCode = e2.getStatusLine().getStatusCode();
+			res.setStatus(statusCode);
 
 			PrintWriter w = null;
 			try {
@@ -6920,9 +6921,9 @@ public class RestContext extends BeanContext {
 			}
 
 			try (PrintWriter w2 = w) {
-				String httpMessage = RestUtils.getHttpResponseText(e2.getStatusCode());
+				String httpMessage = RestUtils.getHttpResponseText(statusCode);
 				if (httpMessage != null)
-					w2.append("HTTP ").append(String.valueOf(e2.getStatusCode())).append(": ").append(httpMessage).append("\n\n");
+					w2.append("HTTP ").append(String.valueOf(statusCode)).append(": ").append(httpMessage).append("\n\n");
 				if (isRenderResponseStackTraces())
 					e.printStackTrace(w2);
 				else

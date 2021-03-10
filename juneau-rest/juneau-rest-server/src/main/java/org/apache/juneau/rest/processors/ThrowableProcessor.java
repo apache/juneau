@@ -12,46 +12,28 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.processors;
 
-import static org.apache.juneau.http.HttpHeaders.*;
-
 import java.io.*;
 
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.*;
-import org.apache.http.*;
 
 /**
- * Response handler for {@link HttpResponse} objects.
+ * Response handler for {@link Throwable} objects.
+ * 
+ * <p>
+ * Adds a <c>Thrown</c> header to the response and returns <c>0</c> so that the processor chain can continue.
  */
-public final class HttpResponseProcessor implements ResponseProcessor {
+public final class ThrowableProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(HttpResponse.class))
+		if (! call.getOutputInfo().isChildOf(Throwable.class))
 			return 0;
 
-		RestResponse res = call.getRestResponse();
-		HttpResponse r = res.getOutput(HttpResponse.class);
+		call.addResponseHeader(Thrown.of(call.getRestResponse().getOutput(Throwable.class)));
 
-		call.status(r.getStatusLine().getStatusCode());
-
-		HttpEntity e = r.getEntity();
-
-		call.addResponseHeader(e.getContentType());
-		call.addResponseHeader(e.getContentEncoding());
-		long contentLength = e.getContentLength();
-		if (contentLength >= 0)
-			call.addResponseHeader(contentLength(contentLength));
-		
-		for (Header h : r.getAllHeaders()) // No iterator involved.
-			call.addResponseHeader(h);
-
-		try (OutputStream os = res.getNegotiatedOutputStream()) {
-			e.writeTo(os);
-			os.flush();
-		}
-		
-		return 1;
+		return 0; // Continue processing.
 	}
 }
 

@@ -2899,7 +2899,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = new UrlEncodedFormEntity((PartList)input2);
 				else if (input2 instanceof HttpResource) {
 					HttpResource r = (HttpResource)input2;
-					headers(r.getHeaders());
+					List<Header> headers = r.getAllHeaders();
+					for (int i = 0; i < headers.size(); i++)  // Avoids iterator creation.
+						addHeader(headers.get(i));
 					entity = (HttpEntity)input2;
 				}
 				else if (input2 instanceof HttpEntity)

@@ -36,7 +36,7 @@ import org.apache.juneau.http.header.*;
  * 		Externally-supplied/dynamic content.
  * </ul>
  */
-@BeanIgnore
+@BeanIgnore  /* Use toString() to serialize */
 public class BasicResource implements HttpResource {
 
 	final BasicHttpEntity entity;
@@ -248,7 +248,7 @@ public class BasicResource implements HttpResource {
 	}
 
 	@Override /* HttpResource */
-	public List<Header> getHeaders() {
+	public List<Header> getAllHeaders() {
 		return headers.getAll();
 	}
 }

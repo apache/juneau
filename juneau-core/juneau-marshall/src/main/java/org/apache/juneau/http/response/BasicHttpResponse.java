@@ -22,7 +22,6 @@ import org.apache.http.Header;
 import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -38,8 +37,7 @@ import org.apache.juneau.http.header.*;
  * <p>
  * Beans are not thread safe unless they're marked as unmodifiable.
  */
-@Response
-@BeanIgnore
+@BeanIgnore /* Use toString() to serialize */
 public class BasicHttpResponse implements HttpResponse {
 
 	private static final Header[] EMPTY_HEADERS = new Header[0];
@@ -95,16 +93,6 @@ public class BasicHttpResponse implements HttpResponse {
 	}
 
 	/**
-	 * Returns the HTTP status code of this response.
-	 *
-	 * @return The HTTP status code of this response.
-	 */
-	@ResponseStatus
-	public int getStatusCode() {
-		return statusLine().getStatusCode();
-	}
-
-	/**
 	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
 	 *
 	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
@@ -152,7 +140,6 @@ public class BasicHttpResponse implements HttpResponse {
 	}
 
 	@Override /* HttpMessage */
-	@ResponseHeader("*")
 	public Header[] getAllHeaders() {
 		List<Header> l = headers().getAll();
 		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
@@ -244,7 +231,6 @@ public class BasicHttpResponse implements HttpResponse {
 		statusLineBuilder().reasonPhrase(reason).build();
 	}
 
-	@ResponseBody
 	@Override /* HttpMessage */
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.

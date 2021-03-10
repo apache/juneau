@@ -132,14 +132,15 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Sets the serializer to use for serializing the value to a string value if it's not already set on this object.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * Copies this bean and sets the serializer on it.
+	 * 
+	 * @param value The new serializer for the bean.  Can be <jk>null</jk>.
+	 * @return Either a new bean with the serializer set, or this bean if
+	 * 	the value is <jk>null</jk> or the serializer was already set.
 	 */
-	public SerializedHeader serializerIfNotSet(HttpPartSerializerSession value) {
-		if (serializer == null)
-			serializer = value;
+	public SerializedHeader copyWithSerializer(HttpPartSerializerSession value) {
+		if (serializer == null && value != null)
+			return copy().serializer(value);
 		return this;
 	}
 
@@ -155,14 +156,35 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Sets the schema object that defines the format of the output if it's not already set on this object.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * Copies this bean and sets the schema on it.
+	 * 
+	 * @param value The new schema for the bean.  Can be <jk>null</jk>.
+	 * @return Either a new bean with the schema set, or this bean if
+	 * 	the value is <jk>null</jk> or the schema was already set.
 	 */
-	public SerializedHeader schemaIfNotSet(HttpPartSchema value) {
-		if (schema == null)
-			schema = value;
+	public SerializedHeader copyWithSchema(HttpPartSchema value) {
+		if (schema == null && value != null)
+			return copy().schema(value);
+		return this;
+	}
+
+	/**
+	 * Copies this bean and sets the serializer and schema on it.
+	 * 
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @return Either a new bean with the serializer set, or this bean if
+	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
+	 */
+	public SerializedHeader copyWithSerializerAndSchema(HttpPartSerializerSession serializer, HttpPartSchema schema) {
+		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+			SerializedHeader h = copy();
+			if (serializer != null)
+				h.serializer(serializer);
+			if (schema != null)
+				h.schema(schema);
+			return h;
+		}
 		return this;
 	}
 

@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
-import org.apache.juneau.http.annotation.*;
 
 /**
  * An extension of an {@link HttpEntity} that also includes arbitrary headers.
@@ -37,18 +36,16 @@ import org.apache.juneau.http.annotation.*;
  * 		.build();
  * </p>
  */
-@Response
 public interface HttpResource extends HttpEntity {
 
 	/**
 	 * Returns the list of headers associated with this resource.
-	 * 
+	 *
 	 * <p>
 	 * Note that this typically does NOT include headers associated with {@link HttpEntity}
 	 * (e.g. <c>Content-Type</c>, <c>Content-Encoding</c>, and <c>Content-Length</c>).
-	 * 
+	 *
 	 * @return The list of headers associated with this resource.
 	 */
-	@ResponseHeader("*")
-	List<Header> getHeaders();
+	List<Header> getAllHeaders();
 }

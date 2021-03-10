@@ -33,14 +33,17 @@ public final class HttpEntityProcessor implements ResponseProcessor {
 		RestResponse res = call.getRestResponse();
 		HttpEntity e = res.getOutput(HttpEntity.class);
 
-		res.header(e.getContentType()).header(e.getContentEncoding());
+		call.addResponseHeader(e.getContentType());
+		call.addResponseHeader(e.getContentEncoding());
 		long contentLength = e.getContentLength();
 		if (contentLength >= 0)
-			res.header(contentLength(contentLength));
+			call.addResponseHeader(contentLength(contentLength));
+
 		try (OutputStream os = res.getNegotiatedOutputStream()) {
 			e.writeTo(os);
 			os.flush();
 		}
+
 		return 1;
 	}
 }

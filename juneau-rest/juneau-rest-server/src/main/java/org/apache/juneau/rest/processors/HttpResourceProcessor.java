@@ -15,6 +15,7 @@ package org.apache.juneau.rest.processors;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.http.*;
@@ -32,18 +33,23 @@ public final class HttpResourceProcessor implements ResponseProcessor {
 			return 0;
 
 		RestResponse res = call.getRestResponse();
-		HttpResource e = res.getOutput(HttpResource.class);
+		HttpResource r = res.getOutput(HttpResource.class);
 
-		res.header(e.getContentType()).header(e.getContentEncoding());
-		long contentLength = e.getContentLength();
+		call.addResponseHeader(r.getContentType());
+		call.addResponseHeader(r.getContentEncoding());
+		long contentLength = r.getContentLength();
 		if (contentLength >= 0)
-			res.header(contentLength(contentLength));
-		for (Header h : e.getHeaders())
-			res.addHeader(h);
+			call.addResponseHeader(contentLength(contentLength));
+		
+		List<Header> allHeaders = r.getAllHeaders();
+		for (int i = 0; i < allHeaders.size() ; i++) // Avoids Iterator creation.
+			call.addResponseHeader(allHeaders.get(i));
+
 		try (OutputStream os = res.getNegotiatedOutputStream()) {
-			e.writeTo(os);
+			r.writeTo(os);
 			os.flush();
 		}
+
 		return 1;
 	}
 }

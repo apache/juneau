@@ -2125,7 +2125,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private static Object buildBuilders(Object o, HttpPartSerializerSession ss) {
 		if (o instanceof SerializedHeader)
-			return ((SerializedHeader)o).copy().serializerIfNotSet(ss);
+			return ((SerializedHeader)o).copyWithSerializer(ss);
 		if (o instanceof SerializedPart)
 			return ((SerializedPart)o).copy().serializerIfNotSet(ss);
 		return o;
@@ -2532,8 +2532,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (body instanceof PartList)
 				return req.body(new UrlEncodedFormEntity((PartList)body));
 			if (body instanceof HttpResource) {
-				for (Header h : ((HttpResource)body).getHeaders())
-					req.header(h);
+				List<Header> headers = ((HttpResource)body).getAllHeaders();
+				for (int i = 0; i < headers.size(); i++)  // Avoids iterator creation.
+					req.header(headers.get(i));
 			}
 			if (body instanceof HttpEntity) {
 				HttpEntity e = (HttpEntity)body;

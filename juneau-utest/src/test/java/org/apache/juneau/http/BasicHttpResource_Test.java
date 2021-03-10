@@ -36,7 +36,7 @@ public class BasicHttpResource_Test {
 		assertNull(x.getContentType());
 		assertStream(x.getContent()).isNotNull().asString().isEmpty();
 		assertNull(x.getContentEncoding());
-		assertList(x.getHeaders()).isSize(0);
+		assertList(x.getAllHeaders()).isSize(0);
 
 		x = stringResource("foo").build();
 		assertStream(x.getContent()).asString().is("foo");
@@ -121,7 +121,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar")).doesNotExist();
 		assertObject(x.getLastHeader("Bar")).doesNotExist();
-		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz']");
+		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz']");
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
 		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
+		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
 		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
+		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class BasicHttpResource_Test {
 		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
 		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
 		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getHeaders()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
+		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
 
