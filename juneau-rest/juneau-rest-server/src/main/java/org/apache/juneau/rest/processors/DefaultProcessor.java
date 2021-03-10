@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.processors;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
@@ -168,19 +167,6 @@ public class DefaultProcessor implements ResponseProcessor {
 			}
 
 			schema = rm.getSchema();
-		}
-
-		if (o instanceof HttpEntity) {
-			HttpEntity e = (HttpEntity)o;
-			res.header(e.getContentType()).header(e.getContentEncoding());
-			long contentLength = e.getContentLength();
-			if (contentLength >= 0)
-				res.header(contentLength(contentLength));
-			try (OutputStream os = res.getNegotiatedOutputStream()) {
-				e.writeTo(os);
-				os.flush();
-			}
-			return 1;
 		}
 
 		if (sm != null) {
