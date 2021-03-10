@@ -88,10 +88,15 @@ public interface ResponseProcessor {
 
 	/**
 	 * Process this response if possible.
-	 * This method should return <jk>false</jk> if it wasn't able to process the response.
 	 *
 	 * @param call The HTTP call.
-	 * @return true If this processor handled the response.
+	 * @return One of the following codes:
+	 * 	<ul>
+	 * 		<li><c>0</c> - The processor could not handle the request.
+	 * 		<li><c>1</c> - The processor was able to fully handle the request.
+	 * 		<li><c>2</c> - The processor was able to partially handle the request by replacing the output.
+	 * 			The response processors should start over.
+	 * 	</ul>
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.
 	 * 	Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
@@ -99,5 +104,5 @@ public interface ResponseProcessor {
 	 * 	If some other exception occurred.
 	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
-	boolean process(RestCall call) throws IOException, BasicHttpException;
+	int process(RestCall call) throws IOException, BasicHttpException;
 }

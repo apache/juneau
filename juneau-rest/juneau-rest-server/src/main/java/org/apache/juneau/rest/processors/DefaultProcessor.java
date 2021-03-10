@@ -54,7 +54,7 @@ public class DefaultProcessor implements ResponseProcessor {
 
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
-	public boolean process(RestCall call) throws IOException, InternalServerError, NotAcceptable {
+	public int process(RestCall call) throws IOException, InternalServerError, NotAcceptable {
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
 		SerializerGroup g = res.getOpContext().getSerializers();
@@ -161,7 +161,7 @@ public class DefaultProcessor implements ResponseProcessor {
 							m.invoke(o, res.getOutputStream());
 						else if (ptt == Writer.class)
 							m.invoke(o, res.getWriter());
-						return true;
+						return 1;
 					}
 					o = m.invoke(o);
 				} catch (Exception e) {
@@ -182,7 +182,7 @@ public class DefaultProcessor implements ResponseProcessor {
 				e.writeTo(os);
 				os.flush();
 			}
-			return true;
+			return 1;
 		}
 
 		if (sm != null) {
@@ -242,7 +242,7 @@ public class DefaultProcessor implements ResponseProcessor {
 			} catch (SerializeException e) {
 				throw new InternalServerError(e);
 			}
-			return true;
+			return 1;
 		}
 
 		// Non-existent Accept or plain/text can just be serialized as-is.
@@ -266,11 +266,11 @@ public class DefaultProcessor implements ResponseProcessor {
 				w.flush();
 				w.finish();
 			}
-			return true;
+			return 1;
 		}
 
 		if (o == null)
-			return true;
+			return 1;
 
 		throw new NotAcceptable(
 			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",

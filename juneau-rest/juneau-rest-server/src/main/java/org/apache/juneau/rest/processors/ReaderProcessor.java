@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import java.io.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.response.*;
 
 /**
  * Response processor for {@link Reader} objects.
@@ -32,15 +31,16 @@ import org.apache.juneau.http.response.*;
 public final class ReaderProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public boolean process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		if (call.getOutputInfo().isChildOf(Reader.class)) {
-			RestResponse res = call.getRestResponse();
-			try (Reader r = res.getOutput(Reader.class); Writer w = res.getNegotiatedWriter()) {
-				pipe(r, w);
-			}
-			return true;
+	public int process(RestCall call) throws IOException {
+
+		if (! call.getOutputInfo().isChildOf(Reader.class))
+			return 0;
+
+		RestResponse res = call.getRestResponse();
+		try (Reader r = res.getOutput(Reader.class); Writer w = res.getNegotiatedWriter()) {
+			pipe(r, w);
 		}
-		return false;
+		return 1;
 	}
 }
 

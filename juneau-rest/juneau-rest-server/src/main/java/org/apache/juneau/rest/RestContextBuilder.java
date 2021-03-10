@@ -128,8 +128,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			responseProcessors(
 				ReaderProcessor.class,
 				InputStreamProcessor.class,
+				HttpResponseProcessor.class,
 				HttpResourceProcessor.class,
 				HttpEntityProcessor.class,
+				ResponseBeanProcessor.class,
+				PojoProcessor.class,
 				DefaultProcessor.class
 			);
 

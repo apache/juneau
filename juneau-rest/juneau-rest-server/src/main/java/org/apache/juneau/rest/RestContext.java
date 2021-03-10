@@ -6781,9 +6781,18 @@ public class RestContext extends BeanContext {
 	public void processResponse(RestCall call) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.
-		for (ResponseProcessor x : getResponseProcessors())
-			if (x.process(call))
+		List<ResponseProcessor> l = getResponseProcessors();
+		int loops = 5;
+		for (int i = 0; i < l.size(); i++) {
+			int j = l.get(i).process(call);
+			if (j == 1)
 				return;
+			if (j == 2) {
+				if (loops-- < 0)
+					throw new InternalServerError("Too many processing loops.");
+				i = -1;  // Start over.
+			}
+		}
 
 		Object output = call.getRestResponse().getOutput().get().orElse(null);
 		throw new NotImplemented("No response processors found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");

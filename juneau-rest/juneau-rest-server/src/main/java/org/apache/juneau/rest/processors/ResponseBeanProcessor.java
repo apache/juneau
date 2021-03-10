@@ -12,34 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.processors;
 
-import static org.apache.juneau.internal.IOUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
- * Response processor for {@link InputStream} objects.
- *
- * <p>
- * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmReturnTypes}
- * </ul>
+ * Response handler for {@link Response @Response}-annotated objects.
  */
-public final class InputStreamProcessor implements ResponseProcessor {
+public final class ResponseBeanProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(InputStream.class))
+		if (! call.getOutputInfo().hasAnnotation(Response.class))
 			return 0;
 
-		RestResponse res = call.getRestResponse();
-		try (InputStream is = res.getOutput(InputStream.class); OutputStream os = res.getNegotiatedOutputStream()) {
-			pipe(is, os);
-		}
-		return 1;
+		return 0;
 	}
 }
+

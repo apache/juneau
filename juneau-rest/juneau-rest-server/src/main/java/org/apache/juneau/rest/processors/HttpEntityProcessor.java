@@ -18,7 +18,6 @@ import java.io.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.http.*;
-import org.apache.juneau.http.response.*;
 
 /**
  * Response handler for {@link HttpEntity} objects.
@@ -26,22 +25,23 @@ import org.apache.juneau.http.response.*;
 public final class HttpEntityProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public boolean process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		if (call.getOutputInfo().isChildOf(HttpEntity.class)) {
-			RestResponse res = call.getRestResponse();
-			HttpEntity e = res.getOutput(HttpEntity.class);
+	public int process(RestCall call) throws IOException {
 
-			res.header(e.getContentType()).header(e.getContentEncoding());
-			long contentLength = e.getContentLength();
-			if (contentLength >= 0)
-				res.header(contentLength(contentLength));
-			try (OutputStream os = res.getNegotiatedOutputStream()) {
-				e.writeTo(os);
-				os.flush();
-			}
-			return true;
+		if (! call.getOutputInfo().isChildOf(HttpEntity.class))
+			return 0;
+
+		RestResponse res = call.getRestResponse();
+		HttpEntity e = res.getOutput(HttpEntity.class);
+
+		res.header(e.getContentType()).header(e.getContentEncoding());
+		long contentLength = e.getContentLength();
+		if (contentLength >= 0)
+			res.header(contentLength(contentLength));
+		try (OutputStream os = res.getNegotiatedOutputStream()) {
+			e.writeTo(os);
+			os.flush();
 		}
-		return false;
+		return 1;
 	}
 }
 

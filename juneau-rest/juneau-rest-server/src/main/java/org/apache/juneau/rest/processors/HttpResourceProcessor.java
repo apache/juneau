@@ -19,7 +19,6 @@ import java.io.*;
 import org.apache.juneau.rest.*;
 import org.apache.http.*;
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
 
 /**
  * Response handler for {@link HttpResource} objects.
@@ -27,24 +26,25 @@ import org.apache.juneau.http.response.*;
 public final class HttpResourceProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
-	public boolean process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
-		if (call.getOutputInfo().isChildOf(HttpResource.class)) {
-			RestResponse res = call.getRestResponse();
-			HttpResource e = res.getOutput(HttpResource.class);
+	public int process(RestCall call) throws IOException {
 
-			res.header(e.getContentType()).header(e.getContentEncoding());
-			long contentLength = e.getContentLength();
-			if (contentLength >= 0)
-				res.header(contentLength(contentLength));
-			for (Header h : e.getHeaders())
-				res.addHeader(h);
-			try (OutputStream os = res.getNegotiatedOutputStream()) {
-				e.writeTo(os);
-				os.flush();
-			}
-			return true;
+		if (! call.getOutputInfo().isChildOf(HttpResource.class))
+			return 0;
+
+		RestResponse res = call.getRestResponse();
+		HttpResource e = res.getOutput(HttpResource.class);
+
+		res.header(e.getContentType()).header(e.getContentEncoding());
+		long contentLength = e.getContentLength();
+		if (contentLength >= 0)
+			res.header(contentLength(contentLength));
+		for (Header h : e.getHeaders())
+			res.addHeader(h);
+		try (OutputStream os = res.getNegotiatedOutputStream()) {
+			e.writeTo(os);
+			os.flush();
 		}
-		return false;
+		return 1;
 	}
 }
 
