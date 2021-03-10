@@ -153,18 +153,6 @@ public class SerializedPart extends BasicPart implements Headerable {
 	}
 
 	/**
-	 * Sets the serializer to use for serializing the value to a string value if it's not already set on this object.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SerializedPart serializerIfNotSet(HttpPartSerializerSession value) {
-		if (serializer == null)
-			serializer = value;
-		return this;
-	}
-
-	/**
 	 * Sets the schema object that defines the format of the output.
 	 *
 	 * @param value The new value for this property.
@@ -176,14 +164,22 @@ public class SerializedPart extends BasicPart implements Headerable {
 	}
 
 	/**
-	 * Sets the schema object that defines the format of the output if it's not already set on this object.
+	 * Copies this bean and sets the serializer and schema on it.
 	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @return Either a new bean with the serializer set, or this bean if
+	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
-	public SerializedPart schemaIfNotSet(HttpPartSchema value) {
-		if (schema == null)
-			schema = value;
+	public SerializedPart copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {
+		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+			SerializedPart p = copy();
+			if (serializer != null)
+				p.serializer(serializer);
+			if (schema != null)
+				p.schema(schema);
+			return p;
+		}
 		return this;
 	}
 

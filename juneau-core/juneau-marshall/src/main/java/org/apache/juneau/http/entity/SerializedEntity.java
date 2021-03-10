@@ -47,20 +47,6 @@ public class SerializedEntity extends BasicHttpEntity {
 		schema = builder.schema;
 	}
 
-	/**
-	 * Sets the schema to use to serialize the content.
-	 *
-	 * <p>
-	 * Value is ignored if the serializer is not schema-aware.
-	 *
-	 * @param value The schema.
-	 * @return This object (for method chaining).
-	 */
-	public SerializedEntity schema(HttpPartSchema value) {
-		this.schema = value;
-		return this;
-	}
-
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
 		try {

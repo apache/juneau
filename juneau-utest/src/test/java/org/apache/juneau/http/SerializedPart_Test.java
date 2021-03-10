@@ -56,9 +56,9 @@ public class SerializedPart_Test {
 		assertString(x2.getValue()).is("bar,baz");
 		SerializedPart x3 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertString(x3.getValue()).is("['bar','baz']");
-		SerializedPart x4 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializerIfNotSet((HttpPartSerializerSession)null);
+		SerializedPart x4 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertString(x4.getValue()).is("bar,baz");
-		SerializedPart x5 = serializedPart("Foo",list("bar","baz")).serializerIfNotSet(OAPI_SERIALIZER.createPartSession(null));
+		SerializedPart x5 = serializedPart("Foo",list("bar","baz")).copyWith(OAPI_SERIALIZER.createPartSession(null),null);
 		assertString(x5.getValue()).is("bar,baz");
 	}
 

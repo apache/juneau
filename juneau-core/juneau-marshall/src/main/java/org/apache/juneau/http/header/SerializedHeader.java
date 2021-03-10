@@ -132,19 +132,6 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Copies this bean and sets the serializer on it.
-	 * 
-	 * @param value The new serializer for the bean.  Can be <jk>null</jk>.
-	 * @return Either a new bean with the serializer set, or this bean if
-	 * 	the value is <jk>null</jk> or the serializer was already set.
-	 */
-	public SerializedHeader copyWithSerializer(HttpPartSerializerSession value) {
-		if (serializer == null && value != null)
-			return copy().serializer(value);
-		return this;
-	}
-
-	/**
 	 * Sets the schema object that defines the format of the output.
 	 *
 	 * @param value The new value for this property.
@@ -156,27 +143,14 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Copies this bean and sets the schema on it.
-	 * 
-	 * @param value The new schema for the bean.  Can be <jk>null</jk>.
-	 * @return Either a new bean with the schema set, or this bean if
-	 * 	the value is <jk>null</jk> or the schema was already set.
-	 */
-	public SerializedHeader copyWithSchema(HttpPartSchema value) {
-		if (schema == null && value != null)
-			return copy().schema(value);
-		return this;
-	}
-
-	/**
 	 * Copies this bean and sets the serializer and schema on it.
-	 * 
+	 *
 	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
 	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
 	 * @return Either a new bean with the serializer set, or this bean if
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
-	public SerializedHeader copyWithSerializerAndSchema(HttpPartSerializerSession serializer, HttpPartSchema schema) {
+	public SerializedHeader copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
 			SerializedHeader h = copy();
 			if (serializer != null)

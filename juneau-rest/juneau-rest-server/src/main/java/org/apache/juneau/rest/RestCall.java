@@ -228,7 +228,7 @@ public class RestCall {
 			BasicUriHeader x = (BasicUriHeader)h;
 			addResponseHeader(x.getName(), rreq.getUriResolver().resolve(x.getValue()));
 		} else if (h instanceof SerializedHeader) {
-			SerializedHeader x = ((SerializedHeader)h).copyWithSerializer(rreq.getPartSerializerSession());
+			SerializedHeader x = ((SerializedHeader)h).copyWith(rreq.getPartSerializerSession(), null);
 			addResponseHeader(x.getName(), rreq.getUriResolver().resolve(x.getValue()));
 		} else {
 			addResponseHeader(h.getName(), h.getValue());

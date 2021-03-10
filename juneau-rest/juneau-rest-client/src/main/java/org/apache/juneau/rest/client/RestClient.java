@@ -2125,9 +2125,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private static Object buildBuilders(Object o, HttpPartSerializerSession ss) {
 		if (o instanceof SerializedHeader)
-			return ((SerializedHeader)o).copyWithSerializer(ss);
+			return ((SerializedHeader)o).copyWith(ss, null);
 		if (o instanceof SerializedPart)
-			return ((SerializedPart)o).copy().serializerIfNotSet(ss);
+			return ((SerializedPart)o).copy().copyWith(ss, null);
 		return o;
 	}
 

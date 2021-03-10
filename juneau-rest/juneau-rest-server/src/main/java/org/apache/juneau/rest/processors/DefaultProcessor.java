@@ -106,11 +106,11 @@ public class DefaultProcessor implements ResponseProcessor {
 								res.setHeader(new HttpPart(k, RESPONSE_HEADER, partSchema.getProperty(k), hm.getSerializerSession().orElse(ps), v));
 							} else if (ho2 instanceof SerializedHeader) {
 								SerializedHeader x = ((SerializedHeader)ho2);
-								x = x.copyWithSerializerAndSchema(ps, partSchema.getProperty(x.getName()));
+								x = x.copyWith(ps, partSchema.getProperty(x.getName()));
 								res.setHeader(x.getName(), x.getValue());
 							} else if (ho2 instanceof SerializedPart) {
-								SerializedPart x = ((SerializedPart)ho2).copy().serializerIfNotSet(ps);
-								x.schemaIfNotSet(partSchema.getProperty(x.getName()));
+								SerializedPart x = ((SerializedPart)ho2);
+								x = x.copyWith(ps, partSchema.getProperty(x.getName()));
 								res.setHeader(x.getName(), x.getValue());
 							} else if (ho2 instanceof BasicUriHeader) {
 								BasicUriHeader x = (BasicUriHeader)ho2;
@@ -127,11 +127,10 @@ public class DefaultProcessor implements ResponseProcessor {
 						}
 					} else {
 						if (ho instanceof SerializedHeader) {
-							SerializedHeader x = ((SerializedHeader)ho).copyWithSerializerAndSchema(ps, schema);
+							SerializedHeader x = ((SerializedHeader)ho).copyWith(ps, schema);
 							res.setHeader(x.getName(), x.getValue());
 						} else if (ho instanceof SerializedPart) {
-							SerializedPart x = ((SerializedPart)ho).copy().serializerIfNotSet(ps);
-							x.schemaIfNotSet(schema);
+							SerializedPart x = ((SerializedPart)ho).copyWith(ps, schema);
 							res.setHeader(x.getName(), x.getValue());
 						} else if (ho instanceof Header) {
 							Header x = (Header)ho;

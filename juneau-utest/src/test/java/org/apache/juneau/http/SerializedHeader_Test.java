@@ -55,9 +55,9 @@ public class SerializedHeader_Test {
 		assertString(x2.getValue()).is("bar,baz");
 		SerializedHeader x3 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertString(x3.getValue()).is("['bar','baz']");
-		SerializedHeader x4 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).copyWithSerializer((HttpPartSerializerSession)null);
+		SerializedHeader x4 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertString(x4.getValue()).is("bar,baz");
-		SerializedHeader x5 = serializedHeader("Foo",list("bar","baz")).copyWithSerializer(OAPI_SERIALIZER.createPartSession(null));
+		SerializedHeader x5 = serializedHeader("Foo",list("bar","baz")).copyWith(OAPI_SERIALIZER.createPartSession(null),null);
 		assertString(x5.getValue()).is("bar,baz");
 	}
 
