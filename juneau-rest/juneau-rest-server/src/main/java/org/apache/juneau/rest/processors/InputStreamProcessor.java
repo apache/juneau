@@ -33,13 +33,16 @@ public final class InputStreamProcessor implements ResponseProcessor {
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(InputStream.class))
-			return 0;
-
 		RestResponse res = call.getRestResponse();
-		try (InputStream is = res.getOutput(InputStream.class); OutputStream os = res.getNegotiatedOutputStream()) {
-			pipe(is, os);
+		InputStream is = res.getOutput(InputStream.class);
+
+		if (is == null)
+			return NEXT;
+
+		try (InputStream is2 = is; OutputStream os = res.getNegotiatedOutputStream()) {
+			pipe(is2, os);
 		}
-		return 1;
+
+		return FINISHED;
 	}
 }

@@ -29,7 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logging.*;
@@ -65,11 +65,16 @@ public final class RestResponse {
 	private final RestRequest request;
 
 	private Optional<Optional<Object>> output = empty();  // The POJO being sent to the output.
-	private Optional<ClassInfo> outputInfo = empty();
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
-	private ResponseBeanMeta responseMeta;
+	private ResponseBeanMeta responseBeanMeta;
+	private RestOperationContext opContext;
+	private Optional<HttpPartSchema> bodySchema;
+	private Serializer serializer;
+	private Optional<SerializerMatch> serializerMatch;
+	private boolean safeHeaders;
+	private int maxHeaderLength = 8096;
 
 	/**
 	 * Constructor.
@@ -79,8 +84,8 @@ public final class RestResponse {
 		inner = call.getResponse();
 		request = call.getRestRequest();
 
-		RestOperationContext opContext = call.getRestOperationContext();
-		responseMeta = opContext.getResponseMeta();
+		opContext = call.getRestOperationContext();
+		responseBeanMeta = opContext.getResponseMeta();
 
 		RestContext context = call.getContext();
 
@@ -90,7 +95,7 @@ public final class RestResponse {
 				HttpPartParser p = context.getPartParser();
 				OMap m = p.createPartSession(request.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
-					setHeaderSafe(e.getKey(), e.getValue().toString());
+					addHeader(e.getKey(), resolveUris(e.getValue()));
 			}
 		} catch (Exception e1) {
 			throw new BadRequest(e1, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.");
@@ -113,9 +118,9 @@ public final class RestResponse {
 		}
 
 		for (Header e : request.getContext().getDefaultResponseHeaders().getAll())
-			setHeaderSafe(e.getName(), stringify(e.getValue()));
+			addHeader(e.getName(), resolveUris(e.getValue()));
 		for (Header e : opContext.getDefaultResponseHeaders().getAll())
-			setHeaderSafe(e.getName(), stringify(e.getValue()));
+			addHeader(e.getName(), resolveUris(e.getValue()));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset").orElse(null));
@@ -176,7 +181,6 @@ public final class RestResponse {
 	 */
 	public RestResponse setOutput(Object output) {
 		this.output = of(ofNullable(output));
-		this.outputInfo = ofNullable(ClassInfo.ofc(output));
 		return this;
 	}
 
@@ -216,12 +220,19 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns metadata about the output object.
+	 * Returns <jk>true</jk> if the response contains output.
 	 *
-	 * @return Metadata about the output object.
+	 * <p>
+	 * This implies {@link #setOutput(Object)} has been called on this object.
+	 *
+	 * <p>
+	 * Note that this also returns <jk>true</jk> even if {@link #setOutput(Object)} was called with a <jk>null</jk>
+	 * value as this means the response contains an output value of <jk>null</jk> as opposed to no value at all.
+	 *
+	 * @return <jk>true</jk> if the response contains output.
 	 */
-	public Optional<ClassInfo> getOutputInfo() {
-		return outputInfo;
+	public boolean hasOutput() {
+		return output.isPresent();
 	}
 
 	/**
@@ -505,6 +516,9 @@ public final class RestResponse {
 			if (ct != null && ct.getParameter("charset") != null)
 				inner.setCharacterEncoding(ct.getParameter("charset"));
 		} else {
+			if (safeHeaders)
+				value = stripInvalidHttpHeaderChars(value);
+			value = abbreviate(value, maxHeaderLength);
 			inner.setHeader(name, value);
 		}
 	}
@@ -517,40 +531,6 @@ public final class RestResponse {
 	 */
 	public boolean containsHeader(String name) {
 		return inner.containsHeader(name);
-	}
-
-	/**
-	 * Same as {@link #setHeader(String, String)} but strips invalid characters from the value if present.
-	 *
-	 * These include CTRL characters, newlines, and non-ISO8859-1 characters.
-	 * Also limits the string length to 1024 characters.
-	 *
-	 * @param name Header name.
-	 * @param value Header value.
-	 */
-	public void setHeaderSafe(String name, String value) {
-		setHeaderSafe(name, value, 1024);
-	}
-
-	/**
-	 * Same as {@link #setHeader(String, String)} but strips invalid characters from the value if present.
-	 *
-	 * These include CTRL characters, newlines, and non-ISO8859-1 characters.
-	 *
-	 * @param name Header name.
-	 * @param value Header value.
-	 * @param maxLength
-	 * 	The maximum length of the header value.
-	 * 	Will be truncated with <js>"..."</js> added if the value exceeds the length.
-	 */
-	public void setHeaderSafe(String name, String value, int maxLength) {
-
-		// Jetty doesn't set the content type correctly if set through this method.
-		// Tomcat/WAS does.
-		if (name.equalsIgnoreCase("Content-Type"))
-			inner.setContentType(value);
-		else
-			inner.setHeader(name, abbreviate(stripInvalidHttpHeaderChars(value), maxLength));
 	}
 
 	/**
@@ -628,6 +608,20 @@ public final class RestResponse {
 	}
 
 	/**
+	 * Specifies the schema for the response body.
+	 *
+	 * <p>
+	 * Used by schema-aware serializers such as {@link OpenApiSerializer}.  Ignored by other serializers.
+	 *
+	 * @param schema The body schema
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse bodySchema(HttpPartSchema schema) {
+		this.bodySchema = ofNullable(schema);
+		return this;
+	}
+
+	/**
 	 * Same as {@link #setHeader(String, String)} but header is defined as a response part
 	 *
 	 * @param h Header to set.
@@ -635,7 +629,7 @@ public final class RestResponse {
 	 * @throws SerializeException Header part could not be serialized.
 	 */
 	public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {
-		setHeaderSafe(h.getName(), h.getValue());
+		setHeader(h.getName(), h.getValue());
 	}
 
 	/**
@@ -709,8 +703,8 @@ public final class RestResponse {
 	 * 	The metadata about this response.
 	 * 	<jk>Never <jk>null</jk>.
 	 */
-	public ResponseBeanMeta getResponseMeta() {
-		return responseMeta;
+	public ResponseBeanMeta getResponseBeanMeta() {
+		return responseBeanMeta;
 	}
 
 	/**
@@ -719,8 +713,8 @@ public final class RestResponse {
 	 * @param rbm The metadata about this response.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setResponseMeta(ResponseBeanMeta rbm) {
-		this.responseMeta = rbm;
+	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {
+		this.responseBeanMeta = rbm;
 		return this;
 	}
 
@@ -738,11 +732,13 @@ public final class RestResponse {
 	 * Returns this value cast to the specified class.
 	 *
 	 * @param c The class to cast to.
-	 * @return This value cast to the specified class.
+	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getOutput(Class<T> c) {
-		return (T)getRawOutput();
+		if (isOutputType(c))
+			return (T)getRawOutput();
+		return null;
 	}
 
 	/**
@@ -808,17 +804,61 @@ public final class RestResponse {
 	}
 
 	/**
+	 * Enabled safe-header mode.
+	 *
+	 * <p>
+	 * When enabled, invalid characters such as CTRL characters will be stripped from header values
+	 * before they get set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse safeHeaders() {
+		this.safeHeaders = true;
+		return this;
+	}
+
+	/**
+	 * Specifies the maximum length for header values.
+	 *
+	 * <p>
+	 * Header values that exceed this length will get truncated.
+	 *
+	 * @param value The new value for this setting.  The default is <c>8096</c>.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse maxHeaderLength(int value) {
+		this.maxHeaderLength = value;
+		return this;
+	}
+
+	/**
 	 * Adds a response header with the given name and value.
 	 *
 	 * <p>
 	 * This method allows response headers to have multiple values.
 	 *
+	 * <p>
+	 * A no-op of either the name or value is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
+	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
+	 *
 	 * @param name The header name.
- 	 * @param value The header value.
+	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse addHeader(String name, String value) {
-		inner.addHeader(name, value);
+		if (name != null && value != null) {
+			if (name.equalsIgnoreCase("Content-Type"))
+				setHeader(name, value);
+			else {
+				if (safeHeaders)
+					value = stripInvalidHttpHeaderChars(value);
+				value = abbreviate(value, maxHeaderLength);
+				inner.addHeader(name, value);
+			}
+		}
 		return this;
 	}
 
@@ -835,7 +875,17 @@ public final class RestResponse {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHeader(Header header) {
-		inner.setHeader(header.getName(), header.getValue());
+		if (header == null) {
+			// Do nothing.
+		} else if (header instanceof BasicUriHeader) {
+			BasicUriHeader x = (BasicUriHeader)header;
+			setHeader(x.getName(), resolveUris(x.getValue()));
+		} else if (header instanceof SerializedHeader) {
+			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+			setHeader(x.getName(), resolveUris(x.getValue()));
+		} else {
+			setHeader(header.getName(), header.getValue());
+		}
 		return this;
 	}
 
@@ -848,12 +898,37 @@ public final class RestResponse {
 	 * <p>
 	 * Value is added at the end of the headers.
 	 *
+	 * <p>
+	 * If the header is a {@link BasicUriHeader}, the URI will be resolved using the {@link RestRequest#getUriResolver()} object.
+	 *
+	 * <p>
+	 * If the header is a {@link SerializedHeader} and the serializer session is not set, it will be set to the one returned by {@link RestRequest#getPartSerializerSession()} before serialization.
+	 *
+	 * <p>
+	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
+	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
+	 *
 	 * @param header The header.
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse addHeader(Header header) {
-		inner.addHeader(header.getName(), header.getValue());
+		if (header == null) {
+			// Do nothing.
+		} else if (header instanceof BasicUriHeader) {
+			BasicUriHeader x = (BasicUriHeader)header;
+			addHeader(x.getName(), resolveUris(x.getValue()));
+		} else if (header instanceof SerializedHeader) {
+			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+			addHeader(x.getName(), resolveUris(x.getValue()));
+		} else {
+			addHeader(header.getName(), header.getValue());
+		}
 		return this;
+	}
+
+	private String resolveUris(Object value) {
+		String s = stringify(value);
+		return request.getUriResolver().resolve(s);
 	}
 
 	/**
@@ -867,5 +942,42 @@ public final class RestResponse {
 	 */
 	public String getHeader(String name) {
 		return inner.getHeader(name);
+	}
+
+
+	/**
+	 * Returns the matching serializer and media type for this response.
+	 *
+	 * @return The matching serializer, never <jk>null</jk>.
+	 */
+	public Optional<SerializerMatch> getSerializerMatch() {
+		if (serializerMatch != null)
+			return serializerMatch;
+		if (serializer != null) {
+			serializerMatch = of(new SerializerMatch(getMediaType(), serializer));
+		} else {
+			serializerMatch = ofNullable(opContext.getSerializers().getSerializerMatch(request.getHeader("Accept").orElse("*/*")));
+		}
+		return serializerMatch;
+	}
+
+	/**
+	 * Returns the schema of the response body.
+	 *
+	 * @return The schema of the response body, never <jk>null</jk>.
+	 */
+	public Optional<HttpPartSchema> getBodySchema() {
+		if (bodySchema != null)
+			return bodySchema;
+		if (responseBeanMeta != null)
+			bodySchema = ofNullable(responseBeanMeta.getSchema());
+		else {
+			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getOutput(Object.class));
+			if (rbm != null)
+				bodySchema = ofNullable(rbm.getSchema());
+			else
+				bodySchema = empty();
+		}
+		return bodySchema;
 	}
 }

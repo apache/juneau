@@ -71,7 +71,7 @@ public class ResponseBeanArg implements RestOperationArg {
 				ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
 				if (meta == null)
 					meta = ResponseBeanArg.this.meta;
-				res.setResponseMeta(meta);
+				res.setResponseBeanMeta(meta);
 				res.setOutput(o);
 			}
 		});

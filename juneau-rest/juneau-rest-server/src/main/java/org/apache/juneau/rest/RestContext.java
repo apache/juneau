@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.rest.ResponseProcessor.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
@@ -2293,29 +2294,39 @@ public class RestContext extends BeanContext {
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <p>
-	 * By default, the following response handlers are provided out-of-the-box:
+	 * By default, the following response handlers are provided in the specified order:
 	 * <ul>
 	 * 	<li class='jc'>{@link ReaderProcessor}
 	 * 	<li class='jc'>{@link InputStreamProcessor}
+	 * 	<li class='jc'>{@link ThrowableProcessor}
+	 * 	<li class='jc'>{@link HttpResponseProcessor}
 	 * 	<li class='jc'>{@link HttpResourceProcessor}
 	 * 	<li class='jc'>{@link HttpEntityProcessor}
-	 * 	<li class='jc'>{@link DefaultProcessor}
+	 * 	<li class='jc'>{@link ResponseBeanProcessor}
+	 * 	<li class='jc'>{@link PlainTextPojoProcessor}
+	 * 	<li class='jc'>{@link SerializedPojoProcessor}
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Our custom response processor for MySpecialObject objects. </jc>
+	 * 	<jc>// Our custom response processor for Foo objects. </jc>
 	 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public boolean</jk> process(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, Object <jv>output</jv>) <jk>throws</jk> IOException, RestException {
-	 * 			<jk>if</jk> (output <jk>instanceof</jk> MySpecialObject) {
+	 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
+	 * 
+	 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
+	 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
+	 * 
+	 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
+	 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
+	 * 
 	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
 	 * 					<jc>//Pipe it to the writer ourselves.</jc>
 	 * 				}
-	 * 				<jk>return true</jk>;  <jc>// We handled it.</jc>
-	 * 			}
-	 * 			<jk>return false</jk>; <jc>// We didn't handle it.</jc>
+	 * 				
+	 * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
+	 *			}
 	 * 		}
 	 * 	}
 	 *
@@ -6730,7 +6741,7 @@ public class RestContext extends BeanContext {
 				handleNotFound(call);
 			}
 
-			if (call.getOutput().isPresent()) {
+			if (call.hasOutput()) {
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
 				processResponse(call);
@@ -6785,9 +6796,9 @@ public class RestContext extends BeanContext {
 		int loops = 5;
 		for (int i = 0; i < l.size(); i++) {
 			int j = l.get(i).process(call);
-			if (j == 1)
+			if (j == FINISHED)
 				return;
-			if (j == 2) {
+			if (j == RESTART) {
 				if (loops-- < 0)
 					throw new InternalServerError("Too many processing loops.");
 				i = -1;  // Start over.

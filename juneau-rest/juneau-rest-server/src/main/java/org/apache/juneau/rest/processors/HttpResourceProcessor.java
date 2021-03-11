@@ -29,28 +29,28 @@ public final class HttpResourceProcessor implements ResponseProcessor {
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(HttpResource.class))
-			return 0;
-
 		RestResponse res = call.getRestResponse();
 		HttpResource r = res.getOutput(HttpResource.class);
 
-		call.addResponseHeader(r.getContentType());
-		call.addResponseHeader(r.getContentEncoding());
+		if (r == null)
+			return NEXT;
+
+		res.setHeader(r.getContentType());
+		res.setHeader(r.getContentEncoding());
 		long contentLength = r.getContentLength();
 		if (contentLength >= 0)
-			call.addResponseHeader(contentLength(contentLength));
-		
+			res.setHeader(contentLength(contentLength));
+
 		List<Header> allHeaders = r.getAllHeaders();
 		for (int i = 0; i < allHeaders.size() ; i++) // Avoids Iterator creation.
-			call.addResponseHeader(allHeaders.get(i));
+			res.addHeader(allHeaders.get(i));
 
 		try (OutputStream os = res.getNegotiatedOutputStream()) {
 			r.writeTo(os);
 			os.flush();
 		}
 
-		return 1;
+		return FINISHED;
 	}
 }
 

@@ -12,20 +12,43 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.processors;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.util.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 
 /**
- * Response handler for plain-old Java objects.
+ * Response handler for plain-old Java objects when a serializer match is not found and they're asking for plain/text or anything.
  */
-public final class PojoProcessor implements ResponseProcessor {
+public final class PlainTextPojoProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException, NotAcceptable, BasicHttpException {
+		RestRequest req = call.getRestRequest();
+		RestResponse res = call.getRestResponse();
+		String accept = req.getHeader("Accept").orElse("*/*");
 
-		return 0;
+		if (res.getSerializerMatch().isPresent())
+			return NEXT;
+
+		if (! (isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
+			return NEXT;
+
+		Object o = res.getOutput(Object.class);
+
+		if (isEmpty(res.getContentType()))
+			res.setHeader(ContentType.TEXT_PLAIN);
+
+		FinishablePrintWriter w = res.getNegotiatedWriter();
+		w.append(req.getBeanSession().getClassMetaForObject(o).toString(o));
+		w.flush();
+		w.finish();
+
+		return FINISHED;
 	}
 }
 

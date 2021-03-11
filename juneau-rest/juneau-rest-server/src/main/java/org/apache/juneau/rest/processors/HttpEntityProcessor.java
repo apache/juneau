@@ -27,24 +27,24 @@ public final class HttpEntityProcessor implements ResponseProcessor {
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(HttpEntity.class))
-			return 0;
-
 		RestResponse res = call.getRestResponse();
 		HttpEntity e = res.getOutput(HttpEntity.class);
 
-		call.addResponseHeader(e.getContentType());
-		call.addResponseHeader(e.getContentEncoding());
+		if (e == null)
+			return NEXT;
+
+		res.setHeader(e.getContentType());
+		res.setHeader(e.getContentEncoding());
 		long contentLength = e.getContentLength();
 		if (contentLength >= 0)
-			call.addResponseHeader(contentLength(contentLength));
+			res.setHeader(contentLength(contentLength));
 
 		try (OutputStream os = res.getNegotiatedOutputStream()) {
 			e.writeTo(os);
 			os.flush();
 		}
 
-		return 1;
+		return FINISHED;
 	}
 }
 

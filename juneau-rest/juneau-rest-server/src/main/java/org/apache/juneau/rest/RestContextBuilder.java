@@ -133,8 +133,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				HttpResourceProcessor.class,
 				HttpEntityProcessor.class,
 				ResponseBeanProcessor.class,
-				PojoProcessor.class,
-				DefaultProcessor.class
+				PlainTextPojoProcessor.class,
+				SerializedPojoProcessor.class
 			);
 
 			// Pass-through default values.

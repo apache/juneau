@@ -17,7 +17,6 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.util.*;
 
 import javax.servlet.*;
 
@@ -54,8 +53,7 @@ public class RrpcRestOperationContext extends RestOperationContext {
 
 		super.invoke(call);
 
-		Optional<Optional<Object>> x = call.getOutput();
-		final Object o = x.isPresent() ? x.get().orElse(null) : null;
+		final Object o = call.hasOutput() ? call.getRestResponse().getOutput(Object.class) : null;
 
 		if ("GET".equals(call.getMethod())) {
 			call.output(meta.getMethodsByPath().keySet());

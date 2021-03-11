@@ -19,7 +19,7 @@ import org.apache.juneau.rest.*;
 
 /**
  * Response handler for {@link Throwable} objects.
- * 
+ *
  * <p>
  * Adds a <c>Thrown</c> header to the response and returns <c>0</c> so that the processor chain can continue.
  */
@@ -28,12 +28,15 @@ public final class ThrowableProcessor implements ResponseProcessor {
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(Throwable.class))
-			return 0;
+		RestResponse res = call.getRestResponse();
+		Throwable t = res.getOutput(Throwable.class);
 
-		call.addResponseHeader(Thrown.of(call.getRestResponse().getOutput(Throwable.class)));
+		if (t == null)
+			return NEXT;
 
-		return 0; // Continue processing.
+		res.addHeader(Thrown.of(t));
+
+		return NEXT; // Continue processing as bean.
 	}
 }
 

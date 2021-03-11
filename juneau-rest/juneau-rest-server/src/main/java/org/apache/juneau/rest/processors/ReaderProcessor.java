@@ -33,14 +33,16 @@ public final class ReaderProcessor implements ResponseProcessor {
 	@Override /* ResponseProcessor */
 	public int process(RestCall call) throws IOException {
 
-		if (! call.getOutputInfo().isChildOf(Reader.class))
-			return 0;
-
 		RestResponse res = call.getRestResponse();
-		try (Reader r = res.getOutput(Reader.class); Writer w = res.getNegotiatedWriter()) {
-			pipe(r, w);
+		Reader r = res.getOutput(Reader.class);
+
+		if (r == null)
+			return NEXT;
+
+		try (Reader r2 = r; Writer w = res.getNegotiatedWriter()) {
+			pipe(r2, w);
 		}
-		return 1;
+		return FINISHED;
 	}
 }
 

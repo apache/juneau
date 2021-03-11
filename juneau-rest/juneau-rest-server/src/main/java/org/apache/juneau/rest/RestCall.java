@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static java.util.Optional.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -22,10 +20,7 @@ import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.util.*;
 
@@ -208,52 +203,6 @@ public class RestCall {
 	}
 
 	/**
-	 * Adds a header to the response.
-	 *
-	 * <p>
-	 * If the header is a {@link BasicUriHeader}, the URI will be resolved using the {@link RestRequest#getUriResolver()} object.
-	 *
-	 * <p>
-	 * If the header is a {@link SerializedHeader} and the serializer session is not set, it will be set to the one returned by {@link RestRequest#getPartSerializerSession()} before serialization.
-	 *
-	 * @param h The header to add.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall addResponseHeader(Header h) {
-
-		if (h == null)
-			return this;
-
-		if (h instanceof BasicUriHeader) {
-			BasicUriHeader x = (BasicUriHeader)h;
-			addResponseHeader(x.getName(), rreq.getUriResolver().resolve(x.getValue()));
-		} else if (h instanceof SerializedHeader) {
-			SerializedHeader x = ((SerializedHeader)h).copyWith(rreq.getPartSerializerSession(), null);
-			addResponseHeader(x.getName(), rreq.getUriResolver().resolve(x.getValue()));
-		} else {
-			addResponseHeader(h.getName(), h.getValue());
-		}
-
-		return this;
-	}
-
-	/**
-	 * Adds a header to the response.
-	 *
-	 * <p>
-	 * A no-op of either the name or value is <jk>null</jk>.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall addResponseHeader(String name, String value) {
-		if (name != null && value != null)
-			res.addHeader(name, value);
-		return this;
-	}
-
-	/**
 	 * Identifies that an exception occurred during this call.
 	 *
 	 * @param value The thrown exception.
@@ -262,18 +211,6 @@ public class RestCall {
 	public RestCall exception(Throwable value) {
 		req.setAttribute("Exception", value);
 		beanStore.addBean(Throwable.class, value);
-		return this;
-	}
-
-	/**
-	 * Sets metadata about the response.
-	 *
-	 * @param value The metadata about the response.
-	 * @return This object (for method chaining).
-	 */
-	public RestCall responseMeta(ResponseBeanMeta value) {
-		if (rres != null)
-			rres.setResponseMeta(value);
 		return this;
 	}
 
@@ -340,15 +277,6 @@ public class RestCall {
 	 */
 	public RestResponse getRestResponse() {
 		return Optional.ofNullable(rres).orElseThrow(()->new InternalServerError("RestResponse object has not yet been created."));
-	}
-
-	/**
-	 * Returns information about the output POJO.
-	 *
-	 * @return The metadata on the object returned by the REST Java method, or {@link ClassInfo#OBJECT} if nothing was set.
-	 */
-	public ClassInfo getOutputInfo() {
-		return getRestResponse().getOutputInfo().orElse(ClassInfo.OBJECT);
 	}
 
 	/**
@@ -538,19 +466,21 @@ public class RestCall {
 	}
 
 	/**
-	 * Returns the output that was set by calling {@link RestResponse#setOutput(Object)}.
+	 * Returns <jk>true</jk> if the response contains output.
 	 *
 	 * <p>
-	 * If it's empty, then {@link RestResponse#setOutput(Object)} wasn't called.
-	 * <br>If it's not empty but contains an empty, then <c>response.setObject(<jk>null</jk>)</c> was called.
-	 * <br>Otherwise, {@link RestResponse#setOutput(Object)} was called with a non-null value.
+	 * This implies {@link RestResponse#setOutput(Object)} has been called on this object.
 	 *
-	 * @return The output object.  Never <jk>null</jk>.
+	 * <p>
+	 * Note that this also returns <jk>true</jk> even if {@link RestResponse#setOutput(Object)} was called with a <jk>null</jk>
+	 * value as this means the response contains an output value of <jk>null</jk> as opposed to no value at all.
+	 *
+	 * @return <jk>true</jk> if the response contains output.
 	 */
-	public Optional<Optional<Object>> getOutput() {
+	public boolean hasOutput() {
 		if (rres != null)
-			return rres.getOutput();
-		return rres == null ? empty() : rres.getOutput();
+			return rres.hasOutput();
+		return false;
 	}
 
 	/**

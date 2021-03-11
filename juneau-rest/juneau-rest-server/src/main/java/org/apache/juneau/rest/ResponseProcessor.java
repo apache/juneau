@@ -18,7 +18,6 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.processors.*;
 
 /**
  * Defines the interface for processors that convert POJOs to appropriate HTTP responses.
@@ -36,16 +35,6 @@ import org.apache.juneau.rest.processors.*;
  * </ul>
  *
  * <p>
- * By default, REST resources are registered with the following response processors:
- * <ul class='spaced-list'>
- * 	<li class='jc'>{@link ReaderProcessor}
- * 	<li class='jc'>{@link InputStreamProcessor}
- * 	<li class='jc'>{@link HttpResourceProcessor}
- * 	<li class='jc'>{@link HttpEntityProcessor}
- * 	<li class='jc'>{@link DefaultProcessor}
- * </ul>
- *
- * <p>
  * Response processors can be used to process POJOs that cannot normally be handled through Juneau serializers, or
  * because it's simply easier to define response processors for special cases.
  *
@@ -55,7 +44,7 @@ import org.apache.juneau.rest.processors.*;
  * <p class='bcode w800'>
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/example"</js>,
- * 		responseHandlers=FooHandler.<jk>class</jk>
+ * 		responseProcessors=FooProcessor.<jk>class</jk>
  * 	)
  * 	<jk>public class</jk> Example <jk>extends</jk> RestServlet {
  *
@@ -64,27 +53,42 @@ import org.apache.juneau.rest.processors.*;
  * 			<jk>return new</jk> Foo(<js>"123"</js>);
  * 		}
  *
- * 		<jk>public static class</jk> FooHandler <jk>implements</jk> ResponseHandler {
+ * 		<jk>public static class</jk> FooProcessor <jk>implements</jk> ResponseProcessor {
  * 			<ja>@Override</ja>
- * 			<jk>public boolean</jk> handle(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, Object <jv>output</jv>) <jk>throws</jk> IOException, RestException {
- * 				<jk>if</jk> (<jv>output</jv> <jk>instanceof</jk> Foo) {
- * 					Foo <jv>foo</jv> = (Foo)<jv>output</jv>;
- * 					<jc>// Set some headers and body content.</jc>
- * 					<jv>res</jv>.setHeader(<js>"Foo-ID"</js>, <jv>foo</jv>.getId());
- * 					<jv>res</jv>.getWriter().write(<js>"foo.id="</js> + <jv>foo</jv>.getId());
- * 					<jk>return true</jk>;  <jc>// We handled it.</jc>
- * 				}
- * 				<jk>return false</jk>;  <jc>// We didn't handle it.</jc>
+ * 			<jk>public int</jk> process(RestCall <jv>call</jv>) {
+ *
+ * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
+ * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
+ *
+ * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
+ * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
+ *
+ * 				<jc>// Set some headers and body content.</jc>
+ * 				<jv>res</jv>.setHeader(<js>"Foo-ID"</js>, <jv>foo</jv>.getId());
+ * 				<jv>res</jv>.getWriter().write(<js>"foo.id="</js> + <jv>foo</jv>.getId());
+ *
+ * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
  * 			}
  * 		}
  * 	}
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc RestmReturnTypes}
- * </ul>
  */
 public interface ResponseProcessor {
+
+	/**
+	 * Return code indicating to proceed to the next response processor in the chain.
+	 */
+	public static final int NEXT = 0;
+
+	/**
+	 * Return code indicating that processing is complete and to exit the chain.
+	 */
+	public static final int FINISHED = 1;
+
+	/**
+	 * Return code indicating to restart processing the chain from the beginning.
+	 */
+	public static final int RESTART = 2;
 
 	/**
 	 * Process this response if possible.
@@ -99,10 +103,10 @@ public interface ResponseProcessor {
 	 * 	</ul>
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.
-	 * 	Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
+	 * 	<br>Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
 	 * @throws BasicHttpException
 	 * 	If some other exception occurred.
-	 * 	Can be used to provide an appropriate HTTP response code and message.
+	 * 	<br>Can be used to provide an appropriate HTTP response code and message.
 	 */
 	int process(RestCall call) throws IOException, BasicHttpException;
 }

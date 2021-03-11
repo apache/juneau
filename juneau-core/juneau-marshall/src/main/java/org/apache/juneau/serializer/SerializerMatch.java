@@ -22,7 +22,13 @@ public final class SerializerMatch {
 	private final MediaType mediaType;
 	private final Serializer serializer;
 
-	SerializerMatch(MediaType mediaType, Serializer serializer) {
+	/**
+	 * Constructor.
+	 *
+	 * @param mediaType The media type matched.
+	 * @param serializer The serializer matched.
+	 */
+	public SerializerMatch(MediaType mediaType, Serializer serializer) {
 		this.mediaType = mediaType;
 		this.serializer = serializer;
 	}
