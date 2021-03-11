@@ -12,13 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
+import org.apache.juneau.reflect.*;
 
 /**
  * Standard predefined HTTP headers.
@@ -3157,6 +3162,44 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link Header} of the specified type.
+	 *
+	 * <p>
+	 * The implementation class must have a public constructor taking in one of the following argument lists:
+	 * <ul>
+	 * 	<li><c>X(String <jv>value</jv>)</c>
+	 * 	<li><c>X(Object <jv>value</jv>)</c>
+	 * 	<li><c>X(String <jv>name</jv>, String <jv>value</jv>)</c>
+	 * 	<li><c>X(String <jv>name</jv>, Object <jv>value</jv>)</c>
+	 * </ul>
+	 *
+	 * @param type The header implementation class.
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final <T extends Header> T header(Class<T> type, String name, Object value) {
+		Constructor<T> c = findConstructor(type);
+		if (c == null)
+			throw new UnsupportedOperationException("Constructor for type "+type.getClass().getName()+" could not be found.");
+
+		Class<?>[] pt = c.getParameterTypes();
+		Object[] args = new Object[pt.length];
+		if (pt.length == 1) {
+			args[0] = pt[0] == String.class ? stringify(value) : value;
+		} else {
+			args[0] = name;
+			args[1] = pt[1] == String.class ? stringify(value) : value;
+		}
+
+		try {
+			return c.newInstance(args);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * Instantiates a new {@link HeaderListBuilder}.
 	 *
 	 * @return A new empty builder.
@@ -3196,5 +3239,25 @@ public class HttpHeaders {
 	 */
 	public static HeaderList headerList(Object...pairs) {
 		return HeaderList.ofPairs(pairs);
+	}
+
+	private static final ConcurrentHashMap<Class<? extends Header>,Optional<Constructor<? extends Header>>> HEADER_CONSTRUCTORS = new ConcurrentHashMap<>();
+
+	@SuppressWarnings("unchecked")
+	private static final <T extends Header> Constructor<T> findConstructor(Class<T> c) {
+		Optional<Constructor<? extends Header>> o = HEADER_CONSTRUCTORS.get(c);
+		if (o == null) {
+			ClassInfo ci = ClassInfo.of(c);
+			ConstructorInfo cci = ci.getPublicConstructor(String.class);
+			if (cci == null)
+				cci = ci.getPublicConstructor(Object.class);
+			if (cci == null)
+				cci = ci.getPublicConstructor(String.class, String.class);
+			if (cci == null)
+				cci = ci.getPublicConstructor(String.class, Object.class);
+			o = Optional.ofNullable(cci == null ? null : cci.inner());
+			HEADER_CONSTRUCTORS.put(c, o);
+		}
+		return (Constructor<T>)o.orElse(null);
 	}
 }

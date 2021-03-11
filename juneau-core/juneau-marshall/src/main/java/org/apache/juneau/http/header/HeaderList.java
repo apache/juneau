@@ -23,6 +23,7 @@ import org.apache.http.message.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.HttpHeaders;
 
 /**
  * An unmodifiable list of HTTP headers.
@@ -162,6 +163,55 @@ public class HeaderList implements Iterable<Header> {
 		}
 
 		return new BasicHeader(name.toLowerCase(Locale.ROOT), sb.toString());
+	}
+
+	/**
+	 * Gets a header representing all of the header values with the given name.
+	 *
+	 * <p>
+	 * If more that one header with the given name exists the values will be
+	 * combined with a "," as per RFC 2616.
+	 *
+	 * <p>Header name comparison is case insensitive.
+	 *
+	 * <p>
+	 * The implementation class must have a public constructor taking in one of the following argument lists:
+	 * <ul>
+	 * 	<li><c>X(String <jv>value</jv>)</c>
+	 * 	<li><c>X(Object <jv>value</jv>)</c>
+	 * 	<li><c>X(String <jv>name</jv>, String <jv>value</jv>)</c>
+	 * 	<li><c>X(String <jv>name</jv>, Object <jv>value</jv>)</c>
+	 * </ul>
+	 *
+	 * @param type The header implementation class.
+	 * @param name The header name.
+	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Header> T getCondensed(Class<T> type, String name) {
+		List<Header> hdrs = get(name);
+
+		if (hdrs.isEmpty())
+			return null;
+
+		String value = null;
+
+		if (hdrs.size() == 1) {
+			Header h = hdrs.get(0);
+			if (type.isInstance(h))
+				return (T)h;
+			value = h.getValue();
+		} else {
+			CharArrayBuffer sb = new CharArrayBuffer(128);
+			sb.append(hdrs.get(0).getValue());
+			for (int i = 1; i < hdrs.size(); i++) {
+				sb.append(", ");
+				sb.append(hdrs.get(i).getValue());
+			}
+			value = sb.toString();
+		}
+
+		return HttpHeaders.header(type, name, value);
 	}
 
 	/**
