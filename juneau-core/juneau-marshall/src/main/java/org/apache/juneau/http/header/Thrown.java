@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Collections.*;
 
 import java.util.*;
 
@@ -26,15 +27,28 @@ import org.apache.juneau.http.annotation.*;
  *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Thrown: org.apache.juneau.http.response.NotFound, Resource was not found
+ * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found
  * </p>
  *
  * <p>
  * This header isn't part of the RFC2616 specification, but is provided to allow for Java exception information
  * to be delivered to remote REST Java interfaces.
+ * 
+ * <p>
+ * This header supports comma-delimited values for multiple thrown values.
+ * <p class='bcode w800'>
+ * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found,java.lang.RuntimeException;foo
+ * </p>
+ * 
+ * <p>
+ * Note that this is equivalent to specifying multiple header values.
+ * <p class='bcode w800'>
+ * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found
+ * 	Thrown: java.lang.RuntimeException;foo
+ * </p>
  */
 @Header("Thrown")
-public class Thrown extends BasicHeader {
+public class Thrown extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,19 +57,24 @@ public class Thrown extends BasicHeader {
 	 */
 	public static final Thrown EMPTY = new Thrown((String)null);
 
-	private final String className, message;
+	private final List<Part> parts;
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @param value
+	 * @param values
 	 * 	The header value.
 	 * @return A new {@link Exception} object.
 	 */
-	public static Thrown of(Throwable value) {
-		if (value == null)
-			return null;
-		return new Thrown(value);
+	public static Thrown of(Throwable...values) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < values.length; i++) {
+			if (i > 0)
+				sb.append(", ");
+			Throwable t = values[i];
+			sb.append(urlEncode(t.getClass().getName())).append(";").append(urlEncode(t.getMessage()));
+		}
+		return new Thrown(sb.toString());
 	}
 
 	/**
@@ -77,40 +96,18 @@ public class Thrown extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 */
-	public Thrown(Throwable value) {
-		super("Thrown", value);
-		className = stripInvalidHttpHeaderChars(value.getClass().getName());
-		message = stripInvalidHttpHeaderChars(value.getMessage());
-	}
-
-	@Override /* Header */
-	public String getValue() {
-		if (message == null)
-			return className;
-		return className + ", " + message;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 */
 	public Thrown(String value) {
 		super("Thrown", value);
-		if (value != null) {
-			int i = value.indexOf(',');
+		List<Part> l = new ArrayList<>();
+		for (String s : asList().orElse(emptyList())) {
+			int i = value.indexOf(';');
 			if (i != -1) {
-				className = value.substring(0, i).trim();
-				message = value.substring(i+1).trim();
+				l.add(new Part(urlDecode(s.substring(0, i).trim()), urlDecode(s.substring(i+1).trim())));
 			} else {
-				className = value;
-				message = null;
+				l.add(new Part(urlDecode(s), null));
 			}
-		} else {
-			className = null;
-			message = null;
 		}
+		parts = unmodifiableList(l);
 	}
 
 	/**
@@ -118,34 +115,38 @@ public class Thrown extends BasicHeader {
 	 *
 	 * @return The class name portion of the header, or <jk>null</jk> if not there.
 	 */
-	public String getClassName() {
-		return className;
+	public List<Part> getParts() {
+		return parts;
 	}
 
 	/**
-	 * Returns the class name portion of the header.
-	 *
-	 * @return The class name portion of the header, never <jk>null</jk>.
+	 * Represents a single entry in this header.
 	 */
-	public Optional<String> className() {
-		return Optional.ofNullable(className);
-	}
+	public static class Part {
 
-	/**
-	 * Returns the message portion of the header.
-	 *
-	 * @return The message portion of the header, or <jk>null</jk> if not there.
-	 */
-	public String getMessage() {
-		return message;
-	}
+		String className, message;
 
-	/**
-	 * Returns the message portion of the header.
-	 *
-	 * @return The message portion of the header, never <jk>null</jk>.
-	 */
-	public Optional<String> message() {
-		return Optional.ofNullable(message);
+		Part(String className, String message) {
+			this.className = className;
+			this.message = message;
+		}
+
+		/**
+		 * Returns the message portion of the header.
+		 *
+		 * @return The message portion of the header, or <jk>null</jk> if not there.
+		 */
+		public String getClassName() {
+			return className;
+		}
+
+		/**
+		 * Returns the message portion of the header.
+		 *
+		 * @return The message portion of the header, or <jk>null</jk> if not there.
+		 */
+		public String getMessage() {
+			return message;
+		}
 	}
 }

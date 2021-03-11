@@ -87,7 +87,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	public HttpExceptionBuilder<?> copyFrom(HttpResponse response) {
 		Header h = response.getLastHeader("Thrown");
 		if (h != null)
-			message(thrown(h.getValue()).message().orElse(null));
+			message(thrown(h.getValue()).getParts().get(0).getMessage());
 		headers(response.getAllHeaders());
 		body(response.getEntity());
 		return this;

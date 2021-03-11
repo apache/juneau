@@ -2944,7 +2944,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			Thrown thrown = response.getHeader("Thrown").asHeader(Thrown.class);
 			if (thrown.isPresent() && rethrow != null) {
-				String className = thrown.className().orElse(null);
+				Thrown.Part thrownPart = thrown.getParts().get(0);
+				String className = thrownPart.getClassName();
+				String message = thrownPart.getMessage();
 				for (Class<? extends Throwable> t : rethrow) {
 					if (t.getName().equals(className)) {
 						ConstructorInfo c = null;
@@ -2954,10 +2956,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 							throw c.<Throwable>invoke(response);
 						c = ci.getPublicConstructor(String.class);
 						if (c != null)
-							throw c.<Throwable>invoke(thrown.message().orElse(response.getBody().asString()));
+							throw c.<Throwable>invoke(message != null ? message : response.getBody().asString());
 						c = ci.getPublicConstructor(String.class,Throwable.class);
 						if (c != null)
-							throw c.<Throwable>invoke(thrown.message().orElse(response.getBody().asString()), null);
+							throw c.<Throwable>invoke(message != null ? message : response.getBody().asString(), null);
 						c = ci.getPublicConstructor();
 						if (c != null)
 							throw c.<Throwable>invoke();
