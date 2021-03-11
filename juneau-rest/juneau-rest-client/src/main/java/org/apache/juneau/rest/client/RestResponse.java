@@ -54,6 +54,7 @@ public class RestResponse implements HttpResponse {
 	HttpPartParserSession partParser;
 	private ResponseBody responseBody;
 	private boolean isClosed;
+	private HeaderList headers;
 
 	/**
 	 * Constructor.
@@ -70,6 +71,7 @@ public class RestResponse implements HttpResponse {
 		this.response = response == null ? new BasicHttpResponse(null, 0, null) : response;
 		this.responseBody = new ResponseBody(client, request, this, parser);
 		this.partParser = client.getPartParserSession();
+		this.headers = HeaderList.of(this.response.getAllHeaders());
 	}
 
 	/**
@@ -638,10 +640,10 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getHeaders(String name) {
-		Header[] a = response.getHeaders(name);
-		ResponseHeader[] b = new ResponseHeader[a.length];
-		for (int i = 0; i < a.length; i++)
-			b[i] = new ResponseHeader(request, this, a[i]).parser(partParser);
+		List<Header> a = headers.get(name);
+		ResponseHeader[] b = new ResponseHeader[a.size()];
+		for (int i = 0; i < b.length; i++)
+			b[i] = new ResponseHeader(request, this, a.get(i)).parser(partParser);
 		return b;
 	}
 
@@ -658,7 +660,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
-		return new ResponseHeader(request, this, response.getFirstHeader(name)).parser(partParser);
+		return new ResponseHeader(request, this, headers.getFirst(name)).parser(partParser);
 	}
 
 	/**
@@ -674,17 +676,22 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
-		return new ResponseHeader(request, this, response.getLastHeader(name)).parser(partParser);
+		return new ResponseHeader(request, this, headers.getLast(name)).parser(partParser);
 	}
 
 	/**
-	 * A synonym for {@link #getLastHeader(String)}.
+	 * Returns the response header with the specified name.
+	 *
+	 * <p>
+	 * If more than one header with the name exists, it is condensed into a comma-delimited list per
+	 * <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>
+	 * which governs multiple message header fields.
 	 *
 	 * @param name The name of the header to return.
 	 * @return The header, never <jk>null</jk>.
 	 */
 	public ResponseHeader getHeader(String name) {
-		return getLastHeader(name);
+		return new ResponseHeader(request, this, headers.getCondensed(name)).parser(partParser);
 	}
 
 	/**
@@ -696,10 +703,10 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getAllHeaders() {
-		Header[] a = response.getAllHeaders();
-		ResponseHeader[] b = new ResponseHeader[a.length];
-		for (int i = 0; i < a.length; i++)
-			b[i] = new ResponseHeader(request, this, a[i]).parser(partParser);
+		List<Header> a = headers.getAll();
+		ResponseHeader[] b = new ResponseHeader[a.size()];
+		for (int i = 0; i < b.length; i++)
+			b[i] = new ResponseHeader(request, this, a.get(i)).parser(partParser);
 		return b;
 	}
 
@@ -712,7 +719,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(Header header) {
-		response.addHeader(header);
+		headers = headers.copy().add(header).build();
 	}
 
 	/**
@@ -725,7 +732,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		response.addHeader(name, value);
+		headers = headers.copy().add(name, value).build();
 	}
 
 	/**
@@ -737,7 +744,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(Header header) {
-		response.setHeader(header);
+		headers = headers.copy().update(header).build();
 	}
 
 	/**
@@ -750,7 +757,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		response.setHeader(name, value);
+		headers = headers.copy().update(name, value).build();
 	}
 
 	/**
@@ -760,7 +767,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] headers) {
-		response.setHeaders(headers);
+		this.headers = HeaderList.of(headers);
 	}
 
 	/**
@@ -770,7 +777,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void removeHeader(Header header) {
-		response.removeHeader(header);
+		headers = headers.copy().remove(header).build();
 	}
 
 	/**
@@ -780,7 +787,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		response.removeHeaders(name);
+		headers = headers.copy().remove(name).build();
 	}
 
 	/**
@@ -790,7 +797,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return response.headerIterator();
+		return headers.headerIterator();
 	}
 
 	/**
@@ -801,7 +808,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return response.headerIterator(name);
+		return headers.headerIterator(name);
 	}
 
 	/**

@@ -195,7 +195,7 @@ public class RestClient_Response_Test {
 		assertEquals(0, r.getHeaders("Bar").length);
 		r.getFirstHeader("Foo").assertValue().is("bar");
 		assertFalse(r.getFirstHeader("Bar").isPresent());
-		r.getHeader("Foo").assertValue().is("qux");
+		r.getHeader("Foo").assertValue().is("bar, baz, qux");
 		assertFalse(r.getHeader("Bar").isPresent());
 
 		r.setHeaders(new Header[]{basicHeader("Foo", "quux")});

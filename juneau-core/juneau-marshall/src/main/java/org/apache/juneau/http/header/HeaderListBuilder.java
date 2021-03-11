@@ -325,6 +325,18 @@ public class HeaderListBuilder {
 	/**
 	 * Replaces the first occurrence of the headers with the same name.
 	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder update(String name, String value) {
+		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
+		return update(x);
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
 	 * <p>
 	 * If no header with the same name is found the given header is added to the end of the list.
 	 *
