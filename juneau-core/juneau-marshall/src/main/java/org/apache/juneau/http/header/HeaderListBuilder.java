@@ -370,61 +370,6 @@ public class HeaderListBuilder {
 		return this;
 	}
 
-	/**
-	 * Appends or replaces the header values in this list.
-	 *
-	 * <p>
-	 * If the header already exists in this list, it will be replaced with the new value.
-	 * Otherwise it will be appended to the end of this list.
-	 *
-	 * @param values The values to append or replace in this list.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderListBuilder appendUnique(Header...values) {
-		for (Header h : values) {
-			boolean replaced = false;
-			for (ListIterator<Header> li = headers.listIterator(); li.hasNext();) {
-				Header h2 = li.next();
-				if (h2.getName().equalsIgnoreCase(h.getName())) {
-					li.set(h);
-					replaced = true;
-					break;
-				}
-			}
-			if (! replaced)
-				add(h);
-		}
-		return this;
-	}
-
-
-	/**
-	 * Appends or replaces the header values in this list.
-	 *
-	 * <p>
-	 * If the header already exists in this list, it will be replaced with the new value.
-	 * Otherwise it will be appended to the end of this list.
-	 *
-	 * @param values The values to append or replace in this list.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderListBuilder appendUnique(Collection<Header> values) {
-		for (Header h : values) {
-			boolean replaced = false;
-			for (ListIterator<Header> li = headers.listIterator(); li.hasNext();) {
-				Header h2 = li.next();
-				if (h2.getName().equalsIgnoreCase(h.getName())) {
-					li.set(h);
-					replaced = true;
-					break;
-				}
-			}
-			if (! replaced)
-				add(h);
-		}
-		return this;
-	}
-
 	private boolean isResolving() {
 		return varResolver != null;
 	}

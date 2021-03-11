@@ -2314,17 +2314,17 @@ public class RestContext extends BeanContext {
 	 *
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public int</jk> process(RestCall <jv>call</jv>) <jk>throws</jk> IOException {
-	 * 
+	 *
 	 * 				RestResponse <jv>res</jv> = <jv>call</jv>.getRestResponse();
 	 * 				Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
-	 * 
+	 *
 	 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
 	 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
-	 * 
+	 *
 	 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
 	 * 					<jc>//Pipe it to the writer ourselves.</jc>
 	 * 				}
-	 * 				
+	 *
 	 * 				<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
 	 *			}
 	 * 		}
@@ -5168,7 +5168,7 @@ public class RestContext extends BeanContext {
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.appendUnique(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		x.update(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -5199,7 +5199,7 @@ public class RestContext extends BeanContext {
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.appendUnique(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		x.update(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
