@@ -2900,7 +2900,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasBody());
 
 		for (Object o : headers)
-			req.header(BasicHeader.cast(o));
+			req.header(APPEND, BasicHeader.cast(o));
 
 		for (Object o : query)
 			req.query(BasicPart.cast(o));
@@ -3084,7 +3084,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					rc.parser(parser);
 
 					for (Header h : rm.getHeaders())
-						rc.header(h);
+						rc.header(APPEND, h);
 
 					for (RemoteOperationArg a : rom.getPathArgs())
 						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));

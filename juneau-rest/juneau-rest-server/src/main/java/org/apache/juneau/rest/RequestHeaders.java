@@ -65,18 +65,13 @@ public class RequestHeaders {
 			map.put(key, l);
 		}
 
+		// Parameters defined on the request URL overwrite existing headers.
 		Set<String> allowedHeaderParams = req.getContext().getAllowedHeaderParams();
 		for (RequestQueryParam p : query.getAll()) {
 			String name = p.getName();
 			String key = key(name);
 			if (allowedHeaderParams.contains(key) || allowedHeaderParams.contains("*")) {
-				List<RequestHeader> l = map.get(key);
-				if (l == null)
-					l = new ArrayList<>();
-				RequestHeader h = new RequestHeader(req, name, p.getValue());
-				list.add(h);
-				l.add(h);
-				map.put(key, l);
+				set(name, p.getValue());
 			}
 		}
 	}
@@ -382,16 +377,24 @@ public class RequestHeaders {
 	}
 
 	/**
-	 * Returns the last header with the specified name.
-	 *
-	 * <p>
-	 * This is equivalent to {@link #getLast(String)}.
+	 * Returns the condensed header with the specified name.
 	 *
 	 * @param name The header name.
 	 * @return The header, never <jk>null</jk>.
 	 */
 	public RequestHeader get(String name) {
-		return getLast(name);
+		List<RequestHeader> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestHeader(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0, j = l.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestHeader(req, name, sb.toString()).parser(parser);
 	}
 
 	/**

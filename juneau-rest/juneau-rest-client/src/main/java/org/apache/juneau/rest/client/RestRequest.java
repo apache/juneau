@@ -2032,7 +2032,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Appends a header on the request.
+	 * Adds or replaces a header on the request.
+	 * 
+	 * <p>
+	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -2057,8 +2060,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Appends a header on the request.
+	 * Adds or replaces a header on the request.
 	 *
+	 * <p>
+	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
+	 * 
 	 * <p>
 	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
 	 *
@@ -2089,7 +2095,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Adds a header to the request.
+	 * Adds or replaces a header to the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -2123,8 +2129,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Appends a header on the request.
+	 * Adds or replaces a header on the request.
 	 *
+	 * <p>
+	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
@@ -2143,8 +2152,37 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Appends multiple headers to the request.
+	 * Adds or replaces a header on the request.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Adds header "Foo: bar".</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.header(<jsf>APPEND</jsf>, BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param flag How to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 	</ul>
+	 * @param header The header to set.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest header(AddFlag flag, Header header) throws RestCallException {
+		return headers(flag, header);
+	}
+
+	/**
+	 * Adds or replaces multiple headers to the request.
+	 *
+	 * <p>
+	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
@@ -2176,7 +2214,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest headers(Object...headers) throws RestCallException {
-		return headers(APPEND, headers);
+		return headers(REPLACE, headers);
 	}
 
 	/**
@@ -2247,8 +2285,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Appends multiple headers on the request using freeform key/value pairs.
+	 * Adds or replaces multiple headers on the request using freeform key/value pairs.
 	 *
+	 * <p>
+	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
+	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
@@ -2267,12 +2308,43 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest headerPairs(Object...pairs) throws RestCallException {
+		return headerPairs(REPLACE, pairs);
+	}
+
+	/**
+	 * Adds or replaces multiple headers on the request using freeform key/value pairs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.headers(<jsf>APPEND</jsf>,<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param flag How to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 	</ul>
+	 * @param pairs The form-data key/value pairs.
+	 * 	<ul>
+	 * 		<li>Values can be any POJO.
+	 * 		<li>Values converted to a string using the configured part serializer.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+
+	public RestRequest headerPairs(AddFlag flag, Object...pairs) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
 			throw new RestCallException(null, null, "Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
-		return innerHeaders(EnumSet.of(APPEND), l);
+		return innerHeaders(EnumSet.of(flag), l);
 	}
 
 	RestRequest headerArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {

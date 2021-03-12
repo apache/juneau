@@ -75,30 +75,30 @@ public class RestClient_Headers_Test {
 	public void a01_header_String_Object() throws Exception {
 		checkFooClient().header("Foo","bar").build().get("/headers").run().assertBody().is("['bar']");
 		checkFooClient().build().get("/headers").header("Foo","baz").run().assertBody().is("['baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").header("Foo","baz").run().assertBody().is("['bar','baz']");
-		checkFooClient().header("Foo",bean).build().get("/headers").header("Foo",bean).run().assertBody().is("['f=1','f=1']");
-		checkFooClient().header("Foo",null).build().get("/headers").header("Foo",null).run().assertBody().is("[]");
+		checkFooClient().header("Foo","bar").build().get("/headers").header(APPEND,"Foo","baz").run().assertBody().is("['bar','baz']");
+		checkFooClient().header("Foo",bean).build().get("/headers").header(APPEND,"Foo",bean).run().assertBody().is("['f=1','f=1']");
+		checkFooClient().header("Foo",null).build().get("/headers").header(APPEND,"Foo",null).run().assertBody().is("[]");
 
 		checkClient("null").header(null,"bar").build().get("/headers").header(null,"Foo").run().assertBody().is("[]");
-		checkClient("null").header(null,null).build().get("/headers").header(null,null).run().assertBody().is("[]");
+		checkClient("null").header(null,null).build().get("/headers").header((String)null,null).run().assertBody().is("[]");
 	}
 
 	@Test
 	public void a02_header_String_Object_Schema() throws Exception {
 		List<String> l1 = AList.of("bar","baz"), l2 = AList.of("qux","quux");
-		checkFooClient().header("Foo",l1,T_ARRAY_PIPES).build().get("/headers").header("Foo",l2,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','qux|quux']");
+		checkFooClient().header("Foo",l1,T_ARRAY_PIPES).build().get("/headers").header(APPEND,"Foo",l2,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','qux|quux']");
 	}
 
 	@Test
 	public void a03_header_Header() throws Exception {
-		checkFooClient().header(header("Foo","bar")).build().get("/headers").header(header("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().header(stringHeader("Foo","bar")).build().get("/headers").header(stringHeader("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().header(header("Foo","bar")).build().get("/headers").header(APPEND,header("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().header(stringHeader("Foo","bar")).build().get("/headers").header(APPEND,stringHeader("Foo","baz")).run().assertBody().is("['bar','baz']");
 	}
 
 	@Test
 	public void a05_headerPairs_Objects() throws Exception {
-		checkFooClient().headerPairs("Foo","bar").build().get("/headers").headerPairs("Foo","baz").run().assertBody().is("['bar','baz']");
-		checkFooClient().headerPairs("Foo","bar","Foo","baz").header("Foo","qux").build().get("/headers").headerPairs("Foo","q1x","Foo","q2x").run().assertBody().is("['bar','baz','qux','q1x','q2x']");
+		checkFooClient().headerPairs("Foo","bar").build().get("/headers").headerPairs(APPEND,"Foo","baz").run().assertBody().is("['bar','baz']");
+		checkFooClient().headerPairs("Foo","bar","Foo","baz").header("Foo","qux").build().get("/headers").headerPairs(APPEND,"Foo","q1x","Foo","q2x").run().assertBody().is("['bar','baz','qux','q1x','q2x']");
 		assertThrown(()->client().headerPairs("Foo")).contains("Odd number of parameters");
 		assertThrown(()->client().build().get("").headerPairs("Foo")).contains("Odd number of parameters");
 	}
@@ -106,16 +106,16 @@ public class RestClient_Headers_Test {
 	@Test
 	public void a06_headers_Objects() throws Exception {
 		checkFooClient().headers((Header)null).build().get("/headers").headers((Header)null).run().assertBody().is("[]");
-		checkFooClient().headers(header("Foo","bar"),header("Baz","baz")).build().get("/headers").headers(header("Foo","baz"),header("Baz","quux")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(OMap.of("Foo","bar")).build().get("/headers").headers(OMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(AMap.of("Foo","bar")).build().get("/headers").headers(AMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(part("Foo","bar")).build().get("/headers").headers(part("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(serializedPart("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedPart("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
-		checkFooClient().headers(serializedHeader("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedHeader("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
-		checkFooClient().headers(serializedHeader("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(serializedHeader("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
-		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers((Object)new Header[]{header("Foo","baz")}).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(HeaderList.of(header("Foo","bar"))).build().get("/headers").headers(HeaderList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(AList.of(header("Foo","bar"))).build().get("/headers").headers(AList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(header("Foo","bar"),header("Baz","baz")).build().get("/headers").headers(APPEND,header("Foo","baz"),header("Baz","quux")).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(OMap.of("Foo","bar")).build().get("/headers").headers(APPEND,OMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(AMap.of("Foo","bar")).build().get("/headers").headers(APPEND,AMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(part("Foo","bar")).build().get("/headers").headers(APPEND,part("Foo","baz")).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(serializedPart("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedPart("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers(serializedHeader("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedHeader("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers(serializedHeader("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedHeader("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers(APPEND,(Object)new Header[]{header("Foo","baz")}).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(HeaderList.of(header("Foo","bar"))).build().get("/headers").headers(APPEND,HeaderList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
+		checkFooClient().headers(AList.of(header("Foo","bar"))).build().get("/headers").headers(APPEND,AList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
 		checkClient("f").build().get("/headers").headers(bean).run().assertBody().is("['1']");
 		checkClient("f").build().get("/headers").headers((Object)null).run().assertBody().is("[]");
 		assertThrown(()->client().headers("Foo")).contains("Invalid type");
@@ -150,9 +150,9 @@ public class RestClient_Headers_Test {
 	public void a08_header_String_Supplier() throws Exception {
 		TestSupplier s = TestSupplier.of("foo");
 		RestClient x = checkFooClient().header("Foo",s).build();
-		x.get("/headers").header("Foo",s).run().assertBody().is("['foo','foo']");
+		x.get("/headers").header(APPEND,"Foo",s).run().assertBody().is("['foo','foo']");
 		s.set("bar");
-		x.get("/headers").header("Foo",s).run().assertBody().is("['bar','bar']");
+		x.get("/headers").header(APPEND,"Foo",s).run().assertBody().is("['bar','bar']");
 	}
 
 	public static class A8 extends SimplePartSerializer {
@@ -176,9 +176,9 @@ public class RestClient_Headers_Test {
 	public void a10_headers_String_Supplier_Schema() throws Exception {
 		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
 		RestClient x = checkFooClient().header("Foo",s,T_ARRAY_PIPES).build();
-		x.get("/headers").header("Foo",s,T_ARRAY_PIPES).run().assertBody().is("['foo|bar','foo|bar']");
+		x.get("/headers").header(APPEND,"Foo",s,T_ARRAY_PIPES).run().assertBody().is("['foo|bar','foo|bar']");
 		s.set(new String[]{"bar","baz"});
-		x.get("/headers").header("Foo",s,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','bar|baz']");
+		x.get("/headers").header(APPEND,"Foo",s,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','bar|baz']");
 	}
 
 	@Test
@@ -210,7 +210,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void b01_standardHeaders() throws Exception {
-		checkClient("Accept").accept("text/foo").build().get("/headers").accept("text/plain").run().assertBody().is("['text/foo','text/plain']");
+		checkClient("Accept").accept("text/foo").build().get("/headers").accept("text/plain").run().assertBody().is("['text/plain']");
 		checkClient("Accept-Charset").acceptCharset("UTF-8").build().get("/headers").run().assertBody().is("['UTF-8']");
 		checkClient("Accept-Encoding").acceptEncoding("identity").build().get("/headers").run().assertBody().is("['identity']");
 		checkClient("Accept-Language").acceptLanguage("en").build().get("/headers").run().assertBody().is("['en']");
@@ -281,7 +281,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void b02_headerBeans() throws Exception {
-		checkClient("Accept").header(new Accept("text/foo")).build().get("/headers").header(new Accept("text/plain")).run().assertBody().is("['text/foo','text/plain']");
+		checkClient("Accept").header(new Accept("text/foo")).build().get("/headers").header(new Accept("text/plain")).run().assertBody().is("['text/plain']");
 		checkClient("Accept-Charset").header(new AcceptCharset("UTF-8")).build().get("/headers").run().assertBody().is("['UTF-8']");
 		checkClient("Accept-Encoding").header(new AcceptEncoding("identity")).build().get("/headers").run().assertBody().is("['identity']");
 		checkClient("Accept-Language").header(new AcceptLanguage("en")).build().get("/headers").run().assertBody().is("['en']");
@@ -326,7 +326,7 @@ public class RestClient_Headers_Test {
 	@Test
 	public void b04_dontOverrideAccept() throws Exception {
 		checkClient("Accept").header("Accept","text/plain").build().get("/headers").run().assertBody().is("['text/plain']");
-		checkClient("Accept").header("Accept","text/foo").build().get("/headers").header("Accept","text/plain").run().assertBody().is("['text/foo','text/plain']");
+		checkClient("Accept").header("Accept","text/foo").build().get("/headers").header("Accept","text/plain").run().assertBody().is("['text/plain']");
 		RestClient rc = checkClient("Accept").header("Accept","text/foo").build();
 		RestRequest req = rc.get("/headers");
 		req.setHeader("Accept","text/plain");
@@ -336,7 +336,7 @@ public class RestClient_Headers_Test {
 	@Test
 	public void b05_dontOverrideContentType() throws Exception {
 		checkClient("Content-Type").header("Content-Type","text/plain").build().get("/headers").run().assertBody().is("['text/plain']");
-		checkClient("Content-Type").header("Content-Type","text/foo").build().get("/headers").header("Content-Type","text/plain").run().assertBody().is("['text/foo','text/plain']");
+		checkClient("Content-Type").header("Content-Type","text/foo").build().get("/headers").header("Content-Type","text/plain").run().assertBody().is("['text/plain']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
