@@ -240,7 +240,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> header(Header value) {
-		headersBuilder().add(value);
+		headersBuilder().append(value);
 		return this;
 	}
 
@@ -252,7 +252,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> header(String name, String value) {
-		headersBuilder().add(name, value);
+		headersBuilder().append(name, value);
 		return this;
 	}
 
@@ -263,7 +263,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> headers(Header...values) {
-		headersBuilder().add(values);
+		headersBuilder().append(values);
 		return this;
 	}
 
@@ -274,7 +274,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> headers(List<Header> values) {
-		headersBuilder().add(values);
+		headersBuilder().append(values);
 		return this;
 	}
 
@@ -321,7 +321,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeader(Header value) {
-		headersBuilder().update(value);
+		headersBuilder().set(value);
 		return this;
 	}
 
@@ -335,7 +335,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(Header...values) {
-		headersBuilder().update(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -349,7 +349,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> updateHeaders(List<Header> values) {
-		headersBuilder().update(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -363,7 +363,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> setHeaders(Header...values) {
-		headersBuilder().set(values);
+		headersBuilder().clear().append(values);
 		return this;
 	}
 
@@ -377,7 +377,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object (for method chaining).
 	 */
 	public HttpExceptionBuilder<T> setHeaders(List<Header> values) {
-		headersBuilder().set(values);
+		headersBuilder().clear().append(values);
 		return this;
 	}
 

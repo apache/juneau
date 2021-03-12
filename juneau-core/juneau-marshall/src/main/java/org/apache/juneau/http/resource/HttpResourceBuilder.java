@@ -291,7 +291,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	public HttpResourceBuilder<T> header(Header value) {
 		if (value != null)
-			headersBuilder().add(value);
+			headersBuilder().append(value);
 		return this;
 	}
 
@@ -307,7 +307,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	public HttpResourceBuilder<T> header(String name, String value) {
 		if (name != null && value != null)
-			headersBuilder().add(name, value);
+			headersBuilder().append(name, value);
 		return this;
 	}
 
@@ -330,7 +330,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 					else if (n.equalsIgnoreCase("content-length"))
 						contentLength(Long.parseLong(v));
 					else
-						headersBuilder().add(h);
+						headersBuilder().append(h);
 				}
 			}
 		}
@@ -344,7 +344,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResourceBuilder<T> headers(List<Header> values) {
-		headersBuilder().add(values);
+		headersBuilder().append(values);
 		return this;
 	}
 
@@ -391,7 +391,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResourceBuilder<T> updateHeader(Header value) {
-		headersBuilder().update(value);
+		headersBuilder().set(value);
 		return this;
 	}
 
@@ -405,7 +405,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResourceBuilder<T> updateHeaders(Header...values) {
-		headersBuilder().update(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -419,7 +419,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResourceBuilder<T> updateHeaders(List<Header> values) {
-		headersBuilder().update(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -433,7 +433,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResourceBuilder<T> setHeaders(Header...values) {
-		headersBuilder().set(values);
+		headersBuilder().clear().append(values);
 		return this;
 	}
 
@@ -447,7 +447,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResourceBuilder<T> setHeaders(List<Header> values) {
-		headersBuilder().set(values);
+		headersBuilder().clear().append(values);
 		return this;
 	}
 

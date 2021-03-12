@@ -95,12 +95,12 @@ public class ConfigClasspathStore extends ConfigStore {
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 
 		// This is a no-op.
-		if (isEquals(expectedContents, newContents))
+		if (eq(expectedContents, newContents))
 			return null;
 
 		String currentContents = read(name);
 
-		if (expectedContents != null && ! isEquals(currentContents, expectedContents))
+		if (expectedContents != null && ! eq(currentContents, expectedContents))
 			return currentContents;
 
 		update(name, newContents);

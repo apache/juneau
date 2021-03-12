@@ -211,7 +211,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
 	public boolean equalsIgnoreCase(String compare) {
-		return isEqualsIc(getValue(), compare);
+		return eqic(getValue(), compare);
 	}
 
 	/**

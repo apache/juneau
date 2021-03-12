@@ -59,14 +59,14 @@ public class RemoteMeta {
 			if (! r.path().isEmpty())
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headersBuilder.add(basicHeader(resolve(h)));
+				headersBuilder.append(basicHeader(resolve(h)));
 			if (! r.version().isEmpty())
 				clientVersion = resolve(r.version());
 			if (! r.versionHeader().isEmpty())
 				versionHeader = resolve(r.versionHeader());
 			if (r.headerList() != HeaderList.Null.class) {
 				try {
-					headersBuilder.add(r.headerList().newInstance().getAll());
+					headersBuilder.append(r.headerList().newInstance().getAll());
 				} catch (Exception e) {
 					throw new RuntimeException("Could not instantiate HeaderSupplier class.", e);
 				}
@@ -74,7 +74,7 @@ public class RemoteMeta {
 		}
 
 		if (clientVersion != null)
-			headersBuilder.add(stringHeader(versionHeader, clientVersion));
+			headersBuilder.append(stringHeader(versionHeader, clientVersion));
 
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		for (MethodInfo m : ci.getPublicMethods())

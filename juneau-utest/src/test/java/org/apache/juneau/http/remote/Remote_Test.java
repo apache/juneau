@@ -583,8 +583,8 @@ public class Remote_Test {
 		public F1b() {
 			super(
 				create()
-				.add(basicHeader("Foo","baz"))
-				.add(HeaderList.create().add(basicHeader("Foo",()->"qux")).build())
+				.append(basicHeader("Foo","baz"))
+				.append(HeaderList.create().append(basicHeader("Foo",()->"qux")).build().getAll())
 			);
 		}
 	}

@@ -43,7 +43,7 @@ public abstract class RoundTripStringSwapTest<T> {
 	@Test
 	public void testSwap() throws Exception {
 		String s = (String)ss.swap(bs, o);
-		if (! isEquals(expected, s)) {
+		if (ne(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))
 					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
@@ -59,7 +59,7 @@ public abstract class RoundTripStringSwapTest<T> {
 		String s = (String)ss.swap(bs, o);
 		T o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
 		String s2 = (String)ss.swap(bs, o2);
-		if (! isEquals(s, s2)) {
+		if (ne(s, s2)) {
 			if (expected.isEmpty())
 				Assert.fail();
 			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG

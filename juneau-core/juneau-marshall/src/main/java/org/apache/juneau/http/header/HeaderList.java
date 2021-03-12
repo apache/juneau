@@ -14,7 +14,6 @@ package org.apache.juneau.http.header;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Arrays.*;
 
 import java.util.*;
 
@@ -23,7 +22,9 @@ import org.apache.http.message.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.HttpHeaders;
+import org.apache.juneau.internal.*;
 
 /**
  * An unmodifiable list of HTTP headers.
@@ -31,6 +32,7 @@ import org.apache.juneau.http.HttpHeaders;
  * <p>
  * Similar to {@link HeaderGroup} but uses a builder-based approach for building header lists.
  */
+@ThreadSafe
 public class HeaderList implements Iterable<Header> {
 
 	/** Represents no header supplier in annotations. */
@@ -40,6 +42,7 @@ public class HeaderList implements Iterable<Header> {
 	public static final HeaderList EMPTY = new HeaderList();
 
 	final List<Header> headers;
+	final boolean caseSensitive;
 
 	/**
 	 * Instantiates a new builder for this bean.
@@ -67,7 +70,7 @@ public class HeaderList implements Iterable<Header> {
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static HeaderList of(Header...headers) {
-		return headers == null || headers.length == 0 ? EMPTY : new HeaderList(asList(headers));
+		return headers == null || headers.length == 0 ? EMPTY : new HeaderList(headers);
 	}
 
 	/**
@@ -86,7 +89,7 @@ public class HeaderList implements Iterable<Header> {
 			throw new BasicRuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
 		HeaderListBuilder b = create();
 		for (int i = 0; i < pairs.length; i+=2)
-			b.add(stringify(pairs[i]), pairs[i+1]);
+			b.append(stringify(pairs[i]), pairs[i+1]);
 		return new HeaderList(b);
 	}
 
@@ -97,6 +100,7 @@ public class HeaderList implements Iterable<Header> {
 	 */
 	public HeaderList(HeaderListBuilder builder) {
 		this.headers = unmodifiableList(new ArrayList<>(builder.headers));
+		this.caseSensitive = builder.caseSensitive;
 	}
 
 	/**
@@ -108,14 +112,35 @@ public class HeaderList implements Iterable<Header> {
 		if (headers == null || headers.isEmpty())
 			this.headers = emptyList();
 		else {
-			List<Header> l = new ArrayList<>();
-			for (int i = 0; i < headers.size(); i++) {
+			List<Header> l = new ArrayList<>(headers.size());
+			for (int i = 0, j = headers.size(); i < j; i++) {
 				Header x = headers.get(i);
 				if (x != null)
 					l.add(x);
 			}
 			this.headers = unmodifiableList(l);
 		}
+		caseSensitive = false;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param headers The initial list of headers.  <jk>null</jk> entries are ignored.
+	 */
+	protected HeaderList(Header...headers) {
+		if (headers.length == 0)
+			this.headers = emptyList();
+		else {
+			List<Header> l = new ArrayList<>(headers.length);
+			for (int i = 0; i < headers.length; i++) {
+				Header x = headers[i];
+				if (x != null)
+					l.add(x);
+			}
+			this.headers = unmodifiableList(l);
+		}
+		caseSensitive = false;
 	}
 
 	/**
@@ -123,6 +148,7 @@ public class HeaderList implements Iterable<Header> {
 	 */
 	protected HeaderList() {
 		this.headers = emptyList();
+		caseSensitive = false;
 	}
 
 	/**
@@ -189,24 +215,24 @@ public class HeaderList implements Iterable<Header> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Header> T getCondensed(Class<T> type, String name) {
-		List<Header> hdrs = get(name);
+		List<Header> l = get(name);
 
-		if (hdrs.isEmpty())
+		if (l.isEmpty())
 			return null;
 
 		String value = null;
 
-		if (hdrs.size() == 1) {
-			Header h = hdrs.get(0);
+		if (l.size() == 1) {
+			Header h = l.get(0);
 			if (type.isInstance(h))
 				return (T)h;
 			value = h.getValue();
 		} else {
-			CharArrayBuffer sb = new CharArrayBuffer(128);
-			sb.append(hdrs.get(0).getValue());
-			for (int i = 1; i < hdrs.size(); i++) {
-				sb.append(", ");
-				sb.append(hdrs.get(i).getValue());
+			StringBuilder sb = new StringBuilder(128);
+			for (int i = 0; i < l.size(); i++) {
+				if (i > 0)
+					sb.append(", ");
+				sb.append(l.get(i).getValue());
 			}
 			value = sb.toString();
 		}
@@ -229,9 +255,9 @@ public class HeaderList implements Iterable<Header> {
 	 */
 	public List<Header> get(String name) {
 		List<Header> l = null;
-		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
+		for (int i = 0, j = headers.size(); i < j; i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
-			if (isEqualsIc(x.getName(), name)) {
+			if (eq(x.getName(), name)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(x);
@@ -252,7 +278,7 @@ public class HeaderList implements Iterable<Header> {
 	public Header getFirst(String name) {
 		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
-			if (isEqualsIc(x.getName(), name))
+			if (eq(x.getName(), name))
 				return x;
 		}
 		return null;
@@ -270,7 +296,7 @@ public class HeaderList implements Iterable<Header> {
 	public Header getLast(String name) {
 		for (int i = headers.size() - 1; i >= 0; i--) {
 			Header x = headers.get(i);
-			if (isEqualsIc(x.getName(), name))
+			if (eq(x.getName(), name))
 				return x;
 		}
 		return null;
@@ -297,7 +323,7 @@ public class HeaderList implements Iterable<Header> {
 	public boolean contains(String name) {
 		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
 			Header x = headers.get(i);
-			if (isEqualsIc(x.getName(), name))
+			if (eq(x.getName(), name))
 				return true;
 		}
 		return false;
@@ -321,6 +347,10 @@ public class HeaderList implements Iterable<Header> {
 	 */
 	public HeaderIterator headerIterator(String name) {
 		return new BasicListHeaderIterator(headers, name);
+	}
+
+	private boolean eq(String s1, String s2) {
+		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
 
 	@Override /* Iterable */

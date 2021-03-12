@@ -719,7 +719,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(Header header) {
-		headers = headers.copy().add(header).build();
+		headers = headers.copy().append(header).build();
 	}
 
 	/**
@@ -732,7 +732,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headers = headers.copy().add(name, value).build();
+		headers = headers.copy().append(name, value).build();
 	}
 
 	/**
@@ -744,7 +744,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(Header header) {
-		headers = headers.copy().update(header).build();
+		headers = headers.copy().set(header).build();
 	}
 
 	/**
@@ -757,7 +757,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headers = headers.copy().update(name, value).build();
+		headers = headers.copy().set(name, value).build();
 	}
 
 	/**

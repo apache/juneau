@@ -173,7 +173,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEqualTo(String value) throws AssertionError {
-		if (! StringUtils.isEquals(value, text))
+		if (ne(value, text))
 			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(text));
 		return returns();
 	}
@@ -203,7 +203,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	public R isEqualLinesTo(String...lines) throws AssertionError {
 		assertNotNull("lines", lines);
 		String v = join(lines, '\n');
-		if (! StringUtils.isEquals(v, text))
+		if (ne(v, text))
 			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
 		return returns();
 	}
@@ -272,7 +272,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(String value) throws AssertionError {
-		if (! StringUtils.isEquals(value, text))
+		if (ne(value, text))
 			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
 		return isEqualTo(value);
 	}
@@ -285,7 +285,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEqualIgnoreCaseTo(String value) throws AssertionError {
-		if (! StringUtils.isEqualsIc(value, text))
+		if (neic(value, text))
 			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
 		return returns();
 	}
@@ -298,7 +298,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
-		if (StringUtils.isEquals(value, text))
+		if (eq(value, text))
 			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(text));
 		return returns();
 	}
@@ -325,7 +325,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqualIc(String value) throws AssertionError {
-		if (StringUtils.isEqualsIc(value, text))
+		if (eqic(value, text))
 			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(text));
 		return returns();
 	}

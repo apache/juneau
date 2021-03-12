@@ -13,12 +13,12 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 /**
@@ -176,7 +176,7 @@ public class ConfigImportsTest {
 			if (events.size() == 0)
 				return null;
 			for (ConfigEvent ce : events)
-				if (StringUtils.isEquals(section, ce.getSection()) && StringUtils.isEquals(key, ce.getKey()))
+				if (eq(section, ce.getSection()) && eq(key, ce.getKey()))
 					return ce.getValue();
 			return null;
 		}

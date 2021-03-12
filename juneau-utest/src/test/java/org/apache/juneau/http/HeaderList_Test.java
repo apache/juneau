@@ -16,6 +16,8 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
@@ -31,21 +33,21 @@ public class HeaderList_Test {
 		HeaderListBuilder x = HeaderList.create();
 
 		assertObject(x.build().iterator()).asJson().is("[]");
-		x.add(header("Foo","bar"));
+		x.append(header("Foo","bar"));
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar']");
-		x.add(header("Foo","baz"));
+		x.append(header("Foo","baz"));
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz']");
-		x.add(HeaderList.of());
+		x.append(HeaderList.of().getAll());
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz']");
-		x.add(HeaderList.of(header("Foo","qux")));
+		x.append(HeaderList.of(header("Foo","qux")).getAll());
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux']");
-		x.add(HeaderList.of(header("Foo","q2x"), header("Foo","q3x")));
+		x.append(HeaderList.of(header("Foo","q2x"), header("Foo","q3x")).getAll());
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x']");
-		x.add(HeaderList.of(header("Foo","q4x"), header("Foo","q5x")));
+		x.append(HeaderList.of(header("Foo","q4x"), header("Foo","q5x")).getAll());
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
-		x.add((Header)null);
+		x.append((Header)null);
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
-		x.add((HeaderList)null);
+		x.append((List<Header>)null);
 		assertObject(x.build().iterator()).asJson().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
 
 		assertObject(new HeaderList.Null().iterator()).asJson().is("[]");
@@ -74,18 +76,17 @@ public class HeaderList_Test {
 		HeaderListBuilder x = HeaderList.create().resolving();
 		System.setProperty(pname, "y");
 
-		x.add("X1","bar");
-		x.add("X2","$S{"+pname+"}");
-		x.add("X3","bar");
-		x.add("X4",()->"$S{"+pname+"}");
-		x.add("X5","bar",openApiSession(),null,false);
-		x.add("X6","$S{"+pname+"}",openApiSession(),null,false);
+		x.append("X1","bar");
+		x.append("X2","$S{"+pname+"}");
+		x.append("X3","bar");
+		x.append("X4",()->"$S{"+pname+"}");
+		x.append(SerializedHeader.of("X5","bar",openApiSession(),null,false));
 
-		assertString(x.build().toString()).is("[X1: bar, X2: y, X3: bar, X4: y, X5: bar, X6: y]");
+		assertString(x.build().toString()).is("[X1: bar, X2: y, X3: bar, X4: y, X5: bar]");
 
 		System.setProperty(pname, "z");
 
-		assertString(x.build().toString()).is("[X1: bar, X2: z, X3: bar, X4: z, X5: bar, X6: z]");
+		assertString(x.build().toString()).is("[X1: bar, X2: z, X3: bar, X4: z, X5: bar]");
 
 		System.clearProperty(pname);
 	}
@@ -94,8 +95,8 @@ public class HeaderList_Test {
 	public void a04_toArrayMethods() {
 		HeaderListBuilder x = HeaderList
 			.create()
-			.add("X1","1")
-			.add(headerList("X2","2"));
+			.append("X1","1")
+			.append(headerList("X2","2").getAll());
 		assertObject(x.build().getAll()).asJson().is("['X1: 1','X2: 2']");
 	}
 

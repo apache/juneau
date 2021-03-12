@@ -1353,9 +1353,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.update(context.getDefaultRequestHeaders().getAll());
+		x.set(context.getDefaultRequestHeaders().getAll());
 
-		x.update(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		x.set(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1364,7 +1364,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.update(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.set(basicHeader(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Header annotation");
 						}
@@ -1399,9 +1399,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.update(context.getDefaultResponseHeaders().getAll());
+		x.set(context.getDefaultResponseHeaders().getAll());
 
-		x.update(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		x.set(properties.getInstanceArray(RESTOP_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)

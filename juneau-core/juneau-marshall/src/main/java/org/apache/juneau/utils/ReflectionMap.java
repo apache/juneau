@@ -516,7 +516,7 @@ public class ReflectionMap<V> {
 			Class<?> c = m.getDeclaringClass();
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (isEquals(m.getName(), methodName))
+				&& (eq(m.getName(), methodName))
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
@@ -594,7 +594,7 @@ public class ReflectionMap<V> {
 			Class<?> c = f.getDeclaringClass();
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (isEquals(f.getName(), fieldName));
+				&& (eq(f.getName(), fieldName));
 		}
 
 		public OMap toMap() {
@@ -621,7 +621,7 @@ public class ReflectionMap<V> {
 		for (int i = 0; i < args.length; i++) {
 			String n = names[i];
 			Class<?> a = args[i];
-			if (! (isEquals(n, a.getSimpleName()) || isEquals(n, a.getName())))
+			if (! (eq(n, a.getSimpleName()) || eq(n, a.getName())))
 				return false;
 		}
 		return true;
@@ -640,7 +640,7 @@ public class ReflectionMap<V> {
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		String cSimple = c.getSimpleName(), cFull = c.getName();
-		if (isEquals(simpleName, cSimple) || isEquals(fullName, cFull))
+		if (eq(simpleName, cSimple) || eq(fullName, cFull))
 			return true;
 		if ("*".equals(simpleName))
 			return true;
@@ -648,12 +648,12 @@ public class ReflectionMap<V> {
 			Package p = c.getPackage();
 			if (p != null)
 				cFull = cFull.substring(p.getName().length() + 1);
-			if (isEquals(simpleName, cFull))
+			if (eq(simpleName, cFull))
 				return true;
 			int i = cFull.indexOf('$');
 			while (i != -1) {
 				cFull = cFull.substring(i+1);
-				if (isEquals(simpleName, cFull))
+				if (eq(simpleName, cFull))
 					return true;
 				i = cFull.indexOf('$');
 			}

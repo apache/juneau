@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * DTO for an HTML {@doc ExtHTML5.forms#the-select-element <select>}
@@ -160,7 +161,7 @@ public class Select extends HtmlElementContainer {
 			for (Object o : getChildren()) {
 				if (o instanceof Option) {
 					Option o2 = (Option)o;
-					if (StringUtils.isEquals(optionValue.toString(), o2.getAttr(String.class, "value")))
+					if (eq(optionValue.toString(), o2.getAttr(String.class, "value")))
 						o2.selected(true);
 				}
 			}

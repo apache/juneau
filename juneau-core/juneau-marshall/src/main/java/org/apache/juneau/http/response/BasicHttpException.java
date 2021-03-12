@@ -268,27 +268,27 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public void addHeader(Header value) {
-		headersBuilder().add(value).build();
+		headersBuilder().append(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headersBuilder().add(new BasicHeader(name, value)).build();
+		headersBuilder().append(name, value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(Header value) {
-		headersBuilder().update(value).build();
+		headersBuilder().set(value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headersBuilder().update(new BasicHeader(name, value)).build();
+		headersBuilder().set(name, value).build();
 	}
 
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] values) {
-		headersBuilder().set(values).build();
+		headersBuilder().clear().append(values).build();
 	}
 
 	@Override /* HttpMessage */

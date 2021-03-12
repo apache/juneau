@@ -64,6 +64,27 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
+	 * Instantiates a new instance of this object.
+	 *
+	 * @param name The HTTP header name name.
+	 * @param value The POJO to serialize to the parameter value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
+	 * @param schema
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	<br>Can also be a {@link Supplier}.
+	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 *
+	 * @return A new instance of this object.
+	 */
+	public static SerializedHeader of(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name name.

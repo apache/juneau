@@ -128,7 +128,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 		List<String> vv = getParsedValue();
 		if (val != null && vv != null)
 			for (String v : vv)
-				if (isEquals(v, val))
+				if (eq(v, val))
 					return true;
 		return false;
 	}
@@ -143,7 +143,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 		List<String> vv = getParsedValue();
 		if (val != null && vv != null)
 			for (String v : vv)
-				if (isEqualsIc(v, val))
+				if (eqic(v, val))
 					return true;
 		return false;
 	}

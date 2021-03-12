@@ -10,42 +10,17 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.config.event;
+package org.apache.juneau.annotation;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import java.util.*;
+import java.lang.annotation.*;
 
 /**
- * Represents a list of {@link ConfigEvent} objects.
+ * Identifies a class as not thread safe.
  */
-public class ConfigEvents extends ArrayList<ConfigEvent> {
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Returns <jk>true</jk> if the specified section was modified in this list of events.
-	 *
-	 * @param name The section name.
-	 * @return <jk>true</jk> if the specified section was modified in this list of events.
-	 */
-	public boolean isSectionModified(String name) {
-		for (ConfigEvent ce : this)
-			if (eq(name, ce.getSection()))
-				return true;
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified key was modified in this list of events.
-	 *
-	 * @param section The section name.
-	 * @param key The key name.
-	 * @return <jk>true</jk> if the specified key was modified in this list of events.
-	 */
-	public boolean isKeyModified(String section, String key) {
-		for (ConfigEvent ce : this)
-			if (eq(section, ce.getSection()) && eq(key, ce.getKey()))
-				return true;
-		return false;
-	}
-}
+@Documented
+@Retention(RUNTIME)
+@Target(TYPE)
+public @interface NotThreadSafe {}

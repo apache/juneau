@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -224,7 +226,7 @@ public class FluentBaseAssertion<V,R> extends FluentAssertion<R> {
 		try {
 			String s1 = serializer.serialize(this.value);
 			String s2 = serializer.serialize(o);
-			if (! StringUtils.isEquals(s1, s2))
+			if (ne(s1, s2))
 				throw error("Unexpected comparison.\n\tExpect=[{0}]\n\tActual=[{1}]", s2, s1);
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);

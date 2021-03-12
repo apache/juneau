@@ -640,8 +640,8 @@ public class Operation extends SwaggerElement {
 	public ParameterInfo getParameter(String in, String name) {
 		if (parameters != null)
 			for (ParameterInfo pi : parameters)
-				if (StringUtils.isEquals(pi.getIn(), in))
-					if (StringUtils.isEquals(pi.getName(), name) || "body".equals(pi.getIn()))
+				if (eq(pi.getIn(), in))
+					if (eq(pi.getName(), name) || "body".equals(pi.getIn()))
 						return pi;
 		return null;
 	}

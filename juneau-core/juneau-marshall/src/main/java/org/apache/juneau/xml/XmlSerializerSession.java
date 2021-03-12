@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
@@ -25,7 +26,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
@@ -370,7 +370,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			name = null;
 		}
 
-		if (StringUtils.isEquals(name, elementName))
+		if (eq(name, elementName))
 			name = null;
 
 		if (isEnableNamespaces()) {

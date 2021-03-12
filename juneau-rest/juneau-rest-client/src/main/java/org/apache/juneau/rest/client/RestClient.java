@@ -2090,9 +2090,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		for (Object o : cp.getList(RESTCLIENT_headers, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof HeaderList)
-				headers.add((HeaderList)o);
+				headers.append(((HeaderList)o).getAll());
 			else
-				headers.add(BasicHeader.cast(o));
+				headers.append(BasicHeader.cast(o));
 		}
 		this.headers = headers.build();
 

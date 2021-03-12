@@ -18,19 +18,20 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link HeaderList} objects.
  */
 @FluentSetters
+@NotThreadSafe
 public class HeaderListBuilder {
 
 	final List<Header> headers;
-	private volatile VarResolver varResolver;
+	private VarResolver varResolver;
+	boolean caseSensitive = false;
 
 	/** Predefined instance. */
 	private static final HeaderList EMPTY = new HeaderList();
@@ -66,9 +67,12 @@ public class HeaderListBuilder {
 	 * <p>
 	 * Resolves variables in header values when using the following methods:
 	 * <ul>
-	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
-	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #add(String, Object, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
+	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
+	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
+	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
 	 * </ul>
 	 *
 	 * <p>
@@ -86,9 +90,12 @@ public class HeaderListBuilder {
 	 * <p>
 	 * Resolves variables in header values when using the following methods:
 	 * <ul>
-	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
-	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #add(String, Object, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
+	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
+	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
+	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
 	 * </ul>
 	 *
 	 * @param varResolver The variable resolver to use for resolving variables.
@@ -96,6 +103,19 @@ public class HeaderListBuilder {
 	 */
 	public HeaderListBuilder resolving(VarResolver varResolver) {
 		this.varResolver = varResolver;
+		return this;
+	}
+
+	/**
+	 * Specifies that the headers in this builder should be treated as case-sensitive.
+	 *
+	 * <p>
+	 * The default behavior is case-insensitive.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder caseSensitive() {
+		this.caseSensitive = true;
 		return this;
 	}
 
@@ -117,27 +137,14 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderListBuilder add(Header value) {
+	public HeaderListBuilder append(Header value) {
 		if (value != null)
 			headers.add(value);
 		return this;
 	}
 
 	/**
-	 * Adds the specified header to the end of the headers in this builder.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HeaderListBuilder add(String name, String value) {
-		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
-		return add(x);
-	}
-
-	/**
-	 * Appends the specified header to the end of this list.
+	 * Appends the specified header to the end of this builder.
 	 *
 	 * <p>
 	 * The header is added as a {@link BasicHeader}.
@@ -146,13 +153,12 @@ public class HeaderListBuilder {
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderListBuilder add(String name, Object value) {
-		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
-		return add(x);
+	public HeaderListBuilder append(String name, Object value) {
+		return append(header(name, value));
 	}
 
 	/**
-	 * Appends the specified header to the end of this list using a value supplier.
+	 * Appends the specified header to the end of this builder using a value supplier.
 	 *
 	 * <p>
 	 * The header is added as a {@link BasicHeader}.
@@ -164,66 +170,103 @@ public class HeaderListBuilder {
 	 * @param value The header value supplier.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderListBuilder add(String name, Supplier<?> value) {
-		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
-		return add(x);
+	public HeaderListBuilder append(String name, Supplier<?> value) {
+		return append(header(name, value));
 	}
 
 	/**
-	 * Appends the specified header to the end of this list.
+	 * Adds the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder append(Header...values) {
+		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
+			append(values[i]);
+		return this;
+	}
+
+	/**
+	 * Adds the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder append(List<Header> values) {
+		if (values != null)
+			for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
+				append(values.get(i));
+		return this;
+	}
+
+	/**
+	 * Adds the specified header to the beginning of the headers in this builder.
+	 *
+	 * @param value The header to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder prepend(Header value) {
+		if (value != null)
+			headers.add(0, value);
+		return this;
+	}
+
+	/**
+	 * Appends the specified header to the beginning of this builder.
+	 *
+	 * <p>
+	 * The header is added as a {@link BasicHeader}.
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * @param serializer
-	 * 	The serializer to use for serializing the value to a string value.
-	 * @param schema
-	 * 	The schema object that defines the format of the output.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderListBuilder add(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		Header x = isResolving() ? new SerializedHeader(name, resolver(value), serializer, schema, skipIfEmpty) : new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
-		return add(x);
+	public HeaderListBuilder prepend(String name, Object value) {
+		return prepend(header(name, value));
 	}
 
 	/**
-	 * Adds the specified headers to the end of the headers in this builder.
+	 * Appends the specified header to the beginning of this builder using a value supplier.
+	 *
+	 * <p>
+	 * The header is added as a {@link BasicHeader}.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder prepend(String name, Supplier<?> value) {
+		return prepend(header(name, value));
+	}
+
+	/**
+	 * Adds the specified headers to the beginning of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderListBuilder add(Header...values) {
-		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
-			add(values[i]);
+	public HeaderListBuilder prepend(Header...values) {
+		headers.addAll(0, Arrays.asList(values));
 		return this;
 	}
 
 	/**
-	 * Adds the specified headers to the end of the headers in this builder.
+	 * Adds the specified headers to the beginning of the headers in this builder.
 	 *
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderListBuilder add(List<Header> values) {
-		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
-			add(values.get(i));
-		return this;
-	}
-
-	/**
-	 * Adds the specified headers to the end of the headers in this builder.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderListBuilder add(HeaderList values) {
+	public HeaderListBuilder prepend(List<Header> values) {
 		if (values != null)
-			add(values.getAll());
+			headers.addAll(0, values);
 		return this;
 	}
 
@@ -261,7 +304,7 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder remove(List<Header> values) {
-		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
+		for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
 			remove(values.get(i));
 		return this;
 	}
@@ -275,7 +318,7 @@ public class HeaderListBuilder {
 	@FluentSetter
 	public HeaderListBuilder remove(String name) {
 		for (int i = 0; i < headers.size(); i++) /* See HTTPCORE-361 */
-			if (headers.get(i).getName().equalsIgnoreCase(name))
+			if (eq(headers.get(i).getName(), name))
 				headers.remove(i--);
 		return null;
 	}
@@ -290,13 +333,13 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderListBuilder update(Header value) {
+	public HeaderListBuilder set(Header value) {
 		if (value == null)
 			return this;
 
-		for (int i = 0; i < headers.size(); i++) {
+		for (int i = 0, j = headers.size(); i < j; i++) {
 			Header x = headers.get(i);
-			if (x.getName().equalsIgnoreCase(value.getName())) {
+			if (eq(x.getName(), value.getName())) {
 				headers.set(i, value);
 				return this;
 			}
@@ -316,9 +359,9 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderListBuilder update(Header...values) {
+	public HeaderListBuilder set(Header...values) {
 		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
-			update(values[i]);
+			set(values[i]);
 		return this;
 	}
 
@@ -329,9 +372,19 @@ public class HeaderListBuilder {
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderListBuilder update(String name, String value) {
-		Header x = isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
-		return update(x);
+	public HeaderListBuilder set(String name, Object value) {
+		return set(header(name, value));
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder set(String name, Supplier<?> value) {
+		return set(header(name, value));
 	}
 
 	/**
@@ -344,41 +397,9 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HeaderListBuilder update(List<Header> values) {
-		for (int i = 0; i < values.size(); i++) /* See HTTPCORE-361 */
-			update(values.get(i));
-		return this;
-	}
-
-	/**
-	 * Sets all of the headers contained within this list overriding any existing headers.
-	 *
-	 * <p>
-	 * The headers are added in the order in which they appear in the array.
-	 *
-	 * @param values The headers to set
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HeaderListBuilder set(Header...values) {
-		clear();
-		Collections.addAll(headers, values);
-		return this;
-	}
-
-	/**
-	 * Sets all of the headers contained within this list overriding any existing headers.
-	 *
-	 * <p>
-	 * The headers are added in the order in which they appear in the list.
-	 *
-	 * @param values The headers to set
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
 	public HeaderListBuilder set(List<Header> values) {
-		clear();
-		headers.addAll(values);
+		for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
+			set(values.get(i));
 		return this;
 	}
 
@@ -394,6 +415,18 @@ public class HeaderListBuilder {
 		while (o instanceof Supplier)
 			o = ((Supplier<?>)o).get();
 		return o;
+	}
+
+	private Header header(String name, Object value) {
+		return isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
+	}
+
+	private Header header(String name, Supplier<?> value) {
+		return isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
+	}
+
+	private boolean eq(String s1, String s2) {
+		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
 
 	// <FluentSetters>

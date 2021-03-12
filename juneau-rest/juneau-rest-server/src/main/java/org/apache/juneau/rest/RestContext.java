@@ -5168,7 +5168,7 @@ public class RestContext extends BeanContext {
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.update(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		x.set(properties.getInstanceArray(REST_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -5199,7 +5199,7 @@ public class RestContext extends BeanContext {
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.update(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
+		x.set(properties.getInstanceArray(REST_defaultResponseHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 
 		x = BeanStore
 			.of(beanStore, resource)

@@ -294,7 +294,7 @@ public class ConfigFileStore extends ConfigStore {
 		name = resolveName(name);
 
 		// This is a no-op.
-		if (isEquals(expectedContents, newContents))
+		if (eq(expectedContents, newContents))
 			return null;
 
 		dir.mkdirs();
@@ -324,7 +324,7 @@ public class ConfigFileStore extends ConfigStore {
 							}
 							currentContents = sb.toString();
 						}
-						if (expectedContents != null && ! isEquals(currentContents, expectedContents)) {
+						if (expectedContents != null && ! eq(currentContents, expectedContents)) {
 							if (currentContents == null)
 								cache.remove(name);
 							else
@@ -493,7 +493,7 @@ public class ConfigFileStore extends ConfigStore {
 		String oldContents = cache.get(fn);
 		cache.remove(fn);
 		String newContents = read(fn);
-		if (! isEquals(oldContents, newContents)) {
+		if (! eq(oldContents, newContents)) {
 			update(fn, newContents);
 		}
 	}

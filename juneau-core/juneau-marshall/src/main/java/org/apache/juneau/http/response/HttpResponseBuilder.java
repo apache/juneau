@@ -247,7 +247,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> header(Header value) {
-		headersBuilder().add(value);
+		headersBuilder().append(value);
 		return this;
 	}
 
@@ -259,7 +259,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> header(String name, String value) {
-		headersBuilder().add(name, value);
+		headersBuilder().append(name, value);
 		return this;
 	}
 
@@ -270,7 +270,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> headers(Header...values) {
-		headersBuilder().add(values);
+		headersBuilder().append(values);
 		return this;
 	}
 
@@ -281,7 +281,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> headers(List<Header> values) {
-		headersBuilder().add(values);
+		headersBuilder().append(values);
 		return this;
 	}
 
@@ -328,7 +328,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> updateHeader(Header value) {
-		headersBuilder().update(value);
+		headersBuilder().set(value);
 		return this;
 	}
 
@@ -342,7 +342,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> updateHeaders(Header...values) {
-		headersBuilder().update(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -356,7 +356,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> updateHeaders(List<Header> values) {
-		headersBuilder().update(values);
+		headersBuilder().set(values);
 		return this;
 	}
 
@@ -370,7 +370,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> setHeaders(Header...values) {
-		headersBuilder().set(values);
+		headersBuilder().clear().append(values);
 		return this;
 	}
 
@@ -384,7 +384,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object (for method chaining).
 	 */
 	public HttpResponseBuilder<T> setHeaders(List<Header> values) {
-		headersBuilder().set(values);
+		headersBuilder().clear().append(values);
 		return this;
 	}
 

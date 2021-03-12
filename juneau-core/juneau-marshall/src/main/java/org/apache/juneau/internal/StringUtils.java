@@ -1199,7 +1199,7 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	public static boolean isEquals(String s1, String s2) {
+	public static boolean eq(String s1, String s2) {
 		if (s1 == null)
 			return s2 == null;
 		if (s2 == null)
@@ -1260,7 +1260,7 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	public static boolean isEqualsIc(String s1, String s2) {
+	public static boolean eqic(String s1, String s2) {
 		if (s1 == null)
 			return s2 == null;
 		if (s2 == null)
@@ -1275,8 +1275,19 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are not equal.
 	 */
-	public static boolean isNotEquals(String s1, String s2) {
-		return ! isEquals(s1, s2);
+	public static boolean ne(String s1, String s2) {
+		return ! eq(s1, s2);
+	}
+
+	/**
+	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are not equal ignoring case.
+	 */
+	public static boolean neic(String s1, String s2) {
+		return ! eqic(s1, s2);
 	}
 
 	/**
@@ -1903,7 +1914,7 @@ public final class StringUtils {
 	 */
 	public static boolean isOneOf(String s, String...values) {
 		for (int i = 0; i < values.length; i++)
-			if (StringUtils.isEquals(s, values[i]))
+			if (StringUtils.eq(s, values[i]))
 				return true;
 		return false;
 	}
