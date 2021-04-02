@@ -2090,7 +2090,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		for (Object o : cp.getList(RESTCLIENT_headers, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof HeaderList)
-				headers.append(((HeaderList)o).getAll());
+				headers.append(((HeaderList)o));
 			else
 				headers.append(BasicHeader.cast(o));
 		}
@@ -2531,11 +2531,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
 			if (body instanceof PartList)
 				return req.body(new UrlEncodedFormEntity((PartList)body));
-			if (body instanceof HttpResource) {
-				List<Header> headers = ((HttpResource)body).getAllHeaders();
-				for (int i = 0; i < headers.size(); i++)  // Avoids iterator creation.
-					req.header(headers.get(i));
-			}
+			if (body instanceof HttpResource)
+				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
 			if (body instanceof HttpEntity) {
 				HttpEntity e = (HttpEntity)body;
 				if (e.getContentType() == null)
@@ -2899,8 +2896,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasBody());
 
-		for (Object o : headers)
-			req.header(APPEND, BasicHeader.cast(o));
+		headers.forEach(x -> req.header(APPEND, BasicHeader.cast(x)));
 
 		for (Object o : query)
 			req.query(BasicPart.cast(o));
@@ -3083,8 +3079,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					rc.serializer(serializer);
 					rc.parser(parser);
 
-					for (Header h : rm.getHeaders())
-						rc.header(APPEND, h);
+					rm.getHeaders().forEach(x -> rc.header(APPEND, x));
 
 					for (RemoteOperationArg a : rom.getPathArgs())
 						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
@@ -3164,6 +3159,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					return executeRemote(interfaceClass, rc, method, rom);
 				}
 		});
+	}
+
+	static Consumer<Header> wrapper(Consumer<Header> consumer) {
+	    return i -> {
+	        try {
+	            consumer.accept(i);
+	        } catch (Exception e) {
+	        	throw new RuntimeException(e);
+	        }
+	    };
 	}
 
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {

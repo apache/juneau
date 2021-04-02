@@ -43,8 +43,7 @@ public final class HttpResponseProcessor implements ResponseProcessor {
 		if (contentLength >= 0)
 			res.setHeader(contentLength(contentLength));
 
-		for (Header h : r.getAllHeaders()) // No iterator involved.
-			res.addHeader(h);
+		r.headerIterator().forEachRemaining(x -> res.addHeader((Header)x)); // No iterator involved.
 
 		try (OutputStream os = res.getNegotiatedOutputStream()) {
 			e.writeTo(os);

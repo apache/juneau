@@ -1353,7 +1353,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		HeaderListBuilder x = HeaderList.create();
 
-		x.set(context.getDefaultRequestHeaders().getAll());
+		x.set(context.getDefaultRequestHeaders());
 
 		x.set(properties.getInstanceArray(RESTOP_defaultRequestHeaders, org.apache.http.Header.class, beanStore).orElse(new org.apache.http.Header[0]));
 

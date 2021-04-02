@@ -640,11 +640,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getHeaders(String name) {
-		List<Header> a = headers.get(name);
-		ResponseHeader[] b = new ResponseHeader[a.size()];
-		for (int i = 0; i < b.length; i++)
-			b[i] = new ResponseHeader(request, this, a.get(i)).parser(partParser);
-		return b;
+		return headers.stream(name).map(x -> new ResponseHeader(request, this, x).parser(partParser)).toArray(ResponseHeader[]::new);
 	}
 
 	/**
@@ -660,7 +656,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
-		return new ResponseHeader(request, this, headers.getFirst(name)).parser(partParser);
+		return new ResponseHeader(request, this, headers.getFirst(name).orElse(null)).parser(partParser);
 	}
 
 	/**
@@ -676,22 +672,20 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
-		return new ResponseHeader(request, this, headers.getLast(name)).parser(partParser);
+		return new ResponseHeader(request, this, headers.getLast(name).orElse(null)).parser(partParser);
 	}
 
 	/**
 	 * Returns the response header with the specified name.
 	 *
 	 * <p>
-	 * If more than one header with the name exists, it is condensed into a comma-delimited list per
-	 * <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>
-	 * which governs multiple message header fields.
+	 * If more that one header with the given name exists the values will be combined with <js>", "</js> as per <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a>.
 	 *
 	 * @param name The name of the header to return.
 	 * @return The header, never <jk>null</jk>.
 	 */
 	public ResponseHeader getHeader(String name) {
-		return new ResponseHeader(request, this, headers.getCondensed(name)).parser(partParser);
+		return new ResponseHeader(request, this, headers.get(name).orElse(null)).parser(partParser);
 	}
 
 	/**
@@ -703,11 +697,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getAllHeaders() {
-		List<Header> a = headers.getAll();
-		ResponseHeader[] b = new ResponseHeader[a.size()];
-		for (int i = 0; i < b.length; i++)
-			b[i] = new ResponseHeader(request, this, a.get(i)).parser(partParser);
-		return b;
+		return headers.stream().map(x -> new ResponseHeader(request, this, x).parser(partParser)).toArray(ResponseHeader[]::new);
 	}
 
 	/**
@@ -797,7 +787,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headers.headerIterator();
+		return headers.iterator();
 	}
 
 	/**
@@ -808,7 +798,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headers.headerIterator(name);
+		return headers.iterator(name);
 	}
 
 	/**

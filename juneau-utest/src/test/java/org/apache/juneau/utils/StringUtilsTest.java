@@ -456,7 +456,7 @@ public class StringUtilsTest {
 		assertEquals("1", join(Arrays.asList(new Integer[]{1}), ','));
 		assertEquals("1,2", join(Arrays.asList(new Integer[]{1,2}), ','));
 
-		assertNull(joine((Collection<?>)null, ','));
+		assertNull(joine((List<?>)null, ','));
 		assertEquals("x\\,y,z", joine(Arrays.asList(new String[]{"x,y","z"}), ','));
 	}
 

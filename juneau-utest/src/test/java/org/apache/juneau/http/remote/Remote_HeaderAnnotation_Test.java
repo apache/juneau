@@ -811,11 +811,11 @@ public class Remote_HeaderAnnotation_Test {
 		}
 		@Header(aev=true)
 		public org.apache.http.Header[] getE() {
-			return headers("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new org.apache.http.Header[0]);
+			return headers("e1","v1","e2",123,"e3",null,"e4","").getAll();
 		}
 		@Header(aev=true)
 		public BasicHeader[] getF() {
-			return headers("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicHeader[0]);
+			return headers("f1","v1","f2",123,"f3",null,"f4","").stream().toArray(BasicHeader[]::new);
 		}
 	}
 

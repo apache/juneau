@@ -262,9 +262,14 @@
 								<tagletClass>org.apache.juneau.doc.internal.SourceTag</tagletClass>
 								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 							</taglet>
-							
-							<!--org.apache.juneau.doc.internal.DocTag</taglet-->
-							<!-- taglet>org.apache.juneau.doc.internal.PropertyTag</taglet-->
+							<taglet>
+								<tagletClass>org.apache.juneau.doc.internal.ReviewTag</tagletClass>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+							</taglet>
+							<taglet>
+								<tagletClass>org.apache.juneau.doc.internal.ReviewedTag</tagletClass>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+							</taglet>
 						</taglets>
 						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>

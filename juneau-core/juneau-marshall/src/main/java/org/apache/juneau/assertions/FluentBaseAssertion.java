@@ -415,6 +415,38 @@ public class FluentBaseAssertion<V,R> extends FluentAssertion<R> {
 		return o;
 	}
 
+	/**
+	 * Converts this object to a string using {@link Object#toString} and runs the {@link FluentStringAssertion#is(String)} on the result.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param value The expected string value.
+	 * @return This object (for method chaining).
+	 */
+	public R isString(String value) {
+		return asString().is(value);
+	}
+
+	/**
+	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * </p>
+	 *
+	 * @param value The expected string value.
+	 * @return This object (for method chaining).
+	 */
+	public R isJson(String value) {
+		return asJson().is(value);
+	}
+
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

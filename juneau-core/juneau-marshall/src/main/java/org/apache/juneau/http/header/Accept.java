@@ -149,6 +149,30 @@ public class Accept extends BasicMediaRangeArrayHeader {
 
 	private static final Cache<String,Accept> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
+	// Constants
+	@SuppressWarnings("javadoc")
+	public static final Accept
+		APPLICATION_ATOM_XML = of("application/atom+xml"),
+		APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded"),
+		APPLICATION_JSON = of("application/json"),
+		APPLICATION_OCTET_STREAM = of("application/octet-stream"),
+		APPLICATION_SOAP_XML = of("application/soap+xml"),
+		APPLICATION_SVG_XML = of("application/svg+xml"),
+		APPLICATION_XHTML_XML = of("application/xhtml+xml"),
+		APPLICATION_XML = of("application/xml"),
+		IMAGE_BMP = of("image/bmp"),
+		IMAGE_GIF = of("image/gif"),
+		IMAGE_JPEG = of("image/jpeg"),
+		IMAGE_PNG = of("image/png"),
+		IMAGE_SVG = of("image/svg+xml"),
+		IMAGE_TIFF = of("image/tiff"),
+		IMAGE_WEBP = of("image/webp"),
+		MULTIPART_FORM_DATA = of("multipart/form-data"),
+		TEXT_HTML = of("text/html"),
+		TEXT_PLAIN = of("text/plain"),
+		TEXT_XML = of("text/xml"),
+		WILDCARD = of("*/*");
+
 	/**
 	 * Returns a parsed and cached header.
 	 *

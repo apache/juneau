@@ -24,6 +24,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link HeaderList} objects.
+ * {@review}
  */
 @FluentSetters
 @NotThreadSafe
@@ -49,7 +50,10 @@ public class HeaderListBuilder {
 	 * @param copyFrom The bean to copy from.
 	 */
 	public HeaderListBuilder(HeaderList copyFrom) {
-		headers = new ArrayList<>(copyFrom.headers);
+		headers = new ArrayList<>(copyFrom.headers.length);
+		for (int i = 0; i < copyFrom.headers.length; i++)
+			headers.add(copyFrom.headers[i]);
+		caseSensitive = copyFrom.caseSensitive;
 	}
 
 	/**
@@ -131,6 +135,20 @@ public class HeaderListBuilder {
 	}
 
 	/**
+	 * Adds the specified headers to the end of the headers in this builder.
+	 *
+	 * @param value The header to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder append(HeaderList value) {
+		if (value != null)
+			for (Header h : value.headers)
+				append(h);
+		return this;
+	}
+
+	/**
 	 * Adds the specified header to the end of the headers in this builder.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
@@ -182,8 +200,9 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder append(Header...values) {
-		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
-			append(values[i]);
+		if (values != null)
+			for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
+				append(values[i]);
 		return this;
 	}
 
@@ -198,6 +217,19 @@ public class HeaderListBuilder {
 		if (values != null)
 			for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
 				append(values.get(i));
+		return this;
+	}
+
+	/**
+	 * Adds the specified header to the beginning of the headers in this builder.
+	 *
+	 * @param value The header to add.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder prepend(HeaderList value) {
+		if (value != null)
+			headers.addAll(0, Arrays.asList(value.headers));
 		return this;
 	}
 
@@ -253,7 +285,8 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder prepend(Header...values) {
-		headers.addAll(0, Arrays.asList(values));
+		if (values != null)
+			prepend(Arrays.asList(values));
 		return this;
 	}
 
@@ -267,6 +300,20 @@ public class HeaderListBuilder {
 	public HeaderListBuilder prepend(List<Header> values) {
 		if (values != null)
 			headers.addAll(0, values);
+		return this;
+	}
+
+	/**
+	 * Removes the specified header from this builder.
+	 *
+	 * @param value The header to remove.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder remove(HeaderList value) {
+		if (value != null)
+			for (int i = 0; i < value.headers.length; i++) /* See HTTPCORE-361 */
+				remove(value.headers[i]);
 		return this;
 	}
 
@@ -320,11 +367,25 @@ public class HeaderListBuilder {
 		for (int i = 0; i < headers.size(); i++) /* See HTTPCORE-361 */
 			if (eq(headers.get(i).getName(), name))
 				headers.remove(i--);
-		return null;
+		return this;
 	}
 
 	/**
-	 * Replaces the first occurrence of the header with the same name.
+	 * Removes the header with the specified name from this builder.
+	 *
+	 * @param names The header name.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder remove(String...names) {
+		if (names != null)
+			for (int i = 0; i < names.length; i++) /* See HTTPCORE-361 */
+				remove(names[i]);
+		return this;
+	}
+
+	/**
+	 * Adds or replaces the header(s) with the same name.
 	 *
 	 * <p>
 	 * If no header with the same name is found the given header is added to the end of the list.
@@ -334,23 +395,30 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder set(Header value) {
-		if (value == null)
-			return this;
-
-		for (int i = 0, j = headers.size(); i < j; i++) {
-			Header x = headers.get(i);
-			if (eq(x.getName(), value.getName())) {
-				headers.set(i, value);
-				return this;
+		if (value != null) {
+			boolean replaced = false;
+			for (int i = 0, j = headers.size(); i < j; i++) {
+				Header x = headers.get(i);
+				if (eq(x.getName(), value.getName())) {
+					if (replaced) {
+						headers.remove(i);
+						j--;
+					} else {
+						headers.set(i, value);
+						replaced = true;
+					}
+				}
 			}
+
+			if (! replaced)
+				headers.add(value);
 		}
 
-		headers.add(value);
 		return this;
 	}
 
 	/**
-	 * Replaces the first occurrence of the headers with the same name.
+	 * Adds or replaces the header(s) with the same name.
 	 *
 	 * <p>
 	 * If no header with the same name is found the given header is added to the end of the list.
@@ -360,8 +428,8 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder set(Header...values) {
-		for (int i = 0; i < values.length; i++) /* See HTTPCORE-361 */
-			set(values[i]);
+		if (values != null)
+			set(Arrays.asList(values));
 		return this;
 	}
 
@@ -398,9 +466,42 @@ public class HeaderListBuilder {
 	 */
 	@FluentSetter
 	public HeaderListBuilder set(List<Header> values) {
-		for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
-			set(values.get(i));
+
+		if (values != null) {
+			for (int k = 0, m = values.size(); k < m; k++) {
+				Header h = values.get(k);
+				if (h != null) {
+					for (int i = 0, j = headers.size(); i < j; i++) {
+						Header x = headers.get(i);
+						if (eq(x.getName(), h.getName())) {
+							headers.remove(i);
+							j--;
+						}
+					}
+				}
+			}
+
+			for (Header v : values) {
+				if (v != null) {
+					headers.add(v);
+				}
+			}
+		}
+
 		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * <p>
+	 * If no header with the same name is found the given header is added to the end of the list.
+	 *
+	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder set(HeaderList values) {
+		return set(values.headers);
 	}
 
 	private boolean isResolving() {
@@ -408,7 +509,7 @@ public class HeaderListBuilder {
 	}
 
 	private Supplier<Object> resolver(Object input) {
-		return ()->(varResolver == null ? unwrap(input) : varResolver.resolve(stringify(unwrap(input))));
+		return ()->varResolver.resolve(stringify(unwrap(input)));
 	}
 
 	private Object unwrap(Object o) {
@@ -428,7 +529,6 @@ public class HeaderListBuilder {
 	private boolean eq(String s1, String s2) {
 		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
-
 	// <FluentSetters>
 
 	// </FluentSetters>

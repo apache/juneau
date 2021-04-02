@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -28,6 +30,18 @@ import org.apache.juneau.marshall.*;
  */
 @FluentSetters(returns="FluentArrayAssertion<R>")
 public class FluentArrayAssertion<R> extends FluentBaseAssertion<Object,R> {
+
+	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
+	static {
+		STRINGIFIERS.put(boolean.class, (x) -> Arrays.toString((boolean[])x));
+		STRINGIFIERS.put(byte.class, (x) -> Arrays.toString((byte[])x));
+		STRINGIFIERS.put(char.class, (x) -> Arrays.toString((char[])x));
+		STRINGIFIERS.put(double.class, (x) -> Arrays.toString((double[])x));
+		STRINGIFIERS.put(float.class, (x) -> Arrays.toString((float[])x));
+		STRINGIFIERS.put(int.class, (x) -> Arrays.toString((int[])x));
+		STRINGIFIERS.put(long.class, (x) -> Arrays.toString((long[])x));
+		STRINGIFIERS.put(short.class, (x) -> Arrays.toString((short[])x));
+	}
 
 	private Object value;
 
@@ -53,6 +67,14 @@ public class FluentArrayAssertion<R> extends FluentBaseAssertion<Object,R> {
 		if (contents != null && ! contents.getClass().isArray())
 			throw new BasicAssertionError("Object was not an array.  Actual=''{0}''", contents.getClass());
 		this.value = contents;
+	}
+
+	@Override /* FluentBaseAssertion */
+	public FluentStringAssertion<R> asString() {
+		String s = null;
+		if (value != null)
+			s = STRINGIFIERS.getOrDefault( value.getClass().getComponentType(), (x) -> Arrays.toString((Object[])x)).apply(value);
+		return new FluentStringAssertion<>(this, s, returns());
 	}
 
 	/**

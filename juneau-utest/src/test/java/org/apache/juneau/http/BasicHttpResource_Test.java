@@ -36,7 +36,7 @@ public class BasicHttpResource_Test {
 		assertNull(x.getContentType());
 		assertStream(x.getContent()).isNotNull().asString().isEmpty();
 		assertNull(x.getContentEncoding());
-		assertList(x.getAllHeaders()).isSize(0);
+		assertInteger(x.getHeaders().size()).is(0);
 
 		x = stringResource("foo").build();
 		assertStream(x.getContent()).asString().is("foo");
@@ -116,42 +116,42 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a02_header_String_Object() throws Exception {
-		StringResource x = stringResource("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).build();
-		assertString(x.getFirstHeader("Foo").toString()).is("Foo: bar");
-		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
-		assertObject(x.getFirstHeader("Bar")).doesNotExist();
-		assertObject(x.getLastHeader("Bar")).doesNotExist();
-		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz']");
+		HeaderList x = stringResource("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).build().getHeaders();
+		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
+		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertObject(x.getFirst("Bar")).doesNotExist();
+		assertObject(x.getLast("Bar")).doesNotExist();
+		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz']");
 	}
 
 	@Test
 	public void a03_header_Header() throws Exception {
-		StringResource x = stringResource("foo").header(null).header(header("Foo","bar")).header(header("Foo","baz")).header(header(null,"bar")).header(header("Bar",null)).header(null).build();
-		assertString(x.getFirstHeader("Foo").toString()).is("Foo: bar");
-		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
-		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
+		HeaderList x = stringResource("foo").header(null).header(header("Foo","bar")).header(header("Foo","baz")).header(header(null,"bar")).header(header("Bar",null)).header(null).build().getHeaders();
+		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
+		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertObject(x.getFirst("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getLast("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
 	}
 
 	@Test
 	public void a04_headers_List() throws Exception {
-		StringResource x = stringResource("foo").headers(AList.of(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build();
-		assertString(x.getFirstHeader("Foo").toString()).is("Foo: bar");
-		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
-		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
+		HeaderList x = stringResource("foo").headers(AList.of(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
+		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
+		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertObject(x.getFirst("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getLast("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
 	}
 
 	@Test
 	public void a05_headers_array() throws Exception {
-		StringResource x = stringResource("foo").headers(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null).build();
-		assertString(x.getFirstHeader("Foo").toString()).is("Foo: bar");
-		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
-		assertObject(x.getFirstHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getLastHeader("Bar").getValue()).doesNotExist();
-		assertObject(x.getAllHeaders()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
+		HeaderList x = stringResource("foo").headers(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null).build().getHeaders();
+		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
+		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertObject(x.getFirst("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getLast("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
 

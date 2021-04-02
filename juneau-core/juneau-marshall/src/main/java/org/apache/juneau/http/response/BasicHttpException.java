@@ -45,7 +45,6 @@ import org.apache.juneau.http.header.*;
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 
 	private static final long serialVersionUID = 1L;
-	private static final Header[] EMPTY_HEADERS = new Header[0];
 
 	HeaderList headers;
 	BasicStatusLine statusLine;
@@ -246,24 +245,22 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		List<Header> l = headers().get(name);
-		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
+		return headers().getAll(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return headers().getFirst(name);
+		return headers().getFirst(name).orElse(null);
 	}
 
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return headers().getLast(name);
+		return headers().getLast(name).orElse(null);
 	}
 
 	@Override /* HttpMessage */
 	public Header[] getAllHeaders() {
-		List<Header> l = headers().getAll();
-		return l.isEmpty() ? EMPTY_HEADERS : l.toArray(new Header[l.size()]);
+		return headers().getAll();
 	}
 
 	@Override /* HttpMessage */
@@ -303,12 +300,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headers().headerIterator();
+		return headers().iterator();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headers().headerIterator(name);
+		return headers().iterator(name);
 	}
 
 	@SuppressWarnings("deprecation")

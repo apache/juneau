@@ -10,30 +10,68 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.remote;
+package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
-
+import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.serializer.*;
+/**
+ * Builder for arrays.
+ *
+ * <p>
+ * Designed to create arrays without array copying.
+ * Initial capacity cannot be exceeded without throwing a {@link ArrayIndexOutOfBoundsException}.
+ *
+ * @param <T> The array element type.
+ */
+public class ArrayBuilder<T> {
 
-public class ListSerializer extends BaseHttpPartSerializer {
-	@Override
-	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-		return new BaseHttpPartSerializerSession() {
-			@Override
-			public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-				if (value instanceof List)
-					return join((List<?>)value, '|');
-				if (value instanceof Collection)
-					return join((Collection<?>)value, '|');
-				if (isArray(value))
-					return join(toList(value, Object.class), "|");
-				return "?" + value + "?";
-			}
-		};
+	private final T[] array;
+	private int i = 0;
+
+	/**
+	 * Creator.
+	 *
+	 * @param elementType The element type.
+	 * @param size The array size.
+	 * @return A new builder object.
+	 */
+	public static <T> ArrayBuilder<T> create(Class<T> elementType, int size) {
+		return new ArrayBuilder<>(elementType, size);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param elementType The element type.
+	 * @param capacity The array size.
+	 */
+	@SuppressWarnings("unchecked")
+	public ArrayBuilder(Class<T> elementType, int capacity) {
+		array = (T[])Array.newInstance(elementType, capacity);
+	}
+
+	/**
+	 * Appends to this array if the specified value is not null.
+	 *
+	 * @param t The element to add.
+	 * @return This object (for method chaining).
+	 * @throws ArrayIndexOutOfBoundsException if size is exceeded.
+	 */
+	public ArrayBuilder<T> add(T t) {
+		if (t != null)
+			array[i++] = t;
+		return this;
+	}
+
+	/**
+	 * Returns the populated array.
+	 *
+	 * @return The populated array.
+	 */
+	public T[] toArray() {
+		if (i != array.length)
+			return Arrays.copyOf(array, i);
+		return array;
 	}
 }

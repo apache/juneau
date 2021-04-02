@@ -534,10 +534,23 @@ div.severe {
 }
 
 review {
+	display: block;
 	background-color: #ffdf00;
 	padding: 10px;
 	border-radius: 5px;
-	width: 800px;
 	text-align: center;
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
+	margin: 20px 0px;
+	font-weight: bold;
+}
+
+reviewed {
+	display: block;
+	background-color: lightgreen;
+	padding: 10px;
+	border-radius: 5px;
+	text-align: center;
+	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
+	margin: 20px 0px;
+	font-weight: bold;
 }

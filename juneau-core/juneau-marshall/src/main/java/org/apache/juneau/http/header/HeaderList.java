@@ -12,28 +12,135 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static java.util.Collections.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 
 /**
- * An unmodifiable list of HTTP headers.
+ * An immutable list of HTTP headers.
+ * {@review}
+ *
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode w800'>
+ * 	HeaderList <jv>headers</jv> = HeaderList
+ * 		.<jsm>create</jsm>()
+ * 		.append(Accept.<jsm>of</jsm>("text/xml"))
+ * 		.append(<js>"Content-Type"</js>, ()-><jsm>getDynamicContentTypeFromSomewhere</jsm>())
+ * 		.build();
+ * </p>
  *
  * <p>
- * Similar to {@link HeaderGroup} but uses a builder-based approach for building header lists.
+ * Convenience creators are provided for creating lists with minimal code:
+ * <p class='bcode w800'>
+ * 	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
+ * </p>
+ *
+ * <p>
+ * Header lists are immutable, but can be appended to using the {@link #copy()} method:
+ * <p class='bcode w800'>
+ * 	headers = headers
+ * 		.copy()
+ * 		.append(AcceptEncoding.<jsm>of</jsm>(<js>"identity"</js>))
+ * 		.build();
+ * </p>
+ *
+ * <p>
+ * Static methods are provided on {@link HttpHeaders} to further simplify creation of header lists.
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+ *
+ * 	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"<js>));
+ * </p>
+ *
+ * <p>
+ * Various methods are provided for iterating over the headers in this list to avoid array copies.
+ * <ul class='javatree'>
+ * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} - Use consumers to process headers.
+ * 	<li class='jm'>{@link #iterator()} / {@link #iterator(String)} - Use an {@link HeaderIterator} to process headers.
+ * 	<li class='jm'>{@link #stream()} / {@link #stream(String)} - Use a stream.
+ * </ul>
+ * <p>
+ * In general, try to use these over the {@link #getAll()}/{@link #getAll(String)} methods that require array copies.
+ *
+ * <p>
+ * The {@link #get(String)} method is special in that it will collapse multiple headers with the same name into
+ * a single comma-delimited list (see <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a> for rules).
+ *
+ * <p>
+ * The {@link #get(Class)} and {@link #get(String, Class)} methods are provided for working with {@link org.apache.juneau.http.annotation.Header}-annotated
+ * beans.
+ *
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode w800'>
+ * 	ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>);
+ * </p>
+ *
+ * <p>
+ * By default, header names are treated as case-insensitive.  This can be changed using the {@link HeaderListBuilder#caseSensitive()}
+ * method.
+ *
+ * <p>
+ * A {@link VarResolver} can be associated with this builder to create header values with embedded variables that
+ * are resolved at runtime.
+ *
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Create a header list with dynamically-resolving values pulled from a system property.</jc>
+ *
+ * 	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+ *
+ * 	HeaderList <jv>headers</jv> = HeaderList
+ * 		.<jsm>create</jsm>()
+ * 		.resolving()
+ * 		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
+ * 		.append(<js>"X2"</js>, ()-><js>"$S{foo}"</js>)
+ * 		.build();
+ *
+ * 	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[X1: bar, X2: bar]"</js>);
+ * </p>
+ *
+ * <p>
+ * The {@link HeaderList} object can be extended to defined pre-packaged lists of headers which can be used in various
+ * annotations throughout the framework.
+ *
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// A predefined list of headers.</jc>
+ * 	<jk>public class</jk> MyHeaderList <jk>extends</jk> HeaderList {
+ * 		<jk>public</jk> MyHeaderList() {
+ * 			<jk>super</jk>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
+ * 		}
+ * 	}
+ *
+ * 	<jc>// Use it on a remote proxy to add headers on all requests.</jc>
+ *  <ja>@Remote</ja>(path=<js>"/petstore"</js>, headerList=MyHeaderList.<jk>class</jk>)
+ * 	<jk>public interface</jk> PetStore {
+ *
+ * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
+ * 		Pet addPet(
+ * 			<ja>@Body</ja> CreatePet <jv>createPet</jv>,
+ * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+ * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+ * 		);
+ * 	}
+ * </p>
  */
 @ThreadSafe
-public class HeaderList implements Iterable<Header> {
+public class HeaderList {
+
+	private static final Header[] EMPTY_ARRAY = new Header[0];
 
 	/** Represents no header supplier in annotations. */
 	public static final class Null extends HeaderList {}
@@ -41,7 +148,7 @@ public class HeaderList implements Iterable<Header> {
 	/** Predefined instance. */
 	public static final HeaderList EMPTY = new HeaderList();
 
-	final List<Header> headers;
+	final Header[] headers;
 	final boolean caseSensitive;
 
 	/**
@@ -56,7 +163,10 @@ public class HeaderList implements Iterable<Header> {
 	/**
 	 * Creates a new {@link HeaderList} initialized with the specified headers.
 	 *
-	 * @param headers The headers to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
+	 * @param headers
+	 * 	The headers to add to the list.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static HeaderList of(List<Header> headers) {
@@ -66,7 +176,9 @@ public class HeaderList implements Iterable<Header> {
 	/**
 	 * Creates a new {@link HeaderList} initialized with the specified headers.
 	 *
-	 * @param headers The headers to add to the list.  <jk>null</jk> entries are ignored.
+	 * @param headers
+	 * 	The headers to add to the list.
+	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static HeaderList of(Header...headers) {
@@ -76,6 +188,11 @@ public class HeaderList implements Iterable<Header> {
 	/**
 	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
 	 *
+	 * <h5 class='figure'>Example</h5>
+	 * <p class='bcode w800'>
+	 * 	HeaderList <jv>headers</jv> = HeaderList.<jsm>ofPairs</jsm>(<js>"Accept"</js>, <js>"text/xml"</js>, <js>"Content-Type"</js>, <js>"text/xml"</js>);
+	 * </p>
+	 *
 	 * @param pairs
 	 * 	Initial list of pairs.
 	 * 	<br>Must be an even number of parameters representing key/value pairs.
@@ -83,14 +200,14 @@ public class HeaderList implements Iterable<Header> {
 	 * @return A new instance.
 	 */
 	public static HeaderList ofPairs(Object...pairs) {
-		if (pairs.length == 0)
+		if (pairs == null || pairs.length == 0)
 			return EMPTY;
 		if (pairs.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
-		HeaderListBuilder b = create();
+		ArrayBuilder<Header> b = ArrayBuilder.create(Header.class, pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
-			b.append(stringify(pairs[i]), pairs[i+1]);
-		return new HeaderList(b);
+			b.add(BasicHeader.of(stringify(pairs[i]), pairs[i+1]));
+		return new HeaderList(b.toArray());
 	}
 
 	/**
@@ -99,47 +216,38 @@ public class HeaderList implements Iterable<Header> {
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	public HeaderList(HeaderListBuilder builder) {
-		this.headers = unmodifiableList(new ArrayList<>(builder.headers));
+		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
 		this.caseSensitive = builder.caseSensitive;
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param headers The initial list of headers.  <jk>null</jk> entries are ignored.
+	 * @param headers
+	 * 	The headers to add to the list.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected HeaderList(List<Header> headers) {
-		if (headers == null || headers.isEmpty())
-			this.headers = emptyList();
-		else {
-			List<Header> l = new ArrayList<>(headers.size());
-			for (int i = 0, j = headers.size(); i < j; i++) {
-				Header x = headers.get(i);
-				if (x != null)
-					l.add(x);
-			}
-			this.headers = unmodifiableList(l);
-		}
+		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.size());
+		for (int i = 0, j = headers.size(); i < j; i++)
+			l.add(headers.get(i));
+		this.headers = l.toArray();
 		caseSensitive = false;
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param headers The initial list of headers.  <jk>null</jk> entries are ignored.
+	 * @param headers
+	 * 	The headers to add to the list.
+	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected HeaderList(Header...headers) {
-		if (headers.length == 0)
-			this.headers = emptyList();
-		else {
-			List<Header> l = new ArrayList<>(headers.length);
-			for (int i = 0; i < headers.length; i++) {
-				Header x = headers[i];
-				if (x != null)
-					l.add(x);
-			}
-			this.headers = unmodifiableList(l);
-		}
+		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.length);
+		for (int i = 0; i < headers.length; i++)
+			l.add(headers[i]);
+		this.headers = l.toArray();
 		caseSensitive = false;
 	}
 
@@ -147,7 +255,7 @@ public class HeaderList implements Iterable<Header> {
 	 * Default constructor.
 	 */
 	protected HeaderList() {
-		this.headers = emptyList();
+		this.headers = EMPTY_ARRAY;
 		caseSensitive = false;
 	}
 
@@ -164,41 +272,51 @@ public class HeaderList implements Iterable<Header> {
 	 * Gets a header representing all of the header values with the given name.
 	 *
 	 * <p>
-	 * If more that one header with the given name exists the values will be
-	 * combined with a "," as per RFC 2616.
-	 *
-	 * <p>Header name comparison is case insensitive.
+	 * If more that one header with the given name exists the values will be combined with <js>", "</js> as per
+	 * <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a>.
 	 *
 	 * @param name The header name.
-	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
+	 * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present
 	 */
-	public Header getCondensed(String name) {
-		List<Header> hdrs = get(name);
+	public Optional<Header> get(String name) {
 
-		if (hdrs.isEmpty())
-			return null;
-
-		if (hdrs.size() == 1)
-			return hdrs.get(0);
-
-		CharArrayBuffer sb = new CharArrayBuffer(128);
-		sb.append(hdrs.get(0).getValue());
-		for (int i = 1; i < hdrs.size(); i++) {
-			sb.append(", ");
-			sb.append(hdrs.get(i).getValue());
+		Header first = null;
+		List<Header> rest = null;
+		for (int i = 0; i < headers.length; i++) {
+			Header x = headers[i];
+			if (eq(x.getName(), name)) {
+				if (first == null)
+					first = x;
+				else {
+					if (rest == null)
+						rest = new ArrayList<>();
+					rest.add(x);
+				}
+			}
 		}
 
-		return new BasicHeader(name.toLowerCase(Locale.ROOT), sb.toString());
+		if (first == null)
+			return Optional.empty();
+
+		if (rest == null)
+			return Optional.of(first);
+
+		CharArrayBuffer sb = new CharArrayBuffer(128);
+		sb.append(first.getValue());
+		for (int i = 0; i < rest.size(); i++) {
+			sb.append(", ");
+			sb.append(rest.get(i).getValue());
+		}
+
+		return Optional.of(new BasicHeader(name, sb.toString()));
 	}
 
 	/**
 	 * Gets a header representing all of the header values with the given name.
 	 *
 	 * <p>
-	 * If more that one header with the given name exists the values will be
-	 * combined with a "," as per RFC 2616.
-	 *
-	 * <p>Header name comparison is case insensitive.
+	 * If more that one header with the given name exists the values will be combined with <js>", "</js> as per
+	 * <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a>.
 	 *
 	 * <p>
 	 * The implementation class must have a public constructor taking in one of the following argument lists:
@@ -209,35 +327,72 @@ public class HeaderList implements Iterable<Header> {
 	 * 	<li><c>X(String <jv>name</jv>, Object <jv>value</jv>)</c>
 	 * </ul>
 	 *
-	 * @param type The header implementation class.
+	 * <h5 class='figure'>Example</h5>
+	 * <p class='bcode w800'>
+	 * 	BasicIntegerHeader <jv>age</jv> = headerList.get(<js>"Age"</js>, BasicIntegerHeader.<jk>class</jk>);
+	 * </p>
+	 *
 	 * @param name The header name.
+	 * @param type The header implementation class.
+
 	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Header> T getCondensed(Class<T> type, String name) {
-		List<Header> l = get(name);
+	public <T> Optional<T> get(String name, Class<T> type) {
 
-		if (l.isEmpty())
-			return null;
-
-		String value = null;
-
-		if (l.size() == 1) {
-			Header h = l.get(0);
-			if (type.isInstance(h))
-				return (T)h;
-			value = h.getValue();
-		} else {
-			StringBuilder sb = new StringBuilder(128);
-			for (int i = 0; i < l.size(); i++) {
-				if (i > 0)
-					sb.append(", ");
-				sb.append(l.get(i).getValue());
+		Header first = null;
+		List<Header> rest = null;
+		for (int i = 0; i < headers.length; i++) {
+			Header x = headers[i];
+			if (eq(x.getName(), name)) {
+				if (first == null)
+					first = x;
+				else {
+					if (rest == null)
+						rest = new ArrayList<>();
+					rest.add(x);
+				}
 			}
-			value = sb.toString();
 		}
 
-		return HttpHeaders.header(type, name, value);
+		if (first == null)
+			return Optional.empty();
+
+		if (rest == null)
+			return Optional.of(HeaderBeanMeta.of(type).construct(name, first.getValue()));
+
+		CharArrayBuffer sb = new CharArrayBuffer(128);
+		sb.append(first.getValue());
+		for (int i = 0; i < rest.size(); i++) {
+			sb.append(", ");
+			sb.append(rest.get(i).getValue());
+		}
+
+		return Optional.of(HeaderBeanMeta.of(type).construct(name, sb.toString()));
+	}
+
+	/**
+	 * Gets a header representing all of the header values with the given name.
+	 *
+	 * <p>
+	 * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name()} or
+	 * 	{@link org.apache.juneau.http.annotation.Header#value()} annotations.
+	 *
+	 * <h5 class='figure'>Example</h5>
+	 * <p class='bcode w800'>
+	 * 	Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param type The header implementation class.
+	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		assertArgNotNull("type", type);
+
+		String headerName = HeaderBeanMeta.of(type).getSchema().getName();
+		if (headerName == null)
+			throw new BasicIllegalArgumentException("Header name could not be found on bean type ''{0}''", type.getName());
+
+		return get(headerName, type);
 	}
 
 	/**
@@ -253,17 +408,26 @@ public class HeaderList implements Iterable<Header> {
 	 *
 	 * @return An array containing all matching headers, or an empty array if none are found.
 	 */
-	public List<Header> get(String name) {
+	public Header[] getAll(String name) {
 		List<Header> l = null;
-		for (int i = 0, j = headers.size(); i < j; i++) {  // See HTTPCORE-361
-			Header x = headers.get(i);
+		for (int i = 0; i < headers.length; i++) {
+			Header x = headers[i];
 			if (eq(x.getName(), name)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(x);
 			}
 		}
-		return l == null ? emptyList() : l;
+		return l == null ? EMPTY_ARRAY : l.toArray(new Header[l.size()]);
+	}
+
+	/**
+	 * Returns the number of headers in this list.
+	 *
+	 * @return The number of headers in this list.
+	 */
+	public int size() {
+		return headers.length;
 	}
 
 	/**
@@ -275,13 +439,13 @@ public class HeaderList implements Iterable<Header> {
 	 * @param name The header name.
 	 * @return The first matching header, or <jk>null</jk> if not found.
 	 */
-	public Header getFirst(String name) {
-		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
-			Header x = headers.get(i);
+	public Optional<Header> getFirst(String name) {
+		for (int i = 0; i < headers.length; i++) {
+			Header x = headers[i];
 			if (eq(x.getName(), name))
-				return x;
+				return Optional.of(x);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**
@@ -293,22 +457,22 @@ public class HeaderList implements Iterable<Header> {
 	 * @param name The header name.
 	 * @return The last matching header, or <jk>null</jk> if not found.
 	 */
-	public Header getLast(String name) {
-		for (int i = headers.size() - 1; i >= 0; i--) {
-			Header x = headers.get(i);
+	public Optional<Header> getLast(String name) {
+		for (int i = headers.length - 1; i >= 0; i--) {
+			Header x = headers[i];
 			if (eq(x.getName(), name))
-				return x;
+				return Optional.of(x);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**
 	 * Gets all of the headers contained within this list.
 	 *
-	 * @return An unmodifiable list of all the headers in this list, or an empty list if no headers are present.
+	 * @return An array of all the headers in this list, or an empty array if no headers are present.
 	 */
-	public List<Header> getAll() {
-		return headers;
+	public Header[] getAll() {
+		return headers.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(headers, headers.length);
 	}
 
 	/**
@@ -321,8 +485,8 @@ public class HeaderList implements Iterable<Header> {
 	 * @return <jk>true</jk> if at least one header with the name is present.
 	 */
 	public boolean contains(String name) {
-		for (int i = 0; i < headers.size(); i++) {  // See HTTPCORE-361
-			Header x = headers.get(i);
+		for (int i = 0; i < headers.length; i++) {
+			Header x = headers[i];
 			if (eq(x.getName(), name))
 				return true;
 		}
@@ -334,8 +498,8 @@ public class HeaderList implements Iterable<Header> {
 	 *
 	 * @return A new iterator over this list of headers.
 	 */
-	public HeaderIterator headerIterator() {
-		return new BasicListHeaderIterator(headers, null);
+	public HeaderIterator iterator() {
+		return new BasicHeaderIterator(headers, null);
 	}
 
 	/**
@@ -345,21 +509,75 @@ public class HeaderList implements Iterable<Header> {
 	 *
 	 * @return A new iterator over the matching headers in this list.
 	 */
-	public HeaderIterator headerIterator(String name) {
-		return new BasicListHeaderIterator(headers, name);
+	public HeaderIterator iterator(String name) {
+		return new BasicHeaderIterator(headers, name);
+	}
+
+	/**
+	 * Performs an operation on the headers of this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over headers as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param c The consumer.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderList forEach(Consumer<Header> c) {
+		for (int i = 0; i < headers.length; i++)
+			c.accept(headers[i]);
+		return this;
+	}
+
+	/**
+	 * Performs an operation on the headers with the specified name in this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over headers as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param name The header name.
+	 * @param c The consumer.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderList forEach(String name, Consumer<Header> c) {
+		for (int i = 0; i < headers.length; i++)
+			if (eq(name, headers[i].getName()))
+				c.accept(headers[i]);
+		return this;
+	}
+
+	/**
+	 * Returns a stream of the headers in this list.
+	 *
+	 * <p>
+	 * This does not involve a copy of the underlying array of <c>Header</c> objects so should perform well.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public Stream<Header> stream() {
+		return Arrays.stream(headers);
+	}
+
+	/**
+	 * Returns a stream of the headers in this list with the specified name.
+	 *
+	 * <p>
+	 * This does not involve a copy of the underlying array of <c>Header</c> objects so should perform well.
+	 *
+	 * @param name The header name.
+	 * @return This object (for method chaining).
+	 */
+	public Stream<Header> stream(String name) {
+		return Arrays.stream(headers).filter(x->eq(name, x.getName()));
 	}
 
 	private boolean eq(String s1, String s2) {
 		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
 
-	@Override /* Iterable */
-	public Iterator<Header> iterator() {
-		return getAll().iterator();
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return headers.toString();
+		return Arrays.asList(headers).toString();
 	}
 }

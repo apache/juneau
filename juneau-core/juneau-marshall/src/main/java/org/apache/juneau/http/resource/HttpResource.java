@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.resource;
 
-import java.util.*;
-
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.http.header.*;
 
 /**
  * An extension of an {@link HttpEntity} that also includes arbitrary headers.
@@ -47,5 +45,5 @@ public interface HttpResource extends HttpEntity {
 	 *
 	 * @return The list of headers associated with this resource.
 	 */
-	List<Header> getAllHeaders();
+	HeaderList getHeaders();
 }

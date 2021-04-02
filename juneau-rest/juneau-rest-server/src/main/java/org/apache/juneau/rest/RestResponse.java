@@ -117,10 +117,9 @@ public final class RestResponse {
 			}
 		}
 
-		for (Header e : request.getContext().getDefaultResponseHeaders().getAll())
-			addHeader(e.getName(), resolveUris(e.getValue()));
-		for (Header e : opContext.getDefaultResponseHeaders().getAll())
-			addHeader(e.getName(), resolveUris(e.getValue()));
+		request.getContext().getDefaultResponseHeaders().forEach(x->addHeader(x.getValue(), resolveUris(x.getValue())));  // Done this way to avoid list/array copy.
+		
+		opContext.getDefaultResponseHeaders().forEach(x->addHeader(x.getName(), resolveUris(x.getValue())));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset").orElse(null));

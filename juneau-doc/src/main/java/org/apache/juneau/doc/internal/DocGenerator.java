@@ -329,9 +329,9 @@ public class DocGenerator {
 		if (WARNINGS.isEmpty())
 			info("No DocGenerator warnings.");
 		else {
-			warning(WARNINGS.size()+" DocGenerator warnings:");
+			warning(null, WARNINGS.size()+" DocGenerator warnings:");
 			for (int i = 0; i < WARNINGS.size(); i++)
-				warning("["+(i+1)+"] " + WARNINGS.get(i));
+				warning(null, "["+(i+1)+"] " + WARNINGS.get(i));
 		}
 	}
 

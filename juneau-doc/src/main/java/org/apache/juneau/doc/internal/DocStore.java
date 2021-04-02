@@ -39,7 +39,7 @@ public class DocStore {
 	public void addLink(String key, String href, String text) {
 		if (mappings.containsKey(key)) {
 			mappings.remove(key);
-			Console.warning("Duplicate @doc tag: {0}", key);
+			Console.warning(null, "Duplicate @doc tag: {0}", key);
 			return;
 		}
 		mappings.put(key, new Link(href, text));

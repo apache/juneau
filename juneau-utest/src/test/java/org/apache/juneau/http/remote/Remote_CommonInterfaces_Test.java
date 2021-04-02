@@ -214,8 +214,8 @@ public class Remote_CommonInterfaces_Test {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
 		BasicResource sr = x.httpResource();
 		assertEquals("foo",read(sr.getContent()));
-		assertEquals("foo",sr.getLastHeader("Foo").getValue());
-		assertEquals("\"bar\"",sr.getLastHeader("ETag").getValue());
+		assertEquals("foo",sr.getHeaders().getLast("Foo").orElseThrow(RuntimeException::new).getValue());
+		assertEquals("\"bar\"",sr.getHeaders().getLast("ETag").orElseThrow(RuntimeException::new).getValue());
 		assertEquals("text/foo",sr.getContentType().getValue().toString());
 	}
 

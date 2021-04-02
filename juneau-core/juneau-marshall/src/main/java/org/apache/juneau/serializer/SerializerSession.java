@@ -20,6 +20,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -389,7 +390,19 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
 		if (isSortCollections() && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
-			return new TreeSet<>(c);
+			return c.stream().sorted().collect(Collectors.toList());
+		return c;
+	}
+
+	/**
+	 * Sorts the specified collection if {@link SerializerSession#isSortCollections()} returns <jk>true</jk>.
+	 *
+	 * @param c The collection being sorted.
+	 * @return A new sorted {@link TreeSet}.
+	 */
+	public final <E> List<E> sort(List<E> c) {
+		if (isSortCollections() && c != null && (! c.isEmpty()) && c.get(0) instanceof Comparable<?>)
+			return c.stream().sorted().collect(Collectors.toList());
 		return c;
 	}
 

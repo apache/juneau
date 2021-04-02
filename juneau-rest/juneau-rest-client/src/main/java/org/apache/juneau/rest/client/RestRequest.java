@@ -2025,15 +2025,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(AddFlag flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
+	public RestRequest header(AddFlag flag, String name, Object value, HttpPartSchema schema) {
 		return headers(flag, serializedHeader(name, value, partSerializer, schema, EnumSet.of(flag)));
 	}
 
 	/**
 	 * Adds or replaces a header on the request.
-	 * 
+	 *
 	 * <p>
 	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
 	 *
@@ -2053,9 +2052,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(String name, Object value) throws RestCallException {
+	public RestRequest header(String name, Object value) {
 		return headers(serializedHeader(name, value, partSerializer, null, null));
 	}
 
@@ -2064,7 +2062,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <p>
 	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
-	 * 
+	 *
 	 * <p>
 	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
 	 *
@@ -2088,9 +2086,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(String name, Object value, HttpPartSchema schema) throws RestCallException {
+	public RestRequest header(String name, Object value, HttpPartSchema schema) {
 		return headers(serializedHeader(name, value, partSerializer, schema, null));
 	}
 
@@ -2122,9 +2119,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(AddFlag flag, String name, Object value) throws RestCallException {
+	public RestRequest header(AddFlag flag, String name, Object value) {
 		return headers(flag, serializedHeader(name, value, partSerializer, null, EnumSet.of(flag)));
 	}
 
@@ -2133,7 +2129,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <p>
 	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
@@ -2145,9 +2141,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param header The header to set.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(Header header) throws RestCallException {
+	public RestRequest header(Header header) {
 		return headers(header);
 	}
 
@@ -2171,9 +2166,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @param header The header to set.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(AddFlag flag, Header header) throws RestCallException {
+	public RestRequest header(AddFlag flag, Header header) {
 		return headers(flag, header);
 	}
 
@@ -2182,7 +2176,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <p>
 	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
@@ -2211,9 +2205,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headers(Object...headers) throws RestCallException {
+	public RestRequest headers(Object...headers) {
 		return headers(REPLACE, headers);
 	}
 
@@ -2255,16 +2248,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headers(AddFlag flag, Object...headers) throws RestCallException {
+	public RestRequest headers(AddFlag flag, Object...headers) {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
 			if (BasicHeader.canCast(o)) {
 				l.add(BasicHeader.cast(o));
 			} else if (o instanceof HeaderList) {
-				for (Header h : (HeaderList)o)
-					l.add(h);
+				((HeaderList)o).forEach(x->l.add(x));
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					l.add(BasicHeader.cast(o2));
@@ -2278,7 +2269,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new RestCallException(null, null, "Invalid type passed to headers(): {0}", className(o));
+				throw new BasicRuntimeException("Invalid type passed to headers(): {0}", className(o));
 			}
 		}
 		return innerHeaders(EnumSet.of(flag), l);
@@ -2289,7 +2280,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <p>
 	 * Replaces the header if it already exists, or appends it to the end of the headers if it doesn't.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
@@ -2305,9 +2296,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headerPairs(Object...pairs) throws RestCallException {
+	public RestRequest headerPairs(Object...pairs) {
 		return headerPairs(REPLACE, pairs);
 	}
 
@@ -2335,13 +2325,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-
-	public RestRequest headerPairs(AddFlag flag, Object...pairs) throws RestCallException {
+	public RestRequest headerPairs(AddFlag flag, Object...pairs) {
 		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
-			throw new RestCallException(null, null, "Odd number of parameters passed into headerPairs()");
+			throw new BasicRuntimeException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
 		return innerHeaders(EnumSet.of(flag), l);
@@ -2359,8 +2347,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (BasicHeader.canCast(value)) {
 			l.add(BasicHeader.cast(value));
 		} else if (value instanceof HeaderList) {
-			for (Header o : (HeaderList)value)
-				l.add(o);
+			((HeaderList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
 			for (Object o : (Collection<?>)value)
 				l.add(BasicHeader.cast(o));
@@ -2971,9 +2958,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = new UrlEncodedFormEntity((PartList)input2);
 				else if (input2 instanceof HttpResource) {
 					HttpResource r = (HttpResource)input2;
-					List<Header> headers = r.getAllHeaders();
-					for (int i = 0; i < headers.size(); i++)  // Avoids iterator creation.
-						addHeader(headers.get(i));
+					r.getHeaders().forEach(x -> addHeader(x));
 					entity = (HttpEntity)input2;
 				}
 				else if (input2 instanceof HttpEntity)

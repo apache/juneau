@@ -12,21 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.doc.internal;
 
-import static org.apache.juneau.doc.internal.Console.*;
 
 import com.sun.tools.doclets.Taglet;
 import com.sun.javadoc.*;
 
-import java.io.*;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Implements the <c>{@doc link}</c> tag.
+ * Implements the <c>{@property review}</c> tag that identifies documentation in need of review.
  */
-public class DocTag implements Taglet {
+public class ReviewTag implements Taglet {
 
-	private static final String NAME = "doc";
-	private static final DocStore STORE = new DocStore(new File("resources/docs.txt"));
+	private static final String NAME = "review";
+
+	static final Set<String> TO_REVIEW = Collections.synchronizedSet(new LinkedHashSet<>());
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				if (TO_REVIEW.size() > 0)
+					System.out.println("[INFO] No files needing review");
+				else
+					System.out.println("[WARNING] " + TO_REVIEW.size() + " files needing review");
+
+				for (String s : TO_REVIEW)
+					System.out.println("[NEEDS-REVIEW] " + s);
+			}
+		});
+	}
 
 	@Override
 	public String getName() {
@@ -70,84 +83,23 @@ public class DocTag implements Taglet {
 
 	@SuppressWarnings({ "javadoc", "rawtypes", "unchecked" })
 	public static void register(Map tagletMap) {
-		DocTag tag = new DocTag();
+		ReviewTag tag = new ReviewTag();
 		tagletMap.put(tag.getName(), tag);
 	}
 
 	@Override
 	public String toString(Tag tag) {
-		File f = tag.position().file();
-		String key = tag.text();
-		String href = null;
-		String label = null;
+		String label = tag.text();
+		if (label == null || label.isEmpty())
+			label = "Needs Review";
 
-		int i = key.indexOf(' ');
-		if (key.indexOf(' ') != -1) {
-			label = key.substring(i + 1);
-			key = key.substring(0, i).trim();
-		}
-
-		String hrefRemainder = "";
-
-		if (key.matches("^\\w+\\:\\/\\/.*")) {
-			href = key;
-			if (label == null)
-				label = href;
-		} else if (key.startsWith("org.apache.juneau")) {
-			i = firstDelimiter(key, 0);
-			if (i == -1)
-				href = key.replace('.', '/') + "/package-summary.html";
-			else
-				href = key.substring(0, i).replace('.', '/') + "/package-summary.html" + key.substring(i);
-			if (label == null)
-				label = href;
-		} else {
-			i = firstDelimiter(key, 0);
-			if (i != -1) {
-				hrefRemainder = key.substring(i);
-				key = key.substring(0, i);
-			}
-			DocStore.Link l = STORE.getLink(key);
-			if (l == null) {
-				error(tag.position(), "Unknown doc tag: {0}", key);
-				return tag.text();
-			}
-			href = l.href;
-			if (label == null)
-				label = l.label;
-		}
-
-		if (label == null)
-			label = "link";
-		label = label.replace("<", "&lt;").replace(">", "&gt;");
-
-		if (href.startsWith("#") && !f.getName().equals("overview.html")) {
-			StringBuilder sb = new StringBuilder();
-			while (true) {
-				f = f.getParentFile();
-				if (f == null) {
-					error(tag.position(), "Unknown doc tag href: {0}", tag.text());
-					return tag.text();
-				}
-				if (f.getName().equals("java"))
-					break;
-				sb.append("../");
-			}
-			sb.append("overview-summary.html" + href);
-			href = sb.toString();
-		}
-		return "<a class='doclink' href='" + href + hrefRemainder + "'>" + label + "</a>";
+		String file = tag.position().file().getAbsolutePath().replaceFirst("\\/juneau\\/.*\\/java\\/", "/juneau/target/site/apidocs/").replace(".java", ".html");
+		TO_REVIEW.add(file);
+		return "<review>" + label + "</review>";
 	}
 
 	@Override
 	public String toString(Tag[] tags) {
 		return null;
-	}
-
-	private int firstDelimiter(String path, int from) {
-		int i = path.indexOf('/', from);
-		if (i == -1)
-			i = path.indexOf('#', from);
-		return i;
 	}
 }

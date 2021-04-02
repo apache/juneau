@@ -26,6 +26,8 @@ public class XSerializer extends BaseHttpPartSerializer {
 		return new BaseHttpPartSerializerSession() {
 			@Override
 			public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				if (value instanceof List)
+					return join((List<?>)value, "X");
 				if (value instanceof Collection)
 					return join((Collection<?>)value, "X");
 				if (isArray(value))

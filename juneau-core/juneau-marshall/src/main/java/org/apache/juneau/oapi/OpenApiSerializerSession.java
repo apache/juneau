@@ -349,7 +349,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Collection toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
 		OList l = new OList();
@@ -392,7 +392,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				return toIsoDateTime(toType(o, CM_Calendar));
 			return o;
 		} else if (t == ARRAY) {
-			Collection l = toList(partType, getClassMetaForObject(o), o, s);
+			List l = toList(partType, getClassMetaForObject(o), o, s);
 			if (cf == CSV)
 				return joine(l, ',');
 			if (cf == PIPES)

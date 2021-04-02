@@ -13,7 +13,6 @@
 package org.apache.juneau.http.resource;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
@@ -141,66 +140,6 @@ public class BasicResource implements HttpResource {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Header convenience methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Tests if headers with the given name are contained within this resource (excluding those set on the entity itself).
-	 *
-	 * <p>
-	 * Header name comparison is case insensitive.
-	 *
-	 * @param name The header name.
-	 * @return <jk>true</jk> if at least one header with the name is present.
-	 */
-	public boolean containsHeader(String name) {
-		return headers.contains(name);
-	}
-
-	/**
-	 * Gets all of the headers with the given name (excluding those set on the entity itself).
-	 *
-	 * <p>
-	 * The returned array maintains the relative order in which the headers were added.
-	 *
-	 * <p>
-	 * Header name comparison is case insensitive.
-	 *
-	 * @param name The header name.
-	 *
-	 * @return An array containing all matching headers, or an empty array if none are found.
-	 */
-	public List<Header> getHeaders(String name) {
-		return headers.get(name);
-	}
-
-	/**
-	 * Gets the first header with the given name (excluding those set on the entity itself).
-	 *
-	 * <p>
-	 * Header name comparison is case insensitive.
-	 *
-	 * @param name The header name.
-	 * @return The first matching header, or <jk>null</jk> if not found.
-	 */
-	public Header getFirstHeader(String name) {
-		return headers.getFirst(name);
-	}
-
-	/**
-	 * Gets the last header with the given name (excluding those set on the entity itself).
-	 *
-	 * <p>
-	 * Header name comparison is case insensitive.
-	 *
-	 * @param name The header name.
-	 * @return The last matching header, or <jk>null</jk> if not found.
-	 */
-	public Header getLastHeader(String name) {
-		return headers.getLast(name);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Path-through methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -248,7 +187,7 @@ public class BasicResource implements HttpResource {
 	}
 
 	@Override /* HttpResource */
-	public List<Header> getAllHeaders() {
-		return headers.getAll();
+	public HeaderList getHeaders() {
+		return headers;
 	}
 }

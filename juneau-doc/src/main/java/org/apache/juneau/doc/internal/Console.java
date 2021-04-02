@@ -14,6 +14,8 @@ package org.apache.juneau.doc.internal;
 
 import java.text.*;
 
+import com.sun.javadoc.*;
+
 /**
  * Console utilities.
  */
@@ -33,22 +35,30 @@ public class Console {
 	/**
 	 * Print a console [WARNING] message.
 	 *
+	 * @param position The source position of the tag.
 	 * @param msg Message.
 	 * @param args Message arguments.
 	 */
-	public static void warning(String msg, Object...args) {
-		System.err.println("[WARNING] " + format(msg, args));  // NOT DEBUG
+	public static void warning(SourcePosition position, String msg, Object...args) {
+		if (position != null)
+			System.err.println(position + ": warning - " + format(msg, args));  // NOT DEBUG
+		else
+			System.err.println("[WARNING] " + format(msg, args));  // NOT DEBUG
 		System.err.flush();
 	}
 
 	/**
 	 * Print a console [ERROR] message.
 	 *
+	 * @param position The source position of the tag.
 	 * @param msg Message.
 	 * @param args Message arguments.
 	 */
-	public static void error(String msg, Object...args) {
-		System.err.println("[ERROR] " + format(msg, args));  // NOT DEBUG
+	public static void error(SourcePosition position, String msg, Object...args) {
+		if (position != null)
+			System.err.println(position + ": error - " + format(msg, args));  // NOT DEBUG
+		else
+			System.err.println("[ERROR] " + format(msg, args));  // NOT DEBUG
 		System.err.flush();
 	}
 

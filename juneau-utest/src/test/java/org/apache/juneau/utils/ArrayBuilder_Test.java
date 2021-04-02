@@ -10,43 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.processors;
+package org.apache.juneau.utils;
 
-import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.runners.MethodSorters.*;
 
-import java.io.*;
+import org.apache.juneau.internal.*;
+import org.junit.*;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.http.resource.*;
+@FixMethodOrder(NAME_ASCENDING)
+public class ArrayBuilder_Test {
 
-/**
- * Response handler for {@link HttpResource} objects.
- */
-public final class HttpResourceProcessor implements ResponseProcessor {
-
-	@Override /* ResponseProcessor */
-	public int process(RestCall call) throws IOException {
-
-		RestResponse res = call.getRestResponse();
-		HttpResource r = res.getOutput(HttpResource.class);
-
-		if (r == null)
-			return NEXT;
-
-		res.setHeader(r.getContentType());
-		res.setHeader(r.getContentEncoding());
-		long contentLength = r.getContentLength();
-		if (contentLength >= 0)
-			res.setHeader(contentLength(contentLength));
-
-		r.getHeaders().forEach(x -> res.addHeader(x));
-
-		try (OutputStream os = res.getNegotiatedOutputStream()) {
-			r.writeTo(os);
-			os.flush();
-		}
-
-		return FINISHED;
+	@Test
+	public void a01_basic() {
+		ArrayBuilder<String> x = ArrayBuilder.create(String.class, 2);
+		assertObject(x.toArray()).asJson().is("[]");
+		x.add(null);
+		assertObject(x.toArray()).asJson().is("[]");
+		x.add("a");
+		assertObject(x.toArray()).asJson().is("['a']");
+		x.add("b");
+		x.add(null);
+		assertObject(x.toArray()).asJson().is("['a','b']");
+		assertThrown(()->x.add("c")).isType(ArrayIndexOutOfBoundsException.class);
 	}
 }
-
