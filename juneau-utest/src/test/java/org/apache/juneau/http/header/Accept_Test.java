@@ -27,6 +27,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
+/**
+ * Tests: {@link Accept}
+ */
 @FixMethodOrder(NAME_ASCENDING)
 public class Accept_Test {
 

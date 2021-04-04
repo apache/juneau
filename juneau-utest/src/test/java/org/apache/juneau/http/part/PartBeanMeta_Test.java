@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http.part;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -20,10 +20,13 @@ import static org.apache.juneau.internal.StringUtils.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.*;
 
+/**
+ * Tests: {@link PartBeanMeta}
+ */
 @FixMethodOrder(NAME_ASCENDING)
-public class HeaderBeanMeta_Test {
+public class PartBeanMeta_Test {
 
-	private static final String TNAME = HeaderBeanMeta_Test.class.getName();
+	private static final String TNAME = PartBeanMeta_Test.class.getName();
 
 	public static class A1 {
 		public String name, value;
@@ -43,7 +46,7 @@ public class HeaderBeanMeta_Test {
 		}
 	}
 
-	@Header(name="A3")
+	@Query(name="A3")
 	public static class A3 {
 		public String value;
 
@@ -52,7 +55,7 @@ public class HeaderBeanMeta_Test {
 		}
 	}
 
-	@Header("A4")
+	@FormData("A4")
 	public static class A4 {
 		public String value;
 
@@ -61,7 +64,7 @@ public class HeaderBeanMeta_Test {
 		}
 	}
 
-	@Header(name="A5")
+	@Path(name="A5")
 	public static class A5 {}
 
 	public static class A6 {
@@ -70,34 +73,41 @@ public class HeaderBeanMeta_Test {
 		}
 	}
 
+	@ResponseHeader(name="A7")
+	public static class A7 {}
+
 	@Test
 	public void a01_basic() {
-		HeaderBeanMeta<A1> a1 = HeaderBeanMeta.of(A1.class);
-		assertTrue(a1 == HeaderBeanMeta.of(A1.class));
+		PartBeanMeta<A1> a1 = PartBeanMeta.of(A1.class);
+		assertTrue(a1 == PartBeanMeta.of(A1.class));
 		assertObject(a1.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
 		assertThrown(()->a1.construct("foo")).contains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
 		assertString(a1.getSchema().getName()).isNull();
 
-		HeaderBeanMeta<A2> a2 = HeaderBeanMeta.of(A2.class);
+		PartBeanMeta<A2> a2 = PartBeanMeta.of(A2.class);
 		assertObject(a2.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
 		assertThrown(()->a2.construct("foo")).contains("Constructor for type "+TNAME+"$A2 requires a name as the first argument.");
 		assertString(a2.getSchema().getName()).isNull();
 
-		HeaderBeanMeta<A3> a3 = HeaderBeanMeta.of(A3.class);
+		PartBeanMeta<A3> a3 = PartBeanMeta.of(A3.class);
 		assertObject(a3.construct("X", "foo")).isJson("{value:'foo'}");
 		assertObject(a3.construct("foo")).isJson("{value:'foo'}");
 		assertString(a3.getSchema().getName()).is("A3");
 
-		HeaderBeanMeta<A4> a4 = HeaderBeanMeta.of(A4.class);
+		PartBeanMeta<A4> a4 = PartBeanMeta.of(A4.class);
 		assertObject(a4.construct("X", "foo")).isJson("{value:'foo'}");
 		assertObject(a4.construct("foo")).isJson("{value:'foo'}");
 		assertString(a4.getSchema().getName()).is("A4");
 
-		HeaderBeanMeta<A5> a5 = HeaderBeanMeta.of(A5.class);
+		PartBeanMeta<A5> a5 = PartBeanMeta.of(A5.class);
 		assertThrown(()->a5.construct("foo")).contains("Constructor for type "+TNAME+"$A5 could not be found.");
 		assertString(a5.getSchema().getName()).is("A5");
 
-		HeaderBeanMeta<A6> a6 = HeaderBeanMeta.of(A6.class);
+		PartBeanMeta<A6> a6 = PartBeanMeta.of(A6.class);
 		assertThrown(()->a6.construct("X", "foo")).contains("oops");
+
+		PartBeanMeta<A7> a7 = PartBeanMeta.of(A7.class);
+		assertThrown(()->a7.construct("foo")).contains("Constructor for type "+TNAME+"$A7 could not be found.");
+		assertString(a7.getSchema().getName()).is("A7");
 	}
 }

@@ -1259,6 +1259,18 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Tests two strings for equality, but gracefully handles nulls.
+	 *
+	 * @param caseInsensitive Use case-insensitive matching.
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
+	 */
+	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
+		return caseInsensitive ? eqic(s1, s2) : eq(s1, s2);
+	}
+
+	/**
 	 * Finds the position where the two strings differ.
 	 *
 	 * @param s1 The first string.

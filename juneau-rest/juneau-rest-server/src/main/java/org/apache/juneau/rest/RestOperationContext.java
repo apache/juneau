@@ -1457,7 +1457,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		PartListBuilder x = PartList.create();
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultQuery, Part.class, beanStore).orElse(new Part[0]));
+		x.setDefault(properties.getInstanceArray(RESTOP_defaultQuery, Part.class, beanStore).orElse(new Part[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1466,7 +1466,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Query annotation");
 						}
@@ -1501,7 +1501,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		PartListBuilder x = PartList.create();
 
-		x.appendUnique(properties.getInstanceArray(RESTOP_defaultFormData, Part.class, beanStore).orElse(new Part[0]));
+		x.setDefault(properties.getInstanceArray(RESTOP_defaultFormData, Part.class, beanStore).orElse(new Part[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1510,7 +1510,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
 					if (def != null) {
 						try {
-							x.appendUnique(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
+							x.setDefault(basicPart(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @FormData annotation");
 						}

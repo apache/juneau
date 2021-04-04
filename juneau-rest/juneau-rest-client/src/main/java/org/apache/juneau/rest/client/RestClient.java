@@ -2100,9 +2100,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		for (Object o : cp.getList(RESTCLIENT_query, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof PartList)
-				query.add((PartList)o);
+				query.append((PartList)o);
 			else
-				query.add(BasicPart.cast(o));
+				query.append(BasicPart.cast(o));
 		}
 		this.query = query.build();
 
@@ -2110,9 +2110,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		for (Object o : cp.getList(RESTCLIENT_formData, Object.class).orElse(emptyList())) {
 			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof PartList)
-				formData.add((PartList)o);
+				formData.append((PartList)o);
 			else
-				formData.add(BasicPart.cast(o));
+				formData.append(BasicPart.cast(o));
 		}
 		this.formData = formData.build();
 
@@ -2530,7 +2530,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (body instanceof NameValuePair[])
 				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
 			if (body instanceof PartList)
-				return req.body(new UrlEncodedFormEntity((PartList)body));
+				return req.body(new UrlEncodedFormEntity(((PartList)body).asNameValuePairs()));
 			if (body instanceof HttpResource)
 				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
 			if (body instanceof HttpEntity) {
@@ -2896,13 +2896,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasBody());
 
-		headers.forEach(x -> req.header(APPEND, BasicHeader.cast(x)));
+		headers.forEach(x -> req.header(APPEND, x));
 
-		for (Object o : query)
-			req.query(BasicPart.cast(o));
+		query.forEach(x -> req.query(APPEND, x.getName(), x.getValue()));
 
-		for (Object o : formData)
-			req.formData(BasicPart.cast(o));
+		formData.forEach(x -> req.formData(APPEND, x.getName(), x.getValue()));
 
 		onInit(req);
 

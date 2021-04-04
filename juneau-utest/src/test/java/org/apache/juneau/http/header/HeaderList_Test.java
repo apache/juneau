@@ -25,6 +25,9 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 
+/**
+ * Tests: {@link HeaderList}, {@link HeaderListBuilder}, {@link BasicHeaderIterator}
+ */
 @FixMethodOrder(NAME_ASCENDING)
 public class HeaderList_Test {
 
@@ -377,6 +380,7 @@ public class HeaderList_Test {
 			.set(FOO_3)
 			.set(BAR_1)
 			.set((Header)null)
+			.set((HeaderList)null)
 			.build();
 		assertObject(x).isString("[Foo: 3, Bar: 1]");
 
@@ -431,6 +435,99 @@ public class HeaderList_Test {
 			.set(HeaderList.of(FOO_3,FOO_4))
 			.build();
 		assertObject(x).isString("[Bar: 1, Bar: 2, Foo: 3, Foo: 4]");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicHeaderIterator
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void c01_iterators() {
+		HeaderList x = HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_XML);
+
+		HeaderIterator i1 = x.iterator();
+		assertObject(i1.nextHeader()).isString("Accept: text/xml");
+		assertObject(i1.nextHeader()).isString("Content-Type: text/xml");
+		assertThrown(()->i1.nextHeader()).contains("Iteration already finished.");
+
+		HeaderIterator i2 = x.iterator();
+		assertObject(i2.next()).isString("Accept: text/xml");
+		assertObject(i2.nextHeader()).isString("Content-Type: text/xml");
+		assertThrown(()->i2.next()).contains("Iteration already finished.");
+
+		HeaderIterator i3 = x.iterator("accept");
+		assertObject(i3.nextHeader()).isString("Accept: text/xml");
+		assertThrown(()->i3.nextHeader()).contains("Iteration already finished.");
+
+		HeaderList x2 = HeaderList.create().append(Accept.TEXT_XML,ContentType.TEXT_XML).caseSensitive().build();
+
+		HeaderIterator i4 = x2.iterator("Accept");
+		assertObject(i4.nextHeader()).isString("Accept: text/xml");
+		assertThrown(()->i4.nextHeader()).contains("Iteration already finished.");
+
+		HeaderIterator i5 = x2.iterator("accept");
+		assertThrown(()->i5.nextHeader()).contains("Iteration already finished.");
+
+		assertThrown(()->i5.remove()).contains("Remove is not supported.");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Default headers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void d01_defaultHeaders() {
+		HeaderList x1 = HeaderList.create().setDefault(Accept.TEXT_XML).build();
+		assertObject(x1).isString("[Accept: text/xml]");
+
+		HeaderList x2 = HeaderList.create().set(Accept.TEXT_PLAIN).setDefault(Accept.TEXT_XML).build();
+		assertObject(x2).isString("[Accept: text/plain]");
+
+		HeaderList x3 = HeaderList.create().set(ContentType.TEXT_XML,Accept.TEXT_PLAIN,ContentType.TEXT_XML).setDefault(Accept.TEXT_XML).build();
+		assertObject(x3).isString("[Content-Type: text/xml, Accept: text/plain, Content-Type: text/xml]");
+
+		HeaderList x4 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_XML).setDefault(Accept.TEXT_XML).build();
+		assertObject(x4).isString("[Content-Type: text/xml, Content-Type: text/xml, Accept: text/xml]");
+
+		HeaderList x5 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_XML).setDefault(Accept.TEXT_XML).setDefault(ContentType.TEXT_HTML).build();
+		assertObject(x5).isString("[Content-Type: text/xml, Content-Type: text/xml, Accept: text/xml]");
+
+		HeaderList x6 = HeaderList.create().setDefault(Accept.TEXT_XML,Accept.TEXT_PLAIN).build();
+		assertObject(x6).isString("[Accept: text/xml, Accept: text/plain]");
+
+		HeaderList x7 = HeaderList.create().setDefault(Accept.TEXT_XML).setDefault(Accept.TEXT_PLAIN).build();
+		assertObject(x7).isString("[Accept: text/plain]");
+
+		HeaderList x8 = HeaderList.create().setDefault(Accept.TEXT_XML,Accept.TEXT_HTML).setDefault(Accept.TEXT_PLAIN).build();
+		assertObject(x8).isString("[Accept: text/plain]");
+
+		HeaderList x9 = HeaderList
+			.create()
+			.setDefault((Header)null)
+			.setDefault((HeaderList)null)
+			.setDefault((Header[])null)
+			.setDefault((List<Header>)null)
+			.build();
+		assertObject(x9).isString("[]");
+
+		HeaderList x10 = HeaderList.create().setDefault("Accept","text/xml").build();
+		assertObject(x10).isString("[Accept: text/xml]");
+
+		HeaderList x11 = HeaderList.create().setDefault("Accept",()->"text/xml").build();
+		assertObject(x11).isString("[Accept: text/xml]");
+
+		HeaderList x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(AList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
+		assertObject(x12).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/xml]");
+
+		HeaderList x13 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
+		assertObject(x13).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/xml]");
+
+		HeaderList x14 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN)
+			.setDefault(AList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
+			.setDefault(AList.of(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
+			.setDefault(AList.of(Age.of(1)))
+			.build();
+		assertObject(x14).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/html, Age: 1]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

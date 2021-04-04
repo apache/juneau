@@ -681,8 +681,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote(path="/")
 	public static interface K3 {
-		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}/{f1}/{f2}/{f3}/{f4}") String getX1(@Request K3a rb);
-		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}/{f1}/{f2}/{f3}/{f4}") String getX2(@Request(serializer=XSerializer.class) K3a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX1(@Request K3a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX2(@Request(serializer=XSerializer.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -704,11 +704,7 @@ public class Remote_PathAnnotation_Test {
 		}
 		@Path(aev=true)
 		public NameValuePair[] getE() {
-			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new Part[0]);
-		}
-		@Path(aev=true)
-		public BasicPart[] getF() {
-			return parts("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicPart[0]);
+			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll();
 		}
 	}
 
@@ -716,9 +712,9 @@ public class Remote_PathAnnotation_Test {
 	public void k03_requestBean_nameValuePairs() throws Exception {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
-		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/",x1.getX1(new K3a()));
-		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/",x2.getX1(new K3a()));
-		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/",x2.getX2(new K3a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x1.getX1(new K3a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x2.getX1(new K3a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x2.getX2(new K3a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -10,77 +10,78 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Holds metadata about header beans (POJOs that get serialized as HTTP headers).
- * {@reviewed}
+ * Holds metadata about http part beans (POJOs that get serialized as HTTP parts such as form data or query parameters).
+ * {@review}
  *
  * <p>
- * Header beans are typically annotated with {@link org.apache.juneau.http.annotation.Header @Header} although it's not an
- * absolute requirement.
+ * HTTP part beans are typically annotated with {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path}
+ * although it's not an absolute requirement.
  *
  * <p>
- * Header beans must have one of the following public constructors:
+ * HTTP part beans must have one of the following public constructors:
  * <ul>
- * 	<li><c><jk>public</jk> X(String <jv>headerValue</jv>)</c>
- * 	<li><c><jk>public</jk> X(Object <jv>headerValue</jv>)</c>
- * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, String <jv>headerValue</jv>)</c>
- * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, Object <jv>headerValue</jv>)</c>
+ * 	<li><c><jk>public</jk> X(String <jv>partValue</jv>)</c>
+ * 	<li><c><jk>public</jk> X(Object <jv>partValue</jv>)</c>
+ * 	<li><c><jk>public</jk> X(String <jv>partName</jv>, String <jv>partValue</jv>)</c>
+ * 	<li><c><jk>public</jk> X(String <jv>partName</jv>, Object <jv>partValue</jv>)</c>
  * </ul>
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	<jc>// Our header bean.</jc>
- * 	<ja>@Header</ja>(<js>"Foo"</js>)
- * 	<jk>public class</jk> FooHeader <jk>extends</jk> BasicStringHeader {
+ * 	<jc>// Our part bean.</jc>
+ * 	<ja>@Query</ja>(<js>"foo"</js>)
+ * 	<jk>public class</jk> FooPart <jk>extends</jk> BasicStringPart {
  *
- * 		<jk>public</jk> FooHeader(String <jv>headerValue</jv>) {
- * 			<jk>super</jk>(<js>"Foo"</js>, <jv>headerValue</jv>);
+ * 		<jk>public</jk> FooPart(String <jv>partValue</jv>) {
+ * 			<jk>super</jk>(<js>"foo"</js>, <jv>partValue</jv>);
  * 		}
  *  }
  *
- *  <jc>// Code to retrieve a header bean from a header list in a request.</jc>
- *  HeaderList <jv>headers</jv> = <jv>httpRequest</jv>.getHeaders();
- *  FooHeader <jv>foo</jv> = <jv>headers</jv>.get(FooHeader.<jk>class</jk>);
+ *  <jc>// Code to retrieve a part bean from a part list in a request.</jc>
+ *  PartList <jv>parts</jv> = <jv>httpRequest</jv>.getFormDataList();
+ *  FooPart <jv>foo</jv> = <jv>parts</jv>.get(FooPart.<jk>class</jk>);
  * </p>
  *
- * @param <T> The header bean type.
+ * @param <T> The HTTP part bean type.
  */
-public class HeaderBeanMeta<T> {
+public class PartBeanMeta<T> {
 
-	private static final ConcurrentHashMap<Class<?>,HeaderBeanMeta<?>> CACHE = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<Class<?>,PartBeanMeta<?>> CACHE = new ConcurrentHashMap<>();
 
 	private final Class<T> type;
 	private final Constructor<T> constructor;
 	private final HttpPartSchema schema;
 
 	/**
-	 * Finds the header bean meta for the specified type.
+	 * Finds the part bean meta for the specified type.
 	 *
-	 * @param type The header bean type.
+	 * @param type The part bean type.
 	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> HeaderBeanMeta<T> of(Class<T> type) {
-		HeaderBeanMeta<?> m = CACHE.get(type);
+	public static <T> PartBeanMeta<T> of(Class<T> type) {
+		PartBeanMeta<?> m = CACHE.get(type);
 		if (m == null) {
-			m = new HeaderBeanMeta<>(type);
+			m = new PartBeanMeta<>(type);
 			CACHE.put(type, m);
 		}
-		return (HeaderBeanMeta<T>)m;
+		return (PartBeanMeta<T>)m;
 	}
 
-	private HeaderBeanMeta(Class<T> type) {
+	private PartBeanMeta(Class<T> type) {
 		this.type = type;
 
 		ClassInfo ci = ClassInfo.of(type);
@@ -94,14 +95,24 @@ public class HeaderBeanMeta<T> {
 			cci = ci.getPublicConstructor(String.class, Object.class);
 		constructor = cci == null ? null : cci.inner();
 
-		this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
+		if (ci.hasAnnotation(Query.class))
+			this.schema = HttpPartSchema.create(Query.class, type);
+		else if (ci.hasAnnotation(FormData.class))
+			this.schema = HttpPartSchema.create(FormData.class, type);
+		else if (ci.hasAnnotation(Path.class))
+			this.schema = HttpPartSchema.create(Path.class, type);
+		else if (ci.hasAnnotation(ResponseHeader.class))
+			this.schema = HttpPartSchema.create(ResponseHeader.class, type);
+		else
+			this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
 	}
 
 	/**
-	 * Returns schema information about this header.
+	 * Returns schema information about this part.
 	 *
 	 * <p>
-	 * This is information pulled from {@link org.apache.juneau.http.annotation.Header @Header} annotation on the class.
+	 * This is information pulled from {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path} annotations
+	 * on the class.
 	 *
 	 * @return The schema information.
 	 */
@@ -110,13 +121,13 @@ public class HeaderBeanMeta<T> {
 	}
 
 	/**
-	 * Constructs a header bean with the specified name or value.
+	 * Constructs a part bean with the specified name or value.
 	 *
 	 * <p>
-	 * Can only be used on beans where the header name is known.
+	 * Can only be used on beans where the part name is known.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The part value.
 	 * @return A newly constructed bean.
 	 */
 	public T construct(Object value) {
@@ -124,14 +135,14 @@ public class HeaderBeanMeta<T> {
 	}
 
 	/**
-	 * Constructs a header bean with the specified name or value.
+	 * Constructs a part bean with the specified name or value.
 	 *
 	 * @param name
-	 * 	The header name.
+	 * 	The part name.
 	 * 	<br>If <jk>null</jk>, uses the value pulled from the {@link org.apache.juneau.http.annotation.Header#name() @Header(name)} or
 	 * 	{@link org.apache.juneau.http.annotation.Header#value() @Header(value)} annotations.
 	 * @param value
-	 * 	The header value.
+	 * 	The part value.
 	 * @return A newly constructed bean.
 	 * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).
 	 */

@@ -987,16 +987,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("rawtypes")
-	public RestRequest paths(Object...params) throws RestCallException {
+	public RestRequest paths(Object...params) {
 		for (Object o : params) {
 			if (BasicPart.canCast(o)) {
 				innerPath(BasicPart.cast(o));
 			} else if (o instanceof PartList) {
-				for (NameValuePair p : (PartList)o)
-					innerPath(p);
+				((PartList)o).forEach(x -> innerPath(x));
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					innerPath(BasicPart.cast(o2));
@@ -1010,7 +1008,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					innerPath(serializedPart(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
 			} else if (o != null) {
-				throw new RestCallException(null, null, "Invalid type passed to paths(): {0}", className(o));
+				throw new BasicRuntimeException("Invalid type passed to paths(): {0}", className(o));
 			}
 		}
 		return this;
@@ -1056,8 +1054,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (BasicPart.canCast(value)) {
 			innerPath(BasicPart.cast(value));
 		} else if (value instanceof PartList) {
-			for (Part o : (PartList)value)
-				innerPath(o);
+			((PartList)value).forEach(x -> innerPath(x));
 		} else if (value instanceof Collection) {
 			for (Object o : (Collection<?>)value)
 				innerPath(BasicPart.cast(o));
@@ -1076,12 +1073,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	private RestRequest innerPath(NameValuePair param) throws RestCallException {
+	private RestRequest innerPath(NameValuePair param) {
 		String path = uriBuilder.getPath();
 		String name = param.getName(), value = param.getValue();
 		String var = "{" + name + "}";
 		if (path.indexOf(var) == -1 && ! name.equals("/*"))
-			throw new RestCallException(null, null, "Path variable {"+name+"} was not found in path.");
+			throw new RuntimeException("Path variable {"+name+"} was not found in path.");
 		String p = null;
 		if (name.equals("/*"))
 			p = path.replaceAll("\\/\\*$", "/" + value);
@@ -1174,9 +1171,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param pair The parameter.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(NameValuePair pair) throws RestCallException {
+	public RestRequest query(NameValuePair pair) {
 		return queries(pair);
 	}
 
@@ -1240,9 +1236,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(AddFlag flag, String name, Object value) throws RestCallException {
+	public RestRequest query(AddFlag flag, String name, Object value) {
 		return queries(flag, serializedPart(name, value, QUERY, partSerializer, null, EnumSet.of(flag)));
 	}
 
@@ -1278,9 +1273,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest queries(Object...params) throws RestCallException {
+	public RestRequest queries(Object...params) {
 		return queries(APPEND, params);
 	}
 
@@ -1323,16 +1317,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest queries(AddFlag flag, Object...params) throws RestCallException {
+	public RestRequest queries(AddFlag flag, Object...params) {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
 			if (BasicPart.canCast(o)) {
 				l.add(BasicPart.cast(o));
 			} else if (o instanceof PartList) {
-				for (NameValuePair p : (PartList)o)
-					l.add(p);
+				((PartList)o).forEach(x -> l.add(x));
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					l.add(BasicPart.cast(o2));
@@ -1346,7 +1338,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedPart(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new RestCallException(null, null, "Invalid type passed to queries(): {0}", className(o));
+				throw new BasicRuntimeException("Invalid type passed to queries(): {0}", className(o));
 			}
 		}
 		return innerQuery(EnumSet.of(flag), l);
@@ -1435,8 +1427,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (BasicPart.canCast(value)) {
 			l.add(BasicPart.cast(value));
 		} else if (value instanceof PartList) {
-			for (Object o : (PartList)value)
-				l.add(BasicPart.cast(o));
+			((PartList)value).forEach(x -> l.add(x));
 		} else if (value instanceof Collection) {
 			for (Object o : (Collection<?>)value)
 				l.add(BasicPart.cast(o));
@@ -1627,9 +1618,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(AddFlag flag, String name, Object value) throws RestCallException {
+	public RestRequest formData(AddFlag flag, String name, Object value) {
 		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer, null, EnumSet.of(flag)));
 	}
 
@@ -1710,16 +1700,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formDatas(AddFlag flag, Object...params) throws RestCallException {
+	public RestRequest formDatas(AddFlag flag, Object...params) {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
 			if (BasicPart.canCast(o)) {
 				l.add(BasicPart.cast(o));
 			} else if (o instanceof PartList) {
-				for (NameValuePair p : (PartList)o)
-					l.add(p);
+				((PartList)o).forEach(x -> l.add(x));
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					l.add(BasicPart.cast(o2));
@@ -1733,7 +1721,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedPart(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new RestCallException(null, null, "Invalid type passed to formDatas(): {0}", className(o));
+				throw new BasicRuntimeException("Invalid type passed to formDatas(): {0}", className(o));
 			}
 		}
 		return innerFormData(EnumSet.of(flag), l);
@@ -1831,8 +1819,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (BasicPart.canCast(value)) {
 			l.add(BasicPart.cast(value));
 		} else if (value instanceof PartList) {
-			for (Part o : (PartList)value)
-				l.add(o);
+			((PartList)value).forEach(x -> l.add(x));
 		} else if (value instanceof Collection) {
 			for (Object o : (Collection<?>)value)
 				l.add(BasicPart.cast(o));
@@ -2955,7 +2942,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (formData != null)
 					entity = new UrlEncodedFormEntity(formData);
 				else if (input2 instanceof PartList)
-					entity = new UrlEncodedFormEntity((PartList)input2);
+					entity = new UrlEncodedFormEntity(((PartList)input2).asNameValuePairs());
 				else if (input2 instanceof HttpResource) {
 					HttpResource r = (HttpResource)input2;
 					r.getHeaders().forEach(x -> addHeader(x));

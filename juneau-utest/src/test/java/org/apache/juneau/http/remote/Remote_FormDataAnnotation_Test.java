@@ -848,11 +848,7 @@ public class Remote_FormDataAnnotation_Test {
 		}
 		@FormData
 		public NameValuePair[] getE() {
-			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new NameValuePair[0]);
-		}
-		@FormData
-		public BasicPart[] getF() {
-			return parts("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicPart[0]);
+			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll();
 		}
 	}
 
@@ -860,9 +856,9 @@ public class Remote_FormDataAnnotation_Test {
 	public void k03_requestBean_nameValuePairs() throws Exception {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x1.postX1(new K3a()));
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x2.postX1(new K3a()));
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x2.postX2(new K3a()));
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}",x1.postX1(new K3a()));
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}",x2.postX1(new K3a()));
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}",x2.postX2(new K3a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

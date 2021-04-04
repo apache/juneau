@@ -95,7 +95,6 @@ public class RestClient_FormData_Test {
 		client().formDatas(part("foo","bar"),null).build().post("/formData").run().assertBody().is("foo=bar");
 		client().build().post("/formData").formDatas(part("foo","bar"),null).run().assertBody().is("foo=bar");
 		client().formDatas(part("foo",null)).build().post("/formData").run().assertBody().is("");
-		client().formDatas(part(null,"foo")).build().post("/formData").run().assertBody().is("null=foo");
 		client().formDatas(part(null,null)).build().post("/formData").run().assertBody().is("");
 
 		client().build().post("/formData").formDatas(part("foo",null)).run().assertBody().is("");

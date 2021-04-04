@@ -23,7 +23,7 @@ public class ArrayBuilder_Test {
 
 	@Test
 	public void a01_basic() {
-		ArrayBuilder<String> x = ArrayBuilder.create(String.class, 2);
+		ArrayBuilder<String> x = ArrayBuilder.create(String.class, 2, true);
 		assertObject(x.toArray()).asJson().is("[]");
 		x.add(null);
 		assertObject(x.toArray()).asJson().is("[]");

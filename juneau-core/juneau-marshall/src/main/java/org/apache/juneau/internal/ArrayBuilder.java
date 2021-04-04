@@ -28,16 +28,18 @@ public class ArrayBuilder<T> {
 
 	private final T[] array;
 	private int i = 0;
+	private final boolean skipNulls;
 
 	/**
 	 * Creator.
 	 *
 	 * @param elementType The element type.
 	 * @param size The array size.
+	 * @param skipNulls If <jk>true</jk>, <jk>null</jk> values will be ignored.
 	 * @return A new builder object.
 	 */
-	public static <T> ArrayBuilder<T> create(Class<T> elementType, int size) {
-		return new ArrayBuilder<>(elementType, size);
+	public static <T> ArrayBuilder<T> create(Class<T> elementType, int size, boolean skipNulls) {
+		return new ArrayBuilder<>(elementType, size, skipNulls);
 	}
 
 	/**
@@ -45,10 +47,12 @@ public class ArrayBuilder<T> {
 	 *
 	 * @param elementType The element type.
 	 * @param capacity The array size.
+	 * @param skipNulls If <jk>true</jk>, <jk>null</jk> values will be ignored.
 	 */
 	@SuppressWarnings("unchecked")
-	public ArrayBuilder(Class<T> elementType, int capacity) {
+	public ArrayBuilder(Class<T> elementType, int capacity, boolean skipNulls) {
 		array = (T[])Array.newInstance(elementType, capacity);
+		this.skipNulls = skipNulls;
 	}
 
 	/**
@@ -59,7 +63,7 @@ public class ArrayBuilder<T> {
 	 * @throws ArrayIndexOutOfBoundsException if size is exceeded.
 	 */
 	public ArrayBuilder<T> add(T t) {
-		if (t != null)
+		if (!(skipNulls && t == null))
 			array[i++] = t;
 		return this;
 	}

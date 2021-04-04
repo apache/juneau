@@ -87,7 +87,6 @@ public class Remote_QueryAnnotation_Test {
 		@RemoteOp(path="a") String getX20(@Query PartList b);
 		@RemoteOp(path="a") String getX21(@Query NameValuePair b);
 		@RemoteOp(path="a") String getX22(@Query NameValuePair[] b);
-		@RemoteOp(path="a") String getX23(@Query BasicPart[] b);
 		@RemoteOp(path="a") String getX24(@Query String b);
 		@RemoteOp(path="a") String getX25(@Query List<NameValuePair> b);
 	}
@@ -116,8 +115,7 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.getX19(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX20(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX21(part("foo","bar")));
-		assertEquals("{foo:'bar'}",x.getX22(parts("foo","bar").getAll().toArray(new Part[0])));
-		assertEquals("{foo:'bar'}",x.getX23(parts("foo","bar").getAll().toArray(new BasicPart[0])));
+		assertEquals("{foo:'bar'}",x.getX22(parts("foo","bar").getAll()));
 		assertEquals("{foo:'bar'}",x.getX24("foo=bar"));
 		assertEquals("{}",x.getX24(null));
 		assertEquals("{foo:'bar'}",x.getX25(AList.of(part("foo","bar"))));
@@ -815,11 +813,7 @@ public class Remote_QueryAnnotation_Test {
 		}
 		@Query(aev=true)
 		public NameValuePair[] getE() {
-			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll().toArray(new Part[0]);
-		}
-		@Query(aev=true)
-		public BasicPart[] getF() {
-			return parts("f1","v1","f2",123,"f3",null,"f4","").getAll().toArray(new BasicPart[0]);
+			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll();
 		}
 	}
 
@@ -827,9 +821,8 @@ public class Remote_QueryAnnotation_Test {
 	public void k03_requestBean_nameValuePairs() throws Exception {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x1.getX1(new K3a()));
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x2.getX1(new K3a()));
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x2.getX2(new K3a()));
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}",x1.getX1(new K3a()));
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}",x2.getX1(new K3a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

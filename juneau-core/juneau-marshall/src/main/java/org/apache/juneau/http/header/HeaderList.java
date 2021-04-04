@@ -20,7 +20,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.http.message.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -62,6 +61,28 @@ import org.apache.juneau.svl.*;
  * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
  *
  * 	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"<js>));
+ * </p>
+ *
+ * <p>
+ * The builder class supports setting default header values (i.e. add a header to the list if it isn't otherwise in the list).
+ * Note that this is different from simply setting a value twice as using default values will not overwrite existing
+ * headers.
+ * <br>The following example notes the distinction:
+ *
+ * <p class='bcode w800'>
+ * 	<jv>headers</jv> = HeaderList
+ * 		.<jsm>create</jsm>()
+ * 		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
+ * 		.set(Accept.<jsf>TEXT_XML</jsf>)
+ * 		.build();
+ * 	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/xml]"</js>);
+ *
+ * 	<jv>headers</jv> = HeaderList
+ * 		.create()
+ * 		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
+ * 		.setDefault(Accept.<jsf>TEXT_XML</jsf>)
+ * 		.build();
+ * 	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/plain]"</js>);
  * </p>
  *
  * <p>
@@ -148,7 +169,7 @@ public class HeaderList {
 	/** Predefined instance. */
 	public static final HeaderList EMPTY = new HeaderList();
 
-	final Header[] headers;
+	final Header[] entries;
 	final boolean caseSensitive;
 
 	/**
@@ -204,7 +225,7 @@ public class HeaderList {
 			return EMPTY;
 		if (pairs.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
-		ArrayBuilder<Header> b = ArrayBuilder.create(Header.class, pairs.length / 2);
+		ArrayBuilder<Header> b = ArrayBuilder.create(Header.class, pairs.length / 2, true);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicHeader.of(stringify(pairs[i]), pairs[i+1]));
 		return new HeaderList(b.toArray());
@@ -216,7 +237,25 @@ public class HeaderList {
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	public HeaderList(HeaderListBuilder builder) {
-		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
+		if (builder.defaultEntries == null) {
+			entries = builder.entries.toArray(new Header[builder.entries.size()]);
+		} else {
+			ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, builder.entries.size() + builder.defaultEntries.size(), true);
+
+			for (int i = 0, j = builder.entries.size(); i < j; i++)
+				l.add(builder.entries.get(i));
+
+			for (int i1 = 0, j1 = builder.defaultEntries.size(); i1 < j1; i1++) {
+				Header x = builder.defaultEntries.get(i1);
+				boolean exists = false;
+				for (int i2 = 0, j2 = builder.entries.size(); i2 < j2 && ! exists; i2++)
+					exists = eq(builder.entries.get(i2).getName(), x.getName());
+				if (! exists)
+					l.add(x);
+			}
+
+			entries = l.toArray();
+		}
 		this.caseSensitive = builder.caseSensitive;
 	}
 
@@ -229,10 +268,10 @@ public class HeaderList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected HeaderList(List<Header> headers) {
-		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.size());
+		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.size(), true);
 		for (int i = 0, j = headers.size(); i < j; i++)
 			l.add(headers.get(i));
-		this.headers = l.toArray();
+		entries = l.toArray();
 		caseSensitive = false;
 	}
 
@@ -244,10 +283,10 @@ public class HeaderList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected HeaderList(Header...headers) {
-		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.length);
+		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.length, true);
 		for (int i = 0; i < headers.length; i++)
 			l.add(headers[i]);
-		this.headers = l.toArray();
+		entries = l.toArray();
 		caseSensitive = false;
 	}
 
@@ -255,7 +294,7 @@ public class HeaderList {
 	 * Default constructor.
 	 */
 	protected HeaderList() {
-		this.headers = EMPTY_ARRAY;
+		entries = EMPTY_ARRAY;
 		caseSensitive = false;
 	}
 
@@ -282,8 +321,8 @@ public class HeaderList {
 
 		Header first = null;
 		List<Header> rest = null;
-		for (int i = 0; i < headers.length; i++) {
-			Header x = headers[i];
+		for (int i = 0; i < entries.length; i++) {
+			Header x = entries[i];
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -341,8 +380,8 @@ public class HeaderList {
 
 		Header first = null;
 		List<Header> rest = null;
-		for (int i = 0; i < headers.length; i++) {
-			Header x = headers[i];
+		for (int i = 0; i < entries.length; i++) {
+			Header x = entries[i];
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -388,11 +427,11 @@ public class HeaderList {
 	public <T> Optional<T> get(Class<T> type) {
 		assertArgNotNull("type", type);
 
-		String headerName = HeaderBeanMeta.of(type).getSchema().getName();
-		if (headerName == null)
+		String name = HeaderBeanMeta.of(type).getSchema().getName();
+		if (name == null)
 			throw new BasicIllegalArgumentException("Header name could not be found on bean type ''{0}''", type.getName());
 
-		return get(headerName, type);
+		return get(name, type);
 	}
 
 	/**
@@ -410,8 +449,8 @@ public class HeaderList {
 	 */
 	public Header[] getAll(String name) {
 		List<Header> l = null;
-		for (int i = 0; i < headers.length; i++) {
-			Header x = headers[i];
+		for (int i = 0; i < entries.length; i++) {
+			Header x = entries[i];
 			if (eq(x.getName(), name)) {
 				if (l == null)
 					l = new ArrayList<>();
@@ -427,7 +466,7 @@ public class HeaderList {
 	 * @return The number of headers in this list.
 	 */
 	public int size() {
-		return headers.length;
+		return entries.length;
 	}
 
 	/**
@@ -440,8 +479,8 @@ public class HeaderList {
 	 * @return The first matching header, or <jk>null</jk> if not found.
 	 */
 	public Optional<Header> getFirst(String name) {
-		for (int i = 0; i < headers.length; i++) {
-			Header x = headers[i];
+		for (int i = 0; i < entries.length; i++) {
+			Header x = entries[i];
 			if (eq(x.getName(), name))
 				return Optional.of(x);
 		}
@@ -458,8 +497,8 @@ public class HeaderList {
 	 * @return The last matching header, or <jk>null</jk> if not found.
 	 */
 	public Optional<Header> getLast(String name) {
-		for (int i = headers.length - 1; i >= 0; i--) {
-			Header x = headers[i];
+		for (int i = entries.length - 1; i >= 0; i--) {
+			Header x = entries[i];
 			if (eq(x.getName(), name))
 				return Optional.of(x);
 		}
@@ -472,7 +511,7 @@ public class HeaderList {
 	 * @return An array of all the headers in this list, or an empty array if no headers are present.
 	 */
 	public Header[] getAll() {
-		return headers.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(headers, headers.length);
+		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
 	}
 
 	/**
@@ -485,8 +524,8 @@ public class HeaderList {
 	 * @return <jk>true</jk> if at least one header with the name is present.
 	 */
 	public boolean contains(String name) {
-		for (int i = 0; i < headers.length; i++) {
-			Header x = headers[i];
+		for (int i = 0; i < entries.length; i++) {
+			Header x = entries[i];
 			if (eq(x.getName(), name))
 				return true;
 		}
@@ -499,7 +538,7 @@ public class HeaderList {
 	 * @return A new iterator over this list of headers.
 	 */
 	public HeaderIterator iterator() {
-		return new BasicHeaderIterator(headers, null);
+		return new BasicHeaderIterator(entries, null, caseSensitive);
 	}
 
 	/**
@@ -510,7 +549,7 @@ public class HeaderList {
 	 * @return A new iterator over the matching headers in this list.
 	 */
 	public HeaderIterator iterator(String name) {
-		return new BasicHeaderIterator(headers, name);
+		return new BasicHeaderIterator(entries, name, caseSensitive);
 	}
 
 	/**
@@ -524,8 +563,8 @@ public class HeaderList {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderList forEach(Consumer<Header> c) {
-		for (int i = 0; i < headers.length; i++)
-			c.accept(headers[i]);
+		for (int i = 0; i < entries.length; i++)
+			c.accept(entries[i]);
 		return this;
 	}
 
@@ -541,9 +580,9 @@ public class HeaderList {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderList forEach(String name, Consumer<Header> c) {
-		for (int i = 0; i < headers.length; i++)
-			if (eq(name, headers[i].getName()))
-				c.accept(headers[i]);
+		for (int i = 0; i < entries.length; i++)
+			if (eq(name, entries[i].getName()))
+				c.accept(entries[i]);
 		return this;
 	}
 
@@ -556,7 +595,7 @@ public class HeaderList {
 	 * @return This object (for method chaining).
 	 */
 	public Stream<Header> stream() {
-		return Arrays.stream(headers);
+		return Arrays.stream(entries);
 	}
 
 	/**
@@ -569,15 +608,15 @@ public class HeaderList {
 	 * @return This object (for method chaining).
 	 */
 	public Stream<Header> stream(String name) {
-		return Arrays.stream(headers).filter(x->eq(name, x.getName()));
+		return Arrays.stream(entries).filter(x->eq(name, x.getName()));
 	}
 
 	private boolean eq(String s1, String s2) {
-		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
+		return StringUtils.eq(!caseSensitive, s1, s2);
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return Arrays.asList(headers).toString();
+		return Arrays.asList(entries).toString();
 	}
 }
