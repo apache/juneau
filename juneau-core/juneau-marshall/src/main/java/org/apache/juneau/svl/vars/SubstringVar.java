@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -60,9 +59,7 @@ public class SubstringVar extends MultipartVar {
 
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		if (args.length > 3)
-			illegalArg("Invalid number of arguments passed to $ST var.  Must have 1 or 2 arguments.");
-
+		assertArg(args.length >= 2 && args.length <= 3, "Invalid number of arguments passed to $ST var.  Must have 2 or 3 arguments.");
 
 		String stringArg = args[0];
 		String result = "";

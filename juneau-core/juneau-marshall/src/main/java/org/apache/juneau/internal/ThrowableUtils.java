@@ -12,25 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import java.text.*;
-
-import org.apache.juneau.*;
-
 /**
  * Various utility methods for creating and working with throwables.
  */
 public class ThrowableUtils {
-
-	/**
-	 * Shortcut for calling <code><jk>new</jk> IllegalArgumentException(MessageFormat.<jsm>format</jsm>(msg, args));</code>
-	 *
-	 * @param msg The message of the IllegalArgumentException.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static void illegalArg(String msg, Object...args) throws IllegalArgumentException {
-		throw new BasicIllegalArgumentException(msg, args);
-	}
 
 	/**
 	 * Same as {@link Throwable#getCause()} but searches the throwable chain for an exception of the specified type.

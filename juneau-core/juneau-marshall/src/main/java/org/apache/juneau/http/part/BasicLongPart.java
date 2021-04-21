@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
@@ -19,7 +20,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 
 /**
@@ -130,7 +130,7 @@ public class BasicLongPart extends BasicPart {
 		try {
 			return Long.parseLong(s);
 		} catch (NumberFormatException e) {
-			throw new BasicIllegalArgumentException("Value could not be parsed as a long: {0}", o);
+			throw illegalArgumentException("Value could not be parsed as a long: {0}", o);
 		}
 	}
 }

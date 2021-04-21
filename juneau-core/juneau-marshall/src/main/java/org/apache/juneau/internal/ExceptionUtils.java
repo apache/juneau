@@ -127,4 +127,25 @@ public class ExceptionUtils {
 	public static UnsupportedOperationException unsupportedOperationException(String msg, Object...args) {
 		return unsupportedOperationException().message(msg, args).build();
 	}
+
+	/**
+	 * Creates a new builder for {@link IllegalArgumentException} objects.
+	 *
+	 * @return A new builder for {@link IllegalArgumentException} objects.
+	 */
+	public static ExceptionBuilder<IllegalArgumentException> illegalArgumentException() {
+		return new ExceptionBuilder<>(IllegalArgumentException.class);
+	}
+
+	/**
+	 * Creates a new {@link UnsupportedOperationException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link UnsupportedOperationException}.
+	 */
+	public static IllegalArgumentException illegalArgumentException(String msg, Object...args) {
+		return illegalArgumentException().message(msg, args).build();
+	}
 }

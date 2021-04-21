@@ -22,7 +22,6 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.util.*;
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.HttpParts;
 import org.apache.juneau.http.annotation.*;
@@ -416,8 +415,7 @@ public class PartList {
 		assertArgNotNull("type", type);
 
 		String name = PartBeanMeta.of(type).getSchema().getName();
-		if (name == null)
-			throw new BasicIllegalArgumentException("Part name could not be found on bean type ''{0}''", type.getName());
+		assertArg(name != null, "Part name could not be found on bean type ''{0}''", type.getName());
 
 		return get(name, type);
 	}

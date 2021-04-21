@@ -14,6 +14,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
@@ -2406,9 +2407,9 @@ public final class ClassInfo {
 	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).
 	 * @return The resolved real class.
 	 */
+	@SuppressWarnings("null")
 	public Class<?> getParameterType(int index, Class<?> pt) {
-		if (pt == null)
-			throw new BasicIllegalArgumentException("Parameterized type cannot be null");
+		assertArgNotNull("pt", pt);
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -2416,19 +2417,16 @@ public final class ClassInfo {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			if (cc == null)
-				throw new BasicIllegalArgumentException("Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		if (! (gsc instanceof ParameterizedType))
-			throw new BasicIllegalArgumentException("Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
 		ParameterizedType cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
-		if (index >= atArgs.length)
-			throw new BasicIllegalArgumentException("Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))
@@ -2464,7 +2462,7 @@ public final class ClassInfo {
 		} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
-		throw new BasicIllegalArgumentException("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
+		throw illegalArgumentException("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {

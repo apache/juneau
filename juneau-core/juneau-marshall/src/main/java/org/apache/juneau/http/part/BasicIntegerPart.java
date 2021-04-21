@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
@@ -19,7 +20,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 
 /**
@@ -136,7 +136,7 @@ public class BasicIntegerPart extends BasicPart {
 				Long.parseLong(s);
 				return Integer.MAX_VALUE;
 			} catch (NumberFormatException e2) {
-				throw new BasicIllegalArgumentException("Value could not be parsed as an int: {0}", o);
+				throw illegalArgumentException("Value could not be parsed as an int: {0}", o);
 			}
 		}
 	}

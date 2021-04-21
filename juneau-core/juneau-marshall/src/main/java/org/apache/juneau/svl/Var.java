@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import java.io.*;
 
 /**
@@ -61,16 +61,15 @@ public abstract class Var {
 	 * 	If <jk>false</jk>, then the {@link #resolve(VarResolverSession, String)} method is implemented.
 	 */
 	public Var(String name, boolean streamed) {
+		assertArgNotNull("name", name);
 		this.name = name;
 		this.streamed = streamed;
 
-		if (name == null)
-			illegalArg("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
-		else for (int i = 0; i < name.length(); i++) {
-		// Need to make sure only ASCII characters are used.
+		for (int i = 0; i < name.length(); i++) {
+			// Need to make sure only ASCII characters are used.
 			char c = name.charAt(i);
 			if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a'))
-				illegalArg("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
+				throw illegalArgumentException("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
 		}
 	}
 

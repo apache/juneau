@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 /**
  * Subclass of non-runtime exceptions that take in a message and zero or more arguments.
  */
-public class BasicException extends Exception {
+public abstract class BasicException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

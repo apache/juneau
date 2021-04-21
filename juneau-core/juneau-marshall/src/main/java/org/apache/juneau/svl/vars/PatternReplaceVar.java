@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -62,8 +61,7 @@ public class PatternReplaceVar extends MultipartVar {
 
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		if (args.length < 3)
-			illegalArg("Invalid number of arguments passed to $PR var.  Must have 3 or more arguments.");
+		assertArg(args.length >= 3, "Invalid number of arguments passed to $PR var.  Must have 3 or more arguments.");
 
 		String stringArg = args[0];
 		String pattern = args[1];

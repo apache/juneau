@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.util.regex.*;
 
 import org.apache.juneau.svl.*;
@@ -62,8 +61,7 @@ public class PatternExtractVar extends MultipartVar {
 
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		if (args.length < 3)
-			illegalArg("Invalid number of arguments passed to $PE var.  Must have 3 arguments.");
+		assertArg(args.length == 3, "Invalid number of arguments passed to $PE var.  Must have 3 arguments.");
 
 		String stringArg = args[0];
 		String pattern = args[1];

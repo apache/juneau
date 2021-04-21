@@ -13,9 +13,9 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-
-import org.apache.juneau.*;
 
 /**
  * Represents a validator value.
@@ -55,8 +55,7 @@ public class EntityTag {
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public EntityTag(String value) {
-		if (value == null)
-			throw new BasicIllegalArgumentException("Invalid value for entity-tag: [null]");
+		assertArgNotNull("value", value);
 
 		value = trim(emptyIfNull(value));
 		isWeak = value.startsWith("W/");
@@ -68,7 +67,7 @@ public class EntityTag {
 			if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length()-1) == '"')
 				value = value.substring(1, value.length()-1);
 			else
-				throw new BasicIllegalArgumentException("Invalid value for entity-tag: [{0}]", isWeak ? ("W/"+value) : value);
+				throw illegalArgumentException("Invalid value for entity-tag: [{0}]", isWeak ? ("W/"+value) : value);
 		}
 		this.value = value;
 

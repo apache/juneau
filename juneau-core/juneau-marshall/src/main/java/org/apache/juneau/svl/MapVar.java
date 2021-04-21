@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.*;
 
 /**
@@ -37,8 +36,7 @@ public abstract class MapVar extends DefaultingVar {
 	 */
 	public MapVar(String name, Map m) {
 		super(name);
-		if (m == null)
-			illegalArg("''m'' parameter cannot be null.");
+		assertArgNotNull("m", m);
 		this.m = m;
 	}
 

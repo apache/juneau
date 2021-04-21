@@ -15,8 +15,6 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.math.*;
@@ -1422,8 +1420,7 @@ public final class StringUtils {
 
 		byte bIn[] = in.getBytes(IOUtils.UTF8);
 
-		if (bIn.length % 4 != 0)
-			illegalArg("Invalid BASE64 string length.  Must be multiple of 4.");
+		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
 		// Strip out any trailing '=' filler characters.
 		int inLength = bIn.length;

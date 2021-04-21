@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -577,14 +578,26 @@ public class Assertions {
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
 	 *
 	 * @param <T> The argument data type.
-	 * @param arg The argument name.
+	 * @param name The argument name.
 	 * @param o The object to check.
 	 * @return The same argument.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	public static final <T> T assertArgNotNull(String arg, T o) throws IllegalArgumentException {
-		if (o == null)
-			throw new BasicIllegalArgumentException("Argument ''{0}'' cannot be null", arg);
+	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null", name);
 		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
+	 *
+	 * @param expression The boolean expression to check.
+	 * @param msg The exception message.
+	 * @param args The exception message args.
+	 * @throws IllegalArgumentException Constructed exception.
+	 */
+	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
+		if (! expression)
+			throw illegalArgumentException(msg, args);
 	}
 }

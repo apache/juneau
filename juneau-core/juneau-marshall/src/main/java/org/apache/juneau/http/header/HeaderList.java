@@ -21,7 +21,6 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.util.*;
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
@@ -428,8 +427,7 @@ public class HeaderList {
 		assertArgNotNull("type", type);
 
 		String name = HeaderBeanMeta.of(type).getSchema().getName();
-		if (name == null)
-			throw new BasicIllegalArgumentException("Header name could not be found on bean type ''{0}''", type.getName());
+		assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());
 
 		return get(name, type);
 	}

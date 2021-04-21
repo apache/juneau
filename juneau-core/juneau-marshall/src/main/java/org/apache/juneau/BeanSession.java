@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -833,9 +832,7 @@ public class BeanSession extends Session {
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
 		assertArgNotNull("o", o);
 		assertArgNotNull("c", c);
-
-		if (! c.isInstance(o))
-			illegalArg("The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", className(c), className(o), 0);
+		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", className(c), className(o), 0);
 
 		ClassMeta cm = getClassMeta(c);
 

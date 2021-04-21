@@ -14,12 +14,9 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.*;
 
 /**
  * An instance of a <c>Map</c> where the keys and values are simple arrays.
@@ -52,15 +49,13 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 	public SimpleMap(K[] keys, V[] values) {
 		assertArgNotNull("keys", keys);
 		assertArgNotNull("values", values);
-		if (keys.length != values.length)
-			illegalArg("keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
+		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 
 		this.keys = keys;
 		this.values = values;
 		entries = (SimpleMapEntry[]) Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (int i = 0; i < keys.length; i++) {
-			if (keys[i] == null)
-				illegalArg("Keys array cannot contain a null value.");
+			assertArg(keys[i] != null, "Keys array cannot contain a null value.");
 			entries[i] = new SimpleMapEntry(i);
 	}
 	}
@@ -92,7 +87,7 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 				return v;
 			}
 		}
-		throw new BasicIllegalArgumentException("No key ''{0}'' defined in map", key);
+		throw illegalArgumentException("No key ''{0}'' defined in map", key);
 	}
 
 	final class SimpleMapEntry implements Map.Entry<K,V> {
