@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -340,7 +342,7 @@ public abstract class Context {
 	public Context(ContextProperties cp, boolean allowReuse) {
 		properties = cp == null ? ContextProperties.DEFAULT : cp;
 		cp = properties;
-		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(cp).get() : System.identityHashCode(this);
+		this.identityCode = allowReuse ? new HashCode().add(className(this)).add(cp).get() : System.identityHashCode(this);
 		debug = cp.getBoolean(CONTEXT_debug).orElse(false);
 		locale = cp.getInstance(CONTEXT_locale, Locale.class).orElseGet(()->Locale.getDefault());
 		timeZone = cp.getInstance(CONTEXT_timeZone, TimeZone.class).orElse(null);

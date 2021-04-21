@@ -13,6 +13,7 @@
 package org.apache.juneau.dto;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;
@@ -214,7 +215,7 @@ public class LinkString implements Comparable<LinkString> {
 			try {
 				args[i] = OpenApiSerializer.DEFAULT.createSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 		this.uri = java.net.URI.create(format(value, args));
 		return this;

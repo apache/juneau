@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.internal.*;
@@ -258,7 +260,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public ParserReader unread() throws IOException {
 		if (iCurrent <= 0)
-			throw new IOException("Buffer underflow.");
+			throw ioException("Buffer underflow.");
 		iCurrent--;
 		if (column == 0)
 			line--;
@@ -363,11 +365,11 @@ public class ParserReader extends Reader implements Positionable {
 	public final ParserReader replace(int c, int offset) throws IOException {
 		if (c < 0x10000) {
 			if (offset < 1)
-				throw new IOException("Buffer underflow.");
+				throw ioException("Buffer underflow.");
 			buff[iCurrent-offset] = (char)c;
 		} else {
 			if (offset < 2)
-				throw new IOException("Buffer underflow.");
+				throw ioException("Buffer underflow.");
 			c -= 0x10000;
 			buff[iCurrent-offset] = (char)(0xd800 + (c >> 10));
 			buff[iCurrent-offset+1] = (char)(0xdc00 + (c & 0x3ff));

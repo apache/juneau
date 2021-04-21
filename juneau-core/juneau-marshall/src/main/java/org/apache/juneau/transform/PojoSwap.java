@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -294,7 +296,7 @@ public abstract class PojoSwap<T,S> {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	public S swap(BeanSession session, T o, String template) throws Exception {
-		throw new SerializeException("Swap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
+		throw new SerializeException("Swap method not implemented on PojoSwap ''{0}''", className(this));
 	}
 
 	/**
@@ -334,7 +336,7 @@ public abstract class PojoSwap<T,S> {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	public T unswap(BeanSession session, S f, ClassMeta<?> hint, String template) throws Exception {
-		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
+		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", className(this));
 	}
 
 	/**

@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.beans.*;
@@ -1589,7 +1590,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		try {
 			return setSection(section(name), preLines, null);
 		} catch (SerializeException e) {
-			throw new RuntimeException(e);  // Impossible.
+			throw runtimeException(e);  // Impossible.
 		}
 	}
 

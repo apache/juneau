@@ -13,13 +13,14 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
@@ -114,7 +115,7 @@ public class BasicPart implements NameValuePair, Headerable {
 			Map.Entry e = (Map.Entry)o;
 			return BasicPart.of(stringify(e.getKey()), e.getValue());
 		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
+		throw runtimeException("Object of type {0} could not be converted to a Part.", className(o));
 	}
 
 	/**

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -95,14 +97,14 @@ public final class SerializerPipe implements Closeable {
 	 */
 	public OutputStream getOutputStream() throws IOException {
 		if (output == null)
-			throw new IOException("Output cannot be null.");
+			throw ioException("Output cannot be null.");
 
 		if (output instanceof OutputStream)
 			outputStream = (OutputStream)output;
 		else if (output instanceof File)
 			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
 		else
-			throw new IOException("Cannot convert object of type "+output.getClass().getName()+" to an OutputStream.");
+			throw ioException("Cannot convert object of type {0} to an OutputStream.", className(output));
 
 		return new NoCloseOutputStream(outputStream);
 	}
@@ -130,7 +132,7 @@ public final class SerializerPipe implements Closeable {
 	 */
 	public Writer getWriter() throws IOException {
 		if (output == null)
-			throw new IOException("Output cannot be null.");
+			throw ioException("Output cannot be null.");
 
 		if (output instanceof Writer)
 			writer = (Writer)output;
@@ -141,7 +143,7 @@ public final class SerializerPipe implements Closeable {
 		else if (output instanceof StringBuilder)
 			writer = new StringBuilderWriter((StringBuilder)output);
 		else
-			throw new IOException("Cannot convert object of type "+output.getClass().getName()+" to a Writer.");
+			throw ioException("Cannot convert object of type {0} to a Writer.", className(output));
 
 		return new NoCloseWriter(writer);
 	}

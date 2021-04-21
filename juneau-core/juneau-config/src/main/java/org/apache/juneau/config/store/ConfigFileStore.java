@@ -14,6 +14,7 @@ package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.StandardOpenOption.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -249,7 +250,7 @@ public class ConfigFileStore extends ConfigStore {
 				watcher.start();
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -452,20 +453,20 @@ public class ConfigFileStore extends ConfigStore {
 		@SuppressWarnings("unchecked")
 		@Override /* Thread */
 		public void run() {
-		    try {
+			try {
 				WatchKey key;
 				while ((key = watchService.take()) != null) {
-				    for (WatchEvent<?> event : key.pollEvents()) {
-				        WatchEvent.Kind<?> kind = event.kind();
-				        if (kind != OVERFLOW)
-				        		ConfigFileStore.this.onFileEvent(((WatchEvent<Path>)event));
-				    }
-				    if (! key.reset())
-				    		break;
+					for (WatchEvent<?> event : key.pollEvents()) {
+						WatchEvent.Kind<?> kind = event.kind();
+						if (kind != OVERFLOW)
+							ConfigFileStore.this.onFileEvent(((WatchEvent<Path>)event));
+					}
+					if (! key.reset())
+						break;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 		};
 
@@ -474,7 +475,7 @@ public class ConfigFileStore extends ConfigStore {
 			try {
 				watchService.close();
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			} finally {
 				super.interrupt();
 			}

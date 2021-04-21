@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.ref.*;
@@ -304,7 +305,7 @@ public final class DateUtils {
 				return (DateTimeFormatter)fi.inner().get(null);
 			return DateTimeFormatter.ofPattern(pattern);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 }

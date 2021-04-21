@@ -13,11 +13,11 @@
 package org.apache.juneau.collections;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -109,7 +109,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	public static <K,V> AMap<K,V> ofPairs(Object...parameters) {
 		AMap<K,V> m = AMap.create();
 		if (parameters.length % 2 != 0)
-			throw new BasicRuntimeException("Odd number of parameters passed into AMap.ofPairs()");
+			throw runtimeException("Odd number of parameters passed into AMap.ofPairs()");
 		for (int i = 0; i < parameters.length; i+=2)
 			m.put((K)parameters[i], (V)parameters[i+1]);
 		return m;

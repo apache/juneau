@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.text.*;
@@ -141,7 +142,7 @@ public abstract class RestObject {
 		RestContext c = context.get();
 		Logger logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(getClass().getName());
+			logger = Logger.getLogger(className(this));
 		logger.log(level, cause, msg);
 	}
 

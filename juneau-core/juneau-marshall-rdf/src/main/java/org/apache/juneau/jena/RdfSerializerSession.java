@@ -14,6 +14,7 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -75,7 +76,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		// Only apply properties with this prefix!
 		String propPrefix = RdfCommon.LANG_PROP_MAP.get(ctx.getLanguage());
 		if (propPrefix == null)
-			throw new BasicRuntimeException("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
+			throw runtimeException("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
 
 		// RDF/XML specific properties.
 		if (propPrefix.equals("rdfXml.")) {

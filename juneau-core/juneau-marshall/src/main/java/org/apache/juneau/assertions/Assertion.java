@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -134,7 +135,7 @@ public class Assertion {
 			try {
 				throw BeanStore.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).addBean(Object[].class, new Object[0]).createBean(throwable);
 			} catch (ExecutableException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 		}
 		return new BasicAssertionError(cause, msg);

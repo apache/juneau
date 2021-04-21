@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -168,7 +169,7 @@ public class PartBeanMeta<T> {
 		try {
 			return constructor.newInstance(args);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 }

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -76,10 +78,8 @@ public class AnnotationUtils {
 				if (value == null)
 					throw new IllegalStateException(String.format("Annotation method %s returned null", m));
 				result += hashMember(m.getName(), value);
-			} catch (RuntimeException ex) {
-				throw ex;
 			} catch (Exception ex) {
-				throw new RuntimeException(ex);
+				throw runtimeException(ex);
 			}
 		}
 
@@ -188,7 +188,7 @@ public class AnnotationUtils {
 
 	/**
 	 * If the annotation is an array of other annotations, returns the inner annotations.
-	 * 
+	 *
 	 * @param a The annotation to split if repeated.
 	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
 	 */

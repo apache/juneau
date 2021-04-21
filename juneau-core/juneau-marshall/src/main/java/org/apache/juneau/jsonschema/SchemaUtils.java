@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -67,7 +68,7 @@ public class SchemaUtils {
 		}
 		if (o instanceof OMap)
 			return (OMap)o;
-		throw new ParseException("Unexpected data type ''{0}''.  Expected OMap or String.", o.getClass().getName());
+		throw new ParseException("Unexpected data type ''{0}''.  Expected OMap or String.", className(o));
 	}
 
 	/**

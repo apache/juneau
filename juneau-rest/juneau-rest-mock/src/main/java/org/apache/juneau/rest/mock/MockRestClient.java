@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
@@ -697,7 +698,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			MockPathResolver pr = new MockPathResolver(target, contextPath, servletPath, path, null);
 			if (pr.getError() != null)
-				throw new RuntimeException(pr.getError());
+				throw runtimeException(pr.getError());
 
 			MockServletRequest r = MockServletRequest
 				.create(request.getRequestLine().getMethod(), pr.getURI())
@@ -761,7 +762,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			// If the status isn't set, something's broken.
 			if (res.getStatus() == 0)
-				throw new RuntimeException("Response status was 0.");
+				throw runtimeException("Response status was 0.");
 
 			// A bug in HttpClient causes an infinite loop if the response is less than 200.
 			// As a workaround, just add 1000 to the status code (which is better than an infinite loop).

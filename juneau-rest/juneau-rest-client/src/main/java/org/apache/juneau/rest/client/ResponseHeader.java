@@ -13,6 +13,8 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Optional.*;
 
 import java.lang.reflect.*;
@@ -234,11 +236,9 @@ public class ResponseHeader implements Header {
 		} catch (Throwable e) {
 			if (e instanceof ExecutableException)
 				e = ((ExecutableException)e).getCause();
-			if (e instanceof RuntimeException)
-				throw (RuntimeException)e;
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
-		throw new BasicRuntimeException("Could not determine a method to construct type {0}", c.getClass().getName());
+		throw runtimeException("Could not determine a method to construct type {0}", className(c));
 	}
 
 	/**

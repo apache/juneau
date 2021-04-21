@@ -15,6 +15,7 @@ package org.apache.juneau.httppart;
 import static java.util.Collections.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -1513,7 +1514,7 @@ public class HttpPartSchema {
 			for (Object o : StringUtils.parseListOrCdl(s))
 				set.add(o.toString());
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 		return set;
 	}
@@ -1525,7 +1526,7 @@ public class HttpPartSchema {
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -1538,7 +1539,7 @@ public class HttpPartSchema {
 		try {
 			return OMap.ofJson(s);
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

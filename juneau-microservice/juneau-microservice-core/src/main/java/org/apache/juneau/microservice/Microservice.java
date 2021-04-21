@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -172,7 +173,7 @@ public class Microservice implements ConfigEventListener {
 				try (FileInputStream fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
-					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n " + read(f), e);
+					throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f));
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
@@ -181,7 +182,7 @@ public class Microservice implements ConfigEventListener {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n " + read(url.openStream()), e);
+						throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(url.openStream()));
 					}
 				}
 			}

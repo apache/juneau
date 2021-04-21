@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -240,7 +241,7 @@ public class ResponseBody implements HttpEntity {
 
 			return is;
 		} catch (UnsupportedOperationException | RestCallException e) {
-			throw new IOException(e);
+			throw ioException(e);
 		}
 	}
 
@@ -679,7 +680,7 @@ public class ResponseBody implements HttpEntity {
 				try {
 					return (T)ci.invoke(response);
 				} catch (ExecutableException e) {
-					throw new RuntimeException(e);
+					throw runtimeException(e);
 				}
 			}
 

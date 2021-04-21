@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.processors;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -87,7 +88,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 						} else if (o2 instanceof NameValuePair) {
 							h = BasicHeader.of((NameValuePair)o2);
 						} else {
-							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", o2 == null ? null : o2.getClass().getName(), n);
+							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", className(o2), n);
 						}
 						res.addHeader(h);
 					}
@@ -142,6 +143,6 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 			return Arrays.asList((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;
-		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", o.getClass().getName());
+		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", className(o));
 	}
 }

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
@@ -175,7 +178,7 @@ public class MicroserviceBuilder {
 		else if (value instanceof Class)
 			this.manifest = new ManifestFile((Class<?>)value);
 		else
-			throw new RuntimeException("Invalid type passed to MicroserviceBuilder.manifest(Object).  Type=["+value.getClass().getName()+"]");
+			throw runtimeException("Invalid type passed to MicroserviceBuilder.manifest(Object).  Type=[{0}]", className(value));
 
 		return this;
 	}

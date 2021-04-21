@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
@@ -59,11 +60,11 @@ public abstract class RestServlet extends HttpServlet {
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
 			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
+			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
 			throw e;
 		} catch (Throwable e) {
 			initException.set(toHttpException(e, InternalServerError.class));
-			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
+			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
 		}
 	}
 
@@ -128,7 +129,7 @@ public abstract class RestServlet extends HttpServlet {
 			if (initException.get() != null)
 				throw initException.get();
 			if (context.get() == null)
-				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
+				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", className(this));
 			getContext().execute(this, r1, r2);
 
 		} catch (Throwable e) {
@@ -247,7 +248,7 @@ public abstract class RestServlet extends HttpServlet {
 		RestContext c = context.get();
 		Logger logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(getClass().getName());
+			logger = Logger.getLogger(className(this));
 		logger.log(level, cause, msg);
 	}
 

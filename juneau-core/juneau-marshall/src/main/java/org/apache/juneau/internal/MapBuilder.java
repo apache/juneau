@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -199,7 +200,7 @@ public class MapBuilder<K,V> {
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addAny(Object...values) {
 		if (keyType == null || valueType == null)
-			throw new RuntimeException("Unknown key and value types.  Cannot use this method.");
+			throw runtimeException("Unknown key and value types.  Cannot use this method.");
 		try {
 			for (Object o : values) {
 				if (o != null) {
@@ -210,12 +211,12 @@ public class MapBuilder<K,V> {
 						for (Map.Entry<String,Object> e : OMap.ofJson(o.toString()).entrySet())
 							add(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
 					} else {
-						throw new BasicRuntimeException("Invalid object type {0} passed to addAny()", o.getClass().getName());
+						throw runtimeException("Invalid object type {0} passed to addAny()", className(o));
 					}
 				}
 			}
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 		return this;
 	}

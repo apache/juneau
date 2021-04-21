@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -157,7 +158,7 @@ public class HeaderBeanMeta<T> {
 		try {
 			return constructor.newInstance(args);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 }

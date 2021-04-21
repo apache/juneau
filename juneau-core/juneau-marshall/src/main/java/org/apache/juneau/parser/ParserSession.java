@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 
@@ -670,7 +672,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
+		throw unsupportedOperationException("Parser ''{0}'' does not support this method.", className(getClass()));
 	}
 
 	/**
@@ -723,7 +725,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
+		throw unsupportedOperationException("Parser ''{0}'' does not support this method.", className(getClass()));
 	}
 
 	/**

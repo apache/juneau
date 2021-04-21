@@ -882,7 +882,7 @@ public final class ContextProperties {
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
 						o2 = instantiate(beanStore, eType, o);
 					if (o2 == null)
-						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''.  Entry type: ''{3}''", type, eType, name, o == null ? null : o.getClass().getName());
+						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''.  Entry type: ''{3}''", type, eType, name, className(o));
 					Array.set(t, i++, o2);
 				}
 				return (T[])t;

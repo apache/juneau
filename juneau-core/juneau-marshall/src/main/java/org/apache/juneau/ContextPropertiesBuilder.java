@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -73,7 +74,7 @@ public class ContextPropertiesBuilder {
 		if (cp == null)
 			CACHE.put(properties, properties);
 		else if (! cp.equals(properties))
-			throw new RuntimeException("Property store mismatch!  This shouldn't happen.  hashCode=["+properties.hashCode()+"]\n---PS#1---\n" + cp.hashCodes() + "\n---PS#2---\n" + properties.hashCodes());
+			throw runtimeException("Property store mismatch!  This shouldn't happen.  hashCode=[{0}]\n---PS#1---\n{1}\n---PS#2---\n{2}", properties.hashCode(), cp.hashCodes(), properties.hashCodes());
 		else
 			properties = cp;
 

@@ -13,6 +13,7 @@
 package org.apache.juneau.pojotools;
 
 import static java.util.Calendar.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
 import java.text.*;
@@ -424,7 +425,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 			}
 		}
 
-		throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
+		throw runtimeException("Invalid date encountered:  ''{0}''", seg);
 	}
 
 	/**

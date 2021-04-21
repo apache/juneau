@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import java.util.*;
 
@@ -142,19 +143,19 @@ class MockPathResolver {
 		} else if (state == S07) {
 			this.remainder = uri.substring(mark);
 		} else {
-			throw new RuntimeException("Invalid URI pattern encountered:  " + uri);
+			throw runtimeException("Invalid URI pattern encountered:  {0}", uri);
 		}
 
 		if (! contextPath.isEmpty()) {
 			UrlPathMatcher p = UrlPathMatcher.of(contextPath);
 			if (p.match(UrlPath.of(this.contextPath)) == null)
-				throw new RuntimeException("Context path ["+contextPath+"] not found in URI:  " + uri);
+				throw runtimeException("Context path [{0}] not found in URI:  {1}", contextPath, uri);
 		}
 
 		if (! servletPath.isEmpty()) {
 			UrlPathMatcher p = UrlPathMatcher.of(servletPath);
 			if (p.match(UrlPath.of(this.servletPath)) == null)
-				throw new RuntimeException("Servlet path ["+servletPath+"] not found in URI:  " + uri);
+				throw runtimeException("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
 		}
 	}
 

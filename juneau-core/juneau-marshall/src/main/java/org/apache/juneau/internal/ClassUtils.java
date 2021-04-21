@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 
@@ -151,14 +152,14 @@ public final class ClassUtils {
 						return con.<T>invoke(getMatchingArgs(con.getParamTypes(), args));
 				}
 
-				throw new BasicRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
+				throw runtimeException("Could not instantiate class {0}/{1}.  Constructor not found.", className(c), c2);
 			} catch (Exception e) {
-				throw new BasicRuntimeException(e, "Could not instantiate class {0}", c.getName());
+				throw runtimeException(e, "Could not instantiate class {0}", className(c));
 			}
 		} else if (ClassInfo.of(c).isParentOf(c2.getClass())) {
 			return (T)c2;
 		} else {
-			throw new BasicRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
+			throw runtimeException("Object of type {0} found but was expecting {1}.", className(c2), className(c));
 		}
 	}
 

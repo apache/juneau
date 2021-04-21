@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import java.util.concurrent.*;
@@ -175,7 +176,7 @@ public class Mutaters {
 						try {
 							return createMethod.invoke(null, in);
 						} catch (Exception e) {
-							throw new RuntimeException(e);
+							throw runtimeException(e);
 						}
 					}
 				};
@@ -190,7 +191,7 @@ public class Mutaters {
 						try {
 							return cm.invoke(null, in);
 						} catch (Exception e) {
-							throw new RuntimeException(e);
+							throw runtimeException(e);
 						}
 					}
 				};
@@ -208,7 +209,7 @@ public class Mutaters {
 							return c.invoke(outer, in);
 						return c.invoke(in);
 					} catch (Exception e) {
-						throw new RuntimeException(e);
+						throw runtimeException(e);
 					}
 				}
 			};
@@ -222,7 +223,7 @@ public class Mutaters {
 					try {
 						return toXMethod.invoke(in);
 					} catch (Exception e) {
-						throw new RuntimeException(e);
+						throw runtimeException(e);
 					}
 				}
 			};

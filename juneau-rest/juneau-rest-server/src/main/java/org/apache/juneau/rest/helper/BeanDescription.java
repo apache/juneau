@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
@@ -47,7 +49,7 @@ public final class BeanDescription {
 		type = c.getName();
 		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
 		if (bm == null)
-			throw new BasicRuntimeException("Class ''{0}'' is not a valid bean.", c);
+			throw runtimeException("Class ''{0}'' is not a valid bean.", c);
 		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
 		int i = 0;
 		for (BeanPropertyMeta pm : bm.getPropertyMetas())

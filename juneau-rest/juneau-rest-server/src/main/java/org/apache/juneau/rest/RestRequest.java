@@ -18,6 +18,7 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -1450,7 +1451,7 @@ public final class RestRequest {
 			return new URI(uri);
 		} catch (URISyntaxException e) {
 			// Shouldn't happen.
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -1960,7 +1961,7 @@ public final class RestRequest {
 
 			});
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

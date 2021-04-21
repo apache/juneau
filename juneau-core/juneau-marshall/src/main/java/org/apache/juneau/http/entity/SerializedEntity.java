@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -64,7 +64,7 @@ public class SerializedEntity extends BasicHttpEntity {
 				}
 			}
 		} catch (SerializeException e) {
-			throw new BasicRuntimeException(e, "Serialization error on request body.");
+			throw runtimeException(e, "Serialization error on request body.");
 		}
 	}
 
@@ -85,7 +85,7 @@ public class SerializedEntity extends BasicHttpEntity {
 			writeTo(baos);
 			return new ByteArrayInputStream(baos.toByteArray());
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 }

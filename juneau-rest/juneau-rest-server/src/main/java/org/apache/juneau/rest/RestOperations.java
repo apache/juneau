@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -104,7 +106,7 @@ public class RestOperations {
 		if (rc == 1)
 			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, call.getPathInfo());
 
-		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), call.getResource().getClass().getName());
+		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", call.getPathInfo(), className(call.getResource()));
 	}
 
 

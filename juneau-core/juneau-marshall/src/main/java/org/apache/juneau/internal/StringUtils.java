@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
@@ -924,7 +925,7 @@ public final class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw new RuntimeException("Unmatched string quotes: " + s);
+			throw runtimeException("Unmatched string quotes: {0}", s);
 		return l.toArray(new String[l.size()]);
 	}
 
@@ -2454,7 +2455,7 @@ public final class StringUtils {
 		try {
 			return new URI(o.toString());
 		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -2707,7 +2708,7 @@ public final class StringUtils {
 			}
 			return -1;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 	private static void skipComments(StringReader r) throws IOException {

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -114,7 +116,7 @@ public class HttpPartSchemaBuilder {
 		else if (a instanceof Schema)
 			apply((Schema)a);
 		else
-			throw new RuntimeException("HttpPartSchemaBuilder.apply(@"+a.getClass().getSimpleName()+") not defined");
+			throw runtimeException("HttpPartSchemaBuilder.apply(@{0}) not defined", className(a));
 		return this;
 	}
 

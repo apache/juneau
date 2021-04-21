@@ -20,6 +20,8 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
 import static java.util.Collections.*;
@@ -2053,10 +2055,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			} else if (o instanceof Class) {
 				Class<?> c = (Class<?>)o;
 				if (! Serializer.class.isAssignableFrom(c))
-					throw new ConfigException("RESTCLIENT_serializers property had invalid class of type ''{0}''", c.getName());
+					throw new ConfigException("RESTCLIENT_serializers property had invalid class of type ''{0}''", className(c));
 				sgb.append(ContextCache.INSTANCE.create((Class<? extends Serializer>)o, cp));
 			} else {
-				throw new ConfigException("RESTCLIENT_serializers property had invalid object of type ''{0}''", o.getClass().getName());
+				throw new ConfigException("RESTCLIENT_serializers property had invalid object of type ''{0}''", className(o));
 			}
 		}
 		this.serializers = sgb.build();
@@ -2068,10 +2070,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			} else if (o instanceof Class) {
 				Class<?> c = (Class<?>)o;
 				if (! Parser.class.isAssignableFrom(c))
-					throw new ConfigException("RESTCLIENT_parsers property had invalid class of type ''{0}''", c.getName());
+					throw new ConfigException("RESTCLIENT_parsers property had invalid class of type ''{0}''", className(c));
 				pgb.append(ContextCache.INSTANCE.create((Class<? extends Parser>)o, cp));
 			} else {
-				throw new ConfigException("RESTCLIENT_parsers property had invalid object of type ''{0}''", o.getClass().getName());
+				throw new ConfigException("RESTCLIENT_parsers property had invalid object of type ''{0}''", className(o));
 			}
 		}
 		this.parsers = pgb.build();
@@ -3135,7 +3137,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 								} catch (Exception e) {
 									throw e;
 								} catch (Throwable e) {
-									throw new RuntimeException(e);
+									throw runtimeException(e);
 								}
 							}
 						});
@@ -3161,13 +3163,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	static Consumer<Header> wrapper(Consumer<Header> consumer) {
-	    return i -> {
-	        try {
-	            consumer.accept(i);
-	        } catch (Exception e) {
-	        	throw new RuntimeException(e);
-	        }
-	    };
+		return i -> {
+			try {
+				consumer.accept(i);
+			} catch (Exception e) {
+				throw runtimeException(e);
+			}
+		};
 	}
 
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {
@@ -3211,7 +3213,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			for (Class<?> t2 : method.getExceptionTypes())
 				if (t2.isInstance(t))
 					throw t;
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -3342,7 +3344,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 						for (Class<?> t2 : method.getExceptionTypes())
 							if (t2.isInstance(e))
 								throw e;
-						throw new RuntimeException(e);
+						throw runtimeException(e);
 					}
 				}
 		});

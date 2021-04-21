@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
@@ -78,7 +80,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 		try {
 			return (T) implClass.getConstructor(HttpEntityBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

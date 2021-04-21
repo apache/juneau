@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -1012,7 +1013,7 @@ public class OList extends LinkedList<Object> {
 		try {
 			return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT.serialize(this), cm);
 		} catch (ParseException | SerializeException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

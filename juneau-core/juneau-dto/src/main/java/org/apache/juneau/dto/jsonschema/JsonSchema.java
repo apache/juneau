@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.jsonschema;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
@@ -263,9 +264,7 @@ public class JsonSchema {
 			else if (type instanceof JsonTypeArray)
 				this.typeJsonTypeArray = (JsonTypeArray)type;
 			else
-				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray",
-					type.getClass().getName());
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", className(type));
 		}
 		return this;
 	}
@@ -616,10 +615,9 @@ public class JsonSchema {
 			} else if (items instanceof JsonSchemaArray) {
 				this.itemsSchemaArray = (JsonSchemaArray)items;
 				setMasterOn(this.itemsSchemaArray);
-			} else
-				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray",
-					items.getClass().getName());
+			} else {
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", className(items));
+			}
 		}
 		return this;
 	}
@@ -861,10 +859,9 @@ public class JsonSchema {
 			else if (additionalItems instanceof JsonSchemaArray) {
 				this.additionalItemsSchemaArray = (JsonSchemaArray)additionalItems;
 				setMasterOn(this.additionalItemsSchemaArray);
-			} else
-				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray",
-					additionalItems.getClass().getName());
+			} else {
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", className(additionalItems));
+			}
 		}
 		return this;
 	}
@@ -1143,7 +1140,7 @@ public class JsonSchema {
 			} else
 				throw new BeanRuntimeException(JsonSchemaProperty.class,
 					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema",
-					additionalProperties.getClass().getName());
+					className(additionalProperties));
 		}
 		return this;
 	}

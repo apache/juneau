@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.util.function.*;
 
 /**
@@ -27,10 +29,8 @@ public interface ThrowingFunction<T,R> extends Function<T,R> {
 	default R apply(T t) {
 		try {
 			return applyThrows(t);
-		} catch (RuntimeException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

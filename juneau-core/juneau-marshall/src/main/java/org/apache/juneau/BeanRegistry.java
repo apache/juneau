@@ -72,7 +72,7 @@ public class BeanRegistry {
 						if (o instanceof Class)
 							addClass((Class<?>)o);
 						else
-							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", c.getName());
+							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", className(c));
 					}
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = castOrCreate(Map.class, c);
@@ -85,7 +85,7 @@ public class BeanRegistry {
 						else if (v.getClass().isArray())
 							val = getTypedClassMeta(v);
 						else
-							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", c.getName(), v.getClass().getName());
+							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", className(c), className(v));
 						addToMap(typeName, val);
 					}
 				} else {
@@ -94,7 +94,7 @@ public class BeanRegistry {
 						if (! b.typeName().isEmpty())
 							typeName = b.typeName();
 					if (typeName == null)
-						throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", c.getName());
+						throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c));
 					addToMap(typeName, beanContext.getClassMeta(c));
 				}
 			}

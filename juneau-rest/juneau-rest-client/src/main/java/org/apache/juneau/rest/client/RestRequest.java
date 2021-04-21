@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpEntities.*;
@@ -1009,7 +1010,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					innerPath(serializedPart(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
 			} else if (o != null) {
-				throw new BasicRuntimeException("Invalid type passed to paths(): {0}", className(o));
+				throw runtimeException("Invalid type passed to paths(): {0}", className(o));
 			}
 		}
 		return this;
@@ -1079,7 +1080,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		String name = param.getName(), value = param.getValue();
 		String var = "{" + name + "}";
 		if (path.indexOf(var) == -1 && ! name.equals("/*"))
-			throw new RuntimeException("Path variable {"+name+"} was not found in path.");
+			throw runtimeException("Path variable ''{0}'' was not found in path.", name);
 		String p = null;
 		if (name.equals("/*"))
 			p = path.replaceAll("\\/\\*$", "/" + value);
@@ -1337,7 +1338,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedPart(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new BasicRuntimeException("Invalid type passed to queries(): {0}", className(o));
+				throw runtimeException("Invalid type passed to queries(): {0}", className(o));
 			}
 		}
 		return innerQuery(EnumSet.of(flag), l);
@@ -1719,7 +1720,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedPart(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new BasicRuntimeException("Invalid type passed to formDatas(): {0}", className(o));
+				throw runtimeException("Invalid type passed to formDatas(): {0}", className(o));
 			}
 		}
 		return innerFormData(EnumSet.of(flag), l);
@@ -2254,7 +2255,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new BasicRuntimeException("Invalid type passed to headers(): {0}", className(o));
+				throw runtimeException("Invalid type passed to headers(): {0}", className(o));
 			}
 		}
 		return innerHeaders(EnumSet.of(flag), l);
@@ -2314,7 +2315,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(AddFlag flag, Object...pairs) {
 		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
-			throw new BasicRuntimeException("Odd number of parameters passed into headerPairs()");
+			throw runtimeException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
 		return innerHeaders(EnumSet.of(flag), l);

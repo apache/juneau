@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -156,7 +158,7 @@ public final class UonWriter extends SerializerWriter {
 	 */
 	private UonWriter appendHex(int b) throws IOException {
 		if (b > 255)
-			throw new IOException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value=" + b);
+			throw ioException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
 		append('%').append(hexArray[b>>>4]).append(hexArray[b&0x0F]);
 		return this;
 	}

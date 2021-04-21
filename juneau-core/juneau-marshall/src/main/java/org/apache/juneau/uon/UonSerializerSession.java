@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -292,7 +293,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
 			return w.toString();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

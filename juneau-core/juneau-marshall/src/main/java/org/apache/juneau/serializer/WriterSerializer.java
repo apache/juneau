@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
@@ -392,7 +394,7 @@ public abstract class WriterSerializer extends Serializer {
 		try {
 			return serialize(o);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

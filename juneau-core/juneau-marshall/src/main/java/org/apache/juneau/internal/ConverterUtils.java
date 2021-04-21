@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -215,7 +217,7 @@ public final class ConverterUtils {
 		try {
 			return StringUtils.parseNumber(o.toString(), null);
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 }

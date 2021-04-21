@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 
 import javax.xml.namespace.*;
@@ -63,7 +65,7 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 			sr.nextTag();
 			pipe.setPositionable(this);
 		} catch (Error e) {
-			throw new IOException(e.getLocalizedMessage());
+			throw ioException(e);
 		}
 	}
 

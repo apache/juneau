@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.resource;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -82,7 +83,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 		try {
 			return (T) implClass.getConstructor(HttpResourceBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

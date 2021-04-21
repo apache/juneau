@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
@@ -643,7 +645,7 @@ public class BasicSwaggerProviderSession {
 		}
 		if (o instanceof OMap)
 			return (OMap)o;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected OMap or String.", o.getClass().getName());
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected OMap or String.", className(o));
 	}
 
 	private OList parseList(Object o, String location, Object...locationArgs) throws ParseException {
@@ -1177,7 +1179,7 @@ public class BasicSwaggerProviderSession {
 		for (ResponseHeader aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
-				throw new RuntimeException("@ResponseHeader used without name or value.");
+				throw runtimeException("@ResponseHeader used without name or value.");
 			om.getMap(name, true).putAll(merge(null, aa));
 		}
 		return om;

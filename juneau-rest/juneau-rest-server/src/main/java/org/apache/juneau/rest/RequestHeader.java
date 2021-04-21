@@ -13,6 +13,8 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.time.*;
 import java.util.*;
@@ -114,9 +116,9 @@ public class RequestHeader extends RequestHttpPart implements Header {
 			if (cc != null)
 				return cc.invoke(getName(), orElse(null));
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
-		throw new BasicRuntimeException("Could not determine a method to construct type {0}", c.getClass().getName());
+		throw runtimeException("Could not determine a method to construct type {0}", className(c));
 	}
 
 	/**

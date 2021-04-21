@@ -12,6 +12,8 @@ package org.apache.juneau.marshall;
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
@@ -139,7 +141,7 @@ public abstract class Marshall {
 		try {
 			return s.serializeToString(o);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

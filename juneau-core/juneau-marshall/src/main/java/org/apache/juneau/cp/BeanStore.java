@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
@@ -306,7 +307,7 @@ public class BeanStore {
 			try {
 				return createBean(c);
 			} catch (ExecutableException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 		};
 	}

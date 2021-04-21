@@ -56,7 +56,7 @@ public class RestClient_Paths_Test {
 	public void a01_path_String_Object() throws Exception {
 		client().build().get("/echo/{x}").path("x",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
 		client().build().get("/echo/*").path("/*",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
-		assertThrown(()->client().build().get("/echo/{x}").path("y","foo")).is("Path variable {y} was not found in path.");
+		assertThrown(()->client().build().get("/echo/{x}").path("y","foo")).is("Path variable 'y' was not found in path.");
 	}
 
 	@Test

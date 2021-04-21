@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.internal;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
@@ -111,7 +112,7 @@ public class ConfigMap implements ConfigStoreListener {
 							if (! imports.containsKey(importName))
 								imports.put(importName, store.getMap(importName));
 						} catch (StackOverflowError e) {
-							throw new IOException("Import loop detected in configuration '"+name+"'->'"+importName+"'");
+							throw ioException("Import loop detected in configuration ''{0}''->''{1}''", name, importName);
 						}
 					}
 				}
@@ -622,7 +623,7 @@ public class ConfigMap implements ConfigStoreListener {
 					applyChange(false, ce);
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		} finally {
 			writeUnlock();
 		}
@@ -699,7 +700,7 @@ public class ConfigMap implements ConfigStoreListener {
 				changes.clear();
 				load(contents);
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 		 	} finally {
 				writeUnlock();
 			}
@@ -864,7 +865,7 @@ public class ConfigMap implements ConfigStoreListener {
 				cs.writeTo(sw);
 			return sw.toString();
 		} catch (IOException e) {
-			throw new RuntimeException(e);  // Not possible.
+			throw runtimeException(e);  // Not possible.
 		}
 	}
 

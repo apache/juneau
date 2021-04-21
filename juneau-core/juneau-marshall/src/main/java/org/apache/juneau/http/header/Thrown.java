@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
@@ -149,9 +150,9 @@ public class Thrown extends BasicCsvArrayHeader {
 		 * @param value The throwable to create the header part value from.
 		 */
 		public Part(Throwable value) {
-			this.className = value.getClass().getName();
+			this.className = className(value);
 			this.message = value.getMessage();
-			this.value = urlEncode(value.getClass().getName()) + ';' + urlEncode(value.getMessage());
+			this.value = urlEncode(className) + ';' + urlEncode(value.getMessage());
 		}
 
 		/**

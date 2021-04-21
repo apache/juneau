@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import javax.xml.datatype.*;
@@ -39,7 +40,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 		try {
 			this.dtf = DatatypeFactory.newInstance();
 		} catch (DatatypeConfigurationException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

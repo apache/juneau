@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -106,7 +107,7 @@ public class VarResolverSession {
 		try {
 			return resolveTo(s, new StringWriter()).toString();
 		} catch (IOException e) {
-			throw new RuntimeException(e); // Never happens.
+			throw runtimeException(e); // Never happens.
 		}
 	}
 

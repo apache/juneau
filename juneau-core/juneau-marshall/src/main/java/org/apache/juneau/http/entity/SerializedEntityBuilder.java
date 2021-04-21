@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -67,7 +69,7 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 		try {
 			return (T) implClass.getConstructor(SerializedEntityBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

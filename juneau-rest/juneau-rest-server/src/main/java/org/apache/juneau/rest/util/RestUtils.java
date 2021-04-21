@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -21,7 +22,6 @@ import java.util.regex.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -168,7 +168,7 @@ public final class RestUtils {
 				return requestURI;
 			throw new Exception("case=6");
 		} catch (Exception e) {
-			throw new BasicRuntimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
+			throw runtimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
 		}
 	}
 
@@ -350,7 +350,7 @@ public final class RestUtils {
 				return m;
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e); // Should never happen.
+			throw runtimeException(e); // Should never happen.
 		}
 	}
 
@@ -514,7 +514,7 @@ public final class RestUtils {
 	 */
 	public static void validateContextPath(String value) {
 		if (! isValidContextPath(value))
-			throw new RuntimeException("Value is not a valid context path: ["+value+"]");
+			throw runtimeException("Value is not a valid context path: [{0}]", value);
 	}
 
 	/**
@@ -548,7 +548,7 @@ public final class RestUtils {
 	 */
 	public static void validateServletPath(String value) {
 		if (! isValidServletPath(value))
-			throw new RuntimeException("Value is not a valid servlet path: ["+value+"]");
+			throw runtimeException("Value is not a valid servlet path: [{0}]", value);
 	}
 
 	/**
@@ -577,6 +577,6 @@ public final class RestUtils {
 	 */
 	public static void validatePathInfo(String value) {
 		if (! isValidPathInfo(value))
-			throw new RuntimeException("Value is not a valid path-info path: ["+value+"]");
+			throw runtimeException("Value is not a valid path-info path: [{0}]", value);
 	}
 }

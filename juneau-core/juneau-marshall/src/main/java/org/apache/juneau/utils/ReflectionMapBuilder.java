@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -49,7 +50,7 @@ public class ReflectionMapBuilder<V> {
 	 */
 	public ReflectionMapBuilder<V> append(String key, V value) {
 		if (isEmpty(key))
-			throw new RuntimeException("Invalid reflection signature: [" + key + "]");
+			throw runtimeException("Invalid reflection signature: [{0}]", key);
 		try {
 			for (String k : ReflectionMap.splitNames(key)) {
 				if (k.endsWith(")")) {
@@ -73,7 +74,7 @@ public class ReflectionMapBuilder<V> {
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
-			throw new RuntimeException("Invalid reflection signature: [" + key + "]");
+			throw runtimeException("Invalid reflection signature: [{0}]", key);
 		}
 
 		return this;

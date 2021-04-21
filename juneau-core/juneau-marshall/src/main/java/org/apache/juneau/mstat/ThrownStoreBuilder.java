@@ -13,6 +13,7 @@
 package org.apache.juneau.mstat;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class ThrownStoreBuilder {
 			Class<? extends ThrownStore> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
 			return BeanStore.of(beanStore).addBeans(ThrownStoreBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

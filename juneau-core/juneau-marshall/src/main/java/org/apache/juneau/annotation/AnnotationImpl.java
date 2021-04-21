@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -63,7 +65,7 @@ public class AnnotationImpl implements Annotation {
 	@Override /* Object */
 	public int hashCode() {
 		if (hashCode == -1)
-			throw new RuntimeException("Programming error.  postConstruct() was never called on annotation.");
+			throw runtimeException("Programming error.  postConstruct() was never called on annotation.");
 		return hashCode;
 	}
 

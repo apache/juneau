@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -4677,7 +4678,7 @@ public class RestContext extends BeanContext {
 		Logger x = beanStore.getBean(Logger.class).orElse(null);
 
 		if (x == null)
-			x = Logger.getLogger(resource.getClass().getName());
+			x = Logger.getLogger(className(resource));
 
 		x = BeanStore
 			.of(beanStore, resource)
@@ -6806,7 +6807,7 @@ public class RestContext extends BeanContext {
 		}
 
 		Object output = call.getRestResponse().getOutput().get().orElse(null);
-		throw new NotImplemented("No response processors found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
+		throw new NotImplemented("No response processors found to process output of type ''{0}''", className(output));
 	}
 
 	/**
@@ -6842,7 +6843,7 @@ public class RestContext extends BeanContext {
 		if (t instanceof ParseException || t instanceof InvalidDataConversionException)
 			return new BadRequest(t);
 
-		String n = t.getClass().getName();
+		String n = className(t);
 
 		if (n.contains("AccessDenied") || n.contains("Unauthorized"))
 			return new Unauthorized(t);

@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -207,7 +208,7 @@ public class SetBuilder<E> {
 	@SuppressWarnings("unchecked")
 	public SetBuilder<E> addAny(Object...values) {
 		if (elementType == null)
-			throw new RuntimeException("Unknown element type.  Cannot use this method.");
+			throw runtimeException("Unknown element type.  Cannot use this method.");
 		try {
 			if (values != null) {
 				for (Object o : values) {
@@ -230,7 +231,7 @@ public class SetBuilder<E> {
 				}
 			}
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 		return this;
 	}

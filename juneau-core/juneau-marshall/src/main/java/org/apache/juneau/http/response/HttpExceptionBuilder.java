@@ -14,6 +14,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.util.*;
 
@@ -74,7 +75,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		try {
 			return (T) implClass.getConstructor(HttpExceptionBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

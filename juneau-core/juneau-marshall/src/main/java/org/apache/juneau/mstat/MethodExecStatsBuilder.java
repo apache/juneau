@@ -13,6 +13,7 @@
 package org.apache.juneau.mstat;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.lang.reflect.*;
 
@@ -42,7 +43,7 @@ public class MethodExecStatsBuilder {
 			Class<? extends MethodExecStats> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
 			return BeanStore.of(beanStore).addBeans(MethodExecStatsBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
@@ -686,7 +687,7 @@ public final class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 			return null;
 		}
@@ -697,7 +698,7 @@ public final class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw runtimeException(e);
 			}
 			return null;
 		}

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -397,7 +398,7 @@ public abstract class ExecutableInfo {
 						return false;
 					break;
 				default:
-					throw new RuntimeException("Invalid flag for executable: " + f);
+					throw runtimeException("Invalid flag for executable: {0}", f);
 			}
 		}
 		return true;
@@ -463,7 +464,7 @@ public abstract class ExecutableInfo {
 						return true;
 					break;
 				default:
-					throw new RuntimeException("Invalid flag for executable: " + f);
+					throw runtimeException("Invalid flag for executable: {0}", f);
 			}
 		}
 		return false;

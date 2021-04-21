@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.args;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -94,7 +95,7 @@ public class ResponseHeaderArg implements RestOperationArg {
 					HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().createPartSession(req.getSerializerSessionArgs());
 					res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), pss, o));
 				} catch (SerializeException | SchemaValidationException e) {
-					throw new RuntimeException(e);
+					throw runtimeException(e);
 				}
 			}
 		});

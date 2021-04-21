@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
@@ -261,7 +262,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		for (AnnotationInfo<Rest> r : rci.getAnnotationInfos(Rest.class))
 			if (! r.getAnnotation().config().isEmpty())
 				configPath = r.getAnnotation().config();
-		VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
+		VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver not found."));
 		String cf = vr.resolve(configPath);
 
 		if (x == null && "SYSTEM_DEFAULT".equals(cf))

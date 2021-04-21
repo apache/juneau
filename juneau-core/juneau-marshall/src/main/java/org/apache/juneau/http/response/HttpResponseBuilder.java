@@ -13,6 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.net.*;
 import java.util.*;
@@ -73,7 +74,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		try {
 			return (T) implClass.getConstructor(HttpResponseBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

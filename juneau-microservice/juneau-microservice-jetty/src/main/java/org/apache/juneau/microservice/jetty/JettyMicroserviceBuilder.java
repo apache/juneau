@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -117,7 +119,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 		else if (jettyXml instanceof Reader)
 			this.jettyXml = read((Reader)jettyXml);
 		else
-			throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object)", jettyXml == null ? null : jettyXml.getClass().getName());
+			throw runtimeException("Invalid object type passed to jettyXml(Object)", className(jettyXml));
 		this.jettyXmlResolveVars = resolveVars;
 		return this;
 	}

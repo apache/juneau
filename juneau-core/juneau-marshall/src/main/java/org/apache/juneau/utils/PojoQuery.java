@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static java.util.Calendar.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -226,7 +227,7 @@ public final class PojoQuery {
 			return null;
 
 		if (! type.isCollectionOrArray())
-			throw new BasicRuntimeException("Cannot call filterCollection() on class type ''{0}''", type);
+			throw runtimeException("Cannot call filterCollection() on class type ''{0}''", type);
 
 		// Create a new OList
 		OList l = (OList)replaceWithMutables(input);
@@ -550,8 +551,7 @@ public final class PojoQuery {
 				// If a non-numeric value was passed in for a numeric value, just set the value to '0'.
 				// (I think this might resolve a workaround in custom queries).
 				if (! m.matches())
-					throw new BasicRuntimeException("Numeric value didn't match pattern:  ''{0}''", token);
-					//m = numericPattern.matcher("0");
+					throw runtimeException("Numeric value didn't match pattern:  ''{0}''", token);
 
 				String arg1 = m.group(1);
 				String start = m.group(3);
@@ -871,7 +871,7 @@ public final class PojoQuery {
 		}
 
 		if (cal == null)
-			throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
+			throw runtimeException("Invalid date encountered:  ''{0}''", seg);
 
 		return cal;
 	}

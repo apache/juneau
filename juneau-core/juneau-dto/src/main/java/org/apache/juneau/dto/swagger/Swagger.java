@@ -13,8 +13,10 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.util.*;
 
@@ -1756,11 +1758,11 @@ public class Swagger extends SwaggerElement {
 		if (isEmpty(ref))
 			return null;
 		if (! ref.startsWith("#/"))
-			throw new RuntimeException("Unsupported reference:  '" + ref + '"');
+			throw runtimeException("Unsupported reference:  ''{0}''", ref);
 		try {
 			return new PojoRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName());
+			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));
 		}
 	}
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -37,7 +38,7 @@ public class BeanStoreBuilder {
 			Class<? extends BeanStore> ic = isConcrete(implClass) ? implClass : getDefaultImplClass();
 			return new BeanStore().addBeans(BeanStoreBuilder.class, this).createBean(ic);
 		} catch (ExecutableException e) {
-			throw new RuntimeException(e.getCause().getMessage(), e.getCause());
+			throw runtimeException(e);
 		}
 	}
 

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 /**
@@ -68,7 +69,7 @@ public class ExceptionBuilder<T extends Throwable> {
 		try {
 			return type.getConstructor(String.class, Throwable.class).newInstance(message, causedBy);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 }

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -91,7 +93,7 @@ public class MockLogger extends Logger {
 		try {
 			baos.write(getFormatter().format(record).getBytes("UTF-8"));
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

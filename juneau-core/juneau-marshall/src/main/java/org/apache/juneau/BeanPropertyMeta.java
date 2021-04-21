@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -327,14 +328,14 @@ public final class BeanPropertyMeta {
 			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (ps.forMediaTypes() != null)
-					throw new RuntimeException("TODO - Media types on swaps not yet supported on bean properties.");
+					throw runtimeException("TODO - Media types on swaps not yet supported on bean properties.");
 				if (ps.withTemplate() != null)
-					throw new RuntimeException("TODO - Templates on swaps not yet supported on bean properties.");
+					throw runtimeException("TODO - Templates on swaps not yet supported on bean properties.");
 				return ps;
 			}
 			if (ci.isChildOf(Surrogate.class))
-				throw new RuntimeException("TODO - Surrogate swaps not yet supported on bean properties.");
-			throw new BasicRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate.", c);
+				throw runtimeException("TODO - Surrogate swaps not yet supported on bean properties.");
+			throw runtimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate. {0}", c);
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {

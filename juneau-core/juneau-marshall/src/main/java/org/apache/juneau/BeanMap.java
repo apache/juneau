@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -141,7 +142,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				try {
 					bpm.setArray(b, value);
 				} catch (Exception e1) {
-					throw new RuntimeException(e1);
+					throw runtimeException(e1);
 				}
 			}
 			arrayPropertyCache = null;

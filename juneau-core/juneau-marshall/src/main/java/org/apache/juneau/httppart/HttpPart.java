@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import org.apache.http.*;
 import org.apache.juneau.parser.ParseException;
 
@@ -86,7 +88,7 @@ public class HttpPart implements NameValuePair {
 		try {
 			return serializer.serialize(partType, schema, opart);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

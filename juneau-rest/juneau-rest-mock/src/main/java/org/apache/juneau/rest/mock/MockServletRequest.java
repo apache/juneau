@@ -14,6 +14,7 @@ package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -937,7 +938,7 @@ public class MockServletRequest implements HttpServletRequest {
 			else if (value != null)
 				this.body = value.toString().getBytes();
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 		return this;
 	}

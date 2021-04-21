@@ -14,6 +14,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.lang.annotation.*;
@@ -1496,7 +1497,7 @@ public final class ClassInfo {
 						return false;
 					break;
 				default:
-					throw new RuntimeException("Invalid flag for class: " + f);
+					throw runtimeException("Invalid flag for class: {0}", f);
 
 			}
 		}
@@ -1561,7 +1562,7 @@ public final class ClassInfo {
 						return true;
 					break;
 				default:
-					throw new RuntimeException("Invalid flag for class: " + f);
+					throw runtimeException("Invalid flag for class: {0}", f);
 			}
 		}
 		return false;

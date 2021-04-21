@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -37,7 +39,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 			for (Schema a : cm.getAnnotations(Schema.class))
 				schema.append(SchemaAnnotation.asMap(a));
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

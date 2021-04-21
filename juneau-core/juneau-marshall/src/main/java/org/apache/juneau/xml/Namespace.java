@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -91,7 +93,7 @@ public final class Namespace {
 			return (Namespace)o;
 		if (o instanceof CharSequence)
 			return create(o.toString());
-		throw new BasicRuntimeException("Invalid object type passed to Namespace.create(Object):  ''{0}''", o.getClass());
+		throw runtimeException("Invalid object type passed to Namespace.create(Object):  ''{0}''", className(o));
 	}
 
 	/**
@@ -140,12 +142,12 @@ public final class Namespace {
 				else if (o2 instanceof CharSequence)
 					n[i] = create(o2.toString());
 				else
-					throw new BasicRuntimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
+					throw runtimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
 			}
 			return n;
 		}
 
-		throw new BasicRuntimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
+		throw runtimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
 	}
 
 

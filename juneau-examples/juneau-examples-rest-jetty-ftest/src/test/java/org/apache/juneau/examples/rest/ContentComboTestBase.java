@@ -13,12 +13,12 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.examples.rest.TestUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.header.*;
@@ -55,7 +55,7 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/n-triple": return getClient(mt, NTripleSerializer.DEFAULT, NTripleParser.DEFAULT);
 			case "text/turtle": return getClient(mt, TurtleSerializer.DEFAULT, TurtleParser.DEFAULT);
 			case "text/n3": return getClient(mt, N3Serializer.DEFAULT, N3Parser.DEFAULT);
-			default: throw new BasicRuntimeException("Client for mediaType ''{0}'' not found", mt);
+			default: throw runtimeException("Client for mediaType ''{0}'' not found", mt);
 		}
 	}
 

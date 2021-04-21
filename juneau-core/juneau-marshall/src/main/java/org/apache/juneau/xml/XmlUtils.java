@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -73,7 +74,7 @@ public final class XmlUtils {
 					return encodeElementNameInner(w, s).toString();
 				}
 		} catch (IOException e) {
-			throw new RuntimeException(e); // Never happens
+			throw runtimeException(e); // Never happens
 		}
 
 		return s;
@@ -159,7 +160,7 @@ public final class XmlUtils {
 			}
 			return sw.toString();
 		} catch (IOException e) {
-			throw new RuntimeException(e); // Never happens
+			throw runtimeException(e); // Never happens
 		}
 	}
 

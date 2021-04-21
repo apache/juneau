@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class UrlPath {
 	 */
 	public static UrlPath of(String path) {
 		if (path != null && ! path.startsWith("/"))
-			throw new RuntimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+			throw runtimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
 

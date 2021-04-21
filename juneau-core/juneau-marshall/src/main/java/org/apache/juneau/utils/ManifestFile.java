@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -44,7 +45,7 @@ public class ManifestFile extends OMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
+			throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f));
 		}
 	}
 
@@ -74,7 +75,7 @@ public class ManifestFile extends OMap {
 			Manifest mf = new Manifest(new URL(manifestPath).openStream());
 			load(mf);
 		} catch (MalformedURLException e) {
-			throw new IOException(e);
+			throw ioException(e);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

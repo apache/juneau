@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.jaxrs;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -63,7 +64,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				.build();
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -104,7 +105,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			session.serialize(o, c);
 
 		} catch (SerializeException e) {
-			throw new IOException(e);
+			throw ioException(e);
 		}
 	}
 
@@ -136,7 +137,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
 			return session.parse(in2, p.getClassMeta(gType));
 		} catch (ParseException e) {
-			throw new IOException(e);
+			throw ioException(e);
 		}
 	}
 

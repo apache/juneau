@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
@@ -183,8 +184,7 @@ public class BeanTraverseSession extends BeanSession {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
-				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.",
-					o.getClass().getName(), stack);
+				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", className(o), stack);
 		}
 		isBottom = false;
 	}
@@ -353,7 +353,7 @@ public class BeanTraverseSession extends BeanSession {
 	public OMap toMap() {
 		return super.toMap()
 			.a(
-				"BeanTraverseSession", 
+				"BeanTraverseSession",
 				OMap
 					.create()
 					.filtered()

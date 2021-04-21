@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -239,7 +240,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 */
 	public OMap(Object... keyValuePairs) {
 		if (keyValuePairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into OMap(Object...)");
+			throw runtimeException("Odd number of parameters passed into OMap(Object...)");
 		for (int i = 0; i < keyValuePairs.length; i+=2)
 			put(stringify(keyValuePairs[i]), keyValuePairs[i+1]);
 	}
@@ -583,7 +584,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Enables filtering based on default values.
-	 * 
+	 *
 	 * <p>
 	 * Any of the following types will be ignored when set as values in this map:
 	 * <ul>
@@ -607,11 +608,11 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Enables filtering based on a predicate test.
-	 * 
+	 *
 	 * <p>
 	 * If the predicate evaluates to <jk>false</jk> on values added to this map, the entry will be skipped.
-	 * 
-	 * @param value The value tester predicate. 
+	 *
+	 * @param value The value tester predicate.
 	 * @return This object (for method chaining).
 	 */
 	public OMap filtered(Predicate<Object> value) {

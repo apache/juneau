@@ -16,10 +16,10 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -613,7 +613,7 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public void setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException(
+			throw runtimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
 				value, VALID_TYPES
 			);

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -105,7 +106,7 @@ public class FluentBaseAssertion<V,R> extends FluentAssertion<R> {
 			String s = ws.serialize(this.value);
 			return new FluentStringAssertion<>(this, s, returns());
 		} catch (SerializeException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 
@@ -229,7 +230,7 @@ public class FluentBaseAssertion<V,R> extends FluentAssertion<R> {
 			if (ne(s1, s2))
 				throw error("Unexpected comparison.\n\tExpect=[{0}]\n\tActual=[{1}]", s2, s1);
 		} catch (SerializeException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 		return returns();
 	}

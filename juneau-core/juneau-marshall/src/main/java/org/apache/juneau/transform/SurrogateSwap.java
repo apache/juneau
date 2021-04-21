@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -91,8 +93,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	@SuppressWarnings("unchecked")
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
-			throw new ParseException("unswap() method not implement on surrogate class ''{1}''",
-				f.getClass().getName(), getNormalClass().getFullName());
+			throw new ParseException("unswap() method not implement on surrogate class ''{1}'': {0}", className(f), getNormalClass().getFullName());
 		try {
 			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {

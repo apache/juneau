@@ -18,6 +18,7 @@ import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.oapi.OpenApiCommon.*;
@@ -805,7 +806,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		else if (cm instanceof HttpClientConnectionManager)
 			httpClientBuilder.setConnectionManager((HttpClientConnectionManager)cm);
 		else
-			throw new RuntimeException("Invalid type for RESTCLIENT_connectionManager: " + cm.getClass().getName());
+			throw runtimeException("Invalid type for RESTCLIENT_connectionManager: {0}", className(cm));
 		return httpClientBuilder.build();
 	}
 
@@ -1306,7 +1307,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 				for (int i = 0; i < Array.getLength(h); i++)
 					headers(Array.get(h, i));
 			} else if (h != null) {
-				throw new RuntimeException("Invalid type passed to headers():  " + className(h));
+				throw runtimeException("Invalid type passed to headers():  {0}", className(h));
 			}
 		}
 		return this;
@@ -1333,7 +1334,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headerPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into headerPairs()");
+			throw runtimeException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			headers(serializedHeader(pairs[i], pairs[i+1], null, null));
 		return this;
@@ -2056,7 +2057,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 				for (int i = 0; i < Array.getLength(p); i++)
 					queries(Array.get(p, i));
 			} else if (p != null) {
-				throw new RuntimeException("Invalid type passed to query():  " + className(p));
+				throw runtimeException("Invalid type passed to query():  {0}", className(p));
 			}
 		}
 		return this;
@@ -2083,7 +2084,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder queryPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
+			throw runtimeException("Odd number of parameters passed into queryPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
 			queries(serializedPart(pairs[i], pairs[i+1], QUERY, null, null));
 		return this;
@@ -2339,7 +2340,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 				for (int i = 0; i < Array.getLength(p); i++)
 					formDatas(Array.get(p, i));
 			} else if (p != null) {
-				throw new RuntimeException("Invalid type passed to formData():  " + className(p));
+				throw runtimeException("Invalid type passed to formData():  {0}", className(p));
 			}
 		}
 		return this;
@@ -2366,7 +2367,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formDataPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
+			throw runtimeException("Odd number of parameters passed into formDataPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			formDatas(serializedPart(pairs[i], pairs[i+1], FORMDATA, null, null));
 		return this;

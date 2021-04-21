@@ -13,6 +13,7 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -212,7 +213,7 @@ public class PartList {
 		if (pairs == null || pairs.length == 0)
 			return EMPTY;
 		if (pairs.length % 2 != 0)
-			throw new BasicRuntimeException("Odd number of parameters passed into PartList.ofPairs()");
+			throw runtimeException("Odd number of parameters passed into PartList.ofPairs()");
 		ArrayBuilder<NameValuePair> b = ArrayBuilder.create(NameValuePair.class, pairs.length / 2, true);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicPart.of(stringify(pairs[i]), pairs[i+1]));

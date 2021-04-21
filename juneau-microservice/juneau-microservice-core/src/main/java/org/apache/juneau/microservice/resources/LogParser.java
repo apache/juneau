@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.text.*;
@@ -91,7 +93,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 				}
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 		return current;
 	}
@@ -157,7 +159,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 						logger = logger.substring(logger.lastIndexOf('.')+1);
 				}
 			} catch (ParseException e) {
-				throw new IOException(e);
+				throw ioException(e);
 			}
 		}
 
