@@ -35,41 +35,52 @@ import org.apache.juneau.http.annotation.*;
 public class Debug extends BasicBooleanHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Debug";
+
+	@SuppressWarnings("javadoc")
+	public static final Debug TRUE = of(true), FALSE = of(false);
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link Debug} object, or <jk>null</jk> if the value was null.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug of(Object value) {
+	public static Debug of(String value) {
 		if (value == null)
 			return null;
 		return new Debug(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static Debug of(Boolean value) {
+		if (value == null)
+			return null;
+		return new Debug(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
 	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link Debug} object, or <jk>null</jk> if the value was null.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug of(Supplier<?> value) {
+	public static Debug of(Supplier<Boolean> value) {
 		if (value == null)
 			return null;
 		return new Debug(value);
@@ -80,24 +91,35 @@ public class Debug extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Debug(Object value) {
-		super("Debug", value);
+	public Debug(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Debug(String value) {
-		this((Object)value);
+	public Debug(Boolean value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Debug(Supplier<Boolean> value) {
+		super(NAME, value);
 	}
 }

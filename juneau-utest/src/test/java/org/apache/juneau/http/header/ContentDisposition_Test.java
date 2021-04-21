@@ -30,6 +30,7 @@ public class ContentDisposition_Test {
 
 	private static final String HEADER = "Content-Disposition";
 	private static final String VALUE = "foo";
+	private static final StringRanges PARSED = StringRanges.of("foo");
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class ContentDisposition_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(contentDisposition(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentDisposition(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentDisposition(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentDisposition(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(contentDisposition((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentDisposition((Object)null)).run().assertBody().isEmpty();
-		c.get().header(contentDisposition((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(contentDisposition((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(contentDisposition(()->null)).run().assertBody().isEmpty();
-		c.get().header(contentDisposition(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentDisposition(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentDisposition(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(contentDisposition(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ContentDisposition(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

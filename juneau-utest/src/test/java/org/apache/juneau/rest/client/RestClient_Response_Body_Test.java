@@ -337,7 +337,7 @@ public class RestClient_Response_Body_Test {
 	}
 
 	private static Header header(String name, Object val) {
-		return stringHeader(name, val);
+		return basicHeader(name, val);
 	}
 
 	private static InputStreamEntity inputStreamEntity(String in) {

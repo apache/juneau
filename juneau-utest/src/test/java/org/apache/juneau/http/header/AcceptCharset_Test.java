@@ -30,6 +30,7 @@ public class AcceptCharset_Test {
 
 	private static final String HEADER = "Accept-Charset";
 	private static final String VALUE = "utf-8";
+	private static final StringRanges PARSED = StringRanges.of("utf-8");
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class AcceptCharset_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(acceptCharset(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptCharset(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptCharset(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(acceptCharset(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(acceptCharset((String)null)).run().assertBody().isEmpty();
-		c.get().header(acceptCharset((Object)null)).run().assertBody().isEmpty();
-		c.get().header(acceptCharset((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(acceptCharset((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(acceptCharset(()->null)).run().assertBody().isEmpty();
-		c.get().header(acceptCharset(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptCharset(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptCharset(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(acceptCharset(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new AcceptCharset(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

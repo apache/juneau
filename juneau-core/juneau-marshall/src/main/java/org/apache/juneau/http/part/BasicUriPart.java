@@ -49,7 +49,7 @@ public class BasicUriPart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value

@@ -108,15 +108,18 @@ import org.apache.juneau.internal.*;
 public class AcceptLanguage extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Accept-Language";
 
 	private static final Cache<String,AcceptLanguage> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed and cached header.
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A cached {@link AcceptLanguage} object.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptLanguage of(String value) {
 		if (value == null)
@@ -124,7 +127,7 @@ public class AcceptLanguage extends BasicStringRangeArrayHeader {
 		AcceptLanguage x = CACHE.get(value);
 		if (x == null)
 			x = CACHE.put(value, new AcceptLanguage(value));
-		return x;
+		return new AcceptLanguage(value);
 	}
 
 	/**
@@ -132,62 +135,67 @@ public class AcceptLanguage extends BasicStringRangeArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link AcceptLanguage} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static AcceptLanguage of(Object value) {
+	public static AcceptLanguage of(StringRanges value) {
+		if (value == null)
+			return null;
 		return new AcceptLanguage(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link AcceptLanguage} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static AcceptLanguage of(Supplier<?> value) {
+	public static AcceptLanguage of(Supplier<StringRanges> value) {
+		if (value == null)
+			return null;
 		return new AcceptLanguage(value);
 	}
 
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public AcceptLanguage(Object value) {
-		super("Accept-Language", value);
+	public AcceptLanguage(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public AcceptLanguage(String value) {
-		this((Object)value);
+	public AcceptLanguage(StringRanges value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public AcceptLanguage(Supplier<StringRanges> value) {
+		super(NAME, value);
 	}
 }

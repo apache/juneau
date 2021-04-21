@@ -29,7 +29,8 @@ import org.junit.*;
 public class MaxForwards_Test {
 
 	private static final String HEADER = "Max-Forwards";
-	private static final Integer VALUE = 123;
+	private static final String VALUE = "123";
+	private static final Integer PARSED = 123;
 
 	@Rest
 	public static class A {
@@ -47,14 +48,16 @@ public class MaxForwards_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(maxForwards(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(maxForwards(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(maxForwards(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(maxForwards(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(maxForwards((String)null)).run().assertBody().isEmpty();
-		c.get().header(maxForwards((Object)null)).run().assertBody().isEmpty();
-		c.get().header(maxForwards((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(maxForwards((Supplier<Integer>)null)).run().assertBody().isEmpty();
 		c.get().header(maxForwards(()->null)).run().assertBody().isEmpty();
-		c.get().header(maxForwards(VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(maxForwards(VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(maxForwards(()->VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(new MaxForwards(VALUE.toString())).run().assertBody().is(VALUE.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

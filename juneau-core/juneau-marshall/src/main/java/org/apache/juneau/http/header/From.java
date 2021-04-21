@@ -70,41 +70,34 @@ import org.apache.juneau.http.annotation.*;
 public class From extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "From";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link From} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static From of(Object value) {
+	public static From of(String value) {
 		if (value == null)
 			return null;
 		return new From(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link From} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static From of(Supplier<?> value) {
+	public static From of(Supplier<String> value) {
 		if (value == null)
 			return null;
 		return new From(value);
@@ -115,24 +108,23 @@ public class From extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public From(Object value) {
-		super("From", value);
+	public From(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public From(String value) {
-		this((Object)value);
+	public From(Supplier<String> value) {
+		super(NAME, value);
 	}
 }

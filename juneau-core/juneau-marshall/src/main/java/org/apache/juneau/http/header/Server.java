@@ -62,41 +62,34 @@ import org.apache.juneau.http.annotation.*;
 public class Server extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Server";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Server} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Server of(Object value) {
+	public static Server of(String value) {
 		if (value == null)
 			return null;
 		return new Server(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Server} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Server of(Supplier<?> value) {
+	public static Server of(Supplier<String> value) {
 		if (value == null)
 			return null;
 		return new Server(value);
@@ -107,24 +100,23 @@ public class Server extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Server(Object value) {
-		super("Server", value);
+	public Server(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Server(String value) {
-		this((Object)value);
+	public Server(Supplier<String> value) {
+		super(NAME, value);
 	}
 }

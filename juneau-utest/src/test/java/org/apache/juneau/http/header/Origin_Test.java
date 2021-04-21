@@ -30,6 +30,7 @@ public class Origin_Test {
 
 	private static final String HEADER = "Origin";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class Origin_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(origin(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(origin(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(origin((String)null)).run().assertBody().isEmpty();
-		c.get().header(origin((Object)null)).run().assertBody().isEmpty();
-		c.get().header(origin((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(origin((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(origin(()->null)).run().assertBody().isEmpty();
-		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(origin(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(origin(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Origin(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -31,8 +32,10 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicUriHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "foo://bar";
+	private static final URI PARSED = URI.create("foo://bar");
+
 
 	@Rest
 	public static class A {
@@ -50,26 +53,25 @@ public class BasicUriHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(uriHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(uriHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(uriHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(uriHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(uriHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(uriHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(uriHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(uriHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(uriHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(uriHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(uriHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(null,(Supplier<URI>)null)).run().assertBody().isEmpty();
 		c.get().header(uriHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(new BasicUriHeader(HEADER,null)).run().assertBody().isEmpty();
-		c.get().header(new BasicUriHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
-
-		c.get().header(uriHeader(HEADER,"foo")).run().assertBody().is("foo");
 	}
 
 	@Test
 	public void a02_asUri() throws Exception {
 		assertString(uriHeader(HEADER,"http://foo").asURI()).is("http://foo");
-		assertString(new BasicUriHeader(HEADER,null).asURI()).doesNotExist();
+		assertString(new BasicUriHeader(HEADER,(URI)null).asURI()).doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

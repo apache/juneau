@@ -30,6 +30,7 @@ public class AcceptEncoding_Test {
 
 	private static final String HEADER = "Accept-Encoding";
 	private static final String VALUE = "foo";
+	private static final StringRanges PARSED = StringRanges.of("foo");
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class AcceptEncoding_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(acceptEncoding((String)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(acceptEncoding((Object)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(acceptEncoding((Supplier<?>)null)).run().assertBody().is("gzip,deflate");
+		c.get().header(acceptEncoding((Supplier<StringRanges>)null)).run().assertBody().is("gzip,deflate");
 		c.get().header(acceptEncoding(()->null)).run().assertBody().is("gzip,deflate");
-		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptEncoding(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(acceptEncoding(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new AcceptEncoding(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

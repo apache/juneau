@@ -72,41 +72,34 @@ import org.apache.juneau.http.annotation.*;
 public class ContentEncoding extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Content-Encoding";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ContentEncoding} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentEncoding of(Object value) {
+	public static ContentEncoding of(String value) {
 		if (value == null)
 			return null;
 		return new ContentEncoding(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ContentEncoding} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentEncoding of(Supplier<?> value) {
+	public static ContentEncoding of(Supplier<String> value) {
 		if (value == null)
 			return null;
 		return new ContentEncoding(value);
@@ -117,24 +110,23 @@ public class ContentEncoding extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentEncoding(Object value) {
-		super("Content-Encoding", value);
+	public ContentEncoding(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentEncoding(String value) {
-		this((Object)value);
+	public ContentEncoding(Supplier<String> value) {
+		super(NAME, value);
 	}
 }

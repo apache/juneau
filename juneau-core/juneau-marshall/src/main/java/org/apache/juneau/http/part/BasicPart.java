@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Subclass of {@link Part} for serializing POJOs as URL-encoded form post entries.
+ * Implementation of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
  *
  * Provides the following features:
  * <ul class='spaced-list'>
@@ -43,7 +43,7 @@ import org.apache.juneau.reflect.*;
  */
 @FluentSetters
 @BeanIgnore
-public class BasicPart implements Part, Headerable {
+public class BasicPart implements NameValuePair, Headerable {
 	private final String name;
 	private final Object value;
 
@@ -59,10 +59,10 @@ public class BasicPart implements Part, Headerable {
 	}
 
 	/**
-	 * Creates a {@link Part} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
 	 *
 	 * @param pair The pair string.
-	 * @return A new {@link Part} object.
+	 * @return A new {@link NameValuePair} object.
 	 */
 	public static BasicPart ofPair(String pair) {
 		if (pair == null)
@@ -79,7 +79,7 @@ public class BasicPart implements Part, Headerable {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value The part value supplier.
@@ -90,18 +90,18 @@ public class BasicPart implements Part, Headerable {
 	}
 
 	/**
-	 * Utility method for converting an arbitrary object to a {@link Part}.
+	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
 	 *
 	 * @param o
-	 * 	The object to cast or convert to a {@link Part}.
-	 * @return Either the same object cast as a {@link Part} or converted to a {@link Part}.
+	 * 	The object to cast or convert to a {@link NameValuePair}.
+	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Part cast(Object o) {
-		if (o instanceof Part)
-			return (Part)o;
-		if (o instanceof Partable)
-			return ((Partable)o).asPart();
+	public static NameValuePair cast(Object o) {
+		if (o instanceof NameValuePair)
+			return (NameValuePair)o;
+		if (o instanceof NameValuePairable)
+			return ((NameValuePairable)o).asNameValuePair();
 		if (o instanceof NameValuePair) {
 			NameValuePair p = (NameValuePair)o;
 			return BasicPart.of(p.getName(), p.getValue());
@@ -125,7 +125,7 @@ public class BasicPart implements Part, Headerable {
 	 */
 	public static boolean canCast(Object o) {
 		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, Partable.class, Map.Entry.class);
+		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class BasicPart implements Part, Headerable {
 
 	@Override /* Headerable */
 	public BasicHeader asHeader() {
-		return BasicHeader.of(name, value);
+		return BasicHeader.of(name, stringify(value));
 	}
 
 	@Override /* NameValuePair */
@@ -204,7 +204,7 @@ public class BasicPart implements Part, Headerable {
 
 	@Override /* Object */
 	public String toString() {
-		return urlEncode(getName()) + "=" + urlEncode(getValue());
+		return getName() + "=" + getValue();
 	}
 
 	private Object unwrap(Object o) {

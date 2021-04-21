@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
@@ -42,59 +43,103 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicUriHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be parsable by {@link URI#create(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicUriHeader of(String name, Object value) {
+	public static BasicUriHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicUriHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicUriHeader of(String name, URI value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicUriHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicUriHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicUriHeader of(String name, Supplier<?> value) {
+	public static BasicUriHeader of(String name, Supplier<URI> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicUriHeader(name, value);
 	}
 
-	private URI parsed;
+	private final URI value;
+	private final Supplier<URI> supplier;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link URI#create(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicUriHeader(String name, Object value) {
+	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicUriHeader(String name, URI value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicUriHeader(String name, Supplier<URI> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -103,15 +148,20 @@ public class BasicUriHeader extends BasicHeader {
 	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<URI> asURI() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
-	private URI getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return URI.create(o.toString());
+	private static String serialize(URI value) {
+		return stringify(value);
+	}
+
+	private URI parse(String value) {
+		try {
+			return URI.create(value);
+		} catch (IllegalArgumentException e) {
+			throw runtimeException("Value ''{0}'' could not be parsed as a URI.", value);
+		}
 	}
 }

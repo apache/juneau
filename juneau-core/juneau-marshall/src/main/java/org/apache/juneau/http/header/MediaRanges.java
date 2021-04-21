@@ -84,7 +84,7 @@ public class MediaRanges {
 	/**
 	 * Constructor.
 	 *
-	 * @param e The parsed <c>Accept</c> header value.
+	 * @param e The parsed header value.
 	 */
 	public MediaRanges(HeaderElement[] e) {
 

@@ -795,7 +795,7 @@ public class Remote_HeaderAnnotation_Test {
 	public static class K3a {
 		@Header(aev=true)
 		public HeaderList getA() {
-			return headers("a1","v1","a2",123,"a3",null,"a4","");
+			return headerList(stringHeader("a1","v1"),integerHeader("a2",123),basicHeader("a3",null),stringHeader("a4",""));
 		}
 		@Header(value="*",aev=true)
 		public HeaderList getB() {
@@ -803,7 +803,7 @@ public class Remote_HeaderAnnotation_Test {
 		}
 		@Header(n="*",aev=true)
 		public HeaderList getC() {
-			return headers("c1","v1","c2",123,"c3",null,"c4","");
+			return headerList(stringHeader("c1","v1"),integerHeader("c2",123),basicHeader("c3",null),stringHeader("c4",""));
 		}
 		@Header(value="*",aev=true)
 		public HeaderList getD() {
@@ -811,11 +811,11 @@ public class Remote_HeaderAnnotation_Test {
 		}
 		@Header(aev=true)
 		public org.apache.http.Header[] getE() {
-			return headers("e1","v1","e2",123,"e3",null,"e4","").getAll();
+			return headerList(stringHeader("e1","v1"),integerHeader("e2",123),basicHeader("e3",null),stringHeader("e4","")).getAll();
 		}
 		@Header(aev=true)
 		public BasicHeader[] getF() {
-			return headers("f1","v1","f2",123,"f3",null,"f4","").stream().toArray(BasicHeader[]::new);
+			return headerList(stringHeader("f1","v1"),integerHeader("f2",123),basicHeader("f3",null),stringHeader("f4","")).stream().toArray(BasicHeader[]::new);
 		}
 	}
 
@@ -890,12 +890,12 @@ public class Remote_HeaderAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static HeaderList headers(Object...pairs) {
+	private static HeaderList headers(String...pairs) {
 		return headerList(pairs);
 	}
 
 	private static org.apache.http.Header header(String key,Object val) {
-		return stringHeader(key,val);
+		return basicHeader(key,val);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

@@ -1049,8 +1049,8 @@ public class RestAnnotation {
 			cpb.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			cpb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(REST_defaultRequestAttributes, x));
-			stringStream(a.defaultRequestHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(REST_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(REST_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(REST_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(REST_defaultResponseHeaders, x));
 			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
 			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
 			cpb.prependTo(REST_responseProcessors, a.responseProcessors());

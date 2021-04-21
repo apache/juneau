@@ -30,6 +30,7 @@ public class Warning_Test {
 
 	private static final String HEADER = "Warning";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class Warning_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(warning(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(warning(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(warning((String)null)).run().assertBody().isEmpty();
-		c.get().header(warning((Object)null)).run().assertBody().isEmpty();
-		c.get().header(warning((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(warning((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(warning(()->null)).run().assertBody().isEmpty();
-		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(warning(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(warning(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Warning(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

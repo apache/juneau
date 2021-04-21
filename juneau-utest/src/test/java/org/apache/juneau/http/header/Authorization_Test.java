@@ -47,15 +47,15 @@ public class Authorization_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(authorization((String)null)).run().assertBody().isEmpty();
-		c.get().header(authorization((Object)null)).run().assertBody().isEmpty();
-		c.get().header(authorization((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(authorization(()->null)).run().assertBody().isEmpty();
+		// Normal usage.
 		c.get().header(authorization(VALUE)).run().assertBody().is(VALUE);
 		c.get().header(authorization(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(authorization(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
 		c.get().header(authorization(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Authorization(VALUE)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
+		c.get().header(authorization((String)null)).run().assertBody().isEmpty();
+		c.get().header(authorization((Supplier<String>)null)).run().assertBody().isEmpty();
+		c.get().header(authorization(()->null)).run().assertBody().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

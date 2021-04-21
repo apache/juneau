@@ -16,8 +16,10 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -30,6 +32,7 @@ public class ContentLanguage_Test {
 
 	private static final String HEADER = "Content-Language";
 	private static final String VALUE = "foo";
+	private static final List<String> PARSED = AList.of("foo");
 
 	@Rest
 	public static class A {
@@ -47,15 +50,16 @@ public class ContentLanguage_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(contentLanguage(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentLanguage(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentLanguage(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentLanguage(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(contentLanguage((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentLanguage((Object)null)).run().assertBody().isEmpty();
-		c.get().header(contentLanguage((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(contentLanguage((Supplier<List<String>>)null)).run().assertBody().isEmpty();
 		c.get().header(contentLanguage(()->null)).run().assertBody().isEmpty();
-		c.get().header(contentLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLanguage(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(contentLanguage(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ContentLanguage(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -35,6 +35,7 @@ public class Accept_Test {
 
 	private static final String HEADER = "Accept";
 	private static final String VALUE = "foo";
+	private static final MediaRanges PARSED = MediaRanges.of("foo");
 
 	@Rest
 	public static class A {
@@ -52,15 +53,16 @@ public class Accept_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(accept(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(accept(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(accept(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(accept(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(accept((String)null)).run().assertBody().isEmpty();
-		c.get().header(accept((Object)null)).run().assertBody().isEmpty();
-		c.get().header(accept((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(accept((Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(accept(()->null)).run().assertBody().isEmpty();
-		c.get().header(accept(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(accept(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(accept(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(accept(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Accept(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	@Test
@@ -68,7 +70,7 @@ public class Accept_Test {
 		assertObject(new Accept((String)null).asMediaRanges().orElse(null)).isNull();
 		assertInteger(new Accept((String)null).match(AList.of(MediaType.JSON))).is(-1);
 		assertObject(new Accept((String)null).getRange(0)).isNull();
-		assertObject(new Accept(MediaType.JSON).getRange(0)).asString().is("application/json");
+		assertObject(new Accept(MediaRanges.of("application/json"))).asString().is("Accept: application/json");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

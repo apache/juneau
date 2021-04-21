@@ -40,6 +40,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
@@ -974,8 +975,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The path parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
 	 * 		<li>{@link NameValuePair}
@@ -1260,11 +1261,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
-	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1304,11 +1304,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
-	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1642,11 +1641,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
-	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1687,8 +1685,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
 	 * 		<li>{@link NameValuePair}
@@ -2239,16 +2237,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headers(AddFlag flag, Object...headers) {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
-			if (BasicHeader.canCast(o)) {
-				l.add(BasicHeader.cast(o));
+			if (HttpHeaders.canCast(o)) {
+				l.add(HttpHeaders.cast(o));
 			} else if (o instanceof HeaderList) {
 				((HeaderList)o).forEach(x->l.add(x));
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
-					l.add(BasicHeader.cast(o2));
+					l.add(HttpHeaders.cast(o2));
 			} else if (o != null && o.getClass().isArray()) {
 				for (int i = 0; i < Array.getLength(o); i++)
-					l.add(BasicHeader.cast(Array.get(o, i)));
+					l.add(HttpHeaders.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
 					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
@@ -2331,16 +2329,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		List<Header> l = AList.create();
 
-		if (BasicHeader.canCast(value)) {
-			l.add(BasicHeader.cast(value));
+		if (HttpHeaders.canCast(value)) {
+			l.add(HttpHeaders.cast(value));
 		} else if (value instanceof HeaderList) {
 			((HeaderList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
 			for (Object o : (Collection<?>)value)
-				l.add(BasicHeader.cast(o));
+				l.add(HttpHeaders.cast(o));
 		} else if (value != null && value.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(value); i++)
-				l.add(BasicHeader.cast(Array.get(value, i)));
+				l.add(HttpHeaders.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
 			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
 				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
@@ -2370,7 +2368,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			}
 		}
 		for (Header h : headers) {
-			addHeader(h);
+			if (h.getValue() != null)
+				addHeader(h);
 		}
 		return this;
 	}
@@ -2988,7 +2987,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			Thrown thrown = response.getHeader("Thrown").asHeader(Thrown.class);
 			if (thrown.isPresent() && rethrow != null) {
-				Thrown.Part thrownPart = thrown.getParts().get(0);
+				Thrown.Part thrownPart = thrown.asParts().get().get(0);
 				String className = thrownPart.getClassName();
 				String message = thrownPart.getMessage();
 				for (Class<? extends Throwable> t : rethrow) {

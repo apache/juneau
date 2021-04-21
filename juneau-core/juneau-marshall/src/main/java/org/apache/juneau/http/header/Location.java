@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import java.net.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -59,69 +60,88 @@ import org.apache.juneau.http.annotation.*;
 public class Location extends BasicUriHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Location";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Location} object.
+	 * 	<br>Must be parsable by {@link URI#create(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Location of(Object value) {
+	public static Location of(String value) {
 		if (value == null)
 			return null;
 		return new Location(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Location of(URI value) {
+		if (value == null)
+			return null;
+		return new Location(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Location} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Location of(Supplier<?> value) {
+	public static Location of(Supplier<URI> value) {
 		if (value == null)
 			return null;
 		return new Location(value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link URI#create(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Location(Object value) {
-		super("Location", value);
+	public Location(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Location(String value) {
-		this((Object)value);
+	public Location(URI value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Location(Supplier<URI> value) {
+		super(NAME, value);
 	}
 }

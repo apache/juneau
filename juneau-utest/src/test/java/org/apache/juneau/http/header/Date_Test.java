@@ -12,10 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.time.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -30,6 +33,7 @@ public class Date_Test {
 
 	private static final String HEADER = "Date";
 	private static final String VALUE = "Sat, 29 Oct 1994 19:43:31 GMT";
+	private static final ZonedDateTime PARSED = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(VALUE)).truncatedTo(SECONDS);
 
 	@Rest
 	public static class A {
@@ -47,15 +51,16 @@ public class Date_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(date(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(date(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(date(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(date(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(date((String)null)).run().assertBody().isEmpty();
-		c.get().header(date((Object)null)).run().assertBody().isEmpty();
-		c.get().header(date((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(date((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
 		c.get().header(date(()->null)).run().assertBody().isEmpty();
-		c.get().header(date(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(date(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(date(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(date(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Date(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

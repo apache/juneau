@@ -12,10 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static java.util.Optional.*;
 import static org.apache.juneau.http.header.Constants.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -38,15 +42,18 @@ import org.apache.juneau.internal.*;
 public class ClientVersion extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Client-Version";
 
 	private static final Cache<String,ClientVersion> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed and cached header.
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A cached {@link ClientVersion} object.
+	 * 	<br>Must be parsable by {@link Version#of(String)}
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ClientVersion of(String value) {
 		if (value == null)
@@ -54,7 +61,7 @@ public class ClientVersion extends BasicStringHeader {
 		ClientVersion x = CACHE.get(value);
 		if (x == null)
 			x = CACHE.put(value, new ClientVersion(value));
-		return x;
+		return new ClientVersion(value);
 	}
 
 	/**
@@ -62,38 +69,47 @@ public class ClientVersion extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ClientVersion} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ClientVersion of(Object value) {
+	public static ClientVersion of(Version value) {
 		if (value == null)
 			return null;
 		return new ClientVersion(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ClientVersion} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ClientVersion of(Supplier<?> value) {
+	public static ClientVersion of(Supplier<Version> value) {
 		if (value == null)
 			return null;
 		return new ClientVersion(value);
+	}
+
+	private final Version value;
+	private final Supplier<Version> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Version#of(String)}
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ClientVersion(String value) {
+		super(NAME, value);
+		this.value = Version.of(value);
+		this.supplier = null;
 	}
 
 	/**
@@ -101,24 +117,62 @@ public class ClientVersion extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ClientVersion(Object value) {
-		super("Client-Version", value);
+	public ClientVersion(Version value) {
+		super(NAME, stringify(value));
+		this.value = value;
+		this.supplier = null;
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ClientVersion(String value) {
-		this((Object)value);
+	public ClientVersion(Supplier<Version> value) {
+		super(NAME, (String)null);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		if (supplier != null)
+			return stringify(supplier.get());
+		return super.getValue();
+	}
+
+	/**
+	 * Returns the header value as a {@link Version} object.
+	 *
+	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 */
+	public Optional<Version> asVersion() {
+		return ofNullable(value);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response content is older than 1.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getHeader(ClientVersion.<jk>class</jk>).assertVersion().major().isGreaterThan(1);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentVersionAssertion<ClientVersion> assertVersion() {
+		return new FluentVersionAssertion<>(asVersion().orElse(null), this);
 	}
 }

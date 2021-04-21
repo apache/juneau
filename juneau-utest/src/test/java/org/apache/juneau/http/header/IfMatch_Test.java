@@ -16,8 +16,10 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,7 +31,8 @@ import org.junit.*;
 public class IfMatch_Test {
 
 	private static final String HEADER = "If-Match";
-	private static final String VALUE = "\"foo\"";
+	private static final String VALUE = "\"foo\", \"bar\"";
+	private static final List<EntityTag> PARSED = AList.of(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
 
 	@Rest
 	public static class A {
@@ -47,15 +50,16 @@ public class IfMatch_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(ifMatch(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(ifMatch(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(ifMatch(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(ifMatch(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(ifMatch((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifMatch((Object)null)).run().assertBody().isEmpty();
-		c.get().header(ifMatch((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(ifMatch((Supplier<List<EntityTag>>)null)).run().assertBody().isEmpty();
 		c.get().header(ifMatch(()->null)).run().assertBody().isEmpty();
-		c.get().header(ifMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifMatch(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(ifMatch(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new IfMatch(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

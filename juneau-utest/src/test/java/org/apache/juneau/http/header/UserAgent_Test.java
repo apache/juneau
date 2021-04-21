@@ -30,6 +30,7 @@ public class UserAgent_Test {
 
 	private static final String HEADER = "User-Agent";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class UserAgent_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(userAgent(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(userAgent(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(userAgent((String)null)).run().assertBody().contains("Apache");
-		c.get().header(userAgent((Object)null)).run().assertBody().contains("Apache");
-		c.get().header(userAgent((Supplier<?>)null)).run().assertBody().contains("Apache");
+		c.get().header(userAgent((Supplier<String>)null)).run().assertBody().contains("Apache");
 		c.get().header(userAgent(()->null)).run().assertBody().contains("Apache");
-		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(userAgent(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(userAgent(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new UserAgent(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

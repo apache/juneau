@@ -29,7 +29,8 @@ import org.junit.*;
 public class ContentLength_Test {
 
 	private static final String HEADER = "Content-Length";
-	private static final Long VALUE = 123l;
+	private static final String VALUE = "123";
+	private static final Long PARSED = 123l;
 
 	@Rest
 	public static class A {
@@ -47,14 +48,16 @@ public class ContentLength_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(contentLength(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentLength(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentLength(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentLength(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(contentLength((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentLength((Object)null)).run().assertBody().isEmpty();
-		c.get().header(contentLength((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(contentLength((Supplier<Long>)null)).run().assertBody().isEmpty();
 		c.get().header(contentLength(()->null)).run().assertBody().isEmpty();
-		c.get().header(contentLength(VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(contentLength(VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(contentLength(()->VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(new ContentLength(VALUE.toString())).run().assertBody().is(VALUE.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

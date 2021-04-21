@@ -30,6 +30,7 @@ public class WwwAuthenticate_Test {
 
 	private static final String HEADER = "WWW-Authenticate";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class WwwAuthenticate_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(wwwAuthenticate((String)null)).run().assertBody().isEmpty();
-		c.get().header(wwwAuthenticate((Object)null)).run().assertBody().isEmpty();
-		c.get().header(wwwAuthenticate((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(wwwAuthenticate((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(wwwAuthenticate(()->null)).run().assertBody().isEmpty();
-		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(wwwAuthenticate(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(wwwAuthenticate(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new WwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -30,6 +30,7 @@ public class Trailer_Test {
 
 	private static final String HEADER = "Trailer";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class Trailer_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(trailer(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(trailer(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(trailer(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(trailer(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(trailer((String)null)).run().assertBody().isEmpty();
-		c.get().header(trailer((Object)null)).run().assertBody().isEmpty();
-		c.get().header(trailer((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(trailer((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(trailer(()->null)).run().assertBody().isEmpty();
-		c.get().header(trailer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(trailer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(trailer(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(trailer(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Trailer(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

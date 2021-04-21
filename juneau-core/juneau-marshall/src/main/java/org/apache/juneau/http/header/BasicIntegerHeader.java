@@ -13,12 +13,12 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
 
@@ -46,44 +46,51 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicIntegerHeader of(String name, Object value) {
+	public static BasicIntegerHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicIntegerHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicIntegerHeader of(String name, Integer value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicIntegerHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicIntegerHeader of(String name, Supplier<?> value) {
+	public static BasicIntegerHeader of(String name, Supplier<Integer> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicIntegerHeader(name, value);
 	}
 
-	private Integer parsed;
+	private final Integer value;
+	private final Supplier<Integer> supplier;
 
 	/**
 	 * Constructor.
@@ -91,23 +98,51 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicIntegerHeader(String name, Object value) {
+	public BasicIntegerHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicIntegerHeader(String name, Integer value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicIntegerHeader(String name, Supplier<Integer> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(getParsedValue());
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -116,7 +151,9 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return The header value as an integer, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
 	/**
@@ -135,29 +172,18 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentIntegerAssertion<BasicIntegerHeader> assertInteger() {
-		return new FluentIntegerAssertion<>(getParsedValue(), this);
+		return new FluentIntegerAssertion<>(asInteger().orElse(null), this);
 	}
 
-	private Integer getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Integer)
-			return (Integer)o;
-		if (o instanceof Number)
-			return ((Number)o).intValue();
-		String s = o.toString();
+	private static String serialize(Integer value) {
+		return stringify(value);
+	}
+
+	private Integer parse(String value) {
 		try {
-			return Integer.parseInt(s);
+			return value == null ? null : Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			try {
-				Long.parseLong(s);
-				return Integer.MAX_VALUE;
-			} catch (NumberFormatException e2) {
-				throw new BasicIllegalArgumentException("Value could not be parsed as an int: {0}", o);
-			}
+			throw runtimeException("Value ''{0}'' could not be parsed as an integer.", value);
 		}
 	}
 }

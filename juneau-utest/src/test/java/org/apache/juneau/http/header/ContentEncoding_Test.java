@@ -30,6 +30,7 @@ public class ContentEncoding_Test {
 
 	private static final String HEADER = "Content-Encoding";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class ContentEncoding_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(contentEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentEncoding(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentEncoding(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(contentEncoding((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentEncoding((Object)null)).run().assertBody().isEmpty();
-		c.get().header(contentEncoding((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(contentEncoding((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(contentEncoding(()->null)).run().assertBody().isEmpty();
-		c.get().header(contentEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentEncoding(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(contentEncoding(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ContentEncoding(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

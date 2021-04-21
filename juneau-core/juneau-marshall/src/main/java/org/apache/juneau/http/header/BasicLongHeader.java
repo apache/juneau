@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
 
@@ -46,44 +46,52 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicLongHeader of(String name, Object value) {
+	public static BasicLongHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicLongHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicLongHeader of(String name, Long value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicLongHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicLongHeader of(String name, Supplier<?> value) {
+	public static BasicLongHeader of(String name, Supplier<Long> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicLongHeader(name, value);
 	}
 
-	private Long parsed;
+	private final Long value;
+	private final Supplier<Long> supplier;
 
 	/**
 	 * Constructor.
@@ -91,23 +99,51 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicLongHeader(String name, Object value) {
+	public BasicLongHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicLongHeader(String name, Long value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicLongHeader(String name, Supplier<Long> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(getParsedValue());
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -116,7 +152,9 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return The header value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<Long> asLong() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
 	/**
@@ -135,22 +173,18 @@ public class BasicLongHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentLongAssertion<BasicLongHeader> assertLong() {
-		return new FluentLongAssertion<>(getParsedValue(), this);
+		return new FluentLongAssertion<>(asLong().orElse(null), this);
 	}
 
-	private Long getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Number)
-			return ((Number)o).longValue();
-		String s = o.toString();
+	private static String serialize(Long value) {
+		return stringify(value);
+	}
+
+	private Long parse(String value) {
 		try {
-			return Long.parseLong(s);
+			return value == null ? null : Long.parseLong(value);
 		} catch (NumberFormatException e) {
-			throw new BasicIllegalArgumentException("Value could not be parsed as a long: {0}", o);
+			throw runtimeException("Value ''{0}'' could not be parsed as a long.", value);
 		}
 	}
 }

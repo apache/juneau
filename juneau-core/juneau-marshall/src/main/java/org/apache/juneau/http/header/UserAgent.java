@@ -55,41 +55,34 @@ import org.apache.juneau.http.annotation.*;
 public class UserAgent extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "User-Agent";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link UserAgent} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static UserAgent of(Object value) {
+	public static UserAgent of(String value) {
 		if (value == null)
 			return null;
 		return new UserAgent(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link UserAgent} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static UserAgent of(Supplier<?> value) {
+	public static UserAgent of(Supplier<String> value) {
 		if (value == null)
 			return null;
 		return new UserAgent(value);
@@ -100,24 +93,23 @@ public class UserAgent extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public UserAgent(Object value) {
-		super("User-Agent", value);
+	public UserAgent(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public UserAgent(String value) {
-		this((Object)value);
+	public UserAgent(Supplier<String> value) {
+		super(NAME, value);
 	}
 }

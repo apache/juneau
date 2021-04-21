@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import java.time.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -68,45 +67,49 @@ import org.apache.juneau.http.annotation.*;
 public class IfUnmodifiedSince extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "If-Unmodified-Since";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link IfUnmodifiedSince} object, or <jk>null</jk> if the value was null.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static IfUnmodifiedSince of(Object value) {
+	public static IfUnmodifiedSince of(String value) {
 		if (value == null)
 			return null;
 		return new IfUnmodifiedSince(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfUnmodifiedSince of(ZonedDateTime value) {
+		if (value == null)
+			return null;
+		return new IfUnmodifiedSince(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link IfUnmodifiedSince} object, or <jk>null</jk> if the value was null.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static IfUnmodifiedSince of(Supplier<?> value) {
+	public static IfUnmodifiedSince of(Supplier<ZonedDateTime> value) {
 		if (value == null)
 			return null;
 		return new IfUnmodifiedSince(value);
@@ -117,26 +120,35 @@ public class IfUnmodifiedSince extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfUnmodifiedSince(Object value) {
-		super("If-Unmodified-Since", value);
+	public IfUnmodifiedSince(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfUnmodifiedSince(String value) {
-		this((Object)value);
+	public IfUnmodifiedSince(ZonedDateTime value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfUnmodifiedSince(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
 	}
 }

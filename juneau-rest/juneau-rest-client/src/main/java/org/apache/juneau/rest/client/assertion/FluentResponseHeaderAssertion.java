@@ -52,16 +52,6 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	}
 
 	/**
-	 * Converts this object assertion into a date assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a date.
-	 */
-	public FluentDateAssertion<R> asDate() {
-		return new FluentDateAssertion<>(this, value.asDateHeader().asDate().orElse(null), returns());
-	}
-
-	/**
 	 * Converts this object assertion into an integer assertion.
 	 *
 	 * @return A new assertion.

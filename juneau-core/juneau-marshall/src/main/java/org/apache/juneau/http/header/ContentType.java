@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.header.Constants.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
@@ -54,6 +53,7 @@ import org.apache.juneau.internal.*;
 public class ContentType extends BasicMediaTypeHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Content-Type";
 
 	private static Cache<String,ContentType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -82,30 +82,21 @@ public class ContentType extends BasicMediaTypeHeader {
 		WILDCARD = of("*/*");
 
 	/**
-	 * Returns a parsed and cached <c>Content-Type</c> header.
+	 * Convenience creator.
 	 *
-	 * @param value The <c>Content-Type</c> header string.
-	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentType of(String value) {
-		if (isEmpty(value))
+		if (value == null)
 			return null;
-		ContentType ct = CACHE.get(value);
-		if (ct == null)
-			ct = CACHE.put(value, new ContentType(value));
-		return ct;
-	}
-
-	/**
-	 * Returns a parsed and cached <c>Content-Type</c> header.
-	 *
-	 * @param value The <c>Content-Type</c> header value.
-	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
-	 */
-	public static ContentType of(MediaType value) {
-		if (isEmpty(value))
-			return null;
-		return of(value.toString());
+		ContentType x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new ContentType(value));
+		return new ContentType(value);
 	}
 
 	/**
@@ -113,55 +104,66 @@ public class ContentType extends BasicMediaTypeHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link MediaType#of(String)}.
-	 * 		<li>{@link MediaType}.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link AcceptEncoding} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentType of(Object value) {
-		if (isEmpty(value))
+	public static ContentType of(MediaType value) {
+		if (value == null)
 			return null;
 		return new ContentType(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link MediaType#of(String)}.
-	 * 		<li>{@link MediaType}.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link AcceptEncoding} object.
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentType of(Supplier<?> value) {
+	public static ContentType of(Supplier<MediaType> value) {
+		if (value == null)
+			return null;
 		return new ContentType(value);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value for this header.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentType(Object value) {
-		super("Content-Type", value);
+	public ContentType(String value) {
+		super(NAME, value);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value for this header.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentType(String value) {
-		this((Object)value);
+	public ContentType(MediaType value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentType(Supplier<MediaType> value) {
+		super(NAME, value);
 	}
 }

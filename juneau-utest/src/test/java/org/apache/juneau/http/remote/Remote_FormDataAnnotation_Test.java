@@ -967,7 +967,7 @@ public class Remote_FormDataAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static Part part(String name, Object val) {
+	private static NameValuePair part(String name, Object val) {
 		return basicPart(name,val);
 	}
 

@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.header.Constants.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
@@ -146,6 +145,7 @@ import org.apache.juneau.internal.*;
 public class Accept extends BasicMediaRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Accept";
 
 	private static final Cache<String,Accept> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -174,19 +174,21 @@ public class Accept extends BasicMediaRangeArrayHeader {
 		WILDCARD = of("*/*");
 
 	/**
-	 * Returns a parsed and cached header.
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A cached {@link AcceptCharset} object.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Accept of(String value) {
-		if (isEmpty(value))
+		if (value == null)
 			return null;
 		Accept x = CACHE.get(value);
 		if (x == null)
 			x = CACHE.put(value, new Accept(value));
-		return x;
+		return new Accept(value);
 	}
 
 	/**
@@ -194,63 +196,80 @@ public class Accept extends BasicMediaRangeArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Accept} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Accept of(Object value) {
-		if (isEmpty(value))
-			return null;
-		return new Accept(value);
-	}
-
-	/**
-	 * Convenience creator using supplier.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Accept} object.
-	 */
-	public static Accept of(Supplier<?> value) {
+	public static Accept of(MediaRanges value) {
 		if (value == null)
 			return null;
 		return new Accept(value);
 	}
 
 	/**
-	 * Constructor
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public Accept(Object value) {
-		super("Accept", value);
+	public static Accept of(MediaType value) {
+		if (value == null)
+			return null;
+		return new Accept(value.toString());
 	}
 
 	/**
-	 * Constructor
+	 * Convenience creator with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Accept of(Supplier<MediaRanges> value) {
+		if (value == null)
+			return null;
+		return new Accept(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Accept(String value) {
-		this((Object)value);
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Accept(MediaRanges value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Accept(Supplier<MediaRanges> value) {
+		super(NAME, value);
 	}
 }

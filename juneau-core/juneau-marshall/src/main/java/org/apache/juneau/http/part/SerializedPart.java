@@ -230,11 +230,6 @@ public class SerializedPart extends BasicPart implements Headerable {
 		}
 	}
 
-	@Override /* Object */
-	public String toString() {
-		return getName() + "=" + getValue();
-	}
-
 	private Object unwrap(Object o) {
 		if (o instanceof Supplier)
 			return ((Supplier<?>)o).get();

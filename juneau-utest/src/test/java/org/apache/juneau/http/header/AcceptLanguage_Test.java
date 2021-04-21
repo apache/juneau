@@ -30,6 +30,7 @@ public class AcceptLanguage_Test {
 
 	private static final String HEADER = "Accept-Language";
 	private static final String VALUE = "foo";
+	private static final StringRanges PARSED = StringRanges.of("foo");
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class AcceptLanguage_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(acceptLanguage(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptLanguage(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(acceptLanguage(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(acceptLanguage(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(acceptLanguage((String)null)).run().assertBody().isEmpty();
-		c.get().header(acceptLanguage((Object)null)).run().assertBody().isEmpty();
-		c.get().header(acceptLanguage((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(acceptLanguage((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(acceptLanguage(()->null)).run().assertBody().isEmpty();
-		c.get().header(acceptLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptLanguage(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(acceptLanguage(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new AcceptLanguage(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

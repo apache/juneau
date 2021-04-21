@@ -30,6 +30,7 @@ public class TransferEncoding_Test {
 
 	private static final String HEADER = "Transfer-Encoding";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class TransferEncoding_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(transferEncoding((String)null)).run().assertBody().isEmpty();
-		c.get().header(transferEncoding((Object)null)).run().assertBody().isEmpty();
-		c.get().header(transferEncoding((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(transferEncoding((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(transferEncoding(()->null)).run().assertBody().isEmpty();
-		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(transferEncoding(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(transferEncoding(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new TransferEncoding(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

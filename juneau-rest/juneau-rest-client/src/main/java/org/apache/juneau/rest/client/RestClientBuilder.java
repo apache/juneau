@@ -52,6 +52,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
@@ -1293,7 +1294,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (BasicHeader.canCast(h) || h instanceof HeaderList) {
+			if (HttpHeaders.canCast(h) || h instanceof HeaderList) {
 				appendTo(RESTCLIENT_headers, h);
 			} else if (h instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(h).entrySet())
@@ -2027,8 +2028,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	The query parameters.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
 	 * 		<li>{@link Map}
@@ -2310,8 +2311,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	The form-data parameters.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Part}
-	 * 		<li>{@link Partable}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link PartList}
 	 * 		<li>{@link Map}

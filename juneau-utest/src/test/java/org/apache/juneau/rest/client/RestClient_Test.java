@@ -488,6 +488,6 @@ public class RestClient_Test {
 	}
 
 	private static Header header(String name, Object val) {
-		return stringHeader(name, val);
+		return basicHeader(name, val);
 	}
 }

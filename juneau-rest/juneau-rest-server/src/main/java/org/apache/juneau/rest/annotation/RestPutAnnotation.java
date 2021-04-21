@@ -601,8 +601,8 @@ public class RestPutAnnotation {
 			cpb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
 			cpb.setIfNotEmpty(REST_produces, stringList(a.produces()));
 			cpb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
-			stringStream(a.defaultRequestHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
 			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
 			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> cpb.appendTo(RESTOP_defaultFormData, x));

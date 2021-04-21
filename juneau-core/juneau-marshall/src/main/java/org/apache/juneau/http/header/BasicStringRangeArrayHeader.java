@@ -38,71 +38,106 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	/**
 	 * Convenience creator.
 	 *
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li>{@link StringRanges} - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object.
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicStringRangeArrayHeader of(String name, Object value) {
+	public static BasicStringRangeArrayHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicStringRangeArrayHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicStringRangeArrayHeader of(String name, StringRanges value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicStringRangeArrayHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li>{@link StringRanges} - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicStringRangeArrayHeader of(String name, Supplier<?> value) {
+	public static BasicStringRangeArrayHeader of(String name, Supplier<StringRanges> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicStringRangeArrayHeader(name, value);
 	}
 
-	private StringRanges parsed;
+	private final StringRanges value;
+	private final Supplier<StringRanges> supplier;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicStringRangeArrayHeader(String name, Object value) {
+	public BasicStringRangeArrayHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = parse();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicStringRangeArrayHeader(String name, StringRanges value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicStringRangeArrayHeader(String name, Supplier<StringRanges> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return stringify(asRanges().orElse(StringRanges.EMPTY));
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -114,7 +149,9 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * @return An unmodifiable list of type ranges, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<StringRanges> asRanges() {
-		return ofNullable(parse());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
 	/**
@@ -158,12 +195,11 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 		return asRanges().orElse(StringRanges.EMPTY).getRanges();
 	}
 
-	private StringRanges parse() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return StringRanges.of(o.toString());
+	private static String serialize(StringRanges value) {
+		return stringify(value);
+	}
+
+	private StringRanges parse(String value) {
+		return StringRanges.of(value);
 	}
 }

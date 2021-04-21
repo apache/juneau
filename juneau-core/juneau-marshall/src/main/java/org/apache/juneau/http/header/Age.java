@@ -61,43 +61,49 @@ import org.apache.juneau.http.annotation.*;
 public class Age extends BasicIntegerHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Age";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object.
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Age of(Object value) {
+	public static Age of(String value) {
 		if (value == null)
 			return null;
 		return new Age(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Age of(Integer value) {
+		if (value == null)
+			return null;
+		return new Age(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Age of(Supplier<?> value) {
+	public static Age of(Supplier<Integer> value) {
 		if (value == null)
 			return null;
 		return new Age(value);
@@ -108,25 +114,35 @@ public class Age extends BasicIntegerHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Age(Object value) {
-		super("Age", value);
+	public Age(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Age(String value) {
-		this((Object)value);
+	public Age(Integer value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Age(Supplier<Integer> value) {
+		super(NAME, value);
 	}
 }

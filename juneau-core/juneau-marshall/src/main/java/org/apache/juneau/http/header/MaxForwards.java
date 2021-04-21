@@ -62,43 +62,49 @@ import org.apache.juneau.http.annotation.*;
 public class MaxForwards extends BasicIntegerHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Max-Forwards";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object.
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static MaxForwards of(Object value) {
+	public static MaxForwards of(String value) {
 		if (value == null)
 			return null;
 		return new MaxForwards(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static MaxForwards of(Integer value) {
+		if (value == null)
+			return null;
+		return new MaxForwards(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static MaxForwards of(Supplier<?> value) {
+	public static MaxForwards of(Supplier<Integer> value) {
 		if (value == null)
 			return null;
 		return new MaxForwards(value);
@@ -109,25 +115,35 @@ public class MaxForwards extends BasicIntegerHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public MaxForwards(Object value) {
-		super("Max-Forwards", value);
+	public MaxForwards(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public MaxForwards(String value) {
-		this((Object)value);
+	public MaxForwards(Integer value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public MaxForwards(Supplier<Integer> value) {
+		super(NAME, value);
 	}
 }

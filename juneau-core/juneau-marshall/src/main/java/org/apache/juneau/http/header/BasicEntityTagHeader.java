@@ -43,44 +43,51 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicEntityTagHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicEntityTagHeader of(String name, Object value) {
+	public static BasicEntityTagHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicEntityTagHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicEntityTagHeader of(String name, EntityTag value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicEntityTagHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A raw entity validator values (e.g. <js>"\"xyzzy\""</js>).
-	 * 		<li>An {@link EntityTag} object.
-	 * 	</ul>
-	 * @return A new {@link BasicEntityTagHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicEntityTagHeader of(String name, Supplier<?> value) {
+	public static BasicEntityTagHeader of(String name, Supplier<EntityTag> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicEntityTagHeader(name, value);
 	}
 
-	private EntityTag parsed;
+	private final EntityTag value;
+	private final Supplier<EntityTag> supplier;
 
 	/**
 	 * Constructor.
@@ -88,24 +95,51 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A raw entity validator values (e.g. <js>"\"xyzzy\""</js>).
-	 * 		<li>An {@link EntityTag} object.
-	 * 	</ul>
+	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicEntityTagHeader(String name, Object value) {
+	public BasicEntityTagHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicEntityTagHeader(String name, EntityTag value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicEntityTagHeader(String name, Supplier<EntityTag> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o instanceof String)
-			return (String)o;
-		return stringify(getParsedValue());
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -114,12 +148,16 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @return This header as an {@link EntityTag}, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<EntityTag> asEntityTag() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
-	private EntityTag getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		return EntityTag.of(getRawValue());
+	private static String serialize(EntityTag value) {
+		return stringify(value);
+	}
+
+	private EntityTag parse(String value) {
+		return EntityTag.of(value);
 	}
 }

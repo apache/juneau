@@ -231,7 +231,11 @@ public class ResponseHeader implements Header {
 			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
 			if (cc != null)
 				return cc.invoke(getName(), getValue());
-		} catch (Exception e) {
+		} catch (Throwable e) {
+			if (e instanceof ExecutableException)
+				e = ((ExecutableException)e).getCause();
+			if (e instanceof RuntimeException)
+				throw (RuntimeException)e;
 			throw new RuntimeException(e);
 		}
 		throw new BasicRuntimeException("Could not determine a method to construct type {0}", c.getClass().getName());

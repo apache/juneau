@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -220,14 +219,14 @@ public class HeaderList {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static HeaderList ofPairs(Object...pairs) {
+	public static HeaderList ofPairs(String...pairs) {
 		if (pairs == null || pairs.length == 0)
 			return EMPTY;
 		if (pairs.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
 		ArrayBuilder<Header> b = ArrayBuilder.create(Header.class, pairs.length / 2, true);
 		for (int i = 0; i < pairs.length; i+=2)
-			b.add(BasicHeader.of(stringify(pairs[i]), pairs[i+1]));
+			b.add(BasicHeader.of(pairs[i], pairs[i+1]));
 		return new HeaderList(b.toArray());
 	}
 

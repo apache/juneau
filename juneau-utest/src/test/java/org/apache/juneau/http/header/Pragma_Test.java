@@ -30,6 +30,7 @@ public class Pragma_Test {
 
 	private static final String HEADER = "Pragma";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class Pragma_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(pragma(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(pragma(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(pragma(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(pragma(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(pragma((String)null)).run().assertBody().isEmpty();
-		c.get().header(pragma((Object)null)).run().assertBody().isEmpty();
-		c.get().header(pragma((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(pragma((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(pragma(()->null)).run().assertBody().isEmpty();
-		c.get().header(pragma(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(pragma(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(pragma(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(pragma(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Pragma(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

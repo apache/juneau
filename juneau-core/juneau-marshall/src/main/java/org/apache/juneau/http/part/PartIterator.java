@@ -14,12 +14,14 @@ package org.apache.juneau.http.part;
 
 import java.util.Iterator;
 
+import org.apache.http.*;
+
 /**
- * A type-safe iterator for {@link Part} objects.
+ * A type-safe iterator for {@link NameValuePair} objects.
  *
  * {@review}
  */
-public interface PartIterator extends Iterator<Part> {
+public interface PartIterator extends Iterator<NameValuePair> {
 
 	/**
 	 * Indicates whether there is another part in this iteration.

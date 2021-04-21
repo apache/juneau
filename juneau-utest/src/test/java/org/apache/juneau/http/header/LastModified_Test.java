@@ -12,10 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.time.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -30,6 +33,7 @@ public class LastModified_Test {
 
 	private static final String HEADER = "Last-Modified";
 	private static final String VALUE = "Sat, 29 Oct 1994 19:43:31 GMT";
+	private static final ZonedDateTime PARSED = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(VALUE)).truncatedTo(SECONDS);
 
 	@Rest
 	public static class A {
@@ -47,15 +51,16 @@ public class LastModified_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(lastModified(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(lastModified(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(lastModified((String)null)).run().assertBody().isEmpty();
-		c.get().header(lastModified((Object)null)).run().assertBody().isEmpty();
-		c.get().header(lastModified((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(lastModified((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
 		c.get().header(lastModified(()->null)).run().assertBody().isEmpty();
-		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(lastModified(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(lastModified(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new LastModified(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

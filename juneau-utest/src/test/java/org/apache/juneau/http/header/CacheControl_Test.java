@@ -30,6 +30,7 @@ public class CacheControl_Test {
 
 	private static final String HEADER = "Cache-Control";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class CacheControl_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(cacheControl(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(cacheControl(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(cacheControl(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(cacheControl(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(cacheControl((String)null)).run().assertBody().isEmpty();
-		c.get().header(cacheControl((Object)null)).run().assertBody().isEmpty();
-		c.get().header(cacheControl((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(cacheControl((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(cacheControl(()->null)).run().assertBody().isEmpty();
-		c.get().header(cacheControl(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(cacheControl(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(cacheControl(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(cacheControl(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new CacheControl(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

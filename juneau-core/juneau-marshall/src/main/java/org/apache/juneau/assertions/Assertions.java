@@ -19,6 +19,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Main class for creation of assertions for testing.
@@ -56,6 +57,39 @@ public class Assertions {
 	public static final DateAssertion assertDate(Optional<Date> value) {
 		assertArgNotNull("value", value);
 		return assertDate(value.orElse(null));
+	}
+
+	/**
+	 * Used for assertion calls against {@link Version} objects.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified major version is greater than 2.</jc>
+	 * 	<jsm>assertVersion</jsm>(<jv>version</jv>).major().isGreaterThan(2);
+	 * </p>
+	 *
+	 * @param value The version object being wrapped.
+	 * @return A new {@link VersionAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final VersionAssertion assertVersion(Version value) {
+		return VersionAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against {@link Version} objects.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified major version is greater than 2.</jc>
+	 * 	<jsm>assertVersion</jsm>(<jv>version</jv>).major().isGreaterThan(2);
+	 * </p>
+	 *
+	 * @param value The version object being wrapped.
+	 * @return A new {@link VersionAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final VersionAssertion assertVersion(Optional<Version> value) {
+		assertArgNotNull("value", value);
+		return assertVersion(value.orElse(null));
 	}
 
 	/**

@@ -83,15 +83,17 @@ import org.apache.juneau.internal.*;
 public class Connection extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Connection";
 
 	private static final Cache<String,Connection> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed and cached header.
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A cached {@link Connection} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Connection of(String value) {
 		if (value == null)
@@ -99,43 +101,21 @@ public class Connection extends BasicStringHeader {
 		Connection x = CACHE.get(value);
 		if (x == null)
 			x = CACHE.put(value, new Connection(value));
-		return x;
-	}
-
-	/**
-	 * Convenience creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Connection} object.
-	 */
-	public static Connection of(Object value) {
-		if (value == null)
-			return null;
 		return new Connection(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link Connection} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Connection of(Supplier<?> value) {
+	public static Connection of(Supplier<String> value) {
 		if (value == null)
 			return null;
 		return new Connection(value);
@@ -146,25 +126,24 @@ public class Connection extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Connection(Object value) {
-		super("Connection", value);
+	public Connection(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Connection(String value) {
-		this((Object)value);
+	public Connection(Supplier<String> value) {
+		super(NAME, value);
 	}
 
 	/**

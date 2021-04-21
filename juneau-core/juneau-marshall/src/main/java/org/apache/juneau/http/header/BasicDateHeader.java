@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
@@ -46,95 +47,103 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicDateHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicDateHeader of(String name, Object value) {
+	public static BasicDateHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicDateHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicDateHeader of(String name, ZonedDateTime value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicDateHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicDateHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicDateHeader of(String name, Supplier<?> value) {
+	public static BasicDateHeader of(String name, Supplier<ZonedDateTime> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicDateHeader(name, value);
 	}
 
-	private ZonedDateTime parsed;
+	private final ZonedDateTime value;
+	private final Supplier<ZonedDateTime> supplier;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime} - Will be truncated to seconds.
-	 * 		<li>{@link Calendar} - Will be truncated to seconds.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicDateHeader(String name, Object value) {
+	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicDateHeader(String name, ZonedDateTime value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicDateHeader(String name, Supplier<ZonedDateTime> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof String)
-			return (String)o;
-		return RFC_1123_DATE_TIME.format(getParsedValue());
-	}
-
-	/**
-	 * Returns this header value as a {@link java.util.Calendar}.
-	 *
-	 * @return This header value as a {@link java.util.Calendar}, or {@link Optional#empty()} if the header could not be parsed.
-	 */
-	public Optional<Calendar> asCalendar() {
-		ZonedDateTime zdt = getParsedValue();
-		return ofNullable(zdt == null ? null : GregorianCalendar.from(zdt));
-	}
-
-	/**
-	 * Returns this header value as a {@link java.util.Date}.
-	 *
-	 * @return This header value as a {@link java.util.Date}, or {@link Optional#empty()} if the header could not be parsed.
-	 */
-	public Optional<java.util.Date> asDate() {
-		Calendar c = asCalendar().orElse(null);
-		return ofNullable(c == null ? null : c.getTime());
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -143,7 +152,9 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return This header value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the header could not be parsed.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
 	/**
@@ -162,19 +173,18 @@ public class BasicDateHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentZonedDateTimeAssertion<BasicDateHeader> assertZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(getParsedValue(), this);
+		return new FluentZonedDateTimeAssertion<>(asZonedDateTime().orElse(null), this);
 	}
 
-	private ZonedDateTime getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof ZonedDateTime)
-			return ((ZonedDateTime)o).truncatedTo(SECONDS);
-		if (o instanceof GregorianCalendar)
-			return ((GregorianCalendar)o).toZonedDateTime().truncatedTo(SECONDS);
-		return ZonedDateTime.from(RFC_1123_DATE_TIME.parse(o.toString())).truncatedTo(SECONDS);
+	private static String serialize(ZonedDateTime value) {
+		return value == null ? null : RFC_1123_DATE_TIME.format(value);
+	}
+
+	private static ZonedDateTime parse(String value) {
+		try {
+			return value == null ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
+		} catch (NumberFormatException e) {
+			throw runtimeException("Value ''{0}'' could not be parsed as a zoned date-time.");
+		}
 	}
 }

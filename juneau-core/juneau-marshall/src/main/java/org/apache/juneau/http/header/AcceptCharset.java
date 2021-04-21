@@ -76,15 +76,18 @@ import org.apache.juneau.internal.*;
 public class AcceptCharset extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Accept-Charset";
 
 	private static final Cache<String,AcceptCharset> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed and cached header.
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A cached {@link AcceptCharset} object.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptCharset of(String value) {
 		if (value == null)
@@ -92,7 +95,7 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 		AcceptCharset x = CACHE.get(value);
 		if (x == null)
 			x = CACHE.put(value, new AcceptCharset(value));
-		return x;
+		return new AcceptCharset(value);
 	}
 
 	/**
@@ -100,66 +103,67 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link AcceptCharset} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static AcceptCharset of(Object value) {
+	public static AcceptCharset of(StringRanges value) {
 		if (value == null)
 			return null;
 		return new AcceptCharset(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link AcceptCharset} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static AcceptCharset of(Supplier<?> value) {
+	public static AcceptCharset of(Supplier<StringRanges> value) {
 		if (value == null)
 			return null;
 		return new AcceptCharset(value);
 	}
 
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public AcceptCharset(Object value) {
-		super("Accept-Charset", value);
+	public AcceptCharset(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public AcceptCharset(String value) {
-		this((Object)value);
+	public AcceptCharset(StringRanges value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public AcceptCharset(Supplier<StringRanges> value) {
+		super(NAME, value);
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -97,45 +98,49 @@ import org.apache.juneau.http.annotation.*;
 public class IfNoneMatch extends BasicEntityTagArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "If-None-Match";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link IfNoneMatch} object.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static IfNoneMatch of(Object value) {
+	public static IfNoneMatch of(String value) {
 		if (value == null)
 			return null;
 		return new IfNoneMatch(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static IfNoneMatch of(List<EntityTag> value) {
+		if (value == null)
+			return null;
+		return new IfNoneMatch(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link IfNoneMatch} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static IfNoneMatch of(Supplier<?> value) {
+	public static IfNoneMatch of(Supplier<List<EntityTag>> value) {
 		if (value == null)
 			return null;
 		return new IfNoneMatch(value);
@@ -146,26 +151,35 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfNoneMatch(Object value) {
-		super("If-None-Match", value);
+	public IfNoneMatch(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfNoneMatch(String value) {
-		this((Object)value);
+	public IfNoneMatch(List<EntityTag> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfNoneMatch(Supplier<List<EntityTag>> value) {
+		super(NAME, value);
 	}
 }

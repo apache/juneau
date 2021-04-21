@@ -59,7 +59,7 @@ public class RemoteMeta {
 			if (! r.path().isEmpty())
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headersBuilder.append(basicHeader(resolve(h)));
+				headersBuilder.append(stringHeader(resolve(h)));
 			if (! r.version().isEmpty())
 				clientVersion = resolve(r.version());
 			if (! r.versionHeader().isEmpty())

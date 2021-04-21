@@ -31,8 +31,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicLongHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "123";
+	private static final Long PARSED = 123l;
 
 	@Rest
 	public static class A {
@@ -50,35 +51,24 @@ public class BasicLongHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(longHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(longHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(longHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(longHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(longHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(longHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(longHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(longHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(longHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(longHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(longHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-
-		c.get().header(longHeader(HEADER,"1")).run().assertBody().is("1");
-		c.get().header(longHeader(HEADER,()->"1")).run().assertBody().is("1");
-
-		c.get().header(longHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(longHeader(HEADER,1)).run().assertBody().is("1");
-		c.get().header(longHeader(HEADER,()->1)).run().assertBody().is("1");
-
-		c.get().header(longHeader(HEADER,1.0)).run().assertBody().is("1");
-		c.get().header(longHeader(HEADER,()->1.0)).run().assertBody().is("1");
-
-		c.get().header(longHeader(HEADER,""+Long.MAX_VALUE)).run().assertBody().is(""+Long.MAX_VALUE);
-		c.get().header(longHeader(HEADER,()->""+Long.MAX_VALUE)).run().assertBody().is(""+Long.MAX_VALUE);
-
-		assertThrown(()->longHeader(HEADER,()->"foo").getValue()).contains("Value could not be parsed");
+		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(null,(Supplier<Long>)null)).run().assertBody().isEmpty();
+		assertThrown(()->longHeader(HEADER,"foo")).contains("Value 'foo' could not be parsed as a long.");
 	}
 
 	@Test
 	public void a02_assertLong() throws Exception {
-		longHeader(HEADER,1).assertLong().is(1l);
+		longHeader(HEADER,1l).assertLong().is(1l);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

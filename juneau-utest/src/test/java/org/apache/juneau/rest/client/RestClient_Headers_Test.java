@@ -16,9 +16,12 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.http.HttpParts.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.http.Header;
@@ -62,10 +65,8 @@ public class RestClient_Headers_Test {
 		}
 	}
 
-	private static final Calendar CALENDAR = new GregorianCalendar(TimeZone.getTimeZone("Z"));
-	static {
-		CALENDAR.set(2000,11,31,12,34,56);
-	}
+	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Sat, 29 Oct 1994 19:43:31 GMT")).truncatedTo(SECONDS);
+	private static final String PARSEDZONEDDATETIME = "Sat, 29 Oct 1994 19:43:31 GMT";
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Method tests
@@ -289,21 +290,21 @@ public class RestClient_Headers_Test {
 		checkClient("Cache-Control").header(new CacheControl("none")).header("X-Expect","none").build().get("/headers").run().assertBody().is("['none']");
 		checkClient("Client-Version").header(new ClientVersion("1")).build().get("/headers").run().assertBody().is("['1']");
 		checkClient("Connection").header(new Connection("foo")).build().get("/headers").run().assertBody().is("['foo']");
-		checkClient("Content-Length").header(new ContentLength(123)).build().get("/headers").run().assertBody().is("['123']");
+		checkClient("Content-Length").header(new ContentLength(123l)).build().get("/headers").run().assertBody().is("['123']");
 		checkClient("Content-Type").header(new ContentType("foo")).build().get("/headers").run().assertBody().is("['foo']");
-		checkClient("Date").header(new org.apache.juneau.http.header.Date("Sun, 31 Dec 2000 12:34:56 GMT")).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		checkClient("Date").header(new org.apache.juneau.http.header.Date(CALENDAR)).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
+		checkClient("Date").header(new org.apache.juneau.http.header.Date(PARSEDZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
+		checkClient("Date").header(new org.apache.juneau.http.header.Date(ZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Expect").header(new Expect("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Forwarded").header(new Forwarded("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("From").header(new From("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Host").header(new Host("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("If-Match").header(new IfMatch("\"foo\"")).build().get("/headers").run().assertBody().is("['\"foo\"']");
-		checkClient("If-Modified-Since").header(new IfModifiedSince(CALENDAR)).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		checkClient("If-Modified-Since").header(new IfModifiedSince("Sun, 31 Dec 2000 12:34:56 GMT")).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
+		checkClient("If-Modified-Since").header(new IfModifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
+		checkClient("If-Modified-Since").header(new IfModifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("If-None-Match").header(new IfNoneMatch("\"foo\"")).build().get("/headers").run().assertBody().is("['\"foo\"']");
 		checkClient("If-Range").header(new IfRange("\"foo\"")).build().get("/headers").run().assertBody().is("['\"foo\"']");
-		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince(CALENDAR)).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince("Sun, 31 Dec 2000 12:34:56 GMT")).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
+		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
+		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Max-Forwards").header(new MaxForwards(10)).build().get("/headers").run().assertBody().is("['10']");
 		checkClient("No-Trace").header(new NoTrace("true")).build().get("/headers").run().assertBody().is("['true']");
 		checkClient("Origin").header(new Origin("foo")).build().get("/headers").run().assertBody().is("['foo']");

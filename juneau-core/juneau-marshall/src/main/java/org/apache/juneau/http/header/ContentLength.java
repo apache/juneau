@@ -64,43 +64,49 @@ import org.apache.juneau.http.annotation.*;
 public class ContentLength extends BasicLongHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Content-Length";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link ContentLength} object.
+	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentLength of(Object value) {
+	public static ContentLength of(String value) {
 		if (value == null)
 			return null;
 		return new ContentLength(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ContentLength of(Long value) {
+		if (value == null)
+			return null;
+		return new ContentLength(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link ContentLength} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentLength of(Supplier<?> value) {
+	public static ContentLength of(Supplier<Long> value) {
 		if (value == null)
 			return null;
 		return new ContentLength(value);
@@ -111,25 +117,35 @@ public class ContentLength extends BasicLongHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentLength(Object value) {
-		super("Content-Length", value);
+	public ContentLength(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentLength(String value) {
-		this((Object)value);
+	public ContentLength(Long value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentLength(Supplier<Long> value) {
+		super(NAME, value);
 	}
 }

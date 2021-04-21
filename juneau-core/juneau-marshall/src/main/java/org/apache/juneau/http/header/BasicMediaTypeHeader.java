@@ -44,59 +44,107 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicMediaTypeHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicMediaTypeHeader of(String name, Object value) {
+	public static BasicMediaTypeHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicMediaTypeHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicMediaTypeHeader of(String name, MediaType value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicMediaTypeHeader(name, value);
+	}
+
+//	/**
+//	 * Convenience creator using supplier.
+//	 *
+//	 * <p>
+//	 * Header value is re-evaluated on each call to {@link #getValue()}.
+//	 *
+//	 * @param name The header name.
+//	 * @param value
+//	 * 	The header value supplier.
+//	 * 	<br>Can be any of the following:
+//	 * 	<ul>
+//	 * 		<li>{@link String}
+//	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
+//	 * 	</ul>
+//	 * @return A new header bean, or <jk>null</jk> if the name or value is <jk>null</jk>.
+//	 */
+//	public static BasicMediaTypeHeader of(String name, Supplier<MediaType> value) {
+//		if (isEmpty(name) || value == null)
+//			return null;
+//		return new BasicMediaTypeHeader(name, value);
+//	}
+
+	private final MediaType value;
+	private final Supplier<MediaType> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicMediaTypeHeader(String name, String value) {
+		super(name, value);
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicMediaTypeHeader(String name, MediaType value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicMediaTypeHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public static BasicMediaTypeHeader of(String name, Supplier<?> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicMediaTypeHeader(name, value);
+	public BasicMediaTypeHeader(String name, Supplier<MediaType> value) {
+		super(name, (String)null);
+		this.value = null;
+		this.supplier = value;
 	}
 
-	private MediaType parsed;
-
-	/**
-	 * Constructor
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 */
-	public BasicMediaTypeHeader(String name, Object value) {
-		super(name, value);
-		if (! isSupplier(value))
-			parsed = parse();
+	@Override /* Header */
+	public String getValue() {
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -105,7 +153,9 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return This header as a {@link MediaType} object, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<MediaType> asMediaType() {
-		return ofNullable(parse());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
 	/**
@@ -262,22 +312,11 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		return asMediaType().orElse(MediaType.EMPTY).getParameter(name);
 	}
 
-	@Override /* Header */
-	public String getValue() {
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return stringify(parse());
+	private static String serialize(MediaType value) {
+		return stringify(value);
 	}
 
-	private MediaType parse() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof MediaType)
-			return (MediaType)o;
-		return new MediaType(o.toString());
+	private MediaType parse(String value) {
+		return MediaType.of(value);
 	}
 }

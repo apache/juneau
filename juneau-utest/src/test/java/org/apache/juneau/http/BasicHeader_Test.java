@@ -16,15 +16,11 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.HttpParts.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -33,23 +29,23 @@ public class BasicHeader_Test {
 
 	@Test
 	public void a01_ofPair() {
-		BasicHeader x = basicHeader("Foo:bar");
+		Header x = stringHeader("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = basicHeader(" Foo : bar ");
+		x = stringHeader(" Foo : bar ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
-		x = basicHeader(" Foo : bar : baz ");
+		x = stringHeader(" Foo : bar : baz ");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar : baz", x.getValue());
 
-		x = basicHeader("Foo");
+		x = stringHeader("Foo");
 		assertEquals("Foo", x.getName());
 		assertEquals("", x.getValue());
 
-		assertNull(basicHeader((String)null));
+		assertNull(stringHeader((String)null));
 	}
 
 	@Test
@@ -59,55 +55,6 @@ public class BasicHeader_Test {
 		assertObject(x).asJson().is("'Foo: bar'");
 		x = header("Foo",()->"bar");
 		assertObject(x).asJson().is("'Foo: bar'");
-	}
-
-	@Test
-	public void a03_cast() {
-		BasicPart x1 = part("X1","1");
-		SerializedPart x2 = serializedPart("X2","2");
-		Header x3 = header("X3","3");
-		SerializedHeader x4 = serializedHeader("X4","4");
-		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
-		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
-		Partable x7 = new Partable() {
-			@Override
-			public Part asPart() {
-				return part("X7","7");
-			}
-		};
-		Headerable x8 = new Headerable() {
-			@Override
-			public Header asHeader() {
-				return header("X8","8");
-			}
-		};
-		SerializedPart x9 = serializedPart("X9",()->"9");
-
-		assertObject(BasicHeader.cast(x1)).isType(Header.class).asJson().is("'X1: 1'");
-		assertObject(BasicHeader.cast(x2)).isType(Header.class).asJson().is("'X2: 2'");
-		assertObject(BasicHeader.cast(x3)).isType(Header.class).asJson().is("'X3: 3'");
-		assertObject(BasicHeader.cast(x4)).isType(Header.class).asJson().is("'X4: 4'");
-		assertObject(BasicHeader.cast(x5)).isType(Header.class).asJson().is("'X5: 5'");
-		assertObject(BasicHeader.cast(x6)).isType(Header.class).asJson().is("'X6: 6'");
-		assertObject(BasicHeader.cast(x7)).isType(Header.class).asJson().is("'X7: 7'");
-		assertObject(BasicHeader.cast(x8)).isType(Header.class).asJson().is("'X8: 8'");
-		assertObject(BasicHeader.cast(x9)).isType(Header.class).asJson().is("'X9: 9'");
-
-		assertThrown(()->BasicHeader.cast("X")).is("Object of type java.lang.String could not be converted to a Header.");
-		assertThrown(()->BasicHeader.cast(null)).is("Object of type null could not be converted to a Header.");
-
-		assertTrue(BasicHeader.canCast(x1));
-		assertTrue(BasicHeader.canCast(x2));
-		assertTrue(BasicHeader.canCast(x3));
-		assertTrue(BasicHeader.canCast(x4));
-		assertTrue(BasicHeader.canCast(x5));
-		assertTrue(BasicHeader.canCast(x6));
-		assertTrue(BasicHeader.canCast(x7));
-		assertTrue(BasicHeader.canCast(x8));
-		assertTrue(BasicHeader.canCast(x9));
-
-		assertFalse(BasicHeader.canCast("X"));
-		assertFalse(BasicHeader.canCast(null));
 	}
 
 	@Test
@@ -174,9 +121,5 @@ public class BasicHeader_Test {
 
 	private BasicHeader header(String name, Supplier<?> val) {
 		return basicHeader(name, val);
-	}
-
-	private BasicPart part(String name, Object val) {
-		return basicPart(name, val);
 	}
 }

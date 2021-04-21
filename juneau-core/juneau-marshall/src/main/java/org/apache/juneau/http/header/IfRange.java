@@ -12,6 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static java.time.format.DateTimeFormatter.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
+import static java.util.Optional.*;
+
+import java.time.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -64,41 +71,62 @@ import org.apache.juneau.http.annotation.*;
 public class IfRange extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
-
-	private final Object value;  // Only set if value is an entity tag.
+	private static final String NAME = "If-Range";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link IfRange} object.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static IfRange of(Object value) {
+	public static IfRange of(String value) {
 		if (value == null)
 			return null;
 		return new IfRange(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfRange of(ZonedDateTime value) {
+		if (value == null)
+			return null;
+		return new IfRange(value);
+	}
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfRange of(EntityTag value) {
+		if (value == null)
+			return null;
+		return new IfRange(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link IfRange} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Supplier must supply either {@link EntityTag} or {@link ZonedDateTime} objects.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfRange of(Supplier<?> value) {
 		if (value == null)
@@ -106,58 +134,82 @@ public class IfRange extends BasicDateHeader {
 		return new IfRange(value);
 	}
 
+	private final EntityTag value;
+	private final Supplier<?> supplier;
+
 	/**
 	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfRange(Object value) {
-		super("If-Range", dateValue(value));
-		this.value = etagValue(value);
+	public IfRange(String value) {
+		super(NAME, isEtag(value) ? null : value);
+		this.value = isEtag(value) ? EntityTag.of(value) : null;
+		this.supplier = null;
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfRange(String value) {
-		this((Object)value);
+	public IfRange(ZonedDateTime value) {
+		super(NAME, value);
+		this.value = null;
+		this.supplier = null;
 	}
 
-	private static Object dateValue(Object o) {
-		Object o2 = unwrap(o);
-		if (o2 == null || isEtag(o2))
-			return null;
-		return o;
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfRange(EntityTag value) {
+		super(NAME, (String)null);
+		this.value = value;
+		this.supplier = null;
 	}
 
-	private static Object etagValue(Object o) {
-		Object o2 = unwrap(o);
-		if (o2 == null || isEtag(o2))
-			return o;
-		return null;
-	}
-
-	private static boolean isEtag(Object o) {
-		String s = o.toString();
-		return s.startsWith("\"") || s.startsWith("W/");
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Supplier must supply either {@link EntityTag} or {@link ZonedDateTime} objects.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfRange(Supplier<?> value) {
+		super(NAME, (String)null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		if (value == null)
-			return super.getValue();
-		Object o = unwrap(value);
-		return (o == null ? null : o.toString());
+		if (supplier != null) {
+			Object o = supplier.get();
+			if (o == null)
+				return null;
+			if (o instanceof EntityTag) {
+				return o.toString();
+			} else if (o instanceof ZonedDateTime) {
+				return RFC_1123_DATE_TIME.format((ZonedDateTime)o);
+			}
+			throw runtimeException("Invalid object type returned by supplier: {0}", o.getClass().getName());
+		}
+		if (value != null)
+			return stringify(value);
+		return super.getValue();
 	}
 
 	/**
@@ -165,7 +217,15 @@ public class IfRange extends BasicDateHeader {
 	 *
 	 * @return This header as an {@link EntityTag}.
 	 */
-	public EntityTag asEntityTag() {
-		return (value == null ? null : EntityTag.of(value));
+	public Optional<EntityTag> asEntityTag() {
+		if (supplier != null) {
+			Object o = supplier.get();
+			return ofNullable(o instanceof EntityTag ? (EntityTag)o : null);
+		}
+		return ofNullable(value);
+	}
+
+	private static boolean isEtag(String s) {
+		return s.startsWith("\"") || s.startsWith("W/");
 	}
 }

@@ -298,7 +298,7 @@ public class RestOp_Params_Test {
 		b.get("/accept").accept("text/foo+bar").run().assertBody().is("text/foo+bar");
 		b.get("/accept").accept("text/*").run().assertBody().is("text/*");
 		b.get("/accept").accept("*/foo").run().assertBody().is("*/foo");
-		b.get("/accept").accept("text/foo;q=1.0").run().assertBody().is("text/foo");
+		b.get("/accept").accept("text/foo;q=1.0").run().assertBody().is("text/foo;q=1.0");
 		b.get("/accept").accept("text/foo;q=0.9").run().assertBody().is("text/foo;q=0.9");
 		b.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").run().assertBody().is("text/foo;x=X;q=0.9;y=Y");
 		b.get("/accept?Accept=text/foo").run().assertBody().is("text/foo");

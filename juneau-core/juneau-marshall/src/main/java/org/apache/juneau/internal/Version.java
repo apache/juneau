@@ -14,20 +14,48 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
+
+import static java.util.Optional.*;
+
 /**
  * Represents a version string such as <js>"1.2"</js> or <js>"1.2.3"</js>
  *
  * <p>
  * Used to compare version numbers.
  */
-public class Version {
+public class Version implements Comparable<Version> {
+
+	public static final boolean NEEDS_TESTING = true;
 
 	private int[] parts;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	A string of the form <js>"#.#..."</js> where there can be any number of parts.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"1.2"</js>
+	 * 		<li><js>"1.2.3"</js>
+	 * 		<li><js>"0.1"</js>
+	 * 		<li><js>".1"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Version of(String value) {
+		if (value == null)
+			return null;
+		return new Version(value);
+	}
+
+
+	/**
 	 * Constructor
 	 *
-	 * @param versionString
+	 * @param value
 	 * 	A string of the form <js>"#.#..."</js> where there can be any number of parts.
 	 * 	<br>Valid values:
 	 * 	<ul>
@@ -38,10 +66,10 @@ public class Version {
 	 * 	</ul>
 	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
-	public Version(String versionString) {
-		if (isEmpty(versionString))
-			versionString = "0";
-		String[] sParts = split(versionString, '.');
+	public Version(String value) {
+		if (isEmpty(value))
+			value = "0";
+		String[] sParts = split(value, '.');
 		parts = new int[sParts.length];
 		for (int i = 0; i < sParts.length; i++) {
 			try {
@@ -50,6 +78,45 @@ public class Version {
 				parts[i] = Integer.MAX_VALUE;
 			}
 		}
+	}
+
+	/**
+	 * Returns the version part at the specified zero-indexed value.
+	 *
+	 * @param index The index of the version part.
+	 * @return The version part, never <jk>null</jk>.
+	 */
+	public Optional<Integer> getPart(int index) {
+		if (parts.length <= index)
+			return empty();
+		return ofNullable(parts[index]);
+	}
+
+	/**
+	 * Returns the major version part (i.e. part at index 0).
+	 *
+	 * @return The version part, never <jk>null</jk>.
+	 */
+	public Optional<Integer> getMajor() {
+		return getPart(0);
+	}
+
+	/**
+	 * Returns the minor version part (i.e. part at index 1).
+	 *
+	 * @return The version part, never <jk>null</jk>.
+	 */
+	public Optional<Integer> getMinor() {
+		return getPart(1);
+	}
+
+	/**
+	 * Returns the maintenance version part (i.e. part at index 2).
+	 *
+	 * @return The version part, never <jk>null</jk>.
+	 */
+	public Optional<Integer> getMaintenance() {
+		return getPart(2);
 	}
 
 	/**
@@ -134,5 +201,18 @@ public class Version {
 	@Override /* Object */
 	public String toString() {
 		return join(parts, '.');
+	}
+
+	@Override
+	public int compareTo(Version v) {
+		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
+			int c = parts[i] - v.parts[i];
+			if (c != 0)
+				return c;
+		}
+		for (int i = parts.length; i < v.parts.length; i++)
+			if (v.parts[i] > 0)
+				return 1;
+		return 0;
 	}
 }

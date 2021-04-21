@@ -16,8 +16,10 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,7 +31,8 @@ import org.junit.*;
 public class IfNoneMatch_Test {
 
 	private static final String HEADER = "If-None-Match";
-	private static final String VALUE = "\"foo\"";
+	private static final String VALUE = "\"foo\", \"bar\"";
+	private static final List<EntityTag> PARSED = AList.of(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
 
 	@Rest
 	public static class A {
@@ -47,15 +50,16 @@ public class IfNoneMatch_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(ifNoneMatch(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(ifNoneMatch(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(ifNoneMatch(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(ifNoneMatch(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(ifNoneMatch((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifNoneMatch((Object)null)).run().assertBody().isEmpty();
-		c.get().header(ifNoneMatch((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(ifNoneMatch((Supplier<List<EntityTag>>)null)).run().assertBody().isEmpty();
 		c.get().header(ifNoneMatch(()->null)).run().assertBody().isEmpty();
-		c.get().header(ifNoneMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifNoneMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifNoneMatch(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(ifNoneMatch(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new IfNoneMatch(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

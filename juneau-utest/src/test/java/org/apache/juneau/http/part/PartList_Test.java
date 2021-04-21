@@ -19,6 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -31,7 +32,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class PartList_Test {
 
-	private static final Part
+	private static final NameValuePair
 		FOO_1 = part("Foo","1"),
 		FOO_2 = part("Foo","2"),
 		FOO_3 = part("Foo","3"),
@@ -85,9 +86,9 @@ public class PartList_Test {
 		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5");
 		x.append(PartList.of(FOO_6, FOO_7).getAll());
 		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
-		x.append((Part)null);
+		x.append((NameValuePair)null);
 		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
-		x.append((List<Part>)null);
+		x.append((List<NameValuePair>)null);
 		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
 
 		assertObject(new PartList.Null()).isString("");
@@ -108,7 +109,7 @@ public class PartList_Test {
 
 		assertThrown(()->partList("Foo")).is("Odd number of parameters passed into PartList.ofPairs()");
 
-		x = PartList.of((List<Part>)null);
+		x = PartList.of((List<NameValuePair>)null);
 		assertObject(x).isString("");
 
 		x = PartList.of(Collections.emptyList());
@@ -117,7 +118,7 @@ public class PartList_Test {
 		x = PartList.of(AList.of(FOO_1));
 		assertObject(x).isString("Foo=1");
 
-		x = PartList.of((Part[])null);
+		x = PartList.of((NameValuePair[])null);
 		assertObject(x).isString("");
 
 		x = PartList.of();
@@ -177,7 +178,7 @@ public class PartList_Test {
 		assertObject(x.get("Foo")).isString("Foo=1");
 		assertObject(x.get("Bar")).isNull();
 		x = PartList.of(FOO_1, FOO_2, FOO_3, X_x);
-		assertObject(x.get("Foo")).isString("Foo=1%2C2%2C3");
+		assertObject(x.get("Foo")).isString("Foo=1,2,3");
 		assertObject(x.get("Bar")).isNull();
 	}
 
@@ -195,9 +196,9 @@ public class PartList_Test {
 		assertObject(x.get("Foo", APart.class)).isString("a=1");
 		assertObject(x.get("Bar", APart.class)).isNull();
 		x = PartList.of(FOO_1, FOO_2, FOO_3, X_x);
-		assertObject(x.get("Foo", APart.class)).isString("a=1%2C2%2C3");
+		assertObject(x.get("Foo", APart.class)).isString("a=1,2,3");
 		assertObject(x.get("Bar", APart.class)).isNull();
-		assertObject(x.get(Foo.class)).isString("Foo=1%2C2%2C3");
+		assertObject(x.get(Foo.class)).isString("Foo=1,2,3");
 		final PartList x2 = x;
 		assertThrown(()->x2.get(String.class)).contains("Part name could not be found on bean type 'java.lang.String'");
 	}
@@ -347,13 +348,13 @@ public class PartList_Test {
 			.create()
 			.append()
 			.append((PartList)null)
-			.append((Part)null)
-			.append((Part[])null)
+			.append((NameValuePair)null)
+			.append((NameValuePair[])null)
 			.append(x1)
 			.append(FOO_2, FOO_3)
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
-			.append((List<Part>)null)
+			.append((List<NameValuePair>)null)
 			.append(AList.of(FOO_4))
 			.build();
 		assertObject(x2).isString("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4");
@@ -366,13 +367,13 @@ public class PartList_Test {
 			.create()
 			.prepend()
 			.prepend((PartList)null)
-			.prepend((Part)null)
-			.prepend((Part[])null)
+			.prepend((NameValuePair)null)
+			.prepend((NameValuePair[])null)
 			.prepend(x1)
 			.prepend(FOO_2, FOO_3)
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
-			.prepend((List<Part>)null)
+			.prepend((List<NameValuePair>)null)
 			.prepend(AList.of(FOO_4))
 			.build();
 		assertObject(x2).isString("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1");
@@ -384,7 +385,7 @@ public class PartList_Test {
 			.create()
 			.append(FOO_1,FOO_2,FOO_3,FOO_4,FOO_5,FOO_6,FOO_7)
 			.remove((PartList)null)
-			.remove((Part)null)
+			.remove((NameValuePair)null)
 			.remove(PartList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
@@ -405,7 +406,7 @@ public class PartList_Test {
 			.append(FOO_1,FOO_2)
 			.set(FOO_3)
 			.set(BAR_1)
-			.set((Part)null)
+			.set((NameValuePair)null)
 			.set((PartList)null)
 			.build();
 		assertObject(x).isString("Foo=3&Bar=1");
@@ -420,7 +421,7 @@ public class PartList_Test {
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set((Part[])null)
+			.set((NameValuePair[])null)
 			.set(null,FOO_3,FOO_4,FOO_5)
 			.build();
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
@@ -428,7 +429,7 @@ public class PartList_Test {
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set((List<Part>)null)
+			.set((List<NameValuePair>)null)
 			.set(AList.of(null,FOO_3,FOO_4,FOO_5))
 			.build();
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
@@ -529,10 +530,10 @@ public class PartList_Test {
 
 		PartList x9 = PartList
 			.create()
-			.setDefault((Part)null)
+			.setDefault((NameValuePair)null)
 			.setDefault((PartList)null)
-			.setDefault((Part[])null)
-			.setDefault((List<Part>)null)
+			.setDefault((NameValuePair[])null)
+			.setDefault((List<NameValuePair>)null)
 			.build();
 		assertObject(x9).isString("");
 
@@ -570,7 +571,7 @@ public class PartList_Test {
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static Part part(String name, Object val) {
+	private static NameValuePair part(String name, Object val) {
 		return basicPart(name, val);
 	}
 

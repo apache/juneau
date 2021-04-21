@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static java.time.format.DateTimeFormatter.*;import static java.util.Optional.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.time.*;
@@ -64,41 +66,62 @@ import org.apache.juneau.http.annotation.*;
 public class RetryAfter extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
-
-	private final Object value;  // Only set if value is an integer.
+	private static final String NAME = "Retry-After";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link RetryAfter} object.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>) or an integer.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static RetryAfter of(Object value) {
+	public static RetryAfter of(String value) {
 		if (value == null)
 			return null;
 		return new RetryAfter(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static RetryAfter of(ZonedDateTime value) {
+		if (value == null)
+			return null;
+		return new RetryAfter(value);
+	}
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static RetryAfter of(Integer value) {
+		if (value == null)
+			return null;
+		return new RetryAfter(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link RetryAfter} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Supplier must supply either {@link Integer} or {@link ZonedDateTime} objects.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static RetryAfter of(Supplier<?> value) {
 		if (value == null)
@@ -106,76 +129,94 @@ public class RetryAfter extends BasicDateHeader {
 		return new RetryAfter(value);
 	}
 
+	private final Integer value;
+	private final Supplier<?> supplier;
+
 	/**
 	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>{@link Number}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>) or an integer.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public RetryAfter(Object value) {
-		super("Retry-After", dateValue(value));
-		this.value = intValue(value);
+	public RetryAfter(String value) {
+		super(NAME, isNumeric(value) ? null : value);
+		this.value = isNumeric(value) ? Integer.parseInt(value) : null;
+		this.supplier = null;
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public RetryAfter(String value) {
-		this((Object)value);
+	public RetryAfter(ZonedDateTime value) {
+		super(NAME, value);
+		this.value = null;
+		this.supplier = null;
 	}
 
-	private static Object dateValue(Object o) {
-		Object o2 = unwrap(o);
-		if (o2 == null || isInt(o2))
-			return null;
-		return o;
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public RetryAfter(Integer value) {
+		super(NAME, (String)null);
+		this.value = value;
+		this.supplier = null;
 	}
 
-	private static Object intValue(Object o) {
-		Object o2 = unwrap(o);
-		if (o2 == null || isInt(o2))
-			return o;
-		return null;
-	}
-
-	private static boolean isInt(Object o) {
-		if (o instanceof Number)
-			return true;
-		String s = o.toString();
-		char c0 = charAt(s, 0);
-		return Character.isDigit(c0);
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Supplier must supply either {@link Integer} or {@link ZonedDateTime} objects.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public RetryAfter(Supplier<?> value) {
+		super(NAME, (String)null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		if (value == null)
-			return super.getValue();
-		Object o = unwrap(value);
-		return (o == null ? null : o.toString());
+		if (supplier != null) {
+			Object o = supplier.get();
+			if (o == null)
+				return null;
+			if (o instanceof Integer) {
+				return o.toString();
+			} else if (o instanceof ZonedDateTime) {
+				return RFC_1123_DATE_TIME.format((ZonedDateTime)o);
+			}
+			throw runtimeException("Invalid object type returned by supplier: {0}", o.getClass().getName());
+		}
+		if (value != null)
+			return stringify(value);
+		return super.getValue();
 	}
 
 	/**
 	 * Returns this header value as an integer.
 	 *
-	 * @return This header value as a integer, or <c>-1</c> if the value is not an integer.
+	 * @return This header value as a integer, or an empty optional if value was <jk>null</jk> or not an integer.
 	 */
-	public int asInt() {
-		if (value != null) {
-			Object o = unwrap(value);
-			return o == null ? -1 : Integer.parseInt(o.toString());
+	public Optional<Integer> asInteger() {
+		if (supplier != null) {
+			Object o = supplier.get();
+			return ofNullable(o instanceof Integer ? (Integer)o : null);
 		}
-		return -1;
+		return ofNullable(value);
 	}
 }

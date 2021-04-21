@@ -160,7 +160,6 @@ public class ConfigurablePropertyCodeGenerator {
 		ParserBuilder.class,
 		ParserGroupBuilder.class,
 		ParserSessionArgs.class,
-		Part.class,
 		PartialContent.class,
 		PermanentRedirect.class,
 		PlainTextParserBuilder.class,

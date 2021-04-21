@@ -29,7 +29,8 @@ import org.junit.*;
 public class Age_Test {
 
 	private static final String HEADER = "Age";
-	private static final Integer VALUE = 123;
+	private static final String VALUE = "123";
+	private static final Integer PARSED = 123;
 
 	@Rest
 	public static class A {
@@ -47,14 +48,16 @@ public class Age_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(age(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(age(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(age(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(age(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(age((String)null)).run().assertBody().isEmpty();
-		c.get().header(age((Object)null)).run().assertBody().isEmpty();
-		c.get().header(age((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(age((Supplier<Integer>)null)).run().assertBody().isEmpty();
 		c.get().header(age(()->null)).run().assertBody().isEmpty();
-		c.get().header(age(VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(age(VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(age(()->VALUE)).run().assertBody().is(VALUE.toString());
-		c.get().header(new Age(VALUE.toString())).run().assertBody().is(VALUE.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

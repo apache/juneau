@@ -40,7 +40,7 @@ public class EntityTag {
 	 * Creator.
 	 *
 	 * @param value The validator string value.
-	 * @return A new {@link EntityTag} object or <jk>null</jk> if the value was <jk>null</jk>.
+	 * @return A new header bean or <jk>null</jk> if the value was <jk>null</jk>.
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public static EntityTag of(Object value) {

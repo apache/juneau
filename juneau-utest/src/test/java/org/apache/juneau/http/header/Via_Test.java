@@ -16,8 +16,10 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -30,6 +32,7 @@ public class Via_Test {
 
 	private static final String HEADER = "Via";
 	private static final String VALUE = "foo";
+	private static final List<String> PARSED = AList.of("foo");
 
 	@Rest
 	public static class A {
@@ -47,15 +50,16 @@ public class Via_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(via(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(via(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(via(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(via(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(via((String)null)).run().assertBody().isEmpty();
-		c.get().header(via((Object)null)).run().assertBody().isEmpty();
-		c.get().header(via((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(via((Supplier<List<String>>)null)).run().assertBody().isEmpty();
 		c.get().header(via(()->null)).run().assertBody().isEmpty();
-		c.get().header(via(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(via(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(via(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(via(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Via(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

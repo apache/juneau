@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
@@ -50,11 +52,32 @@ public class HeaderListBuilder {
 	 *
 	 * @param copyFrom The bean to copy from.
 	 */
-	public HeaderListBuilder(HeaderList copyFrom) {
+	protected HeaderListBuilder(HeaderList copyFrom) {
 		entries = new ArrayList<>(copyFrom.entries.length);
 		for (int i = 0; i < copyFrom.entries.length; i++)
 			entries.add(copyFrom.entries[i]);
 		caseSensitive = copyFrom.caseSensitive;
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	protected HeaderListBuilder(HeaderListBuilder copyFrom) {
+		entries = new ArrayList<>(copyFrom.entries);
+		defaultEntries = copyFrom.defaultEntries == null ? null : new ArrayList<>(copyFrom.defaultEntries);
+		varResolver = copyFrom.varResolver;
+		caseSensitive = copyFrom.caseSensitive;
+	}
+
+	/**
+	 * Creates a modifiable copy of this builder.
+	 *
+	 * @return A shallow copy of this builder.
+	 */
+	public HeaderListBuilder copy() {
+		return new HeaderListBuilder(this);
 	}
 
 	/**
@@ -177,7 +200,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder append(String name, Object value) {
-		return append(header(name, value));
+		return append(createHeader(name, value));
 	}
 
 	/**
@@ -194,7 +217,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder append(String name, Supplier<?> value) {
-		return append(header(name, value));
+		return append(createHeader(name, value));
 	}
 
 	/**
@@ -262,7 +285,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder prepend(String name, Object value) {
-		return prepend(header(name, value));
+		return prepend(createHeader(name, value));
 	}
 
 	/**
@@ -279,7 +302,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder prepend(String name, Supplier<?> value) {
-		return prepend(header(name, value));
+		return prepend(createHeader(name, value));
 	}
 
 	/**
@@ -446,7 +469,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder set(String name, Object value) {
-		return set(header(name, value));
+		return set(createHeader(name, value));
 	}
 
 	/**
@@ -457,7 +480,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder set(String name, Supplier<?> value) {
-		return set(header(name, value));
+		return set(createHeader(name, value));
 	}
 
 	/**
@@ -571,7 +594,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder setDefault(String name, Object value) {
-		return setDefault(header(name, value));
+		return setDefault(createHeader(name, value));
 	}
 
 	/**
@@ -582,7 +605,7 @@ public class HeaderListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderListBuilder setDefault(String name, Supplier<?> value) {
-		return setDefault(header(name, value));
+		return setDefault(createHeader(name, value));
 	}
 
 	/**
@@ -638,6 +661,209 @@ public class HeaderListBuilder {
 		return this;
 	}
 
+	/**
+	 * Adds the specify header to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the header.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(Header)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(Header)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(Header)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(Header)}.
+	 * 	</ul>
+	 * @param value The header to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder add(ListOperation flag, Header value) {
+		if (flag == ListOperation.APPEND)
+			return append(value);
+		if (flag == ListOperation.PREPEND)
+			return prepend(value);
+		if (flag == ListOperation.SET)
+			return set(value);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(value);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,value) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified headers to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the header.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(Header[])}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(Header[])}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(Header[])}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(Header[])}.
+	 * 	</ul>
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder add(ListOperation flag, Header...values) {
+		if (flag == ListOperation.APPEND)
+			return append(values);
+		if (flag == ListOperation.PREPEND)
+			return prepend(values);
+		if (flag == ListOperation.SET)
+			return set(values);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(values);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified header to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the header.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(String,Object)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(String,Object)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(String,Object)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Object)}.
+	 * 	</ul>
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(ListOperation flag, String name, Object value) {
+		if (flag == ListOperation.APPEND)
+			return append(name, value);
+		if (flag == ListOperation.PREPEND)
+			return prepend(name, value);
+		if (flag == ListOperation.SET)
+			return set(name, value);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(name, value);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified header to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the header.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(String,Supplier)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(String,Supplier)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(String,Supplier)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Supplier)}.
+	 * 	</ul>
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(ListOperation flag, String name, Supplier<?> value) {
+		if (flag == ListOperation.APPEND)
+			return append(name, value);
+		if (flag == ListOperation.PREPEND)
+			return prepend(name, value);
+		if (flag == ListOperation.SET)
+			return set(name, value);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(name, value);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified headers to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the header.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(String,Supplier)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(String,Supplier)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(String,Supplier)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Supplier)}.
+	 * 	</ul>
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public HeaderListBuilder add(ListOperation flag, List<Header> values) {
+		if (flag == ListOperation.APPEND)
+			return append(values);
+		if (flag == ListOperation.PREPEND)
+			return prepend(values);
+		if (flag == ListOperation.SET)
+			return set(values);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(values);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified headers to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the header.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(HeaderList)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(HeaderList)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(HeaderList)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(HeaderList)}.
+	 * 	</ul>
+	 * @param values The headers to add.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder add(ListOperation flag, HeaderList values) {
+		if (flag == ListOperation.APPEND)
+			return append(values);
+		if (flag == ListOperation.PREPEND)
+			return prepend(values);
+		if (flag == ListOperation.SET)
+			return set(values);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(values);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+	}
+
+	/**
+	 * Performs an operation on the headers of this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param c The consumer.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder forEach(Consumer<Header> c) {
+		for (int i = 0, j = entries.size(); i < j; i++)
+			c.accept(entries.get(i));
+		return this;
+	}
+
+	/**
+	 * Performs an operation on the headers with the specified name in this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param name The part name.
+	 * @param c The consumer.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderListBuilder forEach(String name, Consumer<Header> c) {
+		for (int i = 0, j = entries.size(); i < j; i++) {
+			Header x = entries.get(i);
+			if (eq(name, x.getName()))
+				c.accept(x);
+		}
+		return this;
+	}
+
 	private boolean isResolving() {
 		return varResolver != null;
 	}
@@ -652,11 +878,18 @@ public class HeaderListBuilder {
 		return o;
 	}
 
-	private Header header(String name, Object value) {
-		return isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
-	}
-
-	private Header header(String name, Supplier<?> value) {
+	/**
+	 * Creates a new header out of the specified name/value pair.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return A new header.
+	 */
+	public Header createHeader(String name, Object value) {
+		if (value instanceof Supplier<?>) {
+			Supplier<?> value2 = (Supplier<?>)value;
+			return isResolving() ? new BasicHeader(name, resolver(value2)) : new BasicHeader(name, value2);
+		}
 		return isResolving() ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
 	}
 

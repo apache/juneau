@@ -29,7 +29,8 @@ import org.junit.*;
 public class NoTrace_Test {
 
 	private static final String HEADER = "No-Trace";
-	private static final String VALUE = "foo";
+	private static final String VALUE = "true";
+	private static final Boolean PARSED = Boolean.TRUE;
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class NoTrace_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(noTrace(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(noTrace(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(noTrace(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(noTrace(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(noTrace((String)null)).run().assertBody().isEmpty();
-		c.get().header(noTrace((Object)null)).run().assertBody().isEmpty();
-		c.get().header(noTrace((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(noTrace((Supplier<Boolean>)null)).run().assertBody().isEmpty();
 		c.get().header(noTrace(()->null)).run().assertBody().isEmpty();
-		c.get().header(noTrace(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(noTrace(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(noTrace(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(noTrace(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new NoTrace(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

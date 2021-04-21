@@ -14,6 +14,8 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 import java.util.*;
 
@@ -33,13 +35,13 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * This header isn't part of the RFC2616 specification, but is provided to allow for Java exception information
  * to be delivered to remote REST Java interfaces.
- * 
+ *
  * <p>
  * This header supports comma-delimited values for multiple thrown values.
  * <p class='bcode w800'>
  * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found,java.lang.RuntimeException;foo
  * </p>
- * 
+ *
  * <p>
  * Note that this is equivalent to specifying multiple header values.
  * <p class='bcode w800'>
@@ -51,38 +53,20 @@ import org.apache.juneau.http.annotation.*;
 public class Thrown extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Thrown";
 
 	/**
 	 * An empty unmodifiable Thrown header.
 	 */
 	public static final Thrown EMPTY = new Thrown((String)null);
 
-	private final List<Part> parts;
-
-	/**
-	 * Convenience creator.
-	 *
-	 * @param values
-	 * 	The header value.
-	 * @return A new {@link Exception} object.
-	 */
-	public static Thrown of(Throwable...values) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
-				sb.append(", ");
-			Throwable t = values[i];
-			sb.append(urlEncode(t.getClass().getName())).append(";").append(urlEncode(t.getMessage()));
-		}
-		return new Thrown(sb.toString());
-	}
-
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A new {@link Exception} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Thrown of(String value) {
 		if (value == null)
@@ -91,23 +75,43 @@ public class Thrown extends BasicCsvArrayHeader {
 	}
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param values
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Thrown of(Throwable...values) {
+		return new Thrown(Arrays.asList(values).stream().map(Part::new).collect(toList()));
+	}
+
+	private final List<Part> value;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
 	 */
 	public Thrown(String value) {
-		super("Thrown", value);
+		super(NAME, value);
 		List<Part> l = new ArrayList<>();
-		for (String s : asList().orElse(emptyList())) {
-			int i = value.indexOf(';');
-			if (i != -1) {
-				l.add(new Part(urlDecode(s.substring(0, i).trim()), urlDecode(s.substring(i+1).trim())));
-			} else {
-				l.add(new Part(urlDecode(s), null));
-			}
-		}
-		parts = unmodifiableList(l);
+		if (value != null)
+			for (String s : split(value))
+				l.add(new Part(s));
+		this.value = value == null ? null : unmodifiableList(l);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 */
+	public Thrown(List<Part> value) {
+		super(NAME, join(value, ", "));
+		this.value = value == null ? null : unmodifiableList(value);
 	}
 
 	/**
@@ -115,8 +119,8 @@ public class Thrown extends BasicCsvArrayHeader {
 	 *
 	 * @return The class name portion of the header, or <jk>null</jk> if not there.
 	 */
-	public List<Part> getParts() {
-		return parts;
+	public Optional<List<Part>> asParts() {
+		return ofNullable(value);
 	}
 
 	/**
@@ -125,10 +129,29 @@ public class Thrown extends BasicCsvArrayHeader {
 	public static class Part {
 
 		String className, message;
+		String value;
 
-		Part(String className, String message) {
-			this.className = className;
-			this.message = message;
+		/**
+		 * Constructor.
+		 *
+		 * @param value The header part value.
+		 */
+		public Part(String value) {
+			this.value = value;
+			int i = value.indexOf(';');
+			this.className = urlDecode(i == -1 ? value.trim() : value.substring(0, i).trim());
+			this.message = urlDecode(i == -1 ? null : value.substring(i+1).trim());
+		}
+
+		/**
+		 * Constructor.
+		 *
+		 * @param value The throwable to create the header part value from.
+		 */
+		public Part(Throwable value) {
+			this.className = value.getClass().getName();
+			this.message = value.getMessage();
+			this.value = urlEncode(value.getClass().getName()) + ';' + urlEncode(value.getMessage());
 		}
 
 		/**
@@ -147,6 +170,11 @@ public class Thrown extends BasicCsvArrayHeader {
 		 */
 		public String getMessage() {
 			return message;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return value;
 		}
 	}
 }

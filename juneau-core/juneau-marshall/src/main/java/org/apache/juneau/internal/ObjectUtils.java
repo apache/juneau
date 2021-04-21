@@ -316,6 +316,18 @@ public class ObjectUtils {
 	}
 
 	/**
+	 * Casts an object to a specific type if it's an instance of that type.
+	 *
+	 * @param c The type to cast to.
+	 * @param o The object to cast to.
+	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T cast(Class<T> c, Object o) {
+		return o != null && c.isInstance(o) ? (T)o : null;
+	}
+
+	/**
 	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
 	 * @param o The object to convert to a string.
 	 * @return An identity string.

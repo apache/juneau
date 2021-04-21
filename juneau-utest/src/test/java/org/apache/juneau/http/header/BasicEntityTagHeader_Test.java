@@ -31,6 +31,7 @@ public class BasicEntityTagHeader_Test {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "\"foo\"";
+	private static final EntityTag PARSED = EntityTag.of("\"foo\"");
 
 	@Rest
 	public static class A {
@@ -48,16 +49,18 @@ public class BasicEntityTagHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(entityTagHeader(HEADER,(String)null)).run().assertBody().isEmpty();
 		c.get().header(entityTagHeader(null,VALUE)).run().assertBody().isEmpty();
-		c.get().header(entityTagHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(entityTagHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(entityTagHeader(null,()->VALUE)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(HEADER,(Supplier<EntityTag>)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagHeader(null,()->PARSED)).run().assertBody().isEmpty();
 		c.get().header(entityTagHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(entityTagHeader(HEADER,new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(entityTagHeader(HEADER,()->VALUE)).run().assertBody().is(VALUE);
 	}
 
 	@Test

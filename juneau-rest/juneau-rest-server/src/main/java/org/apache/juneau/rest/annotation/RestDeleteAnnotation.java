@@ -459,8 +459,8 @@ public class RestDeleteAnnotation {
 
 			cpb.set(REST_encoders, merge(ConverterUtils.toType(cpb.peek(REST_encoders), Object[].class), a.encoders()));
 			cpb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
-			stringStream(a.defaultRequestHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> basicHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
 			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
 			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
 			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));

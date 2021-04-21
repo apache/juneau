@@ -101,7 +101,7 @@ public class StringRanges {
 		l.sort(RANGE_COMPARATOR);
 		ranges = l.toArray(new StringRange[l.size()]);
 
-		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ',');
+		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ", ");
 	}
 
 	/**

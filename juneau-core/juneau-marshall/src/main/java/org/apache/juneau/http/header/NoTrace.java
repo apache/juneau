@@ -20,44 +20,56 @@ import org.apache.juneau.http.annotation.*;
  * Represents a parsed <l>No-Trace</l> HTTP request header.
  */
 @Header("No-Trace")
-public class NoTrace extends BasicStringHeader {
+public class NoTrace extends BasicBooleanHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "No-Trace";
+
+	@SuppressWarnings("javadoc")
+	public static final NoTrace TRUE = of(true), FALSE = of(false);
+
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link NoTrace} object.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace of(Object value) {
+	public static NoTrace of(String value) {
 		if (value == null)
 			return null;
 		return new NoTrace(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static NoTrace of(Boolean value) {
+		if (value == null)
+			return null;
+		return new NoTrace(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
 	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link NoTrace} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace of(Supplier<?> value) {
+	public static NoTrace of(Supplier<Boolean> value) {
 		if (value == null)
 			return null;
 		return new NoTrace(value);
@@ -68,24 +80,35 @@ public class NoTrace extends BasicStringHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public NoTrace(Object value) {
-		super("No-Trace", value);
+	public NoTrace(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public NoTrace(String value) {
-		this((Object)value);
+	public NoTrace(Boolean value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public NoTrace(Supplier<Boolean> value) {
+		super(NAME, value);
 	}
 }

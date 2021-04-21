@@ -62,6 +62,6 @@ public class StringRanges_Test {
 	@Test
 	public void a04_toString() throws Exception {
 		assertString(new StringRange("*")).is("*");
-		assertString(of("foo;q=0.6,bar;q=0.9,qux")).is("qux,bar;q=0.9,foo;q=0.6");
+		assertString(of("foo;q=0.6,bar;q=0.9,qux")).is("qux, bar;q=0.9, foo;q=0.6");
 	}
 }

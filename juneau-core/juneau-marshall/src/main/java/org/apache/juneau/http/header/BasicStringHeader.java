@@ -13,10 +13,12 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 
 /**
@@ -42,59 +44,91 @@ public class BasicStringHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()}.
-	 * 	</ul>
-	 * @return A new {@link BasicStringHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicStringHeader of(String name, Object value) {
+	public static BasicStringHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicStringHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()}.
-	 * 	</ul>
-	 * @return A new {@link BasicStringHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicStringHeader of(String name, Supplier<?> value) {
+	public static BasicStringHeader of(String name, Supplier<String> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicStringHeader(name, value);
 	}
 
-	private String parsed;
+	/**
+	 * Creates a {@link Header} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 *
+	 * @param pair The pair string.
+	 * @return A new header bean.
+	 */
+	public static BasicStringHeader ofPair(String pair) {
+		if (pair == null)
+			return null;
+		int i = pair.indexOf(':');
+		if (i == -1)
+			i = pair.indexOf('=');
+		if (i == -1)
+			return of(pair, "");
+		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+	}
+
+	private final Supplier<String> supplier;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicStringHeader(String name, Object value) {
+	public BasicStringHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicStringHeader(String name, Supplier<String> value) {
+		super(name, null);
+		this.supplier = value;
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		if (supplier != null)
+			return supplier.get();
+		return super.getValue();
+	}
+
+	@Override /* BasicHeader */
+	public Optional<String> asString() {
+		return ofNullable(getValue());
 	}
 
 	/**
@@ -114,21 +148,5 @@ public class BasicStringHeader extends BasicHeader {
 	 */
 	public FluentStringAssertion<BasicStringHeader> assertString() {
 		return new FluentStringAssertion<>(getValue(), this);
-	}
-
-	@Override /* Header */
-	public String getValue() {
-		return getParsedValue();
-	}
-
-	@Override /* BasicHeader */
-	public Optional<String> asString() {
-		return Optional.ofNullable(getParsedValue());
-	}
-
-	private String getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		return stringify(getRawValue());
 	}
 }

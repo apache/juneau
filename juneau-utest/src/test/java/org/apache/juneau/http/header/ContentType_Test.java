@@ -30,7 +30,8 @@ import org.junit.*;
 public class ContentType_Test {
 
 	private static final String HEADER = "Content-Type";
-	private static final String VALUE = "foo";
+	private static final String VALUE = "foo/bar";
+	private static final MediaType PARSED = MediaType.of("foo/bar");
 
 	@Rest
 	public static class A {
@@ -48,19 +49,17 @@ public class ContentType_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(contentType((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentType((Object)null)).run().assertBody().isEmpty();
-		c.get().header(contentType((MediaType)null)).run().assertBody().isEmpty();
-		c.get().header(contentType((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(contentType(()->null)).run().assertBody().isEmpty();
+		// Normal usage.
 		c.get().header(contentType(VALUE)).run().assertBody().is(VALUE);
 		c.get().header(contentType(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentType(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(contentType(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ContentType(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentType(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentType(()->PARSED)).run().assertBody().is(VALUE);
 
-		c.get().header(contentType(MediaType.JSON)).run().assertBody().is("application/json");
-		c.get().header(contentType(()->MediaType.JSON)).run().assertBody().is("application/json");
+		// Invalid usage.
+		c.get().header(contentType((String)null)).run().assertBody().isEmpty();
+		c.get().header(contentType((MediaType)null)).run().assertBody().isEmpty();
+		c.get().header(contentType((Supplier<MediaType>)null)).run().assertBody().isEmpty();
+		c.get().header(contentType(()->null)).run().assertBody().isEmpty();
 	}
 
 	@Test

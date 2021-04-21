@@ -13,15 +13,12 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.stream.Collectors.*;
 import static java.util.Optional.*;
 import static java.util.Collections.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.
@@ -48,46 +45,51 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicEntityTagArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicEntityTagArrayHeader of(String name, Object value) {
+	public static BasicEntityTagArrayHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicEntityTagArrayHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicEntityTagArrayHeader of(String name, List<EntityTag> value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicEntityTagArrayHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicEntityTagArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicEntityTagArrayHeader of(String name, Supplier<?> value) {
+	public static BasicEntityTagArrayHeader of(String name, Supplier<List<EntityTag>> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicEntityTagArrayHeader(name, value);
 	}
 
-	private List<EntityTag> parsed;
+	private final List<EntityTag> value;
+	private final Supplier<List<EntityTag>> supplier;
 
 	/**
 	 * Constructor.
@@ -95,27 +97,51 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityTag} objects.
-	 * 		<li>A collection or array of anything else - Converted to Strings.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicEntityTagArrayHeader(String name, Object value) {
+	public BasicEntityTagArrayHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicEntityTagArrayHeader(String name, List<EntityTag> value) {
+		super(name, serialize(value));
+		this.value = value == null ? null : unmodifiableList(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicEntityTagArrayHeader(String name, Supplier<List<EntityTag>> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o instanceof String)
-			return (String)o;
-		return StringUtils.join(asEntityTags().orElse(emptyList()), ',');
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -124,29 +150,16 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @return this header value as an array of {@link EntityTag} objects, or {@link Optional#empty()} if the value was <jk>null</jk>..
 	 */
 	public Optional<List<EntityTag>> asEntityTags() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
 	}
 
-	private List<EntityTag> getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof EntityTag[])
-			return AList.of((EntityTag[])o).unmodifiable();
+	private static String serialize(List<EntityTag> value) {
+		return join(value, ", ");
+	}
 
-		AList<EntityTag> l = AList.create();
-		if (o instanceof Collection) {
-			for (Object o2 : (Collection<?>)o)
-				l.add(EntityTag.of(o2));
-		} else if (o.getClass().isArray()) {
-			for (int i = 0; i < Array.getLength(o); i++)
-				l.add(EntityTag.of(Array.get(o, i)));
-		} else {
-			for (String s : split(o.toString()))
-				l.add(EntityTag.of(s));
-		}
-		return l.unmodifiable();
+	private List<EntityTag> parse(String value) {
+		return value == null ? null : Arrays.asList(split(value, ',')).stream().map(x -> EntityTag.of(x)).collect(toList());
 	}
 }

@@ -45,7 +45,6 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.http.part.Part;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -1457,7 +1456,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		PartListBuilder x = PartList.create();
 
-		x.setDefault(properties.getInstanceArray(RESTOP_defaultQuery, Part.class, beanStore).orElse(new Part[0]));
+		x.setDefault(properties.getInstanceArray(RESTOP_defaultQuery, NameValuePair.class, beanStore).orElse(new NameValuePair[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {
@@ -1501,7 +1500,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 
 		PartListBuilder x = PartList.create();
 
-		x.setDefault(properties.getInstanceArray(RESTOP_defaultFormData, Part.class, beanStore).orElse(new Part[0]));
+		x.setDefault(properties.getInstanceArray(RESTOP_defaultFormData, NameValuePair.class, beanStore).orElse(new NameValuePair[0]));
 
 		for (Annotation[] aa : method.getParameterAnnotations()) {
 			for (Annotation a : aa) {

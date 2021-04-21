@@ -31,8 +31,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicStringRangeArrayHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "foo, bar";
+	private static final StringRanges PARSED = StringRanges.of("foo, bar");
 
 	@Rest
 	public static class A {
@@ -50,32 +51,29 @@ public class BasicStringRangeArrayHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(stringRangeArrayHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(stringRangeArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(stringRangeArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(stringRangeArrayHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(stringRangeArrayHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(stringRangeArrayHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(stringRangeArrayHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(stringRangeArrayHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(stringRangeArrayHeader(HEADER,(Supplier<StringRanges>)null)).run().assertBody().isEmpty();
+		c.get().header(stringRangeArrayHeader(null,(Supplier<StringRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(stringRangeArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(new BasicStringRangeArrayHeader(HEADER,null)).run().assertBody().isEmpty();
-		c.get().header(new BasicStringRangeArrayHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
-
-		c.get().header(stringRangeArrayHeader(HEADER,"foo")).run().assertBody().is("foo");
-		c.get().header(stringRangeArrayHeader(HEADER,"foo,bar")).run().assertBody().is("foo,bar");
-
 	}
 
 	@Test
 	public void a02_getRange() throws Exception {
-		assertString(stringRangeArrayHeader(HEADER,"foo,bar").getRange(0)).is("foo");
+		assertString(stringRangeArrayHeader(HEADER,PARSED).getRange(0)).is("foo");
 	}
 
 	@Test
 	public void a03_getRanges() throws Exception {
-		assertObject(stringRangeArrayHeader(HEADER,"foo,bar").getRanges()).asJson().is("['foo','bar']");
+		assertObject(stringRangeArrayHeader(HEADER,PARSED).getRanges()).asJson().is("['foo','bar']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

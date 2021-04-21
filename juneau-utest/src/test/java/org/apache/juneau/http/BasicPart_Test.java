@@ -68,9 +68,9 @@ public class BasicPart_Test {
 		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
-		Partable x7 = new Partable() {
+		NameValuePairable x7 = new NameValuePairable() {
 			@Override
-			public Part asPart() {
+			public NameValuePair asNameValuePair() {
 				return part("X7","7");
 			}
 		};
@@ -83,10 +83,10 @@ public class BasicPart_Test {
 
 		assertObject(BasicPart.cast(x1)).isType(NameValuePair.class).asJson().is("'X1=1'");
 		assertObject(BasicPart.cast(x2)).isType(NameValuePair.class).asJson().is("'X2=2'");
-		assertObject(BasicPart.cast(x3)).isType(NameValuePair.class).asJson().is("'X3=3'");
-		assertObject(BasicPart.cast(x4)).isType(NameValuePair.class).asJson().is("'X4=4'");
+		assertObject(BasicPart.cast(x3)).isType(NameValuePair.class).asJson().is("'X3: 3'");
+		assertObject(BasicPart.cast(x4)).isType(NameValuePair.class).asJson().is("'X4: 4'");
 		assertObject(BasicPart.cast(x5)).isType(NameValuePair.class).asJson().is("'X5=5'");
-		assertObject(BasicPart.cast(x6)).isType(NameValuePair.class).asJson().is("'X6=6'");
+		assertObject(BasicPart.cast(x6)).isType(NameValuePair.class).asJson().is("{name:'X6',value:'6'}");
 		assertObject(BasicPart.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
 		assertObject(BasicPart.cast(x8)).isType(NameValuePair.class).asJson().is("'X8=8'");
 

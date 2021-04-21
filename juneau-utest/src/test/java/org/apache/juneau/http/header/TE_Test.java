@@ -30,6 +30,7 @@ public class TE_Test {
 
 	private static final String HEADER = "TE";
 	private static final String VALUE = "foo";
+	private static final StringRanges PARSED = StringRanges.of("foo");
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class TE_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(te(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(te(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(te((String)null)).run().assertBody().isEmpty();
-		c.get().header(te((Object)null)).run().assertBody().isEmpty();
-		c.get().header(te((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(te((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(te(()->null)).run().assertBody().isEmpty();
-		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(te(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(te(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new TE(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

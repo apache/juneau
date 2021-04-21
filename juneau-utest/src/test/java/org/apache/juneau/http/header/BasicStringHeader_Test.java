@@ -28,8 +28,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicStringHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "bar";
+	private static final String PARSED = "bar";
 
 	@Rest
 	public static class A {
@@ -47,36 +48,23 @@ public class BasicStringHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(stringHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(stringHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(stringHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(stringHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(stringHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(stringHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(stringHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(stringHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(stringHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(stringHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(stringHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-
-		c.get().header(stringHeader(HEADER,"foo")).run().assertBody().is("foo");
-		c.get().header(stringHeader(HEADER,()->"foo")).run().assertBody().is("foo");
-
-		c.get().header(new BasicStringHeader(HEADER,null)).run().assertBody().isEmpty();
-		c.get().header(new BasicStringHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
-
-		c.get().header(stringHeader(HEADER,"1")).run().assertBody().is("1");
-		c.get().header(stringHeader(HEADER,()->"1")).run().assertBody().is("1");
-
-		c.get().header(stringHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(stringHeader(HEADER,1)).run().assertBody().is("1");
-		c.get().header(stringHeader(HEADER,()->1)).run().assertBody().is("1");
-
-		c.get().header(stringHeader(HEADER,1.0)).run().assertBody().is("1.0");
-		c.get().header(stringHeader(HEADER,()->1.0)).run().assertBody().is("1.0");
+		c.get().header(stringHeader(HEADER,(Supplier<String>)null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(null,(Supplier<String>)null)).run().assertBody().isEmpty();
 	}
 
 	@Test
 	public void a02_assertString() throws Exception {
-		stringHeader(HEADER,1).assertString().is("1");
+		stringHeader(HEADER,"1").assertString().is("1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -149,7 +149,7 @@ import org.apache.juneau.svl.*;
 @ThreadSafe
 public class PartList {
 
-	private static final Part[] EMPTY_ARRAY = new Part[0];
+	private static final NameValuePair[] EMPTY_ARRAY = new NameValuePair[0];
 
 	/** Represents no part supplier in annotations. */
 	public static final class Null extends PartList {}
@@ -157,7 +157,7 @@ public class PartList {
 	/** Predefined instance. */
 	public static final PartList EMPTY = new PartList();
 
-	final Part[] entries;
+	final NameValuePair[] entries;
 	final boolean caseInsensitive;
 
 	/**
@@ -178,7 +178,7 @@ public class PartList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
-	public static PartList of(List<Part> parts) {
+	public static PartList of(List<NameValuePair> parts) {
 		return parts == null || parts.isEmpty() ? EMPTY : new PartList(parts);
 	}
 
@@ -190,7 +190,7 @@ public class PartList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
-	public static PartList of(Part...parts) {
+	public static PartList of(NameValuePair...parts) {
 		return parts == null || parts.length == 0 ? EMPTY : new PartList(parts);
 	}
 
@@ -213,7 +213,7 @@ public class PartList {
 			return EMPTY;
 		if (pairs.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into PartList.ofPairs()");
-		ArrayBuilder<Part> b = ArrayBuilder.create(Part.class, pairs.length / 2, true);
+		ArrayBuilder<NameValuePair> b = ArrayBuilder.create(NameValuePair.class, pairs.length / 2, true);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicPart.of(stringify(pairs[i]), pairs[i+1]));
 		return new PartList(b.toArray());
@@ -226,15 +226,15 @@ public class PartList {
 	 */
 	public PartList(PartListBuilder builder) {
 		if (builder.defaultEntries == null) {
-			entries = builder.entries.toArray(new Part[builder.entries.size()]);
+			entries = builder.entries.toArray(new NameValuePair[builder.entries.size()]);
 		} else {
-			ArrayBuilder<Part> l = ArrayBuilder.create(Part.class, builder.entries.size() + builder.defaultEntries.size(), true);
+			ArrayBuilder<NameValuePair> l = ArrayBuilder.create(NameValuePair.class, builder.entries.size() + builder.defaultEntries.size(), true);
 
 			for (int i = 0, j = builder.entries.size(); i < j; i++)
 				l.add(builder.entries.get(i));
 
 			for (int i1 = 0, j1 = builder.defaultEntries.size(); i1 < j1; i1++) {
-				Part x = builder.defaultEntries.get(i1);
+				NameValuePair x = builder.defaultEntries.get(i1);
 				boolean exists = false;
 				for (int i2 = 0, j2 = builder.entries.size(); i2 < j2 && ! exists; i2++)
 					exists = eq(builder.entries.get(i2).getName(), x.getName());
@@ -255,8 +255,8 @@ public class PartList {
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected PartList(List<Part> parts) {
-		ArrayBuilder<Part> l = ArrayBuilder.create(Part.class, parts.size(), true);
+	protected PartList(List<NameValuePair> parts) {
+		ArrayBuilder<NameValuePair> l = ArrayBuilder.create(NameValuePair.class, parts.size(), true);
 		for (int i = 0, j = parts.size(); i < j; i++)
 			l.add(parts.get(i));
 		entries = l.toArray();
@@ -270,8 +270,8 @@ public class PartList {
 	 * 	The parts to add to the list.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected PartList(Part...parts) {
-		ArrayBuilder<Part> l = ArrayBuilder.create(Part.class, parts.length, true);
+	protected PartList(NameValuePair...parts) {
+		ArrayBuilder<NameValuePair> l = ArrayBuilder.create(NameValuePair.class, parts.length, true);
 		for (int i = 0; i < parts.length; i++)
 			l.add(parts[i]);
 		entries = l.toArray();
@@ -305,12 +305,12 @@ public class PartList {
 	 * @param name The part name.
 	 * @return A part with a condensed value, or {@link Optional#empty()} if no parts by the given name are present
 	 */
-	public Optional<Part> get(String name) {
+	public Optional<NameValuePair> get(String name) {
 
-		Part first = null;
-		List<Part> rest = null;
+		NameValuePair first = null;
+		List<NameValuePair> rest = null;
 		for (int i = 0; i < entries.length; i++) {
-			Part x = entries[i];
+			NameValuePair x = entries[i];
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -366,10 +366,10 @@ public class PartList {
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
 
-		Part first = null;
-		List<Part> rest = null;
+		NameValuePair first = null;
+		List<NameValuePair> rest = null;
 		for (int i = 0; i < entries.length; i++) {
-			Part x = entries[i];
+			NameValuePair x = entries[i];
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -434,17 +434,17 @@ public class PartList {
 	 *
 	 * @return An array containing all matching parts, or an empty array if none are found.
 	 */
-	public Part[] getAll(String name) {
-		List<Part> l = null;
+	public NameValuePair[] getAll(String name) {
+		List<NameValuePair> l = null;
 		for (int i = 0; i < entries.length; i++) {
-			Part x = entries[i];
+			NameValuePair x = entries[i];
 			if (eq(x.getName(), name)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(x);
 			}
 		}
-		return l == null ? EMPTY_ARRAY : l.toArray(new Part[l.size()]);
+		return l == null ? EMPTY_ARRAY : l.toArray(new NameValuePair[l.size()]);
 	}
 
 	/**
@@ -465,9 +465,9 @@ public class PartList {
 	 * @param name The part name.
 	 * @return The first matching part, or <jk>null</jk> if not found.
 	 */
-	public Optional<Part> getFirst(String name) {
+	public Optional<NameValuePair> getFirst(String name) {
 		for (int i = 0; i < entries.length; i++) {
-			Part x = entries[i];
+			NameValuePair x = entries[i];
 			if (eq(x.getName(), name))
 				return Optional.of(x);
 		}
@@ -483,9 +483,9 @@ public class PartList {
 	 * @param name The part name.
 	 * @return The last matching part, or <jk>null</jk> if not found.
 	 */
-	public Optional<Part> getLast(String name) {
+	public Optional<NameValuePair> getLast(String name) {
 		for (int i = entries.length - 1; i >= 0; i--) {
-			Part x = entries[i];
+			NameValuePair x = entries[i];
 			if (eq(x.getName(), name))
 				return Optional.of(x);
 		}
@@ -497,7 +497,7 @@ public class PartList {
 	 *
 	 * @return An array of all the parts in this list, or an empty array if no parts are present.
 	 */
-	public Part[] getAll() {
+	public NameValuePair[] getAll() {
 		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
 	}
 
@@ -512,7 +512,7 @@ public class PartList {
 	 */
 	public boolean contains(String name) {
 		for (int i = 0; i < entries.length; i++) {
-			Part x = entries[i];
+			NameValuePair x = entries[i];
 			if (eq(x.getName(), name))
 				return true;
 		}
@@ -549,7 +549,7 @@ public class PartList {
 	 * @param c The consumer.
 	 * @return This object (for method chaining).
 	 */
-	public PartList forEach(Consumer<Part> c) {
+	public PartList forEach(Consumer<NameValuePair> c) {
 		for (int i = 0; i < entries.length; i++)
 			c.accept(entries[i]);
 		return this;
@@ -566,7 +566,7 @@ public class PartList {
 	 * @param c The consumer.
 	 * @return This object (for method chaining).
 	 */
-	public PartList forEach(String name, Consumer<Part> c) {
+	public PartList forEach(String name, Consumer<NameValuePair> c) {
 		for (int i = 0; i < entries.length; i++)
 			if (eq(name, entries[i].getName()))
 				c.accept(entries[i]);
@@ -577,11 +577,11 @@ public class PartList {
 	 * Returns a stream of the parts in this list.
 	 *
 	 * <p>
-	 * This does not involve a copy of the underlying array of <c>Part</c> objects so should perform well.
+	 * This does not involve a copy of the underlying array of <c>NameValuePair</c> objects so should perform well.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public Stream<Part> stream() {
+	public Stream<NameValuePair> stream() {
 		return Arrays.stream(entries);
 	}
 
@@ -589,12 +589,12 @@ public class PartList {
 	 * Returns a stream of the parts in this list with the specified name.
 	 *
 	 * <p>
-	 * This does not involve a copy of the underlying array of <c>Part</c> objects so should perform well.
+	 * This does not involve a copy of the underlying array of <c>NameValuePair</c> objects so should perform well.
 	 *
 	 * @param name The part name.
 	 * @return This object (for method chaining).
 	 */
-	public Stream<Part> stream(String name) {
+	public Stream<NameValuePair> stream(String name) {
 		return Arrays.stream(entries).filter(x->eq(name, x.getName()));
 	}
 
@@ -618,7 +618,7 @@ public class PartList {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < entries.length; i++) {
-			Part p = entries[i];
+			NameValuePair p = entries[i];
 			String v = p.getValue();
 			if (v != null) {
 				if (sb.length() > 0)

@@ -32,8 +32,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicMediaRangeArrayHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "foo/bar;x=1";
+	private static final MediaRanges PARSED = MediaRanges.of("foo/bar;x=1");
 
 	@Rest
 	public static class A {
@@ -51,22 +52,19 @@ public class BasicMediaRangeArrayHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(mediaRangeArrayHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(mediaRangeArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangeArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangeArrayHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangeArrayHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(mediaRangeArrayHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(mediaRangeArrayHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(mediaRangeArrayHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(mediaRangeArrayHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(mediaRangeArrayHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(mediaRangeArrayHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangeArrayHeader(null,(Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(mediaRangeArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(new BasicMediaRangeArrayHeader(HEADER,null)).run().assertBody().isEmpty();
-		c.get().header(new BasicMediaRangeArrayHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
-
-		c.get().header(mediaRangeArrayHeader(HEADER,"foo/bar;x=1")).run().assertBody().is("foo/bar;x=1");
-
-		c.get().header(mediaRangeArrayHeader(HEADER,MediaRanges.of("foo/bar;x=1"))).run().assertBody().is("foo/bar;x=1");
 	}
 
 	@Test

@@ -30,6 +30,7 @@ public class ProxyAuthorization_Test {
 
 	private static final String HEADER = "Proxy-Authorization";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class ProxyAuthorization_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(proxyAuthorization(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(proxyAuthorization(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(proxyAuthorization(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(proxyAuthorization(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(proxyAuthorization((String)null)).run().assertBody().isEmpty();
-		c.get().header(proxyAuthorization((Object)null)).run().assertBody().isEmpty();
-		c.get().header(proxyAuthorization((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(proxyAuthorization((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(proxyAuthorization(()->null)).run().assertBody().isEmpty();
-		c.get().header(proxyAuthorization(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(proxyAuthorization(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(proxyAuthorization(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(proxyAuthorization(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ProxyAuthorization(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

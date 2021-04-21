@@ -29,7 +29,8 @@ import org.junit.*;
 public class ClientVersion_Test {
 
 	private static final String HEADER = "Client-Version";
-	private static final String VALUE = "foo";
+	private static final String VALUE = "1.2.3";
+	private static final Version PARSED = Version.of("1.2.3");
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class ClientVersion_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(clientVersion((String)null)).run().assertBody().isEmpty();
-		c.get().header(clientVersion((Object)null)).run().assertBody().isEmpty();
-		c.get().header(clientVersion((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(clientVersion((Supplier<Version>)null)).run().assertBody().isEmpty();
 		c.get().header(clientVersion(()->null)).run().assertBody().isEmpty();
-		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(clientVersion(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(clientVersion(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ClientVersion(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

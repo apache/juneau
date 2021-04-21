@@ -31,6 +31,7 @@ public class Connection_Test {
 
 	private static final String HEADER = "Connection";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -48,15 +49,16 @@ public class Connection_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(connection(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(connection(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(connection((String)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(connection((Object)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(connection((Supplier<?>)null)).run().assertBody().is("Keep-Alive");
+		c.get().header(connection((Supplier<String>)null)).run().assertBody().is("Keep-Alive");
 		c.get().header(connection(()->null)).run().assertBody().is("Keep-Alive");
-		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(connection(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(connection(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Connection(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	@Test

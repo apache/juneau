@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.time.temporal.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -48,10 +50,7 @@ public class RestClient_Response_Test {
 
 	private static ABean bean = ABean.get();
 
-	private static final Calendar CALENDAR = new GregorianCalendar(TimeZone.getTimeZone("Z"));
-	static {
-		CALENDAR.set(2000,11,31,12,34,56);
-	}
+	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Sat, 29 Oct 1994 19:43:31 GMT")).truncatedTo(SECONDS);
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -173,7 +172,7 @@ public class RestClient_Response_Test {
 	public void c03_response_headerAssertions() throws Exception {
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asInteger().is(123);
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asLong().is(123l);
-		checkFooClient(C.class).build().get().json().header(dateHeader("Foo",CALENDAR)).run().assertHeader("Foo").asZonedDateTime().isEqual(((GregorianCalendar)CALENDAR).toZonedDateTime(), ChronoUnit.SECONDS);
+		checkFooClient(C.class).build().get().json().header(dateHeader("Foo",ZONEDDATETIME)).run().assertHeader("Foo").asZonedDateTime().isEqual(ZONEDDATETIME);
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertCharset().is("iso-8859-1");
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertHeader("Content-Type").is("application/json;charset=iso-8859-1");
 	}

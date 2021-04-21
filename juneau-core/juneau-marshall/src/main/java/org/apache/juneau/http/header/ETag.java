@@ -53,41 +53,49 @@ import org.apache.juneau.http.annotation.*;
 public class ETag extends BasicEntityTagHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "ETag";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ETag} object.
+	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ETag of(Object value) {
+	public static ETag of(String value) {
 		if (value == null)
 			return null;
 		return new ETag(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ETag of(EntityTag value) {
+		if (value == null)
+			return null;
+		return new ETag(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ETag} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ETag of(Supplier<?> value) {
+	public static ETag of(Supplier<EntityTag> value) {
 		if (value == null)
 			return null;
 		return new ETag(value);
@@ -98,24 +106,35 @@ public class ETag extends BasicEntityTagHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ETag(Object value) {
-		super("ETag", value);
+	public ETag(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ETag(String value) {
-		this((Object)value);
+	public ETag(EntityTag value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ETag(Supplier<EntityTag> value) {
+		super(NAME, value);
 	}
 }

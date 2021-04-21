@@ -45,44 +45,52 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicBooleanHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicBooleanHeader of(String name, Object value) {
+	public static BasicBooleanHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicBooleanHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicBooleanHeader of(String name, Boolean value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicBooleanHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicBooleanHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicBooleanHeader of(String name, Supplier<?> value) {
+	public static BasicBooleanHeader of(String name, Supplier<Boolean> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicBooleanHeader(name, value);
 	}
 
-	private Boolean parsed;
+
+	private final Boolean value;
+	private final Supplier<Boolean> supplier;
 
 	/**
 	 * Constructor.
@@ -90,23 +98,51 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicBooleanHeader(String name, Object value) {
+	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicBooleanHeader(String name, Boolean value) {
+		super(name, serialize(value));
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicBooleanHeader(String name, Supplier<Boolean> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(getParsedValue());
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
 	}
 
 	/**
@@ -115,7 +151,18 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return The header value as a boolean.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return ofNullable(getParsedValue());
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return ofNullable(value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the header value is <jk>true</jk>.
+	 *
+	 * @return <jk>true</jk> if the header value is <jk>true</jk>.
+	 */
+	public boolean isTrue() {
+		return asBoolean().orElse(false).booleanValue();
 	}
 
 	/**
@@ -134,18 +181,14 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentBooleanAssertion<BasicBooleanHeader> assertBoolean() {
-		return new FluentBooleanAssertion<>(getParsedValue(), this);
+		return new FluentBooleanAssertion<>(asBoolean().orElse(null), this);
 	}
 
-	private Boolean getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Boolean)
-			return (Boolean)o;
-		String s = o.toString();
-		return Boolean.parseBoolean(s);
+	private static String serialize(Boolean value) {
+		return stringify(value);
+	}
+
+	private Boolean parse(String value) {
+		return value == null ? null : Boolean.parseBoolean(value);
 	}
 }

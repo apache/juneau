@@ -16,6 +16,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.http.part.*;
 
 /**
@@ -45,7 +46,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicBooleanPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -86,7 +87,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicCsvArrayPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -128,7 +129,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicDatePart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -168,7 +169,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicIntegerPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -207,7 +208,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicLongPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -245,7 +246,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicUriPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -286,7 +287,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value The part value supplier.
@@ -317,7 +318,7 @@ public class HttpParts {
 	 * Creates a new {@link BasicStringPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -374,7 +375,7 @@ public class HttpParts {
 	 * @param parts The parts to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
-	public static final PartList partList(List<Part> parts) {
+	public static final PartList partList(List<NameValuePair> parts) {
 		return PartList.of(parts);
 	}
 
@@ -384,7 +385,7 @@ public class HttpParts {
 	 * @param parts The parts to add to the list.  <jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
-	public static final PartList partList(Part...parts) {
+	public static final PartList partList(NameValuePair...parts) {
 		return PartList.of(parts);
 	}
 

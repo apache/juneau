@@ -31,8 +31,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicMediaTypeHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "foo/bar";
+	private static final MediaType PARSED = MediaType.of("foo/bar");
 
 	@Rest
 	public static class A {
@@ -50,20 +51,19 @@ public class BasicMediaTypeHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(mediaTypeHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(mediaTypeHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(mediaTypeHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(mediaTypeHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(mediaTypeHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(mediaTypeHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(mediaTypeHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaTypeHeader(HEADER,(Supplier<MediaType>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaTypeHeader(null,(Supplier<MediaType>)null)).run().assertBody().isEmpty();
 		c.get().header(mediaTypeHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(new BasicMediaTypeHeader(HEADER,null)).run().assertBody().isEmpty();
-		c.get().header(new BasicMediaTypeHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
-
-		c.get().header(mediaTypeHeader(HEADER,"foo/bar;x=1")).run().assertBody().is("foo/bar;x=1");
 	}
 
 	@Test

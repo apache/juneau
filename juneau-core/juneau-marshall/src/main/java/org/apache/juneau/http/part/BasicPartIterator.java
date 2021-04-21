@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 
 import java.util.NoSuchElementException;
 
+import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -27,7 +28,7 @@ import org.apache.juneau.internal.*;
 @NotThreadSafe
 public class BasicPartIterator implements PartIterator {
 
-	private final Part[] entries;
+	private final NameValuePair[] entries;
 	private final String name;
 	private final boolean caseInsensitive;
 
@@ -40,7 +41,7 @@ public class BasicPartIterator implements PartIterator {
 	 * @param name The name of the parts over which to iterate, or <jk>null</jk> for all.
 	 * @param caseInsensitive Use case-insensitive matching for part name.
 	 */
-	public BasicPartIterator(Part[] parts, String name, boolean caseInsensitive) {
+	public BasicPartIterator(NameValuePair[] parts, String name, boolean caseInsensitive) {
 		this.entries = assertArgNotNull("parts", parts);
 		this.name = name;
 		this.caseInsensitive = caseInsensitive;
@@ -71,7 +72,7 @@ public class BasicPartIterator implements PartIterator {
 	}
 
 	@Override /* Iterator */
-	public Part next() throws NoSuchElementException {
+	public NameValuePair next() throws NoSuchElementException {
 
 		int current = currentIndex;
 

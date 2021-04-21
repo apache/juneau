@@ -10,11 +10,65 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.part;
+package org.apache.juneau.internal;
 
-import org.apache.http.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 /**
- * Defines the interface for HTTP parts such as query and form-data parameters.
+ * Builder class for {@link Exception} objects.
+ *
+ * @param <T> The exception class.
  */
-public interface Part extends NameValuePair {}
+public class ExceptionBuilder<T extends Throwable> {
+
+	private final Class<T> type;
+	private String message;
+	private Throwable causedBy;
+
+	/**
+	 * Default constructor.
+	 * @param type The exception type to create.
+	 */
+	public ExceptionBuilder(Class<T> type) {
+		this.type = type;
+	}
+
+	/**
+	 * Specifies the exception message.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ExceptionBuilder<T> message(String msg, Object...args) {
+		message = format(msg, args);
+		return this;
+	}
+
+	/**
+	 * Specifies the caused-by exception.
+	 *
+	 * @param value The caused-by exception.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ExceptionBuilder<T> causedBy(Throwable value) {
+		causedBy = value;
+		return this;
+	}
+
+	/**
+	 * Creates the exception.
+	 *
+	 * @return The exception.
+	 */
+	public T build() {
+		try {
+			return type.getConstructor(String.class, Throwable.class).newInstance(message, causedBy);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+}

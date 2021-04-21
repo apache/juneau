@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import java.time.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -75,45 +74,49 @@ import org.apache.juneau.http.annotation.*;
 public class LastModified extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Last-Modified";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link LastModified} object, or <jk>null</jk> if the value was null.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static LastModified of(Object value) {
+	public static LastModified of(String value) {
 		if (value == null)
 			return null;
 		return new LastModified(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static LastModified of(ZonedDateTime value) {
+		if (value == null)
+			return null;
+		return new LastModified(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link LastModified} object, or <jk>null</jk> if the value was null.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static LastModified of(Supplier<?> value) {
+	public static LastModified of(Supplier<ZonedDateTime> value) {
 		if (value == null)
 			return null;
 		return new LastModified(value);
@@ -124,26 +127,35 @@ public class LastModified extends BasicDateHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public LastModified(Object value) {
-		super("Last-Modified", value);
+	public LastModified(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public LastModified(String value) {
-		this((Object)value);
+	public LastModified(ZonedDateTime value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public LastModified(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
 	}
 }

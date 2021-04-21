@@ -102,7 +102,7 @@ public class HeaderList_Test {
 		x = HeaderList.of(FOO_1);
 		assertObject(x).isString("[Foo: 1]");
 
-		x = HeaderList.ofPairs((Object[])null);
+		x = HeaderList.ofPairs((String[])null);
 		assertObject(x).isString("[]");
 
 		x = HeaderList.ofPairs();
@@ -161,7 +161,7 @@ public class HeaderList_Test {
 	static class Foo extends BasicStringHeader {
 		private static final long serialVersionUID = 1L;
 
-		public Foo(Object value) {
+		public Foo(String value) {
 			super("Foo", value);
 		}
 	}

@@ -13,20 +13,17 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.StringUtils.isEmpty;
 import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -52,38 +49,19 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = new HeaderElement[] {};
 
-	private final String name;
-	private final Object value;
-	private HeaderElement[] elements;
-
 	/**
 	 * Convenience creator.
 	 *
 	 * @param name The parameter name.
 	 * @param value
 	 * 	The parameter value.
-	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
-	 * @return A new {@link BasicHeader} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static BasicHeader of(String name, Object value) {
-		return new BasicHeader(name, value);
-	}
-
-	/**
-	 * Creates a {@link Header} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
-	 *
-	 * @param pair The pair string.
-	 * @return A new {@link Header} object.
-	 */
-	public static BasicHeader ofPair(String pair) {
-		if (pair == null)
+		if (isEmpty(name) || value == null)
 			return null;
-		int i = pair.indexOf(':');
-		if (i == -1)
-			i = pair.indexOf('=');
-		if (i == -1)
-			return of(pair, "");
-		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+		return new BasicHeader(name, value);
 	}
 
 	/**
@@ -92,62 +70,19 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @param o The name value pair that makes up the header name and value.
 	 * 	The parameter value.
 	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
-	 * @return A new {@link BasicHeader} object.
+	 * @return A new header bean.
 	 */
-	public static Header of(NameValuePair o) {
+	public static BasicHeader of(NameValuePair o) {
 		return new BasicHeader(o.getName(), o.getValue());
 	}
 
-	/**
-	 * Convenience creator using supplier.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param name The parameter name.
-	 * @param value
-	 * 	The parameter value supplier.
-	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
-	 * @return A new {@link BasicHeader} object.
-	 */
-	public static BasicHeader of(String name, Supplier<?> value) {
-		return new BasicHeader(name, value);
-	}
+	private final String name;
+	private final String stringValue;
 
-	/**
-	 * Utility method for converting an arbitrary object to a {@link Header}.
-	 *
-	 * @param o
-	 * 	The object to cast or convert to a {@link Header}.
-	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Header cast(Object o) {
-		if (o instanceof Header)
-			return (Header)o;
-		if (o instanceof Headerable)
-			return ((Headerable)o).asHeader();
-		if (o instanceof NameValuePair)
-			return BasicHeader.of((NameValuePair)o);
-		if (o instanceof Partable)
-			return BasicHeader.of(((Partable)o).asPart());
-		if (o instanceof Map.Entry) {
-			Map.Entry e = (Map.Entry)o;
-			return BasicHeader.of(stringify(e.getKey()), e.getValue());
-		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", o == null ? null : o.getClass().getName());
-	}
+	private final Object value;
+	private final Supplier<Object> supplier;
 
-	/**
-	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
-	 */
-	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, Partable.class, Map.Entry.class);
-	}
+	private HeaderElement[] elements;
 
 	/**
 	 * Constructor.
@@ -160,7 +95,27 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	public BasicHeader(String name, Object value) {
 		this.name = name;
-		this.value = value;
+		this.value = value instanceof Supplier ? null : value;
+		this.stringValue = stringify(value);
+		this.supplier = cast(Supplier.class, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicHeader(String name, Supplier<Object> value) {
+		this.name = name;
+		this.value = null;
+		this.stringValue = null;
+		this.supplier = value;
 	}
 
 	/**
@@ -171,6 +126,8 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	protected BasicHeader(BasicHeader copyFrom) {
 		this.name = copyFrom.name;
 		this.value = copyFrom.value;
+		this.stringValue = copyFrom.stringValue;
+		this.supplier = copyFrom.supplier;
 	}
 
 	@Override /* Header */
@@ -180,16 +137,9 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(getRawValue());
-	}
-
-	/**
-	 * Returns the raw value of the header.
-	 *
-	 * @return The raw value of the header.
-	 */
-	public Object getRawValue() {
-		return unwrap(value);
+		if (supplier != null)
+			return stringify(supplier.get());
+		return stringValue;
 	}
 
 	@Override
@@ -197,9 +147,9 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		if (elements == null) {
 			String s = getValue();
 			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
-			if (value instanceof Supplier)
-				return x;
-			elements = x;
+			if (supplier == null)
+				elements = x;
+			return x;
 		}
 		return elements;
 	}
@@ -290,26 +240,6 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		return asString().orElse(other);
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified object is a {@link Supplier}.
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is a {@link Supplier}.
-	 */
-	protected boolean isSupplier(Object o) {
-		return o instanceof Supplier;
-	}
-
-	/**
-	 * If the specified object is a {@link Supplier}, returns the supplied value, otherwise the same value.
-	 *
-	 * @param o The object to unwrap.
-	 * @return The unwrapped object.
-	 */
-	protected static Object unwrap(Object o) {
-		return ObjectUtils.unwrap(o);
-	}
-
 	@Override /* Object */
 	public boolean equals(Object o) {
 		// Functionality provided for HttpRequest.removeHeader().
@@ -327,7 +257,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Object */
 	public String toString() {
-		return name + ": " + getValue();
+		return getName() + ": " + getValue();
 	}
 
 	// <FluentSetters>

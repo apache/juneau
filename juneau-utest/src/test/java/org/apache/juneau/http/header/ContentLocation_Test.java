@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -29,7 +30,8 @@ import org.junit.*;
 public class ContentLocation_Test {
 
 	private static final String HEADER = "Content-Location";
-	private static final String VALUE = "foo";
+	private static final String VALUE = "foo://bar";
+	private static final URI PARSED = URI.create("foo://bar");
 
 	@Rest
 	public static class A {
@@ -47,15 +49,16 @@ public class ContentLocation_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(contentLocation(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentLocation(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(contentLocation(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentLocation(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(contentLocation((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentLocation((Object)null)).run().assertBody().isEmpty();
-		c.get().header(contentLocation((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(contentLocation((Supplier<URI>)null)).run().assertBody().isEmpty();
 		c.get().header(contentLocation(()->null)).run().assertBody().isEmpty();
-		c.get().header(contentLocation(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLocation(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLocation(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(contentLocation(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ContentLocation(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

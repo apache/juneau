@@ -13,11 +13,13 @@
 package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
-import java.util.*;
+import java.time.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -31,11 +33,10 @@ import org.junit.*;
 public class RetryAfter_Test {
 
 	private static final String HEADER = "Retry-After";
-	private static final String INT_VALUE = "123";
-	private static final Calendar CALENDAR_VALUE = new GregorianCalendar(TimeZone.getTimeZone("Z"));
-	static {
-		CALENDAR_VALUE.set(2000,11,31,12,34,56);
-	}
+	private static final String VALUE1 = "123";
+	private static final String VALUE2 = "Sat, 29 Oct 1994 19:43:31 GMT";
+	private static final Integer PARSED1 = 123;
+	private static final ZonedDateTime PARSED2 = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(VALUE2)).truncatedTo(SECONDS);
 
 	@Rest
 	public static class A {
@@ -53,29 +54,34 @@ public class RetryAfter_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(retryAfter(VALUE1)).run().assertBody().is(VALUE1);
+		c.get().header(retryAfter(VALUE1)).run().assertBody().is(VALUE1);
+		c.get().header(retryAfter(PARSED1)).run().assertBody().is(VALUE1);
+		c.get().header(retryAfter(()->PARSED1)).run().assertBody().is(VALUE1);
+
+		c.get().header(retryAfter(VALUE2)).run().assertBody().is(VALUE2);
+		c.get().header(retryAfter(VALUE2)).run().assertBody().is(VALUE2);
+		c.get().header(retryAfter(PARSED2)).run().assertBody().is(VALUE2);
+		c.get().header(retryAfter(()->PARSED2)).run().assertBody().is(VALUE2);
+
+		// Invalid usage.
 		c.get().header(retryAfter((String)null)).run().assertBody().isEmpty();
-		c.get().header(retryAfter((Object)null)).run().assertBody().isEmpty();
+		c.get().header(retryAfter((ZonedDateTime)null)).run().assertBody().isEmpty();
 		c.get().header(retryAfter((Supplier<?>)null)).run().assertBody().isEmpty();
 		c.get().header(retryAfter(()->null)).run().assertBody().isEmpty();
-		c.get().header(retryAfter(INT_VALUE)).run().assertBody().is(INT_VALUE);
-		c.get().header(retryAfter(INT_VALUE)).run().assertBody().is(INT_VALUE);
-		c.get().header(retryAfter(new StringBuilder(INT_VALUE))).run().assertBody().is(INT_VALUE);
-		c.get().header(retryAfter(()->INT_VALUE)).run().assertBody().is(INT_VALUE);
-		c.get().header(retryAfter(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(retryAfter(()->CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(new RetryAfter(INT_VALUE)).run().assertBody().is(INT_VALUE);
 	}
 
 	@Test
 	public void a02_asZonedDateTime() throws Exception {
-		assertObject(retryAfter(CALENDAR_VALUE).asZonedDateTime().get().toString()).is("2000-12-31T12:34:56Z[GMT]");
+		assertObject(retryAfter(PARSED2).asZonedDateTime().get().toString()).is("1994-10-29T19:43:31Z");
 	}
 
 	@Test
 	public void a03_asInt() throws Exception {
-		assertObject(retryAfter(123).asInt()).is(123);
-		assertObject(new RetryAfter((String)null).asInt()).is(-1);
-		assertObject(retryAfter(()->null).asInt()).is(-1);
+		assertObject(retryAfter(123).asInteger()).is(123);
+		assertObject(new RetryAfter((String)null).asInteger()).isNull();
+		assertObject(retryAfter(()->null).asInteger()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

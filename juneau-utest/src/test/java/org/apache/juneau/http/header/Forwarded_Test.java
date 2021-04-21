@@ -30,6 +30,7 @@ public class Forwarded_Test {
 
 	private static final String HEADER = "Forwarded";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class Forwarded_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(forwarded(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(forwarded(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(forwarded(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(forwarded(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(forwarded((String)null)).run().assertBody().isEmpty();
-		c.get().header(forwarded((Object)null)).run().assertBody().isEmpty();
-		c.get().header(forwarded((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(forwarded((Supplier<String>)null)).run().assertBody().isEmpty();
 		c.get().header(forwarded(()->null)).run().assertBody().isEmpty();
-		c.get().header(forwarded(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(forwarded(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(forwarded(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(forwarded(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Forwarded(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

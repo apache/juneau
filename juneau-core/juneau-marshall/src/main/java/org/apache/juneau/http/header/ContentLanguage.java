@@ -77,47 +77,48 @@ import org.apache.juneau.http.annotation.*;
 public class ContentLanguage extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Content-Language";
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the value was null.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentLanguage of(Object value) {
+	public static ContentLanguage of(String value) {
 		if (value == null)
 			return null;
 		return new ContentLanguage(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ContentLanguage of(List<String> value) {
+		if (value == null)
+			return null;
+		return new ContentLanguage(value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the value was null.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentLanguage of(Supplier<?> value) {
+	public static ContentLanguage of(Supplier<List<String>> value) {
 		if (value == null)
 			return null;
 		return new ContentLanguage(value);
@@ -128,27 +129,34 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentLanguage(Object value) {
-		super("Content-Language", value);
+	public ContentLanguage(String value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentLanguage(String value) {
-		this((Object)value);
+	public ContentLanguage(List<String> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentLanguage(Supplier<List<String>> value) {
+		super(NAME, value);
 	}
 }

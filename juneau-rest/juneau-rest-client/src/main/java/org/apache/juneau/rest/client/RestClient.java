@@ -70,6 +70,7 @@ import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.http.HttpHeaders;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
@@ -2092,7 +2093,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (o instanceof HeaderList)
 				headers.append(((HeaderList)o));
 			else
-				headers.append(BasicHeader.cast(o));
+				headers.append(HttpHeaders.cast(o));
 		}
 		this.headers = headers.build();
 
@@ -2770,7 +2771,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
 				for (Map.Entry<String,Object> e : OMap.ofJson(headers).entrySet())
-					req.header(basicHeader(e.getKey(), e.getValue()));
+					req.header(stringHeader(e.getKey(), stringify(e.getValue())));
 			if (isNotEmpty(content))
 				req.bodyString(content);
 			return req;

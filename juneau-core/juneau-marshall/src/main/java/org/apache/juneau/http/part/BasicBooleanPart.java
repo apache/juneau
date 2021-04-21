@@ -50,7 +50,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * Convenience creator using supplier.
 	 *
 	 * <p>
-	 * Part value is re-evaluated on each call to {@link Part#getValue()}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
 	 * @param value

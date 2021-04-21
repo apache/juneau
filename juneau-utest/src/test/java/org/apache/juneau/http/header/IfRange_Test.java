@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
-import java.util.*;
+import java.time.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -32,12 +33,12 @@ import org.junit.*;
 public class IfRange_Test {
 
 	private static final String HEADER = "If-Range";
-	private static final String ETAG_VALUE = "\"foo\"";
-	private static final String ETAG_VALUE2 = "W/\"foo\"";
-	private static final Calendar CALENDAR_VALUE = new GregorianCalendar(TimeZone.getTimeZone("Z"));
-	static {
-		CALENDAR_VALUE.set(2000,11,31,12,34,56);
-	}
+	private static final String VALUE1 = "\"foo\"";
+	private static final String VALUE2 = "W/\"foo\"";
+	private static final String VALUE3 = "Sat, 29 Oct 1994 19:43:31 GMT";
+	private static final EntityTag PARSED1 = EntityTag.of(VALUE1);
+	private static final EntityTag PARSED2 = EntityTag.of(VALUE2);
+	private static final ZonedDateTime PARSED3 = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(VALUE3)).truncatedTo(SECONDS);
 
 	@Rest
 	public static class A {
@@ -55,31 +56,34 @@ public class IfRange_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(ifRange(VALUE1)).run().assertBody().is(VALUE1);
+		c.get().header(ifRange(VALUE1)).run().assertBody().is(VALUE1);
+		c.get().header(ifRange(PARSED1)).run().assertBody().is(VALUE1);
+		c.get().header(ifRange(()->PARSED1)).run().assertBody().is(VALUE1);
+
+		c.get().header(ifRange(VALUE2)).run().assertBody().is(VALUE2);
+		c.get().header(ifRange(VALUE2)).run().assertBody().is(VALUE2);
+		c.get().header(ifRange(PARSED2)).run().assertBody().is(VALUE2);
+		c.get().header(ifRange(()->PARSED2)).run().assertBody().is(VALUE2);
+
+		c.get().header(ifRange(VALUE3)).run().assertBody().is(VALUE3);
+		c.get().header(ifRange(VALUE3)).run().assertBody().is(VALUE3);
+		c.get().header(ifRange(PARSED3)).run().assertBody().is(VALUE3);
+		c.get().header(ifRange(()->PARSED3)).run().assertBody().is(VALUE3);
+
+		// Invalid usage.
 		c.get().header(ifRange((String)null)).run().assertBody().isEmpty();
-		c.get().header(new IfRange((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifRange((Object)null)).run().assertBody().isEmpty();
-		c.get().header(ifRange((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(ifRange((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
 		c.get().header(ifRange(()->null)).run().assertBody().isEmpty();
-		c.get().header(ifRange(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
-		c.get().header(ifRange(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
-		c.get().header(ifRange(new StringBuilder(ETAG_VALUE))).run().assertBody().is(ETAG_VALUE);
-		c.get().header(ifRange(()->ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
-		c.get().header(ifRange(ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(ifRange(ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(ifRange(new StringBuilder(ETAG_VALUE2))).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(ifRange(()->ETAG_VALUE2)).run().assertBody().is(ETAG_VALUE2);
-		c.get().header(ifRange(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(ifRange(CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(ifRange(()->CALENDAR_VALUE)).run().assertBody().is("Sun, 31 Dec 2000 12:34:56 GMT");
-		c.get().header(new IfRange(ETAG_VALUE)).run().assertBody().is(ETAG_VALUE);
 	}
 
 	@Test
 	public void a02_asEntityTag() throws Exception {
-		EntityTag x = ifRange(ETAG_VALUE).asEntityTag();
+		EntityTag x = ifRange(VALUE1).asEntityTag().get();
 		assertString(x).is("\"foo\"");
-		assertNull(ifRange(()->null).asEntityTag());
-		assertNull(ifRange(()->CALENDAR_VALUE).asEntityTag());
+		assertObject(ifRange(()->null).asEntityTag()).isNull();
+		assertObject(ifRange(()->PARSED3).asEntityTag()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

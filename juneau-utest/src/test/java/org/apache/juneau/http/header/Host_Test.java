@@ -30,6 +30,7 @@ public class Host_Test {
 
 	private static final String HEADER = "Host";
 	private static final String VALUE = "foo";
+	private static final String PARSED = "foo";
 
 	@Rest
 	public static class A {
@@ -47,15 +48,16 @@ public class Host_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(host(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(host(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(host((String)null)).run().assertBody().is("localhost");
-		c.get().header(host((Object)null)).run().assertBody().is("localhost");
-		c.get().header(host((Supplier<?>)null)).run().assertBody().is("localhost");
+		c.get().header(host((Supplier<String>)null)).run().assertBody().is("localhost");
 		c.get().header(host(()->null)).run().assertBody().is("localhost");
-		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(host(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(host(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Host(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

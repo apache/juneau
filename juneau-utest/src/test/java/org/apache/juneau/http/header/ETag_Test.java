@@ -31,6 +31,7 @@ public class ETag_Test {
 
 	private static final String HEADER = "ETag";
 	private static final String VALUE = "\"foo\"";
+	private static final EntityTag PARSED = EntityTag.of("\"foo\"");
 
 	@Rest
 	public static class A {
@@ -48,15 +49,16 @@ public class ETag_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(eTag(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(eTag(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(eTag((String)null)).run().assertBody().isEmpty();
-		c.get().header(eTag((Object)null)).run().assertBody().isEmpty();
-		c.get().header(eTag((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(eTag((Supplier<EntityTag>)null)).run().assertBody().isEmpty();
 		c.get().header(eTag(()->null)).run().assertBody().isEmpty();
-		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(eTag(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(eTag(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new ETag(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	@Test

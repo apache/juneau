@@ -47,15 +47,15 @@ public class AcceptRanges_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(acceptRanges((String)null)).run().assertBody().isEmpty();
-		c.get().header(acceptRanges((Object)null)).run().assertBody().isEmpty();
-		c.get().header(acceptRanges((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(acceptRanges(()->null)).run().assertBody().isEmpty();
+		// Normal usage.
 		c.get().header(acceptRanges(VALUE)).run().assertBody().is(VALUE);
 		c.get().header(acceptRanges(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptRanges(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
 		c.get().header(acceptRanges(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new AcceptRanges(VALUE)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
+		c.get().header(acceptRanges((String)null)).run().assertBody().isEmpty();
+		c.get().header(acceptRanges((Supplier<String>)null)).run().assertBody().isEmpty();
+		c.get().header(acceptRanges(()->null)).run().assertBody().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

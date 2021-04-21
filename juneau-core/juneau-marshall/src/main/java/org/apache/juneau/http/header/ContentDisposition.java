@@ -53,15 +53,18 @@ import org.apache.juneau.internal.*;
 public class ContentDisposition extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
+	private static final String NAME = "Content-Disposition";
 
 	private static final Cache<String,ContentDisposition> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed and cached header.
+	 * Convenience creator.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * @return A cached {@link ContentDisposition} object.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentDisposition of(String value) {
 		if (value == null)
@@ -69,7 +72,7 @@ public class ContentDisposition extends BasicStringRangeArrayHeader {
 		ContentDisposition x = CACHE.get(value);
 		if (x == null)
 			x = CACHE.put(value, new ContentDisposition(value));
-		return x;
+		return new ContentDisposition(value);
 	}
 
 	/**
@@ -77,38 +80,43 @@ public class ContentDisposition extends BasicStringRangeArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ContentDisposition} object.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentDisposition of(Object value) {
+	public static ContentDisposition of(StringRanges value) {
 		if (value == null)
 			return null;
 		return new ContentDisposition(value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 	</ul>
-	 * @return A new {@link ContentDisposition} object.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentDisposition of(Supplier<?> value) {
+	public static ContentDisposition of(Supplier<StringRanges> value) {
 		if (value == null)
 			return null;
 		return new ContentDisposition(value);
+	}
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentDisposition(String value) {
+		super(NAME, value);
 	}
 
 	/**
@@ -116,24 +124,23 @@ public class ContentDisposition extends BasicStringRangeArrayHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentDisposition(Object value) {
-		super("Content-Disposition", value);
+	public ContentDisposition(StringRanges value) {
+		super(NAME, value);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The header value.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentDisposition(String value) {
-		this((Object)value);
+	public ContentDisposition(Supplier<StringRanges> value) {
+		super(NAME, value);
 	}
 }

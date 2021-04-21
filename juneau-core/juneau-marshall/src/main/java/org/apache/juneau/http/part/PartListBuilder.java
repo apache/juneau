@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
@@ -29,8 +30,8 @@ import org.apache.juneau.svl.*;
 @NotThreadSafe
 public class PartListBuilder {
 
-	final List<Part> entries;
-	List<Part> defaultEntries;
+	final List<NameValuePair> entries;
+	List<NameValuePair> defaultEntries;
 	private VarResolver varResolver;
 	boolean caseInsensitive = false;
 
@@ -147,7 +148,7 @@ public class PartListBuilder {
 	@FluentSetter
 	public PartListBuilder append(PartList value) {
 		if (value != null)
-			for (Part x : value.entries)
+			for (NameValuePair x : value.entries)
 				append(x);
 		return this;
 	}
@@ -159,7 +160,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder append(Part value) {
+	public PartListBuilder append(NameValuePair value) {
 		if (value != null)
 			entries.add(value);
 		return this;
@@ -203,7 +204,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder append(Part...values) {
+	public PartListBuilder append(NameValuePair...values) {
 		if (values != null)
 			for (int i = 0; i < values.length; i++)
 				append(values[i]);
@@ -217,7 +218,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder append(List<Part> values) {
+	public PartListBuilder append(List<NameValuePair> values) {
 		if (values != null)
 			for (int i = 0, j = values.size(); i < j; i++)
 				append(values.get(i));
@@ -244,7 +245,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder prepend(Part value) {
+	public PartListBuilder prepend(NameValuePair value) {
 		if (value != null)
 			entries.add(0, value);
 		return this;
@@ -288,7 +289,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder prepend(Part...values) {
+	public PartListBuilder prepend(NameValuePair...values) {
 		if (values != null)
 			prepend(Arrays.asList(values));
 		return this;
@@ -301,7 +302,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder prepend(List<Part> values) {
+	public PartListBuilder prepend(List<NameValuePair> values) {
 		if (values != null)
 			entries.addAll(0, values);
 		return this;
@@ -328,7 +329,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder remove(Part value) {
+	public PartListBuilder remove(NameValuePair value) {
 		if (value != null)
 			entries.remove(value);
 		return this;
@@ -341,7 +342,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder remove(Part...values) {
+	public PartListBuilder remove(NameValuePair...values) {
 		for (int i = 0; i < values.length; i++)
 			remove(values[i]);
 		return this;
@@ -354,7 +355,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder remove(List<Part> values) {
+	public PartListBuilder remove(List<NameValuePair> values) {
 		for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
 			remove(values.get(i));
 		return this;
@@ -398,11 +399,11 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder set(Part value) {
+	public PartListBuilder set(NameValuePair value) {
 		if (value != null) {
 			boolean replaced = false;
 			for (int i = 0, j = entries.size(); i < j; i++) {
-				Part x = entries.get(i);
+				NameValuePair x = entries.get(i);
 				if (eq(x.getName(), value.getName())) {
 					if (replaced) {
 						entries.remove(i);
@@ -431,7 +432,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder set(Part...values) {
+	public PartListBuilder set(NameValuePair...values) {
 		if (values != null)
 			set(Arrays.asList(values));
 		return this;
@@ -469,14 +470,14 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder set(List<Part> values) {
+	public PartListBuilder set(List<NameValuePair> values) {
 
 		if (values != null) {
 			for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
-				Part p = values.get(i1);
+				NameValuePair p = values.get(i1);
 				if (p != null) {
 					for (int i2 = 0, j2 = entries.size(); i2 < j2; i2++) {
-						Part x = entries.get(i2);
+						NameValuePair x = entries.get(i2);
 						if (eq(x.getName(), p.getName())) {
 							entries.remove(i2);
 							j2--;
@@ -486,7 +487,7 @@ public class PartListBuilder {
 			}
 
 			for (int i = 0, j = values.size(); i < j; i++) {
-				Part x = values.get(i);
+				NameValuePair x = values.get(i);
 				if (x != null) {
 					entries.add(x);
 				}
@@ -521,13 +522,13 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder setDefault(Part value) {
+	public PartListBuilder setDefault(NameValuePair value) {
 		if (value != null) {
 			boolean replaced = false;
 			if (defaultEntries == null)
 				defaultEntries = new ArrayList<>();
 			for (int i = 0, j = defaultEntries.size(); i < j; i++) {
-				Part x = defaultEntries.get(i);
+				NameValuePair x = defaultEntries.get(i);
 				if (eq(x.getName(), value.getName())) {
 					if (replaced) {
 						defaultEntries.remove(i);
@@ -556,7 +557,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder setDefault(Part...values) {
+	public PartListBuilder setDefault(NameValuePair...values) {
 		if (values != null)
 			setDefault(Arrays.asList(values));
 		return this;
@@ -594,16 +595,16 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder setDefault(List<Part> values) {
+	public PartListBuilder setDefault(List<NameValuePair> values) {
 
 		if (values != null) {
 			if (defaultEntries == null)
 				defaultEntries = new ArrayList<>();
 			for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
-				Part p = values.get(i1);
+				NameValuePair p = values.get(i1);
 				if (p != null) {
 					for (int i2 = 0, j2 = defaultEntries.size(); i2 < j2; i2++) {
-						Part x = defaultEntries.get(i2);
+						NameValuePair x = defaultEntries.get(i2);
 						if (eq(x.getName(), p.getName())) {
 							defaultEntries.remove(i2);
 							j2--;
@@ -612,7 +613,7 @@ public class PartListBuilder {
 				}
 			}
 
-			for (Part v : values) {
+			for (NameValuePair v : values) {
 				if (v != null) {
 					defaultEntries.add(v);
 				}
@@ -651,11 +652,11 @@ public class PartListBuilder {
 		return o;
 	}
 
-	private Part part(String name, Object value) {
+	private NameValuePair part(String name, Object value) {
 		return isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
 	}
 
-	private Part part(String name, Supplier<?> value) {
+	private NameValuePair part(String name, Supplier<?> value) {
 		return isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
 	}
 

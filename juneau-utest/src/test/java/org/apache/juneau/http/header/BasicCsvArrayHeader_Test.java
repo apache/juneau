@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
@@ -32,8 +33,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicCsvArrayHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "foo, bar";
+	private static final List<String> PARSED = AList.of("foo", "bar");
 
 	@Rest
 	public static class A {
@@ -51,34 +53,25 @@ public class BasicCsvArrayHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(csvArrayHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(csvArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(csvArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(csvArrayHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(csvArrayHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(csvArrayHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(csvArrayHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(csvArrayHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-
-		c.get().header(csvArrayHeader(HEADER,"foo")).run().assertBody().is("foo");
-		c.get().header(csvArrayHeader(HEADER,()->"foo")).run().assertBody().is("foo");
-
+		c.get().header(csvArrayHeader(HEADER,(Supplier<List<String>>)null)).run().assertBody().isEmpty();
+		c.get().header(csvArrayHeader(null,(Supplier<List<String>>)null)).run().assertBody().isEmpty();
 		c.get().header(csvArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
 
-		c.get().header(csvArrayHeader(HEADER,"foo,bar")).run().assertBody().is("foo,bar");
-		c.get().header(csvArrayHeader(HEADER,()->"foo,bar")).run().assertBody().is("foo,bar");
-
-		c.get().header(csvArrayHeader(HEADER,AList.of("foo","bar"))).run().assertBody().is("foo,bar");
-		c.get().header(csvArrayHeader(HEADER,()->AList.of("foo","bar"))).run().assertBody().is("foo,bar");
-
-		String[] x2 = {"foo","bar"};
-		c.get().header(csvArrayHeader(HEADER,x2)).run().assertBody().is("foo,bar");
-		c.get().header(csvArrayHeader(HEADER,()->x2)).run().assertBody().is("foo,bar");
 	}
 
 	@Test
 	public void a02_contains() throws Exception {
-		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", new String[]{null,"bar","baz"});
+		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", AList.of(null,"bar","baz"));
 		assertBoolean(x.contains(null)).isFalse();
 		assertBoolean(x.containsIgnoreCase(null)).isFalse();
 		assertBoolean(x.contains("bar")).isTrue();
@@ -98,7 +91,7 @@ public class BasicCsvArrayHeader_Test {
 	@Test
 	public void a03_assertList() throws Exception {
 		csvArrayHeader("Foo", AList.of("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
-		new BasicCsvArrayHeader("Foo", null).assertList().doesNotExist();
+		new BasicCsvArrayHeader("Foo", (String)null).assertList().doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

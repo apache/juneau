@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -29,7 +30,8 @@ import org.junit.*;
 public class Referer_Test {
 
 	private static final String HEADER = "Referer";
-	private static final String VALUE = "foo";
+	private static final String VALUE = "foo://bar";
+	private static final URI PARSED = URI.create("foo://bar");
 
 	@Rest
 	public static class A {
@@ -47,15 +49,16 @@ public class Referer_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
+		// Normal usage.
+		c.get().header(referer(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(referer(VALUE)).run().assertBody().is(VALUE);
+		c.get().header(referer(PARSED)).run().assertBody().is(VALUE);
+		c.get().header(referer(()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(referer((String)null)).run().assertBody().isEmpty();
-		c.get().header(referer((Object)null)).run().assertBody().isEmpty();
-		c.get().header(referer((Supplier<?>)null)).run().assertBody().isEmpty();
+		c.get().header(referer((Supplier<URI>)null)).run().assertBody().isEmpty();
 		c.get().header(referer(()->null)).run().assertBody().isEmpty();
-		c.get().header(referer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(referer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(referer(new StringBuilder(VALUE))).run().assertBody().is(VALUE);
-		c.get().header(referer(()->VALUE)).run().assertBody().is(VALUE);
-		c.get().header(new Referer(VALUE)).run().assertBody().is(VALUE);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

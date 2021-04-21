@@ -13,14 +13,13 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Collections.*;
 import static java.util.Optional.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.collections.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.
@@ -45,48 +44,51 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicCsvArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	<br>Must be a comma-delimited list.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicCsvArrayHeader of(String name, Object value) {
+	public static BasicCsvArrayHeader of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayHeader(name, value);
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Convenience creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static BasicCsvArrayHeader of(String name, List<String> value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicCsvArrayHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param name The header name.
 	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicCsvArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static BasicCsvArrayHeader of(String name, Supplier<?> value) {
+	public static BasicCsvArrayHeader of(String name, Supplier<List<String>> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayHeader(name, value);
 	}
 
-	private List<String> parsed;
+	private final List<String> value;
+	private final Supplier<List<String>> supplier;
 
 	/**
 	 * Constructor.
@@ -94,28 +96,64 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	<br>Must be a comma-delimited list.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicCsvArrayHeader(String name, Object value) {
+	public BasicCsvArrayHeader(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = parse(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicCsvArrayHeader(String name, List<String> value) {
+		super(name, serialize(value));
+		this.value = value == null ? null : unmodifiableList(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicCsvArrayHeader(String name, Supplier<List<String>> value) {
+		super(name, null);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o instanceof String)
-			return (String)o;
-		return joine(getParsedValue(), ',');
+		if (supplier != null)
+			return serialize(supplier.get());
+		return super.getValue();
+	}
+
+	/**
+	 * Returns the contents of this header as a list of strings.
+	 *
+	 * @return The contents of this header as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
+	 */
+	public Optional<List<String>> asList() {
+		if (value != null)
+			return ofNullable(value);
+		if (supplier != null)
+			return ofNullable(supplier.get());
+		return empty();
 	}
 
 	/**
@@ -125,11 +163,13 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
 	public boolean contains(String val) {
-		List<String> vv = getParsedValue();
-		if (val != null && vv != null)
-			for (String v : vv)
-				if (eq(v, val))
+		Optional<List<String>> o = asList();
+		if (val != null && o.isPresent()) {
+			List<String> l = o.get();
+			for (int i = 0, j = l.size(); i < j; i++)
+				if (eq(val, l.get(i)))
 					return true;
+		}
 		return false;
 	}
 
@@ -140,11 +180,13 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
 	public boolean containsIgnoreCase(String val) {
-		List<String> vv = getParsedValue();
-		if (val != null && vv != null)
-			for (String v : vv)
-				if (eqic(v, val))
+		Optional<List<String>> o = asList();
+		if (val != null && o.isPresent()) {
+			List<String> l = o.get();
+			for (int i = 0, j = l.size(); i < j; i++)
+				if (eqic(val, l.get(i)))
 					return true;
+		}
 		return false;
 	}
 
@@ -164,38 +206,14 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentListAssertion<BasicCsvArrayHeader> assertList() {
-		return new FluentListAssertion<>(getParsedValue(), this);
+		return new FluentListAssertion<>(asList().orElse(null), this);
 	}
 
-	/**
-	 * Returns the contents of this header as a list of strings.
-	 *
-	 * @return The contents of this header as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
-	 */
-	public Optional<List<String>> asList() {
-		List<String> l = getParsedValue();
-		return ofNullable(l == null ? null : Collections.unmodifiableList(l));
+	private static String serialize(List<String> value) {
+		return join(value, ", ");
 	}
 
-	private List<String> getParsedValue() {
-		if (parsed != null)
-			return parsed;
-
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-
-		AList<String> l = AList.create();
-		if (o instanceof Collection) {
-			for (Object o2 : (Collection<?>)o)
-				l.add(stringify(o2));
-		} else if (o.getClass().isArray()) {
-			for (int i = 0; i < Array.getLength(o); i++)
-				l.add(stringify(Array.get(o, i)));
-		} else {
-			for (String s : split(o.toString()))
-				l.add(s);
-		}
-		return l.unmodifiable();
+	private List<String> parse(String value) {
+		return value == null ? null : unmodifiableList(Arrays.asList(split(value)));
 	}
 }

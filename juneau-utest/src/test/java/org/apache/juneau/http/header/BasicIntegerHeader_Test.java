@@ -31,8 +31,9 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BasicIntegerHeader_Test {
 
-
 	private static final String HEADER = "Foo";
+	private static final String VALUE = "123";
+	private static final Integer PARSED = 123;
 
 	@Rest
 	public static class A {
@@ -50,30 +51,19 @@ public class BasicIntegerHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(integerHeader(null,(Object)null)).run().assertBody().isEmpty();
+		// Normal usage.
+		c.get().header(integerHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(integerHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(integerHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(integerHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+
+		// Invalid usage.
 		c.get().header(integerHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(integerHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
 		c.get().header(integerHeader(null,"*")).run().assertBody().isEmpty();
-
 		c.get().header(integerHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(integerHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(integerHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-
-		c.get().header(integerHeader(HEADER,"1")).run().assertBody().is("1");
-		c.get().header(integerHeader(HEADER,()->"1")).run().assertBody().is("1");
-
-		c.get().header(integerHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(integerHeader(HEADER,1)).run().assertBody().is("1");
-		c.get().header(integerHeader(HEADER,()->1)).run().assertBody().is("1");
-
-		c.get().header(integerHeader(HEADER,1.0)).run().assertBody().is("1");
-		c.get().header(integerHeader(HEADER,()->1.0)).run().assertBody().is("1");
-
-		c.get().header(integerHeader(HEADER,""+Long.MAX_VALUE)).run().assertBody().is(""+Integer.MAX_VALUE);
-		c.get().header(integerHeader(HEADER,()->""+Long.MAX_VALUE)).run().assertBody().is(""+Integer.MAX_VALUE);
-
-		assertThrown(()->integerHeader(HEADER,()->"foo").getValue()).contains("Value could not be parsed");
+		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertBody().isEmpty();
+		c.get().header(integerHeader(null,(Supplier<Integer>)null)).run().assertBody().isEmpty();
+		assertThrown(()->integerHeader(HEADER,"foo")).contains("Value 'foo' could not be parsed as an integer.");
 	}
 
 	@Test

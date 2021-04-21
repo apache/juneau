@@ -16,7 +16,6 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.time.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -24,8 +23,9 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.testutils.*;
 
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -36,6 +36,7 @@ public class BasicDateHeader_Test {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "Sat, 29 Oct 1994 19:43:31 GMT";
+	private static final ZonedDateTime PARSED = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(VALUE)).truncatedTo(SECONDS);
 
 	@Rest
 	public static class A {
@@ -53,53 +54,34 @@ public class BasicDateHeader_Test {
 	public void a01_basic() throws Exception {
 		RestClient c = client().build();
 
-		c.get().header(dateHeader(null,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(dateHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(dateHeader(HEADER,(Object)null)).run().assertBody().isEmpty();
-		c.get().header(dateHeader(null,"*")).run().assertBody().isEmpty();
-
-		c.get().header(dateHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(dateHeader(HEADER,(Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(dateHeader(null,(Supplier<?>)null)).run().assertBody().isEmpty();
-
+		// Normal usage.
 		c.get().header(dateHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(dateHeader(HEADER,()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(dateHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(dateHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(dateHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
+		// Invalid usage.
+		c.get().header(dateHeader("","*")).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,"*")).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,()->null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(HEADER,(Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(null,(Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
 		c.get().header(dateHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
-		c.get().header(dateHeader(HEADER,ZonedDateTime.parse("1994-10-29T19:43:31Z"))).run().assertBody().is("Sat, 29 Oct 1994 19:43:31 GMT");
-		c.get().header(dateHeader(HEADER,GregorianCalendar.from(ZonedDateTime.parse("1994-10-29T19:43:31Z")))).run().assertBody().is("Sat, 29 Oct 1994 19:43:31 GMT");
 	}
 
 	@Test
-	public void a02_asCalendar() throws Exception {
-		assertObject(dateHeader(HEADER,VALUE).asCalendar()).asString(Calendar.class, x->calendarString(x)).is("1994-10-29T19:43:31Z");
-		assertObject(header(HEADER,null).asCalendar()).doesNotExist();
-	}
-
-	@Test
-	public void a03_asDate() throws Exception {
-		assertObject(dateHeader(HEADER,VALUE).asDate()).asString().contains("1994");
-		assertObject(header(HEADER,null).asDate()).doesNotExist();
+	public void a02_asZonedDateTime() throws Exception {
+		assertObject(dateHeader(HEADER,VALUE).asZonedDateTime()).asString().is("1994-10-29T19:43:31Z");
 	}
 
 	@Test
 	public void a04_assertZonedDateTime() throws Exception {
 		dateHeader(HEADER,VALUE).assertZonedDateTime().asString().is("1994-10-29T19:43:31Z");
-		header(HEADER,null).assertZonedDateTime().doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
-
-	private static String calendarString(Calendar c) {
-		return CalendarUtils.serialize(c, CalendarUtils.Format.ISO8601_DTZ, null, null);
-	}
-
-	private static BasicDateHeader header(String name, Object value) {
-		return new BasicDateHeader(name, value);
-	}
 
 	private static RestClientBuilder client() {
 		return MockRestClient.create(A.class);

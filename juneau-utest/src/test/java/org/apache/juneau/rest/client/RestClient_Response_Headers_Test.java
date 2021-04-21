@@ -12,11 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -45,10 +48,7 @@ public class RestClient_Response_Headers_Test {
 		}
 	}
 
-	private static final Calendar CALENDAR = new GregorianCalendar(TimeZone.getTimeZone("Z"));
-	static {
-		CALENDAR.set(2000,11,31,12,34,56);
-	}
+	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Sat, 29 Oct 1994 19:43:31 GMT")).truncatedTo(SECONDS);
 
 	@Test
 	public void a01_exists() throws Exception {
@@ -72,7 +72,7 @@ public class RestClient_Response_Headers_Test {
 		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).contains("Value could not be parsed");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).contains("Value 'bar' could not be parsed as an integer.");
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).contains("Could not determine a method to construct type");
 
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
@@ -169,8 +169,8 @@ public class RestClient_Response_Headers_Test {
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().doesNotExist();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asLong().is(123l);
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().asLong().doesNotExist();
-		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getHeader("Foo").assertValue().asDate().exists();
-		checkFooClient().build().get("/echo").header(dateHeader("Foo",CALENDAR)).run().getHeader("Bar").assertValue().asDate().doesNotExist();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Foo").assertValue().asZonedDateTime().exists();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Bar").assertValue().asZonedDateTime().doesNotExist();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
