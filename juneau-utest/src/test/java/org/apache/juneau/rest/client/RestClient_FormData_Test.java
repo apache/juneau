@@ -15,7 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.io.*;
@@ -63,8 +63,8 @@ public class RestClient_FormData_Test {
 	public void a02_formData_AddFlag_String_Object() throws Exception {
 		client().formData(part("foo","bar")).build().post("/formData").formData(APPEND,"foo","baz").run().assertBody().is("foo=bar&foo=baz");
 		client().formData(part("foo","bar")).build().post("/formData").formData(PREPEND,"foo","baz").run().assertBody().is("foo=baz&foo=bar");
-		client().formData(part("foo","bar")).build().post("/formData").formData(REPLACE,"foo","baz").run().assertBody().is("foo=baz");
-		client().formData(part("foo","bar")).build().post("/formData").formData(REPLACE,"bar","baz").run().assertBody().is("foo=bar&bar=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(SET,"foo","baz").run().assertBody().is("foo=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(SET,"bar","baz").run().assertBody().is("foo=bar&bar=baz");
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class RestClient_FormData_Test {
 		List<String> l = AList.of("qux","quux");
 		client().formData("foo","bar").build().post("/formData").formData(APPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=bar&foo=qux|quux");
 		client().formData("foo","bar").build().post("/formData").formData(PREPEND,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=qux|quux&foo=bar");
-		client().formData("foo","bar").build().post("/formData").formData(REPLACE,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=qux|quux");
+		client().formData("foo","bar").build().post("/formData").formData(SET,"foo",l,T_ARRAY_PIPES).run().assertBody().asString().urlDecode().is("foo=qux|quux");
 	}
 
 	@Test

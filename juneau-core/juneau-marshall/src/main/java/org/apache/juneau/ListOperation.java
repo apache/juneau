@@ -43,28 +43,29 @@ public enum ListOperation {
 	/**
 	 * Don't add the value if it's <jk>null</jk> or an empty string.
 	 */
-	@Deprecated
 	SKIP_IF_EMPTY;
+
+	public static final boolean NEEDS_CLEANUP = true;
 
 	/**
 	 * Default flags.
+	 * Needs to be removed.
 	 */
-	@Deprecated
 	public static final EnumSet<ListOperation> DEFAULT_FLAGS = EnumSet.of(APPEND);
 
 	/**
 	 * Default skip-if-empty flags.
+	 * Needs to be removed.
 	 */
-	@Deprecated
 	public static final EnumSet<ListOperation> SKIP_IF_EMPTY_FLAGS = EnumSet.of(APPEND, SKIP_IF_EMPTY);
 
 	/**
 	 * Returns {@link #DEFAULT_FLAGS} if the enum set is <jk>null</jk> or empty.
+	 * Needs to be removed.
 	 *
 	 * @param s The set to check.
 	 * @return Either the same set or {@link #DEFAULT_FLAGS}.  Never <jk>null</jk>.
 	 */
-	@Deprecated
 	public static EnumSet<ListOperation> orDefault(EnumSet<ListOperation> s) {
 		return s == null || s.isEmpty() ? DEFAULT_FLAGS : s;
 	}

@@ -17,7 +17,7 @@ import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.ListOperation.*;
 
 import java.io.*;
 import java.util.concurrent.*;

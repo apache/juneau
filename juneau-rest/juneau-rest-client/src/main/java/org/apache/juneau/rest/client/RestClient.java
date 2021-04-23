@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpHeaders.*;
@@ -342,11 +342,11 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
  * 		<li class='jm'>{@link RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
- * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object) header(AddFlag,String,Object)}
- * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object,HttpPartSchema) header(AddFlag,String,Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#header(ListOperation,String,Object) header(ListOperation,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#header(ListOperation,String,Object,HttpPartSchema) header(ListOperation,String,Object,HttpPartSchema)}
  * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestRequest#headers(AddFlag,Object...) headers(AddFlag;Object...)}
+ * 		<li class='jm'>{@link RestRequest#headers(ListOperation,Object...) headers(ListOperation;Object...)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
  * 	</ul>
  * </ul>
@@ -391,7 +391,7 @@ import org.apache.juneau.http.HttpHeaders;
  * </p>
  *
  * <p>
- * The methods with {@link AddFlag} parameters allow you to control whether new headers get appended, prepended, or
+ * The methods with {@link ListOperation} parameters allow you to control whether new headers get appended, prepended, or
  * replace existing headers with the same name.
  *
  * <ul class='notes'>
@@ -416,9 +416,9 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestRequest#query(AddFlag,String,Object) query(AddFlag,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#query(ListOperation,String,Object) query(ListOperation,String,Object)}
  * 		<li class='jm'>{@link RestRequest#queries(Object...) queries(Object...)}
- * 		<li class='jm'>{@link RestRequest#queries(AddFlag,Object...) queries(AddFlag,Object...)}
+ * 		<li class='jm'>{@link RestRequest#queries(ListOperation,Object...) queries(ListOperation,Object...)}
  * 		<li class='jm'>{@link RestRequest#queryPairs(Object...) queryPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 	</ul>
@@ -457,9 +457,9 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestRequest#formData(AddFlag,String,Object) formData(AddFlag,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#formData(ListOperation,String,Object) formData(ListOperation,String,Object)}
  * 		<li class='jm'>{@link RestRequest#formDatas(Object...) formDatas(Object...)}
- * 		<li class='jm'>{@link RestRequest#formDatas(AddFlag,Object...) formDatas(AddFlag,Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDatas(ListOperation,Object...) formDatas(ListOperation,Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 	</ul>
@@ -1281,9 +1281,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
 	 * 			<ul>
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formData(String,Object) formData(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formData(AddFlag,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formData(ListOperation,String,Object) formData(EnumSet&lt;ListOperation&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDatas(Object...) formDatas(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDatas(AddFlag,Object...) formDatas(EnumSet&lt;AddFlag&gt;Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDatas(ListOperation,Object...) formDatas(EnumSet&lt;ListOperation&gt;Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDataCustom(Object) formDataCustom(Object)}
 	 * 			</ul>
@@ -1349,10 +1349,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
 	 * 			<ul>
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(String,Object) header(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(AddFlag,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(ListOperation,String,Object) header(EnumSet&gt;ListOperation&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(Header) header(Header)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(Object...) headers(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(AddFlag,Object...) headers(EnumSet&gt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(ListOperation,Object...) headers(EnumSet&gt;ListOperation&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headerPairs(Object...) headerPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#accept(Object) accept(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#acceptCharset(Object) acceptCharset(Object)}
@@ -1870,9 +1870,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
 	 * 			<ul>
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#query(String,Object) query(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#query(AddFlag,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#query(ListOperation,String,Object) query(EnumSet&lt;ListOperation&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queries(Object...) queries(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queries(AddFlag,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queries(ListOperation,Object...) queries(EnumSet&lt;ListOperation&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queryPairs(Object...) queryPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queryCustom(Object) queryCustom(Object)}
 	 * 			</ul>
@@ -3109,7 +3109,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 									HttpPartSerializerSession ps = p.getSerializer(s);
 									String pn = p.getPartName();
 									HttpPartSchema schema = p.getSchema();
-									EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
+									EnumSet<ListOperation> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
 									if (pt == PATH)
 										rc.pathArg(pn, val, schema, p.getSerializer(s));
 									else if (val != null) {

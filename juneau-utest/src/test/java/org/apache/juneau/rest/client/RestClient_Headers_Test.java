@@ -18,7 +18,7 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.time.*;
@@ -128,7 +128,7 @@ public class RestClient_Headers_Test {
 	@Test
 	public void a07_header_AddFlag_String_Object() throws Exception {
 		checkFooClient().header("Foo","bar").build().get("/headers").header(APPEND,"Foo","baz").run().assertBody().is("['bar','baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").header(REPLACE,"Foo","baz").run().assertBody().is("['baz']");
+		checkFooClient().header("Foo","bar").build().get("/headers").header(SET,"Foo","baz").run().assertBody().is("['baz']");
 		checkFooClient().header("Foo","bar").build().get("/headers").header(PREPEND,"Foo","baz").run().assertBody().is("['baz','bar']");
 	}
 
@@ -136,14 +136,14 @@ public class RestClient_Headers_Test {
 	public void a07_header_AddFlag_String_Object_Schema() throws Exception {
 		List<String> l = AList.of("baz","qux");
 		checkFooClient().header("Foo","bar").build().get("/headers").header(APPEND,"Foo",l,T_ARRAY_PIPES).run().assertBody().is("['bar','baz|qux']");
-		checkFooClient().header("Foo","bar").build().get("/headers").header(REPLACE,"Foo",l,T_ARRAY_PIPES).run().assertBody().is("['baz|qux']");
+		checkFooClient().header("Foo","bar").build().get("/headers").header(SET,"Foo",l,T_ARRAY_PIPES).run().assertBody().is("['baz|qux']");
 		checkFooClient().header("Foo","bar").build().get("/headers").header(PREPEND,"Foo",l,T_ARRAY_PIPES).run().assertBody().is("['baz|qux','bar']");
 	}
 
 	@Test
 	public void a07_headers_AddFlag_Objects() throws Exception {
 		checkFooClient().header("Foo","bar").build().get("/headers").headers(APPEND,header("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(REPLACE,header("Foo","baz")).run().assertBody().is("['baz']");
+		checkFooClient().header("Foo","bar").build().get("/headers").headers(SET,header("Foo","baz")).run().assertBody().is("['baz']");
 		checkFooClient().header("Foo","bar").build().get("/headers").headers(PREPEND,header("Foo","baz")).run().assertBody().is("['baz','bar']");
 	}
 

@@ -15,7 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
-import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -1112,9 +1112,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1130,7 +1130,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(AddFlag flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
+	public RestRequest query(ListOperation flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
 		return queries(flag, serializedPart(name, value, QUERY, partSerializer, schema, EnumSet.of(flag)));
 	}
 
@@ -1227,9 +1227,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1239,7 +1239,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest query(AddFlag flag, String name, Object value) {
+	public RestRequest query(ListOperation flag, String name, Object value) {
 		return queries(flag, serializedPart(name, value, QUERY, partSerializer, null, EnumSet.of(flag)));
 	}
 
@@ -1297,9 +1297,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param params
 	 * 	The parameters to set.
@@ -1318,7 +1318,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest queries(AddFlag flag, Object...params) {
+	public RestRequest queries(ListOperation flag, Object...params) {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
 			if (BasicPart.canCast(o)) {
@@ -1415,8 +1415,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest queryArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		flags = AddFlag.orDefault(flags);
+	RestRequest queryArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+		flags = ListOperation.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
@@ -1447,12 +1447,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerQuery(flags, l);
 	}
 
-	private RestRequest innerQuery(EnumSet<AddFlag> flags, List<NameValuePair> params) {
-		flags = AddFlag.orDefault(flags);
+	private RestRequest innerQuery(EnumSet<ListOperation> flags, List<NameValuePair> params) {
+		flags = ListOperation.orDefault(flags);
 		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			params.removeIf(x -> isEmpty(x.getValue()));
-		if (flags.contains(REPLACE)) {
+		if (flags.contains(SET)) {
 			List<NameValuePair> l = uriBuilder.getQueryParams();
 			for (NameValuePair p : params)
 				for (Iterator<NameValuePair> i = l.iterator(); i.hasNext();)
@@ -1491,9 +1491,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1509,7 +1509,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(AddFlag flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
+	public RestRequest formData(ListOperation flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
 		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer, schema, EnumSet.of(flag)));
 	}
 
@@ -1607,9 +1607,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1619,7 +1619,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest formData(AddFlag flag, String name, Object value) {
+	public RestRequest formData(ListOperation flag, String name, Object value) {
 		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer, null, EnumSet.of(flag)));
 	}
 
@@ -1678,9 +1678,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param params
 	 * 	The parameters to set.
@@ -1700,7 +1700,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest formDatas(AddFlag flag, Object...params) {
+	public RestRequest formDatas(ListOperation flag, Object...params) {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
 			if (BasicPart.canCast(o)) {
@@ -1806,8 +1806,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest formDataArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		flags = AddFlag.orDefault(flags);
+	RestRequest formDataArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+		flags = ListOperation.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
@@ -1838,15 +1838,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerFormData(flags, l);
 	}
 
-	private RestRequest innerFormData(EnumSet<AddFlag> flags, List<NameValuePair> params) {
+	private RestRequest innerFormData(EnumSet<ListOperation> flags, List<NameValuePair> params) {
 		input = null;
-		flags = AddFlag.orDefault(flags);
+		flags = ListOperation.orDefault(flags);
 		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			params.removeIf(x -> isEmpty(x.getValue()));
 		if (formData == null)
 			formData = new ArrayList<>();
-		if (flags.contains(REPLACE)) {
+		if (flags.contains(SET)) {
 			for (NameValuePair p : params)
 				for (Iterator<NameValuePair> i = formData.iterator(); i.hasNext();)
 					if (i.next().getName().equals(p.getName()))
@@ -1995,9 +1995,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param name The header name.
 	 * @param value The header value.
@@ -2012,7 +2012,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest header(AddFlag flag, String name, Object value, HttpPartSchema schema) {
+	public RestRequest header(ListOperation flag, String name, Object value, HttpPartSchema schema) {
 		return headers(flag, serializedHeader(name, value, partSerializer, schema, EnumSet.of(flag)));
 	}
 
@@ -2094,9 +2094,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 *	 	<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 *	 	<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param name The header name.
 	 * @param value The header value.
@@ -2106,7 +2106,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest header(AddFlag flag, String name, Object value) {
+	public RestRequest header(ListOperation flag, String name, Object value) {
 		return headers(flag, serializedHeader(name, value, partSerializer, null, EnumSet.of(flag)));
 	}
 
@@ -2146,14 +2146,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param header The header to set.
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest header(AddFlag flag, Header header) {
+	public RestRequest header(ListOperation flag, Header header) {
 		return headers(flag, header);
 	}
 
@@ -2193,7 +2193,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest headers(Object...headers) {
-		return headers(REPLACE, headers);
+		return headers(SET, headers);
 	}
 
 	/**
@@ -2214,9 +2214,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param headers
 	 * 	The headers to set.
@@ -2235,7 +2235,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest headers(AddFlag flag, Object...headers) {
+	public RestRequest headers(ListOperation flag, Object...headers) {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
 			if (HttpHeaders.canCast(o)) {
@@ -2284,7 +2284,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest headerPairs(Object...pairs) {
-		return headerPairs(REPLACE, pairs);
+		return headerPairs(SET, pairs);
 	}
 
 	/**
@@ -2301,9 +2301,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param flag How to add this parameter.
 	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link ListOperation#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link ListOperation#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link ListOperation#SET SET} - Delete any existing with same name and append to end.
 	 * 	</ul>
 	 * @param pairs The form-data key/value pairs.
 	 * 	<ul>
@@ -2312,7 +2312,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest headerPairs(AddFlag flag, Object...pairs) {
+	public RestRequest headerPairs(ListOperation flag, Object...pairs) {
 		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into headerPairs()");
@@ -2321,8 +2321,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerHeaders(EnumSet.of(flag), l);
 	}
 
-	RestRequest headerArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		flags = AddFlag.orDefault(flags);
+	RestRequest headerArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+		flags = ListOperation.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti)
@@ -2353,12 +2353,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerHeaders(flags, l);
 	}
 
-	private RestRequest innerHeaders(EnumSet<AddFlag> flags, Collection<Header> headers) {
-		flags = AddFlag.orDefault(flags);
+	private RestRequest innerHeaders(EnumSet<ListOperation> flags, Collection<Header> headers) {
+		flags = ListOperation.orDefault(flags);
 		headers.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			headers.removeIf(x -> isEmpty(x.getValue()));
-		if (flags.contains(REPLACE)) {
+		if (flags.contains(SET)) {
 			for (Header h : headers)
 				removeHeaders(h.getName());
 		} else if (flags.contains(PREPEND)) {
@@ -3523,11 +3523,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return (Map<Object,Object>)o;
 	}
 
-	private static SerializedPart serializedPart(Object key, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
+	private static SerializedPart serializedPart(Object key, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<ListOperation> flags) {
 		return key == null ? null : new SerializedPart(stringify(key), value, type, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
 	}
 
-	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
+	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<ListOperation> flags) {
 		return key == null ? null : new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
 	}
 

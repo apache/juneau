@@ -15,7 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.AddFlag.*;
+import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.io.*;
@@ -73,10 +73,10 @@ public class RestClient_Query_Test {
 		client().query("foo","bar").build().get("/query").query(PREPEND,"foo","baz").run().assertBody().is("foo=baz&foo=bar");
 		client().query("foo","bar").build().get("/query").query(PREPEND,"foo","").run().assertBody().is("foo=&foo=bar");
 		client().query("foo","bar").build().get("/query").query(PREPEND,"foo",null).run().assertBody().is("foo=bar");
-		client().query("foo","bar").build().get("/query").query(REPLACE,"foo","baz").run().assertBody().is("foo=baz");
-		client().query("foo","bar").build().get("/query").query(REPLACE,"foo",null).run().assertBody().is("foo=bar");
-		client().query("foo","bar").build().get("/query").query(REPLACE,"foo","").run().assertBody().is("foo=");
-		client().query("bar","baz").build().get("/query").query(REPLACE,"foo","bar").run().assertBody().is("bar=baz&foo=bar");
+		client().query("foo","bar").build().get("/query").query(SET,"foo","baz").run().assertBody().is("foo=baz");
+		client().query("foo","bar").build().get("/query").query(SET,"foo",null).run().assertBody().is("foo=bar");
+		client().query("foo","bar").build().get("/query").query(SET,"foo","").run().assertBody().is("foo=");
+		client().query("bar","baz").build().get("/query").query(SET,"foo","bar").run().assertBody().is("bar=baz&foo=bar");
 	}
 
 	@Test
