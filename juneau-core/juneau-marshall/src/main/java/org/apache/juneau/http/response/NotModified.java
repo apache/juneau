@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.NotModified.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 304 Not Modified</c> response.
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class NotModified extends BasicHttpResponse {
 
 	/** HTTP status code */

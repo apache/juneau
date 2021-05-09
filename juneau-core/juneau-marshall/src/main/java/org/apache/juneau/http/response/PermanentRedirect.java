@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.PermanentRedirect.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 308 Permanent Redirect</c> response.
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class PermanentRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */

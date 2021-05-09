@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.IMUsed.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 226 IM Used</c> response.
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The server has fulfilled a request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class IMUsed extends BasicHttpResponse {
 
 	/** HTTP status code */

@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.SeeOther.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 303 See Other</c> response.
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class SeeOther extends BasicHttpResponse {
 
 	/** HTTP status code */

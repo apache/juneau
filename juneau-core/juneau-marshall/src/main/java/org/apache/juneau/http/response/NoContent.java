@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.NoContent.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 204 No Content</c> response.
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The server successfully processed the request and is not returning any content.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class NoContent extends BasicHttpResponse {
 
 	/** HTTP status code */

@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.ResetContent.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 205 Reset Content</c> response.
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * Unlike a 204 response, this response requires that the requester reset the document view.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class ResetContent extends BasicHttpResponse {
 
 	/** HTTP status code */

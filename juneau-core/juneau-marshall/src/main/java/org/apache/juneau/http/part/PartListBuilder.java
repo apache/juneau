@@ -13,11 +13,13 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
@@ -55,6 +57,27 @@ public class PartListBuilder {
 		for (int i = 0; i < copyFrom.entries.length; i++)
 			entries.add(copyFrom.entries[i]);
 		caseInsensitive = copyFrom.caseInsensitive;
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	protected PartListBuilder(PartListBuilder copyFrom) {
+		entries = new ArrayList<>(copyFrom.entries);
+		defaultEntries = copyFrom.defaultEntries == null ? null : new ArrayList<>(copyFrom.defaultEntries);
+		varResolver = copyFrom.varResolver;
+		caseInsensitive = copyFrom.caseInsensitive;
+	}
+
+	/**
+	 * Creates a modifiable copy of this builder.
+	 *
+	 * @return A shallow copy of this builder.
+	 */
+	public PartListBuilder copy() {
+		return new PartListBuilder(this);
 	}
 
 	/**
@@ -154,7 +177,7 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Adds the specified parts to the end of the parts in this builder.
+	 * Adds the specified part to the end of the parts in this builder.
 	 *
 	 * @param value The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
@@ -177,7 +200,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder append(String name, Object value) {
-		return append(part(name, value));
+		return append(createPart(name, value));
 	}
 
 	/**
@@ -194,7 +217,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder append(String name, Supplier<?> value) {
-		return append(part(name, value));
+		return append(createPart(name, value));
 	}
 
 	/**
@@ -218,7 +241,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder append(List<NameValuePair> values) {
+	public PartListBuilder append(List<? extends NameValuePair> values) {
 		if (values != null)
 			for (int i = 0, j = values.size(); i < j; i++)
 				append(values.get(i));
@@ -262,7 +285,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder prepend(String name, Object value) {
-		return prepend(part(name, value));
+		return prepend(createPart(name, value));
 	}
 
 	/**
@@ -279,7 +302,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder prepend(String name, Supplier<?> value) {
-		return prepend(part(name, value));
+		return prepend(createPart(name, value));
 	}
 
 	/**
@@ -302,7 +325,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder prepend(List<NameValuePair> values) {
+	public PartListBuilder prepend(List<? extends NameValuePair> values) {
 		if (values != null)
 			entries.addAll(0, values);
 		return this;
@@ -355,7 +378,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder remove(List<NameValuePair> values) {
+	public PartListBuilder remove(List<? extends NameValuePair> values) {
 		for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
 			remove(values.get(i));
 		return this;
@@ -439,29 +462,29 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Replaces the first occurrence of the parts with the same name.
+	 * Adds or replaces the part with the specified name.
 	 *
 	 * @param name The part name.
 	 * @param value The part value.
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder set(String name, Object value) {
-		return set(part(name, value));
+		return set(createPart(name, value));
 	}
 
 	/**
-	 * Replaces the first occurrence of the parts with the same name.
+	 * Adds or replaces the part with the specified name.
 	 *
 	 * @param name The part name.
 	 * @param value The part value.
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder set(String name, Supplier<?> value) {
-		return set(part(name, value));
+		return set(createPart(name, value));
 	}
 
 	/**
-	 * Replaces the first occurrence of the parts with the same name.
+	 * Adds or replaces the parts with the specified names.
 	 *
 	 * <p>
 	 * If no part with the same name is found the given part is added to the end of the list.
@@ -470,7 +493,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder set(List<NameValuePair> values) {
+	public PartListBuilder set(List<? extends NameValuePair> values) {
 
 		if (values != null) {
 			for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
@@ -498,7 +521,7 @@ public class PartListBuilder {
 	}
 
 	/**
-	 * Replaces the first occurrence of the parts with the same name.
+	 * Adds or replaces the parts with the specified names.
 	 *
 	 * <p>
 	 * If no part with the same name is found the given part is added to the end of the list.
@@ -571,7 +594,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder setDefault(String name, Object value) {
-		return setDefault(part(name, value));
+		return setDefault(createPart(name, value));
 	}
 
 	/**
@@ -582,7 +605,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PartListBuilder setDefault(String name, Supplier<?> value) {
-		return setDefault(part(name, value));
+		return setDefault(createPart(name, value));
 	}
 
 	/**
@@ -595,7 +618,7 @@ public class PartListBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public PartListBuilder setDefault(List<NameValuePair> values) {
+	public PartListBuilder setDefault(List<? extends NameValuePair> values) {
 
 		if (values != null) {
 			if (defaultEntries == null)
@@ -638,6 +661,209 @@ public class PartListBuilder {
 		return this;
 	}
 
+	/**
+	 * Adds the specify part to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the part.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(NameValuePair)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(NameValuePair)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(NameValuePair)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(NameValuePair)}.
+	 * 	</ul>
+	 * @param value The part to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public PartListBuilder add(ListOperation flag, NameValuePair value) {
+		if (flag == ListOperation.APPEND)
+			return append(value);
+		if (flag == ListOperation.PREPEND)
+			return prepend(value);
+		if (flag == ListOperation.SET)
+			return set(value);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(value);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,value) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified parts to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the part.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(NameValuePair[])}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(NameValuePair[])}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(NameValuePair[])}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(NameValuePair[])}.
+	 * 	</ul>
+	 * @param values The parts to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public PartListBuilder add(ListOperation flag, NameValuePair...values) {
+		if (flag == ListOperation.APPEND)
+			return append(values);
+		if (flag == ListOperation.PREPEND)
+			return prepend(values);
+		if (flag == ListOperation.SET)
+			return set(values);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(values);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified part to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the part.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(String,Object)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(String,Object)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(String,Object)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Object)}.
+	 * 	</ul>
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(ListOperation flag, String name, Object value) {
+		if (flag == ListOperation.APPEND)
+			return append(name, value);
+		if (flag == ListOperation.PREPEND)
+			return prepend(name, value);
+		if (flag == ListOperation.SET)
+			return set(name, value);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(name, value);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified part to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the part.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(String,Supplier)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(String,Supplier)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(String,Supplier)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Supplier)}.
+	 * 	</ul>
+	 * @param name The part name.
+	 * @param value The part value supplier.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(ListOperation flag, String name, Supplier<?> value) {
+		if (flag == ListOperation.APPEND)
+			return append(name, value);
+		if (flag == ListOperation.PREPEND)
+			return prepend(name, value);
+		if (flag == ListOperation.SET)
+			return set(name, value);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(name, value);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified parts to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the part.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(String,Supplier)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(String,Supplier)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(String,Supplier)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(String,Supplier)}.
+	 * 	</ul>
+	 * @param values The parts to add.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public PartListBuilder add(ListOperation flag, List<NameValuePair> values) {
+		if (flag == ListOperation.APPEND)
+			return append(values);
+		if (flag == ListOperation.PREPEND)
+			return prepend(values);
+		if (flag == ListOperation.SET)
+			return set(values);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(values);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+	}
+
+	/**
+	 * Adds the specified parts to this list.
+	 *
+	 * @param flag
+	 * 	What to do with the part.
+	 * 	<br>Possible values:
+	 * 	<ul>
+	 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(PartList)}.
+	 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(PartList)}.
+	 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(PartList)}.
+	 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(PartList)}.
+	 * 	</ul>
+	 * @param values The parts to add.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder add(ListOperation flag, PartList values) {
+		if (flag == ListOperation.APPEND)
+			return append(values);
+		if (flag == ListOperation.PREPEND)
+			return prepend(values);
+		if (flag == ListOperation.SET)
+			return set(values);
+		if (flag == ListOperation.DEFAULT)
+			return setDefault(values);
+		throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+	}
+
+	/**
+	 * Performs an operation on the parts of this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param c The consumer.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder forEach(Consumer<NameValuePair> c) {
+		for (int i = 0, j = entries.size(); i < j; i++)
+			c.accept(entries.get(i));
+		return this;
+	}
+
+	/**
+	 * Performs an operation on the parts with the specified name in this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param name The part name.
+	 * @param c The consumer.
+	 * @return This object (for method chaining).
+	 */
+	public PartListBuilder forEach(String name, Consumer<NameValuePair> c) {
+		for (int i = 0, j = entries.size(); i < j; i++) {
+			NameValuePair x = entries.get(i);
+			if (eq(name, x.getName()))
+				c.accept(x);
+		}
+		return this;
+	}
+
 	private boolean isResolving() {
 		return varResolver != null;
 	}
@@ -652,17 +878,25 @@ public class PartListBuilder {
 		return o;
 	}
 
-	private NameValuePair part(String name, Object value) {
-		return isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
-	}
-
-	private NameValuePair part(String name, Supplier<?> value) {
+	/**
+	 * Creates a new part out of the specified name/value pair.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return A new header.
+	 */
+	public NameValuePair createPart(String name, Object value) {
+		if (value instanceof Supplier<?>) {
+			Supplier<?> value2 = (Supplier<?>)value;
+			return isResolving() ? new BasicPart(name, resolver(value2)) : new BasicPart(name, value2);
+		}
 		return isResolving() ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
 	}
 
 	private boolean eq(String s1, String s2) {
 		return caseInsensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
+
 	// <FluentSetters>
 
 	// </FluentSetters>

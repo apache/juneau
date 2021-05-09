@@ -16,7 +16,6 @@ import static org.apache.juneau.http.response.EarlyHints.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 103 Early Hints</c> response.
@@ -25,7 +24,6 @@ import org.apache.juneau.internal.*;
  * Used to return some response headers before final HTTP message.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class EarlyHints extends BasicHttpResponse {
 
 	/** HTTP status code */

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static java.lang.Character.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 /**
  * Converts property names to underscore-lower-case format.
  *
@@ -24,16 +27,19 @@ package org.apache.juneau;
  */
 public final class PropertyNamerULC implements PropertyNamer {
 
+	/** Reusable instance. */
+	public static final PropertyNamer INSTANCE = new PropertyNamerULC();
+
 	@Override /* PropertyNamer */
 	public String getPropertyName(String name) {
-		if (name == null || name.isEmpty())
+		if (isEmpty(name))
 			return name;
 
 		int numUCs = 0;
-		boolean isPrevUC = Character.isUpperCase(name.charAt(0));
+		boolean isPrevUC = isUpperCase(name.charAt(0));
 		for (int i = 1; i < name.length(); i++) {
 			char c = name.charAt(i);
-			if (Character.isUpperCase(c)) {
+			if (isUpperCase(c)) {
 				if (! isPrevUC)
 					numUCs++;
 				isPrevUC = true;
@@ -43,16 +49,15 @@ public final class PropertyNamerULC implements PropertyNamer {
 		}
 
 		char[] name2 = new char[name.length() + numUCs];
-		isPrevUC = Character.isUpperCase(name.charAt(0));
-		name2[0] = Character.toLowerCase(name.charAt(0));
+		isPrevUC = isUpperCase(name.charAt(0));
 		int ni = 0;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
-			if (Character.isUpperCase(c)) {
+			if (isUpperCase(c)) {
 				if (! isPrevUC)
 					name2[ni++] = '_';
 				isPrevUC = true;
-				name2[ni++] = Character.toLowerCase(c);
+				name2[ni++] = toLowerCase(c);
 			} else {
 				isPrevUC = false;
 				name2[ni++] = c;

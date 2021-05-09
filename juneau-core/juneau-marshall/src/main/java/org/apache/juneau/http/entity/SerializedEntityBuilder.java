@@ -14,6 +14,7 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
+import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -21,6 +22,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.http.HttpHeaders;
+import org.apache.juneau.http.header.*;
 
 
 /**
@@ -104,15 +106,63 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 
 	// <FluentSetters>
 
-	@Override
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> cached() throws IOException{
+		super.cached();
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> chunked() {
+		super.chunked();
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> chunked(boolean value) {
+		super.chunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
 	public SerializedEntityBuilder<T> content(Object value) {
 		super.content(value);
 		return this;
 	}
 
-	@Override
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> contentEncoding(String value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> contentEncoding(ContentEncoding value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> contentLength(long value) {
+		super.contentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
 	public SerializedEntityBuilder<T> contentSupplier(Supplier<?> value) {
 		super.contentSupplier(value);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> contentType(String value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - HttpEntityBuilder */
+	public SerializedEntityBuilder<T> contentType(ContentType value) {
+		super.contentType(value);
 		return this;
 	}
 

@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.TemporaryRedirect.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 307 Temporary Redirect</c> response.
@@ -28,7 +27,6 @@ import org.apache.juneau.internal.*;
  * For example, a POST request should be repeated using another POST request.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class TemporaryRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */

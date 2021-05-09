@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.Ok.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 200 OK</c> response.
@@ -28,7 +27,6 @@ import org.apache.juneau.internal.*;
  * In a POST request, the response will contain an entity describing or containing the result of the action.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class Ok extends BasicHttpResponse {
 
 	/** HTTP status code */

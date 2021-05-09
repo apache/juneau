@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.MultipleChoices.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 300 Multiple Choices</c> response.
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class MultipleChoices extends BasicHttpResponse {
 
 	/** HTTP status code */

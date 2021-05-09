@@ -12,12 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Standard predefined HTTP headers.
@@ -400,5 +405,42 @@ public class HttpParts {
 	 */
 	public static PartList partList(Object...pairs) {
 		return PartList.ofPairs(pairs);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
+	 *
+	 * @param o
+	 * 	The object to cast or convert to a {@link NameValuePair}.
+	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static NameValuePair cast(Object o) {
+		if (o instanceof NameValuePair)
+			return (NameValuePair)o;
+		if (o instanceof Headerable) {
+			Header x = ((Headerable)o).asHeader();
+			return BasicPart.of(x.getName(), x.getValue());
+		}
+		if (o instanceof Map.Entry) {
+			Map.Entry e = (Map.Entry)o;
+			return BasicPart.of(stringify(e.getKey()), e.getValue());
+		}
+		throw runtimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 */
+	public static boolean canCast(Object o) {
+		ClassInfo ci = ClassInfo.of(o);
+		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 }

@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.Processing.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 102 Processing</c> response.
@@ -28,7 +27,6 @@ import org.apache.juneau.internal.*;
  * This prevents the client from timing out and assuming the request was lost.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class Processing extends BasicHttpResponse {
 
 	/** HTTP status code */

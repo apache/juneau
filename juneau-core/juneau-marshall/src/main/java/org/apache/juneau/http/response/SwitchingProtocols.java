@@ -17,7 +17,6 @@ import static org.apache.juneau.http.response.SwitchingProtocols.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 101 Switching Protocols</c> response.
@@ -26,7 +25,6 @@ import org.apache.juneau.internal.*;
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  */
 @Response(code=STATUS_CODE, description=REASON_PHRASE)
-@FluentSetters
 public class SwitchingProtocols extends BasicHttpResponse {
 
 	/** HTTP status code */

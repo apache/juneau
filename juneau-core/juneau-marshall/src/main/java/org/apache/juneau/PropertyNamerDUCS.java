@@ -16,19 +16,19 @@ import static java.lang.Character.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 /**
- * Converts property names to dashed-lower-case format.
+ * Converts property names to dashed-upper-case-start format.
  *
  * <h5 class='section'>Example:</h5>
  * <ul>
- * 	<li><js>"fooBar"</js> -&gt; <js>"foo-bar"</js>
- * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
- * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
+ * 	<li><js>"fooBar"</js> -&gt; <js>"Foo-Bar"</js>
+ * 	<li><js>"fooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
+ * 	<li><js>"FooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
  * </ul>
  */
-public final class PropertyNamerDLC implements PropertyNamer {
+public final class PropertyNamerDUCS implements PropertyNamer {
 
 	/** Reusable instance. */
-	public static final PropertyNamer INSTANCE = new PropertyNamerDLC();
+	public static final PropertyNamer INSTANCE = new PropertyNamerDUCS();
 
 	@Override /* PropertyNamer */
 	public String getPropertyName(String name) {
@@ -49,18 +49,25 @@ public final class PropertyNamerDLC implements PropertyNamer {
 		}
 
 		char[] name2 = new char[name.length() + numUCs];
-		isPrevUC = isUpperCase(name.charAt(0));
+		isPrevUC = true;
 		int ni = 0;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
-			if (isUpperCase(c)) {
-				if (! isPrevUC)
-					name2[ni++] = '-';
-				isPrevUC = true;
-				name2[ni++] = toLowerCase(c);
+			if (i == 0) {
+				name2[ni++] = toUpperCase(c);
 			} else {
-				isPrevUC = false;
-				name2[ni++] = c;
+				if (isUpperCase(c)) {
+					if (! isPrevUC) {
+						name2[ni++] = '-';
+						name2[ni++] = toUpperCase(c);
+					} else {
+						name2[ni++] = toLowerCase(c);
+					}
+					isPrevUC = true;
+				} else {
+					isPrevUC = false;
+					name2[ni++] = c;
+				}
 			}
 		}
 
