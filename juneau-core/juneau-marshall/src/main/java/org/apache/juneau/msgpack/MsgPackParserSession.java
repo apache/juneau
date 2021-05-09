@@ -107,7 +107,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 
 			if (sType.isObject()) {
 				// Do nothing.
-			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber()) {
+			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				o = convertToType(o, sType);
 			} else if (sType.isMap()) {
 				if (dt == MAP) {

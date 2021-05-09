@@ -132,6 +132,9 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		else if (sType.isCollection()) {
 			serializeCollection(out, (Collection) o, eType);
 		}
+		else if (sType.isByteArray()) {
+			out.appendBinary((byte[])o);
+		}
 		else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
 		}

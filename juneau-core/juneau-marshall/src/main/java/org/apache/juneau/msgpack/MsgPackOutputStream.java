@@ -12,11 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.*;
 import java.math.*;
 import java.util.concurrent.atomic.*;
+
+import org.apache.juneau.internal.*;
 
 /**
  * Specialized output stream for serializing MessagePack streams.
@@ -214,14 +217,22 @@ public final class MsgPackOutputStream extends OutputStream {
 		// * AAAAAAAA_AAAAAAAA_AAAAAAAA_AAAAAAAA is a 32-bit big-endian unsigned integer which represents N
 		// * N is the length of data
 
-		byte[] b = cs.toString().getBytes("UTF-8");
-		if (b.length < 32)
-			return append1(0xA0 + b.length).append(b);
-		if (b.length < (1<<8))
-			return append1(STR8).append1(b.length).append(b);
-		if (b.length < (1<<16))
-			return append1(STR16).append2(b.length).append(b);
-		return append1(STR32).append4(b.length).append(b);
+		int length = getUtf8ByteLength(cs);
+		if (length < 32)
+			append1(0xA0 + length);
+		else if (length < (1<<8))
+			append1(STR8).append1(length);
+		else if (length < (1<<16))
+			append1(STR16).append2(length);
+		else
+			append1(STR32).append4(length);
+
+		int length2 = writeUtf8To(cs, os);
+
+		if (length != length2)
+			throw ioException("Unexpected length.  Expected={0}, Actual={1}", length, length2);
+
+		return this;
 	}
 
 	/**
@@ -241,6 +252,44 @@ public final class MsgPackOutputStream extends OutputStream {
 		// bin 32 stores a byte array whose length is up to (2^32)-1 bytes:
 		// +--------+--------+--------+--------+--------+========+
 		// |  0xc6  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|  data  |
+		// +--------+--------+--------+--------+--------+========+
+		//
+		// where
+		// * XXXXXXXX is a 8-bit unsigned integer which represents N
+		// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N
+		// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N
+		// * N is the length of data
+
+		if (b.length < (1<<8))
+			return append1(BIN8).append1(b.length).append(b);
+		if (b.length < (1<<16))
+			return append1(BIN16).append2(b.length).append(b);
+		return append1(BIN32).append4(b.length).append(b);
+	}
+
+	/**
+	 * Appends a binary field to the stream.
+	 */
+	final MsgPackOutputStream appendBinary(InputStream is) throws IOException {
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		IOUtils.pipe(is, baos);
+
+		byte[] b = baos.toByteArray();
+
+		// bin 8 stores a byte array whose length is up to (2^8)-1 bytes:
+		// +--------+--------+========+
+		// | 0xc4   |XXXXXXXX|  data  |
+		// +--------+--------+========+
+		//
+		// bin 16 stores a byte array whose length is up to (2^16)-1 bytes:
+		// +--------+--------+--------+========+
+		// | 0xc5   |YYYYYYYY|YYYYYYYY|  data  |
+		// +--------+--------+--------+========+
+		//
+		// bin 32 stores a byte array whose length is up to (2^32)-1 bytes:
+		// +--------+--------+--------+--------+--------+========+
+		// | 0xc6   |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|  data  |
 		// +--------+--------+--------+--------+--------+========+
 		//
 		// where
@@ -321,4 +370,52 @@ public final class MsgPackOutputStream extends OutputStream {
 			return append1(MAP16).append2(size);
 		return append1(MAP32).append4(size);
 	}
+
+	private int writeUtf8To(CharSequence in, OutputStream out) throws IOException {
+		int count = 0;
+		for (int i = 0, len = in.length(); i < len; i++) {
+			int c = (in.charAt(i) & 0xFFFF);
+			if (c <= 0x7F) {
+				out.write((byte) (c & 0xFF));
+				count++;
+			} else if (c <= 0x7FF) {
+				out.write((byte) (0xC0 + ((c>>6) & 0x1F)));
+				out.write((byte) (0x80 + (c & 0x3F)));
+				count += 2;
+			} else if (c >= 0xD800 && c <= 0xDFFF) {
+				int jchar2 = in.charAt(++i) & 0xFFFF;
+				int n = (c<<10) + jchar2 + 0xFCA02400;
+				out.write((byte) (0xF0 + ((n>>18) & 0x07)));
+				out.write((byte) (0x80 + ((n>>12) & 0x3F)));
+				out.write((byte) (0x80 + ((n>>6) & 0x3F)));
+				out.write((byte) (0x80 + (n & 0x3F)));
+				count += 4;
+			} else {
+				out.write((byte) (0xE0 + ((c>>12) & 0x0F)));
+				out.write((byte) (0x80 + ((c>>6) & 0x3F)));
+				out.write((byte) (0x80 + (c & 0x3F)));
+				count += 3;
+			}
+		}
+		return count;
+	}
+
+	private int getUtf8ByteLength(CharSequence cs) {
+		int count = 0;
+		for (int i = 0, len = cs.length(); i < len; i++) {
+			char ch = cs.charAt(i);
+			if (ch <= 0x7F) {
+				count++;
+			} else if (ch <= 0x7FF) {
+				count += 2;
+			} else if (Character.isHighSurrogate(ch)) {
+				count += 4;
+				++i;
+			} else {
+				count += 3;
+			}
+		}
+		return count;
+	}
+
 }
