@@ -54,7 +54,7 @@ public class Unauthorized_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		RestClient c = MockRestClient.create(A.class).ignoreErrors().noLog().build();
+		RestClient c = MockRestClient.create(A.class).ignoreErrors().noTrace().build();
 
 		c.get("/f1").run()
 			.assertStatus().code().is(STATUS_CODE)

@@ -925,7 +925,7 @@ public class RrpcInterfaceTest {
 	public RrpcInterfaceTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
-			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).noLog().build().getRrpcInterface(InterfaceProxy.class,"/proxy");
+			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).noTrace().build().getRrpcInterface(InterfaceProxy.class,"/proxy");
 			cache.put(label,proxy);
 		}
 	}

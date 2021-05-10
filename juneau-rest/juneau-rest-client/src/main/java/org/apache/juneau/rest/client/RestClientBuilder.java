@@ -1663,7 +1663,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder noLog() {
+	public RestClientBuilder noTrace() {
 		return header("X-No-Log", true);
 	}
 

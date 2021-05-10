@@ -103,7 +103,7 @@ public class TestMicroservice {
 			RestClientBuilder rc = RestClient.create()
 				.json()
 				.rootUri(microserviceURI)
-				.noLog();
+				.noTrace();
 			rc.retryHandler(
 					new HttpRequestRetryHandler() {
 						@Override

@@ -325,11 +325,11 @@ public class RestClient_Response_Body_Test {
 	}
 
 	private static TestClient plainTestClient() {
-		return MockRestClient.create(A.class).noLog().build(TestClient.class);
+		return MockRestClient.create(A.class).noTrace().build(TestClient.class);
 	}
 
 	private static TestClient testClient() {
-		return MockRestClient.create(A.class).simpleJson().noLog().build(TestClient.class);
+		return MockRestClient.create(A.class).simpleJson().noTrace().build(TestClient.class);
 	}
 
 	private static StringEntity stringEntity(String in) {

@@ -328,7 +328,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClientBuilder createLax(Object impl) {
-		return new MockRestClientBuilder().restBean(impl).ignoreErrors().noLog();
+		return new MockRestClientBuilder().restBean(impl).ignoreErrors().noTrace();
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildLax(Object impl) {
-		return create(impl).ignoreErrors().noLog().build();
+		return create(impl).ignoreErrors().noTrace().build();
 	}
 
 	/**
@@ -406,7 +406,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildJsonLax(Object impl) {
-		return create(impl).json().ignoreErrors().noLog().build();
+		return create(impl).json().ignoreErrors().noTrace().build();
 	}
 
 	/**
@@ -445,7 +445,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildSimpleJsonLax(Object impl) {
-		return create(impl).simpleJson().ignoreErrors().noLog().build();
+		return create(impl).simpleJson().ignoreErrors().noTrace().build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

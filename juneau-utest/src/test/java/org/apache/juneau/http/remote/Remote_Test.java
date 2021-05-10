@@ -636,11 +636,11 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static RestClientBuilder client(Class<?> c) {
-		return MockRestClient.create(c).noLog().simpleJson();
+		return MockRestClient.create(c).noTrace().simpleJson();
 	}
 
 	private static <T> T remote(Class<?> c, Class<T> r) {
-		return MockRestClient.create(c).noLog().simpleJson().build().getRemote(r);
+		return MockRestClient.create(c).noTrace().simpleJson().build().getRemote(r);
 	}
 
 	private static <T> T plainRemote(Class<?> c, Class<T> r) {

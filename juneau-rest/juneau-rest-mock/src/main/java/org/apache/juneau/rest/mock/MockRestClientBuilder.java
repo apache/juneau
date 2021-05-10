@@ -1267,8 +1267,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder noLog() {
-		super.noLog();
+	public MockRestClientBuilder noTrace() {
+		super.noTrace();
 		return this;
 	}
 

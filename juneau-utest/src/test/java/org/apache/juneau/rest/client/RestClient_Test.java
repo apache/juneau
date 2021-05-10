@@ -484,7 +484,7 @@ public class RestClient_Test {
 	}
 
 	private static RestClientBuilder client(Class<?> c) {
-		return MockRestClient.create(c).noLog().simpleJson();
+		return MockRestClient.create(c).noTrace().simpleJson();
 	}
 
 	private static Header header(String name, Object val) {

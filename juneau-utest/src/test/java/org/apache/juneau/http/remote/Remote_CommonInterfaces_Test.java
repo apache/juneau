@@ -398,7 +398,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Test
 	public void e01_predefinedExceptions() {
-		E x = MockRestClient.create(E1.class).ignoreErrors(false).noLog().build().getRemote(E.class);
+		E x = MockRestClient.create(E1.class).ignoreErrors(false).noTrace().build().getRemote(E.class);
 		assertThrown(()->x.badRequest()).isType(BadRequest.class).is(BadRequest.REASON_PHRASE);
 		assertThrown(()->x.conflict()).is(Conflict.REASON_PHRASE);
 		assertThrown(()->x.expectationFailed()).is(ExpectationFailed.REASON_PHRASE);
@@ -571,7 +571,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Test
 	public void e02_predefinedExceptions_customMessages() {
-		E x = MockRestClient.create(E2.class).ignoreErrors(false).noLog().build().getRemote(E.class);
+		E x = MockRestClient.create(E2.class).ignoreErrors(false).noTrace().build().getRemote(E.class);
 		assertThrown(()->x.badRequest()).is("foo");
 		assertThrown(()->x.conflict()).is("foo");
 		assertThrown(()->x.expectationFailed()).is("foo");
@@ -786,7 +786,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Test
 	public void f01_badRequest_returnedExceptions() {
-		F x = MockRestClient.create(F1.class).noLog().json().build().getRemote(F.class);
+		F x = MockRestClient.create(F1.class).noTrace().json().build().getRemote(F.class);
 		assertEquals("foo",x.badRequest().getMessage());
 		assertEquals("foo",x.conflict().getMessage());
 		assertEquals("foo",x.expectationFailed().getMessage());
