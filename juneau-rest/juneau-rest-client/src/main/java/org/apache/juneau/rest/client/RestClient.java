@@ -332,7 +332,6 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object) header(String,Object)}
- * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
  * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
@@ -342,31 +341,13 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
- * 		<li class='jm'>{@link RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
- * 		<li class='jm'>{@link RestRequest#header(ListOperation,String,Object) header(ListOperation,String,Object)}
- * 		<li class='jm'>{@link RestRequest#header(ListOperation,String,Object,HttpPartSchema) header(ListOperation,String,Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#header(ListOperation,String,Object) header(AddFlag,String,Object)}
  * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestRequest#headers(ListOperation,Object...) headers(ListOperation;Object...)}
+ * 		<li class='jm'>{@link RestRequest#headers(ListOperation,Object...) headers(AddFlag;Object...)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
  * 	</ul>
  * </ul>
- *
- * <p>
- * Additionally, methods are provided on the client builder and per request for all standard HTTP headers
- * such as {@link RestClientBuilder#authorization(Object) authorization(Object)}.
- *
- * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Create a client that adds an Authorization header to every request.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
- *
- * 	<jc>// Or do it per-request.</jc>
- * 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
- *
- * 	<jc>// Or use an HttpHeader.</jc>
- * 	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
- * </p>
  *
  * <p class='w900'>
  * The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
@@ -408,18 +389,15 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#queries(Object...) queries(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestRequest#query(ListOperation,String,Object) query(ListOperation,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#query(ListOperation,String,Object) query(AddFlag,String,Object)}
  * 		<li class='jm'>{@link RestRequest#queries(Object...) queries(Object...)}
- * 		<li class='jm'>{@link RestRequest#queries(ListOperation,Object...) queries(ListOperation,Object...)}
+ * 		<li class='jm'>{@link RestRequest#queries(ListOperation,Object...) queries(AddFlag,Object...)}
  * 		<li class='jm'>{@link RestRequest#queryPairs(Object...) queryPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 	</ul>
@@ -449,18 +427,15 @@ import org.apache.juneau.http.HttpHeaders;
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#formDatas(Object...) formDatas(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestRequest#formData(ListOperation,String,Object) formData(ListOperation,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#formData(ListOperation,String,Object) formData(AddFlag,String,Object)}
  * 		<li class='jm'>{@link RestRequest#formDatas(Object...) formDatas(Object...)}
- * 		<li class='jm'>{@link RestRequest#formDatas(ListOperation,Object...) formDatas(ListOperation,Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDatas(ListOperation,Object...) formDatas(AddFlag,Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 	</ul>
@@ -1031,8 +1006,7 @@ import org.apache.juneau.http.HttpHeaders;
  *
  * <p class='w900'>
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
- * {@link RestClient#createRequest(URI, String, boolean)} and {@link RestClient#createResponse(RestRequest, HttpResponse, Parser)} methods.
- *
+ * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
@@ -2302,8 +2276,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest put(Object uri, String body, String contentType) throws RestCallException {
-		return request(op("PUT", uri, stringBody(body))).contentType(contentType);
+	public RestRequest put(Object uri, String body, ContentType contentType) throws RestCallException {
+		return request(op("PUT", uri, stringBody(body))).header(contentType);
 	}
 
 	/**
@@ -2398,8 +2372,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest post(Object uri, String body, String contentType) throws RestCallException {
-		return request(op("POST", uri, stringBody(body))).contentType(contentType);
+	public RestRequest post(Object uri, String body, ContentType contentType) throws RestCallException {
+		return request(op("POST", uri, stringBody(body))).header(contentType);
 	}
 
 	/**
@@ -2545,11 +2519,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (body instanceof HttpEntity) {
 				HttpEntity e = (HttpEntity)body;
 				if (e.getContentType() == null)
-					req.contentType("application/x-www-form-urlencoded");
+					req.header(ContentType.APPLICATION_FORM_URLENCODED);
 				return req.body(e);
 			}
 			if (body instanceof Reader || body instanceof InputStream)
-				return req.contentType("application/x-www-form-urlencoded").body(body);
+				return req.header(ContentType.APPLICATION_FORM_URLENCODED).body(body);
 			return req.body(serializedEntity(body, urlEncodingSerializer, null).build());
 		} catch (IOException e) {
 			throw new RestCallException(null, e, "Could not read form post body.");
@@ -2669,8 +2643,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest patch(Object uri, String body, String contentType) throws RestCallException {
-		return request(op("PATCH", uri, stringBody(body))).contentType(contentType);
+	public RestRequest patch(Object uri, String body, ContentType contentType) throws RestCallException {
+		return request(op("PATCH", uri, stringBody(body))).header(contentType);
 	}
 
 	/**

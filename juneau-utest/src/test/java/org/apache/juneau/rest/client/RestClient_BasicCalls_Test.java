@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpResources.*;
+import static org.apache.juneau.http.header.ContentType.*;
 
 import java.io.*;
 import java.net.*;
@@ -138,7 +139,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a05_put_bodyString() throws Exception {
-		client().build().put("/bean","{f:1}","application/json").run().assertBody().is("{f:1}");
+		client().build().put("/bean","{f:1}",APPLICATION_JSON).run().assertBody().is("{f:1}");
 		client().build().put("/bean").bodyString("{f:1}").simpleJson().run().assertBody().is("{f:1}");
 		client().build().put("/bean").bodyString("").simpleJson().run().assertBody().is("{f:0}");
 		client().build().put("/bean").bodyString(null).simpleJson().run().assertBody().is("null");
@@ -156,7 +157,7 @@ public class RestClient_BasicCalls_Test {
 		RestClient x = client().build();
 		for (Object url : urls) {
 			x.put(url,bean).run().assertBody().is("{f:1}");
-			x.put(url,"{f:1}","application/json").run().assertBody().is("{f:1}");
+			x.put(url,"{f:1}",APPLICATION_JSON).run().assertBody().is("{f:1}");
 			x.put(url).body(bean).run().assertBody().is("{f:1}");
 		}
 	}
@@ -172,7 +173,7 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
+			client().header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -184,7 +185,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a09_post_stringBody() throws Exception {
-		client().build().post("/bean","{f:1}","application/json").run().assertBody().is("{f:1}");
+		client().build().post("/bean","{f:1}",APPLICATION_JSON).run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -199,7 +200,7 @@ public class RestClient_BasicCalls_Test {
 		RestClient x = client().build();
 		for (Object url : urls) {
 			x.post(url,bean).run().assertBody().is("{f:1}");
-			x.post(url,"{f:1}","application/json").run().assertBody().is("{f:1}");
+			x.post(url,"{f:1}",APPLICATION_JSON).run().assertBody().is("{f:1}");
 			x.post(url).body(bean).run().assertBody().is("{f:1}");
 		}
 	}
@@ -215,7 +216,7 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
+			client().header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -317,8 +318,8 @@ public class RestClient_BasicCalls_Test {
 			/*[ 5]*/ part("f","1"),
 			/*[ 6]*/ stringResource("f=1").build(),
 			/*[ 7]*/ stringResource("f=1").build(),
-			/*[ 8]*/ stringResource("f=1").contentType("application/x-www-form-urlencoded").build(),
-			/*[ 9]*/ stringResource("f=1").contentType("application/x-www-form-urlencoded").build(),
+			/*[ 8]*/ stringResource("f=1").contentType(APPLICATION_FORM_URLENCODED).build(),
+			/*[ 9]*/ stringResource("f=1").contentType(APPLICATION_FORM_URLENCODED).build(),
 			/*[14]*/ s1,
 			/*[15]*/ s2
 		);
@@ -341,7 +342,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a23_patch_fromString() throws Exception {
-		client().build().patch("/bean","{f:1}","application/json").run().assertBody().is("{f:1}");
+		client().build().patch("/bean","{f:1}",APPLICATION_JSON).run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -356,7 +357,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.patch("/bean",body).contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -393,7 +394,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.request("patch","/bean",body).contentType(body instanceof PartList ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertBody().is("{f:1}");
 		}
 	}
 

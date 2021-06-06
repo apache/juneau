@@ -39,6 +39,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.http.header.ContentType;
 
 /**
  * Mocked {@link RestClient}.
@@ -473,7 +474,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest put(Object url, String body, String contentType) throws RestCallException {
+	public MockRestRequest put(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.put(url, body, contentType);
 	}
 
@@ -488,7 +489,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest post(Object url, String body, String contentType) throws RestCallException {
+	public MockRestRequest post(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.post(url, body, contentType);
 	}
 
@@ -533,7 +534,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest patch(Object url, String body, String contentType) throws RestCallException {
+	public MockRestRequest patch(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.patch(url, body, contentType);
 	}
 

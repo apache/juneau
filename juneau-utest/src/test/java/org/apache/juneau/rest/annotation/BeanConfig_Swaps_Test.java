@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.ContentType.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -123,10 +124,10 @@ public class BeanConfig_Swaps_Test {
 	public void a01_swaps() throws Exception {
 		RestClient a = MockRestClient.build(A1.class);
 		a.get("/a").json().run().assertBody().is("'A2-0'");
-		a.put("/b", "'A2-1'", "application/json").run().assertBody().is("'A2-1'");
-		a.put("/c/A2-2", null, "application/json").run().assertBody().is("'A2-2'");
+		a.put("/b", "'A2-1'", APPLICATION_JSON).run().assertBody().is("'A2-1'");
+		a.put("/c/A2-2", null, APPLICATION_JSON).run().assertBody().is("'A2-2'");
 		a.get("/d").json().run().assertBody().is("'A3-0'");
-		a.put("/e", "'A3-1'", "application/json").run().assertBody().is("'A3-1'");
-		a.put("/f/A3-2", null, "application/json").run().assertBody().is("'A3-2'");
+		a.put("/e", "'A3-1'", APPLICATION_JSON).run().assertBody().is("'A3-1'");
+		a.put("/f/A3-2", null, APPLICATION_JSON).run().assertBody().is("'A3-2'");
 	}
 }

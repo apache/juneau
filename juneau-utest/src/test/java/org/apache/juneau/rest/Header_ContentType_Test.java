@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -45,16 +46,16 @@ public class Header_ContentType_Test {
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
-		a.put("/a", null, "")
+		a.put("/a", null, ContentType.of(""))
 			.run()
 			.assertBody().is("p2");
-		a.put("/a", null, "text/p1")
+		a.put("/a", null, ContentType.of("text/p1"))
 			.run()
 			.assertBody().is("p1");
-		a.put("/a", null, "text/p2")
+		a.put("/a", null, ContentType.of("text/p2"))
 			.run()
 			.assertBody().is("p2");
-		a.put("/a?noTrace=true", null, "text/p3")
+		a.put("/a?noTrace=true", null, ContentType.of("text/p3"))
 			.run()
 			.assertCode().is(415)
 			.assertBody().contains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
@@ -80,21 +81,21 @@ public class Header_ContentType_Test {
 	public void b01_restMethodWithParsersSerializers() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/a", null).contentType("text/p3").run().assertBody().is("p3");
-		b.put("/a?noTrace=true", null, "")
+		b.put("/a?noTrace=true", null, ContentType.of(""))
 			.run()
 			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
-		b.put("/a?noTrace=true", null, "text/p1")
+		b.put("/a?noTrace=true", null, ContentType.of("text/p1"))
 			.run()
 			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
-		b.put("/a?noTrace=true", null, "text/p2")
+		b.put("/a?noTrace=true", null, ContentType.of("text/p2"))
 			.run()
 			.assertCode().is(415)
 			.assertBody().contains(
@@ -122,10 +123,10 @@ public class Header_ContentType_Test {
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
 		RestClient c = MockRestClient.buildLax(C.class);
-		c.put("/a", null, "").run().assertBody().is("p2");
-		c.put("/a", null, "text/p1").run().assertBody().is("p1");
-		c.put("/a", null, "text/p2").run().assertBody().is("p2");
-		c.put("/a", null, "text/p3").run().assertBody().is("p3");
+		c.put("/a", null, ContentType.of("")).run().assertBody().is("p2");
+		c.put("/a", null, ContentType.of("text/p1")).run().assertBody().is("p1");
+		c.put("/a", null, ContentType.of("text/p2")).run().assertBody().is("p2");
+		c.put("/a", null, ContentType.of("text/p3")).run().assertBody().is("p3");
 		c.put("/a?noTrace=true", null).contentType("text/p4")
 			.run()
 			.assertCode().is(415)
@@ -154,20 +155,20 @@ public class Header_ContentType_Test {
 	@Test
 	public void d01_restMethodParserSerializerAnnotations() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
-		d.put("/a", null, "")
+		d.put("/a", null, ContentType.of(""))
 			.run()
 			.assertBody().is("p3");
-		d.put("/a", null, "text/p3")
+		d.put("/a", null, ContentType.of("text/p3"))
 			.run()
 			.assertBody().is("p3");
-		d.put("/a?noTrace=true", null, "text/p1")
+		d.put("/a?noTrace=true", null, ContentType.of("text/p1"))
 			.run()
 			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
-		d.put("/a?noTrace=true", null, "text/p2")
+		d.put("/a?noTrace=true", null, ContentType.of("text/p2"))
 			.run()
 			.assertCode().is(415)
 			.assertBody().contains(
@@ -195,16 +196,16 @@ public class Header_ContentType_Test {
 	@Test
 	public void e01_restMethodAddParsersSerializersAnnotations() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
-		e.put("/a", null, "")
+		e.put("/a", null, ContentType.of(""))
 			.run()
 			.assertBody().is("p3");
-		e.put("/a", null, "text/p1")
+		e.put("/a", null, ContentType.of("text/p1"))
 			.run()
 			.assertBody().is("p1");
-		e.put("/a", null, "text/p2")
+		e.put("/a", null, ContentType.of("text/p2"))
 			.run()
 			.assertBody().is("p2");
-		e.put("/a", null, "text/p3")
+		e.put("/a", null, ContentType.of("text/p3"))
 			.run()
 			.assertBody().is("p3");
 	}

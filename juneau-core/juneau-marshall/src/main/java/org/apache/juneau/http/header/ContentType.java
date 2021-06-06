@@ -77,6 +77,7 @@ public class ContentType extends BasicMediaTypeHeader {
 		IMAGE_WEBP = of("image/webp"),
 		MULTIPART_FORM_DATA = of("multipart/form-data"),
 		TEXT_HTML = of("text/html"),
+		TEXT_OPENAPI = of("text/openapi"),
 		TEXT_PLAIN = of("text/plain"),
 		TEXT_XML = of("text/xml"),
 		WILDCARD = of("*/*");

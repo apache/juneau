@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.header.ContentType.*;
 
 import java.io.*;
 
@@ -112,61 +113,61 @@ public class Rest_PredefinedStatusCodes_Test {
 	@Test
 	public void b01_badRequest() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
-		b.put("/a?noTrace=true", "{f2:'foo'}", "application/json")
+		b.put("/a?noTrace=true", "{f2:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Unknown property 'f2' encountered while trying to parse into class"
 			);
-		b.put("/a?noTrace=true", "{f1:'foo', f2:'foo'}", "application/json")
+		b.put("/a?noTrace=true", "{f1:'foo', f2:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Unknown property 'f2' encountered while trying to parse into class"
 			);
-		b.put("/b?noTrace=true", "{f1:'foo'}", "application/json")
+		b.put("/b?noTrace=true", "{f1:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Invalid number"
 			);
-		b.put("/c?noTrace=true", "{f1:1}", "application/json")
+		b.put("/c?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"could not be instantiated"
 			);
-		b.put("/d?noTrace=true", "{f1:1}", "application/json")
+		b.put("/d?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"could not be instantiated"
 			);
-		b.put("/e?noTrace=true", "{f1:1}", "application/json")
+		b.put("/e?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Class is not public"
 			);
-		b.put("/f?noTrace=true", "'foo'", "application/json")
+		b.put("/f?noTrace=true", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Test error"
 			);
-		b.put("/g/123?noTrace=true&p1=foo", "'foo'", "application/json")
+		b.put("/g/123?noTrace=true&p1=foo", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Could not parse query parameter 'p1'."
 			);
-		b.put("/g/foo?noTrace=true&p1=1", "'foo'", "application/json")
+		b.put("/g/foo?noTrace=true&p1=1", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
 			.assertBody().contains(
 				"Could not parse path parameter 'a1'."
 			);
-		b.put("/g/123?noTrace=true&p1=1", "'foo'", "application/json")
+		b.put("/g/123?noTrace=true&p1=1", "'foo'", APPLICATION_JSON)
 			.header("h1", "foo")
 			.run()
 			.assertCode().is(400)
