@@ -818,7 +818,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param scheme The new URI host.
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest scheme(String scheme) {
+	public RestRequest uriScheme(String scheme) {
 		uriBuilder.setScheme(scheme);
 		return this;
 	}

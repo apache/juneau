@@ -515,10 +515,10 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a16_request_uriParts() throws Exception {
-		java.net.URI uri = client().build().get().scheme("http").host("localhost").port(8080).userInfo("foo:bar").uri("/bean").fragment("baz").query("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
+		java.net.URI uri = client().build().get().uriScheme("http").host("localhost").port(8080).userInfo("foo:bar").uri("/bean").fragment("baz").query("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().scheme("http").host("localhost").port(8080).userInfo("foo","bar").uri("/bean").fragment("baz").query("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uriScheme("http").host("localhost").port(8080).userInfo("foo","bar").uri("/bean").fragment("baz").query("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
 		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertBody().is("{f:1}").getRequest().getURI();

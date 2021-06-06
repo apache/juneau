@@ -221,8 +221,8 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object (for method chaining).
 	 */
 	@Override
-	public MockRestRequest scheme(String value) {
-		super.scheme(value);
+	public MockRestRequest uriScheme(String value) {
+		super.uriScheme(value);
 		this.scheme = value;
 		return this;
 	}
