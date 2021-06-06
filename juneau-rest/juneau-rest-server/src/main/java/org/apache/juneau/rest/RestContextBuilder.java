@@ -1022,8 +1022,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder defaultRequestHeader(String name, Object value) {
-		return defaultRequestHeaders(basicHeader(name, value));
+	public RestContextBuilder defaultRequestHeader(String name, String value) {
+		return defaultRequestHeaders(stringHeader(name, value));
 	}
 
 	/**
@@ -1041,8 +1041,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder defaultRequestHeader(String name, Supplier<?> value) {
-		return defaultRequestHeaders(basicHeader(name, value));
+	public RestContextBuilder defaultRequestHeader(String name, Supplier<String> value) {
+		return defaultRequestHeaders(stringHeader(name, value));
 	}
 
 	/**
@@ -1079,8 +1079,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder defaultResponseHeader(String name, Object value) {
-		return defaultResponseHeaders(basicHeader(name, value));
+	public RestContextBuilder defaultResponseHeader(String name, String value) {
+		return defaultResponseHeaders(stringHeader(name, value));
 	}
 
 	/**
@@ -1098,8 +1098,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder defaultResponseHeader(String name, Supplier<?> value) {
-		return defaultResponseHeaders(basicHeader(name, value));
+	public RestContextBuilder defaultResponseHeader(String name, Supplier<String> value) {
+		return defaultResponseHeaders(stringHeader(name, value));
 	}
 
 	/**

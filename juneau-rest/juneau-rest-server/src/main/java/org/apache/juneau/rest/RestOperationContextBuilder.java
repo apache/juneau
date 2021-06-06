@@ -377,8 +377,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultRequestHeader(String name, Object value) {
-		return defaultRequestHeaders(basicHeader(name, value));
+	public RestOperationContextBuilder defaultRequestHeader(String name, String value) {
+		return defaultRequestHeaders(stringHeader(name, value));
 	}
 
 	/**
@@ -396,8 +396,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultRequestHeader(String name, Supplier<?> value) {
-		return defaultRequestHeaders(basicHeader(name, value));
+	public RestOperationContextBuilder defaultRequestHeader(String name, Supplier<String> value) {
+		return defaultRequestHeaders(stringHeader(name, value));
 	}
 
 	/**
@@ -434,8 +434,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultResponseHeader(String name, Object value) {
-		return defaultResponseHeaders(basicHeader(name, value));
+	public RestOperationContextBuilder defaultResponseHeader(String name, String value) {
+		return defaultResponseHeaders(stringHeader(name, value));
 	}
 
 	/**
@@ -453,8 +453,8 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestOperationContextBuilder defaultResponseHeader(String name, Supplier<?> value) {
-		return defaultResponseHeaders(basicHeader(name, value));
+	public RestOperationContextBuilder defaultResponseHeader(String name, Supplier<String> value) {
+		return defaultResponseHeaders(stringHeader(name, value));
 	}
 
 	/**
