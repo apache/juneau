@@ -76,6 +76,7 @@ import org.apache.juneau.http.HttpHeaders;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
+ * {@review}
  *
  * <p class='w900'>
  * Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
@@ -1977,6 +1978,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	final CloseableHttpClient httpClient;
 	private final HttpClientConnectionManager connectionManager;
 	private final boolean keepHttpClientOpen, leakDetection;
+	private final BeanStore beanStore;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
@@ -2000,6 +2002,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	Predicate<Integer> errorCodes;
 
 	final RestCallInterceptor[] interceptors;
+
+	private final Map<Class<?>, HttpPartParser> partParsers = new ConcurrentHashMap<>();
+	private final Map<Class<?>, HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
 
 	// This is lazy-created.
 	private volatile ExecutorService executorService;
@@ -2034,6 +2039,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	protected RestClient(ContextProperties cp) {
 		super(cp);
 		this.httpClient = cp.getInstance(RESTCLIENT_httpClient, CloseableHttpClient.class).orElse(null);
+
+		BeanStore bs = this.beanStore = new BeanStore()
+			.addBean(ContextProperties.class, cp)
+			.addBean(RestClient.class, this);
+
 		this.connectionManager = cp.getInstance(RESTCLIENT_connectionManager, HttpClientConnectionManager.class).orElse(null);
 		this.keepHttpClientOpen = cp.getBoolean(RESTCLIENT_keepHttpClientOpen).orElse(false);
 		this.errorCodes = cp.getInstance(RESTCLIENT_errorCodes, Predicate.class).orElse(ERROR_CODES_DEFAULT);
@@ -2077,10 +2087,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			}
 		}
 		this.parsers = pgb.build();
-
-		BeanStore bs = new BeanStore()
-			.addBean(ContextProperties.class, cp)
-			.addBean(RestClient.class, this);
 
 		this.urlEncodingSerializer = UrlEncodingSerializer.create().apply(cp).build();
 		this.partSerializer = cp.getInstance(RESTCLIENT_partSerializer, HttpPartSerializer.class, bs).orElseGet(bs.createBeanSupplier(OpenApiSerializer.class));
@@ -3062,6 +3068,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 				final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
+				@SuppressWarnings("deprecation")
 				@Override /* InvocationHandler */
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					RemoteOperationMeta rom = rm.getOperationMeta(method);
@@ -3073,8 +3080,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 						throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
 					String httpMethod = rom.getHttpMethod();
-					HttpPartSerializerSession s = getPartSerializerSession();
-
 					RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
 
 					rc.serializer(serializer);
@@ -3082,17 +3087,19 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 					rm.getHeaders().forEach(x -> rc.header(APPEND, x));
 
+					HttpPartSerializer partSerializer = getPartSerializer();
+
 					for (RemoteOperationArg a : rom.getPathArgs())
-						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer));
 
 					for (RemoteOperationArg a : rom.getQueryArgs())
-						rc.queryArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.queryArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer));
 
 					for (RemoteOperationArg a : rom.getFormDataArgs())
-						rc.formDataArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.formDataArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer));
 
 					for (RemoteOperationArg a : rom.getHeaderArgs())
-						rc.headerArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.headerArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer));
 
 					RemoteOperationArg ba = rom.getBodyArg();
 					if (ba != null)
@@ -3106,19 +3113,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 								for (RequestBeanPropertyMeta p : rbm.getProperties()) {
 									Object val = p.getGetter().invoke(bean);
 									HttpPartType pt = p.getPartType();
-									HttpPartSerializerSession ps = p.getSerializer(s);
 									String pn = p.getPartName();
 									HttpPartSchema schema = p.getSchema();
 									EnumSet<ListOperation> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
 									if (pt == PATH)
-										rc.pathArg(pn, val, schema, p.getSerializer(s));
+										rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
 									else if (val != null) {
 										if (pt == QUERY)
-											rc.queryArg(flags, pn, val, schema, ps);
+											rc.queryArg(flags, pn, val, schema, p.getSerializer().orElse(partSerializer));
 										else if (pt == FORMDATA)
-											rc.formDataArg(flags, pn, val, schema, ps);
+											rc.formDataArg(flags, pn, val, schema, p.getSerializer().orElse(partSerializer));
 										else if (pt == HEADER)
-											rc.headerArg(flags, pn, val, schema, ps);
+											rc.headerArg(flags, pn, val, schema, p.getSerializer().orElse(partSerializer));
 										else /* (pt == HttpPartType.BODY) */
 											rc.body(val, schema);
 									}
@@ -3395,6 +3401,62 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private Supplier<String> msg(String msg, Object...args) {
 		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
+	}
+
+	/**
+	 * Returns the part serializer associated with this client.
+	 *
+	 * @return The part serializer associated with this client.
+	 */
+	protected HttpPartSerializer getPartSerializer() {
+		return partSerializer;
+	}
+
+	/**
+	 * Returns the part parser associated with this client.
+	 *
+	 * @return The part parser associated with this client.
+	 */
+	protected HttpPartParser getPartParser() {
+		return partParser;
+	}
+
+	/**
+	 * Returns the part serializer instance of the specified type.
+	 *
+	 * @param c The part serializer class.
+	 * @return The part serializer.
+	 */
+	protected HttpPartSerializer getPartSerializer(Class<? extends HttpPartSerializer> c) {
+		HttpPartSerializer x = partSerializers.get(c);
+		if (x == null) {
+			try {
+				x = beanStore.createBean(c);
+			} catch (ExecutableException e) {
+				throw new RuntimeException(e);
+			}
+			partSerializers.put(c, x);
+		}
+		return x;
+	}
+
+	/**
+	 * Returns the part parser instance of the specified type.
+	 *
+	 * @param c The part parser class.
+	 * @return The part parser.
+	 */
+	protected HttpPartParser getPartParser(Class<? extends HttpPartParser> c) {
+		HttpPartParser x = partParsers.get(c);
+		if (x == null) {
+			try {
+				x = beanStore.createBean(c);
+			} catch (ExecutableException e) {
+				throw new RuntimeException(e);
+			}
+			partParsers.put(c, x);
+		}
+		return x;
 	}
 
 

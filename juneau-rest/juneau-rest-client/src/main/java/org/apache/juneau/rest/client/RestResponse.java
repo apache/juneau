@@ -51,10 +51,12 @@ public class RestResponse implements HttpResponse {
 	private final RestRequest request;
 	private final HttpResponse response;
 	private final Parser parser;
-	HttpPartParserSession partParser;
 	private ResponseBody responseBody;
 	private boolean isClosed;
 	private HeaderList headers;
+
+	private Map<HttpPartParser,HttpPartParserSession> partParserSessions = new IdentityHashMap<>();
+	private HttpPartParserSession partParserSession;
 
 	/**
 	 * Constructor.
@@ -70,7 +72,6 @@ public class RestResponse implements HttpResponse {
 		this.parser = parser;
 		this.response = response == null ? new BasicHttpResponse(null, 0, null) : response;
 		this.responseBody = new ResponseBody(client, request, this, parser);
-		this.partParser = client.getPartParserSession();
 		this.headers = HeaderList.of(this.response.getAllHeaders());
 	}
 
@@ -432,7 +433,7 @@ public class RestResponse implements HttpResponse {
 				@Override /* InvocationHandler */
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-					HttpPartParserSession pp = pm.getParserSession().orElse(partParser);
+					HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
 					HttpPartSchema schema = pm.getSchema();
 					HttpPartType pt = pm.getPartType();
 					String name = pm.getPartName().orElse(null);
@@ -640,7 +641,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getHeaders(String name) {
-		return headers.stream(name).map(x -> new ResponseHeader(request, this, x).parser(partParser)).toArray(ResponseHeader[]::new);
+		return headers.stream(name).map(x -> new ResponseHeader(request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
 	}
 
 	/**
@@ -656,7 +657,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
-		return new ResponseHeader(request, this, headers.getFirst(name).orElse(null)).parser(partParser);
+		return new ResponseHeader(request, this, headers.getFirst(name).orElse(null)).parser(getPartParserSession());
 	}
 
 	/**
@@ -672,7 +673,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
-		return new ResponseHeader(request, this, headers.getLast(name).orElse(null)).parser(partParser);
+		return new ResponseHeader(request, this, headers.getLast(name).orElse(null)).parser(getPartParserSession());
 	}
 
 	/**
@@ -685,7 +686,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The header, never <jk>null</jk>.
 	 */
 	public ResponseHeader getHeader(String name) {
-		return new ResponseHeader(request, this, headers.get(name).orElse(null)).parser(partParser);
+		return new ResponseHeader(request, this, headers.get(name).orElse(null)).parser(getPartParserSession());
 	}
 
 	/**
@@ -697,7 +698,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getAllHeaders() {
-		return headers.stream().map(x -> new ResponseHeader(request, this, x).parser(partParser)).toArray(ResponseHeader[]::new);
+		return headers.stream().map(x -> new ResponseHeader(request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
 	}
 
 	/**
@@ -881,6 +882,32 @@ public class RestResponse implements HttpResponse {
 	//------------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a session of the specified part parser.
+	 *
+	 * @param parser The parser to create a session for.
+	 * @return A session of the specified parser.
+	 */
+	protected HttpPartParserSession getPartParserSession(HttpPartParser parser) {
+		HttpPartParserSession s = partParserSessions.get(parser);
+		if (s == null) {
+			s = parser.createPartSession(null);
+			partParserSessions.put(parser, s);
+		}
+		return s;
+	}
+
+	/**
+	 * Creates a session of the client-default parat parser.
+	 *
+	 * @return A session of the specified parser.
+	 */
+	protected HttpPartParserSession getPartParserSession() {
+		if (partParserSession == null)
+			partParserSession = client.getPartParser().createPartSession(null);
+		return partParserSession;
+	}
 
 	HttpResponse asHttpResponse() {
 		return response;

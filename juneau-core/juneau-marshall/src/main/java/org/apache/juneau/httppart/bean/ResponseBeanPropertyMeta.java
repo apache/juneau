@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import static java.util.Optional.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -41,16 +42,16 @@ public class ResponseBeanPropertyMeta {
 
 	private final Method getter;
 	private final HttpPartType partType;
-	private final HttpPartSerializer serializer;
-	private final HttpPartParser parser;
+	private final Optional<HttpPartSerializer> serializer;
+	private final Optional<HttpPartParser> parser;
 	private final HttpPartSchema schema;
 
-	ResponseBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
+	ResponseBeanPropertyMeta(Builder b, Optional<HttpPartSerializer> serializer, Optional<HttpPartParser> parser) {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp);
-		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp);
+		this.serializer = serializer.isPresent() ? serializer : ofNullable(castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp));
+		this.parser = parser.isPresent() ? parser : ofNullable(castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp));
 	}
 
 	static class Builder {
@@ -80,7 +81,7 @@ public class ResponseBeanPropertyMeta {
 			return this;
 		}
 
-		ResponseBeanPropertyMeta build(HttpPartSerializer serializer, HttpPartParser parser) {
+		ResponseBeanPropertyMeta build(Optional<HttpPartSerializer> serializer, Optional<HttpPartParser> parser) {
 			return new ResponseBeanPropertyMeta(this, serializer, parser);
 		}
 	}
@@ -121,8 +122,8 @@ public class ResponseBeanPropertyMeta {
 	 *
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public Optional<HttpPartSerializerSession> getSerializerSession() {
-		return Optional.ofNullable(serializer == null ? null : serializer.createPartSession(null));
+	public Optional<HttpPartSerializer> getSerializer() {
+		return serializer;
 	}
 
 	/**
@@ -130,8 +131,8 @@ public class ResponseBeanPropertyMeta {
 	 *
 	 * @return The parser to use for parsing the bean property value.
 	 */
-	public Optional<HttpPartParserSession> getParserSession() {
-		return Optional.ofNullable(parser == null ? null : parser.createPartSession(null));
+	public Optional<HttpPartParser> getParser() {
+		return parser;
 	}
 
 	/**

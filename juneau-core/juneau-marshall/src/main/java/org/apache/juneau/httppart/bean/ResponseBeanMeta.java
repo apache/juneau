@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.bean.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -104,15 +105,15 @@ public class ResponseBeanMeta {
 	private final int code;
 	private final Map<String,ResponseBeanPropertyMeta> headerMethods;
 	private final ResponseBeanPropertyMeta statusMethod, bodyMethod;
-	private final HttpPartSerializer partSerializer;
-	private final HttpPartParser partParser;
+	private final Optional<HttpPartSerializer> partSerializer;
+	private final Optional<HttpPartParser> partParser;
 	private final HttpPartSchema schema;
 
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = castOrCreate(HttpPartSerializer.class, b.partSerializer, true, b.cp);
-		this.partParser = castOrCreate(HttpPartParser.class, b.partParser, true, b.cp);
+		this.partSerializer = ofNullable(castOrCreate(HttpPartSerializer.class, b.partSerializer, true, b.cp));
+		this.partParser = ofNullable(castOrCreate(HttpPartParser.class, b.partParser, true, b.cp));
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();
@@ -126,7 +127,7 @@ public class ResponseBeanMeta {
 		this.headerMethods = Collections.unmodifiableMap(hm);
 
 		this.bodyMethod = b.bodyMethod == null ? null : b.bodyMethod.schema(schema).build(partSerializer, partParser);
-		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(null, null);
+		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(empty(), empty());
 
 		if (bodyMethod != null)
 			properties.put(bodyMethod.getGetter().getName(), bodyMethod);
@@ -250,7 +251,7 @@ public class ResponseBeanMeta {
 	 *
 	 * @return The part serializer to use to serialize this response.
 	 */
-	public HttpPartSerializer getPartSerializer() {
+	public Optional<HttpPartSerializer> getPartSerializer() {
 		return partSerializer;
 	}
 

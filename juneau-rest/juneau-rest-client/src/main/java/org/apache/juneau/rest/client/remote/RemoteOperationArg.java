@@ -13,6 +13,9 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
+
+import java.util.*;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -31,13 +34,13 @@ public final class RemoteOperationArg {
 
 	private final int index;
 	private final HttpPartType partType;
-	private final HttpPartSerializer serializer;
+	private final Optional<HttpPartSerializer> serializer;
 	private final HttpPartSchema schema;
 
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = createSerializer(partType, schema);
+		this.serializer = ofNullable(createSerializer(partType, schema));
 		this.schema = schema;
 	}
 
@@ -84,11 +87,10 @@ public final class RemoteOperationArg {
 	/**
 	 * Returns the HTTP part serializer to use for serializing this part.
 	 *
-	 * @param _default The default serializer to use if the serializer was not defined via annotations.
 	 * @return The HTTP part serializer, or the default if not specified.
 	 */
-	public HttpPartSerializerSession getSerializer(HttpPartSerializerSession _default) {
-		return serializer == null ? _default : serializer.createPartSession(null);
+	public Optional<HttpPartSerializer> getSerializer() {
+		return serializer;
 	}
 
 	/**

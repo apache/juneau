@@ -13,9 +13,11 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -40,7 +42,7 @@ public class RequestBeanPropertyMeta {
 
 	private final Method getter;
 	private final HttpPartType partType;
-	private final HttpPartSerializer serializer;
+	private final Optional<HttpPartSerializer> serializer;
 	private final HttpPartParser parser;
 	private final HttpPartSchema schema;
 
@@ -48,7 +50,7 @@ public class RequestBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp);
+		this.serializer = ofNullable(schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.cp));
 		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.cp);
 	}
 
@@ -112,11 +114,10 @@ public class RequestBeanPropertyMeta {
 	/**
 	 * Returns the serializer to use for serializing the bean property value.
 	 *
-	 * @param _default The default serializer to use if not defined on the annotation.
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public HttpPartSerializerSession getSerializer(HttpPartSerializerSession _default) {
-		return serializer == null ? _default : serializer.createPartSession(null);
+	public Optional<HttpPartSerializer> getSerializer() {
+		return serializer;
 	}
 
 	/**

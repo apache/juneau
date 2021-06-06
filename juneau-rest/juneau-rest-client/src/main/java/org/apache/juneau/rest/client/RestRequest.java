@@ -83,7 +83,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private boolean hasInput;                              // input() was called, even if it's setting 'null'.
 	private Serializer serializer;
 	private Parser parser;
-	private HttpPartSerializerSession partSerializer;
 	private HttpPartSchema requestBodySchema;
 	private URIBuilder uriBuilder;
 	private List<NameValuePair> formData;
@@ -91,6 +90,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private HttpHost target;
 	private HttpContext context;
 	private List<Class<? extends Throwable>> rethrow;
+
+	private final Map<HttpPartSerializer,HttpPartSerializerSession> partSerializerSessions = new IdentityHashMap<>();
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -106,7 +107,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		this.client = client;
 		this.request = createInnerRequest(method, uri, hasBody);
 		this.errorCodes = client.errorCodes;
-		this.partSerializer = client.getPartSerializerSession();
 		this.uriBuilder = new URIBuilder(request.getURI());
 		this.ignoreErrors = client.ignoreErrors;
 	}
@@ -905,7 +905,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest path(String name, Object value) throws RestCallException {
-		return paths(serializedPart(name, value, PATH, partSerializer, null, null));
+		return paths(serializedPart(name, value, PATH, partSerializer(), null, null));
 	}
 
 	/**
@@ -954,7 +954,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest path(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return paths(serializedPart(name, value, PATH, partSerializer, schema, null));
+		return paths(serializedPart(name, value, PATH, partSerializer(), schema, null));
 	}
 
 	/**
@@ -1005,10 +1005,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					innerPath(BasicPart.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry e : toMap(o).entrySet())
-					innerPath(serializedPart(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
+					innerPath(serializedPart(e.getKey(), e.getValue(), PATH, partSerializer(), null, null));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					innerPath(serializedPart(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
+					innerPath(serializedPart(e.getKey(), e.getValue(), PATH, partSerializer(), null, null));
 			} else if (o != null) {
 				throw runtimeException("Invalid type passed to paths(): {0}", className(o));
 			}
@@ -1043,12 +1043,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (pairs.length % 2 != 0)
 			throw new RestCallException(null, null, "Odd number of parameters passed into pathPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			paths(serializedPart(pairs[i], pairs[i+1], PATH, partSerializer, null, null));
+			paths(serializedPart(pairs[i], pairs[i+1], PATH, partSerializer(), null, null));
 		return this;
 	}
 
-	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer2) throws RestCallException {
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+
+		HttpPartSerializerSession serializer = getPartSerializerSession(serializer2);
 
 		if (! isMulti)
 			return innerPath(serializedPart(name, value, PATH, serializer, schema, null));
@@ -1131,7 +1133,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(ListOperation flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return queries(flag, serializedPart(name, value, QUERY, partSerializer, schema, EnumSet.of(flag)));
+		return queries(flag, serializedPart(name, value, QUERY, partSerializer(), schema, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1156,7 +1158,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(String name, Object value) throws RestCallException {
-		return queries(serializedPart(name, value, QUERY, partSerializer, null, null));
+		return queries(serializedPart(name, value, QUERY, partSerializer(), null, null));
 	}
 
 	/**
@@ -1207,7 +1209,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return queries(serializedPart(name, value, QUERY, partSerializer, schema, null));
+		return queries(serializedPart(name, value, QUERY, partSerializer(), schema, null));
 	}
 
 	/**
@@ -1240,7 +1242,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest query(ListOperation flag, String name, Object value) {
-		return queries(flag, serializedPart(name, value, QUERY, partSerializer, null, EnumSet.of(flag)));
+		return queries(flag, serializedPart(name, value, QUERY, partSerializer(), null, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1333,10 +1335,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					l.add(BasicPart.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
-					l.add(serializedPart(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
+					l.add(serializedPart(e.getKey(), e.getValue(), QUERY, partSerializer(), null, EnumSet.of(flag)));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(serializedPart(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
+					l.add(serializedPart(e.getKey(), e.getValue(), QUERY, partSerializer(), null, EnumSet.of(flag)));
 			} else if (o != null) {
 				throw runtimeException("Invalid type passed to queries(): {0}", className(o));
 			}
@@ -1368,7 +1370,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (pairs.length % 2 != 0)
 			throw new RestCallException(null, null, "Odd number of parameters passed into queryPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			queries(serializedPart(pairs[i], pairs[i+1], QUERY, partSerializer, null, null));
+			queries(serializedPart(pairs[i], pairs[i+1], QUERY, partSerializer(), null, null));
 		return this;
 	}
 
@@ -1415,9 +1417,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest queryArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	@SuppressWarnings("deprecation")
+	RestRequest queryArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer2) throws RestCallException {
 		flags = ListOperation.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+
+		HttpPartSerializerSession serializer = getPartSerializerSession(serializer2);
 
 		if (! isMulti)
 			return innerQuery(flags, AList.of(serializedPart(name, value, QUERY, serializer, schema, flags)));
@@ -1447,6 +1452,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerQuery(flags, l);
 	}
 
+	@SuppressWarnings("deprecation")
 	private RestRequest innerQuery(EnumSet<ListOperation> flags, List<NameValuePair> params) {
 		flags = ListOperation.orDefault(flags);
 		params.removeIf(x -> x.getValue() == null);
@@ -1510,7 +1516,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(ListOperation flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer, schema, EnumSet.of(flag)));
+		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer(), schema, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1535,7 +1541,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(String name, Object value) throws RestCallException {
-		return formDatas(serializedPart(name, value, FORMDATA, partSerializer, null, null));
+		return formDatas(serializedPart(name, value, FORMDATA, partSerializer(), null, null));
 	}
 
 	/**
@@ -1587,7 +1593,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return formDatas(serializedPart(name, value, FORMDATA, partSerializer, schema, null));
+		return formDatas(serializedPart(name, value, FORMDATA, partSerializer(), schema, null));
 	}
 
 	/**
@@ -1620,7 +1626,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest formData(ListOperation flag, String name, Object value) {
-		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer, null, EnumSet.of(flag)));
+		return formDatas(flag, serializedPart(name, value, FORMDATA, partSerializer(), null, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1715,10 +1721,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					l.add(BasicPart.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
-					l.add(serializedPart(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
+					l.add(serializedPart(e.getKey(), e.getValue(), FORMDATA, partSerializer(), null, EnumSet.of(flag)));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(serializedPart(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
+					l.add(serializedPart(e.getKey(), e.getValue(), FORMDATA, partSerializer(), null, EnumSet.of(flag)));
 			} else if (o != null) {
 				throw runtimeException("Invalid type passed to formDatas(): {0}", className(o));
 			}
@@ -1750,7 +1756,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (pairs.length % 2 != 0)
 			throw new RestCallException(null, null, "Odd number of parameters passed into formDataPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			formDatas(serializedPart(pairs[i], pairs[i+1], FORMDATA, partSerializer, null, null));
+			formDatas(serializedPart(pairs[i], pairs[i+1], FORMDATA, partSerializer(), null, null));
 		return this;
 	}
 
@@ -1806,9 +1812,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest formDataArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	@SuppressWarnings("deprecation")
+	RestRequest formDataArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer2) throws RestCallException {
 		flags = ListOperation.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+
+		HttpPartSerializerSession serializer = getPartSerializerSession(serializer2);
 
 		if (! isMulti)
 			return innerFormData(flags, AList.of(serializedPart(name, value, FORMDATA, serializer, schema, flags)));
@@ -1838,6 +1847,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerFormData(flags, l);
 	}
 
+	@SuppressWarnings("deprecation")
 	private RestRequest innerFormData(EnumSet<ListOperation> flags, List<NameValuePair> params) {
 		input = null;
 		flags = ListOperation.orDefault(flags);
@@ -2013,7 +2023,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest header(ListOperation flag, String name, Object value, HttpPartSchema schema) {
-		return headers(flag, serializedHeader(name, value, partSerializer, schema, EnumSet.of(flag)));
+		return headers(flag, serializedHeader(name, value, partSerializer(), schema, EnumSet.of(flag)));
 	}
 
 	/**
@@ -2040,7 +2050,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest header(String name, Object value) {
-		return headers(serializedHeader(name, value, partSerializer, null, null));
+		return headers(serializedHeader(name, value, partSerializer(), null, null));
 	}
 
 	/**
@@ -2074,7 +2084,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest header(String name, Object value, HttpPartSchema schema) {
-		return headers(serializedHeader(name, value, partSerializer, schema, null));
+		return headers(serializedHeader(name, value, partSerializer(), schema, null));
 	}
 
 	/**
@@ -2107,7 +2117,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest header(ListOperation flag, String name, Object value) {
-		return headers(flag, serializedHeader(name, value, partSerializer, null, EnumSet.of(flag)));
+		return headers(flag, serializedHeader(name, value, partSerializer(), null, EnumSet.of(flag)));
 	}
 
 	/**
@@ -2250,10 +2260,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					l.add(HttpHeaders.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
-					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
+					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer(), null, EnumSet.of(flag)));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
+					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer(), null, EnumSet.of(flag)));
 			} else if (o != null) {
 				throw runtimeException("Invalid type passed to headers(): {0}", className(o));
 			}
@@ -2317,13 +2327,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
+			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer(), null, null));
 		return innerHeaders(EnumSet.of(flag), l);
 	}
 
-	RestRequest headerArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	@SuppressWarnings("deprecation")
+	RestRequest headerArg(EnumSet<ListOperation> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer2) throws RestCallException {
 		flags = ListOperation.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
+
+		HttpPartSerializerSession serializer = getPartSerializerSession(serializer2);
 
 		if (! isMulti)
 			return innerHeaders(flags, AList.of(serializedHeader(name, value, serializer, schema, flags)));
@@ -2353,6 +2366,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return innerHeaders(flags, l);
 	}
 
+	@SuppressWarnings("deprecation")
 	private RestRequest innerHeaders(EnumSet<ListOperation> flags, Collection<Header> headers) {
 		flags = ListOperation.orDefault(flags);
 		headers.removeIf(x -> x.getValue() == null);
@@ -3523,12 +3537,29 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return (Map<Object,Object>)o;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static SerializedPart serializedPart(Object key, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<ListOperation> flags) {
 		return key == null ? null : new SerializedPart(stringify(key), value, type, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
 	}
 
+	@SuppressWarnings("deprecation")
 	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<ListOperation> flags) {
 		return key == null ? null : new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
+	}
+
+	/**
+	 * Creates a session of the specified part serializer.
+	 *
+	 * @param serializer The serializer to create a session for.
+	 * @return A session of the specified serializer.
+	 */
+	protected HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {
+		HttpPartSerializerSession s = partSerializerSessions.get(serializer);
+		if (s == null) {
+			s = serializer.createPartSession(null);
+			partSerializerSessions.put(serializer, s);
+		}
+		return s;
 	}
 
 	private static boolean isNameValuePairArray(Object o) {
@@ -3547,6 +3578,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return false;
 	}
 
+	// TEMP.
+	private HttpPartSerializerSession partSerializer() {
+		return getPartSerializerSession(client.getPartSerializer());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -3563,7 +3599,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					.a("hasInput", hasInput)
 					.a("ignoreErrors", ignoreErrors)
 					.a("interceptors", interceptors)
-					.a("partSerializer", partSerializer)
 					.a("requestBodySchema", requestBodySchema)
 					.a("response", response)
 					.a("serializer", serializer)

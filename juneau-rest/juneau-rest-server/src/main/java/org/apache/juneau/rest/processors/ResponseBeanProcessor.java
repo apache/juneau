@@ -24,7 +24,6 @@ import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -39,6 +38,8 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
+		HttpPartSerializer defaultPartSerializer = req.getOpContext().getPartSerializer();
+
 		Object output = res.getOutput(Object.class);
 
 		if (output == null)
@@ -50,8 +51,6 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 		ResponseBeanMeta rm = res.getResponseBeanMeta();
 		if (rm == null)
 			rm = req.getOpContext().getResponseBeanMeta(output);
-
-		HttpPartSerializerSession ss = req.getPartSerializerSession();
 
 		ResponseBeanPropertyMeta stm = rm.getStatusMethod();
 		if (stm != null) {
@@ -76,13 +75,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 							@SuppressWarnings("rawtypes")
 							Map.Entry x = (Map.Entry)o2;
 							String k = stringify(x.getKey());
-							h = new SerializedHeader(k, x.getValue(), hm.getSerializerSession().orElse(ss), ps.getProperty(k), true);
-						} else if (o2 instanceof SerializedHeader) {
-							SerializedHeader x = ((SerializedHeader)o2);
-							h = x.copyWith(ss, ps.getProperty(x.getName()));
-						} else if (o2 instanceof SerializedPart) {
-							SerializedPart x = ((SerializedPart)o2);
-							h = BasicHeader.of(x.copyWith(ss, ps.getProperty(x.getName())));
+							h = new SerializedHeader(k, x.getValue(), req.getPartSerializerSession(hm.getSerializer().orElse(defaultPartSerializer)), ps.getProperty(k), true);
 						} else if (o2 instanceof Header) {
 							h = (Header)o2;
 						} else if (o2 instanceof NameValuePair) {
@@ -94,16 +87,12 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 					}
 				} else {
 					Header h = null;
-					if (o instanceof SerializedHeader)
-						h = ((SerializedHeader)o).copyWith(ss, ps);
-					else if (o instanceof SerializedPart)
-						h = BasicHeader.of(((SerializedPart)o).copyWith(ss, ps));
-					else if (o instanceof Header)
+					if (o instanceof Header)
 						h = (Header)o;
 					else if (o instanceof NameValuePair)
 						h = BasicHeader.of((NameValuePair)o);
 					else
-						h = new SerializedHeader(n, o, hm.getSerializerSession().orElse(ss), ps, true);
+						h = new SerializedHeader(n, o, req.getPartSerializerSession(hm.getSerializer().orElse(defaultPartSerializer)), ps, true);
 					res.addHeader(h);
 				}
 			} catch (Exception e) {
