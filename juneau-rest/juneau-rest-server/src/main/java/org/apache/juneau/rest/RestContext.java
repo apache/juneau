@@ -1181,7 +1181,7 @@ public class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultRequestHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultRequestHeader(String,String)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultRequestHeader(String,Supplier)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * 		</ul>
@@ -1252,7 +1252,7 @@ public class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultResponseHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultResponseHeader(String,String)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultResponseHeader(String,Supplier)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * 		</ul>

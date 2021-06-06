@@ -415,7 +415,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeader(String,String)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeader(String,Supplier)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * 		</ul>
@@ -460,7 +460,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeader(String,String)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeader(String,Supplier)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestOperationContextBuilder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * 		</ul>
