@@ -782,6 +782,27 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
+	 *
+	 * <p>
+	 * Same as {@link #toBeanMap(Object)} but allows you to specify a property namer instance.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a bean map around a bean instance</jc>
+	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param o The object to wrap in a map interface.  Must not be null.
+	 * @param propertyNamer The property namer to use.
+	 * @return The wrapped object.
+	 */
+	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
+		return this.toBeanMap(o, (Class<T>)o.getClass());
+	}
+
+	/**
 	 * Determines whether the specified object matches the requirements on this context of being a bean.
 	 *
 	 * @param o The object being tested.

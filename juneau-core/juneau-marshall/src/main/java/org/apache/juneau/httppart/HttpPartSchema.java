@@ -147,7 +147,6 @@ public class HttpPartSchema {
 
 
 	final String name;
-	final Set<Integer> codes;
 	final String _default;
 	final Set<String> _enum;
 	final Map<String,HttpPartSchema> properties;
@@ -643,7 +642,6 @@ public class HttpPartSchema {
 
 	HttpPartSchema(HttpPartSchemaBuilder b) {
 		this.name = b.name;
-		this.codes = copy(b.codes);
 		this._default = b._default;
 		this._enum = copy(b._enum);
 		this.properties = build(b.properties, b.noValidate);
@@ -870,49 +868,6 @@ public class HttpPartSchema {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * Returns the HTTP status code or codes defined on a schema.
-	 *
-	 * @return
-	 * 	The list of HTTP status codes.
-	 * 	<br>Never <jk>null</jk>.
-	 * @see HttpPartSchemaBuilder#code(int)
-	 * @see HttpPartSchemaBuilder#codes(int[])
-	 */
-	public Set<Integer> getCodes() {
-		return codes;
-	}
-
-	/**
-	 * Returns the HTTP status code or codes defined on a schema.
-	 *
-	 * @param def The default value if there are no codes defined.
-	 * @return
-	 * 	The list of HTTP status codes.
-	 * 	<br>A singleton set containing the default value if the set is empty.
-	 * 	<br>Never <jk>null</jk>.
-	 * @see HttpPartSchemaBuilder#code(int)
-	 * @see HttpPartSchemaBuilder#codes(int[])
-	 */
-	public Set<Integer> getCodes(Integer def) {
-		return codes.isEmpty() ? Collections.singleton(def) : codes;
-	}
-
-	/**
-	 * Returns the first HTTP status code on a schema.
-	 *
-	 * @param def The default value if there are no codes defined.
-	 * @return
-	 * 	The list of HTTP status codes.
-	 * 	<br>A singleton set containing the default value if the set is empty.
-	 * 	<br>Never <jk>null</jk>.
-	 * @see HttpPartSchemaBuilder#code(int)
-	 * @see HttpPartSchemaBuilder#codes(int[])
-	 */
-	public Integer getCode(Integer def) {
-		return codes.isEmpty() ? def : codes.iterator().next();
 	}
 
 	/**
@@ -1550,7 +1505,6 @@ public class HttpPartSchema {
 				.appendSkipEmpty("name", name)
 				.appendSkipEmpty("type", type)
 				.appendSkipEmpty("format", format)
-				.appendSkipEmpty("codes", codes)
 				.appendSkipEmpty("default", _default)
 				.appendSkipEmpty("enum", _enum)
 				.appendSkipEmpty("properties", properties)
