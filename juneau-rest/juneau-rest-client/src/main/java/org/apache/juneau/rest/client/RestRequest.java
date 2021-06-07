@@ -3583,6 +3583,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return getPartSerializerSession(client.getPartSerializer());
 	}
 
+	/**
+	 * TEMP
+	 *
+	 * @return TEMP
+	 */
+	public HttpRequest getHttpRequest() {
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------

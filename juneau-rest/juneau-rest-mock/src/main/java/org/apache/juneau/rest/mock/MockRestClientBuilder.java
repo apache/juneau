@@ -212,7 +212,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public MockRestClientBuilder debug() {
-		header("Debug", true);
+		header("Debug", "true");
 		super.debug();
 		return this;
 	}

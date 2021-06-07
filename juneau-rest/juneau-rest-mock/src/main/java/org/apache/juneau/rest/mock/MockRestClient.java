@@ -38,8 +38,8 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
-import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.http.header.ContentType;
+import org.apache.juneau.rest.logging.*;
 
 /**
  * Mocked {@link RestClient}.
@@ -724,7 +724,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 */
 	private HttpRequest findRestRequest(HttpRequest req) {
 		if (req instanceof RestRequestCreated)
-			return ((RestRequestCreated)req).getRestRequest();
+			return ((RestRequestCreated)req).getRestRequest().getHttpRequest();
 		if (req instanceof HttpRequestWrapper)
 			return findRestRequest(((HttpRequestWrapper) req).getOriginal());
 		return req;
