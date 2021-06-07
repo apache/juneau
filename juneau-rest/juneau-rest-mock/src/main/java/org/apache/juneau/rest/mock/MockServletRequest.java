@@ -958,7 +958,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	protected MockServletRequest debug(boolean value) {
 		if (value)
-			header("X-Debug", true);
+			header("Debug", true);
 		return this;
 	}
 
@@ -973,7 +973,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest noTrace(boolean value) {
 		if (value)
-			header("X-NoTrace", true);
+			header("No-Trace", true);
 		return this;
 	}
 

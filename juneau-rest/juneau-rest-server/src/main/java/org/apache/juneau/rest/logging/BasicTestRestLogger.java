@@ -31,9 +31,9 @@ import org.apache.juneau.rest.*;
  * <p>
  * Requests can be tagged as no-log (meaning don't log if there's an error) in any of the following ways:
  * <ul>
- * 	<li>A <js>"X-No-Log: true"</js> header.
- * 	<li>A <js>"noLog=true"</js> query parameter.
- * 	<li>A <js>"NoLog"</js> request attribute with a string value of <js>"true"</js>.
+ * 	<li>A <js>"No-Trace: true"</js> header.
+ * 	<li>A <js>"noTrace=true"</js> query parameter.
+ * 	<li>A <js>"NoTrace"</js> request attribute with a string value of <js>"true"</js>.
  * </ul>
  *
  * <h5 class='section'>Configured Settings:</h5>
@@ -67,7 +67,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)
 					.enabled(CONDITIONAL)
-					.enabledTest(x -> ! isNoLog(x))  // Only log if it's not a no-trace request.
+					.enabledTest(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build(),
 				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
@@ -76,7 +76,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.requestDetail(STATUS_LINE)
 					.responseDetail(STATUS_LINE)
 					.enabled(CONDITIONAL)
-					.enabledTest(x -> ! isNoLog(x))  // Only log if it's not a no-trace request.
+					.enabledTest(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build()
 			)
@@ -91,13 +91,13 @@ public class BasicTestRestLogger extends BasicRestLogger {
 		;
 	}
 
-	private static boolean isNoLog(HttpServletRequest req) {
-		Object o = req.getAttribute("NoLog");
+	private static boolean isNoTrace(HttpServletRequest req) {
+		Object o = req.getAttribute("NoTrace");
 		if (o != null)
 			return "true".equalsIgnoreCase(o.toString());
-		String s = req.getHeader("X-No-Log");
+		String s = req.getHeader("No-Trace");
 		if (s != null)
 			return "true".equalsIgnoreCase(s);
-		return emptyIfNull(req.getQueryString()).contains("noLog=true");
+		return emptyIfNull(req.getQueryString()).contains("noTrace=true");
 	}
 }

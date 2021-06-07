@@ -118,7 +118,7 @@ public final class RestResponse {
 		}
 
 		request.getContext().getDefaultResponseHeaders().forEach(x->addHeader(x.getValue(), resolveUris(x.getValue())));  // Done this way to avoid list/array copy.
-		
+
 		opContext.getDefaultResponseHeaders().forEach(x->addHeader(x.getName(), resolveUris(x.getValue())));
 
 		if (charset == null)
@@ -646,7 +646,7 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Sets the <js>"NoLog"</js> attribute to the specified boolean.
+	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
 	 *
 	 * <p>
 	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
@@ -654,18 +654,18 @@ public final class RestResponse {
 	 * @param b The attribute value.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setNoLog(Boolean b) {
-		request.setNoLog(b);
+	public RestResponse setNoTrace(Boolean b) {
+		request.setNoTrace(b);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling <c>setNoLog(<jk>true</jk>)</c>.
+	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setNoLog() {
-		return setNoLog(true);
+	public RestResponse setNoTrace() {
+		return setNoTrace(true);
 	}
 
 	/**

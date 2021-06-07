@@ -23,6 +23,7 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
+import java.time.*;
 
 import org.apache.http.*;
 import org.apache.http.client.*;
@@ -273,12 +274,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder locale(Locale value) {
 		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public MockRestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
 		return this;
 	}
 
@@ -637,25 +632,25 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder accept(Object value) {
+	public MockRestClientBuilder accept(String value) {
 		super.accept(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder acceptCharset(Object value) {
+	public MockRestClientBuilder acceptCharset(String value) {
 		super.acceptCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder acceptEncoding(Object value) {
+	public MockRestClientBuilder acceptEncoding(String value) {
 		super.acceptEncoding(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder acceptLanguage(Object value) {
+	public MockRestClientBuilder acceptLanguage(String value) {
 		super.acceptLanguage(value);
 		return this;
 	}
@@ -697,7 +692,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder authorization(Object value) {
+	public MockRestClientBuilder authorization(String value) {
 		super.authorization(value);
 		return this;
 	}
@@ -715,7 +710,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder cacheControl(Object value) {
+	public MockRestClientBuilder cacheControl(String value) {
 		super.cacheControl(value);
 		return this;
 	}
@@ -733,13 +728,13 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder clientVersion(Object value) {
+	public MockRestClientBuilder clientVersion(String value) {
 		super.clientVersion(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder connection(Object value) {
+	public MockRestClientBuilder connection(String value) {
 		super.connection(value);
 		return this;
 	}
@@ -793,25 +788,25 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder contentEncoding(Object value) {
+	public MockRestClientBuilder contentEncoding(String value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder contentLength(Object value) {
+	public MockRestClientBuilder contentLength(Long value) {
 		super.contentLength(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder contentType(Object value) {
+	public MockRestClientBuilder contentType(String value) {
 		super.contentType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder date(Object value) {
+	public MockRestClientBuilder date(ZonedDateTime value) {
 		super.date(value);
 		return this;
 	}
@@ -937,7 +932,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder expect(Object value) {
+	public MockRestClientBuilder expect(String value) {
 		super.expect(value);
 		return this;
 	}
@@ -997,20 +992,20 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder forwarded(Object value) {
+	public MockRestClientBuilder forwarded(String value) {
 		super.forwarded(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder from(Object value) {
+	public MockRestClientBuilder from(String value) {
 		super.from(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder header(Header header) {
-		super.header(header);
+	public MockRestClientBuilder header(Header value) {
+		super.header(value);
 		return this;
 	}
 
@@ -1063,7 +1058,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder host(Object value) {
+	public MockRestClientBuilder host(String value) {
 		super.host(value);
 		return this;
 	}
@@ -1105,31 +1100,31 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifMatch(Object value) {
+	public MockRestClientBuilder ifMatch(String value) {
 		super.ifMatch(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifModifiedSince(Object value) {
+	public MockRestClientBuilder ifModifiedSince(String value) {
 		super.ifModifiedSince(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifNoneMatch(Object value) {
+	public MockRestClientBuilder ifNoneMatch(String value) {
 		super.ifNoneMatch(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifRange(Object value) {
+	public MockRestClientBuilder ifRange(String value) {
 		super.ifRange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifUnmodifiedSince(Object value) {
+	public MockRestClientBuilder ifUnmodifiedSince(String value) {
 		super.ifUnmodifiedSince(value);
 		return this;
 	}
@@ -1249,7 +1244,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder maxForwards(Object value) {
+	public MockRestClientBuilder maxForwards(Integer value) {
 		super.maxForwards(value);
 		return this;
 	}
@@ -1257,6 +1252,18 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder maxIndent(int value) {
 		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder mediaType(String value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
 		return this;
 	}
 
@@ -1291,7 +1298,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder origin(Object value) {
+	public MockRestClientBuilder origin(String value) {
 		super.origin(value);
 		return this;
 	}
@@ -1370,7 +1377,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder pragma(Object value) {
+	public MockRestClientBuilder pragma(String value) {
 		super.pragma(value);
 		return this;
 	}
@@ -1388,7 +1395,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder proxyAuthorization(Object value) {
+	public MockRestClientBuilder proxyAuthorization(String value) {
 		super.proxyAuthorization(value);
 		return this;
 	}
@@ -1460,7 +1467,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder range(Object value) {
+	public MockRestClientBuilder range(String value) {
 		super.range(value);
 		return this;
 	}
@@ -1472,7 +1479,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder referer(Object value) {
+	public MockRestClientBuilder referer(String value) {
 		super.referer(value);
 		return this;
 	}
@@ -1593,7 +1600,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder te(Object value) {
+	public MockRestClientBuilder te(String value) {
 		super.te(value);
 		return this;
 	}
@@ -1629,7 +1636,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder upgrade(Object value) {
+	public MockRestClientBuilder upgrade(String value) {
 		super.upgrade(value);
 		return this;
 	}
@@ -1671,14 +1678,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder userAgent(Object value) {
+	public MockRestClientBuilder userAgent(String value) {
 		super.userAgent(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder userAgent(String userAgent) {
-		super.userAgent(userAgent);
 		return this;
 	}
 
@@ -1689,13 +1690,13 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder via(Object value) {
+	public MockRestClientBuilder via(String value) {
 		super.via(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder warning(Object value) {
+	public MockRestClientBuilder warning(String value) {
 		super.warning(value);
 		return this;
 	}

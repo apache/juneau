@@ -1698,7 +1698,7 @@ public final class RestRequest {
 	}
 
 	/**
-	 * Sets the <js>"NoLog"</js> attribute to the specified boolean.
+	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
 	 *
 	 * <p>
 	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
@@ -1706,18 +1706,18 @@ public final class RestRequest {
 	 * @param b The attribute value.
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest setNoLog(Boolean b) {
-		setAttribute("NoLog", b);
+	public RestRequest setNoTrace(Boolean b) {
+		setAttribute("NoTrace", b);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling <c>setNoLog(<jk>true</jk>)</c>.
+	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest setNoLog() {
-		return setNoLog(true);
+	public RestRequest setNoTrace() {
+		return setNoTrace(true);
 	}
 
 	/**

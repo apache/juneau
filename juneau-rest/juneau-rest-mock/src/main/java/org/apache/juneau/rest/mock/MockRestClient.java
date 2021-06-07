@@ -359,7 +359,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bcode w800'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).ignoreErrors().noLog().build();
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).ignoreErrors().noTrace().build();
 	 * </p>
 	 *
 	 * @param impl
