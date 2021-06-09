@@ -24,6 +24,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.text.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -43,6 +44,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
@@ -150,10 +152,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		{@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		{@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
 	 *
@@ -184,10 +186,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(Object)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(Object)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -226,10 +228,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</c>.
 	 *
@@ -265,10 +267,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(HtmlSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 	 *
@@ -304,10 +306,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(HtmlDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 	 *
@@ -343,10 +345,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(HtmlStrippedDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 	 *
@@ -383,10 +385,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</c>.
 	 *
@@ -422,10 +424,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.
 	 *
@@ -462,10 +464,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</c>.
 	 *
@@ -500,10 +502,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</c>.
 	 *
@@ -542,10 +544,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</c>.
 	 *
@@ -2426,8 +2428,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest accept(Object value) throws RestCallException {
-		return header("Accept", value);
+	public RestRequest accept(String value) throws RestCallException {
+		return header(Accept.of(value));
 	}
 
 	/**
@@ -2440,8 +2442,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest acceptCharset(Object value) throws RestCallException {
-		return header("Accept-Charset", value);
+	public RestRequest acceptCharset(String value) throws RestCallException {
+		return header(AcceptCharset.of(value));
 	}
 
 	/**
@@ -2454,8 +2456,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest acceptEncoding(Object value) throws RestCallException {
-		return header("Accept-Encoding", value);
+	public RestRequest acceptEncoding(String value) throws RestCallException {
+		return header(AcceptEncoding.of(value));
 	}
 
 	/**
@@ -2468,8 +2470,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest acceptLanguage(Object value) throws RestCallException {
-		return header("Accept-Language", value);
+	public RestRequest acceptLanguage(String value) throws RestCallException {
+		return header(AcceptLanguage.of(value));
 	}
 
 	/**
@@ -2482,8 +2484,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest authorization(Object value) throws RestCallException {
-		return header("Authorization", value);
+	public RestRequest authorization(String value) throws RestCallException {
+		return header(Authorization.of(value));
 	}
 
 	/**
@@ -2496,8 +2498,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest cacheControl(Object value) throws RestCallException {
-		return header("Cache-Control", value);
+	public RestRequest cacheControl(String value) throws RestCallException {
+		return header(CacheControl.of(value));
 	}
 
 	/**
@@ -2510,8 +2512,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest connection(Object value) throws RestCallException {
-		return header("Connection", value);
+	public RestRequest connection(String value) throws RestCallException {
+		return header(Connection.of(value));
 	}
 
 	/**
@@ -2524,8 +2526,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest contentLength(Object value) throws RestCallException {
-		return header("Content-Length", value);
+	public RestRequest contentLength(Long value) throws RestCallException {
+		return header(ContentLength.of(value));
 	}
 
 	/**
@@ -2539,8 +2541,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest contentType(Object value) throws RestCallException {
-		return header("Content-Type", value);
+	public RestRequest contentType(String value) throws RestCallException {
+		return header(ContentType.of(value));
 	}
 
 	/**
@@ -2550,8 +2552,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest mediaType(Object value) throws RestCallException {
-		return header("Accept", value).header("Content-Type", value);
+	public RestRequest mediaType(String value) throws RestCallException {
+		return header(Accept.of(value)).header(ContentType.of(value));
 	}
 
 	/**
@@ -2564,8 +2566,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest contentEncoding(Object value) throws RestCallException {
-		return header("Content-Encoding", value);
+	public RestRequest contentEncoding(String value) throws RestCallException {
+		return header(ContentEncoding.of(value));
 	}
 
 	/**
@@ -2578,8 +2580,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest date(Object value) throws RestCallException {
-		return header("Date", value);
+	public RestRequest date(ZonedDateTime value) throws RestCallException {
+		return header(Date.of(value));
 	}
 
 	/**
@@ -2592,8 +2594,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest expect(Object value) throws RestCallException {
-		return header("Expect", value);
+	public RestRequest expect(String value) throws RestCallException {
+		return header(Expect.of(value));
 	}
 
 	/**
@@ -2606,8 +2608,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest forwarded(Object value) throws RestCallException {
-		return header("Forwarded", value);
+	public RestRequest forwarded(String value) throws RestCallException {
+		return header(Forwarded.of(value));
 	}
 
 	/**
@@ -2620,8 +2622,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest from(Object value) throws RestCallException {
-		return header("From", value);
+	public RestRequest from(String value) throws RestCallException {
+		return header(From.of(value));
 	}
 
 	/**
@@ -2634,8 +2636,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest hostHeader(Object value) throws RestCallException {
-		return header("Host", value);
+	public RestRequest hostHeader(String value) throws RestCallException {
+		return header(Host.of(value));
 	}
 
 	/**
@@ -2648,8 +2650,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest ifMatch(Object value) throws RestCallException {
-		return header("If-Match", value);
+	public RestRequest ifMatch(String value) throws RestCallException {
+		return header(IfMatch.of(value));
 	}
 
 	/**
@@ -2662,8 +2664,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest ifModifiedSince(Object value) throws RestCallException {
-		return header("If-Modified-Since", value);
+	public RestRequest ifModifiedSince(ZonedDateTime value) throws RestCallException {
+		return header(IfModifiedSince.of(value));
 	}
 
 	/**
@@ -2676,8 +2678,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest ifNoneMatch(Object value) throws RestCallException {
-		return header("If-None-Match", value);
+	public RestRequest ifNoneMatch(String value) throws RestCallException {
+		return header(IfNoneMatch.of(value));
 	}
 
 	/**
@@ -2690,8 +2692,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest ifRange(Object value) throws RestCallException {
-		return header("If-Range", value);
+	public RestRequest ifRange(String value) throws RestCallException {
+		return header(IfRange.of(value));
 	}
 
 	/**
@@ -2704,8 +2706,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest ifUnmodifiedSince(Object value) throws RestCallException {
-		return header("If-Unmodified-Since", value);
+	public RestRequest ifUnmodifiedSince(ZonedDateTime value) throws RestCallException {
+		return header(IfUnmodifiedSince.of(value));
 	}
 
 	/**
@@ -2718,8 +2720,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest maxForwards(Object value) throws RestCallException {
-		return header("Max-Forwards", value);
+	public RestRequest maxForwards(Integer value) throws RestCallException {
+		return header(MaxForwards.of(value));
 	}
 
 	/**
@@ -2734,7 +2736,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest noTrace() throws RestCallException {
-		return header("No-Trace", true);
+		return header(NoTrace.TRUE);
 	}
 
 	/**
@@ -2747,8 +2749,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest origin(Object value) throws RestCallException {
-		return header("Origin", value);
+	public RestRequest origin(String value) throws RestCallException {
+		return header(Origin.of(value));
 	}
 
 	/**
@@ -2761,8 +2763,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest pragma(Object value) throws RestCallException {
-		return header("Pragma", value);
+	public RestRequest pragma(String value) throws RestCallException {
+		return header(Pragma.of(value));
 	}
 
 	/**
@@ -2775,7 +2777,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest proxyAuthorization(Object value) throws RestCallException {
+	public RestRequest proxyAuthorization(String value) throws RestCallException {
 		return header("Proxy-Authorization", value);
 	}
 

@@ -157,10 +157,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -204,10 +204,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -247,10 +247,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -293,10 +293,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -339,10 +339,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -385,10 +385,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -432,10 +432,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -478,10 +478,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -525,10 +525,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -570,10 +570,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -619,10 +619,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -662,10 +662,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header must be set by {@link #header(String,Object)} or {@link #accept(String)}, or per-request
-	 * 		via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)} in order for the correct parser to be selected.
+	 * 		via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)} in order for the correct parser to be selected.
 	 * <p>
 	 * 	<c>Content-Type</c> request header must be set by {@link #header(String,Object)} or {@link #contentType(String)},
-	 * 		or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)} in order for the correct serializer to be selected.
+	 * 		or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)} in order for the correct serializer to be selected.
 	 * <p>
 	 * 	Similar to calling <c>json().simpleJson().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
 	 *
@@ -1549,21 +1549,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <c>Date</c> request header on all requests.
-	 *
-	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Date"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Date.<jsm>of</jsm>(<jv>value</jv>));</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder date(Date value) {
-		return header(value);
-	}
-
-	/**
 	 * Sets the value for the <c>Debug</c> request header on all requests.
 	 *
 	 * <p>
@@ -1665,7 +1650,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder ifModifiedSince(String value) {
+	public RestClientBuilder ifModifiedSince(ZonedDateTime value) {
 		return header(IfModifiedSince.of(value));
 	}
 
@@ -1710,7 +1695,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder ifUnmodifiedSince(String value) {
+	public RestClientBuilder ifUnmodifiedSince(ZonedDateTime value) {
 		return header(IfUnmodifiedSince.of(value));
 	}
 

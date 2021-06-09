@@ -1106,7 +1106,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifModifiedSince(String value) {
+	public MockRestClientBuilder ifModifiedSince(ZonedDateTime value) {
 		super.ifModifiedSince(value);
 		return this;
 	}
@@ -1124,7 +1124,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder ifUnmodifiedSince(String value) {
+	public MockRestClientBuilder ifUnmodifiedSince(ZonedDateTime value) {
 		super.ifUnmodifiedSince(value);
 		return this;
 	}

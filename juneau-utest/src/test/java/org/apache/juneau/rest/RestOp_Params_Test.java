@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.time.*;
 import java.util.*;
 
 import javax.servlet.*;
@@ -293,6 +294,7 @@ public class RestOp_Params_Test {
 	@Test
 	public void b01_headers() throws Exception {
 		RestClient b = MockRestClient.build(B1.class);
+		ZonedDateTime zdt = ZonedDateTime.parse("2007-12-03T10:15:30Z");
 
 		b.get("/accept").accept("text/foo").run().assertBody().is("text/foo");
 		b.get("/accept").accept("text/foo+bar").run().assertBody().is("text/foo+bar");
@@ -315,12 +317,12 @@ public class RestOp_Params_Test {
 		b.get("/cacheControl?Cache-Control=foo").run().assertBody().is("foo");
 		b.get("/connection").connection("foo").run().assertBody().is("foo");
 		b.get("/connection?Connection=foo").run().assertBody().is("foo");
-		b.get("/contentLength").contentLength(0).run().assertBody().is("0");
+		b.get("/contentLength").contentLength(0l).run().assertBody().is("0");
 		b.get("/contentLength?Content-Length=0").run().assertBody().is("0");
 		b.get("/contentType").contentType("text/foo").run().assertBody().is("text/foo");
 		b.get("/contentType?Content-Type=text/foo").run().assertBody().is("text/foo");
-		b.get("/date").date("Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
-		b.get("/date?Date=Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
+		b.get("/date").date(zdt).run().assertBody().is("Mon, 3 Dec 2007 10:15:30 GMT");
+		b.get("/date?Date=Mon, 3 Dec 2007 10:15:30 GMT").run().assertBody().is("Mon, 3 Dec 2007 10:15:30 GMT");
 		b.get("/expect").expect("100-continue").run().assertBody().is("100-continue");
 		b.get("/expect?Expect=100-continue").run().assertBody().is("100-continue");
 		b.get("/from").from("foo").run().assertBody().is("foo");
@@ -331,16 +333,16 @@ public class RestOp_Params_Test {
 		b.get("/ifMatch").ifMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");
 		b.get("/ifMatch").ifMatch("W/\"foo\",\"bar\"").run().assertBody().is("W/\"foo\",\"bar\"");
 		b.get("/ifMatch?If-Match=\"foo\"").run().assertBody().is("\"foo\"");
-		b.get("/ifModifiedSince").ifModifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
-		b.get("/ifModifiedSince?If-Modified-Since=Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
+		b.get("/ifModifiedSince").ifModifiedSince(zdt).run().assertBody().is("Mon, 3 Dec 2007 10:15:30 GMT");
+		b.get("/ifModifiedSince?If-Modified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertBody().is("Mon, 3 Dec 2007 10:15:30 GMT");
 		b.get("/ifNoneMatch").ifNoneMatch("\"foo\"").run().assertBody().is("\"foo\"");
 		b.get("/ifNoneMatch").ifNoneMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");
 		b.get("/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").run().assertBody().is("W/\"foo\",\"bar\"");
 		b.get("/ifNoneMatch?If-None-Match=\"foo\"").run().assertBody().is("\"foo\"");
 		b.get("/ifRange").ifRange("\"foo\"").run().assertBody().is("\"foo\"");
 		b.get("/ifRange?If-Range=\"foo\"").run().assertBody().is("\"foo\"");
-		b.get("/ifUnmodifiedSince").ifUnmodifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
-		b.get("/ifUnmodifiedSince?If-Unmodified-Since=Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
+		b.get("/ifUnmodifiedSince").ifUnmodifiedSince(zdt).run().assertBody().is("Mon, 3 Dec 2007 10:15:30 GMT");
+		b.get("/ifUnmodifiedSince?If-Unmodified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertBody().is("Mon, 3 Dec 2007 10:15:30 GMT");
 		b.get("/maxForwards").maxForwards(123).run().assertBody().is("123");
 		b.get("/maxForwards?Max-Forwards=123").run().assertBody().is("123");
 		b.get("/pragma").pragma("foo").run().assertBody().is("foo");

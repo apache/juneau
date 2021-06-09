@@ -27,7 +27,6 @@ import java.util.*;
 import org.apache.http.Header;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
@@ -66,8 +65,8 @@ public class RestClient_Headers_Test {
 		}
 	}
 
-	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Sat, 29 Oct 1994 19:43:31 GMT")).truncatedTo(SECONDS);
-	private static final String PARSEDZONEDDATETIME = "Sat, 29 Oct 1994 19:43:31 GMT";
+	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Mon, 3 Dec 2007 10:15:30 GMT")).truncatedTo(SECONDS);
+	private static final String PARSEDZONEDDATETIME = "Mon, 3 Dec 2007 10:15:30 GMT";
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Method tests
@@ -223,16 +222,16 @@ public class RestClient_Headers_Test {
 		checkClient("Content-Length").contentLength(123l).build().get("/headers").run().assertBody().is("['123']");
 		checkClient("Content-Type").contentType("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Content-Encoding").contentEncoding("identity").build().get("/headers").run().assertBody().is("['identity']");
-		checkClient("Date").date(Date.of("Sat, 29 Oct 1994 19:43:31 GMT")).build().get("/headers").run().assertBody().is("['Sat, 29 Oct 1994 19:43:31 GMT']");
+		checkClient("Date").date(ZONEDDATETIME).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Expect").expect("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Forwarded").forwarded("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("From").from("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Host").host("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("If-Match").ifMatch("\"foo\"").build().get("/headers").run().assertBody().is("['\"foo\"']");
-		checkClient("If-Modified-Since").ifModifiedSince("Sat, 29 Oct 1994 19:43:31 GMT").build().get("/headers").run().assertBody().is("['Sat, 29 Oct 1994 19:43:31 GMT']");
+		checkClient("If-Modified-Since").ifModifiedSince(ZONEDDATETIME).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("If-None-Match").ifNoneMatch("\"foo\"").build().get("/headers").run().assertBody().is("['\"foo\"']");
 		checkClient("If-Range").ifRange("\"foo\"").build().get("/headers").run().assertBody().is("['\"foo\"']");
-		checkClient("If-Unmodified-Since").ifUnmodifiedSince("Sat, 29 Oct 1994 19:43:31 GMT").build().get("/headers").run().assertBody().is("['Sat, 29 Oct 1994 19:43:31 GMT']");
+		checkClient("If-Unmodified-Since").ifUnmodifiedSince(ZONEDDATETIME).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Max-Forwards").maxForwards(10).build().get("/headers").run().assertBody().is("['10']");
 		checkClient("No-Trace").noTrace().build().get("/headers").run().assertBody().is("['true']");
 		checkClient("Origin").origin("foo").build().get("/headers").run().assertBody().is("['foo']");
@@ -254,20 +253,20 @@ public class RestClient_Headers_Test {
 		checkClient("Cache-Control").build().get("/headers").cacheControl("none").run().assertBody().is("['none']");
 		checkClient("X-Client-Version").build().get("/headers").clientVersion("1").run().assertBody().is("['1']");
 		checkClient("Connection").build().get("/headers").connection("foo").run().assertBody().is("['foo']");
-		checkClient("Content-Length").build().get("/headers").contentLength("123").run().assertBody().is("['123']");
+		checkClient("Content-Length").build().get("/headers").contentLength(123l).run().assertBody().is("['123']");
 		checkClient("Content-Type").build().get("/headers").contentType("foo").run().assertBody().is("['foo']");
 		checkClient("Content-Encoding").build().get("/headers").contentEncoding("identity").run().assertBody().is("['identity']");
-		checkClient("Date").build().get("/headers").date("123").run().assertBody().is("['123']");
+		checkClient("Date").build().get("/headers").date(ZONEDDATETIME).run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Expect").build().get("/headers").expect("foo").run().assertBody().is("['foo']");
 		checkClient("Forwarded").build().get("/headers").forwarded("foo").run().assertBody().is("['foo']");
 		checkClient("From").build().get("/headers").from("foo").run().assertBody().is("['foo']");
 		checkClient("Host").build().get("/headers").hostHeader("foo").run().assertBody().is("['foo']");
-		checkClient("If-Match").build().get("/headers").ifMatch("foo").run().assertBody().is("['foo']");
-		checkClient("If-Modified-Since").build().get("/headers").ifModifiedSince("foo").run().assertBody().is("['foo']");
-		checkClient("If-None-Match").build().get("/headers").ifNoneMatch("foo").run().assertBody().is("['foo']");
-		checkClient("If-Range").build().get("/headers").ifRange("foo").run().assertBody().is("['foo']");
-		checkClient("If-Unmodified-Since").build().get("/headers").ifUnmodifiedSince("foo").run().assertBody().is("['foo']");
-		checkClient("Max-Forwards").build().get("/headers").maxForwards("10").run().assertBody().is("['10']");
+		checkClient("If-Match").build().get("/headers").ifMatch("\"foo\"").run().assertBody().is("['\"foo\"']");
+		checkClient("If-Modified-Since").build().get("/headers").ifModifiedSince(ZONEDDATETIME).run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
+		checkClient("If-None-Match").build().get("/headers").ifNoneMatch("\"foo\"").run().assertBody().is("['\"foo\"']");
+		checkClient("If-Range").build().get("/headers").ifRange("\"foo\"").run().assertBody().is("['\"foo\"']");
+		checkClient("If-Unmodified-Since").build().get("/headers").ifUnmodifiedSince(ZONEDDATETIME).run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
+		checkClient("Max-Forwards").build().get("/headers").maxForwards(10).run().assertBody().is("['10']");
 		checkClient("No-Trace").build().get("/headers").noTrace().run().assertBody().is("['true']");
 		checkClient("Origin").build().get("/headers").origin("foo").run().assertBody().is("['foo']");
 		checkClient("Pragma").build().get("/headers").pragma("foo").run().assertBody().is("['foo']");
