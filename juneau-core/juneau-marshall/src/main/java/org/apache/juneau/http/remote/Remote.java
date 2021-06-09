@@ -82,7 +82,7 @@ public @interface Remote {
 	 * Specifies the client version of this interface.
 	 *
 	 * <p>
-	 * Used to populate the <js>"X-Client-Version"</js> header that identifies what version of client this is
+	 * Used to populate the <js>"Client-Version"</js> header that identifies what version of client this is
 	 * so that the server side can handle older versions accordingly.
 	 *
 	 * <p>
@@ -91,16 +91,16 @@ public @interface Remote {
 	 * <p>
 	 * The server side then uses an OSGi-version matching pattern to identify which methods to call:
 	 * <p class='bcode w800'>
-	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
+	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1()  {...}
 	 *
-	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
 	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2()  {...}
 	 *
-	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
+	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
 	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
@@ -117,7 +117,7 @@ public @interface Remote {
 	 * Specifies the client version header name.
 	 *
 	 * <p>
-	 * The default value is <js>"X-Client-Version"</js>.
+	 * The default value is <js>"Client-Version"</js>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

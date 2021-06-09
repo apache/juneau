@@ -2503,6 +2503,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
+	 * Sets the client version by setting the value for the <js>"Client-Version"</js> header.
+	 *
+	 * @param value The version string (e.g. <js>"1.2.3"</js>)
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest clientVersion(String value) throws RestCallException {
+		return header(ClientVersion.of(value));
+	}
+
+	/**
 	 * Sets the value for the <c>Connection</c> request header.
 	 *
 	 * <p>
@@ -2778,7 +2789,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest proxyAuthorization(String value) throws RestCallException {
-		return header("Proxy-Authorization", value);
+		return header(ProxyAuthorization.of(value));
 	}
 
 	/**
@@ -2791,8 +2802,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest range(Object value) throws RestCallException {
-		return header("Range", value);
+	public RestRequest range(String value) throws RestCallException {
+		return header(Range.of(value));
 	}
 
 	/**
@@ -2805,8 +2816,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest referer(Object value) throws RestCallException {
-		return header("Referer", value);
+	public RestRequest referer(String value) throws RestCallException {
+		return header(Referer.of(value));
 	}
 
 	/**
@@ -2819,8 +2830,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest te(Object value) throws RestCallException {
-		return header("TE", value);
+	public RestRequest te(String value) throws RestCallException {
+		return header(TE.of(value));
 	}
 
 	/**
@@ -2833,8 +2844,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest userAgent(Object value) throws RestCallException {
-		return header("User-Agent", value);
+	public RestRequest userAgent(String value) throws RestCallException {
+		return header(UserAgent.of(value));
 	}
 
 	/**
@@ -2847,8 +2858,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest upgrade(Object value) throws RestCallException {
-		return header("Upgrade", value);
+	public RestRequest upgrade(String value) throws RestCallException {
+		return header(Upgrade.of(value));
 	}
 
 	/**
@@ -2861,8 +2872,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest via(Object value) throws RestCallException {
-		return header("Via", value);
+	public RestRequest via(String value) throws RestCallException {
+		return header(Via.of(value));
 	}
 
 	/**
@@ -2875,21 +2886,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest warning(Object value) throws RestCallException {
-		return header("Warning", value);
+	public RestRequest warning(String value) throws RestCallException {
+		return header(Warning.of(value));
 	}
-
-	/**
-	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
-	 *
-	 * @param value The version string (e.g. <js>"1.2.3"</js>)
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest clientVersion(Object value) throws RestCallException {
-		return header("X-Client-Version", value);
-	}
-
+	
 	//------------------------------------------------------------------------------------------------------------------
 	// Execution methods.
 	//------------------------------------------------------------------------------------------------------------------

@@ -33,7 +33,6 @@ import java.net.*;
 import java.net.URI;
 import java.nio.charset.*;
 import java.text.*;
-import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -1290,37 +1289,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#header(Header) header(Header)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#headers(Object...) headers(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#accept(String) accept(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#acceptCharset(String) acceptCharset(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#acceptEncoding(String) acceptEncoding(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#acceptLanguage(String) acceptLanguage(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#authorization(String) authorization(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#cacheControl(String) cacheControl(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#clientVersion(String) clientVersion(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#connection(String) connection(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#contentLength(Long) contentLength(Long)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#contentType(String) contentType(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#date(ZonedDateTime) date(ZonedDateTime)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#expect(String) expect(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#forwarded(String) forwarded(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#from(String) from(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#host(String) host(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ifMatch(String) ifMatch(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ifModifiedSince(String) ifModifiedSince(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ifNoneMatch(String) ifNoneMatch(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ifRange(String) ifRange(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#ifUnmodifiedSince(String) ifUnmodifiedSince(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#maxForwards(Integer) maxForwards(Integer)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#origin(String) origin(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#pragma(String) pragma(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#proxyAuthorization(String) proxyAuthorization(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#range(String) proxyAuthorization(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#referer(String) referer(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#te(String) te(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#userAgent(String) userAgent(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#upgrade(String) upgrade(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#via(String) via(String)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#warning(String) warning(String)}
 	 * 			</ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
 	 * 			<ul>
@@ -1330,37 +1298,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(Object...) headers(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(ListOperation,Object...) headers(EnumSet&gt;ListOperation&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headerPairs(Object...) headerPairs(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#accept(Object) accept(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#acceptCharset(Object) acceptCharset(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#acceptEncoding(Object) acceptEncoding(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#acceptLanguage(Object) acceptLanguage(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#authorization(Object) authorization(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#cacheControl(Object) cacheControl(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#clientVersion(Object) clientVersion(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#connection(Object) connection(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#contentLength(Object) contentLength(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#contentType(Object) contentType(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#date(Object) date(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#expect(Object) expect(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#forwarded(Object) forwarded(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#from(Object) from(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#hostHeader(Object) hostHeader(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#ifMatch(Object) ifMatch(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#ifModifiedSince(Object) ifModifiedSince(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#ifNoneMatch(Object) ifNoneMatch(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#ifRange(Object) ifRange(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#ifUnmodifiedSince(Object) ifUnmodifiedSince(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#maxForwards(Object) maxForwards(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#origin(Object) origin(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#pragma(Object) pragma(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#proxyAuthorization(Object) proxyAuthorization(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#range(Object) proxyAuthorization(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#referer(Object) referer(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#te(Object) te(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#userAgent(Object) userAgent(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#upgrade(Object) upgrade(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#via(Object) via(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#warning(Object) warning(Object)}
 	 * 			</ul>
 	 * 		</ul>
 	 * </ul>

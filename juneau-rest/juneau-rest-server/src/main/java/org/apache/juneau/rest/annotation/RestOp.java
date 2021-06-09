@@ -42,7 +42,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * The client version is identified via the HTTP request header identified by
-	 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"X-Client-Version"</js>.
+	 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"Client-Version"</js>.
 	 *
 	 * <p>
 	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
@@ -54,16 +54,16 @@ public @interface RestOp {
 	 * <p>
 	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
 	 * <p class='bcode w800'>
-	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
+	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1()  {...}
 	 *
-	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2()  {...}
 	 *
-	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
+	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
@@ -72,7 +72,7 @@ public @interface RestOp {
 	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 	 * backwards compatibility.
 	 * <p class='bcode w800'>
-	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
+	 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
 	 *

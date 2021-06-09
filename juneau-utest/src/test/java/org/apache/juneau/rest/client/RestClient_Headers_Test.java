@@ -251,7 +251,7 @@ public class RestClient_Headers_Test {
 		checkClient("Accept-Language").build().get("/headers").acceptLanguage("en").run().assertBody().is("['en']");
 		checkClient("Authorization").build().get("/headers").authorization("foo").run().assertBody().is("['foo']");
 		checkClient("Cache-Control").build().get("/headers").cacheControl("none").run().assertBody().is("['none']");
-		checkClient("X-Client-Version").build().get("/headers").clientVersion("1").run().assertBody().is("['1']");
+		checkClient("Client-Version").build().get("/headers").clientVersion("1").run().assertBody().is("['1']");
 		checkClient("Connection").build().get("/headers").connection("foo").run().assertBody().is("['foo']");
 		checkClient("Content-Length").build().get("/headers").contentLength(123l).run().assertBody().is("['123']");
 		checkClient("Content-Type").build().get("/headers").contentType("foo").run().assertBody().is("['foo']");
@@ -274,7 +274,7 @@ public class RestClient_Headers_Test {
 		checkClient("Range").build().get("/headers").range("foo").run().assertBody().is("['foo']");
 		checkClient("Referer").build().get("/headers").referer("foo").run().assertBody().is("['foo']");
 		checkClient("TE").build().get("/headers").te("foo").run().assertBody().is("['foo']");
-		checkClient("User-Agent").build().get("/headers").userAgent(new StringBuilder("foo")).run().assertBody().is("['foo']");
+		checkClient("User-Agent").build().get("/headers").userAgent("foo").run().assertBody().is("['foo']");
 		checkClient("Upgrade").build().get("/headers").upgrade("foo").run().assertBody().is("['foo']");
 		checkClient("Via").build().get("/headers").via("foo").run().assertBody().is("['foo']");
 		checkClient("Warning").build().get("/headers").warning("foo").run().assertBody().is("['foo']");

@@ -606,7 +606,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>System property:</b>  <c>RestContext.clientVersionHeader</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_CLIENTVERSIONHEADER</c>
-	 * 	<li><b>Default:</b>  <js>"X-Client-Version"</js>
+	 * 	<li><b>Default:</b>  <js>"Client-Version"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -3547,7 +3547,7 @@ public class RestContext extends BeanContext {
 			allowedMethodParams = newCaseInsensitiveSet(cp.getString(REST_allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse("HEAD,OPTIONS"));
 			allowedMethodHeaders = newCaseInsensitiveSet(cp.getString(REST_allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			renderResponseStackTraces = cp.getBoolean(REST_renderResponseStackTraces).orElse(false);
-			clientVersionHeader = cp.getString(REST_clientVersionHeader).orElse("X-Client-Version");
+			clientVersionHeader = cp.getString(REST_clientVersionHeader).orElse("Client-Version");
 
 			debugEnablement = createDebugEnablement(r, cp, bf);
 

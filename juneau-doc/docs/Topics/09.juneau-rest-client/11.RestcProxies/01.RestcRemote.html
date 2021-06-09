@@ -148,7 +148,7 @@ specific language governing permissions and limitations under the License.
 <p class='bpcode w800'>	
 	<ja>@Remote</ja>(
 		path=<js>"/petstore"</js>,
-		version=<js>"1.2.3"</js>  <jc>// Adds "X-Client-Version: 1.2.3" header to all requests.</jc>
+		version=<js>"1.2.3"</js>  <jc>// Adds "Client-Version: 1.2.3" header to all requests.</jc>
 	)
 	<jk>public interface</jk> PetStore {...}
 </p>
@@ -157,16 +157,16 @@ specific language governing permissions and limitations under the License.
 	This can be used in conjunction with the server-side client-versioning support.
 </p>
 <p class='bpcode w800'>
-	<jc>// Call this method if X-Client-Version is at least 2.0.
+	<jc>// Call this method if Client-Version is at least 2.0.
 	// Note that this also matches 2.0.1.</jc>
 	<ja>@RestGet</ja>(clientVersion=<js>"2.0"</js>)
 	<jk>public</jk> Object foo()  {...}
 
-	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
 	<ja>@RestGet</ja>(clientVersion=<js>"[1.1,2.0)"</js>)
 	<jk>public</jk> Object foo()  {...}
 
-	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
+	<jc>// Call this method if Client-Version is less than 1.1.</jc>
 	<ja>@RestGet</ja>(clientVersion=<js>"[0,1.1)"</js>)
 	<jk>public</jk> Object foo()  {...}
 </p>

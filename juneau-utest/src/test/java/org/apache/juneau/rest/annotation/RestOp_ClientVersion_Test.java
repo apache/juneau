@@ -23,7 +23,7 @@ import org.junit.*;
 public class RestOp_ClientVersion_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Basic tests - default X-Client-Version header.
+	// Basic tests - default Client-Version header.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest

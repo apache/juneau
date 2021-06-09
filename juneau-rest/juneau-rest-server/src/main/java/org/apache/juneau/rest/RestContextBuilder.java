@@ -735,7 +735,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is <js>"X-Client-Version"</js>.
+	 * 	<br>The default is <js>"Client-Version"</js>.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
