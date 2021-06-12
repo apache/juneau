@@ -19,7 +19,6 @@ import static org.junit.runners.MethodSorters.*;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.ListOperation.*;
-import static org.apache.juneau.http.HttpParts.*;
 
 import java.time.*;
 import java.util.*;
@@ -27,7 +26,6 @@ import java.util.*;
 import org.apache.http.Header;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
@@ -77,17 +75,17 @@ public class RestClient_Headers_Test {
 		checkFooClient().header("Foo","bar").build().get("/headers").run().assertBody().is("['bar']");
 		checkFooClient().build().get("/headers").header("Foo","baz").run().assertBody().is("['baz']");
 		checkFooClient().header("Foo","bar").build().get("/headers").header(APPEND,"Foo","baz").run().assertBody().is("['bar','baz']");
-		checkFooClient().header("Foo",bean).build().get("/headers").header(APPEND,"Foo",bean).run().assertBody().is("['f=1','f=1']");
-		checkFooClient().header("Foo",null).build().get("/headers").header(APPEND,"Foo",null).run().assertBody().is("[]");
+		checkFooClient().header(serializedHeader("Foo",bean)).build().get("/headers").header(APPEND,"Foo",bean).run().assertBody().is("['f=1','f=1']");
+		checkFooClient().header(serializedHeader("Foo",null)).build().get("/headers").header(APPEND,"Foo",null).run().assertBody().is("[]");
 
 		checkClient("null").header(null,"bar").build().get("/headers").header(null,"Foo").run().assertBody().is("[]");
-		checkClient("null").header(null,null).build().get("/headers").header((String)null,null).run().assertBody().is("[]");
+		checkClient("null").header(null,(String)null).build().get("/headers").header((String)null,null).run().assertBody().is("[]");
 	}
 
 	@Test
 	public void a02_header_String_Object_Schema() throws Exception {
 		List<String> l1 = AList.of("bar","baz"), l2 = AList.of("qux","quux");
-		checkFooClient().header("Foo",l1,T_ARRAY_PIPES).build().get("/headers").header(APPEND,"Foo",l2,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','qux|quux']");
+		checkFooClient().header(serializedHeader("Foo",l1).schema(T_ARRAY_PIPES)).build().get("/headers").header(APPEND,"Foo",l2,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','qux|quux']");
 	}
 
 	@Test
@@ -108,18 +106,11 @@ public class RestClient_Headers_Test {
 	public void a06_headers_Objects() throws Exception {
 		checkFooClient().headers((Header)null).build().get("/headers").headers((Header)null).run().assertBody().is("[]");
 		checkFooClient().headers(header("Foo","bar"),header("Baz","baz")).build().get("/headers").headers(APPEND,header("Foo","baz"),header("Baz","quux")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(OMap.of("Foo","bar")).build().get("/headers").headers(APPEND,OMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(AMap.of("Foo","bar")).build().get("/headers").headers(APPEND,AMap.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(part("Foo","bar")).build().get("/headers").headers(APPEND,part("Foo","baz")).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(serializedPart("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedPart("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers(serializedHeader("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedHeader("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers(serializedHeader("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedHeader("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertBody().is("['Bar','Baz']");
-		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers(APPEND,(Object)new Header[]{header("Foo","baz")}).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(HeaderList.of(header("Foo","bar"))).build().get("/headers").headers(APPEND,HeaderList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
-		checkFooClient().headers(AList.of(header("Foo","bar"))).build().get("/headers").headers(APPEND,AList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
 		checkClient("f").build().get("/headers").headers(bean).run().assertBody().is("['1']");
 		checkClient("f").build().get("/headers").headers((Object)null).run().assertBody().is("[]");
-		assertThrown(()->client().headers("Foo")).contains("Invalid type");
 		assertThrown(()->client().build().get("").headers("Foo")).contains("Invalid type");
 
 		checkFooClient().headers(serializedHeader("Foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().get("/headers").run().assertBody().is("['bar']");
@@ -150,7 +141,7 @@ public class RestClient_Headers_Test {
 	@Test
 	public void a08_header_String_Supplier() throws Exception {
 		TestSupplier s = TestSupplier.of("foo");
-		RestClient x = checkFooClient().header("Foo",s).build();
+		RestClient x = checkFooClient().header(serializedHeader("Foo",s)).build();
 		x.get("/headers").header(APPEND,"Foo",s).run().assertBody().is("['foo','foo']");
 		s.set("bar");
 		x.get("/headers").header(APPEND,"Foo",s).run().assertBody().is("['bar','bar']");
@@ -170,13 +161,13 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a09_headers_String_Object_Schema_Serializer() throws Exception {
-		checkFooClient().header("Foo",bean,null,new A8()).build().get("/headers").run().assertBody().is("['x{f:1}']");
+		checkFooClient().header(serializedHeader("Foo",bean).serializer(new A8())).build().get("/headers").run().assertBody().is("['x{f:1}']");
 	}
 
 	@Test
 	public void a10_headers_String_Supplier_Schema() throws Exception {
 		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
-		RestClient x = checkFooClient().header("Foo",s,T_ARRAY_PIPES).build();
+		RestClient x = checkFooClient().header(serializedHeader("Foo",s).schema(T_ARRAY_PIPES)).build();
 		x.get("/headers").header(APPEND,"Foo",s,T_ARRAY_PIPES).run().assertBody().is("['foo|bar','foo|bar']");
 		s.set(new String[]{"bar","baz"});
 		x.get("/headers").header(APPEND,"Foo",s,T_ARRAY_PIPES).run().assertBody().is("['bar|baz','bar|baz']");
@@ -185,7 +176,7 @@ public class RestClient_Headers_Test {
 	@Test
 	public void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
 		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
-		checkFooClient().header("Foo",s,T_ARRAY_PIPES,UonSerializer.DEFAULT).build().get("/headers").run().assertBody().is("['@(foo,bar)']");
+		checkFooClient().header(serializedHeader("Foo",s).schema(T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertBody().is("['@(foo,bar)']");
 	}
 
 	public static class A12 implements HttpPartSerializer {
@@ -233,7 +224,7 @@ public class RestClient_Headers_Test {
 		checkClient("If-Range").ifRange("\"foo\"").build().get("/headers").run().assertBody().is("['\"foo\"']");
 		checkClient("If-Unmodified-Since").ifUnmodifiedSince(ZONEDDATETIME).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Max-Forwards").maxForwards(10).build().get("/headers").run().assertBody().is("['10']");
-		checkClient("No-Trace").noTrace().build().get("/headers").run().assertBody().is("['true']");
+		checkClient("No-Trace").noTrace().build().get("/headers").run().assertBody().is("['true','true']");
 		checkClient("Origin").origin("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Pragma").pragma("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Proxy-Authorization").proxyAuthorization("foo").build().get("/headers").run().assertBody().is("['foo']");
@@ -306,7 +297,7 @@ public class RestClient_Headers_Test {
 		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertBody().is("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Max-Forwards").header(new MaxForwards(10)).build().get("/headers").run().assertBody().is("['10']");
-		checkClient("No-Trace").header(new NoTrace("true")).build().get("/headers").run().assertBody().is("['true']");
+		checkClient("No-Trace").header(new NoTrace("true")).build().get("/headers").run().assertBody().is("['true','true']");
 		checkClient("Origin").header(new Origin("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Pragma").header(new Pragma("foo")).build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Proxy-Authorization").header(new ProxyAuthorization("foo")).build().get("/headers").run().assertBody().is("['foo']");
@@ -346,10 +337,6 @@ public class RestClient_Headers_Test {
 
 	private static org.apache.http.Header header(String name, String val) {
 		return new BasicHeader(name, val);
-	}
-
-	private static BasicPart part(String name, Object val) {
-		return basicPart(name, val);
 	}
 
 	private static RestClientBuilder client() {

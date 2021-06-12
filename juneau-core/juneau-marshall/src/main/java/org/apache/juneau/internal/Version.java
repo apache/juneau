@@ -26,7 +26,9 @@ import static java.util.Optional.*;
  */
 public class Version implements Comparable<Version> {
 
-	public static final boolean NEEDS_TESTING = true;
+	static {
+		boolean NEEDS_TESTING = true;
+	}
 
 	private int[] parts;
 

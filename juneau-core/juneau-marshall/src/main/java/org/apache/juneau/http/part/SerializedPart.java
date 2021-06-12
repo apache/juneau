@@ -20,7 +20,6 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -37,7 +36,6 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-@FluentSetters
 public class SerializedPart extends BasicPart implements Headerable {
 	private final Object value;
 	private HttpPartType type;
@@ -235,8 +233,4 @@ public class SerializedPart extends BasicPart implements Headerable {
 			return ((Supplier<?>)o).get();
 		return o;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

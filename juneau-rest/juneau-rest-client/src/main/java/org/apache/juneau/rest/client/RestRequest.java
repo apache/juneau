@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.logging.*;
+import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.client.config.*;
@@ -1081,6 +1082,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private RestRequest innerPath(NameValuePair param) {
 		String path = uriBuilder.getPath();
+		if (param instanceof SerializedPart)
+			param = ((SerializedPart)param).copyWith(getPartSerializerSession(null), null);
 		String name = param.getName(), value = param.getValue();
 		String var = "{" + name + "}";
 		if (path.indexOf(var) == -1 && ! name.equals("/*"))
@@ -1457,6 +1460,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@SuppressWarnings("deprecation")
 	private RestRequest innerQuery(EnumSet<ListOperation> flags, List<NameValuePair> params) {
 		flags = ListOperation.orDefault(flags);
+		params = params.stream().map(x -> x instanceof SerializedPart ? ((SerializedPart)x).copyWith(getPartSerializerSession(null), null) : x).collect(Collectors.toList());
 		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			params.removeIf(x -> isEmpty(x.getValue()));
@@ -1853,6 +1857,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private RestRequest innerFormData(EnumSet<ListOperation> flags, List<NameValuePair> params) {
 		input = null;
 		flags = ListOperation.orDefault(flags);
+		params = params.stream().map(x -> x instanceof SerializedPart ? ((SerializedPart)x).copyWith(getPartSerializerSession(null), null) : x).collect(Collectors.toList());
 		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			params.removeIf(x -> isEmpty(x.getValue()));
@@ -2170,6 +2175,39 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
+	 * TEMP.
+	 *
+	 * @param flag TODO
+	 * @param value TODO
+	 * @return TODO
+	 */
+	public RestRequest query(ListOperation flag, NameValuePair value) {
+		return queries(flag, value);
+	}
+
+	/**
+	 * TEMP.
+	 *
+	 * @param flag TODO
+	 * @param value TODO
+	 * @return TODO
+	 */
+	public RestRequest formData(ListOperation flag, NameValuePair value) {
+		return formDatas(flag, value);
+	}
+
+	/**
+	 * TEMP.
+	 *
+	 * @param flag TODO
+	 * @param value TODO
+	 * @return TODO
+	 */
+	public RestRequest path(ListOperation flag, NameValuePair value) {
+		return paths(flag, value);
+	}
+
+	/**
 	 * Adds or replaces multiple headers to the request.
 	 *
 	 * <p>
@@ -2371,6 +2409,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@SuppressWarnings("deprecation")
 	private RestRequest innerHeaders(EnumSet<ListOperation> flags, Collection<Header> headers) {
 		flags = ListOperation.orDefault(flags);
+		headers = headers.stream().map(x -> x instanceof SerializedHeader ? ((SerializedHeader)x).copyWith(getPartSerializerSession(null), null) : x).collect(Collectors.toList());
 		headers.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			headers.removeIf(x -> isEmpty(x.getValue()));
@@ -2889,7 +2928,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest warning(String value) throws RestCallException {
 		return header(Warning.of(value));
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Execution methods.
 	//------------------------------------------------------------------------------------------------------------------
@@ -3390,7 +3429,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(Header header) {
-		request.addHeader(header);
+		if (header instanceof SerializedHeader)
+			header = ((SerializedHeader)header).copyWith(getPartSerializerSession(null), null);
+		if (isNotEmpty(header.getName()))
+			request.addHeader(header);
 	}
 
 	/**
@@ -3556,6 +3598,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return A session of the specified serializer.
 	 */
 	protected HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {
+		if (serializer == null)
+			serializer = client.getPartSerializer();
 		HttpPartSerializerSession s = partSerializerSessions.get(serializer);
 		if (s == null) {
 			s = serializer.createPartSession(null);

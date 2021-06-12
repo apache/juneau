@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -485,13 +486,13 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a12_partSerializer_partParser() throws Exception {
-		RestClient x = client(A12.class).header("Foo",bean).partSerializer(A12a.class).partParser(A12b.class).build();
+		RestClient x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
 		ABean b = x.get("/").header(APPEND,"Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 		b = x.get().header(APPEND,"Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 
-		x = client(A12.class).header("Foo",bean).partSerializer(new A12a()).partParser(new A12b()).build();
+		x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(new A12a()).partParser(new A12b()).build();
 		b = x.get("/").header(APPEND,"Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 	}

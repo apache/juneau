@@ -31,7 +31,6 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -146,8 +145,6 @@ public class ConfigurablePropertyCodeGenerator {
 		ParserBuilder.class,
 		ParserGroupBuilder.class,
 		ParserSessionArgs.class,
-		PartialContent.class,
-		PermanentRedirect.class,
 		PlainTextParserBuilder.class,
 		PlainTextSerializerBuilder.class,
 		RdfParserBuilder.class,
@@ -157,10 +154,7 @@ public class ConfigurablePropertyCodeGenerator {
 		RestClientBuilder.class,
 		RestContextBuilder.class,
 		RestOperationContextBuilder.class,
-		SerializedEntity.class,
 		SerializedEntityBuilder.class,
-		SerializedHeader.class,
-		SerializedPart.class,
 		SerializerBuilder.class,
 		SerializerGroupBuilder.class,
 		SerializerSessionArgs.class,

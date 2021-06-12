@@ -33,7 +33,9 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentVersionAssertion<R>")
 public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
 
-	public static final boolean NEEDS_TESTING = true;
+	static {
+		boolean NEEDS_TESTING = true;
+	}
 
 	private final Version value;
 

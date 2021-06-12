@@ -24,7 +24,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
-import static java.util.Collections.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -72,7 +71,6 @@ import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.http.HttpHeaders;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
@@ -331,12 +329,13 @@ import org.apache.juneau.http.HttpHeaders;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#header(String,Object) header(String,Object)}
+ * 		<li class='jm'>{@link RestClientBuilder#getHeaderListBuilder() getHeaderListBuilder()}
+ * 		<li class='jm'>{@link RestClientBuilder#header(String,String) header(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
  * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#headers(Header...) headers(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#headerPairs(String...) headerPairs(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#defaultHeaders(Header...) headers(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -388,9 +387,12 @@ import org.apache.juneau.http.HttpHeaders;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#query(String,Object) query(String,Object)}
+ * 		<li class='jm'>{@link RestClientBuilder#getQueryListBuilder() getQueryListBuilder()}
+ * 		<li class='jm'>{@link RestClientBuilder#query(String,String) query(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(NameValuePair...) queries(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#queryPairs(String...) queryPairs(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#defaultQuery(NameValuePair...) queries(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -426,9 +428,12 @@ import org.apache.juneau.http.HttpHeaders;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object) formData(String,Object)}
+ * 		<li class='jm'>{@link RestClientBuilder#getFormDataListBuilder() getFormData()}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(String,String) formData(String,String)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
- * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(NameValuePair...) formDatas(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(String...) formDataPairs(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#defaultFormData(NameValuePair...) formDatas(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -1236,79 +1241,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public static final String RESTCLIENT_executorServiceShutdownOnClose = PREFIX + "executorServiceShutdownOnClose.b";
 
 	/**
-	 * Configuration property:  Request form-data parameters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_formData RESTCLIENT_formData}
-	 * 	<li><b>Name:</b>  <js>"RestClient.formData.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.http.NameValuePair}&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
-	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#formData(String,Object) formData(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#formData(String,Object,HttpPartSchema,HttpPartSerializer) formData(String,Object,HttpPartSerializer,HttpPartSchema)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#formDatas(Object...) formDatas(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#formDataPairs(Object...) formDataPairs(Map<String, Object>)}
-	 * 			</ul>
-	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
-	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formData(String,Object) formData(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formData(ListOperation,String,Object) formData(EnumSet&lt;ListOperation&gt;,String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDatas(Object...) formDatas(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDatas(ListOperation,Object...) formDatas(EnumSet&lt;ListOperation&gt;Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formDataCustom(Object) formDataCustom(Object)}
-	 * 			</ul>
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Query parameters to add to every request.
-	 */
-	public static final String RESTCLIENT_formData = PREFIX + "formData.lo";
-
-	/**
-	 * Configuration property:  Request headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_headers RESTCLIENT_headers}
-	 * 	<li><b>Name:</b>  <js>"RestClient.headers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.http.Header} | {@link org.apache.http.NameValuePair}&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
-	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#header(String,Object) header(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#header(String,Object,HttpPartSchema,HttpPartSerializer) header(String,Object,HttpPartSerializer,HttpPartSchema)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#header(Header) header(Header)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#headers(Object...) headers(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
-	 * 			</ul>
-	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
-	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(String,Object) header(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(ListOperation,String,Object) header(EnumSet&gt;ListOperation&gt;,String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#header(Header) header(Header)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(Object...) headers(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers(ListOperation,Object...) headers(EnumSet&gt;ListOperation&gt;,Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headerPairs(Object...) headerPairs(Object...)}
-	 * 			</ul>
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Headers to add to every request.
-	 */
-	public static final String RESTCLIENT_headers = PREFIX + "headers.lo";
-
-	/**
 	 * Configuration property:  Ignore errors.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1764,41 +1696,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
 
 	/**
-	 * Configuration property:  Request query parameters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query RESTCLIENT_query}
-	 * 	<li><b>Name:</b>  <js>"RestClient.query.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.http.NameValuePair}&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
-	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#queries(Object...) queries(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#query(String,Object) query(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#query(String,Object,HttpPartSchema,HttpPartSerializer) query(String,Object,HttpPartSerializer,HttpPartSchema)}
-	 * 			</ul>
-	 * 			<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
-	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#query(String,Object) query(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#query(ListOperation,String,Object) query(EnumSet&lt;ListOperation&gt;,String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queries(Object...) queries(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queries(ListOperation,Object...) queries(EnumSet&lt;ListOperation&gt;,Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queryPairs(Object...) queryPairs(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queryCustom(Object) queryCustom(Object)}
-	 * 			</ul>
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Query parameters to add to every request.
-	 */
-	public static final String RESTCLIENT_query = PREFIX + "query.lo";
-
-	/**
 	 * Configuration property:  Root URI.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1882,12 +1779,22 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 */
 	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 
-	static final String RESTCLIENT_httpClient = PREFIX + "httpClient.o";
-	static final String RESTCLIENT_httpClientBuilder= PREFIX + "httpClientBuilder.o";
+	static final String RESTCLIENT_skipEmptyHeaders = PREFIX + "skipEmptyHeaders.b";
+	static final String RESTCLIENT_skipEmptyQueryParameter = PREFIX + "skipEmptyQueryParameters.b";
+	static final String RESTCLIENT_skipEmptyFormDataParameters = PREFIX + "skipEmptyFormDataParameters.b";
 
-	private final HeaderList headers;
-	private final PartList query, formData;
+
+	static final String RESTCLIENT_httpClient = PREFIX + "httpClient.o";
+	static final String RESTCLIENT_httpClientBuilder = PREFIX + "httpClientBuilder.o";
+	static final String RESTCLIENT_headerListBuilder = PREFIX + "headerListBuilder.o";
+	static final String RESTCLIENT_formDataListBuilder = PREFIX + "formDataListBuilder.o";
+	static final String RESTCLIENT_queryListBuilder = PREFIX + "queryListBuilder.o";
+	static final String RESTCLIENT_pathListBuilder = PREFIX + "pathListBuilder.o";
+
+	final HeaderListBuilder headerList;
+	final PartListBuilder queryList, formDataList, pathList;
 	final CloseableHttpClient httpClient;
+
 	private final HttpClientConnectionManager connectionManager;
 	private final boolean keepHttpClientOpen, leakDetection;
 	private final BeanStore beanStore;
@@ -1951,6 +1858,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	protected RestClient(ContextProperties cp) {
 		super(cp);
 		this.httpClient = cp.getInstance(RESTCLIENT_httpClient, CloseableHttpClient.class).orElse(null);
+		this.headerList = cp.getInstance(RESTCLIENT_headerListBuilder, HeaderListBuilder.class).orElseGet(HeaderListBuilder::new).copy();
+		this.queryList = cp.getInstance(RESTCLIENT_queryListBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.formDataList = cp.getInstance(RESTCLIENT_formDataListBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.pathList = cp.getInstance(RESTCLIENT_pathListBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
 
 		BeanStore bs = this.beanStore = new BeanStore()
 			.addBean(ContextProperties.class, cp)
@@ -2005,51 +1916,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.partParser = cp.getInstance(RESTCLIENT_partParser, HttpPartParser.class, bs).orElseGet(bs.createBeanSupplier(OpenApiParser.class));
 		this.executorService = cp.getInstance(RESTCLIENT_executorService, ExecutorService.class).orElse(null);
 
-		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
-
-		HeaderListBuilder headers = HeaderList.create();
-		for (Object o : cp.getList(RESTCLIENT_headers, Object.class).orElse(emptyList())) {
-			o = buildBuilders(o, partSerializerSession);
-			if (o instanceof HeaderList)
-				headers.append(((HeaderList)o));
-			else
-				headers.append(HttpHeaders.cast(o));
-		}
-		this.headers = headers.build();
-
-		PartListBuilder query = PartList.create();
-		for (Object o : cp.getList(RESTCLIENT_query, Object.class).orElse(emptyList())) {
-			o = buildBuilders(o, partSerializerSession);
-			if (o instanceof PartList)
-				query.append((PartList)o);
-			else
-				query.append(BasicPart.cast(o));
-		}
-		this.query = query.build();
-
-		PartListBuilder formData = PartList.create();
-		for (Object o : cp.getList(RESTCLIENT_formData, Object.class).orElse(emptyList())) {
-			o = buildBuilders(o, partSerializerSession);
-			if (o instanceof PartList)
-				formData.append((PartList)o);
-			else
-				formData.append(BasicPart.cast(o));
-		}
-		this.formData = formData.build();
-
 		this.callHandler = cp.getInstance(RESTCLIENT_callHandler, RestCallHandler.class, bs).orElseGet(bs.createBeanSupplier(BasicRestCallHandler.class));
 
 		this.interceptors = cp.getInstanceArray(RESTCLIENT_interceptors, RestCallInterceptor.class).orElse(new RestCallInterceptor[0]);
 
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
-	}
-
-	private static Object buildBuilders(Object o, HttpPartSerializerSession ss) {
-		if (o instanceof SerializedHeader)
-			return ((SerializedHeader)o).copyWith(ss, null);
-		if (o instanceof SerializedPart)
-			return ((SerializedPart)o).copy().copyWith(ss, null);
-		return o;
 	}
 
 	/**
@@ -2817,11 +2688,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasBody());
 
-		headers.forEach(x -> req.header(APPEND, x));
+		headerList.forEach(x -> req.header(APPEND, x));
 
-		query.forEach(x -> req.query(APPEND, x.getName(), x.getValue()));
+		queryList.forEach(x -> req.query(APPEND, x));
 
-		formData.forEach(x -> req.formData(APPEND, x.getName(), x.getValue()));
+		formDataList.forEach(x -> req.formData(APPEND, x));
 
 		onInit(req);
 
@@ -3371,6 +3242,96 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		return x;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if empty request header values should be ignored.
+	 *
+	 * @return <jk>true</jk> if empty request header values should be ignored.
+	 */
+	protected boolean isSkipEmptyHeaders() {
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if empty request query parameter values should be ignored.
+	 *
+	 * @return <jk>true</jk> if empty request query parameter values should be ignored.
+	 */
+	protected boolean isSkipEmptyQueryParameters() {
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if empty request form-data parameter values should be ignored.
+	 *
+	 * @return <jk>true</jk> if empty request form-data parameter values should be ignored.
+	 */
+	protected boolean isSkipEmptyFormDataParameters() {
+		return false;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Part list builders methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a mutable copy of the header list defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public HeaderListBuilder createHeaderListBuilder() {
+		return headerList.copy();
+	}
+
+	/**
+	 * Creates a mutable copy of the qery list defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public PartListBuilder createQueryListBuilder() {
+		return queryList.copy();
+	}
+
+	/**
+	 * Creates a mutable copy of the form-data list defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public PartListBuilder createFormDataListBuilder() {
+		return formDataList.copy();
+	}
+
+	/**
+	 * Creates a mutable copy of the path list defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public PartListBuilder createPathListBuilder() {
+		return pathList.copy();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// RestCallInterceptor methods
@@ -3814,12 +3775,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					.a("errorCodes", errorCodes)
 					.a("executorService", executorService)
 					.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-					.a("headers", headers)
+					.a("headers", headerList)
 					.a("interceptors", interceptors)
 					.a("keepHttpClientOpen", keepHttpClientOpen)
 					.a("partParser", partParser)
 					.a("partSerializer", partSerializer)
-					.a("query", query)
+					.a("query", queryList)
 					.a("rootUri", rootUri)
 			);
 	}

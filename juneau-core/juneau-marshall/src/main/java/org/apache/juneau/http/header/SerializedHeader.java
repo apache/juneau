@@ -19,7 +19,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -36,7 +35,6 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-@FluentSetters
 public class SerializedHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
@@ -300,8 +298,4 @@ public class SerializedHeader extends BasicHeader {
 			throw runtimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

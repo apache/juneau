@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.apache.juneau.BeanTraverseContext.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
@@ -23,6 +22,7 @@ import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.oapi.OpenApiCommon.*;
 import static org.apache.juneau.uon.UonSerializer.*;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -54,7 +54,6 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
@@ -76,6 +75,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Builder class for the {@link RestClient} class.
+ * {@review}
  *
  * <p>
  * Instances of this class are created by the following methods:
@@ -98,6 +98,8 @@ import org.apache.juneau.xml.*;
 public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
+	private HeaderListBuilder headerList;
+	private PartListBuilder queryList, formDataList, pathList;
 	private CloseableHttpClient httpClient;
 	private boolean pooled;
 
@@ -110,6 +112,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 		super(copyFrom);
 		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
+		int FIXME;
+//		if (copyFrom == null) {
+			this.headerList = HeaderList.create();
+			this.queryList = PartList.create();
+			this.formDataList = PartList.create();
+			this.pathList = PartList.create();
+//		} else {
+//			this.headerList = copyFrom.headerList.copy();
+//			this.queryList = copyFrom.queryList.copy();
+//			this.formDataList = copyFrom.formDataList.copy();
+//			this.pathList = copyFrom.pathList.copy();
+//		}
 	}
 
 	/**
@@ -124,16 +138,75 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	@Override /* ContextBuilder */
 	public RestClient build() {
-		set(RESTCLIENT_httpClient, getHttpClient());
-		set(RESTCLIENT_httpClientBuilder, getHttpClientBuilder());
-		return new RestClient(getContextProperties());
+		return new RestClient(contextProperties());
 	}
 
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
+		contextProperties();
+		return super.build(c);
+	}
+
+	private ContextProperties contextProperties() {
 		set(RESTCLIENT_httpClient, getHttpClient());
 		set(RESTCLIENT_httpClientBuilder, getHttpClientBuilder());
-		return super.build(c);
+		set(RESTCLIENT_headerListBuilder, headerList);
+		set(RESTCLIENT_formDataListBuilder, formDataList);
+		set(RESTCLIENT_queryListBuilder, queryList);
+		set(RESTCLIENT_pathListBuilder, pathList);
+		return getContextProperties();
+	}
+
+	/**
+	 * Returns the builder for the header parameter list.
+	 *
+	 * <p>
+	 * Allows you to perform operations on the header parameters that aren't otherwise exposed on this API, such
+	 * as Prepend/Replace/Default operations.
+	 *
+	 * @return The header parameter list builder.
+	 */
+	public HeaderListBuilder getHeaderListBuilder() {
+		return headerList;
+	}
+
+	/**
+	 * Returns the builder for the query parameter list.
+	 *
+	 * <p>
+	 * Allows you to perform operations on the query parameters that aren't otherwise exposed on this API, such
+	 * as Prepend/Replace/Default operations.
+	 *
+	 * @return The query parameter list builder.
+	 */
+	public PartListBuilder getQueryListBuilder() {
+		return queryList;
+	}
+
+	/**
+	 * Returns the builder for the form data parameter list.
+	 *
+	 * <p>
+	 * Allows you to perform operations on the form data parameters that aren't otherwise exposed on this API, such
+	 * as Prepend/Replace/Default operations.
+	 *
+	 * @return The form data parameter list builder.
+	 */
+	public PartListBuilder getFormDataListBuilder() {
+		return formDataList;
+	}
+
+	/**
+	 * Returns the builder for the form data parameter list.
+	 *
+	 * <p>
+	 * Allows you to perform operations on the form data parameters that aren't otherwise exposed on this API, such
+	 * as Prepend/Replace/Default operations.
+	 *
+	 * @return The form data parameter list builder.
+	 */
+	public PartListBuilder getPathListBuilder() {
+		return pathList;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -157,10 +230,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -204,10 +277,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -247,10 +320,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -293,10 +366,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -339,10 +412,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -385,10 +458,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -432,10 +505,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -478,10 +551,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -525,10 +598,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -570,10 +643,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -619,10 +692,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
-	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * 		by {@link #header(Header)}, or per-request via {@link RestRequest#header(Header)}.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 	 * 	<ul>
@@ -661,11 +734,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 			bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
-	 * 	<c>Accept</c> request header must be set by {@link #header(String,Object)} or {@link #accept(String)}, or per-request
-	 * 		via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)} in order for the correct parser to be selected.
+	 * 	<c>Accept</c> request header must be set by {@link #header(Header)}, or per-request
+	 * 		via {@link RestRequest#header(Header)} in order for the correct parser to be selected.
 	 * <p>
-	 * 	<c>Content-Type</c> request header must be set by {@link #header(String,Object)} or {@link #contentType(String)},
-	 * 		or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)} in order for the correct serializer to be selected.
+	 * 	<c>Content-Type</c> request header must be set by {@link #header(Header)},
+	 * 		or per-request via {@link RestRequest#header(Header)} in order for the correct serializer to be selected.
 	 * <p>
 	 * 	Similar to calling <c>json().simpleJson().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
 	 *
@@ -1052,147 +1125,299 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Headers
+	// HTTP parts
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Sets a header on all requests.
+	 * Appends a header to all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
 	 *
-	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
+	 * 		.header(<jsf>ACCEPT_TEXT_XML</jsf>)
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
+	 * <p>
+	 * This is a shortcut for calling <c>getHeaderListBuilder().append(<jv>header</jv>)</c>.
+	 *
+	 * @param value
+	 * 	The parameter to append.
+	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return headers(serializedHeader(name, value, serializer, schema));
+	public RestClientBuilder header(Header value) {
+		getHeaderListBuilder().append(value);
+		return this;
 	}
 
 	/**
-	 * Sets a header with a dynamic value on all requests.
+	 * Appends a query parameter to the URI of all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 	 *
-	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
+	 * 		.query(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param name The header name.
-	 * @param value The header value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
+	 * <p>
+	 * This is a shortcut for calling <c>getQueryListBuilder().append(<jv>value</jv>)</c>.
+	 *
+	 * @param value
+	 * 	The parameter to append.
+	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return headers(serializedHeader(name, value, serializer, schema));
+	public RestClientBuilder query(NameValuePair value) {
+		getQueryListBuilder().append(value);
+		return this;
 	}
 
 	/**
-	 * Sets a header on all requests.
+	 * Appends a form-data parameter to the request bodies of all form posts.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 	 *
-	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.formData(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
+	 * <p>
+	 * This is a shortcut for calling <c>getFormDataListBuilder().append(<jv>value</jv>)</c>.
+	 *
+	 * @param value
+	 * 	The parameter to append.
+	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Object value, HttpPartSchema schema) {
-		return headers(serializedHeader(name, value, null, schema));
+	public RestClientBuilder formData(NameValuePair value) {
+		getFormDataListBuilder().append(value);
+		return this;
 	}
 
 	/**
-	 * Sets a header with a dynamic value on all requests.
+	 * Sets a path parameter on all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 	 *
-	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.path(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param name The header name.
-	 * @param value The header value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
+	 * <p>
+	 * This is a shortcut for calling <c>getPathListBuilder().set(<jv>parts</jv>)</c>.
+	 *
+	 * @param value
+	 * 	The parameter to set.
+	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema) {
-		return headers(serializedHeader(name, value, null, schema));
+	public RestClientBuilder path(NameValuePair value) {
+		getPathListBuilder().set(value);
+		return this;
 	}
 
 	/**
-	 * Sets a header on all requests.
+	 * Appends multiple headers to all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.headers(
+	 * 			<jsf>ACCEPT_TEXT_XML</jsf>,
+	 * 			<jsm>stringHeader</jsm>(<js>"Foo"</js>, <js>"bar"</js>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getHeaderListBuilder().append(<jv>headers</jv>)</c>.
+	 *
+	 * @param headers
+	 * 	The header to set.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder headers(Header...headers) {
+		getHeaderListBuilder().append(headers);
+		return this;
+	}
+
+	/**
+	 * Appends multiple query parameters to the URI of all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.query(
+	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getQueryListBuilder().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The query parameters.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(NameValuePair...parts) {
+		getQueryListBuilder().append(parts);
+		return this;
+	}
+
+	/**
+	 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(
+	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getFormDataListBuilder().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The form-data parameters.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(NameValuePair...parts) {
+		getFormDataListBuilder().append(parts);
+		return this;
+	}
+
+	/**
+	 * Sets multiple path parameters on all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+	 *
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.path(
+	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getPathListBuilder().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The path parameters.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder path(NameValuePair...parts) {
+		getPathListBuilder().append(parts);
+		return this;
+	}
+
+	/**
+	 * Appends multiple headers to all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getHeaderListBuilder().append(<jv>headers</jv>)</c>.
+	 *
+	 * @param headers
+	 * 	The header to set.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder headers(HeaderList headers) {
+		getHeaderListBuilder().append(headers);
+		return this;
+	}
+
+	/**
+	 * Appends multiple query parameters to all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getQueryListBuilder().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The parts to set.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(PartList parts) {
+		getQueryListBuilder().append(parts);
+		return this;
+	}
+
+	/**
+	 * Appends multiple form-data parameters to all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getFormDataListBuilder().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The parts to set.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(PartList parts) {
+		getFormDataListBuilder().append(parts);
+		return this;
+	}
+
+	/**
+	 * Appends multiple path parameters to all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getPathListBuilder().append(<jv>parts</jv>)</c>.
+	 *
+	 * @param parts
+	 * 	The parts to set.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder path(PartList parts) {
+		getPathListBuilder().append(parts);
+		return this;
+	}
+
+	/**
+	 * Appends a header to all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1202,25 +1427,87 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
-	 * </ul>
+	 * <p>
+	 * This is a shortcut for calling <c>getHeaders().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Object value) {
-		return headers(serializedHeader(name, value, null, null));
+	public RestClientBuilder header(String name, String value) {
+		getHeaderListBuilder().append(name, value);
+		return this;
 	}
 
 	/**
-	 * Sets a header with a dynamic value on all requests.
+	 * Appends a query parameter to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getQuery().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(String name, String value) {
+		getQueryListBuilder().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a form-data parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, String value) {
+		getFormDataListBuilder().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a path parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.path(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder path(String name, String value) {
+		getPathListBuilder().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a header to all requests using a dynamic value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1230,93 +1517,187 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
-	 * </ul>
+	 * <p>
+	 * This is a shortcut for calling <c>getHeaders().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The header name.
 	 * @param value The header value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Supplier<?> value) {
-		return headers(serializedHeader(name, value, null, null));
-	}
-
-	/**
-	 * Sets a header on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param header The header to set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder header(Header header) {
-		return headers(header);
-	}
-
-	/**
-	 * Sets multiple headers on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param headers
-	 * 	The header to set.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link Headerable}
-	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link HeaderList}
-	 * 		<li>{@link Map}
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 		</ul>
-	 * 		<li>A collection or array of anything on this list.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder headers(Object...headers) {
-		for (Object h : headers) {
-			if (HttpHeaders.canCast(h) || h instanceof HeaderList) {
-				appendTo(RESTCLIENT_headers, h);
-			} else if (h instanceof Map) {
-				for (Map.Entry<Object,Object> e : toMap(h).entrySet())
-					appendTo(RESTCLIENT_headers, serializedHeader(e.getKey(), e.getValue(), null, null));
-			} else if (h instanceof Collection) {
-				for (Object o : (Collection<?>)h)
-					headers(o);
-			} else if (h != null && h.getClass().isArray()) {
-				for (int i = 0; i < Array.getLength(h); i++)
-					headers(Array.get(h, i));
-			} else if (h != null) {
-				throw runtimeException("Invalid type passed to headers():  {0}", className(h));
-			}
-		}
+	public RestClientBuilder header(String name, Supplier<String> value) {
+		getHeaderListBuilder().append(name, value);
 		return this;
 	}
 
 	/**
-	 * Sets multiple headers on all requests using freeform key/value pairs.
+	 * Appends a query parameter with a dynamic value to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getQuery().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(String name, Supplier<String> value) {
+		getQueryListBuilder().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends a form-data parameter with a dynamic value to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, Supplier<String> value) {
+		getFormDataListBuilder().append(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets a path parameter with a dynamic value to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.path(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder path(String name, Supplier<String> value) {
+		getPathListBuilder().set(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets default header values.
+	 *
+	 * <p>
+	 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.defaultHeaders(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getHeaderListBuilder().setDefault(<jv>value</jv>)</c>.
+	 *
+	 * @param headers The header values.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder defaultHeaders(Header...headers) {
+		getHeaderListBuilder().setDefault(headers);
+		return this;
+	}
+
+	/**
+	 * Sets default query parameter values.
+	 *
+	 * <p>
+	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.defaultQuery(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getQueryListBuilder().setDefault(<jv>value</jv>)</c>.
+	 *
+	 * @param parts The parts.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder defaultQuery(NameValuePair...parts) {
+		getQueryListBuilder().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Sets default form-data parameter values.
+	 *
+	 * <p>
+	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.defaultFormData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getFormDataListBuilder().setDefault(<jv>value</jv>)</c>.
+	 *
+	 * @param parts The parts.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder defaultFormData(NameValuePair...parts) {
+		getFormDataListBuilder().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Sets default path parameter values.
+	 *
+	 * <p>
+	 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.defaultPath(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getPathListBuilder().setDefault(<jv>value</jv>)</c>.
+	 *
+	 * @param parts The parts.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder defaultPath(NameValuePair...parts) {
+		getPathListBuilder().setDefault(parts);
+		return this;
+	}
+
+	/**
+	 * Appends headers to all requests using freeform key/value pairs.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1327,18 +1708,91 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * @param pairs The header key/value pairs.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder headerPairs(Object...pairs) {
+	public RestClientBuilder headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into headerPairs()");
+			throw new RuntimeException("Odd number of parameters passed into headerPairs()");
+		ArrayList<Header> l = new ArrayList<>();
 		for (int i = 0; i < pairs.length; i+=2)
-			headers(serializedHeader(pairs[i], pairs[i+1], null, null));
+			l.add(createHeader(stringify(pairs[i]), pairs[i+1]));
+		getHeaderListBuilder().append(l);
+		return this;
+	}
+
+	/**
+	 * Appends query parameters to the URI query using free-form key/value pairs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param pairs The query key/value pairs.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder queryPairs(String...pairs) {
+		if (pairs.length % 2 != 0)
+			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
+		ArrayList<NameValuePair> l = new ArrayList<>();
+		for (int i = 0; i < pairs.length; i+=2)
+			l.add(getQueryListBuilder().createPart(stringify(pairs[i]), pairs[i+1]));
+		getQueryListBuilder().append(l);
+		return this;
+	}
+
+	/**
+	 * Appends form-data parameters to all request bodies using free-form key/value pairs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param pairs The form-data key/value pairs.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formDataPairs(String...pairs) {
+		if (pairs.length % 2 != 0)
+			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
+		ArrayList<NameValuePair> l = new ArrayList<>();
+		for (int i = 0; i < pairs.length; i+=2)
+			l.add(getFormDataListBuilder().createPart(stringify(pairs[i]), pairs[i+1]));
+		getFormDataListBuilder().append(l);
+		return this;
+	}
+
+	/**
+	 * Sets path parameters to all request URLs using free-form key/value pairs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient <jv>client</jv> = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.pathPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param pairs The form-data key/value pairs.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder pathPairs(String...pairs) {
+		if (pairs.length % 2 != 0)
+			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
+		ArrayList<NameValuePair> l = new ArrayList<>();
+		for (int i = 0; i < pairs.length; i+=2)
+			l.add(getFormDataListBuilder().createPart(stringify(pairs[i]), pairs[i+1]));
+		getPathListBuilder().set(l);
 		return this;
 	}
 
@@ -1362,10 +1816,23 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Appends an <c>Accept</c> header on this request.
+	 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
 	 *
 	 * <p>
-	 * Header is appended to the end of the current header list.
+	 * Headers are appended to the end of the current header list.
+	 *
+	 * @param value The new header values.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	@FluentSetter
+	public RestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return headers(Accept.of(value), ContentType.of(value));
+	}
+
+	/**
+	 * Appends an <c>Accept</c> header on this request.
 	 *
 	 * <p>
 	 * This is equivalent to calling <code>header(<js>"Accept"</js>, <jv>value</jv>);</code>
@@ -1798,8 +2265,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Sets the value for the <c>Referer</c> request header on all requests.
 	 *
 	 * <p>
-	 * This is equivalent to calling <code>header(<js>"Referer"</js>, <jv>value</jv>);</code>
-	 * or <code>header(Referer.<jsm>of</jsm>(<jv>value</jv>));</code>
+	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
@@ -1882,572 +2348,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder warning(String value) {
 		return header(Warning.of(value));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Query
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return queries(serializedPart(name, value, QUERY, serializer, schema));
-	}
-
-	/**
-	 * Adds a query parameter with a dynamic value to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return queries(serializedPart(name, value, QUERY, serializer, schema));
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(String name, Object value, HttpPartSchema schema) {
-		return queries(serializedPart(name, value, QUERY, null, schema));
-	}
-
-	/**
-	 * Adds a query parameter with a dynamic value to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema) {
-		return queries(serializedPart(name, value, QUERY, null, schema));
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(String name, Object value) {
-		return queries(serializedPart(name, value, QUERY, null, null));
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pair The query parameter.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(NameValuePair pair) {
-		return queries(pair);
-	}
-
-	/**
-	 * Adds a query parameter with a dynamic value to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder query(String name, Supplier<?> value) {
-		return queries(serializedPart(name, value, QUERY, null, null));
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queries(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param params
-	 * 	The query parameters.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link NameValuePairable}
-	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link PartList}
-	 * 		<li>{@link Map}
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 		</ul>
-	 * 		<li>A collection or array of anything on this list.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queries(Object...params) {
-		for (Object p : params) {
-			if (BasicPart.canCast(p) || p instanceof PartList) {
-				appendTo(RESTCLIENT_query, p);
-			} else if (p instanceof Map) {
-				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
-					appendTo(RESTCLIENT_query, serializedPart(e.getKey(), e.getValue(), QUERY, null, null));
-			} else if (p instanceof Collection) {
-				for (Object o : (Collection<?>)p)
-					queries(o);
-			} else if (p != null && p.getClass().isArray()) {
-				for (int i = 0; i < Array.getLength(p); i++)
-					queries(Array.get(p, i));
-			} else if (p != null) {
-				throw runtimeException("Invalid type passed to query():  {0}", className(p));
-			}
-		}
-		return this;
-	}
-
-	/**
-	 * Adds query parameters to the URI query using free-form key/value pairs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pairs The query key/value pairs.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder queryPairs(Object...pairs) {
-		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into queryPairs(Object...)");
-		for (int i = 0; i < pairs.length; i+=2)
-			queries(serializedPart(pairs[i], pairs[i+1], QUERY, null, null));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Form data
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Adds a form-data parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return formDatas(serializedPart(name, value, FORMDATA, serializer, schema));
-	}
-
-	/**
-	 * Adds a form-data parameter with a dynamic value to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return formDatas(serializedPart(name, value, FORMDATA, serializer, schema));
-	}
-
-	/**
-	 * Adds a form-data parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema) {
-		return formDatas(serializedPart(name, value, FORMDATA, null, schema));
-	}
-
-	/**
-	 * Adds a form-data parameter with a dynamic value to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
-	 *
-	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema) {
-		return formDatas(serializedPart(name, value, FORMDATA, null, schema));
-	}
-
-	/**
-	 * Adds a form-data parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Object value) {
-		return formDatas(serializedPart(name, value, FORMDATA, null, null));
-	}
-
-	/**
-	 * Adds a form-data parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pair The form data parameter.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(NameValuePair pair) {
-		return formDatas(pair);
-	}
-
-	/**
-	 * Adds a form-data parameter with a dynamic value to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formData(String name, Supplier<?> value) {
-		return formDatas(serializedPart(name, value, FORMDATA, null, null));
-	}
-
-	/**
-	 * Adds a form-data parameter to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param params
-	 * 	The form-data parameters.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link NameValuePairable}
-	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link PartList}
-	 * 		<li>{@link Map}
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 		</ul>
-	 * 		<li>A collection or array of anything on this list.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formDatas(Object...params) {
-		for (Object p : params) {
-			if (BasicPart.canCast(p) || p instanceof PartList) {
-				appendTo(RESTCLIENT_formData, p);
-			} else if (p instanceof Map) {
-				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
-					appendTo(RESTCLIENT_formData, serializedPart(e.getKey(), e.getValue(), FORMDATA, null, null));
-			} else if (p instanceof Collection) {
-				for (Object o : (Collection<?>)p)
-					formDatas(o);
-			} else if (p != null && p.getClass().isArray()) {
-				for (int i = 0; i < Array.getLength(p); i++)
-					formDatas(Array.get(p, i));
-			} else if (p != null) {
-				throw runtimeException("Invalid type passed to formData():  {0}", className(p));
-			}
-		}
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to all request bodies using free-form key/value pairs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient <jv>client</jv> = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pairs The form-data key/value pairs.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder formDataPairs(Object...pairs) {
-		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into formDataPairs()");
-		for (int i = 0; i < pairs.length; i+=2)
-			formDatas(serializedPart(pairs[i], pairs[i+1], FORMDATA, null, null));
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4778,12 +4678,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -5480,24 +5374,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Assigns default request header values.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-	 * 	<li>{@link #headers(Object...)} is an equivalent method.
-	 * </ul>
-	 *
-	 * @param defaultHeaders New property value.
-	 * @return This object (for method chaining).
-	 * @see HttpClientBuilder#setDefaultHeaders(Collection)
-	 */
-	@FluentSetter
-	public RestClientBuilder defaultHeaders(Collection<? extends Header> defaultHeaders) {
-		httpClientBuilder.setDefaultHeaders(defaultHeaders);
-		return this;
-	}
-
-	/**
 	 * Adds this protocol interceptor to the head of the protocol processing list.
 	 *
 	 * <ul class='notes'>
@@ -5843,16 +5719,45 @@ public class RestClientBuilder extends BeanContextBuilder {
 	// Utility methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
-	private static Map<Object,Object> toMap(Object o) {
-		return (Map<Object,Object>)o;
+	/**
+	 * Creates a header from the specified name/value pair.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return A new header, or <jk>null</jk> if the name was <jk>null</jk> or empty.
+	 */
+	protected Header createHeader(String name, Object value) {
+		String n = stringify(name);
+		if (isEmpty(n))
+			return null;
+		return getHeaderListBuilder().createHeader(n, value);
 	}
 
-	private static SerializedPart serializedPart(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return key == null ? null : SerializedPart.of(stringify(key),value).type(type).serializer(serializer).schema(schema);
+	/**
+	 * Creates a query parameter from the specified name/value pair.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new parameter, or <jk>null</jk> if the name was <jk>null</jk> or empty.
+	 */
+	protected NameValuePair createQueryPart(String name, Object value) {
+		String n = stringify(name);
+		if (isEmpty(n))
+			return null;
+		return getQueryListBuilder().createPart(n, value);
 	}
 
-	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return key == null ? null : SerializedHeader.of(stringify(key),value).serializer(serializer).schema(schema);
+	/**
+	 * Creates a form-data parameter from the specified name/value pair.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new parameter, or <jk>null</jk> if the name was <jk>null</jk> or empty.
+	 */
+	protected NameValuePair createFormDataPart(String name, Object value) {
+		String n = stringify(name);
+		if (isEmpty(n))
+			return null;
+		return getFormDataListBuilder().createPart(n, value);
 	}
 }

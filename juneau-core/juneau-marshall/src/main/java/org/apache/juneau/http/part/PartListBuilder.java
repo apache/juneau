@@ -897,6 +897,11 @@ public class PartListBuilder {
 		return caseInsensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
 
+	@Override /* Object */
+	public String toString() {
+		return "[" + join(entries, ", ") + "]";
+	}
+
 	// <FluentSetters>
 
 	// </FluentSetters>

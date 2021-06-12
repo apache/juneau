@@ -896,6 +896,12 @@ public class HeaderListBuilder {
 	private boolean eq(String s1, String s2) {
 		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
+
+	@Override /* Object */
+	public String toString() {
+		return "[" + join(entries, ", ") + "]";
+	}
+
 	// <FluentSetters>
 
 	// </FluentSetters>
