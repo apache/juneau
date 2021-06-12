@@ -112,18 +112,17 @@ public class RestClientBuilder extends BeanContextBuilder {
 		super(copyFrom);
 		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
-		int FIXME;
-//		if (copyFrom == null) {
+		if (copyFrom == null) {
 			this.headerList = HeaderList.create();
 			this.queryList = PartList.create();
 			this.formDataList = PartList.create();
 			this.pathList = PartList.create();
-//		} else {
-//			this.headerList = copyFrom.headerList.copy();
-//			this.queryList = copyFrom.queryList.copy();
-//			this.formDataList = copyFrom.formDataList.copy();
-//			this.pathList = copyFrom.pathList.copy();
-//		}
+		} else {
+			this.headerList = copyFrom.headerList.copy();
+			this.queryList = copyFrom.queryList.copy();
+			this.formDataList = copyFrom.formDataList.copy();
+			this.pathList = copyFrom.pathList.copy();
+		}
 	}
 
 	/**
