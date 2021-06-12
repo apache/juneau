@@ -3654,14 +3654,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	HttpPartSerializerSession getPartSerializerSession() {
-		return partSerializer.createPartSession(null);
-	}
-
-	HttpPartParserSession getPartParserSession() {
-		return partParser.createPartSession(null);
-	}
-
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
 	URI toURI(Object x, String rootUri) throws RestCallException {
