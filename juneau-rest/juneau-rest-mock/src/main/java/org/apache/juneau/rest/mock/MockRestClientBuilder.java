@@ -1324,38 +1324,38 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder path(NameValuePair...parts) {
-		super.path(parts);
+	public MockRestClientBuilder pathData(NameValuePair...parts) {
+		super.pathData(parts);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder path(NameValuePair value) {
-		super.path(value);
+	public MockRestClientBuilder pathData(NameValuePair value) {
+		super.pathData(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder path(PartList parts) {
-		super.path(parts);
+	public MockRestClientBuilder pathData(PartList parts) {
+		super.pathData(parts);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder path(String name, String value) {
-		super.path(name, value);
+	public MockRestClientBuilder pathData(String name, String value) {
+		super.pathData(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder path(String name, Supplier<String> value) {
-		super.path(name, value);
+	public MockRestClientBuilder pathData(String name, Supplier<String> value) {
+		super.pathData(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder pathPairs(String...pairs) {
-		super.pathPairs(pairs);
+	public MockRestClientBuilder pathDataPairs(String...pairs) {
+		super.pathDataPairs(pairs);
 		return this;
 	}
 
@@ -1402,38 +1402,38 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder query(NameValuePair...parts) {
-		super.query(parts);
+	public MockRestClientBuilder queryData(NameValuePair...parts) {
+		super.queryData(parts);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder query(NameValuePair value) {
-		super.query(value);
+	public MockRestClientBuilder queryData(NameValuePair value) {
+		super.queryData(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder query(PartList parts) {
-		super.query(parts);
+	public MockRestClientBuilder queryData(PartList parts) {
+		super.queryData(parts);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder query(String name, String value) {
-		super.query(name, value);
+	public MockRestClientBuilder queryData(String name, String value) {
+		super.queryData(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder query(String name, Supplier<String> value) {
-		super.query(name, value);
+	public MockRestClientBuilder queryData(String name, Supplier<String> value) {
+		super.queryData(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder queryPairs(String...pairs) {
-		super.queryPairs(pairs);
+	public MockRestClientBuilder queryDataPairs(String...pairs) {
+		super.queryDataPairs(pairs);
 		return this;
 	}
 

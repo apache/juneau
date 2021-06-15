@@ -14,8 +14,11 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
+
+import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -45,6 +48,44 @@ public class SerializedEntity extends BasicHttpEntity {
 		super(builder);
 		serializer = builder.serializer;
 		schema = builder.schema;
+	}
+
+	/**
+	 * Creates a copy of this object.
+	 *
+	 * @return A new copy of this object.
+	 */
+	@Override
+	public SerializedEntityBuilder<SerializedEntity> copy() {
+		return new SerializedEntityBuilder<>(this);
+	}
+
+	/**
+	 * Copies this bean and sets the serializer and schema on it.
+	 *
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @return Either a new bean with the serializer set, or this bean if
+	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
+	 */
+	public SerializedEntity copyWith(Serializer serializer, HttpPartSchema schema) {
+		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+			SerializedEntityBuilder<SerializedEntity> h = copy();
+			if (serializer != null)
+				h.serializer(serializer);
+			if (schema != null)
+				h.schema(schema);
+			return h.build();
+		}
+		return this;
+	}
+
+	@Override
+	public Header getContentType() {
+		Header x = super.getContentType();
+		if (x == null && serializer != null)
+			x = contentType(serializer.getPrimaryMediaType());
+		return x;
 	}
 
 	@Override /* HttpEntity */

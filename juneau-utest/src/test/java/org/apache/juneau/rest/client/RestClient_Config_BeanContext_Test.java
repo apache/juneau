@@ -68,8 +68,8 @@ public class RestClient_Config_BeanContext_Test {
 		RestClient x2 = client(A.class).beanClassVisibility(Visibility.PROTECTED).build();
 		x1.post("/echoBody",new A1()).run().assertBody().is("'O1'");
 		x2.post("/echoBody",new A1()).run().assertBody().is("{f:1}");
-		x1.get("/checkQuery").query("foo",new A1()).run().assertBody().is("foo=O1");
-		x2.get("/checkQuery").query("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().urlDecode().is("foo=f=1");
+		x1.get("/checkQuery").queryData("foo",new A1()).run().assertBody().is("foo=O1");
+		x2.get("/checkQuery").queryData("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().urlDecode().is("foo=f=1");
 		x1.formPost("/checkFormData").formData("foo",new A1()).run().assertBody().is("foo=O1");
 		x2.formPost("/checkFormData").formData("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().urlDecode().is("foo=f=1");
 		x1.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertBody().is("['O1']");

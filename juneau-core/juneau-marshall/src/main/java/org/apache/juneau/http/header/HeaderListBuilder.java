@@ -897,6 +897,56 @@ public class HeaderListBuilder {
 		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
 
+	/**
+	 * Gets the first header with the given name.
+	 *
+	 * <p>
+	 * Header name comparison is case insensitive.
+	 *
+	 * @param name The header name.
+	 * @return The first matching header, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<Header> getFirst(String name) {
+		for (int i = 0; i < entries.size(); i++) {
+			Header x = entries.get(i);
+			if (eq(x.getName(), name))
+				return Optional.of(x);
+		}
+		if (defaultEntries != null) {
+			for (int i = 0; i < defaultEntries.size(); i++) {
+				Header x = defaultEntries.get(i);
+				if (eq(x.getName(), name))
+					return Optional.of(x);
+			}
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Gets the last header with the given name.
+	 *
+	 * <p>
+	 * Header name comparison is case insensitive.
+	 *
+	 * @param name The header name.
+	 * @return The last matching header, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<Header> getLast(String name) {
+		for (int i = entries.size() - 1; i >= 0; i--) {
+			Header x = entries.get(i);
+			if (eq(x.getName(), name))
+				return Optional.of(x);
+		}
+		if (defaultEntries != null) {
+			for (int i = defaultEntries.size() - 1; i >= 0; i--) {
+				Header x = defaultEntries.get(i);
+				if (eq(x.getName(), name))
+					return Optional.of(x);
+			}
+		}
+		return Optional.empty();
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return "[" + join(entries, ", ") + "]";

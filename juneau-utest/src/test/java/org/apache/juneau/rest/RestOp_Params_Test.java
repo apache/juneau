@@ -327,7 +327,7 @@ public class RestOp_Params_Test {
 		b.get("/expect?Expect=100-continue").run().assertBody().is("100-continue");
 		b.get("/from").from("foo").run().assertBody().is("foo");
 		b.get("/from?From=foo").run().assertBody().is("foo");
-		b.get("/host").host("localhost").run().assertBody().is("localhost");
+		b.get("/host").uriHost("localhost").run().assertBody().is("localhost");
 		b.get("/host?Host=localhost").run().assertBody().is("localhost");
 		b.get("/ifMatch").ifMatch("\"foo\"").run().assertBody().is("\"foo\"");
 		b.get("/ifMatch").ifMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");

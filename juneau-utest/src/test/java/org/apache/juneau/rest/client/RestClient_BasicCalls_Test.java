@@ -285,8 +285,8 @@ public class RestClient_BasicCalls_Test {
 		client().build().formPost("/bean",bean).accept("application/json+simple").run().assertBody().is("{f:1}");
 
 		client().build().formPost("/bean",bean).body(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
-		client().build().post("/bean").urlEnc().formDatas(bean).body(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
-		client().build().post("/bean").urlEnc().body(bean).formDatas(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+		client().build().post("/bean").urlEnc().formDataBean(bean).body(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+		client().build().post("/bean").urlEnc().body(bean).formDataBean(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -415,7 +415,6 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a29_request_GET() throws Exception {
-		client().build().request("get","/bean",null).run().assertBody().is("{f:1}");
 		client().build().request("get","/bean").run().assertBody().is("{f:1}");
 	}
 

@@ -98,8 +98,8 @@ import org.apache.juneau.xml.*;
 public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
-	private HeaderListBuilder headerList;
-	private PartListBuilder queryList, formDataList, pathList;
+	private HeaderListBuilder headerData;
+	private PartListBuilder queryData, formData, pathData;
 	private CloseableHttpClient httpClient;
 	private boolean pooled;
 
@@ -113,15 +113,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
 		if (copyFrom == null) {
-			this.headerList = HeaderList.create();
-			this.queryList = PartList.create();
-			this.formDataList = PartList.create();
-			this.pathList = PartList.create();
+			this.headerData = HeaderList.create();
+			this.queryData = PartList.create();
+			this.formData = PartList.create();
+			this.pathData = PartList.create();
 		} else {
-			this.headerList = copyFrom.headerList.copy();
-			this.queryList = copyFrom.queryList.copy();
-			this.formDataList = copyFrom.formDataList.copy();
-			this.pathList = copyFrom.pathList.copy();
+			this.headerData = copyFrom.headerData.copy();
+			this.queryData = copyFrom.queryData.copy();
+			this.formData = copyFrom.formData.copy();
+			this.pathData = copyFrom.pathData.copy();
 		}
 	}
 
@@ -149,10 +149,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	private ContextProperties contextProperties() {
 		set(RESTCLIENT_httpClient, getHttpClient());
 		set(RESTCLIENT_httpClientBuilder, getHttpClientBuilder());
-		set(RESTCLIENT_headerListBuilder, headerList);
-		set(RESTCLIENT_formDataListBuilder, formDataList);
-		set(RESTCLIENT_queryListBuilder, queryList);
-		set(RESTCLIENT_pathListBuilder, pathList);
+		set(RESTCLIENT_headerDataBuilder, headerData);
+		set(RESTCLIENT_formDataBuilder, formData);
+		set(RESTCLIENT_queryDataBuilder, queryData);
+		set(RESTCLIENT_pathDataBuilder, pathData);
 		return getContextProperties();
 	}
 
@@ -165,8 +165,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return The header parameter list builder.
 	 */
-	public HeaderListBuilder getHeaderListBuilder() {
-		return headerList;
+	public HeaderListBuilder getHeaderData() {
+		return headerData;
 	}
 
 	/**
@@ -178,8 +178,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return The query parameter list builder.
 	 */
-	public PartListBuilder getQueryListBuilder() {
-		return queryList;
+	public PartListBuilder getQueryData() {
+		return queryData;
 	}
 
 	/**
@@ -191,8 +191,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return The form data parameter list builder.
 	 */
-	public PartListBuilder getFormDataListBuilder() {
-		return formDataList;
+	public PartListBuilder getFormData() {
+		return formData;
 	}
 
 	/**
@@ -204,8 +204,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return The form data parameter list builder.
 	 */
-	public PartListBuilder getPathListBuilder() {
-		return pathList;
+	public PartListBuilder getPathData() {
+		return pathData;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1141,16 +1141,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getHeaderListBuilder().append(<jv>header</jv>)</c>.
+	 * This is a shortcut for calling <c>getHeaderData().append(<jv>part</jv>)</c>.
 	 *
-	 * @param value
+	 * @param part
 	 * 	The parameter to append.
 	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(Header value) {
-		getHeaderListBuilder().append(value);
+	public RestClientBuilder header(Header part) {
+		getHeaderData().append(part);
 		return this;
 	}
 
@@ -1163,21 +1163,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.queryData(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getQueryListBuilder().append(<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getQueryData().append(<jv>part</jv>)</c>.
 	 *
-	 * @param value
+	 * @param part
 	 * 	The parameter to append.
 	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder query(NameValuePair value) {
-		getQueryListBuilder().append(value);
+	public RestClientBuilder queryData(NameValuePair part) {
+		getQueryData().append(part);
 		return this;
 	}
 
@@ -1195,16 +1195,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getFormDataListBuilder().append(<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getFormData().append(<jv>part</jv>)</c>.
 	 *
-	 * @param value
+	 * @param part
 	 * 	The parameter to append.
 	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder formData(NameValuePair value) {
-		getFormDataListBuilder().append(value);
+	public RestClientBuilder formData(NameValuePair part) {
+		getFormData().append(part);
 		return this;
 	}
 
@@ -1217,21 +1217,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.path(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.pathData(<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getPathListBuilder().set(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getPathData().set(<jv>part</jv>)</c>.
 	 *
-	 * @param value
+	 * @param part
 	 * 	The parameter to set.
 	 * 	<br><jk>null</jk> values are ignored.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder path(NameValuePair value) {
-		getPathListBuilder().set(value);
+	public RestClientBuilder pathData(NameValuePair part) {
+		getPathData().set(part);
 		return this;
 	}
 
@@ -1252,15 +1252,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getHeaderListBuilder().append(<jv>headers</jv>)</c>.
+	 * This is a shortcut for calling <c>getHeaderData().append(<jv>parts</jv>)</c>.
 	 *
-	 * @param headers
+	 * @param parts
 	 * 	The header to set.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder headers(Header...headers) {
-		getHeaderListBuilder().append(headers);
+	public RestClientBuilder headers(Header...parts) {
+		getHeaderData().append(parts);
 		return this;
 	}
 
@@ -1273,7 +1273,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(
+	 * 		.queryData(
 	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
 	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
 	 * 		)
@@ -1281,15 +1281,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getQueryListBuilder().append(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getQueryData().append(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts
 	 * 	The query parameters.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder query(NameValuePair...parts) {
-		getQueryListBuilder().append(parts);
+	public RestClientBuilder queryData(NameValuePair...parts) {
+		getQueryData().append(parts);
 		return this;
 	}
 
@@ -1310,7 +1310,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getFormDataListBuilder().append(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getFormData().append(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts
 	 * 	The form-data parameters.
@@ -1318,7 +1318,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(NameValuePair...parts) {
-		getFormDataListBuilder().append(parts);
+		getFormData().append(parts);
 		return this;
 	}
 
@@ -1331,7 +1331,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.path(
+	 * 		.pathData(
 	 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
 	 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
 	 * 		)
@@ -1339,15 +1339,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getPathListBuilder().append(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getPathData().append(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts
 	 * 	The path parameters.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder path(NameValuePair...parts) {
-		getPathListBuilder().append(parts);
+	public RestClientBuilder pathData(NameValuePair...parts) {
+		getPathData().append(parts);
 		return this;
 	}
 
@@ -1355,15 +1355,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Appends multiple headers to all requests.
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getHeaderListBuilder().append(<jv>headers</jv>)</c>.
+	 * This is a shortcut for calling <c>getHeaderData().append(<jv>parts</jv>)</c>.
 	 *
-	 * @param headers
-	 * 	The header to set.
+	 * @param parts
+	 * 	The header parts set.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder headers(HeaderList headers) {
-		getHeaderListBuilder().append(headers);
+	public RestClientBuilder headers(HeaderList parts) {
+		getHeaderData().append(parts);
 		return this;
 	}
 
@@ -1371,15 +1371,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Appends multiple query parameters to all requests.
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getQueryListBuilder().append(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getQueryData().append(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts
 	 * 	The parts to set.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder query(PartList parts) {
-		getQueryListBuilder().append(parts);
+	public RestClientBuilder queryData(PartList parts) {
+		getQueryData().append(parts);
 		return this;
 	}
 
@@ -1387,7 +1387,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Appends multiple form-data parameters to all requests.
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getFormDataListBuilder().append(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getFormData().append(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts
 	 * 	The parts to set.
@@ -1395,7 +1395,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(PartList parts) {
-		getFormDataListBuilder().append(parts);
+		getFormData().append(parts);
 		return this;
 	}
 
@@ -1403,15 +1403,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Appends multiple path parameters to all requests.
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getPathListBuilder().append(<jv>parts</jv>)</c>.
+	 * This is a shortcut for calling <c>getPathData().append(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts
 	 * 	The parts to set.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder path(PartList parts) {
-		getPathListBuilder().append(parts);
+	public RestClientBuilder pathData(PartList parts) {
+		getPathData().append(parts);
 		return this;
 	}
 
@@ -1427,7 +1427,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getHeaders().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getHeaderData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
@@ -1435,7 +1435,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, String value) {
-		getHeaderListBuilder().append(name, value);
+		getHeaderData().append(name, value);
 		return this;
 	}
 
@@ -1446,20 +1446,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.queryData(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getQuery().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getQueryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder query(String name, String value) {
-		getQueryListBuilder().append(name, value);
+	public RestClientBuilder queryData(String name, String value) {
+		getQueryData().append(name, value);
 		return this;
 	}
 
@@ -1474,13 +1474,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getFormData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, String value) {
-		getFormDataListBuilder().append(name, value);
+		getFormData().append(name, value);
 		return this;
 	}
 
@@ -1491,17 +1494,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.path(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.pathData(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.build();
 	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getPathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder path(String name, String value) {
-		getPathListBuilder().append(name, value);
+	public RestClientBuilder pathData(String name, String value) {
+		getPathData().append(name, value);
 		return this;
 	}
 
@@ -1517,7 +1523,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getHeaders().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getHeaderData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The header name.
 	 * @param value The header value supplier.
@@ -1525,7 +1531,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Supplier<String> value) {
-		getHeaderListBuilder().append(name, value);
+		getHeaderData().append(name, value);
 		return this;
 	}
 
@@ -1536,20 +1542,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getQuery().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getQueryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder query(String name, Supplier<String> value) {
-		getQueryListBuilder().append(name, value);
+	public RestClientBuilder queryData(String name, Supplier<String> value) {
+		getQueryData().append(name, value);
 		return this;
 	}
 
@@ -1564,13 +1570,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
+	 * <p>
+	 * This is a shortcut for calling <c>getFormData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<String> value) {
-		getFormDataListBuilder().append(name, value);
+		getFormData().append(name, value);
 		return this;
 	}
 
@@ -1581,17 +1590,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.path(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 	 * 		.build();
 	 * </p>
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder path(String name, Supplier<String> value) {
-		getPathListBuilder().set(name, value);
+	public RestClientBuilder pathData(String name, Supplier<String> value) {
+		getPathData().set(name, value);
 		return this;
 	}
 
@@ -1610,13 +1622,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getHeaderListBuilder().setDefault(<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getHeaderData().setDefault(<jv>parts</jv>)</c>.
 	 *
-	 * @param headers The header values.
+	 * @param parts The header values.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder defaultHeaders(Header...headers) {
-		getHeaderListBuilder().setDefault(headers);
+	public RestClientBuilder defaultHeaders(Header...parts) {
+		getHeaderData().setDefault(parts);
 		return this;
 	}
 
@@ -1630,18 +1642,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.defaultQuery(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.defaultQueryData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getQueryListBuilder().setDefault(<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getQueryData().setDefault(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts The parts.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder defaultQuery(NameValuePair...parts) {
-		getQueryListBuilder().setDefault(parts);
+	public RestClientBuilder defaultQueryData(NameValuePair...parts) {
+		getQueryData().setDefault(parts);
 		return this;
 	}
 
@@ -1660,13 +1672,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getFormDataListBuilder().setDefault(<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getFormData().setDefault(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts The parts.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder defaultFormData(NameValuePair...parts) {
-		getFormDataListBuilder().setDefault(parts);
+		getFormData().setDefault(parts);
 		return this;
 	}
 
@@ -1680,18 +1692,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.defaultPath(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+	 * 		.defaultPathData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>getPathListBuilder().setDefault(<jv>value</jv>)</c>.
+	 * This is a shortcut for calling <c>getPathData().setDefault(<jv>parts</jv>)</c>.
 	 *
 	 * @param parts The parts.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder defaultPath(NameValuePair...parts) {
-		getPathListBuilder().setDefault(parts);
+	public RestClientBuilder defaultPathData(NameValuePair...parts) {
+		getPathData().setDefault(parts);
 		return this;
 	}
 
@@ -1712,11 +1724,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into headerPairs()");
+			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
 		ArrayList<Header> l = new ArrayList<>();
 		for (int i = 0; i < pairs.length; i+=2)
 			l.add(createHeader(stringify(pairs[i]), pairs[i+1]));
-		getHeaderListBuilder().append(l);
+		getHeaderData().append(l);
 		return this;
 	}
 
@@ -1727,7 +1739,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.queryDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -1735,13 +1747,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder queryPairs(String...pairs) {
+	public RestClientBuilder queryDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
 		ArrayList<NameValuePair> l = new ArrayList<>();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(getQueryListBuilder().createPart(stringify(pairs[i]), pairs[i+1]));
-		getQueryListBuilder().append(l);
+			l.add(getQueryData().createPart(stringify(pairs[i]), pairs[i+1]));
+		getQueryData().append(l);
 		return this;
 	}
 
@@ -1762,11 +1774,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
+			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
 		ArrayList<NameValuePair> l = new ArrayList<>();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(getFormDataListBuilder().createPart(stringify(pairs[i]), pairs[i+1]));
-		getFormDataListBuilder().append(l);
+			l.add(getFormData().createPart(stringify(pairs[i]), pairs[i+1]));
+		getFormData().append(l);
 		return this;
 	}
 
@@ -1777,7 +1789,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.pathPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.pathDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -1785,13 +1797,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder pathPairs(String...pairs) {
+	public RestClientBuilder pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
+			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
 		ArrayList<NameValuePair> l = new ArrayList<>();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(getFormDataListBuilder().createPart(stringify(pairs[i]), pairs[i+1]));
-		getPathListBuilder().set(l);
+			l.add(getFormData().createPart(stringify(pairs[i]), pairs[i+1]));
+		getPathData().set(l);
 		return this;
 	}
 
@@ -5729,7 +5741,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		String n = stringify(name);
 		if (isEmpty(n))
 			return null;
-		return getHeaderListBuilder().createHeader(n, value);
+		return getHeaderData().createHeader(n, value);
 	}
 
 	/**
@@ -5743,7 +5755,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		String n = stringify(name);
 		if (isEmpty(n))
 			return null;
-		return getQueryListBuilder().createPart(n, value);
+		return getQueryData().createPart(n, value);
 	}
 
 	/**
@@ -5757,6 +5769,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 		String n = stringify(name);
 		if (isEmpty(n))
 			return null;
-		return getFormDataListBuilder().createPart(n, value);
+		return getFormData().createPart(n, value);
 	}
 }

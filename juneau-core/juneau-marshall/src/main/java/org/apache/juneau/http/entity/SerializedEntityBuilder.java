@@ -21,7 +21,6 @@ import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.header.*;
 
 
@@ -84,8 +83,6 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 	@FluentSetter
 	public SerializedEntityBuilder<T> serializer(Serializer value) {
 		this.serializer = value;
-		if (value != null)
-			contentType(HttpHeaders.contentType(value.getPrimaryMediaType()));
 		return this;
 	}
 

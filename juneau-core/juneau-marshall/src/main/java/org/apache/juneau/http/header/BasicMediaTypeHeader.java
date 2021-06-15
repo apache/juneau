@@ -69,28 +69,6 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		return new BasicMediaTypeHeader(name, value);
 	}
 
-//	/**
-//	 * Convenience creator using supplier.
-//	 *
-//	 * <p>
-//	 * Header value is re-evaluated on each call to {@link #getValue()}.
-//	 *
-//	 * @param name The header name.
-//	 * @param value
-//	 * 	The header value supplier.
-//	 * 	<br>Can be any of the following:
-//	 * 	<ul>
-//	 * 		<li>{@link String}
-//	 * 		<li>Anything else - Converted to <c>String</c> using {@link Object#toString()} and then parsed.
-//	 * 	</ul>
-//	 * @return A new header bean, or <jk>null</jk> if the name or value is <jk>null</jk>.
-//	 */
-//	public static BasicMediaTypeHeader of(String name, Supplier<MediaType> value) {
-//		if (isEmpty(name) || value == null)
-//			return null;
-//		return new BasicMediaTypeHeader(name, value);
-//	}
-
 	private final MediaType value;
 	private final Supplier<MediaType> supplier;
 
@@ -317,6 +295,12 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	}
 
 	private MediaType parse(String value) {
+		// If this happens to be a multi-value, use the last value.
+		if (value != null) {
+			int i = value.indexOf(',');
+			if (i != -1)
+				value = value.substring(i+1);
+		}
 		return MediaType.of(value);
 	}
 }

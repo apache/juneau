@@ -897,6 +897,50 @@ public class PartListBuilder {
 		return caseInsensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
 	}
 
+	/**
+	 * Gets the first part with the given name.
+	 *
+	 * @param name The part name.
+	 * @return The first matching part, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<NameValuePair> getFirst(String name) {
+		for (int i = 0; i < entries.size(); i++) {
+			NameValuePair x = entries.get(i);
+			if (eq(x.getName(), name))
+				return Optional.of(x);
+		}
+		if (defaultEntries != null) {
+			for (int i = 0; i < defaultEntries.size(); i ++) {
+				NameValuePair x = defaultEntries.get(i);
+				if (eq(x.getName(), name))
+					return Optional.of(x);
+			}
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Gets the last part with the given name.
+	 *
+	 * @param name The part name.
+	 * @return The last matching part, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<NameValuePair> getLast(String name) {
+		for (int i = entries.size() - 1; i >= 0; i--) {
+			NameValuePair x = entries.get(i);
+			if (eq(x.getName(), name))
+				return Optional.of(x);
+		}
+		if (defaultEntries != null) {
+			for (int i = defaultEntries.size() - 1; i >= 0; i--) {
+				NameValuePair x = defaultEntries.get(i);
+				if (eq(x.getName(), name))
+					return Optional.of(x);
+			}
+		}
+		return Optional.empty();
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return "[" + join(entries, ", ") + "]";

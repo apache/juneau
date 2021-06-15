@@ -130,17 +130,17 @@ public class FormData_Test {
 	public void c01_defaultFormData() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
 
-		c.post("/a", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
-		c.post("/a", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/a").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
+		c.post("/a").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 
-		c.post("/b", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:null,f2:null,f3:null}");
-		c.post("/b", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/b").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:null,f2:null,f3:null}");
+		c.post("/b").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 
-		c.post("/c", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
-		c.post("/c", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/c").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
+		c.post("/c").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 
-		c.post("/d", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
-		c.post("/d", null).contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
+		c.post("/d").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/d").contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

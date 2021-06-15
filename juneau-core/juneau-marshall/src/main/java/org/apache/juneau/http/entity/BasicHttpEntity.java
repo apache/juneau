@@ -53,7 +53,7 @@ public class BasicHttpEntity implements HttpEntity {
 	final ContentType contentType;
 	final ContentEncoding contentEncoding;
 	final Charset charset;
-	final long length;
+	final long contentLength;
 
 	/**
 	 * Creates a builder for this class.
@@ -78,7 +78,7 @@ public class BasicHttpEntity implements HttpEntity {
 		this.contentType = builder.contentType;
 		this.contentEncoding = builder.contentEncoding;
 		this.charset = builder.charset;
-		this.length = builder.contentLength;
+		this.contentLength = builder.contentLength;
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class BasicHttpEntity implements HttpEntity {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return length;
+		return contentLength;
 	}
 
 	@Override

@@ -216,13 +216,13 @@ public class Query_Test {
 	public void d01_defaultValues() throws Exception {
 		RestClient d = MockRestClient.build(D.class);
 		d.get("/a").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/a").query("f1",4).query("f2",5).query("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/a").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/b").run().assertBody().is("{f1:null,f2:null,f3:null}");
-		d.get("/b").query("f1",4).query("f2",5).query("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/b").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/c").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/c").query("f1",4).query("f2",5).query("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/c").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/d").run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/d").query("f1",7).query("f2",8).query("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
+		d.get("/d").queryData("f1",7).queryData("f2",8).queryData("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

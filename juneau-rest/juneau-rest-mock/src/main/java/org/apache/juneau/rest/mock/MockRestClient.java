@@ -724,7 +724,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 */
 	private HttpRequest findRestRequest(HttpRequest req) {
 		if (req instanceof RestRequestCreated)
-			return ((RestRequestCreated)req).getRestRequest().getHttpRequest();
+			return ((RestRequestCreated)req).getRestRequest();
 		if (req instanceof HttpRequestWrapper)
 			return findRestRequest(((HttpRequestWrapper) req).getOriginal());
 		return req;

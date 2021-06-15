@@ -23,6 +23,13 @@ import org.apache.juneau.http.*;
  */
 public class RestOperation {
 
+	/**
+	 * A placeholder for a non-existent body.
+	 * Used to identify when form-data should be used in a request body.
+	 * Note that this is different than a <jk>null</jk> body since a <jk>null</jk> can be a serialized request.
+	 */
+	public static final Object NO_BODY = "NO_BODY";
+
 	private final Object url;
 	private final String method;
 	private final Object body;
@@ -45,7 +52,7 @@ public class RestOperation {
 	 * @return A new {@link RestOperation} object.
 	 */
 	public static RestOperation of(String method, Object url) {
-		return new RestOperation(method, url, null);
+		return new RestOperation(method, url, NO_BODY);
 	}
 
 	/**
@@ -113,7 +120,10 @@ public class RestOperation {
 	/**
 	 * Bean property getter:  <property>body</property>.
 	 *
-	 * @return The value of the <property>body</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return 
+	 * 	The value of the <property>body</property> property on this bean.
+	 * 	<br>Returns {@link #NO_BODY} if the request does not have a body set.
+	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response. 
 	 */
 	public Object getBody() {
 		return body;

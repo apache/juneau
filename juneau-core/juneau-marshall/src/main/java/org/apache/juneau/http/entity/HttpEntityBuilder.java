@@ -67,7 +67,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 		contentType = impl.contentType;
 		contentEncoding = impl.contentEncoding;
 		charset = impl.charset;
-		contentLength = impl.length;
+		contentLength = impl.contentLength;
 	}
 
 	/**

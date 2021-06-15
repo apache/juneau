@@ -162,7 +162,7 @@ public class RestClient_Body_Test {
 		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").doesNotExist()
+			.assertHeader("X-Content-Type").is("application/json+simple")
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 

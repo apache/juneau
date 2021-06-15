@@ -18,7 +18,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.rest.client.RestClient.*;
-import static org.apache.juneau.ListOperation.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -233,9 +232,7 @@ public class RestClient_Test {
 	}
 
 	@Test
-	@Ignore
 	public void c04_httpClient_defaultHeaders() throws RestCallException {
-		int FIXME;
 		client().defaultHeaders(stringHeader("Foo","bar")).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1","Foo: bar");
 	}
 
@@ -404,7 +401,7 @@ public class RestClient_Test {
 
 	@Test
 	public void e08_httpMessage_getFirstHeader_getLastHeader() throws Exception {
-		RestRequest x = client().build().get("/bean").header("Foo","bar").header(APPEND,"Foo","baz");
+		RestRequest x = client().build().get("/bean").header("Foo","bar").header("Foo","baz");
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
 		assertEquals("baz",x.getLastHeader("Foo").getValue());
 	}

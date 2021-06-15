@@ -18,7 +18,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.ListOperation.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -114,7 +113,7 @@ public class RestClient_Config_RestClient_Test {
 				return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http",1,1),201,null));
 			}
 		};
-		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header(APPEND,"Foo","f2").run().assertBody().is("['f1','f2','baz']");
+		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertBody().is("['f1','f2','baz']");
 		client().callHandler(x).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertCode().is(201);
 	}
 
@@ -159,7 +158,7 @@ public class RestClient_Config_RestClient_Test {
 		@Override
 		public void onInit(RestRequest req) throws Exception {
 			x = 1;
-			req.header(APPEND,"Foo","f2");
+			req.header("Foo","f2");
 		}
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
@@ -273,13 +272,13 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a05_interceptors() throws Exception {
-		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header(APPEND,"Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header(APPEND,"Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header(APPEND,"Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
 		assertThrown(()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader")).isType(RuntimeException.class).is("foo");
@@ -487,13 +486,13 @@ public class RestClient_Config_RestClient_Test {
 	@Test
 	public void a12_partSerializer_partParser() throws Exception {
 		RestClient x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
-		ABean b = x.get("/").header(APPEND,"Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
+		ABean b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
-		b = x.get().header(APPEND,"Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
+		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 
 		x = client(A12.class).header(serializedHeader("Foo", bean)).partSerializer(new A12a()).partParser(new A12b()).build();
-		b = x.get("/").header(APPEND,"Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
+		b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").asType(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 	}
 
@@ -516,10 +515,10 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a16_request_uriParts() throws Exception {
-		java.net.URI uri = client().build().get().uriScheme("http").host("localhost").port(8080).userInfo("foo:bar").uri("/bean").fragment("baz").query("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
+		java.net.URI uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uriScheme("http").host("localhost").port(8080).userInfo("foo","bar").uri("/bean").fragment("baz").query("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
 		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertBody().is("{f:1}").getRequest().getURI();
