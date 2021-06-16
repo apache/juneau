@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.rest.client.RestClient.*;
 import static org.apache.juneau.BeanTraverseContext.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
@@ -37,6 +36,7 @@ import java.util.logging.*;
 import javax.net.ssl.*;
 
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.http.auth.*;
 import org.apache.http.client.*;
 import org.apache.http.client.CookieStore;
@@ -54,6 +54,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
@@ -110,7 +111,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	protected RestClientBuilder(RestClient copyFrom) {
 		super(copyFrom);
-		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_httpClientBuilder);
+		HttpClientBuilder httpClientBuilder = peek(HttpClientBuilder.class, RESTCLIENT_INTERNAL_httpClientBuilder);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
 		if (copyFrom == null) {
 			this.headerData = HeaderList.create();
@@ -147,12 +148,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	private ContextProperties contextProperties() {
-		set(RESTCLIENT_httpClient, getHttpClient());
-		set(RESTCLIENT_httpClientBuilder, getHttpClientBuilder());
-		set(RESTCLIENT_headerDataBuilder, headerData);
-		set(RESTCLIENT_formDataBuilder, formData);
-		set(RESTCLIENT_queryDataBuilder, queryData);
-		set(RESTCLIENT_pathDataBuilder, pathData);
+		set(RESTCLIENT_INTERNAL_httpClient, getHttpClient());
+		set(RESTCLIENT_INTERNAL_httpClientBuilder, getHttpClientBuilder());
+		set(RESTCLIENT_INTERNAL_headerDataBuilder, headerData);
+		set(RESTCLIENT_INTERNAL_formDataBuilder, formData);
+		set(RESTCLIENT_INTERNAL_queryDataBuilder, queryData);
+		set(RESTCLIENT_INTERNAL_pathDataBuilder, pathData);
 		return getContextProperties();
 	}
 
@@ -1725,10 +1726,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
-		ArrayList<Header> l = new ArrayList<>();
+		HeaderListBuilder b  = getHeaderData();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(createHeader(stringify(pairs[i]), pairs[i+1]));
-		getHeaderData().append(l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -1750,10 +1750,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder queryDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		ArrayList<NameValuePair> l = new ArrayList<>();
+		PartListBuilder b  = getQueryData();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(getQueryData().createPart(stringify(pairs[i]), pairs[i+1]));
-		getQueryData().append(l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -1775,10 +1774,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder formDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
-		ArrayList<NameValuePair> l = new ArrayList<>();
+		PartListBuilder b  = getFormData();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(getFormData().createPart(stringify(pairs[i]), pairs[i+1]));
-		getFormData().append(l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -1800,10 +1798,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		ArrayList<NameValuePair> l = new ArrayList<>();
+		PartListBuilder b  = getPathData();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(getFormData().createPart(stringify(pairs[i]), pairs[i+1]));
-		getPathData().set(l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -3400,6 +3397,117 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder serializers(Serializer...value) {
 		return prependTo(RESTCLIENT_serializers, value);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty form data.
+	 *
+	 * <p>
+	 * When enabled, form data consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link FormData#skipIfEmpty()} annotation overrides this setting.
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder skipEmptyFormData(boolean value) {
+		return set(RESTCLIENT_skipEmptyFormData, value);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty form data.
+	 *
+	 * <p>
+	 * When enabled, form data consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link FormData#skipIfEmpty()} annotation overrides this setting.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder skipEmptyFormData() {
+		return skipEmptyFormData(true);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty headers.
+	 *
+	 * <p>
+	 * When enabled, headers consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link org.apache.juneau.http.annotation.Header#skipIfEmpty()} annotation overrides this setting.
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder skipEmptyHeaders(boolean value) {
+		return set(RESTCLIENT_skipEmptyHeaders, value);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty headers.
+	 *
+	 * <p>
+	 * When enabled, headers consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link org.apache.juneau.http.annotation.Header#skipIfEmpty()} annotation overrides this setting.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder skipEmptyHeaders() {
+		return skipEmptyHeaders(true);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty query data.
+	 *
+	 * <p>
+	 * When enabled, query parameters consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link Query#skipIfEmpty()} annotation overrides this setting.
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder skipEmptyQueryData(boolean value) {
+		return set(RESTCLIENT_skipEmptyQueryData, value);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Skip empty query data.
+	 *
+	 * <p>
+	 * When enabled, query parameters consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link Query#skipIfEmpty()} annotation overrides this setting.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder skipEmptyQueryData() {
+		return skipEmptyQueryData(true);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -5724,51 +5832,5 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Utility methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a header from the specified name/value pair.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return A new header, or <jk>null</jk> if the name was <jk>null</jk> or empty.
-	 */
-	protected Header createHeader(String name, Object value) {
-		String n = stringify(name);
-		if (isEmpty(n))
-			return null;
-		return getHeaderData().createHeader(n, value);
-	}
-
-	/**
-	 * Creates a query parameter from the specified name/value pair.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return A new parameter, or <jk>null</jk> if the name was <jk>null</jk> or empty.
-	 */
-	protected NameValuePair createQueryPart(String name, Object value) {
-		String n = stringify(name);
-		if (isEmpty(n))
-			return null;
-		return getQueryData().createPart(n, value);
-	}
-
-	/**
-	 * Creates a form-data parameter from the specified name/value pair.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * @return A new parameter, or <jk>null</jk> if the name was <jk>null</jk> or empty.
-	 */
-	protected NameValuePair createFormDataPart(String name, Object value) {
-		String n = stringify(name);
-		if (isEmpty(n))
-			return null;
-		return getFormData().createPart(n, value);
 	}
 }

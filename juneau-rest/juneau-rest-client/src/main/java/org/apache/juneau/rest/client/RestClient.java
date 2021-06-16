@@ -39,6 +39,7 @@ import java.util.logging.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
@@ -54,6 +55,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
@@ -1778,24 +1780,109 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 */
 	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 
-	static final String RESTCLIENT_skipEmptyHeaders = PREFIX + "skipEmptyHeaders.b";
-	static final String RESTCLIENT_skipEmptyQueryParameter = PREFIX + "skipEmptyQueryParameters.b";
-	static final String RESTCLIENT_skipEmptyFormDataParameters = PREFIX + "skipEmptyFormDataParameters.b";
+	/**
+	 * Configuration property:  Skip empty form data.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_skipEmptyFormData RESTCLIENT_skipEmptyFormData}
+	 * 	<li><b>Name:</b>  <js>"RestClient.skipEmptyFormData.b"</js>
+	 * 	<li><b>Data type:</b>  {@link Boolean}
+	 * 	<li><b>Default:</b>  <jk>false</jk>.
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#skipEmptyFormData(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#skipEmptyFormData()}
+	 * 		</ul>
+	 * 	<li><b>Related:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link FormData#skipIfEmpty()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When enabled, form data consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link FormData#skipIfEmpty()} annotation overrides this setting.
+	 */
+	public static final String RESTCLIENT_skipEmptyFormData = PREFIX + "skipEmptyFormData.b";
 
+	/**
+	 * Configuration property:  Skip empty header data.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_skipEmptyHeaders RESTCLIENT_skipEmptyHeaders}
+	 * 	<li><b>Name:</b>  <js>"RestClient.skipEmptyHeaders.b"</js>
+	 * 	<li><b>Data type:</b>  {@link Boolean}
+	 * 	<li><b>Default:</b>  <jk>false</jk>.
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#skipEmptyHeaders(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#skipEmptyHeaders()}
+	 * 		</ul>
+	 * 	<li><b>Related:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.http.annotation.Header#skipIfEmpty()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When enabled, header values consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link org.apache.juneau.http.annotation.Header#skipIfEmpty()} annotation overrides this setting.
+	 */
+	public static final String RESTCLIENT_skipEmptyHeaders = PREFIX + "skipEmptyHeaders.b";
 
-	static final String RESTCLIENT_httpClient = PREFIX + "httpClient.o";
-	static final String RESTCLIENT_httpClientBuilder = PREFIX + "httpClientBuilder.o";
-	static final String RESTCLIENT_headerDataBuilder = PREFIX + "headerDataBuilder.o";
-	static final String RESTCLIENT_formDataBuilder = PREFIX + "formDataBuilder.o";
-	static final String RESTCLIENT_queryDataBuilder = PREFIX + "queryBuilder.o";
-	static final String RESTCLIENT_pathDataBuilder = PREFIX + "pathDataBuilder.o";
+	/**
+	 * Configuration property:  Skip empty query data.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_skipEmptyQueryData RESTCLIENT_skipEmptyQueryData}
+	 * 	<li><b>Name:</b>  <js>"RestClient.skipEmptyQueryData.b"</js>
+	 * 	<li><b>Data type:</b>  {@link Boolean}
+	 * 	<li><b>Default:</b>  <jk>false</jk>.
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#skipEmptyQueryData(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#skipEmptyQueryData()}
+	 * 		</ul>
+	 * 	<li><b>Related:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Query#skipIfEmpty()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When enabled, query parameters consisting of empty strings will be skipped on requests.
+	 * Note that <jk>null</jk> values are already skipped.
+	 *
+	 * <p>
+	 * The {@link Query#skipIfEmpty()} annotation overrides this setting.
+	 */
+	public static final String RESTCLIENT_skipEmptyQueryData = PREFIX + "skipEmptyQueryData.b";
+
+	static final String RESTCLIENT_INTERNAL_httpClient = PREFIX + "httpClient.o";
+	static final String RESTCLIENT_INTERNAL_httpClientBuilder = PREFIX + "httpClientBuilder.o";
+	static final String RESTCLIENT_INTERNAL_headerDataBuilder = PREFIX + "headerDataBuilder.o";
+	static final String RESTCLIENT_INTERNAL_formDataBuilder = PREFIX + "formDataBuilder.o";
+	static final String RESTCLIENT_INTERNAL_queryDataBuilder = PREFIX + "queryBuilder.o";
+	static final String RESTCLIENT_INTERNAL_pathDataBuilder = PREFIX + "pathDataBuilder.o";
 
 	final HeaderListBuilder headerData;
 	final PartListBuilder queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
 
 	private final HttpClientConnectionManager connectionManager;
-	private final boolean keepHttpClientOpen, leakDetection;
+	private final boolean keepHttpClientOpen, leakDetection, skipEmptyHeaders, skipEmptyQueryData, skipEmptyFormData;
 	private final BeanStore beanStore;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	final HttpPartSerializer partSerializer;
@@ -1856,11 +1943,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	@SuppressWarnings("unchecked")
 	protected RestClient(ContextProperties cp) {
 		super(cp);
-		this.httpClient = cp.getInstance(RESTCLIENT_httpClient, CloseableHttpClient.class).orElse(null);
-		this.headerData = cp.getInstance(RESTCLIENT_headerDataBuilder, HeaderListBuilder.class).orElseGet(HeaderListBuilder::new).copy();
-		this.queryData = cp.getInstance(RESTCLIENT_queryDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
-		this.formData = cp.getInstance(RESTCLIENT_formDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
-		this.pathData = cp.getInstance(RESTCLIENT_pathDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.httpClient = cp.getInstance(RESTCLIENT_INTERNAL_httpClient, CloseableHttpClient.class).orElse(null);
+		this.headerData = cp.getInstance(RESTCLIENT_INTERNAL_headerDataBuilder, HeaderListBuilder.class).orElseGet(HeaderListBuilder::new).copy();
+		this.queryData = cp.getInstance(RESTCLIENT_INTERNAL_queryDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.formData = cp.getInstance(RESTCLIENT_INTERNAL_formDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.pathData = cp.getInstance(RESTCLIENT_INTERNAL_pathDataBuilder, PartListBuilder.class).orElseGet(PartListBuilder::new).copy();
+		this.skipEmptyHeaders = cp.getBoolean(RESTCLIENT_skipEmptyHeaders).orElse(false);
+		this.skipEmptyQueryData = cp.getBoolean(RESTCLIENT_skipEmptyQueryData).orElse(false);
+		this.skipEmptyFormData = cp.getBoolean(RESTCLIENT_skipEmptyFormData).orElse(false);
 
 		BeanStore bs = this.beanStore = new BeanStore()
 			.addBean(ContextProperties.class, cp)
@@ -3236,7 +3326,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @return <jk>true</jk> if empty request header values should be ignored.
 	 */
 	protected boolean isSkipEmptyHeaders() {
-		return false;
+		return skipEmptyHeaders;
 	}
 
 	/**
@@ -3244,8 +3334,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * @return <jk>true</jk> if empty request query parameter values should be ignored.
 	 */
-	protected boolean isSkipEmptyQueryParameters() {
-		return false;
+	protected boolean isSkipEmptyQueryData() {
+		return skipEmptyQueryData;
 	}
 
 	/**
@@ -3253,8 +3343,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * @return <jk>true</jk> if empty request form-data parameter values should be ignored.
 	 */
-	protected boolean isSkipEmptyFormDataParameters() {
-		return false;
+	protected boolean isSkipEmptyFormData() {
+		return skipEmptyFormData;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

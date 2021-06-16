@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
-import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
@@ -1226,10 +1225,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into headerPairs(String...)");
-		List<Header> l = new ArrayList<>();
+		HeaderListBuilder b = getHeaderDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(createHeader(stringify(pairs[i]), pairs[i+1]));
-		getHeaderDataBuilder().add(APPEND, l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -1256,10 +1254,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		List<NameValuePair> l = new ArrayList<>();
+		PartListBuilder b = getQueryDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(createPart(QUERY, stringify(pairs[i]), pairs[i+1]));
-		getQueryDataBuilder().add(APPEND, l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -1286,10 +1283,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into formDataPairs(String...)");
-		List<NameValuePair> l = new ArrayList<>();
+		PartListBuilder b = getFormDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(createPart(FORMDATA, stringify(pairs[i]), pairs[i+1]));
-		getFormDataBuilder().add(APPEND, l);
+			b.append(pairs[i], pairs[i+1]);
 		return this;
 	}
 
@@ -1318,19 +1314,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		List<NameValuePair> l = new ArrayList<>();
+		PartListBuilder b = getPathDataBuilder();
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(createPart(PATH, stringify(pairs[i]), pairs[i+1]));
-		getPathDataBuilder().add(SET, l);
+			b.set(pairs[i], pairs[i+1]);
 		return this;
 	}
 
 	/**
 	 * Appends multiple headers to the request from properties defined on a Java bean.
 	 *
+	 * <p>
+	 * Uses {@link PropertyNamerDUCS} for resolving the header names from property names.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDUCS.<jk>class</jk>) <jc>// Use Dash-UpperCase-Start property names.</jc>
+	 * 	<ja>@Bean</ja>
 	 * 	<jk>public class<jk> MyHeaders {
 	 * 		<jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
 	 * 		<jk>public</jk> Integer getQux() { <jk>return</jk> 123; }
@@ -1350,8 +1348,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isBean(value))
 			throw runtimeException("Object passed into headersBean(Object) is not a bean.");
 		HeaderListBuilder b = getHeaderDataBuilder();
-		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.append(createHeader(e.getKey(), stringify(e.getValue())));
+		for (Map.Entry<String,Object> e : toBeanMap(value, PropertyNamerDUCS.INSTANCE).entrySet())
+			b.append(createHeader(e.getKey(), e.getValue()));
 		return this;
 	}
 
@@ -1380,7 +1378,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			throw runtimeException("Object passed into queryDataBean(Object) is not a bean.");
 		PartListBuilder b = getQueryDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.append(createPart(QUERY, e.getKey(), stringify(e.getValue())));
+			b.append(createPart(QUERY, e.getKey(), e.getValue()));
 		return this;
 	}
 
@@ -1409,7 +1407,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			throw runtimeException("Object passed into formDataBean(Object) is not a bean.");
 		PartListBuilder b = getFormDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.append(createPart(FORMDATA, e.getKey(), stringify(e.getValue())));
+			b.append(createPart(FORMDATA, e.getKey(), e.getValue()));
 		return this;
 	}
 
@@ -1438,7 +1436,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			throw runtimeException("Object passed into pathDataBean(Object) is not a bean.");
 		PartListBuilder b = getPathDataBuilder();
 		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.set(createPart(PATH, e.getKey(), stringify(e.getValue())));
+			b.set(createPart(PATH, e.getKey(), e.getValue()));
 		return this;
 	}
 
@@ -3098,8 +3096,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	protected NameValuePair createPart(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {
 		if (isEmpty(name))
 			return null;
-		if (skipIfEmpty == null)
-			skipIfEmpty = client.isSkipEmptyHeaders();
+		if (skipIfEmpty == null) {
+			if (type == QUERY)
+				skipIfEmpty = client.isSkipEmptyQueryData();
+			else if (type == FORMDATA)
+				skipIfEmpty = client.isSkipEmptyFormData();
+			else
+				skipIfEmpty = false;
+		}
 		if (serializer == null)
 			serializer = client.getPartSerializer();
 		return new SerializedPart(name, value, type, getPartSerializerSession(serializer), schema, skipIfEmpty);
@@ -3149,24 +3153,23 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private class SimplePart implements NameValuePair {
 		final String name;
 		final String value;
-		final boolean skipIfEmpty;
 
 		SimplePart(NameValuePair x, boolean skipIfEmpty) {
-			if (x instanceof SerializedHeader)
-				x = ((SerializedHeader)x).copyWith(getPartSerializerSession(), null);
-			if (x instanceof SerializedPart)
-				x = ((SerializedPart)x).copyWith(getPartSerializerSession(), null);
 			name = x.getName();
-			value = x.getValue();
-			this.skipIfEmpty = skipIfEmpty;
+			if (x instanceof SerializedHeader) {
+				value = ((SerializedHeader)x).copyWith(getPartSerializerSession(), null).getValue();
+			} else if (x instanceof SerializedPart) {
+				value = ((SerializedPart)x).copyWith(getPartSerializerSession(), null).getValue();
+			} else {
+				String v = x.getValue();
+				value = (isEmpty(v) && skipIfEmpty) ? null : v;
+			}
 		}
 
 		boolean isValid() {
 			if (isEmpty(name))
 				return false;
 			if (value == null)
-				return false;
-			if (isEmpty(value) && skipIfEmpty)
 				return false;
 			return true;
 		}
@@ -3184,13 +3187,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private class SimpleQuery extends SimplePart {
 		SimpleQuery(NameValuePair x) {
-			super(x, client.isSkipEmptyQueryParameters());
+			super(x, client.isSkipEmptyQueryData());
 		}
 	}
 
 	private class SimpleFormData extends SimplePart {
 		SimpleFormData(NameValuePair x) {
-			super(x, client.isSkipEmptyFormDataParameters());
+			super(x, client.isSkipEmptyFormData());
 		}
 	}
 

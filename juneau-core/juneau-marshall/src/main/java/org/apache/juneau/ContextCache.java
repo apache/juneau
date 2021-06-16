@@ -40,6 +40,7 @@ public class ContextCache {
 
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<ContextProperties,Context>> contextCache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Class<?>,String[]> prefixCache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Class<?>,Boolean> cacheableMap = new ConcurrentHashMap<>();
 
 	// When enabled, this will spit out cache-hit metrics to the console on shutdown.
 	private static final boolean TRACK_CACHE_HITS = Boolean.getBoolean("juneau.trackCacheHits");
@@ -97,6 +98,9 @@ public class ContextCache {
 	 * @return The
 	 */
 	public <T extends Context> T create(Class<T> c, ContextProperties cp) {
+		if (! isCacheable(c))
+			return instantiate(c, cp);
+
 		String[] prefixes = getPrefixes(c);
 
 		if (prefixes == null)
@@ -139,6 +143,18 @@ public class ContextCache {
 		return m;
 	}
 
+	private boolean isCacheable(Class<?> c) {
+		Boolean b = cacheableMap.get(c);
+		if (b == null) {
+			b = true;
+			for (ConfigurableContext c2 : ClassInfo.of(c).getAnnotations(ConfigurableContext.class))
+				if (c2.nocache())
+					b = false;
+			cacheableMap.put(c, b);
+		}
+		return b;
+	}
+
 	private String[] getPrefixes(Class<?> c) {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
@@ -146,10 +162,6 @@ public class ContextCache {
 			for (ClassInfo c2 : ClassInfo.of(c).getAllParentsChildFirst()) {
 				ConfigurableContext cc = c2.getLastAnnotation(ConfigurableContext.class);
 				if (cc != null) {
-					if (cc.nocache()) {
-						prefixes = new String[0];
-						break;
-					}
 					if (cc.prefixes().length == 0)
 						ps.add(c2.getSimpleName());
 					else
