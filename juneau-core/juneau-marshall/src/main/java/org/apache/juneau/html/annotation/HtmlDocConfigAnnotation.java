@@ -50,6 +50,8 @@ public class HtmlDocConfigAnnotation {
 
 			cpb.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), cpb.peek(String[].class, HTMLDOC_aside)));
 			cpb.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
+			cpb.setIf(! "DEFAULT".equalsIgnoreCase(a.cspHash()), HTMLDOC_cspHash, a.cspHash().toUpperCase());
+			cpb.setIf(! "DEFAULT".equalsIgnoreCase(a.cspNonce()), HTMLDOC_cspNonce, a.cspNonce().toUpperCase());
 			cpb.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), cpb.peek(String[].class, HTMLDOC_footer)));
 			cpb.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), cpb.peek(String[].class, HTMLDOC_head)));
 			cpb.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), cpb.peek(String[].class, HTMLDOC_header)));

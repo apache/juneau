@@ -159,6 +159,84 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_asideFloat = PREFIX + ".asideFloat.s";
 
 	/**
+	 * Configuration property:  Content Security Policy (CSP) Hash algorithm name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_cspHash HTMLDOC_cspHash}
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.cspHash.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.annotation.CspHash}
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.cspHash</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_CSPHASH</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.annotation.CspHash#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#cspHash()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#cspHash(org.apache.juneau.html.annotation.CspHash)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to set a CSP Hash algorithm name.
+	 *
+	 * <p>
+	 * By default, this feature is disabled.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		cspHash=<js>"sha256"</js>
+	 * 	)
+	 * </p>
+	 * @since 9.0.0
+	 */
+	public static final String HTMLDOC_cspHash = PREFIX + ".cspHash.s";
+
+	/**
+	 * Configuration property:  Content Security Policy (CSP) nonce algorithm name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_cspNonce HTMLDOC_cspNonce}
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.cspNonce.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.annotation.CspNonce}
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.cspNonce</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_CSPNONCE</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.annotation.CspNonce#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#cspNonce()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#cspNonce(org.apache.juneau.html.annotation.CspNonce)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to set a CSP nonce algorithm name.
+	 *
+	 * <p>
+	 * By default, this feature is disabled.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		cspNonce=<js>"SecureRandom"</js>
+	 * 	)
+	 * </p>
+	 * @since 9.0.0
+	 */
+	public static final String HTMLDOC_cspNonce = PREFIX + ".cspNonce.s";
+
+	/**
 	 * Configuration property:  Footer section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -717,6 +795,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
+	private final CspHash cspHash;
+	private final CspNonce cspNonce;
 	private final AsideFloat asideFloat;
 	private final String noResultsMessage;
 	private final boolean nowrap;
@@ -776,6 +856,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		navlinks = cp.getArray(HTMLDOC_navlinks, String.class).orElse(new String[0]);
 		noResultsMessage = cp.getString(HTMLDOC_noResultsMessage).orElse("<p>no results</p>");
 		template = cp.getInstance(HTMLDOC_template, HtmlDocTemplate.class).orElseGet(BasicHtmlDocTemplate::new);
+		
+		cspHash = cp.get(HTMLDOC_cspHash, CspHash.class).orElse(CspHash.DEFAULT);
+		cspNonce = cp.get(HTMLDOC_cspNonce, CspNonce.class).orElse(CspNonce.DEFAULT);
 
 		widgets = new HtmlWidgetMap();
 		widgets.append(cp.getInstanceArray(HTMLDOC_widgets, HtmlWidget.class).orElse(new HtmlWidget[0]));
@@ -843,6 +926,26 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	protected final AsideFloat getAsideFloat() {
 		return asideFloat;
+	}
+
+	/**
+	 * CSP hash algorithm name.
+	 * @return
+	 *  CSP hash algorithm name.
+	 * @since 9.0.0
+	 */
+	protected final CspHash getCspHash() {
+		return cspHash;
+	}
+
+	/**
+	 * CSP nonce algorithm name.
+	 * @return
+	 *  CSP nonce algorithm name.
+	 * @since 9.0.0
+	 */
+	protected final CspNonce getCspNonce() {
+		return cspNonce;
 	}
 
 	/**
@@ -996,6 +1099,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 					.a("asideFloat", asideFloat)
 					.a("footer", footer)
 					.a("style", style)
+					.a("cspHash", cspHash)
+					.a("cspNonce", cspNonce)
 					.a("head", head)
 					.a("stylesheet", stylesheet)
 					.a("nowrap", nowrap)
@@ -1004,4 +1109,5 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 					.a("widgets", widgets.keySet())
 			);
 	}
+
 }
