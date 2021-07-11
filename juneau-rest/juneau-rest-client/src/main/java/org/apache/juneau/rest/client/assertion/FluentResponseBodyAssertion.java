@@ -13,8 +13,9 @@
 package org.apache.juneau.rest.client.assertion;
 
 import java.io.*;
-import java.util.function.*;
+import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -26,7 +27,7 @@ import org.apache.juneau.rest.client.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentResponseBodyAssertion<R>")
-public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
+public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<ResponseBody,R> {
 
 	private final ResponseBody value;
 
@@ -108,6 +109,7 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return A new fluent assertion object.
 	 */
+	@Override
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(valueAsString(), returns());
 	}
@@ -152,7 +154,7 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().asType(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * 		.assertBody().asObject(List.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() > 0);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -166,10 +168,56 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public <V> FluentObjectAssertion<V,R> asType(Class<V> type) throws RestCallException {
+	public <V> FluentObjectAssertion<V,R> asObject(Class<V> type) {
 		return new FluentObjectAssertion<>(valueAsType(type), returns());
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response body.
+	 *
+	 * <p>
+	 * Converts the body to a generic Java object and then returns the value as an object assertion.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body bean is the expected value.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<js>"/myBean"</js>)
+	 * 		.run()
+	 * 		.assertBody().asObject().asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentObjectAssertion<Object,R> asObject() {
+		return asObject(Object.class);
+	}
+
+	@Override
+	public <V> FluentBeanAssertion<V,R> asBean(Class<V> beanType) {
+		return new FluentBeanAssertion<>(valueAsType(beanType), returns());
+	}
+
+	@Override
+	public <V> FluentBeanListAssertion<V,R> asBeanList(Class<V> beanType) {
+		ClassMeta<List<V>> cm = BeanContext.DEFAULT.getClassMeta(List.class, beanType);
+		return new FluentBeanListAssertion<>(valueAsType(cm), returns());
+	}
+
+	@Override
+	public <E> FluentListAssertion<E,R> asList(Class<E> elementType) {
+		ClassMeta<List<E>> cm = BeanContext.DEFAULT.getClassMeta(List.class, elementType);
+		return new FluentListAssertion<>(valueAsType(cm), returns());
 	}
 
 	/**
@@ -236,18 +284,9 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 		return asString().isNotEmpty();
 	}
 
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R passes(Predicate<String> test) throws AssertionError {
-		if (! test.test(valueAsString()))
-			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
-		return returns();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private String valueAsString() throws AssertionError {
 		try {
@@ -266,6 +305,14 @@ public class FluentResponseBodyAssertion<R> extends FluentAssertion<R> {
 	}
 
 	private <T> T valueAsType(Class<T> c) throws AssertionError {
+		try {
+			return value.cache().asType(c);
+		} catch (RestCallException e) {
+			throw error(e, "Exception occurred during call.");
+		}
+	}
+
+	private <T> T valueAsType(ClassMeta<T> c) throws AssertionError {
 		try {
 			return value.cache().asType(c);
 		} catch (RestCallException e) {

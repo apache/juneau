@@ -145,7 +145,7 @@ public class ObjectUtils {
 	 * @param o2 Object 2.
 	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
 	 */
-	public static boolean eq(Object o1, Object o2) {
+	public static <T> boolean eq(T o1, T o2) {
 		if (isArray(o1) && isArray(o2)) {
 			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
 			if (l1 != l2)

@@ -20,7 +20,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ArrayAssertion_Test {
 
-	private ArrayAssertion test(Object value) {
+	private <E> ArrayAssertion<E> test(E[] value) {
 		return assertArray(value).silent();
 	}
 
@@ -53,11 +53,11 @@ public class ArrayAssertion_Test {
 		test(x2).item(0).exists();
 
 		test(x2).contains("foo");
-		assertThrown(()->test(x2).contains("z")).is("Array did not contain expected value.\n\tContents: ['foo','bar']\n\tExpected: z");
+		assertThrown(()->test(x2).contains("z")).is("Array did not contain expected value.\n\tContents: [foo, bar]\n\tExpected: z");
 
 		test(x1).doesNotContain("foo");
-		assertThrown(()->test(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: foo");
-		assertThrown(()->test(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tContents: ['foo','bar']\n\tUnexpected: bar");
+		assertThrown(()->test(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tContents: [foo, bar]\n\tUnexpected: foo");
+		assertThrown(()->test(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tContents: [foo, bar]\n\tUnexpected: bar");
 	}
 
 	@Test

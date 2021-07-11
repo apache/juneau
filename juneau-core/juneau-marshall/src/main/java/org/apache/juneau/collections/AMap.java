@@ -285,15 +285,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 *
 	 * @return This collection serialized to a string.
 	 */
-	public String asString() {
+	public String asJson() {
 		return SimpleJsonSerializer.DEFAULT.toString(this);
-	}
-
-	/**
-	 * Convert to Simplified JSON.
-	 */
-	@Override /* Object */
-	public String toString() {
-		return asString(SimpleJsonSerializer.DEFAULT);
 	}
 }

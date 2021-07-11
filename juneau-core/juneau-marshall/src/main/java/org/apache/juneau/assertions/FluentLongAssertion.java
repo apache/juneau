@@ -34,8 +34,6 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentLongAssertion<R>")
 public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 
-	private final Long value;
-
 	/**
 	 * Constructor.
 	 *
@@ -55,7 +53,6 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	 */
 	public FluentLongAssertion(Assertion creator, Long value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -63,13 +60,14 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	 *
 	 * @return A new assertion.
 	 */
+	@Override
 	public FluentIntegerAssertion<R> asInteger() {
-		return new FluentIntegerAssertion<>(this, value == null ? null : value.intValue(), returns());
+		return new FluentIntegerAssertion<>(this, map(Long::intValue).orElse(null), returns());
 	}
 
 	@Override
 	protected int compareTo(Object value) {
-		return this.value.compareTo(((Number)value).longValue());
+		return value().compareTo(((Number)value).longValue());
 	}
 
 	@Override

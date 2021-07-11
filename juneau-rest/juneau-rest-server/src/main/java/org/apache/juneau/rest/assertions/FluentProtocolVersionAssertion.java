@@ -25,9 +25,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentProtocolVersionAssertion<R>")
-public class FluentProtocolVersionAssertion<R> extends FluentAssertion<R> {
-
-	private final ProtocolVersion value;
+public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<ProtocolVersion,R> {
 
 	/**
 	 * Constructor.
@@ -37,7 +35,6 @@ public class FluentProtocolVersionAssertion<R> extends FluentAssertion<R> {
 	 */
 	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
 		super(null, returns);
-		this.value = value;
 		throwable(BadRequest.class);
 	}
 
@@ -47,7 +44,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentAssertion<R> {
 	 * @return A new assertion.
 	 */
 	public FluentStringAssertion<R> protocol() {
-		return new FluentStringAssertion<>(value.getProtocol(), returns());
+		return new FluentStringAssertion<>(value().getProtocol(), returns());
 	}
 
 	/**
@@ -56,7 +53,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentAssertion<R> {
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> major() {
-		return new FluentIntegerAssertion<>(value.getMajor(), returns());
+		return new FluentIntegerAssertion<>(value().getMajor(), returns());
 	}
 
 	/**
@@ -65,7 +62,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentAssertion<R> {
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> minor() {
-		return new FluentIntegerAssertion<>(value.getMinor(), returns());
+		return new FluentIntegerAssertion<>(value().getMinor(), returns());
 	}
 
 	// <FluentSetters>

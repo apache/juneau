@@ -50,7 +50,23 @@ public class SessionProperties {
 	 * Constructor.
 	 */
 	private SessionProperties(Map<String,Object> inner) {
-		this.map = inner == null ? new OMap() : inner instanceof OMap ? (OMap)inner : new OMap(inner);
+		this(inner, false);
+	}
+
+	private SessionProperties(Map<String,Object> inner, boolean unmodifiable) {
+		OMap m = inner == null ? new OMap() : inner instanceof OMap ? (OMap)inner : new OMap(inner);
+		if (unmodifiable)
+			 m = m.unmodifiable();
+		this.map = m;
+	}
+
+	/**
+	 * Returns an unmodifiable copy of these properties.
+	 *
+	 * @return An unmodifiable copy of these properties.
+	 */
+	public final SessionProperties unmodifiable() {
+		return new SessionProperties(map, true);
 	}
 
 	/**

@@ -328,6 +328,27 @@ public class AList<T> extends ArrayList<T> {
 		return this;
 	}
 
+	/**
+	 * Sorts the contents of this list using natural ordering.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> sort() {
+		super.sort(null);
+		return this;
+	}
+
+	/**
+	 * Sorts the contents of this list using the specified comparator.
+	 *
+	 * @param c The comparator to use for sorting.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> sortWith(Comparator<? super T> c) {
+		super.sort(c);
+		return this;
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Other methods.
 	//------------------------------------------------------------------------------------------------------------------
@@ -375,15 +396,7 @@ public class AList<T> extends ArrayList<T> {
 	 *
 	 * @return This collection serialized to a string.
 	 */
-	public String asString() {
+	public String asJson() {
 		return SimpleJsonSerializer.DEFAULT.toString(this);
-	}
-
-	/**
-	 * Convert to Simplified JSON.
-	 */
-	@Override /* Object */
-	public String toString() {
-		return asString(SimpleJsonSerializer.DEFAULT);
 	}
 }

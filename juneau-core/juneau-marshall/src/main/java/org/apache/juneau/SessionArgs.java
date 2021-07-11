@@ -28,6 +28,7 @@ import org.apache.juneau.json.*;
 public class SessionArgs {
 
 	SessionProperties properties = SessionProperties.create();
+	boolean unmodifiable;
 
 	/**
 	 * Constructor.
@@ -118,6 +119,20 @@ public class SessionArgs {
 	@FluentSetter
 	public SessionArgs timeZone(TimeZone value) {
 		property(CONTEXT_timeZone, value);
+		return this;
+	}
+
+	/**
+	 * Create an unmodifiable session.
+	 *
+	 * <p>
+	 * The created Session object will be unmodifiable which makes it suitable for caching and reuse.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public SessionArgs unmodifiable() {
+		this.unmodifiable = true;
 		return this;
 	}
 

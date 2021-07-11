@@ -14,6 +14,8 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import org.apache.juneau.*;
+
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.
  *

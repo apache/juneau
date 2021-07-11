@@ -25,9 +25,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentRequestLineAssertion<R>")
-public class FluentRequestLineAssertion<R> extends FluentAssertion<R> {
-
-	private final RequestLine value;
+public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<RequestLine,R> {
 
 	/**
 	 * Constructor.
@@ -37,7 +35,6 @@ public class FluentRequestLineAssertion<R> extends FluentAssertion<R> {
 	 */
 	public FluentRequestLineAssertion(RequestLine value, R returns) {
 		super(null, returns);
-		this.value = value;
 		throwable(BadRequest.class);
 	}
 
@@ -47,7 +44,7 @@ public class FluentRequestLineAssertion<R> extends FluentAssertion<R> {
 	 * @return A new assertion.
 	 */
 	public FluentStringAssertion<R> method() {
-		return new FluentStringAssertion<>(value.getMethod(), returns());
+		return new FluentStringAssertion<>(value().getMethod(), returns());
 	}
 
 	/**
@@ -56,7 +53,7 @@ public class FluentRequestLineAssertion<R> extends FluentAssertion<R> {
 	 * @return A new assertion.
 	 */
 	public FluentStringAssertion<R> uri() {
-		return new FluentStringAssertion<>(value.getUri(), returns());
+		return new FluentStringAssertion<>(value().getUri(), returns());
 	}
 
 	/**
@@ -65,7 +62,7 @@ public class FluentRequestLineAssertion<R> extends FluentAssertion<R> {
 	 * @return A new assertion.
 	 */
 	public FluentProtocolVersionAssertion<R> protocolVersion() {
-		return new FluentProtocolVersionAssertion<>(value.getProtocolVersion(), returns());
+		return new FluentProtocolVersionAssertion<>(value().getProtocolVersion(), returns());
 	}
 
 	// <FluentSetters>

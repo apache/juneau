@@ -12,22 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
+import static java.util.Arrays.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * Used for fluent assertion calls against maps.
  *
+ * @param <K> The key type.
+ * @param <V> The value type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentMapAssertion<R>")
-@SuppressWarnings("rawtypes")
-public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
-
-	private Map value;
+@FluentSetters(returns="FluentMapAssertion<K,V,R>")
+public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>  {
 
 	/**
 	 * Constructor.
@@ -35,7 +37,7 @@ public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentMapAssertion(Map contents, R returns) {
+	public FluentMapAssertion(Map<K,V> contents, R returns) {
 		this(null, contents, returns);
 	}
 
@@ -46,9 +48,8 @@ public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentMapAssertion(Assertion creator, Map contents, R returns) {
+	public FluentMapAssertion(Assertion creator, Map<K,V> contents, R returns) {
 		super(creator, contents, returns);
-		this.value = contents;
 	}
 
 	/**
@@ -61,43 +62,31 @@ public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 	 * @param key The key of the item to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<Object,R> value(String key) {
-		return value(Object.class, key);
+	public FluentObjectAssertion<V,R> value(K key) {
+		return new FluentObjectAssertion<>(this, get(key), returns());
 	}
 
 	/**
-	 * Returns an object assertion on the value specified at the specified key.
+	 * Returns a {@link FluentListAssertion} of the values of the specified keys.
 	 *
-	 * <p>
-	 * If the map is <jk>null</jk> or the map doesn't contain the specified key, the returned assertion is a null assertion
+	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
 	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
 	 *
-	 * @param type The value type.
-	 * @param key The key of the item to retrieve from the map.
+	 * @param keys The keys of the values to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public <V> FluentObjectAssertion<Object,R> value(Class<V> type, String key) {
-		Object v = getValue(key);
-		if (v == null || type.isInstance(v))
-			return new FluentObjectAssertion<>(this, v, returns());
-		throw error("Map value not of expected type for key ''{0}''.\n\tExpected: {1}.\n\tActual: {2}", key, type, v.getClass());
-	}
-
-	private Object getValue(String key) {
-		if (value != null)
-			return value.get(key);
-		return null;
+	public FluentListAssertion<Object,R> values(@SuppressWarnings("unchecked") K...keys) {
+		return new FluentListAssertion<>(stream(keys).map(x -> get(x)).collect(toList()), returns());
 	}
 
 	/**
 	 * Asserts that the map exists and is empty.
 	 *
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
-		exists();
-		if (! value.isEmpty())
+		if (! value().isEmpty())
 			throw error("Map was not empty.");
 		return returns();
 	}
@@ -105,40 +94,37 @@ public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 	/**
 	 * Asserts that the map contains the expected key.
 	 *
-	 * @param value The value to check for.
+	 * @param name The key name to check for.
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R containsKey(String value) throws AssertionError {
-		exists();
-		if (this.value.containsKey(value))
+	public R containsKey(String name) throws AssertionError {
+		if (value().containsKey(name))
 			return returns();
-		throw error("Map did not contain expected key.\n\tContents: {0}\n\tExpected key: {1}", SimpleJson.DEFAULT.toString(this.value), value);
+		throw error("Map did not contain expected key.\n\tContents: {0}\n\tExpected key: {1}", value(), name);
 	}
 
 	/**
 	 * Asserts that the map contains the expected key.
 	 *
-	 * @param value The value to check for.
+	 * @param name The key name to check for.
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R doesNotContainKey(String value) throws AssertionError {
-		exists();
-		if (! this.value.containsKey(value))
+	public R doesNotContainKey(String name) throws AssertionError {
+		if (! value().containsKey(name))
 			return returns();
-		throw error("Map contained unexpected key.\n\tContents: {0}\n\tUnexpected key: {1}", SimpleJson.DEFAULT.toString(this.value), value);
+		throw error("Map contained unexpected key.\n\tContents: {0}\n\tUnexpected key: {1}", value(), name);
 	}
 
 	/**
 	 * Asserts that the map exists and is not empty.
 	 *
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isNotEmpty() throws AssertionError {
-		exists();
-		if (value.isEmpty())
+		if (value().isEmpty())
 			throw error("Map was empty.");
 		return returns();
 	}
@@ -148,43 +134,54 @@ public class FluentMapAssertion<R> extends FluentBaseAssertion<Map,R>  {
 	 *
 	 * @param size The expected size.
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isSize(int size) throws AssertionError {
-		exists();
-		if (value.size() != size)
-			throw error("Map did not have the expected size.  Expect={0}, Actual={1}.", size, value.size());
+		if (size() != size)
+			throw error("Map did not have the expected size.  Expect={0}, Actual={1}.", size, size());
 		return returns();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private V get(K key) {
+		return orElse(emptyMap()).get(key);
+	}
+
+	private int size() {
+		return value().size();
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentMapAssertion<R> msg(String msg, Object...args) {
+	public FluentMapAssertion<K,V,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentMapAssertion<R> out(PrintStream value) {
+	public FluentMapAssertion<K,V,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentMapAssertion<R> silent() {
+	public FluentMapAssertion<K,V,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentMapAssertion<R> stdout() {
+	public FluentMapAssertion<K,V,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentMapAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentMapAssertion<K,V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

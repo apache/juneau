@@ -20,7 +20,6 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Main class for creation of assertions for testing.
@@ -204,7 +203,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final ComparableAssertion assertComparable(Comparable<?> value) {
+	public static final <T extends Comparable<T>> ComparableAssertion<T> assertComparable(T value) {
 		return ComparableAssertion.create(value);
 	}
 
@@ -220,7 +219,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final <V> ObjectAssertion<V> assertObject(V value) {
+	public static final <T> ObjectAssertion<T> assertObject(T value) {
 		return ObjectAssertion.create(value);
 	}
 
@@ -272,6 +271,24 @@ public class Assertions {
 	public static final <V> BeanAssertion<V> assertBean(Optional<V> value) {
 		assertArgNotNull("value", value);
 		return assertBean(value.orElse(null));
+	}
+
+	/**
+	 * Used for assertion calls against lists of Java beans.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified list contains 3 beans with the specified values for the 'foo' property.</jc>
+	 * 	<jsm>assertBeanList</jsm>(<jv>myBeanList</jv>)
+	 * 		.property(<js>"foo"</js>)
+	 * 		.is(<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link BeanListAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final <E> BeanListAssertion<E> assertBeanList(List<E> value) {
+		return BeanListAssertion.create(value);
 	}
 
 	/**
@@ -357,19 +374,35 @@ public class Assertions {
 	}
 
 	/**
-	 * Used for assertion calls against arrays.
+	 * Used for assertion calls against Java object arrays.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] <jv>array</jv> = <jk>new</jk> String[]{<js>"foo"</js>};
+	 * 	String[] <jv>array</jv> = {<js>"foo"</js>};
 	 * 	<jsm>assertArray</jsm>(<jv>array</jv>).isSize(1);
 	 * </p>
 	 *
 	 * @param value The object being wrapped.
 	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final ArrayAssertion assertArray(Object value) {
+	public static final <E> ArrayAssertion<E> assertArray(E[] value) {
 		return ArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive arrays.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>int</jk>[] <jv>array</jv> = {1,2,3};
+	 * 	<jsm>assertPrimitiveArray</jsm>(<jv>array</jv>).isSize(3);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final <E> PrimitiveArrayAssertion<E> assertPrimitiveArray(E value) {
+		return PrimitiveArrayAssertion.create(value);
 	}
 
 	/**
@@ -384,7 +417,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link CollectionAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final CollectionAssertion assertCollection(Collection<?> value) {
+	public static final <E> CollectionAssertion<E> assertCollection(Collection<E> value) {
 		return CollectionAssertion.create(value);
 	}
 
@@ -394,13 +427,13 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	List=&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>);
-	 * 	<jsm>assertList</jsm>(<jv>list</jv>).item(0).isEqual(<js>"foo"</js>);
+	 * 	<jsm>assertList</jsm>(<jv>list</jv>).item(0).is(<js>"foo"</js>);
 	 * </p>
 	 *
 	 * @param value The object being wrapped.
 	 * @return A new {@link ListAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final ListAssertion assertList(List<?> value) {
+	public static final <E> ListAssertion<E> assertList(List<E> value) {
 		return ListAssertion.create(value);
 	}
 
@@ -416,8 +449,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link MapAssertion} object.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static final MapAssertion assertMap(Map value) {
+	public static final <K,V> MapAssertion<K,V> assertMap(Map<K,V> value) {
 		return MapAssertion.create(value);
 	}
 

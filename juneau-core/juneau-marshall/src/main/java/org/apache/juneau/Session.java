@@ -41,6 +41,7 @@ public abstract class Session {
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
+	private final boolean unmodifiable;
 
 
 	/**
@@ -52,7 +53,11 @@ public abstract class Session {
 	 */
 	protected Session(Context ctx, SessionArgs args) {
 		this.ctx = ctx;
-		SessionProperties sp = this.properties = args.properties;
+		this.unmodifiable = args.unmodifiable;
+		SessionProperties sp = args.properties;
+		if (args.unmodifiable)
+			sp = sp.unmodifiable();
+		properties = sp;
 		debug = sp.get(CONTEXT_debug, Boolean.class).orElse(ctx.isDebug());
 		locale = sp.get(CONTEXT_locale, Locale.class).orElse(ctx.getDefaultLocale());
 		timeZone = sp.get(CONTEXT_timeZone, TimeZone.class).orElse(ctx.getDefaultTimeZone());
@@ -87,6 +92,8 @@ public abstract class Session {
 	 * @param val The cached object.
 	 */
 	public final void addToCache(String key, Object val) {
+		if (unmodifiable)
+			return;
 		if (cache == null)
 			cache = new TreeMap<>();
 		cache.put(key, val);
@@ -103,6 +110,8 @@ public abstract class Session {
 	 * 	No-op if <jk>null</jk>.
 	 */
 	public final void addToCache(Map<String,Object> cacheObjects) {
+		if (unmodifiable)
+			return;
 		if (cacheObjects != null) {
 			if (cache == null)
 				cache = new TreeMap<>();
@@ -129,6 +138,8 @@ public abstract class Session {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void addWarning(String msg, Object... args) {
+		if (unmodifiable)
+			return;
 		if (warnings == null)
 			warnings = new LinkedList<>();
 		warnings.add((warnings.size() + 1) + ": " + format(msg, args));

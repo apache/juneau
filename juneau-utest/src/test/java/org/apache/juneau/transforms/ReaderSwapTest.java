@@ -27,7 +27,7 @@ public class ReaderSwapTest extends OneWayStringSwapTest<Reader> {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static BeanSession BS = BeanContext.DEFAULT.createBeanSession();
+	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static ReaderSwap SWAP = new ReaderSwap();
 
 	public ReaderSwapTest(String label, Reader o, StringSwap<Reader> s, String r, BeanSession bs) throws Exception {

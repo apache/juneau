@@ -294,7 +294,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentListAssertion<RequestFormParam> assertCsvArray() {
+	public FluentListAssertion<String,RequestFormParam> assertCsvArray() {
 		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
 	}
 

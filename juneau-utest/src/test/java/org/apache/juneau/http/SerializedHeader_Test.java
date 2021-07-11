@@ -50,11 +50,11 @@ public class SerializedHeader_Test {
 	@Test
 	public void a03_serializer() throws Exception {
 		SerializedHeader x1 = serializedHeader("Foo",list("bar","baz")).serializer((HttpPartSerializer)null);
-		assertString(x1.getValue()).is("['bar','baz']");
+		assertString(x1.getValue()).is("[bar, baz]");
 		SerializedHeader x2 = serializedHeader("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertString(x2.getValue()).is("bar,baz");
 		SerializedHeader x3 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
-		assertString(x3.getValue()).is("['bar','baz']");
+		assertString(x3.getValue()).is("[bar, baz]");
 		SerializedHeader x4 = serializedHeader("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertString(x4.getValue()).is("bar,baz");
 		SerializedHeader x5 = serializedHeader("Foo",list("bar","baz")).copyWith(OAPI_SERIALIZER.createPartSession(null),null);

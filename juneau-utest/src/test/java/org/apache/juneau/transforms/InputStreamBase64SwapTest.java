@@ -28,7 +28,7 @@ public class InputStreamBase64SwapTest extends OneWayStringSwapTest<InputStream>
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static BeanSession BS = BeanContext.DEFAULT.createBeanSession();
+	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static InputStreamSwap SWAP = new InputStreamSwap.Base64();
 
 	public InputStreamBase64SwapTest(String label, InputStream o, StringSwap<InputStream> s, String r, BeanSession bs) throws Exception {

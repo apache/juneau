@@ -27,7 +27,7 @@ import org.junit.*;
 public class PojoSorterTest {
 
 	PojoSorter p = new PojoSorter();
-	BeanSession bs = BeanContext.DEFAULT.createBeanSession();
+	BeanSession bs = BeanContext.DEFAULT_SESSION;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Null input

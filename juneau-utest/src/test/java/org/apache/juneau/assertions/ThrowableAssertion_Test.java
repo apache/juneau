@@ -32,7 +32,7 @@ public class ThrowableAssertion_Test {
 
 		test(x1).isType(Exception.class).isType(RuntimeException.class);
 		assertThrown(()->test(x1).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[java.lang.RuntimeException]");
-		assertThrown(()->test(null).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=[java.io.IOException]\n\tActual=[null]");
+		assertThrown(()->test(null).isType(IOException.class)).is("Exception was not thrown.");
 		assertThrown(()->test(x1).isType(null)).is("Parameter 'type' cannot be null.");
 
 		test(x1).contains("foo");
@@ -45,16 +45,16 @@ public class ThrowableAssertion_Test {
 		assertThrown(()->test(x1).doesNotExist()).is("Exception was thrown.");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: 'java.lang.RuntimeException: foo'");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: 'java.lang.RuntimeException: foo'");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: 'java.lang.RuntimeException: foo'");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Value did not pass predicate test.\n\tValue=[java.lang.RuntimeException: foo]");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: 'java.lang.RuntimeException: foo'");
 
 		test(x1).message().is("foo");
 		test(new RuntimeException()).message().doesNotExist();

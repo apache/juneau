@@ -191,7 +191,7 @@ public class OList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public OList(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? null : p.createBeanSession());
+		this(p == null ? BeanContext.DEFAULT_SESSION : p.createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		if (in != null)
@@ -222,7 +222,7 @@ public class OList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public OList(Reader in, Parser p) throws ParseException {
-		this(p == null ? null : p.createBeanSession());
+		this(p == null ? BeanContext.DEFAULT_SESSION : p.createBeanSession());
 		parse(in, p);
 	}
 
@@ -1035,7 +1035,7 @@ public class OList extends LinkedList<Object> {
 
 	BeanSession bs() {
 		if (session == null)
-			session = BeanContext.DEFAULT.createBeanSession();
+			session = BeanContext.DEFAULT_SESSION;
 		return session;
 	}
 

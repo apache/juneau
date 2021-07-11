@@ -143,7 +143,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentListAssertion<BasicCsvArrayPart> assertList() {
+	public FluentListAssertion<String,BasicCsvArrayPart> assertList() {
 		return new FluentListAssertion<>(getParsedValue(), this);
 	}
 

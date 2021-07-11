@@ -25,10 +25,12 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Validates the specified POJO is the specified type.</jc>
  * 	<jsm>assertMap</jsm>(<jv>mymap</jv>).isNotEmpty();
  * </p>
+ *
+ * @param <K> The map key type.
+ * @param <V> The map value type.
  */
-@FluentSetters(returns="MapAssertion")
-@SuppressWarnings("rawtypes")
-public class MapAssertion extends FluentMapAssertion<MapAssertion> {
+@FluentSetters(returns="MapAssertion<K,V>")
+public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>> {
 
 	/**
 	 * Creator.
@@ -36,8 +38,8 @@ public class MapAssertion extends FluentMapAssertion<MapAssertion> {
 	 * @param value The object being wrapped.
 	 * @return A new {@link MapAssertion} object.
 	 */
-	public static MapAssertion create(Map value) {
-		return new MapAssertion(value);
+	public static <K,V> MapAssertion<K,V> create(Map<K,V> value) {
+		return new MapAssertion<>(value);
 	}
 
 	/**
@@ -45,43 +47,38 @@ public class MapAssertion extends FluentMapAssertion<MapAssertion> {
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public MapAssertion(Map value) {
+	public MapAssertion(Map<K,V> value) {
 		super(value, null);
-	}
-
-	@Override
-	protected MapAssertion returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public MapAssertion msg(String msg, Object...args) {
+	public MapAssertion<K,V> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public MapAssertion out(PrintStream value) {
+	public MapAssertion<K,V> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public MapAssertion silent() {
+	public MapAssertion<K,V> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public MapAssertion stdout() {
+	public MapAssertion<K,V> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public MapAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+	public MapAssertion<K,V> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

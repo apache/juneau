@@ -8,12 +8,35 @@ HttpException subclasses can set status, but does it use code?
 HttpException should use list of Headers and have a headers(Header...) method.
 
 JsonSchema should have fluent getters and setters.
-Break out @Response bean handling into it's own handler.
-Can HeaderGroup be used universally?
 
 @ResponseBody and @ResponseHeaders shouldn't be required on HttpResponse objects.
-HttpRuntimeException?
-Add ExceptionHeader
-REST query/formdata/path parts should extend from PartGroup class.
-Eliminate PartSupplier and HeaderSupplier?
-Replace ThrowableUtils.assertFieldNotNull() and other methods.
+
+
+This has to be easier:
+	@Enumerated(STRING)
+	@Schema(description="Routing types that this directive applies to.")
+	@NotEmpty(message="At least one copy type is required")
+	@Fetched(primary=true, fetcher=CopyTypes.class)
+	@SortNatural
+	@Beanp(type=TreeSet.class, params=CopyType.class)
+	protected Set<CopyType> copyTypes;
+
+	public Set<CopyType> getCopyTypes() {
+		return copyTypes;
+	}
+
+	public Directive setCopyTypes(Set<CopyType> value) {
+		this.copyTypes = value;
+		return this;
+	}
+	
+assertBodyMatches should tell you at which position it differs and make it obvious in the error.
+
+
+            .extracting(Directive::getLabel, Directive::getStatus, Directive::getStart, Directive::getEnd)
+            .containsOnly(d.getLabel(), DirectiveStatus.ACTIVE, d.getStart(), d.getEnd());
+            
+        assertThat(releaseService.sortReleases(Arrays.asList(sb0_224, sb0_226, sb0_222))).containsExactly(sb0_222, sb0_224, sb0_226);
+            
+
+Better support for SortedSet properties.

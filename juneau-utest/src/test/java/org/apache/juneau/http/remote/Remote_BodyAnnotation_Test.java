@@ -320,7 +320,7 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX5(AList.of(Bean.create())));
-		assertEquals("{k1:{f:1}}",x.postX6(AMap.of("k1",Bean.create())));
+		assertEquals("{k1={f:1}}",x.postX6(AMap.of("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(new StringReader("xxx")));
 		assertEquals("xxx",x.postX8(new StringInputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));

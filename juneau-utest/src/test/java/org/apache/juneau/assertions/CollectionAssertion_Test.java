@@ -23,7 +23,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class CollectionAssertion_Test {
 
-	private CollectionAssertion test(Collection<?> value) {
+	private <T> CollectionAssertion<T> test(Collection<T> value) {
 		return assertCollection(value).silent();
 	}
 

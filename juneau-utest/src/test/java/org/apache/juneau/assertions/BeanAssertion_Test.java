@@ -38,12 +38,12 @@ public class BeanAssertion_Test {
 		assertCollection(null).doesNotExist();
 		assertThrown(()->test(a).doesNotExist()).is("Value was not null.");
 
-		test(a).field("f1").asInteger().is(1);
-		test(a).field("x").asInteger().isNull();
-		assertThrown(()->test((Object)null).field("x")).is("Value was null.");
+		test(a).property("f1").asInteger().is(1);
+		test(a).property("x").asInteger().isNull();
+		assertThrown(()->test((Object)null).property("x")).is("Value was null.");
 
-		test(a).fields("f2,f1").asJson().is("{f2:2,f1:1}");
-		test(a).fields("x").asJson().is("{}");
+		test(a).mapOf("f2,f1").asJson().is("{f2:2,f1:1}");
+		test(a).mapOf("x").asJson().is("{}");
 	}
 
 	@Test

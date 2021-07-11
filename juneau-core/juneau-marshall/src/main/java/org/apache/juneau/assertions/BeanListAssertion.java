@@ -18,27 +18,29 @@ import java.util.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against collections objects.
+ * Used for assertion calls against Java beans.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the specified list is not empty.</jc>
- * 	<jsm>assertCollection</jsm>(<jv>myList</jv>).isNotEmpty();
+ * 	<jc>// Validates the specified list contains 3 beans with the specified values for the 'foo' property.</jc>
+ * 	<jsm>assertBeanList</jsm>(<jv>myBeanList</jv>)
+ * 		.property(<js>"foo"</js>)
+ * 		.is(<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>);
  * </p>
  *
- * @param <E> The element type.
+ * @param <E> The bean type.
  */
-@FluentSetters(returns="CollectionAssertion<E>")
-public class CollectionAssertion<E> extends FluentCollectionAssertion<E,CollectionAssertion<E>> {
+@FluentSetters(returns="BeanListAssertion<E>")
+public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAssertion<E>> {
 
 	/**
 	 * Creator.
 	 *
 	 * @param value The object being wrapped.
-	 * @return A new {@link CollectionAssertion} object.
+	 * @return A new {@link BeanListAssertion} object.
 	 */
-	public static <E> CollectionAssertion<E> create(Collection<E> value) {
-		return new CollectionAssertion<>(value);
+	public static <E> BeanListAssertion<E> create(List<E> value) {
+		return new BeanListAssertion<>(value);
 	}
 
 	/**
@@ -46,38 +48,38 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public CollectionAssertion(Collection<E> value) {
+	public BeanListAssertion(List<E> value) {
 		super(value, null);
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> msg(String msg, Object...args) {
+	public BeanListAssertion<E> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> out(PrintStream value) {
+	public BeanListAssertion<E> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> silent() {
+	public BeanListAssertion<E> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> stdout() {
+	public BeanListAssertion<E> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public BeanListAssertion<E> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

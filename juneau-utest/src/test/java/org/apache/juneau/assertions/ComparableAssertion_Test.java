@@ -20,7 +20,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ComparableAssertion_Test {
 
-	private ComparableAssertion test(Comparable<?> value) {
+	private <T extends Comparable<T>> ComparableAssertion<T> test(T value) {
 		return assertComparable(value).silent();
 	}
 

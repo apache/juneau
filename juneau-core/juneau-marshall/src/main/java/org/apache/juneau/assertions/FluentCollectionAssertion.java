@@ -18,18 +18,15 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * Used for fluent assertion calls against collections objects.
  *
+ * @param <E> The element type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentCollectionAssertion<R>")
-@SuppressWarnings("rawtypes")
-public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection,R> {
-
-	private Collection value;
+@FluentSetters(returns="FluentCollectionAssertion<E,R>")
+public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
 	/**
 	 * Constructor.
@@ -37,7 +34,7 @@ public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection
 	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentCollectionAssertion(Collection contents, R returns) {
+	public FluentCollectionAssertion(Collection<E> contents, R returns) {
 		this(null, contents, returns);
 	}
 
@@ -48,20 +45,18 @@ public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection
 	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentCollectionAssertion(Assertion creator, Collection contents, R returns) {
+	public FluentCollectionAssertion(Assertion creator, Collection<E> contents, R returns) {
 		super(creator, contents, returns);
-		this.value = contents;
 	}
 
 	/**
 	 * Asserts that the collection exists and is empty.
 	 *
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
-		exists();
-		if (! value.isEmpty())
+		if (! value().isEmpty())
 			throw error("Collection was not empty.");
 		return returns();
 	}
@@ -69,30 +64,28 @@ public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection
 	/**
 	 * Asserts that the collection contains the expected value.
 	 *
-	 * @param value The value to check for.
+	 * @param entry The value to check for.
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R contains(Object value) throws AssertionError {
-		exists();
-		for (Object o : this.value)
-			if (eq(o, value))
+	public R contains(E entry) throws AssertionError {
+		for (Object v : value())
+			if (eq(v, entry))
 				return returns();
-		throw error("Collection did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", SimpleJson.DEFAULT.toString(this.value), value);
+		throw error("Collection did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", value(), entry);
 	}
 
 	/**
 	 * Asserts that the collection contains the expected value.
 	 *
-	 * @param value The value to check for.
+	 * @param entry The value to check for.
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R doesNotContain(Object value) throws AssertionError {
-		exists();
-		for (Object o : this.value)
-			if (eq(o, value))
-				throw error("Collection contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", SimpleJson.DEFAULT.toString(this.value), value);
+	public R doesNotContain(E entry) throws AssertionError {
+		for (Object v : value())
+			if (eq(v, entry))
+				throw error("Collection contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", value(), entry);
 		return returns();
 	}
 
@@ -100,11 +93,10 @@ public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection
 	 * Asserts that the collection exists and is not empty.
 	 *
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isNotEmpty() throws AssertionError {
-		exists();
-		if (value.isEmpty())
+		if (value().isEmpty())
 			throw error("Collection was empty.");
 		return returns();
 	}
@@ -114,43 +106,52 @@ public class FluentCollectionAssertion<R> extends FluentBaseAssertion<Collection
 	 *
 	 * @param size The expected size.
 	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isSize(int size) throws AssertionError {
-		exists();
-		if (value.size() != size)
-			throw error("Collection did not have the expected size.  Expect={0}, Actual={1}.", size, value.size());
+		if (size() != size)
+			throw error("Collection did not have the expected size.  Expect={0}, Actual={1}.", size, size());
 		return returns();
+	}
+
+	/**
+	 * Returns the size of this collection if it is not <jk>null</jk>.
+	 *
+	 * @return the size of this collection if it is not <jk>null</jk>.
+	 * @throws AssertionError If value was <jk>null</jk>.
+	 */
+	protected int size() throws AssertionError {
+		return value().size();
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentCollectionAssertion<R> msg(String msg, Object...args) {
+	public FluentCollectionAssertion<E,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentCollectionAssertion<R> out(PrintStream value) {
+	public FluentCollectionAssertion<E,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentCollectionAssertion<R> silent() {
+	public FluentCollectionAssertion<E,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentCollectionAssertion<R> stdout() {
+	public FluentCollectionAssertion<E,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentCollectionAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentCollectionAssertion<E,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

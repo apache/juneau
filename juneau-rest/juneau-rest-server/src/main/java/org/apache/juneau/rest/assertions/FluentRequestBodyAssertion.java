@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.assertions;
 
 import java.io.*;
-import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
@@ -26,9 +25,7 @@ import org.apache.juneau.rest.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentRequestBodyAssertion<R>")
-public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
-
-	private final RequestBody value;
+public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<RequestBody,R> {
 
 	/**
 	 * Constructor.
@@ -38,7 +35,6 @@ public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
 	 */
 	public FluentRequestBodyAssertion(RequestBody value, R returns) {
 		super(null, returns);
-		this.value = value;
 		throwable(BadRequest.class);
 	}
 
@@ -73,6 +69,7 @@ public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return A new fluent assertion object.
 	 */
+	@Override
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(valueAsString(), returns());
 	}
@@ -195,22 +192,13 @@ public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
 		return asString().isNotEmpty();
 	}
 
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The request object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R passes(Predicate<String> test) throws AssertionError {
-		if (! test.test(valueAsString()))
-			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
-		return returns();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private String valueAsString() throws AssertionError {
 		try {
-			return value.cache().asString();
+			return value().cache().asString();
 		} catch (IOException e) {
 			throw error(e, "Exception occurred during call.");
 		}
@@ -218,7 +206,7 @@ public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
 
 	private byte[] valueAsBytes() throws AssertionError {
 		try {
-			return value.cache().asBytes();
+			return value().cache().asBytes();
 		} catch (IOException e) {
 			throw error(e, "Exception occurred during call.");
 		}
@@ -226,7 +214,7 @@ public class FluentRequestBodyAssertion<R> extends FluentAssertion<R> {
 
 	private <T> T valueAsType(Class<T> c) throws AssertionError {
 		try {
-			return value.cache().asType(c);
+			return value().cache().asType(c);
 		} catch (IOException e) {
 			throw error(e, "Exception occurred during call.");
 		}

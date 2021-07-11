@@ -207,6 +207,12 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
+	@Override /* GENERATED - SessionArgs */
+	public SerializerSessionArgs unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
 	@Override /* GENERATED - BeanSessionArgs */
 	public SerializerSessionArgs schema(HttpPartSchema value) {
 		super.schema(value);

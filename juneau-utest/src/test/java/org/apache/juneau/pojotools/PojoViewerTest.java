@@ -27,7 +27,7 @@ import org.junit.*;
 public class PojoViewerTest {
 
 	PojoViewer p = new PojoViewer();
-	BeanSession bs = BeanContext.DEFAULT.createBeanSession();
+	BeanSession bs = BeanContext.DEFAULT_SESSION;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Null input

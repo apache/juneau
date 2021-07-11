@@ -63,7 +63,7 @@ public class StringAssertion_Test {
 
 		test("foo\nbar\nbaz").isEqualLinesTo("foo","bar","baz");
 		assertThrown(()->test(empty()).isEqualLinesTo((String[])null)).is("Parameter 'lines' cannot be null.");
-		assertThrown(()->test(empty()).isEqualLinesTo((String)null)).is("Text differed at position -1.\n\tExpect=[]\n\tActual=[null]");
+		assertThrown(()->test(empty()).isEqualLinesTo((String)null)).is("Value was null.");
 		assertThrown(()->test("foo\nbar\nbaz").javaStrings().isEqualLinesTo("foo","bar","bar")).is("Text differed at position 10.\n\tExpect=[foo\\nbar\\nbar]\n\tActual=[foo\\nbar\\nbaz]");
 
 		test("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo","baz");

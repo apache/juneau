@@ -504,7 +504,7 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testProxyHandler() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createBeanSession();
+		BeanSession session = BeanContext.DEFAULT_SESSION;
 
 		A f1 = (A) Proxy.newProxyInstance(this.getClass()
 				.getClassLoader(), new Class[] { A.class },

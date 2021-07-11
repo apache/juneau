@@ -47,11 +47,6 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 		super(value, null);
 	}
 
-	@Override
-	protected LongAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

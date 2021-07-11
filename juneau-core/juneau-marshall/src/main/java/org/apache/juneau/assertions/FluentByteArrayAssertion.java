@@ -25,9 +25,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentByteArrayAssertion<R>")
-public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
-
-	private byte[] value;
+public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<byte[],R> {
 
 	/**
 	 * Constructor.
@@ -48,7 +46,6 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 */
 	public FluentByteArrayAssertion(Assertion creator, byte[] contents, R returns) {
 		super(creator, contents, returns);
-		this.value = contents;
 	}
 
 	/**
@@ -80,7 +77,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> asString(Charset cs) {
-		return new FluentStringAssertion<>(this, value == null ? null : new String(value, cs), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : new String(value(), cs), returns());
 	}
 
 	/**
@@ -95,7 +92,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> asBase64() {
-		return new FluentStringAssertion<>(this, value == null ? null : base64Encode(value), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : base64Encode(value()), returns());
 	}
 
 	/**
@@ -110,7 +107,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public FluentStringAssertion<R> asHex() {
-		return new FluentStringAssertion<>(this, value == null ? null : toHex(value), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : toHex(value()), returns());
 	}
 
 	/**
@@ -125,7 +122,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public FluentStringAssertion<R> asSpacedHex() {
-		return new FluentStringAssertion<>(this, value == null ? null : toSpacedHex(value), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : toSpacedHex(value()), returns());
 	}
 
 	// <FluentSetters>

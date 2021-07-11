@@ -37,8 +37,6 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentZonedDateTimeAssertion<R>")
 public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
 
-	private final ZonedDateTime value;
-
 	/**
 	 * Constructor.
 	 *
@@ -58,7 +56,6 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public FluentZonedDateTimeAssertion(Assertion creator, ZonedDateTime value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -70,8 +67,9 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEqual(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
-		if (ne(this.value, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
-			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		ZonedDateTime v = orElse(null);
+		if (ne(v, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
+			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, v);
 		return returns();
 	}
 
@@ -83,10 +81,9 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
-		if (! (this.value.isAfter(value)))
-			throw error("Value was not after expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		if (! (value().isAfter(value)))
+			throw error("Value was not after expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -108,10 +105,9 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
-		if (! (this.value.isBefore(value)))
-			throw error("Value was not before expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		if (! (value().isBefore(value)))
+			throw error("Value was not before expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 

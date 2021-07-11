@@ -56,6 +56,8 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 public class ConfigurablePropertyCodeGenerator {
+	
+	private final String TODO = "Have this use code scanning.";
 
 	static Class<?>[] classes = new Class<?>[]{
 		AnnotationBuilder.class,
@@ -65,6 +67,7 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicRuntimeExceptionBuilder.class,
 		BasicStatusLineBuilder.class,
 		BeanAssertion.class,
+		BeanListAssertion.class,
 		BeanContextBuilder.class,
 		BeanSessionArgs.class,
 		BeanStoreBuilder.class,
@@ -87,8 +90,8 @@ public class ConfigurablePropertyCodeGenerator {
 		FileFinderBuilder.class,
 		FluentArrayAssertion.class,
 		FluentAssertion.class,
-		FluentBaseAssertion.class,
 		FluentBeanAssertion.class,
+		FluentBeanListAssertion.class,
 		FluentBooleanAssertion.class,
 		FluentByteArrayAssertion.class,
 		FluentCollectionAssertion.class,
@@ -99,6 +102,7 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentLongAssertion.class,
 		FluentMapAssertion.class,
 		FluentObjectAssertion.class,
+		FluentPrimitiveArrayAssertion.class,
 		FluentProtocolVersionAssertion.class,
 		FluentRequestBodyAssertion.class,
 		FluentRequestFormParamAssertion.class,
@@ -147,6 +151,7 @@ public class ConfigurablePropertyCodeGenerator {
 		ParserSessionArgs.class,
 		PlainTextParserBuilder.class,
 		PlainTextSerializerBuilder.class,
+		PrimitiveArrayAssertion.class,
 		RdfParserBuilder.class,
 		RdfSerializerBuilder.class,
 		ReaderParserBuilder.class,

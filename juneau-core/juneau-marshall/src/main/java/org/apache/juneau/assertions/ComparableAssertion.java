@@ -18,10 +18,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Used for assertion calls against comparable objects.
+ *
+ * @param <T> The comparable type.
  */
-@FluentSetters(returns="ComparableAssertion")
-@SuppressWarnings("rawtypes")
-public class ComparableAssertion extends FluentComparableAssertion<Comparable,ComparableAssertion> {
+@FluentSetters(returns="ComparableAssertion<T>")
+public class ComparableAssertion<T extends Comparable<T>> extends FluentComparableAssertion<T,ComparableAssertion<T>> {
 
 	/**
 	 * Creator.
@@ -29,8 +30,8 @@ public class ComparableAssertion extends FluentComparableAssertion<Comparable,Co
 	 * @param value The object being wrapped.
 	 * @return A new {@link ComparableAssertion} object.
 	 */
-	public static ComparableAssertion create(Comparable value) {
-		return new ComparableAssertion(value);
+	public static <T extends Comparable<T>> ComparableAssertion<T> create(T value) {
+		return new ComparableAssertion<>(value);
 	}
 
 	/**
@@ -38,43 +39,38 @@ public class ComparableAssertion extends FluentComparableAssertion<Comparable,Co
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public ComparableAssertion(Comparable value) {
+	public ComparableAssertion(T value) {
 		super(value, null);
-	}
-
-	@Override
-	protected ComparableAssertion returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ComparableAssertion msg(String msg, Object...args) {
+	public ComparableAssertion<T> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ComparableAssertion out(PrintStream value) {
+	public ComparableAssertion<T> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ComparableAssertion silent() {
+	public ComparableAssertion<T> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ComparableAssertion stdout() {
+	public ComparableAssertion<T> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ComparableAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+	public ComparableAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

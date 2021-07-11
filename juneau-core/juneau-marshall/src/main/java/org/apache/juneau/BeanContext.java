@@ -2028,6 +2028,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/** Default config.  All default settings except sort bean properties. */
 	public static final BeanContext DEFAULT_SORTED = BeanContext.create().sortProperties().build();
 
+	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
+	public  static final BeanSession DEFAULT_SESSION = new BeanSession(DEFAULT, DEFAULT.createDefaultBeanSessionArgs().unmodifiable());
+
 	private final boolean
 		beansRequireDefaultConstructor,
 		beansRequireSerializable,

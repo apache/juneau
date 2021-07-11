@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
@@ -149,6 +150,17 @@ public class Assertion {
 	 */
 	protected static String className(Object o) {
 		return ClassUtils.className(o);
+	}
+
+	/**
+	 * Convenience method for getting the array class of the specified element type.
+	 *
+	 * @param c The object to get the class name for.
+	 * @return The class name for an object.
+	 */
+	@SuppressWarnings("unchecked")
+	protected static <E> Class<E[]> arrayClass(Class<E> c) {
+		return (Class<E[]>)Array.newInstance(c,0).getClass();
 	}
 
 	/**

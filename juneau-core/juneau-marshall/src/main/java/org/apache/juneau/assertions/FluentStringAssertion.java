@@ -13,12 +13,13 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.stream.Collectors.*;
+import static java.util.Arrays.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
-import java.util.stream.*;
 
 import org.apache.juneau.internal.*;
 
@@ -37,9 +38,8 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentStringAssertion<R>")
-public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
+public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 
-	private String text;
 	private boolean javaStrings;
 
 	/**
@@ -61,7 +61,6 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public FluentStringAssertion(Assertion creator, String text, R returns) {
 		super(creator, text, returns);
-		this.text = text;
 	}
 
 	/**
@@ -89,7 +88,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	public FluentStringAssertion<R> replaceAll(String regex, String replacement) {
 		assertNotNull("regex", regex);
 		assertNotNull("replacement", replacement);
-		return apply(x -> x == null ? null : text.replaceAll(regex, replacement));
+		return apply(x -> x == null ? null : x.replaceAll(regex, replacement));
 	}
 
 	/**
@@ -102,7 +101,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	public FluentStringAssertion<R> replace(String target, String replacement) {
 		assertNotNull("target", target);
 		assertNotNull("replacement", replacement);
-		return apply(x -> x == null ? null : text.replace(target, replacement));
+		return apply(x -> x == null ? null : x.replace(target, replacement));
 	}
 
 	/**
@@ -111,7 +110,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 */
 	public FluentStringAssertion<R> urlDecode() {
-		return apply(x->StringUtils.urlDecode(x));
+		return apply(StringUtils::urlDecode);
 	}
 
 	/**
@@ -120,7 +119,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 */
 	public FluentStringAssertion<R> sort() {
-		return apply(x->x == null ? null : Arrays.asList(x.trim().split("[\r\n]+")).stream().sorted().collect(Collectors.joining("\n")));
+		return apply(x->x == null ? null : stream(x.trim().split("[\r\n]+")).sorted().collect(joining("\n")));
 	}
 
 	/**
@@ -148,7 +147,7 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 */
 	public FluentStringAssertion<R> apply(Function<String,String> f) {
-		return new FluentStringAssertion<>(this, f.apply(text), returns());
+		return new FluentStringAssertion<>(this, f.apply(orElse(null)), returns());
 	}
 
 	/**
@@ -173,8 +172,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEqualTo(String value) throws AssertionError {
-		if (ne(value, text))
-			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(text));
+		String s = orElse(null);
+		if (ne(value, s))
+			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(value, s), fix(value), fix(s));
 		return returns();
 	}
 
@@ -203,8 +203,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	public R isEqualLinesTo(String...lines) throws AssertionError {
 		assertNotNull("lines", lines);
 		String v = join(lines, '\n');
-		if (ne(v, text))
-			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
+		String s = value();
+		if (ne(v, s))
+			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(v, s), fix(v), fix(s));
 		return returns();
 	}
 
@@ -232,10 +233,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public R isEqualSortedLinesTo(String...lines) {
 		assertNotNull("lines", lines);
-		exists();
 
 		// Must work for windows too.
-		String[] e = StringUtils.join(lines, '\n').trim().split("[\r\n]+"), a = this.text.trim().split("[\r\n]+");
+		String[] e = StringUtils.join(lines, '\n').trim().split("[\r\n]+"), a = value().trim().split("[\r\n]+");
 
 		if (e.length != a.length)
 			throw error("Expected text had different numbers of lines.\n\tExpect=[{0}]\n\tActual=[{1}]", e.length, a.length);
@@ -272,8 +272,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(String value) throws AssertionError {
-		if (ne(value, text))
-			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
+		String s = orElse(null);
+		if (ne(value, s))
+			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", fix(value), fix(s));
 		return isEqualTo(value);
 	}
 
@@ -285,8 +286,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEqualIgnoreCaseTo(String value) throws AssertionError {
-		if (neic(value, text))
-			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
+		String s = orElse(null);
+		if (neic(value, s))
+			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPositionIc(value, s), fix(value), fix(s));
 		return returns();
 	}
 
@@ -298,8 +300,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
-		if (eq(value, text))
-			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(text));
+		String s = orElse(null);
+		if (eq(value, s))
+			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(s));
 		return returns();
 	}
 
@@ -325,8 +328,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqualIc(String value) throws AssertionError {
-		if (eqic(value, text))
-			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(text));
+		String s = orElse(null);
+		if (eqic(value, s))
+			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(s));
 		return returns();
 	}
 
@@ -339,9 +343,10 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public R contains(String...values) throws AssertionError {
 		assertNotNull("values", values);
+		String s = orElse(null);
 		for (String substring : values)
-			if (substring != null && ! StringUtils.contains(text, substring))
-				throw error("Text did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(text));
+			if (substring != null && ! StringUtils.contains(s, substring))
+				throw error("Text did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(s));
 		return returns();
 	}
 
@@ -354,9 +359,10 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public R doesNotContain(String...values) throws AssertionError {
 		assertNotNull("values", values);
+		String s = orElse(null);
 		for (String substring : values)
-			if (substring != null && StringUtils.contains(text, substring))
-				throw error("Text contained unexpected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(text));
+			if (substring != null && StringUtils.contains(s, substring))
+				throw error("Text contained unexpected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(s));
 		return returns();
 	}
 
@@ -367,8 +373,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
-		if (text != null && ! text.isEmpty())
-			throw error("Text was not empty.\n\tText=[{0}]", fix(text));
+		String s = orElse(null);
+		if (s != null && ! s.isEmpty())
+			throw error("Text was not empty.\n\tText=[{0}]", fix(s));
 		return returns();
 	}
 
@@ -379,9 +386,10 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() throws AssertionError {
-		if (text == null)
+		String s = orElse(null);
+		if (s == null)
 			throw error("Text was null.");
-		if (text.isEmpty())
+		if (s.isEmpty())
 			throw error("Text was empty.");
 		return returns();
 	}
@@ -434,10 +442,10 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public R matches(String regex, int flags) throws AssertionError {
 		assertNotNull("regex", regex);
-		exists();
 		Pattern p = Pattern.compile(regex, flags);
-		if (! p.matcher(text).matches())
-			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(regex), fix(text));
+		String s = value();
+		if (! p.matcher(s).matches())
+			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(regex), fix(s));
 		return returns();
 	}
 
@@ -463,9 +471,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public R matches(Pattern pattern) throws AssertionError {
 		assertNotNull("pattern", pattern);
-		exists();
-		if (! pattern.matcher(text).matches())
-			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(text));
+		String s = value();
+		if (! pattern.matcher(s).matches())
+			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(s));
 		return returns();
 	}
 
@@ -478,8 +486,9 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 */
 	public R doesNotMatch(Pattern pattern) throws AssertionError {
 		assertNotNull("pattern", pattern);
-		if (text != null && pattern.matcher(text).matches())
-			throw error("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(text));
+		String s = orElse(null);
+		if (s != null && pattern.matcher(s).matches())
+			throw error("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(s));
 		return returns();
 	}
 
@@ -491,10 +500,10 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R startsWith(String string) {
-		exists();
 		assertNotNull("string", string);
-		if (! text.startsWith(string))
-			throw error("Text did not start with expected string.\n\tString=[{0}]\n\tText=[{1}]", fix(string), fix(text));
+		String s = value();
+		if (! s.startsWith(string))
+			throw error("Text did not start with expected string.\n\tString=[{0}]\n\tText=[{1}]", fix(string), fix(s));
 		return returns();
 	}
 
@@ -506,10 +515,10 @@ public class FluentStringAssertion<R> extends FluentBaseAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R endsWith(String string) {
-		exists();
 		assertNotNull("string", string);
-		if (! text.endsWith(string))
-			throw error("Text did not end with expected string.\n\tString=[{0}]\n\tText=[{1}]", fix(string), fix(text));
+		String s = value();
+		if (! s.endsWith(string))
+			throw error("Text did not end with expected string.\n\tString=[{0}]\n\tText=[{1}]", fix(string), fix(s));
 		return returns();
 	}
 

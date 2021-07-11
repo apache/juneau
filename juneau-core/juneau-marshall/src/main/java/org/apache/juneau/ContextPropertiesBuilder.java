@@ -611,7 +611,7 @@ public class ContextPropertiesBuilder {
 		Object o = peek(key);
 		if (o == null)
 			return null;
-		return BeanContext.DEFAULT.createBeanSession().convertToType(o, c);
+		return BeanContext.DEFAULT_SESSION.convertToType(o, c);
 	}
 
 	/**

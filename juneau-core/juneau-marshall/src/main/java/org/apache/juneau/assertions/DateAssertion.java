@@ -48,11 +48,6 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 		super(value, null);
 	}
 
-	@Override
-	protected DateAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

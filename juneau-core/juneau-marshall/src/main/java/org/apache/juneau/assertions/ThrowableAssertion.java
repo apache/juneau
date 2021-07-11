@@ -25,10 +25,10 @@ import org.apache.juneau.internal.*;
  * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
  * </p>
  *
- * @param <V> The throwable type.
+ * @param <T> The throwable type.
  */
-@FluentSetters(returns="ThrowableAssertion<V>")
-public class ThrowableAssertion<V extends Throwable> extends FluentThrowableAssertion<V,ThrowableAssertion<V>> {
+@FluentSetters(returns="ThrowableAssertion<T>")
+public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAssertion<T,ThrowableAssertion<T>> {
 
 	/**
 	 * Creator.
@@ -45,43 +45,38 @@ public class ThrowableAssertion<V extends Throwable> extends FluentThrowableAsse
 	 *
 	 * @param value The throwable being wrapped.
 	 */
-	public ThrowableAssertion(V value) {
+	public ThrowableAssertion(T value) {
 		super(value, null);
-	}
-
-	@Override
-	protected ThrowableAssertion<V> returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion<V> msg(String msg, Object...args) {
+	public ThrowableAssertion<T> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion<V> out(PrintStream value) {
+	public ThrowableAssertion<T> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion<V> silent() {
+	public ThrowableAssertion<T> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion<V> stdout() {
+	public ThrowableAssertion<T> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion<V> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public ThrowableAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

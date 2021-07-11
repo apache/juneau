@@ -47,11 +47,6 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 		super(value, null);
 	}
 
-	@Override
-	protected ByteArrayAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

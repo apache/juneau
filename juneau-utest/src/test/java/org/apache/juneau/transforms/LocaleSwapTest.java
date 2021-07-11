@@ -26,7 +26,7 @@ public class LocaleSwapTest extends RoundTripStringSwapTest<Locale> {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static BeanSession BS = BeanContext.DEFAULT.createBeanSession();
+	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static LocaleSwap SWAP = new LocaleSwap();
 
 	public LocaleSwapTest(String label, Locale o, StringSwap<Locale> s, String r, BeanSession bs) throws Exception {

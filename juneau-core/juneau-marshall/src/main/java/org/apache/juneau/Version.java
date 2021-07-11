@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -25,10 +25,6 @@ import static java.util.Optional.*;
  * Used to compare version numbers.
  */
 public class Version implements Comparable<Version> {
-
-	static {
-		boolean NEEDS_TESTING = true;
-	}
 
 	private int[] parts;
 
@@ -89,7 +85,7 @@ public class Version implements Comparable<Version> {
 	 * @return The version part, never <jk>null</jk>.
 	 */
 	public Optional<Integer> getPart(int index) {
-		if (parts.length <= index)
+		if (index < 0 || parts.length <= index)
 			return empty();
 		return ofNullable(parts[index]);
 	}
@@ -124,12 +120,29 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.
 	 *
-	 * <p>
-	 * Note that the following is true:
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	boolean b;
-	 * 	b = <jk>new</jk> Version(<js>"1.2"</js>).isAtLeast(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == true </jc>
-	 * 	b = <jk>new</jk> Version(<js>"1.2.0"</js>).isAtLeast(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == false</jc>
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1"</js>)));
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"2"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.0"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
+	 * </p>
+	 *
+	 * @param v The version to compare to.
+	 * @return <jk>true</jk> if the specified version is at least this version.
+	 */
+	public boolean isAtLeast(Version v) {
+		return isAtLeast(v, false);
+	}
+
+
+	/**
+	 * Returns <jk>true</jk> if the specified version is at least this version.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>false</jk>)));
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
 	 * </p>
 	 *
 	 * @param v The version to compare to.
@@ -153,12 +166,28 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns <jk>true</jk> if the specified version is at most this version.
 	 *
-	 * <p>
-	 * Note that the following is true:
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	boolean b;
-	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).isAtMost(<jk>new</jk> Version(<js>"1.2"</js>)); <jc>// == true </jc>
-	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).isAtMost(<jk>new</jk> Version(<js>"1.2.0"</js>)); <jc>// == false</jc>
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"2"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2"</js>)));
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.0"</js>)));
+	 * </p>
+	 *
+	 * @param v The version to compare to.
+	 * @return <jk>true</jk> if the specified version is at most this version.
+	 */
+	public boolean isAtMost(Version v) {
+		return isAtMost(v, false);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified version is at most this version.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>false</jk>)));
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
 	 * </p>
 	 *
 	 * @param v The version to compare to.
@@ -175,19 +204,17 @@ public class Version implements Comparable<Version> {
 		}
 		for (int i = parts.length; i < v.parts.length; i++)
 			if (v.parts[i] > 0)
-				return false;
+				return true;
 		return ! exclusive;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is equal to this version.
 	 *
-	 * <p>
-	 * Note that the following is true:
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	boolean b;
-	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).equals(<jk>new</jk> Version(<js>"1.2"</js>)); <jc>// == true </jc>
-	 * 	b = <jk>new</jk> Version(<js>"1.2"</js>).equals(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == true</jc>
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2"</js>)));
 	 * </p>
 	 *
 	 * @param v The version to compare to.
@@ -212,9 +239,6 @@ public class Version implements Comparable<Version> {
 			if (c != 0)
 				return c;
 		}
-		for (int i = parts.length; i < v.parts.length; i++)
-			if (v.parts[i] > 0)
-				return 1;
-		return 0;
+		return parts.length - v.parts.length;
 	}
 }

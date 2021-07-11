@@ -25,7 +25,7 @@ import org.apache.juneau.rest.client.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentResponseHeaderAssertion<R>")
-public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String,R> {
+public class FluentResponseHeaderAssertion<R> extends FluentObjectAssertion<String,R> {
 
 	private final ResponseHeader value;
 
@@ -47,6 +47,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a boolean.
 	 */
+	@Override
 	public FluentBooleanAssertion<R> asBoolean() {
 		return new FluentBooleanAssertion<>(this, value.asBoolean().orElse(null), returns());
 	}
@@ -57,6 +58,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an integer.
 	 */
+	@Override
 	public FluentIntegerAssertion<R> asInteger() {
 		return new FluentIntegerAssertion<>(this, value.asInteger().orElse(null), returns());
 	}
@@ -67,6 +69,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a long.
 	 */
+	@Override
 	public FluentLongAssertion<R> asLong() {
 		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
 	}
@@ -77,23 +80,24 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a zoned-datetime.
 	 */
+	@Override
 	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
 		return new FluentZonedDateTimeAssertion<>(this, value.asDateHeader().asZonedDateTime().orElse(null), returns());
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this response body.
+	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
 	 * <p>
-	 * Converts the body to a type using {@link ResponseBody#asType(Class)} and then returns the value as an object assertion.
+	 * Converts the header to a type using {@link ResponseHeader#asType(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body bean is the expected value.</jc>
+	 * 	<jc>// Validates the response header exists and is the specified value.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().asType(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * 		.assertHeader(<js>"Foo"</js>).asObject(Integer.<jk>class</jk>).exists().passes(<mv>x</mv> -&gt; <mv>x</mv> > 0);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -109,8 +113,39 @@ public class FluentResponseHeaderAssertion<R> extends FluentBaseAssertion<String
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public <V> FluentObjectAssertion<V,R> asType(Class<V> type) throws RestCallException {
+	public <V> FluentObjectAssertion<V,R> asObject(Class<V> type) throws RestCallException {
 		return new FluentObjectAssertion<>(value.asType(type).orElse(null), returns());
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response header.
+	 *
+	 * <p>
+	 * Converts the header to a generic Java object using {@link ResponseHeader#asType(Class)} and then returns the value as an object assertion.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response header exists and is the specified value.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<js>"/myBean"</js>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Foo"</js>).asObject().exists().asJson().is(<js>"'foobar'"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentObjectAssertion<Object,R> asObject() throws RestCallException {
+		return new FluentObjectAssertion<>(value.asType(Object.class), returns());
 	}
 
 	// <FluentSetters>

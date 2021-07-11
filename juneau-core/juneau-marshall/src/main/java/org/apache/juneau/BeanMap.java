@@ -83,8 +83,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param bean The bean being wrapped.
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
-	public static <T> BeanMap<T> create(T bean) {
-		return BeanContext.DEFAULT.createBeanSession().toBeanMap(bean);
+	public static <T> BeanMap<T> of(T bean) {
+		return BeanContext.DEFAULT_SESSION.toBeanMap(bean);
 	}
 
 	/**
@@ -460,7 +460,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	A new map with fields as key-value pairs.
 	 * 	<br>Note that modifying the values in this map will also modify the underlying bean.
 	 */
-	public Map<String,Object> getFields(String...fields) {
+	public Map<String,Object> getProperties(String...fields) {
 		return new FilteredMap<>(null, this, fields);
 	}
 

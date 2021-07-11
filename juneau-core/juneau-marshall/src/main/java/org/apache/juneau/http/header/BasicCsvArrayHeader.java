@@ -205,7 +205,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentListAssertion<BasicCsvArrayHeader> assertList() {
+	public FluentListAssertion<String,BasicCsvArrayHeader> assertList() {
 		return new FluentListAssertion<>(asList().orElse(null), this);
 	}
 

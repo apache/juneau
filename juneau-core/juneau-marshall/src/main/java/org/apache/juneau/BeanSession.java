@@ -49,7 +49,7 @@ public class BeanSession extends Session {
 
 	private final BeanContext ctx;
 	private final HttpPartSchema schema;
-	private Stack<StringBuilder> sbStack = new Stack<>();
+	private final Stack<StringBuilder> sbStack;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -64,6 +64,7 @@ public class BeanSession extends Session {
 		super(ctx, args);
 		this.ctx = ctx;
 		schema = args.schema;
+		sbStack = args.unmodifiable ? null : new Stack<>();
 	}
 
 	/**
@@ -1108,7 +1109,7 @@ public class BeanSession extends Session {
 	 * @return A new or previously returned string builder.
 	 */
 	protected final StringBuilder getStringBuilder() {
-		if (sbStack.isEmpty())
+		if (sbStack == null || sbStack.isEmpty())
 			return new StringBuilder();
 		return sbStack.pop();
 	}
@@ -1122,7 +1123,8 @@ public class BeanSession extends Session {
 		if (sb == null)
 			return;
 		sb.setLength(0);
-		sbStack.push(sb);
+		if (sbStack != null)
+			sbStack.push(sb);
 	}
 
 	/**

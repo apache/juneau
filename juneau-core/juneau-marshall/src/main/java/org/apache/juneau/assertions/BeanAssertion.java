@@ -22,13 +22,15 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
- * 	<jsm>assertBean</jsm>(<jv>myBean</jv>).isType(MyBean.<jk>class</jk>).fields(<js>"foo"</js>).asJson().is(<js>"{foo:'bar'}"</js>);
+ * 	<jsm>assertBean</jsm>(<jv>myBean</jv>)
+ * 	.isType(MyBean.<jk>class</jk>)
+ * 	.properties(<js>"foo,bar"</js>).asJson().is(<js>"{foo:1,bar:2}"</js>);
  * </p>
  *
- * @param <V> The bean type.
+ * @param <T> The bean type.
  */
-@FluentSetters(returns="BeanAssertion<V>")
-public class BeanAssertion<V> extends FluentBeanAssertion<Object,BeanAssertion<V>> {
+@FluentSetters(returns="BeanAssertion<T>")
+public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 
 	/**
 	 * Creator.
@@ -36,7 +38,7 @@ public class BeanAssertion<V> extends FluentBeanAssertion<Object,BeanAssertion<V
 	 * @param value The object being wrapped.
 	 * @return A new {@link BeanAssertion} object.
 	 */
-	public static <V> BeanAssertion<V> create(V value) {
+	public static <T> BeanAssertion<T> create(T value) {
 		return new BeanAssertion<>(value);
 	}
 
@@ -45,43 +47,38 @@ public class BeanAssertion<V> extends FluentBeanAssertion<Object,BeanAssertion<V
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public BeanAssertion(Object value) {
+	public BeanAssertion(T value) {
 		super(value, null);
-	}
-
-	@Override
-	protected BeanAssertion<V> returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion<V> msg(String msg, Object...args) {
+	public BeanAssertion<T> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion<V> out(PrintStream value) {
+	public BeanAssertion<T> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion<V> silent() {
+	public BeanAssertion<T> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion<V> stdout() {
+	public BeanAssertion<T> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public BeanAssertion<V> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public BeanAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

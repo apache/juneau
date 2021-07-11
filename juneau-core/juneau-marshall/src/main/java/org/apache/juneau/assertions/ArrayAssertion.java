@@ -21,12 +21,16 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	String[] <jv>array</jv> = <jk>new</jk> String[]{<js>"foo"</js>};
+ * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 
+ * 	String[] <jv>array</jv> = {<js>"foo"</js>};
  * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);
  * </p>
+ *
+ * @param <E> The element type.
  */
-@FluentSetters(returns="ArrayAssertion")
-public class ArrayAssertion extends FluentArrayAssertion<ArrayAssertion> {
+@FluentSetters(returns="ArrayAssertion<E>")
+public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>> {
 
 	/**
 	 * Creator.
@@ -34,8 +38,8 @@ public class ArrayAssertion extends FluentArrayAssertion<ArrayAssertion> {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ArrayAssertion} object.
 	 */
-	public static ArrayAssertion create(Object value) {
-		return new ArrayAssertion(value);
+	public static <E> ArrayAssertion<E> create(E[] value) {
+		return new ArrayAssertion<>(value);
 	}
 
 	/**
@@ -43,43 +47,38 @@ public class ArrayAssertion extends FluentArrayAssertion<ArrayAssertion> {
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public ArrayAssertion(Object value) {
+	public ArrayAssertion(E[] value) {
 		super(value, null);
-	}
-
-	@Override
-	protected ArrayAssertion returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ArrayAssertion msg(String msg, Object...args) {
+	public ArrayAssertion<E> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ArrayAssertion out(PrintStream value) {
+	public ArrayAssertion<E> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ArrayAssertion silent() {
+	public ArrayAssertion<E> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ArrayAssertion stdout() {
+	public ArrayAssertion<E> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ArrayAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+	public ArrayAssertion<E> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

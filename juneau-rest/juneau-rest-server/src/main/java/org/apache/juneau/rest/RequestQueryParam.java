@@ -273,7 +273,7 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentListAssertion<RequestQueryParam> assertCsvArray() {
+	public FluentListAssertion<String,RequestQueryParam> assertCsvArray() {
 		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
 	}
 

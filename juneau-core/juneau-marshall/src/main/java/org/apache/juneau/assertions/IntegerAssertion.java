@@ -47,11 +47,6 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 		super(value, null);
 	}
 
-	@Override
-	protected IntegerAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

@@ -49,11 +49,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 		super(stringify(text), null);
 	}
 
-	@Override
-	protected StringAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

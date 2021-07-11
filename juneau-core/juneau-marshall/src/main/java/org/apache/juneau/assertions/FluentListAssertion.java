@@ -12,21 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static java.util.Arrays.*;
+
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Used for fluent assertion calls against lists.
  *
+ * @param <E> The element type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentListAssertion<R>")
-@SuppressWarnings("rawtypes")
-public class FluentListAssertion<R> extends FluentCollectionAssertion<R> {
-
-	private List value;
+@FluentSetters(returns="FluentListAssertion<E,R>")
+public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
 	/**
 	 * Constructor.
@@ -34,7 +36,7 @@ public class FluentListAssertion<R> extends FluentCollectionAssertion<R> {
 	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentListAssertion(List contents, R returns) {
+	public FluentListAssertion(List<E> contents, R returns) {
 		this(null, contents, returns);
 	}
 
@@ -45,9 +47,8 @@ public class FluentListAssertion<R> extends FluentCollectionAssertion<R> {
 	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentListAssertion(Assertion creator, List contents, R returns) {
+	public FluentListAssertion(Assertion creator, List<E> contents, R returns) {
 		super(creator, contents, returns);
-		this.value = contents;
 	}
 
 	/**
@@ -60,62 +61,150 @@ public class FluentListAssertion<R> extends FluentCollectionAssertion<R> {
 	 * @param index The index of the item to retrieve from the list.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<Object,R> item(int index) {
-		return item(Object.class, index);
+	public FluentObjectAssertion<E,R> item(int index) {
+		return new FluentObjectAssertion<>(this, at(index), returns());
 	}
 
 	/**
-	 * Returns an object assertion on the item specified at the specified index.
+	 * Sorts the entries in this list.
 	 *
-	 * <p>
-	 * If the list is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param type The value type.
-	 * @param index The index of the item to retrieve from the list.
-	 * @return A new assertion.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
 	 */
-	public <V> FluentObjectAssertion<Object,R> item(Class<V> type, int index) {
-		Object v = getItem(index);
-		if (v == null || type.isInstance(v))
-			return new FluentObjectAssertion<>(this, v, returns());
-		throw error("List value not of expected type at index ''{0}''.\n\tExpected: {1}.\n\tActual: {2}", index, type, v.getClass());
+	public FluentListAssertion<E,R> sorted() {
+		return new FluentListAssertion<>(this, toSortedList(null), returns());
 	}
 
-	private Object getItem(int index) {
-		if (value != null && value.size() > index)
-			return value.get(index);
-		return null;
+	/**
+	 * Sorts the entries in this list using the specified comparator.
+	 *
+	 * @param comparator The comparator to use to sort the list.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> sorted(Comparator<E> comparator) {
+		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equals(String...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return passes(p);
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(String...)}
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(String...entries) throws AssertionError {
+		return equals(entries);
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R equals(E...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return passes(p);
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(String...)}
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(@SuppressWarnings("unchecked") E...entries) throws AssertionError {
+		return equals(entries);
+	}
+
+	/**
+	 * Asserts that the contents of this list pass the specified tests.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(String...)}
+	 *
+	 * @param tests
+	 * 	The tests to run.
+	 * <jk>null</jk> predicates are ignored.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SafeVarargs
+	public final R passes(Predicate<E>...tests) throws AssertionError {
+		isSize(tests.length);
+		for (int i = 0, j = size(); i < j; i++) {
+			Predicate<E> t = tests[i];
+			if (t != null && ! t.test(at(i)))
+				throw error("List did not contain expected value at index {0}.\n\t{1}", i, getFailureMessage(t, at(i)));
+		}
+		return returns();
+	}
+
+	@Override
+	protected List<E> value() throws AssertionError {
+		return (List<E>)super.value();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private E at(int index) throws AssertionError {
+		return valueIsNull() || index >= size() ? null : value().get(index);
+	}
+
+	private List<E> toSortedList(Comparator<E> comparator) {
+		return valueIsNull() ? null : AList.of(value()).sortWith(comparator);
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentListAssertion<R> msg(String msg, Object...args) {
+	public FluentListAssertion<E,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentListAssertion<R> out(PrintStream value) {
+	public FluentListAssertion<E,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentListAssertion<R> silent() {
+	public FluentListAssertion<E,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentListAssertion<R> stdout() {
+	public FluentListAssertion<E,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentListAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentListAssertion<E,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

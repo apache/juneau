@@ -56,7 +56,7 @@ public class ObjectAssertion_Test {
 		test(1).exists();
 		test(of(1)).exists();
 
-		assertThrown(()->test(empty()).isType(null)).is("Value was null.");
+		assertThrown(()->test(empty()).isType(String.class)).is("Value was null.");
 		assertThrown(()->test("foo").isType(null)).is("Parameter 'parent' cannot be null.");
 		test("foo").isType(String.class);
 		test("foo").isType(CharSequence.class);
@@ -91,14 +91,15 @@ public class ObjectAssertion_Test {
 		test(x1).doesNotEqual(null);
 		test(empty()).doesNotEqual(x1);
 		test(x1).doesNotEqual(x2);
-		assertThrown(()->test(empty()).doesNotEqual(null)).is("Unexpected value.\n\tExpected not=[null]\n\tActual=[null]");
-		assertThrown(()->test(x1).doesNotEqual(x1)).is("Unexpected value.\n\tExpected not=[[1,2]]\n\tActual=[[1,2]]");
+
+		assertThrown(()->test(empty()).doesNotEqual(null)).is("Unexpected value.\n\tDid not expect=[null]\n\tActual=[null]");
+		assertThrown(()->test(x1).doesNotEqual(x1)).is("Unexpected value.\n\tDid not expect=[[1,2]]\n\tActual=[[1,2]]");
 
 		test(x1).passes(x->x != null);
-		assertThrown(()->test(x1).passes(x->x == null)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		assertThrown(()->test(x1).passes(x->x == null)).is("Unexpected value: '[1,2]'");
 
 		test(x1).passes(x->x[0] == 1);
-		assertThrown(()->test(x1).passes(x->x[0]==2)).is("Value did not pass predicate test.\n\tValue=[[1,2]]");
+		assertThrown(()->test(x1).passes(x->x[0]==2)).is("Unexpected value: '[1,2]'");
 
 		test(x1).isNot(null);
 
@@ -115,7 +116,6 @@ public class ObjectAssertion_Test {
 		test((Object)null).asString().isNull();
 
 		test(123).asString(x -> x.toString()).is("123");
-		test(123).asString(Integer.class, x -> String.valueOf(x.intValue())).is("123");
 	}
 
 	@Test
@@ -126,8 +126,8 @@ public class ObjectAssertion_Test {
 
 	@Test
 	public void a03_conversions() throws Exception {
-		test(new String[]{"foo"}).asArray().item(0).is("foo");
-		assertThrown(()->test("foo").asArray()).contains("Object was not an array");
+		test(new String[]{"foo"}).asArray(String.class).item(0).is("foo");
+		assertThrown(()->test("foo").asArray(String.class)).contains("Object was not type 'java.lang.String[]'.  Actual='java.lang.String'");
 
 		test(true).asBoolean().isTrue();
 		assertThrown(()->test("foo").asBoolean()).contains("Object was not type 'java.lang.Boolean'.  Actual='java.lang.String'");

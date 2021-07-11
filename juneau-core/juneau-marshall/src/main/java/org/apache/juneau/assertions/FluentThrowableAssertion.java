@@ -19,13 +19,11 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against throwables.
  *
- * @param <V> The throwable type.
+ * @param <T> The throwable type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentThrowableAssertion<V,R>")
-public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseAssertion<V,R> {
-
-	private final Throwable value;
+@FluentSetters(returns="FluentThrowableAssertion<T,R>")
+public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
 
 	/**
 	 * Constructor.
@@ -33,7 +31,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 * @param value The throwable being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentThrowableAssertion(V value, R returns) {
+	public FluentThrowableAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -44,9 +42,8 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 * @param value The throwable being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentThrowableAssertion(Assertion creator, V value, R returns) {
+	public FluentThrowableAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -65,8 +62,8 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	@Override
 	public R isType(Class<?> type) {
 		assertNotNull("type", type);
-		if (! type.isInstance(value))
-			throw error("Exception was not expected type.\n\tExpect=[{0}]\n\tActual=[{1}]", className(type), className(value));
+		if (! type.isInstance(value()))
+			throw error("Exception was not expected type.\n\tExpect=[{0}]\n\tActual=[{1}]", className(type), className(value()));
 		return returns();
 	}
 
@@ -84,17 +81,16 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 */
 	public R contains(String...substrings) {
 		assertNotNull("substrings", substrings);
-		exists();
 		for (String substring : substrings) {
 			if (substring != null) {
-				Throwable e2 = value;
+				Throwable e2 = value();
 				boolean found = false;
 				while (e2 != null && ! found) {
 					found |= StringUtils.contains(e2.getMessage(), substring);
 					e2 = e2.getCause();
 				}
 				if (! found) {
-					throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, value.getMessage());
+					throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, value().getMessage());
 				}
 			}
 		}
@@ -130,7 +126,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 */
 	@Override
 	public R exists() {
-		if (value == null)
+		if (valueIsNull())
 			throw error("Exception was not thrown.");
 		return returns();
 	}
@@ -148,7 +144,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 */
 	@Override
 	public R doesNotExist() {
-		if (value != null)
+		if (valueIsNotNull())
 			throw error("Exception was thrown.");
 		return returns();
 	}
@@ -165,7 +161,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> message() {
-		return new FluentStringAssertion<>(this, value == null ? null : value.getMessage(), returns());
+		return new FluentStringAssertion<>(this, map(Throwable::getMessage).orElse(null), returns());
 	}
 
 	/**
@@ -180,7 +176,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> localizedMessage() {
-		return new FluentStringAssertion<>(this, value == null ? null : value.getLocalizedMessage(), returns());
+		return new FluentStringAssertion<>(this, map(Throwable::getLocalizedMessage).orElse(null), returns());
 	}
 
 	/**
@@ -195,7 +191,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> stackTrace() {
-		return new FluentStringAssertion<>(this, value == null ? null : StringUtils.getStackTrace(value), returns());
+		return new FluentStringAssertion<>(this, map(StringUtils::getStackTrace).orElse(null), returns());
 	}
 
 	/**
@@ -227,7 +223,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 */
 	@SuppressWarnings("unchecked")
 	public <E extends Throwable> FluentThrowableAssertion<E,R> causedBy(Class<E> type) {
-		Throwable t = value == null ? null : value.getCause();
+		Throwable t = map(Throwable::getCause).orElse(null);
 		if (t == null || type.isInstance(t))
 			return new FluentThrowableAssertion<>(this, (E)t, returns());
 		throw error("Caused-by exception not of expected type.\n\tExpected: {1}.\n\tActual: {2}", type, t.getClass());
@@ -247,7 +243,7 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	 */
 	@SuppressWarnings("unchecked")
 	public <E extends Throwable> FluentThrowableAssertion<E,R> find(Class<E> throwableClass) {
-		Throwable t = value;
+		Throwable t = orElse(null);
 		while (t != null) {
 			if (throwableClass.isInstance(t))
 				return new FluentThrowableAssertion<>(this, (E)t, returns());
@@ -259,31 +255,31 @@ public class FluentThrowableAssertion<V extends Throwable,R> extends FluentBaseA
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<V,R> msg(String msg, Object...args) {
+	public FluentThrowableAssertion<T,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<V,R> out(PrintStream value) {
+	public FluentThrowableAssertion<T,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<V,R> silent() {
+	public FluentThrowableAssertion<T,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<V,R> stdout() {
+	public FluentThrowableAssertion<T,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentThrowableAssertion<V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentThrowableAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

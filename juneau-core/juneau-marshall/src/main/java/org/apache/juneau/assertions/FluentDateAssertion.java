@@ -37,8 +37,6 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentDateAssertion<R>")
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 
-	private final Date value;
-
 	/**
 	 * Constructor.
 	 *
@@ -58,7 +56,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public FluentDateAssertion(Assertion creator, Date value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -70,8 +67,8 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEqual(Date value, ChronoUnit precision) throws AssertionError {
-		if (ne(this.value, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
-			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		if (ne(value(), value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
+			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -83,10 +80,9 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
-		if (! (this.value.after(value)))
-			throw error("Value was not after expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		if (! (value().after(value)))
+			throw error("Value was not after expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -108,10 +104,9 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
-		if (! (this.value.before(value)))
-			throw error("Value was not before expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		if (! (value().before(value)))
+			throw error("Value was not before expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 

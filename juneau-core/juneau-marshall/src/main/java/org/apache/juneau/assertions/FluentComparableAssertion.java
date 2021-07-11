@@ -19,14 +19,12 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against comparable objects.
  *
- * @param <V> The value type
+ * @param <T> The value type
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentComparableAssertion<V,R>")
+@FluentSetters(returns="FluentComparableAssertion<T,R>")
 @SuppressWarnings("rawtypes")
-public class FluentComparableAssertion<V extends Comparable,R> extends FluentBaseAssertion<V,R> {
-
-	private final V value;
+public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
 
 	/**
 	 * Constructor.
@@ -34,7 +32,7 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 * @param value The value being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentComparableAssertion(V value, R returns) {
+	public FluentComparableAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -45,9 +43,8 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 * @param value The value being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentComparableAssertion(Assertion creator, V value, R returns) {
+	public FluentComparableAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -58,10 +55,9 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGreaterThan(Comparable value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) <= 0)
-			throw error("Value was not greater than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Value was not greater than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -87,10 +83,9 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGreaterThanOrEqual(Comparable value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) < 0)
-				throw error("Value was not greater than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not greater than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -116,10 +111,9 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLessThan(Comparable value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) >= 0)
-				throw error("Value was not less than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not less than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -145,10 +139,9 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLessThanOrEqual(Comparable value) throws AssertionError {
-		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) > 0)
-				throw error("Value was not less than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not less than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
 		return returns();
 	}
 
@@ -188,40 +181,40 @@ public class FluentComparableAssertion<V extends Comparable,R> extends FluentBas
 	 *
 	 * @param value The object to compare against.
 	 * @return The comparison value.
+	 * @throws AssertionError If value was <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
-	protected int compareTo(Object value) {
-		return this.value.compareTo(equivalent(value));
+	protected int compareTo(Object value) throws AssertionError {
+		return value().compareTo(equivalent(value));
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<V,R> msg(String msg, Object...args) {
+	public FluentComparableAssertion<T,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<V,R> out(PrintStream value) {
+	public FluentComparableAssertion<T,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<V,R> silent() {
+	public FluentComparableAssertion<T,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<V,R> stdout() {
+	public FluentComparableAssertion<T,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentComparableAssertion<V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentComparableAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

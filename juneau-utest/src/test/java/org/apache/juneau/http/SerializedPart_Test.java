@@ -51,11 +51,11 @@ public class SerializedPart_Test {
 	@Test
 	public void a03_serializer() throws Exception {
 		SerializedPart x1 = serializedPart("Foo",list("bar","baz")).serializer((HttpPartSerializer)null);
-		assertString(x1.getValue()).is("['bar','baz']");
+		assertString(x1.getValue()).is("[bar, baz]");
 		SerializedPart x2 = serializedPart("Foo",list("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertString(x2.getValue()).is("bar,baz");
 		SerializedPart x3 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
-		assertString(x3.getValue()).is("['bar','baz']");
+		assertString(x3.getValue()).is("[bar, baz]");
 		SerializedPart x4 = serializedPart("Foo",list("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertString(x4.getValue()).is("bar,baz");
 		SerializedPart x5 = serializedPart("Foo",list("bar","baz")).copyWith(OAPI_SERIALIZER.createPartSession(null),null);

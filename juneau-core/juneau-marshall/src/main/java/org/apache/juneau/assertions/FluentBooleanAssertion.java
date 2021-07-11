@@ -25,8 +25,6 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentBooleanAssertion<R>")
 public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
-	private final Boolean value;
-
 	/**
 	 * Constructor.
 	 *
@@ -46,7 +44,6 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 */
 	public FluentBooleanAssertion(Assertion creator, Boolean value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -56,8 +53,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isTrue() throws AssertionError {
-		exists();
-		if (value == false)
+		if (value() == false)
 			throw error("Value was false.");
 		return returns();
 	}
@@ -69,8 +65,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isFalse() throws AssertionError {
-		exists();
-		if (value == true)
+		if (value() == true)
 			throw error("Value was true.");
 		return returns();
 	}

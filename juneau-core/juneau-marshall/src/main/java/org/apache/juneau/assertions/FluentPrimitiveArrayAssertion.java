@@ -1,0 +1,279 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.assertions;
+
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static java.util.Arrays.*;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+
+/**
+ * Used for fluent assertion calls against primitive array objects (e.g. <c><jk>int</jk>[]</c>).
+ *
+ * @param <T> The array type.
+ * @param <R> The return type.
+ */
+@FluentSetters(returns="FluentPrimitiveArrayAssertion<T,R>")
+public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,R> {
+
+	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
+	static {
+		STRINGIFIERS.put(boolean.class, (x) -> Arrays.toString((boolean[])x));
+		STRINGIFIERS.put(byte.class, (x) -> Arrays.toString((byte[])x));
+		STRINGIFIERS.put(char.class, (x) -> Arrays.toString((char[])x));
+		STRINGIFIERS.put(double.class, (x) -> Arrays.toString((double[])x));
+		STRINGIFIERS.put(float.class, (x) -> Arrays.toString((float[])x));
+		STRINGIFIERS.put(int.class, (x) -> Arrays.toString((int[])x));
+		STRINGIFIERS.put(long.class, (x) -> Arrays.toString((long[])x));
+		STRINGIFIERS.put(short.class, (x) -> Arrays.toString((short[])x));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param contents The byte array being tested.
+	 * @param returns The object to return after the test.
+	 */
+	public FluentPrimitiveArrayAssertion(T contents, R returns) {
+		this(null, contents, returns);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param creator The assertion that created this assertion.
+	 * @param contents The byte array being tested.
+	 * @param returns The object to return after the test.
+	 */
+	public FluentPrimitiveArrayAssertion(Assertion creator, T contents, R returns) {
+		super(creator, contents, returns);
+		if (contents != null && ! contents.getClass().isArray())
+			throw new BasicAssertionError("Object was not an array.  Actual=''{0}''", contents.getClass());
+	}
+
+	@Override /* FluentBaseAssertion */
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, toString(), returns());
+	}
+
+	/**
+	 * Asserts that the collection exists and is empty.
+	 *
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEmpty() throws AssertionError {
+		if (length() != 0)
+			throw error("Array was not empty.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection exists and is not empty.
+	 *
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		if (length() == 0)
+			throw error("Array was empty.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection exists and is the specified size.
+	 *
+	 * @param size The expected size.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSize(int size) throws AssertionError {
+		if (length() != size)
+			throw error("Array did not have the expected size.  Expect={0}, Actual={1}.", size, length());
+		return returns();
+	}
+
+	/**
+	 * Asserts that the array contains the expected entry.
+	 *
+	 * @param entry The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R contains(Object entry) throws AssertionError {
+		for (int i = 0, j = length(); i < j; i++)
+			if (eq(at(i), entry))
+				return returns();
+		throw error("Array did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", value(), entry);
+	}
+
+	/**
+	 * Asserts that the array contains the expected entries.
+	 *
+	 * @param entries The values to check for after being converted to strings.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equals(String...entries) throws AssertionError {
+		Predicate<T>[] p = stream(entries).map(StringUtils::stringify).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+		return passes(p);
+	}
+
+	/**
+	 * Asserts that the array contains the expected entries.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(String...)}.
+	 *
+	 * @param entries The values to check for after being converted to strings.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(String...entries) throws AssertionError {
+		return equals(entries);
+	}
+
+	/**
+	 * Asserts that the array contains the expected entries.
+	 *
+	 * @param entries The values to check for.  Uses {@link Object#equals(Object)} for equivalency on entries.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R equals(T...entries) throws AssertionError {
+		Predicate<T>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+		return passes(p);
+	}
+
+	/**
+	 * Asserts that the array contains the expected entries.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(T...)}.
+	 *
+	 * @param entries The values to check for.  Uses {@link Object#equals(Object)} for equivalency on entries.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R is(T...entries) throws AssertionError {
+		return equals(entries);
+	}
+
+	/**
+	 * Asserts that the entries in this array pass the specified tests for each entry.
+	 *
+	 * @param tests The tests to run.  <jk>null</jk> values are ignored.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R passes(Predicate<T>...tests) throws AssertionError {
+		isSize(tests.length);
+		for (int i = 0, j = length(); i < j; i++) {
+			Predicate<T> t = tests[i];
+			if (t != null && ! t.test(at(i)))
+				throw error("Array did not contain expected value at index {0}.\n\t{1}", i, getFailureMessage(t, at(i)));
+		}
+		return returns();
+	}
+
+	/**
+	 * Asserts that the array does not contain the expected value.
+	 *
+	 * @param entry The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotContain(Object entry) throws AssertionError {
+		for (int i = 0; i < length(); i++)
+			if (eq(at(i), entry))
+				throw error("Array contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", value(), entry);
+		return returns();
+	}
+
+	/**
+	 * Returns an object assertion on the item specified at the specified index.
+	 *
+	 * <p>
+	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
+	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @param index The index of the item to retrieve from the array.
+	 * @return A new assertion.
+	 */
+	public FluentObjectAssertion<T,R> item(int index) {
+		return new FluentObjectAssertion<>(this, at(index), returns());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings("unchecked")
+	private T at(int index) {
+		return valueIsNull() || index >= length() ? null : (T)Array.get(value(), index);
+	}
+
+	private int length() {
+		return Array.getLength(value());
+	}
+
+	@Override
+	public String toString() {
+		if (valueIsNull())
+			return null;
+		return STRINGIFIERS.getOrDefault(value().getClass().getComponentType(), (x) -> x.toString()).apply(value());
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public FluentPrimitiveArrayAssertion<T,R> msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentPrimitiveArrayAssertion<T,R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentPrimitiveArrayAssertion<T,R> silent() {
+		super.silent();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentPrimitiveArrayAssertion<T,R> stdout() {
+		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentPrimitiveArrayAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
+	// </FluentSetters>
+}

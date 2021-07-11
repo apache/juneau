@@ -12,33 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Assertions.*;
+
 import java.io.*;
-import java.util.*;
 
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against collections objects.
+ * Used for assertion calls against arrays.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the specified list is not empty.</jc>
- * 	<jsm>assertCollection</jsm>(<jv>myList</jv>).isNotEmpty();
+ * 	<jk>int</jk>[] <jv>array</jv> = {1};
+ * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);
  * </p>
  *
- * @param <E> The element type.
+ * @param <T> The array type.
  */
-@FluentSetters(returns="CollectionAssertion<E>")
-public class CollectionAssertion<E> extends FluentCollectionAssertion<E,CollectionAssertion<E>> {
+@FluentSetters(returns="PrimitiveArrayAssertion<T>")
+public class PrimitiveArrayAssertion<T> extends FluentPrimitiveArrayAssertion<T,PrimitiveArrayAssertion<T>> {
 
 	/**
 	 * Creator.
 	 *
 	 * @param value The object being wrapped.
-	 * @return A new {@link CollectionAssertion} object.
+	 * @return A new {@link PrimitiveArrayAssertion} object.
 	 */
-	public static <E> CollectionAssertion<E> create(Collection<E> value) {
-		return new CollectionAssertion<>(value);
+	public static <T> PrimitiveArrayAssertion<T> create(T value) {
+		return new PrimitiveArrayAssertion<>(value);
 	}
 
 	/**
@@ -46,38 +47,40 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public CollectionAssertion(Collection<E> value) {
+	public PrimitiveArrayAssertion(T value) {
 		super(value, null);
+		Class<?> c = value == null ? null : value.getClass();
+		assertArg(c == null || c.isArray() && c.getComponentType().isPrimitive(), "Value wasn't a primitive array.");
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> msg(String msg, Object...args) {
+	public PrimitiveArrayAssertion<T> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> out(PrintStream value) {
+	public PrimitiveArrayAssertion<T> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> silent() {
+	public PrimitiveArrayAssertion<T> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> stdout() {
+	public PrimitiveArrayAssertion<T> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public CollectionAssertion<E> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public PrimitiveArrayAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

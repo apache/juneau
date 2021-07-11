@@ -12,114 +12,102 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static java.util.stream.Collectors.*;
+
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls against {@link Version} objects.
+ * Used for fluent assertion calls against lists of beans.
  *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Validates the response expiration is after the current date.</jc>
- * 	<jv>client</jv>
- * 		.get(<jsf>URL</jsf>)
- * 		.run()
- * 		.getHeader(ClientVersion.<jk>class</jk>).assertVersion().major().isGreaterThanOrEqual(2);
- * </p>
- *
+ * @param <E> The bean type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentVersionAssertion<R>")
-public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
+@FluentSetters(returns="FluentBeanListAssertion<E,R>")
+public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value being tested.
+	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentVersionAssertion(Version value, R returns) {
-		this(null, value, returns);
+	public FluentBeanListAssertion(List<E> contents, R returns) {
+		this(null, contents, returns);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param creator The assertion that created this assertion.
-	 * @param value The value being tested.
+	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentVersionAssertion(Assertion creator, Version value, R returns) {
-		super(creator, value, returns);
+	public FluentBeanListAssertion(Assertion creator, List<E> contents, R returns) {
+		super(creator, contents, returns);
 	}
 
 	/**
-	 * Extracts the specified version part (zero-indexed position).
+	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
+	 * a new {@link FluentListAssertion} containing maps.
 	 *
-	 * @param index The index of the version part to extract.
+	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
 	 * @return The response object (for method chaining).
 	 */
-	public FluentIntegerAssertion<R> part(int index) {
-		return new FluentIntegerAssertion<>(this, value().getPart(index).orElse(null), returns());
+	public FluentListAssertion<Map<String,Object>,R> extract(String...names) {
+		String[] n = StringUtils.split(names, ',');
+		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).collect(toList()), returns());
 	}
 
 	/**
-	 * Extracts the major part of the version string (index position 0).
+	 * Extracts the specified property from each entry in this list and returns it as a {@link FluentListAssertion}.
 	 *
+	 * @param name The field to extract.
 	 * @return The response object (for method chaining).
 	 */
-	public FluentIntegerAssertion<R> major() {
-		return part(0);
+	public FluentListAssertion<Object,R> property(String name) {
+		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).get(name)).collect(toList()), returns());
 	}
 
-	/**
-	 * Extracts the minor part of the version string (index position 1).
-	 *
-	 * @return The response object (for method chaining).
-	 */
-	public FluentIntegerAssertion<R> minor() {
-		return part(1);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Extracts the maintenance part of the version string (index position 2).
-	 *
-	 * @return The response object (for method chaining).
-	 */
-	public FluentIntegerAssertion<R> maintenance() {
-		return part(2);
+	private static BeanMap<?> beanMap(Object o) {
+		return BeanMap.of(o);
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> msg(String msg, Object...args) {
+	public FluentBeanListAssertion<E,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> out(PrintStream value) {
+	public FluentBeanListAssertion<E,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> silent() {
+	public FluentBeanListAssertion<E,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> stdout() {
+	public FluentBeanListAssertion<E,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentBeanListAssertion<E,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

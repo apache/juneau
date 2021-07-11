@@ -25,9 +25,7 @@ import org.apache.juneau.rest.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentRequestFormParamAssertion<R>")
-public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<String,R> {
-
-	private final RequestFormParam value;
+public class FluentRequestFormParamAssertion<R> extends FluentObjectAssertion<RequestFormParam,R> {
 
 	/**
 	 * Constructor.
@@ -48,8 +46,18 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @param returns The object to return after the test.
 	 */
 	public FluentRequestFormParamAssertion(Assertion creator, RequestFormParam value, R returns) {
-		super(creator, value.getValue(), returns);
-		this.value = value;
+		super(creator, value, returns);
+	}
+
+	/**
+	 * Converts this object assertion into a string assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a string.
+	 */
+	@Override
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, value().asString().orElse(null), returns());
 	}
 
 	/**
@@ -58,8 +66,9 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a boolean.
 	 */
+	@Override
 	public FluentBooleanAssertion<R> asBoolean() {
-		return new FluentBooleanAssertion<>(this, value.asBoolean().orElse(null), returns());
+		return new FluentBooleanAssertion<>(this, value().asBoolean().orElse(null), returns());
 	}
 
 	/**
@@ -68,8 +77,9 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a date.
 	 */
+	@Override
 	public FluentDateAssertion<R> asDate() {
-		return new FluentDateAssertion<>(this, value.asDatePart().asDate().orElse(null), returns());
+		return new FluentDateAssertion<>(this, value().asDatePart().asDate().orElse(null), returns());
 	}
 
 	/**
@@ -78,8 +88,9 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an integer.
 	 */
+	@Override
 	public FluentIntegerAssertion<R> asInteger() {
-		return new FluentIntegerAssertion<>(this, value.asInteger().orElse(null), returns());
+		return new FluentIntegerAssertion<>(this, value().asInteger().orElse(null), returns());
 	}
 
 	/**
@@ -88,8 +99,9 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a long.
 	 */
+	@Override
 	public FluentLongAssertion<R> asLong() {
-		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
+		return new FluentLongAssertion<>(this, value().asLong().orElse(null), returns());
 	}
 
 	/**
@@ -98,8 +110,9 @@ public class FluentRequestFormParamAssertion<R> extends FluentBaseAssertion<Stri
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a zoned-datetime.
 	 */
+	@Override
 	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(this, value.asDatePart().asZonedDateTime().orElse(null), returns());
+		return new FluentZonedDateTimeAssertion<>(this, value().asDatePart().asZonedDateTime().orElse(null), returns());
 	}
 
 	// <FluentSetters>

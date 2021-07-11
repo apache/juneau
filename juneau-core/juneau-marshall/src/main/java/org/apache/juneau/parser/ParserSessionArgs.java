@@ -161,6 +161,12 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
+	@Override /* GENERATED - SessionArgs */
+	public ParserSessionArgs unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
 	@Override /* GENERATED - BeanSessionArgs */
 	public ParserSessionArgs schema(HttpPartSchema value) {
 		super.schema(value);

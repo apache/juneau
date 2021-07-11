@@ -42,7 +42,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 	}
 
 	private static BeanSession
-		BS_DEFAULT = BeanContext.DEFAULT.createBeanSession(),
+		BS_DEFAULT = BeanContext.DEFAULT_SESSION,
 		BS_PST = BeanContext.DEFAULT.createBeanSession(BeanSessionArgs.create().timeZone(TimeZone.getTimeZone("PST")));
 
 	private static Temporal

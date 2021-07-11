@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.stream.Collectors.*;
+import static java.util.Arrays.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -20,13 +24,11 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against Java beans.
  *
- * @param <V> The bean type.
+ * @param <T> The bean type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentBeanAssertion<V,R>")
-public class FluentBeanAssertion<V,R> extends FluentBaseAssertion<Object,R> {
-
-	private final Object value;
+@FluentSetters(returns="FluentBeanAssertion<T,R>")
+public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
 	/**
 	 * Constructor.
@@ -34,7 +36,7 @@ public class FluentBeanAssertion<V,R> extends FluentBaseAssertion<Object,R> {
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentBeanAssertion(V value, R returns) {
+	public FluentBeanAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -45,9 +47,8 @@ public class FluentBeanAssertion<V,R> extends FluentBaseAssertion<Object,R> {
 	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentBeanAssertion(Assertion creator, V value, R returns) {
+	public FluentBeanAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
-		this.value = value;
 	}
 
 	/**
@@ -57,75 +58,67 @@ public class FluentBeanAssertion<V,R> extends FluentBaseAssertion<Object,R> {
 	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
 	 * @return The response object (for method chaining).
 	 */
-	public FluentMapAssertion<R> fields(String...names) {
-		exists();
-		names = StringUtils.split(names, ',');
-		return new FluentMapAssertion<>(this, BeanMap.create(value).getFields(names), returns());
+	public FluentMapAssertion<String,Object,R> mapOf(String...names) {
+		return new FluentMapAssertion<>(this, toBeanMap().getProperties(split(names, ',')), returns());
 	}
 
 	/**
-	 * Extracts the specified field as an {@link ObjectAssertion}.
+	 * Extracts the specified property as an {@link FluentObjectAssertion}.
 	 *
-	 * @param name The field to extract.  Can also pass in comma-delimited lists.
-	 * @return The response object (for method chaining).
+	 * @param name The property to extract.  Can also pass in comma-delimited lists.
+	 * @return An assertion of the property value.
 	 */
-	public FluentObjectAssertion<Object,R> field(String name) {
-		return field(Object.class, name);
+	public FluentObjectAssertion<Object,R> property(String name) {
+		return new FluentObjectAssertion<>(this, toBeanMap().get(name), returns());
 	}
 
 	/**
-	 * Returns an object assertion on the value specified at the specified key.
+	 * Extracts the specified property as an {@link FluentListAssertion}.
 	 *
-	 * <p>
-	 * If the map is <jk>null</jk> or the map doesn't contain the specified key, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param type The value type.
-	 * @param name The bean property name.
-	 * @return A new assertion.
+	 * @param names The names of the properties to extract.  Can also pass in comma-delimited lists.
+	 * @return An assertion of the property values.
 	 */
-	@SuppressWarnings("unchecked")
-	public <E> FluentObjectAssertion<E,R> field(Class<E> type, String name) {
-		Object v = getField(name);
-		if (v == null || type.isInstance(v))
-			return new FluentObjectAssertion<>(this, (E)v, returns());
-		throw error("Bean property value not of expected type for property ''{0}''.\n\tExpected: {1}.\n\tActual: {2}", name, type, v.getClass());
+	public FluentListAssertion<Object,R> properties(String...names) {
+		BeanMap<T> bm = toBeanMap();
+		return new FluentListAssertion<>(stream(names).map(x -> bm.get(x)).collect(toList()), returns());
 	}
 
-	private Object getField(String name) {
-		exists();
-		return BeanMap.create(value).get(name);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
+	private BeanMap<T> toBeanMap() {
+		return BeanMap.of(value());
+	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<V,R> msg(String msg, Object...args) {
+	public FluentBeanAssertion<T,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<V,R> out(PrintStream value) {
+	public FluentBeanAssertion<T,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<V,R> silent() {
+	public FluentBeanAssertion<T,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<V,R> stdout() {
+	public FluentBeanAssertion<T,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentBeanAssertion<V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentBeanAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

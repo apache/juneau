@@ -939,8 +939,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder formData(NameValuePair value) {
-		super.formData(value);
+	public MockRestClientBuilder formData(NameValuePair part) {
+		super.formData(part);
 		return this;
 	}
 
@@ -981,8 +981,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder header(Header value) {
-		super.header(value);
+	public MockRestClientBuilder header(Header part) {
+		super.header(part);
 		return this;
 	}
 
@@ -1005,14 +1005,14 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder headers(Header...headers) {
-		super.headers(headers);
+	public MockRestClientBuilder headers(Header...parts) {
+		super.headers(parts);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder headers(HeaderList headers) {
-		super.headers(headers);
+	public MockRestClientBuilder headers(HeaderList parts) {
+		super.headers(parts);
 		return this;
 	}
 
@@ -1330,8 +1330,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder pathData(NameValuePair value) {
-		super.pathData(value);
+	public MockRestClientBuilder pathData(NameValuePair part) {
+		super.pathData(part);
 		return this;
 	}
 
@@ -1408,8 +1408,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder queryData(NameValuePair value) {
-		super.queryData(value);
+	public MockRestClientBuilder queryData(NameValuePair part) {
+		super.queryData(part);
 		return this;
 	}
 
@@ -1525,6 +1525,42 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder simpleJson() {
 		super.simpleJson();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder skipEmptyFormData() {
+		super.skipEmptyFormData();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder skipEmptyFormData(boolean value) {
+		super.skipEmptyFormData(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder skipEmptyHeaders() {
+		super.skipEmptyHeaders();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder skipEmptyHeaders(boolean value) {
+		super.skipEmptyHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder skipEmptyQueryData() {
+		super.skipEmptyQueryData();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder skipEmptyQueryData(boolean value) {
+		super.skipEmptyQueryData(value);
 		return this;
 	}
 

@@ -22,6 +22,7 @@ import org.junit.*;
 public class BeanContextTest {
 
 	BeanContext bc = BeanContext.DEFAULT;
+	BeanSession bs = BeanContext.DEFAULT_SESSION;
 
 	public static interface A1 {
 		public int getF1();
@@ -48,7 +49,7 @@ public class BeanContextTest {
 
 	@Test
 	public void proxiesNotCached() throws ExecutableException {
-		A1 a1 = bc.createBeanSession().getBeanMeta(A1.class).newBean(null);
+		A1 a1 = bs.getBeanMeta(A1.class).newBean(null);
 		ClassMeta cm1 = bc.getClassMeta(a1.getClass()), cm2 = bc.getClassMeta(a1.getClass());
 		assertTrue(cm1 != cm2);
 	}

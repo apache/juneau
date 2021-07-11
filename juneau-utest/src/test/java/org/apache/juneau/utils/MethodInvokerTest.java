@@ -52,7 +52,7 @@ public class MethodInvokerTest {
 		mi.invoke(a);
 		mi.invoke(a);
 
-		assertBean(mi.getStats()).fields("runs","errors").asJson().is("{runs:3,errors:0}");
+		assertBean(mi.getStats()).mapOf("runs","errors").asJson().is("{runs:3,errors:0}");
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class MethodInvokerTest {
 		assertThrown(()->mi.invoke(a)).exists();
 		assertThrown(()->mi.invoke(a)).exists();
 
-		assertBean(mi.getStats()).fields("runs","errors").asJson().is("{runs:3,errors:3}");
+		assertBean(mi.getStats()).mapOf("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class MethodInvokerTest {
 		assertThrown(()->mi.invoke(a)).exists();
 		assertThrown(()->mi.invoke(a, 1, "x")).exists();
 
-		assertBean(mi.getStats()).fields("runs","errors").asJson().is("{runs:3,errors:3}");
+		assertBean(mi.getStats()).mapOf("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
 
 	@Test

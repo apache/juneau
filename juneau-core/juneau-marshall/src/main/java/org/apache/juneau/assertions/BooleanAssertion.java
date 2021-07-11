@@ -41,11 +41,6 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 		super(value, null);
 	}
 
-	@Override
-	protected BooleanAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

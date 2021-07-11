@@ -105,6 +105,12 @@ public class BeanSessionArgs extends SessionArgs {
 		return this;
 	}
 
+	@Override /* GENERATED - SessionArgs */
+	public BeanSessionArgs unmodifiable() {
+		super.unmodifiable();
+		return this;
+	}
+
 	// </FluentSetters>
 
 	@Override /* SessionArgs */

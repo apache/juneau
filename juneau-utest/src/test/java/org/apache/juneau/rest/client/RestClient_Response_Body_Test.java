@@ -93,7 +93,7 @@ public class RestClient_Response_Body_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		client().build().post("/echo",bean).run().assertBody().asType(ABean.class).asJson().is("{f:1}");
+		client().build().post("/echo",bean).run().assertBody().asObject(ABean.class).asJson().is("{f:1}");
 		client().build().post("/echo",bean).run().assertBody().asBytes().asString().is("{f:1}");
 	}
 
@@ -103,7 +103,7 @@ public class RestClient_Response_Body_Test {
 		ABean b = x.post("/echo",bean).run().getBody().parser(JsonParser.DEFAULT).asType(ABean.class);
 		assertObject(b).asJson().is("{f:1}");
 		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).asType(ABean.class)).contains("ParseError at [row,col]:[1,1]");
-		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertValue().asType(ABean.class)).contains("ParseError at [row,col]:[1,1]");
+		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertValue().asObject(ABean.class)).contains("ParseError at [row,col]:[1,1]");
 	}
 
 	@Test
@@ -221,8 +221,8 @@ public class RestClient_Response_Body_Test {
 		HttpEntity x6 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asType(HttpEntity.class);
 		assertTrue(x6 instanceof ResponseBody);
 
-		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asType(A7a.class).passes(x->((A7a)x).x.equals("foo"));
-		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asType(A7b.class).passes(x->((A7b)x).x.equals("foo"));
+		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asObject(A7a.class).passes(x->x.x.equals("foo"));
+		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asObject(A7b.class).passes(x->x.x.equals("foo"));
 		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getBody().asType(A7c.class)).exists().contains("Unsupported media-type","'foo'");
 		assertThrown(()->testClient().entity(stringEntity("")).get().run().getBody().asType(A7c.class)).contains("foo");
 

@@ -23,7 +23,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class MapAssertion_Test {
 
-	private MapAssertion test(Map<?,?> value) {
+	private <K,V> MapAssertion<K,V> test(Map<K,V> value) {
 		return assertMap(value).silent();
 	}
 
@@ -53,7 +53,7 @@ public class MapAssertion_Test {
 
 		test(x2).value("a").asInteger().is(1);
 		test(x2).value("z").asInteger().isNull();
-		test((Map<?,?>)null).value("a").asInteger().isNull();
+		test((Map<String,Object>)null).value("a").asInteger().isNull();
 
 		test(x2).containsKey("a");
 		assertThrown(()->test(x2).containsKey("x")).is("Map did not contain expected key.\n\tContents: {a:1,b:2}\n\tExpected key: x");

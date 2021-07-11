@@ -25,10 +25,11 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Validates the specified POJO is the specified type.</jc>
  * 	<jsm>assertList</jsm>(<jv>myList</jv>).isNotEmpty();
  * </p>
+ *
+ * @param <E> The element type.
  */
-@FluentSetters(returns="ListAssertion")
-@SuppressWarnings("rawtypes")
-public class ListAssertion extends FluentListAssertion<ListAssertion> {
+@FluentSetters(returns="ListAssertion<E>")
+public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 
 	/**
 	 * Creator.
@@ -36,8 +37,8 @@ public class ListAssertion extends FluentListAssertion<ListAssertion> {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ListAssertion} object.
 	 */
-	public static ListAssertion create(List value) {
-		return new ListAssertion(value);
+	public static <E> ListAssertion<E> create(List<E> value) {
+		return new ListAssertion<>(value);
 	}
 
 	/**
@@ -45,43 +46,38 @@ public class ListAssertion extends FluentListAssertion<ListAssertion> {
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public ListAssertion(List value) {
+	public ListAssertion(List<E> value) {
 		super(value, null);
-	}
-
-	@Override
-	protected ListAssertion returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ListAssertion msg(String msg, Object...args) {
+	public ListAssertion<E> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ListAssertion out(PrintStream value) {
+	public ListAssertion<E> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ListAssertion silent() {
+	public ListAssertion<E> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ListAssertion stdout() {
+	public ListAssertion<E> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ListAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
+	public ListAssertion<E> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

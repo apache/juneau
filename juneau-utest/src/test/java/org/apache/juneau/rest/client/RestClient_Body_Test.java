@@ -171,14 +171,14 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
-			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertBody().asObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null).build();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").is("application/json")
-			.assertBody().asType(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertBody().asObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

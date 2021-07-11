@@ -23,7 +23,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ListAssertion_Test {
 
-	private ListAssertion test(List<?> value) {
+	private <E> ListAssertion<E> test(List<E> value) {
 		return assertList(value).silent();
 	}
 

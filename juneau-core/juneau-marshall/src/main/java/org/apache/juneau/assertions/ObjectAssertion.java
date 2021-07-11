@@ -25,10 +25,10 @@ import org.apache.juneau.internal.*;
  * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
  * </p>
  *
- * @param <V> The object type.
+ * @param <T> The object type.
  */
-@FluentSetters(returns="ObjectAssertion<V>")
-public class ObjectAssertion<V> extends FluentObjectAssertion<V,ObjectAssertion<V>> {
+@FluentSetters(returns="ObjectAssertion<T>")
+public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<T>> {
 
 	/**
 	 * Creator.
@@ -36,7 +36,7 @@ public class ObjectAssertion<V> extends FluentObjectAssertion<V,ObjectAssertion<
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.
 	 */
-	public static <V> ObjectAssertion<V> create(V value) {
+	public static <T> ObjectAssertion<T> create(T value) {
 		return new ObjectAssertion<>(value);
 	}
 
@@ -45,43 +45,38 @@ public class ObjectAssertion<V> extends FluentObjectAssertion<V,ObjectAssertion<
 	 *
 	 * @param value The object being wrapped.
 	 */
-	public ObjectAssertion(V value) {
+	public ObjectAssertion(T value) {
 		super(value, null);
-	}
-
-	@Override
-	protected ObjectAssertion<V> returns() {
-		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion<V> msg(String msg, Object...args) {
+	public ObjectAssertion<T> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion<V> out(PrintStream value) {
+	public ObjectAssertion<T> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion<V> silent() {
+	public ObjectAssertion<T> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion<V> stdout() {
+	public ObjectAssertion<T> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ObjectAssertion<V> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public ObjectAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -45,11 +46,6 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	 */
 	public VersionAssertion(Version value) {
 		super(value, null);
-	}
-
-	@Override
-	protected VersionAssertion returns() {
-		return this;
 	}
 
 	// <FluentSetters>

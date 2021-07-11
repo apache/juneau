@@ -48,11 +48,6 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 		super(value, null);
 	}
 
-	@Override
-	protected ZonedDateTimeAssertion returns() {
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
