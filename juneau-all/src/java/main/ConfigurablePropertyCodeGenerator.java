@@ -15,182 +15,15 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.lang.reflect.Method;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.config.*;
-import org.apache.juneau.config.store.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.csv.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.entity.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
-import org.apache.juneau.jso.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.mstat.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.assertions.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.assertion.*;
-import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.soap.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 
 public class ConfigurablePropertyCodeGenerator {
-	
-	private final String TODO = "Have this use code scanning.";
-
-	static Class<?>[] classes = new Class<?>[]{
-		AnnotationBuilder.class,
-		ArrayAssertion.class,
-		Assertion.class,
-		BasicHeader.class,
-		BasicRuntimeExceptionBuilder.class,
-		BasicStatusLineBuilder.class,
-		BeanAssertion.class,
-		BeanListAssertion.class,
-		BeanContextBuilder.class,
-		BeanSessionArgs.class,
-		BeanStoreBuilder.class,
-		BeanTraverseBuilder.class,
-		BooleanAssertion.class,
-		ByteArrayAssertion.class,
-		CollectionAssertion.class,
-		ComparableAssertion.class,
-		ConfigBuilder.class,
-		ConfigClasspathStoreBuilder.class,
-		ConfigFileStoreBuilder.class,
-		ConfigMemoryStoreBuilder.class,
-		ConfigStoreBuilder.class,
-		ConstructorInfo.class,
-		ContextBuilder.class,
-		CsvParserBuilder.class,
-		CsvSerializerBuilder.class,
-		DateAssertion.class,
-		ExecutableInfo.class,
-		FileFinderBuilder.class,
-		FluentArrayAssertion.class,
-		FluentAssertion.class,
-		FluentBeanAssertion.class,
-		FluentBeanListAssertion.class,
-		FluentBooleanAssertion.class,
-		FluentByteArrayAssertion.class,
-		FluentCollectionAssertion.class,
-		FluentComparableAssertion.class,
-		FluentDateAssertion.class,
-		FluentIntegerAssertion.class,
-		FluentListAssertion.class,
-		FluentLongAssertion.class,
-		FluentMapAssertion.class,
-		FluentObjectAssertion.class,
-		FluentPrimitiveArrayAssertion.class,
-		FluentProtocolVersionAssertion.class,
-		FluentRequestBodyAssertion.class,
-		FluentRequestFormParamAssertion.class,
-		FluentRequestHeaderAssertion.class,
-		FluentRequestLineAssertion.class,
-		FluentRequestQueryParamAssertion.class,
-		FluentResponseBodyAssertion.class,
-		FluentResponseHeaderAssertion.class,
-		FluentStringAssertion.class,
-		FluentThrowableAssertion.class,
-		FluentVersionAssertion.class,
-		FluentZonedDateTimeAssertion.class,
-		HeaderListBuilder.class,
-		HtmlDocSerializerBuilder.class,
-		HtmlParserBuilder.class,
-		HtmlSchemaSerializerBuilder.class,
-		HtmlSerializerBuilder.class,
-		HtmlStrippedDocSerializerBuilder.class,
-		HttpEntityBuilder.class,
-		HttpExceptionBuilder.class,
-		HttpResourceBuilder.class,
-		HttpResponseBuilder.class,
-		InputStreamParserBuilder.class,
-		IntegerAssertion.class,
-		JsonParserBuilder.class,
-		JsonSchemaGeneratorBuilder.class,
-		JsonSchemaSerializerBuilder.class,
-		JsonSerializerBuilder.class,
-		JsoParserBuilder.class,
-		JsoSerializerBuilder.class,
-		ListAssertion.class,
-		LongAssertion.class,
-		MapAssertion.class,
-		MethodExecStatsBuilder.class,
-		MethodExecStoreBuilder.class,
-		MethodInfo.class,
-		MockRestClientBuilder.class,
-		MsgPackParserBuilder.class,
-		MsgPackSerializerBuilder.class,
-		ObjectAssertion.class,
-		OpenApiParserBuilder.class,
-		OpenApiSerializerBuilder.class,
-		OutputStreamSerializerBuilder.class,
-		ParserBuilder.class,
-		ParserGroupBuilder.class,
-		ParserSessionArgs.class,
-		PlainTextParserBuilder.class,
-		PlainTextSerializerBuilder.class,
-		PrimitiveArrayAssertion.class,
-		RdfParserBuilder.class,
-		RdfSerializerBuilder.class,
-		ReaderParserBuilder.class,
-		RequestHttpPart.class,
-		RestClientBuilder.class,
-		RestContextBuilder.class,
-		RestOperationContextBuilder.class,
-		SerializedEntityBuilder.class,
-		SerializerBuilder.class,
-		SerializerGroupBuilder.class,
-		SerializerSessionArgs.class,
-		SessionArgs.class,
-		SimpleJsonParserBuilder.class,
-		SimpleJsonSerializerBuilder.class,
-		SoapXmlSerializerBuilder.class,
-		StaticFilesBuilder.class,
-		StringAssertion.class,
-		TargetedAnnotationBuilder.class,
-		TargetedAnnotationCBuilder.class,
-		TargetedAnnotationMBuilder.class,
-		TargetedAnnotationMFBuilder.class,
-		TargetedAnnotationMFCBuilder.class,
-		TargetedAnnotationTBuilder.class,
-		TargetedAnnotationTMBuilder.class,
-		TargetedAnnotationTMFBuilder.class,
-		TargetedAnnotationTMFCBuilder.class,
-		ThrowableAssertion.class,
-		ThrownStatsBuilder.class,
-		ThrownStoreBuilder.class,
-		UonParserBuilder.class,
-		UonSerializerBuilder.class,
-		UrlEncodingParserBuilder.class,
-		UrlEncodingSerializerBuilder.class,
-		VersionAssertion.class,
-		WriterSerializerBuilder.class,
-		XmlParserBuilder.class,
-		XmlSerializerBuilder.class,
-		ZonedDateTimeAssertion.class,
-	};
 
 	static Set<Class<?>> ignoreClasses = ASet.of(
 		org.apache.http.entity.AbstractHttpEntity.class,
@@ -212,7 +45,23 @@ public class ConfigurablePropertyCodeGenerator {
 	public static void main(String[] args) throws Exception {
 		Map<Class<?>, Set<Method>> configMethods = new HashMap<>();
 
-		for (Class<?> c : classes) {
+		Map<Class<?>,File> classMap = new LinkedHashMap<>();
+		for (String sp : SOURCE_PATHS) {
+			File f = new File("../"+sp+"/src/main/java");
+			Path p = f.toPath();
+			try (Stream<Path> walkStream = Files.walk(p)) {
+				walkStream
+					.filter(x -> x.toFile().isFile())
+					.map(x -> x.toFile())
+					.filter(x -> x.getName().endsWith(".java"))
+					.filter(x -> hasFluentSetters(x))
+					.forEach(x -> classMap.put(toClass(x), x));
+			}
+		}
+
+		System.out.println("Found " + classMap.size() + " classes with fluent setters.");
+
+		for (Class<?> c : classMap.keySet()) {
 			System.out.println("Seaching " + c.getName());
 			Set<Method> s = new TreeSet<>(new MethodComparator());
 			for (Method m : c.getDeclaredMethods()) {
@@ -224,11 +73,9 @@ public class ConfigurablePropertyCodeGenerator {
 			configMethods.put(c, s);
 		}
 
-		for (Class<?> c : classes) {
-			File f = findClassFile(c);
-
-			if (f == null)
-				System.err.println("Couldn't find class " + c.getName());
+		for (Map.Entry<Class<?>,File> e : classMap.entrySet()) {
+			Class<?> c = e.getKey();
+			File f = e.getValue();
 
 			if (! c.isAnnotationPresent(FluentSetters.class))
 				System.err.println("@FluentSetters not present on class " + c.getName());
@@ -241,7 +88,7 @@ public class ConfigurablePropertyCodeGenerator {
 			if (i1 != -1 && i2 != -1) {
 				cpSection = s.substring(i1+15, i2);
 			} else {
-				System.err.println("...skipped " + f.getName());
+				System.err.println("...<FluentSetters> not found: " + f.getName());
 				continue;
 			}
 
@@ -337,6 +184,28 @@ public class ConfigurablePropertyCodeGenerator {
 		System.out.println("DONE");
 	}
 
+	private static boolean hasFluentSetters(File f) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
+			String line;
+			while ((line = br.readLine()) != null)
+				if (line.contains("@FluentSetters"))
+					return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private static Class<?> toClass(File f) {
+		try {
+			String n = f.getAbsolutePath();
+			return Class.forName(n.substring(n.indexOf("/src/main/java/")+15).replace(".java","").replace('/','.'));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private static String getArgs(Method m) {
 		StringBuilder sb = new StringBuilder();
 		for (Parameter p : m.getParameters()) {
@@ -361,21 +230,7 @@ public class ConfigurablePropertyCodeGenerator {
 		return sb.toString();
 	}
 
-
-
-
-	private static File findClassFile(Class<?> c) throws IOException {
-		String path = c.getName().replace('.', '/') + ".java";
-		for (String sp : SOURCE_PATHS) {
-			File f = new File("../"+sp+"/src/main/java/" + path);
-			if (f.exists())
-				return f;
-		}
-		return null;
-	}
-
 	private static class MethodComparator implements Comparator<Method> {
-
 		@Override
 		public int compare(Method m1, Method m2) {
 			int i = m1.getName().compareTo(m2.getName());
@@ -387,7 +242,5 @@ public class ConfigurablePropertyCodeGenerator {
 				i = m1.getParameterTypes()[1].getName().compareTo(m2.getParameterTypes()[1].getName());
 			return i;
 		}
-
 	}
-
 }

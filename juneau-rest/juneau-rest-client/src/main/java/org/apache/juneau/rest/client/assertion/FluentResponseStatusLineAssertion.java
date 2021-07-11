@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.assertion;
 
+import java.io.*;
+
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
@@ -92,4 +94,38 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	public FluentIntegerAssertion<R> minor() {
 		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMinor(), returns());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public FluentResponseStatusLineAssertion<R> msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentResponseStatusLineAssertion<R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentResponseStatusLineAssertion<R> silent() {
+		super.silent();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentResponseStatusLineAssertion<R> stdout() {
+		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentResponseStatusLineAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }
