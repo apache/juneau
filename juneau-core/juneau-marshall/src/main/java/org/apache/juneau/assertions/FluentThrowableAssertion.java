@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Assertions.*;
+
 import java.io.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -24,6 +27,14 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="FluentThrowableAssertion<T,R>")
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
+
+	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
+	static final String
+		MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType"),
+		MSG_exceptionMessageDidNotContainExpectedSubstring = MESSAGES.getString("exceptionMessageDidNotContainExpectedSubstring"),
+		MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown"),
+		MSG_exceptionWasThrown = MESSAGES.getString("exceptionWasThrown"),
+		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
 
 	/**
 	 * Constructor.
@@ -52,7 +63,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();})
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();})
 	 * 		.isType(RuntimeException.<jk>class</jk>);
 	 * </p>
 	 *
@@ -61,9 +72,29 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isType(Class<?> type) {
-		assertNotNull("type", type);
+		assertArgNotNull("type", type);
 		if (! type.isInstance(value()))
-			throw error("Exception was not expected type.\n\tExpect=[{0}]\n\tActual=[{1}]", className(type), className(value()));
+			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
+		return returns();
+	}
+
+	/**
+	 * Asserts that this throwable is exactly the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();})
+	 * 		.isExactType(RuntimeException.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param type The type.
+	 * @return This object (for method chaining).
+	 */
+	public R isExactType(Class<?> type) {
+		assertArgNotNull("type", type);
+		if (type != value().getClass())
+			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
 		return returns();
 	}
 
@@ -73,14 +104,14 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).contains(<js>"foobar"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).contains(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param substrings The substrings to check for.
 	 * @return This object (for method chaining).
 	 */
 	public R contains(String...substrings) {
-		assertNotNull("substrings", substrings);
+		assertArgNotNull("substrings", substrings);
 		for (String substring : substrings) {
 			if (substring != null) {
 				Throwable e2 = value();
@@ -90,7 +121,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 					e2 = e2.getCause();
 				}
 				if (! found) {
-					throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, value().getMessage());
+					throw error(MSG_exceptionMessageDidNotContainExpectedSubstring, substring, value().getMessage());
 				}
 			}
 		}
@@ -103,7 +134,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception with the message 'foobar'.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).is(<js>"foobar"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param msg The message to check for.
@@ -119,7 +150,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws any exception.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).exists();
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).exists();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -127,7 +158,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	@Override
 	public R exists() {
 		if (valueIsNull())
-			throw error("Exception was not thrown.");
+			throw error(MSG_exceptionWasNotThrown);
 		return returns();
 	}
 
@@ -137,7 +168,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method doesn't throw any exception.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).notExists();
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).notExists();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -145,7 +176,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	@Override
 	public R doesNotExist() {
 		if (valueIsNotNull())
-			throw error("Exception was thrown.");
+			throw error(MSG_exceptionWasThrown);
 		return returns();
 	}
 
@@ -155,7 +186,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).message().matches(<js>".*foobar.*"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).message().matches(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
@@ -170,7 +201,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the localized messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).localizedMessage().matches(<js>".*foobar.*"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).localizedMessage().matches(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
@@ -185,7 +216,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the stack trace. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).stackTrace().contains(<js>"foobar"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).stackTrace().contains(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
@@ -200,7 +231,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception whose caused-by message contains 'foobar'. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).causedBy().message().contains(<js>"foobar"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).causedBy().message().contains(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
@@ -215,7 +246,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception whose caused-by message contains 'foobar'. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).causedBy().message().contains(<js>"foobar"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).causedBy().message().contains(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param type The expected exception type.
@@ -226,7 +257,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		Throwable t = map(Throwable::getCause).orElse(null);
 		if (t == null || type.isInstance(t))
 			return new FluentThrowableAssertion<>(this, (E)t, returns());
-		throw error("Caused-by exception not of expected type.\n\tExpected: {1}.\n\tActual: {2}", type, t.getClass());
+		throw error(MSG_causedByExceptionNotExpectedType, type, t.getClass());
 	}
 
 	/**
@@ -235,7 +266,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws an exception with a caused-by RuntimeException containing 'foobar'</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {foo.getBar();}).causedBy(RuntimeException.<jk>class</jk>).exists().contains(<js>"foobar"</js>);
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).causedBy(RuntimeException.<jk>class</jk>).exists().contains(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param throwableClass The class type to search for in the caused-by chain.

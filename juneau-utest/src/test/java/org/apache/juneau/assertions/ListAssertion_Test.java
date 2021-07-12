@@ -39,9 +39,9 @@ public class ListAssertion_Test {
 
 		assertThrown(()->test(null).isSize(0)).is("Value was null.");
 		test(x1).isSize(0);
-		assertThrown(()->test(x1).isSize(1)).is("Collection did not have the expected size.  Expect=1, Actual=0.");
+		assertThrown(()->test(x1).isSize(1)).is("Collection did not have the expected size.\n\tExpect=1.\n\tActual=0.");
 		test(x2).isSize(2);
-		assertThrown(()->test(x2).isSize(0)).is("Collection did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(x2).isSize(0)).is("Collection did not have the expected size.\n\tExpect=0.\n\tActual=2.");
 
 		assertThrown(()->test(null).isEmpty()).is("Value was null.");
 		test(x1).isEmpty();
@@ -59,6 +59,7 @@ public class ListAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		test(null).stdout();
 	}
 }

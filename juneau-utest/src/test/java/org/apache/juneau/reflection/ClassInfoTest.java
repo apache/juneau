@@ -2134,7 +2134,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_nullParameterizedType() {
-		assertThrown(()->aClass.getParameterType(2, null)).is("Argument 'pt' cannot be null");
+		assertThrown(()->aClass.getParameterType(2, null)).is("Argument \"pt\" cannot be null.");
 	}
 
 	@Test

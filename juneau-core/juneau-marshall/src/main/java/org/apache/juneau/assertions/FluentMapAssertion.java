@@ -19,6 +19,7 @@ import static java.util.Arrays.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -30,6 +31,14 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="FluentMapAssertion<K,V,R>")
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>  {
+
+	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");
+	static final String
+		MSG_mapWasNotEmpty = MESSAGES.getString("mapWasNotEmpty"),
+		MSG_mapDidNotContainExpectedKey = MESSAGES.getString("mapDidNotContainExpectedKey"),
+		MSG_mapContainedUnexpectedKey = MESSAGES.getString("mapContainedUnexpectedKey"),
+		MSG_mapWasEmpty = MESSAGES.getString("mapWasEmpty"),
+		MSG_mapDidNotHaveTheExpectedSize = MESSAGES.getString("mapDidNotHaveTheExpectedSize");
 
 	/**
 	 * Constructor.
@@ -87,7 +96,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 */
 	public R isEmpty() throws AssertionError {
 		if (! value().isEmpty())
-			throw error("Map was not empty.");
+			throw error(MSG_mapWasNotEmpty);
 		return returns();
 	}
 
@@ -101,7 +110,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	public R containsKey(String name) throws AssertionError {
 		if (value().containsKey(name))
 			return returns();
-		throw error("Map did not contain expected key.\n\tContents: {0}\n\tExpected key: {1}", value(), name);
+		throw error(MSG_mapDidNotContainExpectedKey, name, value());
 	}
 
 	/**
@@ -114,7 +123,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	public R doesNotContainKey(String name) throws AssertionError {
 		if (! value().containsKey(name))
 			return returns();
-		throw error("Map contained unexpected key.\n\tContents: {0}\n\tUnexpected key: {1}", value(), name);
+		throw error(MSG_mapContainedUnexpectedKey, name, value());
 	}
 
 	/**
@@ -125,7 +134,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 */
 	public R isNotEmpty() throws AssertionError {
 		if (value().isEmpty())
-			throw error("Map was empty.");
+			throw error(MSG_mapWasEmpty);
 		return returns();
 	}
 
@@ -138,7 +147,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 */
 	public R isSize(int size) throws AssertionError {
 		if (size() != size)
-			throw error("Map did not have the expected size.  Expect={0}, Actual={1}.", size, size());
+			throw error(MSG_mapDidNotHaveTheExpectedSize, size, size());
 		return returns();
 	}
 

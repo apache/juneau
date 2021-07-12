@@ -20,11 +20,16 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Main class for creation of assertions for testing.
  */
 public class Assertions {
+
+	private static final Messages MESSAGES = Messages.of(Assertions.class, "Messages");
+	static final String
+		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull");
 
 	/**
 	 * Used for assertion calls against {@link Date} objects.
@@ -616,7 +621,7 @@ public class Assertions {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null", name);
+		assertArg(o != null, MSG_argumentCannotBeNull, name);
 		return o;
 	}
 

@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -31,6 +32,15 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="FluentArrayAssertion<E,R>")
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
+
+	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
+	static final String
+		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
+		MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty"),
+		MSG_arrayUnexpectedSize = MESSAGES.getString("arrayUnexpectedSize"),
+		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
+		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
+		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt");
 
 	/**
 	 * Constructor.
@@ -61,7 +71,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isEmpty() throws AssertionError {
 		if (length() != 0)
-			throw error("Array was not empty.");
+			throw error(MSG_arrayWasNotEmpty);
 		return returns();
 	}
 
@@ -73,7 +83,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isNotEmpty() throws AssertionError {
 		if (length() == 0)
-			throw error("Array was empty.");
+			throw error(MSG_arrayWasEmpty);
 		return returns();
 	}
 
@@ -86,7 +96,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isSize(int size) throws AssertionError {
 		if (length() != size)
-			throw error("Array did not have the expected size.  Expect={0}, Actual={1}.", size, length());
+			throw error(MSG_arrayUnexpectedSize, size, length());
 		return returns();
 	}
 
@@ -101,7 +111,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		for (int i = 0, j = length(); i < j; i++)
 			if (eq(at(i), entry))
 				return returns();
-		throw error("Array did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", toString(), entry);
+		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
 	}
 
 	/**
@@ -115,7 +125,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		for (int i = 0, j = length(); i < j; i++)
 			if (eq(stringify(at(i)), entry))
 				return returns();
-		throw error("Array did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", toString(), entry);
+		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
 	}
 
 	/**
@@ -128,7 +138,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public R doesNotContain(Object entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
 			if (eq(at(i), entry))
-				throw error("Array contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", toString(), entry);
+				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
 		return returns();
 	}
 
@@ -249,7 +259,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		for (int i = 0, j = length(); i < j; i++) {
 			Predicate<E> t = tests[i];
 			if (t != null && ! t.test(at(i)))
-				throw error("Array did not contain expected value at index {0}.\n\t{1}", i, getFailureMessage(t, at(i)));
+				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
 	}

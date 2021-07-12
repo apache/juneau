@@ -73,7 +73,7 @@ public class EntityTag_Test {
 		assertThrown(()->new EntityTag("foo")).is("Invalid value for entity-tag: [foo]");
 		assertThrown(()->new EntityTag("\"")).is("Invalid value for entity-tag: [\"]");
 		assertThrown(()->new EntityTag("")).is("Invalid value for entity-tag: []");
-		assertThrown(()->new EntityTag(null)).is("Argument 'value' cannot be null");
+		assertThrown(()->new EntityTag(null)).is("Argument \"value\" cannot be null.");
 		assertThrown(()->new EntityTag("\"a")).is("Invalid value for entity-tag: [\"a]");
 		assertThrown(()->new EntityTag("a\"")).is("Invalid value for entity-tag: [a\"]");
 		assertThrown(()->new EntityTag("W/\"")).is("Invalid value for entity-tag: [W/\"]");

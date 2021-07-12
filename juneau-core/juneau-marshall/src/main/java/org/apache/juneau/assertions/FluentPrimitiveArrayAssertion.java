@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -44,6 +45,16 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 		STRINGIFIERS.put(short.class, (x) -> Arrays.toString((short[])x));
 	}
 
+	private static final Messages MESSAGES = Messages.of(FluentPrimitiveArrayAssertion.class, "Messages");
+	static final String
+		MSG_objectWasNotAnArray = MESSAGES.getString("objectWasNotAnArray"),
+		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
+		MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty"),
+		MSG_arrayDidNotHaveExpectedSize = MESSAGES.getString("arrayDidNotHaveExpectedSize"),
+		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
+		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
+		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue");
+
 	/**
 	 * Constructor.
 	 *
@@ -64,7 +75,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	public FluentPrimitiveArrayAssertion(Assertion creator, T contents, R returns) {
 		super(creator, contents, returns);
 		if (contents != null && ! contents.getClass().isArray())
-			throw new BasicAssertionError("Object was not an array.  Actual=''{0}''", contents.getClass());
+			throw new BasicAssertionError(MSG_objectWasNotAnArray, contents.getClass());
 	}
 
 	@Override /* FluentBaseAssertion */
@@ -80,7 +91,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 */
 	public R isEmpty() throws AssertionError {
 		if (length() != 0)
-			throw error("Array was not empty.");
+			throw error(MSG_arrayWasNotEmpty);
 		return returns();
 	}
 
@@ -92,7 +103,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 */
 	public R isNotEmpty() throws AssertionError {
 		if (length() == 0)
-			throw error("Array was empty.");
+			throw error(MSG_arrayWasEmpty);
 		return returns();
 	}
 
@@ -105,7 +116,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 */
 	public R isSize(int size) throws AssertionError {
 		if (length() != size)
-			throw error("Array did not have the expected size.  Expect={0}, Actual={1}.", size, length());
+			throw error(MSG_arrayDidNotHaveExpectedSize, size, length());
 		return returns();
 	}
 
@@ -120,7 +131,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 		for (int i = 0, j = length(); i < j; i++)
 			if (eq(at(i), entry))
 				return returns();
-		throw error("Array did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", value(), entry);
+		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
 	}
 
 	/**
@@ -190,7 +201,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 		for (int i = 0, j = length(); i < j; i++) {
 			Predicate<T> t = tests[i];
 			if (t != null && ! t.test(at(i)))
-				throw error("Array did not contain expected value at index {0}.\n\t{1}", i, getFailureMessage(t, at(i)));
+				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
 	}
@@ -205,7 +216,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	public R doesNotContain(Object entry) throws AssertionError {
 		for (int i = 0; i < length(); i++)
 			if (eq(at(i), entry))
-				throw error("Array contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", value(), entry);
+				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
 		return returns();
 	}
 

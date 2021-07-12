@@ -36,9 +36,9 @@ public class ArrayAssertion_Test {
 
 		assertThrown(()->test(null).isSize(0)).is("Value was null.");
 		test(x1).isSize(0);
-		assertThrown(()->test(x1).isSize(2)).is("Array did not have the expected size.  Expect=2, Actual=0.");
+		assertThrown(()->test(x1).isSize(2)).is("Array did not have the expected size.\n\tExpect=2.\n\tActual=0.");
 		test(x2).isSize(2);
-		assertThrown(()->test(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(x2).isSize(0)).is("Array did not have the expected size.\n\tExpect=0.\n\tActual=2.");
 
 		assertThrown(()->test(null).isEmpty()).is("Value was null.");
 		test(x1).isEmpty();
@@ -53,16 +53,17 @@ public class ArrayAssertion_Test {
 		test(x2).item(0).exists();
 
 		test(x2).contains("foo");
-		assertThrown(()->test(x2).contains("z")).is("Array did not contain expected value.\n\tContents: [foo, bar]\n\tExpected: z");
+		assertThrown(()->test(x2).contains("z")).is("Array did not contain expected value.\n\tExpect=\"z\".\n\tActual=\"[foo, bar]\".");
 
 		test(x1).doesNotContain("foo");
-		assertThrown(()->test(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tContents: [foo, bar]\n\tUnexpected: foo");
-		assertThrown(()->test(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tContents: [foo, bar]\n\tUnexpected: bar");
+		assertThrown(()->test(x2).doesNotContain("foo")).is("Array contained unexpected value.\n\tUnexpected=\"foo\".\n\tActual=\"[foo, bar]\".");
+		assertThrown(()->test(x2).doesNotContain("bar")).is("Array contained unexpected value.\n\tUnexpected=\"bar\".\n\tActual=\"[foo, bar]\".");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		test(null).stdout();
 	}
 }

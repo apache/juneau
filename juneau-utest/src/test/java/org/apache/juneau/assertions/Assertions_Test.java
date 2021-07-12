@@ -79,6 +79,7 @@ public class Assertions_Test {
 	@Test
 	public void a02_stdout_stderr() throws Exception {
 		assertThrown(()->assertObject(null).msg("Test message").stdout().exists()).exists();
+		assertThrown(()->assertObject(Optional.empty()).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		assertObject(assertObject("foo").silent().error("test {0}", "message").getMessage()).is("test message");
 	}
 }

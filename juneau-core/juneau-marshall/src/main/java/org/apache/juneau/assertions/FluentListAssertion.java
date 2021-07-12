@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -29,6 +30,10 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="FluentListAssertion<E,R>")
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
+
+	private static final Messages MESSAGES = Messages.of(FluentListAssertion.class, "Messages");
+	static final String
+		MSG_listDidNotContainExpectedValueAt = MESSAGES.getString("listDidNotContainExpectedValueAt");
 
 	/**
 	 * Constructor.
@@ -155,7 +160,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		for (int i = 0, j = size(); i < j; i++) {
 			Predicate<E> t = tests[i];
 			if (t != null && ! t.test(at(i)))
-				throw error("List did not contain expected value at index {0}.\n\t{1}", i, getFailureMessage(t, at(i)));
+				throw error(MSG_listDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
 	}

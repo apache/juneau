@@ -28,6 +28,11 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public class Assertion {
 
+	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
+	static final String
+		MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull"),
+		MSG_causedBy = MESSAGES.getString("causedBy");
+
 	String msg;
 	Object[] msgArgs;
 	PrintStream out = System.err;
@@ -129,7 +134,7 @@ public class Assertion {
 	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
 		msg = format(msg, args);
 		if (this.msg != null)
-			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg).replace("<<<CAUSED-BY>>>", cause == null ? "" : "Caused by: " + cause.getMessage());
+			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg).replace("<<<CAUSED-BY>>>", cause == null ? "" : MSG_causedBy + ": " + cause.getMessage());
 		if (out != null)
 			out.println(msg);
 		if (throwable != null) {
@@ -161,31 +166,6 @@ public class Assertion {
 	@SuppressWarnings("unchecked")
 	protected static <E> Class<E[]> arrayClass(Class<E> c) {
 		return (Class<E[]>)Array.newInstance(c,0).getClass();
-	}
-
-	/**
-	 * Asserts the specified value is not null.
-	 *
-	 * @param value The value to check.
-	 * @param msg The message.
-	 * @param args The message arguments.
-	 * @return The value.
-	 */
-	protected <T> T assertNotNull(T value, String msg, Object...args) {
-		if (value == null)
-			throw new BasicAssertionError(format(msg, args));
-		return value;
-	}
-
-	/**
-	 * Asserts the specified parameter is not null.
-	 *
-	 * @param parameter The parameter name.
-	 * @param value The value to check.
-	 * @return The value.
-	 */
-	protected <T> T assertNotNull(String parameter, T value) {
-		return assertNotNull(value, "Parameter ''{0}'' cannot be null.", parameter);
 	}
 
 	// <FluentSetters>

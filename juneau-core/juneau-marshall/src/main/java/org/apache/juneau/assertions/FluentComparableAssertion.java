@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Assertions.*;
+
 import java.io.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -25,6 +28,13 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentComparableAssertion<T,R>")
 @SuppressWarnings("rawtypes")
 public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
+
+	private static final Messages MESSAGES = Messages.of(FluentComparableAssertion.class, "Messages");
+	static final String
+		MSG_valueWasNotGreaterThanExpected = MESSAGES.getString("valueWasNotGreaterThanExpected"),
+		MSG_valueWasNotGreaterOrEqualsToExpected = MESSAGES.getString("valueWasNotGreaterOrEqualsToExpected"),
+		MSG_valueWasNotLessThanExpected = MESSAGES.getString("valueWasNotLessThanExpected"),
+		MSG_valueWasNotLessOrEqualsToExpected = MESSAGES.getString("valueWasNotLessOrEqualsToExpected");
 
 	/**
 	 * Constructor.
@@ -55,9 +65,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGreaterThan(Comparable value) throws AssertionError {
-		assertNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (compareTo(value) <= 0)
-			throw error("Value was not greater than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
+			throw error(MSG_valueWasNotGreaterThanExpected, value, value());
 		return returns();
 	}
 
@@ -83,9 +93,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGreaterThanOrEqual(Comparable value) throws AssertionError {
-		assertNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (compareTo(value) < 0)
-				throw error("Value was not greater than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
+				throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
 		return returns();
 	}
 
@@ -111,9 +121,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLessThan(Comparable value) throws AssertionError {
-		assertNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (compareTo(value) >= 0)
-				throw error("Value was not less than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
+				throw error(MSG_valueWasNotLessThanExpected, value, value());
 		return returns();
 	}
 
@@ -139,9 +149,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLessThanOrEqual(Comparable value) throws AssertionError {
-		assertNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (compareTo(value) > 0)
-				throw error("Value was not less than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, value());
+				throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
 		return returns();
 	}
 
@@ -169,8 +179,8 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {
 		exists();
-		assertNotNull("lower", lower);
-		assertNotNull("upper", upper);
+		assertArgNotNull("lower", lower);
+		assertArgNotNull("upper", upper);
 		isLessThanOrEqual(upper);
 		isGreaterThanOrEqual(lower);
 		return returns();

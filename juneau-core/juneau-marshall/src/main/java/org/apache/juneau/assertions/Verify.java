@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import java.util.function.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -32,6 +33,11 @@ import org.apache.juneau.internal.*;
  * </p>
  */
 public class Verify {
+
+	private static final Messages MESSAGES = Messages.of(Verify.class, "Messages");
+	static final String
+		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
+		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
 
 	private final Object o;
 	private Supplier<String> msg;
@@ -78,7 +84,7 @@ public class Verify {
 			return null;
 		if (type != null && type.isInstance(o))
 			return null;
-		return msg != null ? msg.get() : StringUtils.format("Expected type [{0}] but was [{1}].", type, (o == null ? null : o.getClass()));
+		return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedType, type, (o == null ? null : o.getClass()));
 	}
 
 	/**
@@ -91,9 +97,9 @@ public class Verify {
 		if (expected == o)
 			return null;
 		if (expected == null || o == null)
-			return msg != null ? msg.get() : StringUtils.format("Expected [{0}] but was [{1}].", expected, o);
+			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
 		if (! expected.equals(o))
-			return msg != null ? msg.get() : StringUtils.format("Expected [{0}] but was [{1}].", expected, o);
+			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
 		return null;
 	}
 

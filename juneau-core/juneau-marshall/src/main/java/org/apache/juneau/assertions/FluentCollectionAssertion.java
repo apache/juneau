@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -27,6 +28,14 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="FluentCollectionAssertion<E,R>")
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
+
+	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");
+	static final String
+		MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),
+		MSG_collectionDidNotContainExpectedValue = MESSAGES.getString("collectionDidNotContainExpectedValue"),
+		MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue"),
+		MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),
+		MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
 
 	/**
 	 * Constructor.
@@ -57,7 +66,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 */
 	public R isEmpty() throws AssertionError {
 		if (! value().isEmpty())
-			throw error("Collection was not empty.");
+			throw error(MSG_collectionWasNotEmpty);
 		return returns();
 	}
 
@@ -72,7 +81,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		for (Object v : value())
 			if (eq(v, entry))
 				return returns();
-		throw error("Collection did not contain expected value.\n\tContents: {0}\n\tExpected: {1}", value(), entry);
+		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
 	}
 
 	/**
@@ -85,7 +94,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	public R doesNotContain(E entry) throws AssertionError {
 		for (Object v : value())
 			if (eq(v, entry))
-				throw error("Collection contained unexpected value.\n\tContents: {0}\n\tUnexpected: {1}", value(), entry);
+				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
 		return returns();
 	}
 
@@ -97,7 +106,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 */
 	public R isNotEmpty() throws AssertionError {
 		if (value().isEmpty())
-			throw error("Collection was empty.");
+			throw error(MSG_collectionWasEmpty);
 		return returns();
 	}
 
@@ -110,7 +119,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 */
 	public R isSize(int size) throws AssertionError {
 		if (size() != size)
-			throw error("Collection did not have the expected size.  Expect={0}, Actual={1}.", size, size());
+			throw error(MSG_collectionDidNotHaveExpectedSize, size, size());
 		return returns();
 	}
 

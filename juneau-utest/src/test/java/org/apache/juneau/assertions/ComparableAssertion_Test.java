@@ -33,6 +33,7 @@ public class ComparableAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		test(null).stdout().silent();
 	}
 }

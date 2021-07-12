@@ -13,15 +13,28 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.assertions.AssertionPredicate.*;
+import static org.apache.juneau.assertions.Assertions.*;
 
+import java.text.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Generic predicates that can be run.
+ * Predefined {@link AssertionPredicate} objects.
+ *
+ * <p>
+ * Typically used wherever predicates are allowed for testing of {@link Assertion} objects such as...
+ * <ul>
+ * 	<li>{@link FluentObjectAssertion#passes(Predicate)}
+ * 	<li>{@link FluentArrayAssertion#passes(Predicate...)}
+ * 	<li>{@link FluentPrimitiveArrayAssertion#passes(Predicate...)}
+ * 	<li>{@link FluentListAssertion#passes(Predicate...)}
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -33,6 +46,18 @@ import org.apache.juneau.internal.*;
  */
 public class AssertionPredicates {
 
+	private static Function<Object,String> TYPENAME = x -> x == null ? null : x.getClass().getName();
+
+	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
+	static final String
+		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
+		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
+		MSG_valueDidNotMatchExpected = MESSAGES.getString("valueDidNotMatchExpected"),
+		MSG_valueUnexpectedlyMatched = MESSAGES.getString("valueUnexpectedlyMatched"),
+		MSG_valueDidNotMatchValue = MESSAGES.getString("valueDidNotMatchValue"),
+		MSG_valueWasNotExpectedType = MESSAGES.getString("valueWasNotExpectedType"),
+		MSG_valueDidNotMatchPattern = MESSAGES.getString("valueDidNotMatchPattern");
+
 	/**
 	 * Predicate that always returns <jk>true</jk>.
 	 *
@@ -42,28 +67,34 @@ public class AssertionPredicates {
 	 * @param <T> The object type being tested.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> any() {
-		return new AssertionPredicate<>(x -> true, null);
+	public static final <T> AssertionPredicate<T> any() {
+		return test(x -> true, null);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value is not null.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value was null."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> notNull() {
-		return new AssertionPredicate<>(x -> x != null, "Value was null.");
+	public static final <T> AssertionPredicate<T> notNull() {
+		return test(x -> x != null, MSG_valueWasNull);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value is null.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value was not null."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> isNull() {
-		return new AssertionPredicate<>(x -> x == null, "Value was not null.");
+	public static final <T> AssertionPredicate<T> isNull() {
+		return test(x -> x == null, MSG_valueWasNotNull);
 	}
 
 	/**
@@ -72,67 +103,101 @@ public class AssertionPredicates {
 	 * <p>
 	 * Uses standard Java equality for testing.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match expected.  Expected='{0}', Actual='{1}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> eq(Object value) {
-		return new AssertionPredicate<>(x -> Objects.equals(x, value), "Value did not match expected.  Expected=''{0}'', Actual='{VALUE}'.", value);
+	public static final <T> AssertionPredicate<T> eq(Object value) {
+		return test(x -> Objects.equals(x, value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified value.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match expected.  Expected='{0}', Actual='{1}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> eq(String value) {
-		return new AssertionPredicate<>(x -> Objects.equals(stringify(x), value), "Value did not match expected.  Expected=''{0}'', Actual='{VALUE}'.", value);
+	public static final <T> AssertionPredicate<T> eq(String value) {
+		return test(x -> Objects.equals(stringify(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value does not match the specified value.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value unexpectedly matched.  Value='{0}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> ne(Object value) {
-		return new AssertionPredicate<>(x -> ! Objects.equals(x, value), "Value unexpectedly matched.  Value='{VALUE}'.");
+	public static final <T> AssertionPredicate<T> ne(Object value) {
+		return test(x -> ! Objects.equals(x, value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string does not match the specified value.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value unexpectedly matched.  Value='{0}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> ne(String value) {
-		return new AssertionPredicate<>(x -> ! Objects.equals(stringify(x), value), "Value unexpectedly matched.  Value='{VALUE}'.");
+	public static final <T> AssertionPredicate<T> ne(String value) {
+		return test(x -> ! Objects.equals(stringify(x), value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string does not match the specified value ignoring case.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match expected.  Expected='{0}', Actual='{1}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> eqic(String value) {
-		return new AssertionPredicate<>(x -> StringUtils.eqic(stringify(x), value), "Value did not match expected.  Expected=''{0}'', Actual='{VALUE}'.", value);
+	public static final <T> AssertionPredicate<T> eqic(String value) {
+		return test(x -> StringUtils.eqic(stringify(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
-	 * Predicate that returns <jk>true</jk> if the tested value is the specified type.
+	 * Predicate that returns <jk>true</jk> if the tested value is the specified or child type.
+	 *
+	 * <p>
+	 * Assertion error message is <js>"Value was not expected type.  Expected='{0}', Actual='{1}'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param type The specified type.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> type(Class<?> type) {
-		return new AssertionPredicate<>(x -> x.getClass().isAssignableFrom(type), "Value was not expected type  Expected=''{0}'', Actual='{VALUE}'.", type);
+	public static final <T> AssertionPredicate<T> type(Class<?> type) {
+		assertArgNotNull("type", type);
+		return test(x -> x != null && type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, type, TYPENAME);
+	}
+
+	/**
+	 * Predicate that returns <jk>true</jk> if the tested value is exactly specified type.
+	 *
+	 * <p>
+	 * Assertion error message is <js>"Value was not expected type.  Expected='{0}', Actual='{1}'."</js>.
+	 *
+	 * @param <T> The object type being tested.
+	 * @param type The specified type.
+	 * @return A new predicate.
+	 */
+	public static final <T> AssertionPredicate<T> exactType(Class<?> type) {
+		assertArgNotNull("type", type);
+		return test(x -> x != null && x.getClass().equals(type), MSG_valueWasNotExpectedType, type, TYPENAME);
 	}
 
 	/**
@@ -141,65 +206,155 @@ public class AssertionPredicates {
 	 * <p>
 	 * Match pattern can contain the <js>"*"</js> meta-character.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> match(String value) {
-		return regex(StringUtils.getMatchPattern(value));
+	public static final <T> AssertionPredicate<T> match(String value) {
+		assertArgNotNull("value", value);
+		Pattern p = StringUtils.getMatchPattern(value);
+		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified regular expression.
+	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param expression The regular expression to match.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> regex(String expression) {
-		return regex(Pattern.compile(expression));
+	public static final <T> AssertionPredicate<T> regex(String expression) {
+		assertArgNotNull("expression", expression);
+		Pattern p = Pattern.compile(expression);
+		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified regular expression.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 *
+	 * @param <T> The object type being tested.
+	 * @param expression The regular expression to match.
+	 * @param flags Match flags, a bit mask that may include:
+	 * 	<ul>
+	 * 		<li>{@link Pattern#CASE_INSENSITIVE CASE_INSENSITIVE}
+	 * 		<li>{@link Pattern#MULTILINE MULTILINE}
+	 * 		<li>{@link Pattern#DOTALL DOTALL}
+	 * 		<li>{@link Pattern#UNICODE_CASE UNICODE_CASE}
+	 * 		<li>{@link Pattern#CANON_EQ CANON_EQ}
+	 * 		<li>{@link Pattern#UNIX_LINES UNIX_LINES}
+	 * 		<li>{@link Pattern#LITERAL LITERAL}
+	 * 		<li>{@link Pattern#UNICODE_CHARACTER_CLASS UNICODE_CHARACTER_CLASS}
+	 * 		<li>{@link Pattern#COMMENTS COMMENTS}
+	 * @return A new predicate.
+	 */
+	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {
+		assertArgNotNull("expression", expression);
+		Pattern p = Pattern.compile(expression, flags);
+		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
+	}
+
+	/**
+	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified regular expression.
+	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 *
 	 * @param <T> The object type being tested.
 	 * @param value The regular expression to match.
 	 * @return A new predicate.
 	 */
-	public static final <T> Predicate<T> regex(Pattern value) {
-		return new AssertionPredicate<>(x -> x != null && value.matcher(stringify(x)).matches(), "Value did not match pattern.  Pattern=''{0}'', Actual='{VALUE}'", value.pattern());
+	public static final <T> AssertionPredicate<T> regex(Pattern value) {
+		assertArgNotNull("value", value);
+		return test(x -> x != null && value.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, value.pattern(), VALUE);
+	}
+
+	/**
+	 * Predicate that wraps another predicate.
+	 *
+	 * <p>
+	 * If the predicate extends from {@link AssertionPredicate}, the assertion error
+	 * message is <js>"Value did not pass test."</js> followed by the inner assertion error.
+	 * Otherwise the message is <js>"Value did not pass test.  Value='{0}'."</js>
+	 *
+	 * @param <T> The object type being tested.
+	 * @param predicate The predicate to run.
+	 * @return A new predicate.
+	 */
+	public static final <T> AssertionPredicate<T> test(Predicate<T> predicate) {
+		return new AssertionPredicate<>(predicate, null);
+	}
+
+	/**
+	 * Predicate that wraps another predicate.
+	 *
+	 * <p>
+	 * If the message specified is <jk>null</jk> and the predicate extends from {@link AssertionPredicate}, the assertion error
+	 * message is <js>"Value did not pass test."</js> followed by the inner assertion error.
+	 * Otherwise the message is <js>"Value did not pass test.  Value='{0}'."</js>
+	 *
+	 * @param <T> The object type being tested.
+	 * @param predicate The predicate to run.
+	 * @param msg
+	 * 	The error message if predicate fails.
+	 * 	<br>Supports {@link MessageFormat}-style arguments.
+	 * @param args
+	 * 	Optional message arguments.
+	 * 	<br>Can contain {@link #VALUE} to specify the value itself as an argument.
+	 * 	<br>Can contain {@link Function functions} to apply to the tested value.
+	 * @return A new predicate.
+	 */
+	public static final <T> AssertionPredicate<T> test(Predicate<T> predicate, String msg, Object...args) {
+		return new AssertionPredicate<>(predicate, msg, args);
 	}
 
 	/**
 	 * Combines the specified predicates into a singled AND'ed predicate.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Predicate test #x failed."</js> followed by
+	 * the inner failed message if the failed predicate extends from {@link AssertionPredicate}.
+	 *
 	 * @param predicates The predicates to combine.
 	 * @return The combined predicates.
 	 */
 	@SafeVarargs
-	public static final <T> Predicate<T> and(Predicate<T>...predicates) {
+	public static final <T> AssertionPredicate<T> and(Predicate<T>...predicates) {
 		return new AssertionPredicate.And<>(predicates);
 	}
 
 	/**
 	 * Combines the specified predicates into a singled OR'ed predicate.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"No predicate tests passed."</js>.
+	 *
 	 * @param predicates The predicates to combine.
 	 * @return The combined predicates.
 	 */
 	@SafeVarargs
-	public static final <T> Predicate<T> or(Predicate<T>...predicates) {
+	public static final <T> AssertionPredicate<T> or(Predicate<T>...predicates) {
 		return new AssertionPredicate.Or<>(predicates);
 	}
 
 	/**
 	 * Negates the specified predicate.
 	 *
+	 * <p>
+	 * Assertion error message is <js>"Predicate test unexpectedly passed."</js>.
+	 *
 	 * @param predicate The predicate to negate.
 	 * @return The combined predicates.
 	 */
-	public static final <T> Predicate<T> not(Predicate<T> predicate) {
+	public static final <T> AssertionPredicate<T> not(Predicate<T> predicate) {
 		return new AssertionPredicate.Not<>(predicate);
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -21,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
@@ -35,7 +37,19 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentObjectAssertion<T,R>")
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
-	private final T value;
+	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
+	static final String
+		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
+		MSG_unexpectedComparison = MESSAGES.getString("unexpectedComparison"),
+		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
+		MSG_unexpectedValueDidNotExpect = MESSAGES.getString("unexpectedValueDidNotExpect"),
+		MSG_notTheSameValue = MESSAGES.getString("notTheSameValue"),
+		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
+		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
+		MSG_expectedValueNotFound = MESSAGES.getString("expectedValueNotFound"),
+		MSG_unexpectedValueFound = MESSAGES.getString("unexpectedValueFound"),
+		MSG_objectWasNotType = MESSAGES.getString("objectWasNotType"),
+		MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
 
 	private static JsonSerializer JSON = JsonSerializer.create()
 		.ssq()
@@ -47,6 +61,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		.sortCollections()
 		.sortMaps()
 		.build();
+
+	private final T value;
 
 	/**
 	 * Constructor.
@@ -84,9 +100,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
-		assertNotNull("parent", parent);
+		assertArgNotNull("parent", parent);
 		if (! ClassInfo.of(value()).isChildOf(parent))
-			throw error("Unexpected class.\n\tExpect=[{0}]\n\tActual=[{1}]", className(parent), className(value));
+			throw error(MSG_unexpectedType, className(parent), className(value));
 		return returns();
 	}
 
@@ -209,7 +225,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 			String s1 = serializer.serialize(value);
 			String s2 = serializer.serialize(o);
 			if (ne(s1, s2))
-				throw error("Unexpected comparison.\n\tExpect=[{0}]\n\tActual=[{1}]", s2, s1);
+				throw error(MSG_unexpectedComparison, s2, s1);
 		} catch (SerializeException e) {
 			throw runtimeException(e);
 		}
@@ -227,7 +243,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		if (this.value == value)
 			return returns();
 		if (! value().equals(equivalent(value)))
-			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error(MSG_unexpectedValue, value, this.value);
 		return returns();
 	}
 
@@ -256,7 +272,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		if (this.value == null && value != null || this.value != null && value == null)
 			return returns();
 		if (this.value == null || this.value.equals(equivalent(value)))
-			throw error("Unexpected value.\n\tDid not expect=[{0}]\n\tActual=[{1}]", value, orElse(null));
+			throw error(MSG_unexpectedValueDidNotExpect, value, orElse(null));
 		return returns();
 	}
 
@@ -270,7 +286,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isSameObjectAs(Object value) throws AssertionError {
 		if (this.value == value)
 			return returns();
-		throw error("Not the same value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
+		throw error(MSG_notTheSameValue, value, this.value);
 	}
 
 	/**
@@ -323,7 +339,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public R isNotNull() throws AssertionError {
 		if (value == null)
-			throw error("Value was null.");
+			throw error(MSG_valueWasNull);
 		return returns();
 	}
 
@@ -338,7 +354,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public R isNull() throws AssertionError {
 		if (value != null)
-			throw error("Value was not null.");
+			throw error(MSG_valueWasNotNull);
 		return returns();
 	}
 
@@ -367,7 +383,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		for (Object v : values)
 			if (value().equals(equivalent(v)))
 				return returns();
-		throw error("Expected value not found.\n\tExpect=[{0}]\n\tActual=[{1}]", values, value);
+		throw error(MSG_expectedValueNotFound, values, value);
 	}
 
 	/**
@@ -380,7 +396,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isNotAny(Object...values) throws AssertionError {
 		for (Object v : values)
 			if (value().equals(equivalent(v)))
-				throw error("Unexpected value found.\n\tUnexpected=[{0}]\n\tActual=[{1}]", v, value);
+				throw error(MSG_unexpectedValueFound, v, value);
 		return returns();
 	}
 
@@ -431,7 +447,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		Object o = value;
 		if (o == null || c.isInstance(o))
 			return (T2)o;
-		throw new BasicAssertionError("Object was not type ''{0}''.  Actual=''{1}''", ClassInfo.of(c).getFullName(), o.getClass());
+		throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());
 	}
 
 	/**
@@ -763,7 +779,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	protected String getFailureMessage(Predicate<?> p, Object value) {
 		if (p instanceof AssertionPredicate)
 			return ((AssertionPredicate<?>)p).getFailureMessage();
-		return format("Unexpected value: ''{0}''", value);
+		return format(MSG_unexpectedValue2, value);
 	}
 
 	/**

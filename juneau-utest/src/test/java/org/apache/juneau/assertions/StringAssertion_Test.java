@@ -41,13 +41,13 @@ public class StringAssertion_Test {
 		test("foobar").replaceAll("fo+","bar").is("barbar").is("foobar");
 		test(of("foobar")).replaceAll("fo+","bar").is("barbar").is("foobar");
 		test(empty()).replaceAll("fo+","bar").isNull();
-		assertThrown(()->test("foobar").replaceAll(null,"")).is("Parameter 'regex' cannot be null.");
-		assertThrown(()->test("foobar").replaceAll("",null)).is("Parameter 'replacement' cannot be null.");
+		assertThrown(()->test("foobar").replaceAll(null,"")).is("Argument \"regex\" cannot be null.");
+		assertThrown(()->test("foobar").replaceAll("",null)).is("Argument \"replacement\" cannot be null.");
 
 		test("foobar").replace("foo","bar").is("barbar").is("foobar");
 		test(empty()).replace("foo","bar").isNull();
-		assertThrown(()->test("").replace(null,"bar").isNull()).is("Parameter 'target' cannot be null.");
-		assertThrown(()->test("").replace("foo",null).isNull()).is("Parameter 'replacement' cannot be null.");
+		assertThrown(()->test("").replace(null,"bar").isNull()).is("Argument \"target\" cannot be null.");
+		assertThrown(()->test("").replace("foo",null).isNull()).is("Argument \"replacement\" cannot be null.");
 
 		test("foo%20bar").urlDecode().is("foo bar").is("foo%20bar");
 		test(empty()).urlDecode().isNull();
@@ -62,91 +62,92 @@ public class StringAssertion_Test {
 		test(empty()).uc().isNull();
 
 		test("foo\nbar\nbaz").isEqualLinesTo("foo","bar","baz");
-		assertThrown(()->test(empty()).isEqualLinesTo((String[])null)).is("Parameter 'lines' cannot be null.");
+		assertThrown(()->test(empty()).isEqualLinesTo((String[])null)).is("Argument \"lines\" cannot be null.");
 		assertThrown(()->test(empty()).isEqualLinesTo((String)null)).is("Value was null.");
-		assertThrown(()->test("foo\nbar\nbaz").javaStrings().isEqualLinesTo("foo","bar","bar")).is("Text differed at position 10.\n\tExpect=[foo\\nbar\\nbar]\n\tActual=[foo\\nbar\\nbaz]");
+		assertThrown(()->test("foo\nbar\nbaz").javaStrings().isEqualLinesTo("foo","bar","bar")).is("String differed at position 10.\n\tExpect=\"foo\\nbar\\nbar\".\n\tActual=\"foo\\nbar\\nbaz\".");
 
 		test("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo","baz");
-		assertThrown(()->test(empty()).isEqualSortedLinesTo((String[])null)).is("Parameter 'lines' cannot be null.");
+		assertThrown(()->test(empty()).isEqualSortedLinesTo((String[])null)).is("Argument \"lines\" cannot be null.");
 		test("").isEqualSortedLinesTo((String)null);
 		assertThrown(()->test(empty()).isEqualSortedLinesTo()).is("Value was null.");
-		assertThrown(()->test("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo","bar")).is("Expected text had different values at line 2.\n\tExpect=[bar]\n\tActual=[baz]");
-		assertThrown(()->test("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo")).is("Expected text had different numbers of lines.\n\tExpect=[2]\n\tActual=[3]");
+		assertThrown(()->test("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo","bar")).is("Expected string had different values at line 2.\n\tExpect=\"bar\".\n\tActual=\"baz\".");
+		assertThrown(()->test("foo\nbar\nbaz").isEqualSortedLinesTo("bar","foo")).is("Expected string had different numbers of lines.\n\tExpect=\"2\".\n\tActual=\"3\".");
 		assertThrown(()->test(empty()).isEqualSortedLinesTo("foo")).is("Value was null.");
-		assertThrown(()->test("foo").isEqualSortedLinesTo((String)null)).is("Expected text had different values at line 1.\n\tExpect=[]\n\tActual=[foo]");
+		assertThrown(()->test("foo").isEqualSortedLinesTo((String)null)).is("Expected string had different values at line 1.\n\tExpect=\"\".\n\tActual=\"foo\".");
 
 		test("foo\nbar\nbaz").isEqualLinesTo("foo","bar","baz");
 
 		test("foobar").isEqualIgnoreCaseTo("FOOBAR");
 		test(empty()).isEqualIgnoreCaseTo(null);
-		assertThrown(()->test("foobar").isEqualIgnoreCaseTo("FOOBAZ")).is("Text differed at position 5.\n\tExpect=[FOOBAZ]\n\tActual=[foobar]");
-		assertThrown(()->test(empty()).isEqualIgnoreCaseTo("FOOBAZ")).is("Text differed at position 0.\n\tExpect=[FOOBAZ]\n\tActual=[null]");
-		assertThrown(()->test("foobar").isEqualIgnoreCaseTo(null)).is("Text differed at position 0.\n\tExpect=[null]\n\tActual=[foobar]");
+		assertThrown(()->test("foobar").isEqualIgnoreCaseTo("FOOBAZ")).is("String differed at position 5.\n\tExpect=\"FOOBAZ\".\n\tActual=\"foobar\".");
+		assertThrown(()->test(empty()).isEqualIgnoreCaseTo("FOOBAZ")).is("String differed at position 0.\n\tExpect=\"FOOBAZ\".\n\tActual=\"null\".");
+		assertThrown(()->test("foobar").isEqualIgnoreCaseTo(null)).is("String differed at position 0.\n\tExpect=\"null\".\n\tActual=\"foobar\".");
 
 		test("foobar").doesNotEqual("foobaz");
-		assertThrown(()->test("foobar").doesNotEqual("foobar")).is("Text equaled unexpected.\n\tText=[foobar]");
+		assertThrown(()->test("foobar").doesNotEqual("foobar")).is("String equaled unexpected.\n\tValue=\"foobar\".");
 
-		assertThrown(()->test("foobar").isEqualTo("foobaz")).is("Text differed at position 5.\n\tExpect=[foobaz]\n\tActual=[foobar]");
+		assertThrown(()->test("foobar").isEqualTo("foobaz")).is("String differed at position 5.\n\tExpect=\"foobaz\".\n\tActual=\"foobar\".");
 
 		test("foobar").isNot("foobaz");
-		assertThrown(()->test("foobar").isNot("foobar")).is("Text equaled unexpected.\n\tText=[foobar]");
-		assertThrown(()->test(empty()).isNot(null)).is("Text equaled unexpected.\n\tText=[null]");
+		assertThrown(()->test("foobar").isNot("foobar")).is("String equaled unexpected.\n\tValue=\"foobar\".");
+		assertThrown(()->test(empty()).isNot(null)).is("String equaled unexpected.\n\tValue=\"null\".");
 		test("foobar").isNot(null);
 		test(empty()).isNot("foobar");
 
 		test("foobar").doesNotEqualIc("foobaz");
-		assertThrown(()->test("foobar").doesNotEqualIc("Foobar")).is("Text equaled unexpected.\n\tText=[foobar]");
-		assertThrown(()->test(empty()).doesNotEqualIc(null)).is("Text equaled unexpected.\n\tText=[null]");
+		assertThrown(()->test("foobar").doesNotEqualIc("Foobar")).is("String equaled unexpected.\n\tValue=\"foobar\".");
+		assertThrown(()->test(empty()).doesNotEqualIc(null)).is("String equaled unexpected.\n\tValue=\"null\".");
 		test("foobar").doesNotEqualIc(null);
 		test(empty()).doesNotEqualIc("foobar");
 
 		test("foobar").contains("foo","bar");
-		assertThrown(()->test("foobar").contains("foo","baz")).is("Text did not contain expected substring.\n\tSubstring=[baz]\n\tText=[foobar]");
+		assertThrown(()->test("foobar").contains("foo","baz")).is("String did not contain expected substring.\n\tSubstring=\"baz\".\n\tValue=\"foobar\".");
 		test(empty()).contains();
-		assertThrown(()->test("foobar").contains((String[])null)).is("Parameter 'values' cannot be null.");
+		assertThrown(()->test("foobar").contains((String[])null)).is("Argument \"values\" cannot be null.");
 		test("foobar").contains((String)null);
-		assertThrown(()->test(empty()).contains("foobar")).is("Text did not contain expected substring.\n\tSubstring=[foobar]\n\tText=[null]");
+		assertThrown(()->test(empty()).contains("foobar")).is("String did not contain expected substring.\n\tSubstring=\"foobar\".\n\tValue=\"null\".");
 
 		test("foobar").doesNotContain("baz","qux");
-		assertThrown(()->test("foobar").doesNotContain("foo","baz")).is("Text contained unexpected substring.\n\tSubstring=[foo]\n\tText=[foobar]");
+		assertThrown(()->test("foobar").doesNotContain("foo","baz")).is("String contained unexpected substring.\n\tSubstring=\"foo\".\n\tValue=\"foobar\".");
 		test(empty()).doesNotContain();
-		assertThrown(()->test("foobar").doesNotContain((String[])null)).is("Parameter 'values' cannot be null.");
+		assertThrown(()->test("foobar").doesNotContain((String[])null)).is("Argument \"values\" cannot be null.");
 		test("foobar").doesNotContain((String)null);
 		test(empty()).doesNotContain("foobar");
 
 		test("").isEmpty();
 		test(empty()).isEmpty();
-		assertThrown(()->test("foo").isEmpty()).is("Text was not empty.\n\tText=[foo]");
+		assertThrown(()->test("foo").isEmpty()).is("String was not empty.\n\tValue=\"foo\".");
 
 		test("foo").isNotEmpty();
-		assertThrown(()->test("").isNotEmpty()).is("Text was empty.");
-		assertThrown(()->test(empty()).isNotEmpty()).is("Text was null.");
+		assertThrown(()->test("").isNotEmpty()).is("String was empty.");
+		assertThrown(()->test(empty()).isNotEmpty()).is("String was null.");
 
 		test("foo").matches("fo+");
-		assertThrown(()->test("foo").matches("bar")).is("Text did not match expected pattern.\n\tPattern=[bar]\n\tText=[foo]");
+		assertThrown(()->test("foo").matches("bar")).is("String did not match expected pattern.\n\tPattern=\"bar\".\n\tValue=\"foo\".");
 		assertThrown(()->test(empty()).matches("fo+")).is("Value was null.");
-		assertThrown(()->test("").matches((String)null)).is("Parameter 'regex' cannot be null.");
+		assertThrown(()->test("").matches((String)null)).is("Argument \"regex\" cannot be null.");
 
 		test("foo").matchesSimple("fo*");
-		assertThrown(()->test("foo").matchesSimple("b*")).is("Text did not match expected pattern.\n\tPattern=[\\Qb\\E.*\\Q\\E]\n\tText=[foo]");
+		assertThrown(()->test("foo").matchesSimple("b*")).is("String did not match expected pattern.\n\tPattern=\"\\Qb\\E.*\\Q\\E\".\n\tValue=\"foo\".");
 		assertThrown(()->test(empty()).matchesSimple("b*")).is("Value was null.");
-		assertThrown(()->test("").matchesSimple(null)).is("Parameter 'searchPattern' cannot be null.");
+		assertThrown(()->test("").matchesSimple(null)).is("Argument \"searchPattern\" cannot be null.");
 
 		test("foo").doesNotMatch("b.*");
-		assertThrown(()->test("foo").doesNotMatch("fo+")).is("Text matched unexpected pattern.\n\tPattern=[fo+]\n\tText=[foo]");
+		assertThrown(()->test("foo").doesNotMatch("fo+")).is("String matched unexpected pattern.\n\tPattern=\"fo+\".\n\tValue=\"foo\".");
 		test(empty()).doesNotMatch("fo+");
-		assertThrown(()->test("").doesNotMatch((String)null)).is("Parameter 'regex' cannot be null.");
+		assertThrown(()->test("").doesNotMatch((String)null)).is("Argument \"regex\" cannot be null.");
 
 		test("foo").startsWith("fo");
-		assertThrown(()->test("foo").startsWith("x")).is("Text did not start with expected string.\n\tString=[x]\n\tText=[foo]");
+		assertThrown(()->test("foo").startsWith("x")).is("String did not start with expected substring.\n\tSubstring=\"x\".\n\tValue=\"foo\".");
 
 		test("foo").endsWith("oo");
-		assertThrown(()->test("foo").endsWith("x")).is("Text did not end with expected string.\n\tString=[x]\n\tText=[foo]");
+		assertThrown(()->test("foo").endsWith("x")).is("String did not end with expected substring.\n\tSubstring=\"x\".\n\tValue=\"foo\".");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->test((String)null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		assertThrown(()->test((String)null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		test((String)null).stdout().javaStrings();
 	}
 }

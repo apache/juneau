@@ -56,12 +56,12 @@ public class DateAssertion_Test {
 		assertThrown(()->test(x2).isEqual(x1, ChronoUnit.DAYS)).contains("Unexpected value.");
 
 		assertThrown(()->test(empty()).isBefore(x1)).is("Value was null.");
-		assertThrown(()->test(x1).isBefore(null)).is("Parameter 'value' cannot be null.");
+		assertThrown(()->test(x1).isBefore(null)).is("Argument \"value\" cannot be null.");
 		test(x1).isBefore(x2);
 		assertThrown(()->test(x2).isBefore(x1)).contains("Value was not before expected.");
 
 		assertThrown(()->test(empty()).isAfter(x1)).is("Value was null.");
-		assertThrown(()->test(x1).isAfter(null)).is("Parameter 'value' cannot be null.");
+		assertThrown(()->test(x1).isAfter(null)).is("Argument \"value\" cannot be null.");
 		test(x2).isAfter(x1);
 		assertThrown(()->test(x1).isAfter(x2)).contains("Value was not after expected.");
 
@@ -74,8 +74,8 @@ public class DateAssertion_Test {
 		assertThrown(()->test(x1).isAfterNow()).contains("Value was not after expected.");
 
 		assertThrown(()->test(empty()).isBetween(x1,x2)).is("Value was null.");
-		assertThrown(()->test(now).isBetween(null,x2)).is("Parameter 'lower' cannot be null.");
-		assertThrown(()->test(now).isBetween(x1,null)).is("Parameter 'upper' cannot be null.");
+		assertThrown(()->test(now).isBetween(null,x2)).is("Argument \"lower\" cannot be null.");
+		assertThrown(()->test(now).isBetween(x1,null)).is("Argument \"upper\" cannot be null.");
 		test(now).isBetween(x1, x2);
 		assertThrown(()->test(x1).isBetween(now,x2)).contains("Value was not after expected.");
 		assertThrown(()->test(x2).isBetween(x1,now)).contains("Value was not before expected.");
@@ -84,6 +84,7 @@ public class DateAssertion_Test {
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->test((Date)null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		assertThrown(()->test((Date)null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		test((Date)null).stdout();
 	}
 }

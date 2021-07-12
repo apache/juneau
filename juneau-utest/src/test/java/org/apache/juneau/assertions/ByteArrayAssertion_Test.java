@@ -48,11 +48,11 @@ public class ByteArrayAssertion_Test {
 
 		assertThrown(()->test(empty()).isSize(0)).is("Value was null.");
 		test(x1).isSize(0);
-		assertThrown(()->test(x1).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
+		assertThrown(()->test(x1).isSize(1)).is("Array did not have the expected size.\n\tExpect=1.\n\tActual=0.");
 		test(x2).isSize(2);
-		assertThrown(()->test(of(x1)).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
+		assertThrown(()->test(of(x1)).isSize(1)).is("Array did not have the expected size.\n\tExpect=1.\n\tActual=0.");
 		test(x2).isSize(2);
-		assertThrown(()->test(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
+		assertThrown(()->test(x2).isSize(0)).is("Array did not have the expected size.\n\tExpect=0.\n\tActual=2.");
 
 		assertThrown(()->test(empty()).isEmpty()).is("Value was null.");
 		test(x1).isEmpty();
@@ -69,27 +69,28 @@ public class ByteArrayAssertion_Test {
 		test(empty()).asString().isNull();
 		test(x1).asString().is("");
 		test(x2).asString().is("ab");
-		assertThrown(()->test(x2).asString().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[ab]");
+		assertThrown(()->test(x2).asString().is("xx")).is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"ab\".");
 
 		test(empty()).asBase64().isNull();
 		test(x1).asBase64().is("");
 		test(x2).asBase64().is("YWI=");
-		assertThrown(()->test(x2).asBase64().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[YWI=]");
+		assertThrown(()->test(x2).asBase64().is("xx")).is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"YWI=\".");
 
 		test(empty()).asHex().isNull();
 		test(x1).asHex().is("");
 		test(x2).asHex().is("6162");
-		assertThrown(()->test(x2).asHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[6162]");
+		assertThrown(()->test(x2).asHex().is("xx")).is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"6162\".");
 
 		test(empty()).asSpacedHex().isNull();
 		test(x1).asSpacedHex().is("");
 		test(x2).asSpacedHex().is("61 62");
-		assertThrown(()->test(x2).asSpacedHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[61 62]");
+		assertThrown(()->test(x2).asSpacedHex().is("xx")).is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"61 62\".");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
 		assertThrown(()->test((byte[])null).msg("Foo {0}", 1).exists()).is("Foo 1");
+		assertThrown(()->test((byte[])null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
 		test((byte[])null).stdout();
 	}
 }
