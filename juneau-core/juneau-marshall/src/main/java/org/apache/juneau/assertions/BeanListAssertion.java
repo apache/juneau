@@ -33,6 +33,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="BeanListAssertion<E>")
 public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAssertion<E>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -51,6 +55,10 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	public BeanListAssertion(List<E> value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

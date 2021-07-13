@@ -32,6 +32,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="BeanAssertion<T>")
 public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -50,6 +54,10 @@ public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 	public BeanAssertion(T value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

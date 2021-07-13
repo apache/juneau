@@ -31,6 +31,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentBeanAssertion<T,R>")
 public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -51,6 +55,10 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	public FluentBeanAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
 	public FluentBeanAssertion<T,R> apply(Function<T,T> function) {
@@ -90,12 +98,8 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private BeanMap<T> toBeanMap() {
-		return BeanMap.of(value());
-	}
 
 	// <FluentSetters>
 
@@ -130,4 +134,12 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private BeanMap<T> toBeanMap() {
+		return BeanMap.of(value());
+	}
 }

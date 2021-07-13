@@ -30,6 +30,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="ThrowableAssertion<T>")
 public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAssertion<T,ThrowableAssertion<T>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -48,6 +52,10 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	public ThrowableAssertion(T value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

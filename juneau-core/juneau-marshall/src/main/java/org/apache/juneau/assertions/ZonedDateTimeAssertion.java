@@ -29,6 +29,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="ZonedDateTimeAssertion")
 public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDateTimeAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -47,6 +51,10 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 	public ZonedDateTimeAssertion(ZonedDateTime value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

@@ -32,12 +32,15 @@ import org.apache.juneau.internal.*;
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType"),
-		MSG_exceptionMessageDidNotContainExpectedSubstring = MESSAGES.getString("exceptionMessageDidNotContainExpectedSubstring"),
 		MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown"),
 		MSG_exceptionWasThrown = MESSAGES.getString("exceptionWasThrown"),
 		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -60,86 +63,13 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		super(creator, value, returns);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* FluentObjectAssertion */
 	public FluentThrowableAssertion<T,R> apply(Function<T,T> function) {
 		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
-	/**
-	 * Asserts that this throwable is of the specified type.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();})
-	 * 		.isType(RuntimeException.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param type The type.
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	public R isType(Class<?> type) {
-		assertArgNotNull("type", type);
-		if (! type.isInstance(value()))
-			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
-		return returns();
-	}
-
-	/**
-	 * Asserts that this throwable is exactly the specified type.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();})
-	 * 		.isExactType(RuntimeException.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param type The type.
-	 * @return This object (for method chaining).
-	 */
-	public R isExactType(Class<?> type) {
-		assertArgNotNull("type", type);
-		if (type != value().getClass())
-			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
-		return returns();
-	}
-
-	/**
-	 * Asserts that this throwable exists.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws any exception.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).exists();
-	 * </p>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	public R exists() {
-		if (valueIsNull())
-			throw error(MSG_exceptionWasNotThrown);
-		return returns();
-	}
-
-	/**
-	 * Asserts that this throwable doesn't exist.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method doesn't throw any exception.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).notExists();
-	 * </p>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	public R doesNotExist() {
-		if (valueIsNotNull())
-			throw error(MSG_exceptionWasThrown);
-		return returns();
 	}
 
 	/**
@@ -300,6 +230,91 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		}
 		return new FluentThrowableAssertion<>(this, (E)null, returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Asserts that this throwable is of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();})
+	 * 		.isType(RuntimeException.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param type The type.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public R isType(Class<?> type) {
+		assertArgNotNull("type", type);
+		if (! type.isInstance(value()))
+			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
+		return returns();
+	}
+
+	/**
+	 * Asserts that this throwable is exactly the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();})
+	 * 		.isExactType(RuntimeException.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param type The type.
+	 * @return This object (for method chaining).
+	 */
+	public R isExactType(Class<?> type) {
+		assertArgNotNull("type", type);
+		if (type != value().getClass())
+			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
+		return returns();
+	}
+
+	/**
+	 * Asserts that this throwable exists.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws any exception.</jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).exists();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public R exists() {
+		if (valueIsNull())
+			throw error(MSG_exceptionWasNotThrown);
+		return returns();
+	}
+
+	/**
+	 * Asserts that this throwable doesn't exist.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method doesn't throw any exception.</jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).notExists();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public R doesNotExist() {
+		if (valueIsNotNull())
+			throw error(MSG_exceptionWasThrown);
+		return returns();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

@@ -55,6 +55,10 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
 		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue");
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -78,10 +82,37 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 			throw new BasicAssertionError(MSG_objectWasNotAnArray, contents.getClass());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* FluentObjectAssertion */
 	public FluentPrimitiveArrayAssertion<T,R> apply(Function<T,T> function) {
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
+
+	@Override /* FluentBaseAssertion */
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, toString(), returns());
+	}
+
+	/**
+	 * Returns an object assertion on the item specified at the specified index.
+	 *
+	 * <p>
+	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
+	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @param index The index of the item to retrieve from the array.
+	 * @return A new assertion.
+	 */
+	public FluentObjectAssertion<T,R> item(int index) {
+		return new FluentObjectAssertion<>(this, at(index), returns());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that at least one value in the array passes the specified test.
@@ -109,11 +140,6 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 			if (! test.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValue, value());
 		return returns();
-	}
-
-	@Override /* FluentBaseAssertion */
-	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, toString(), returns());
 	}
 
 	/**
@@ -253,39 +279,9 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 		return returns();
 	}
 
-	/**
-	 * Returns an object assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentObjectAssertion<T,R> item(int index) {
-		return new FluentObjectAssertion<>(this, at(index), returns());
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@SuppressWarnings("unchecked")
-	private T at(int index) {
-		return valueIsNull() || index >= length() ? null : (T)Array.get(value(), index);
-	}
-
-	private int length() {
-		return Array.getLength(value());
-	}
-
-	@Override
-	public String toString() {
-		if (valueIsNull())
-			return null;
-		return STRINGIFIERS.getOrDefault(value().getClass().getComponentType(), (x) -> x.toString()).apply(value());
-	}
 
 	// <FluentSetters>
 
@@ -320,4 +316,24 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings("unchecked")
+	private T at(int index) {
+		return valueIsNull() || index >= length() ? null : (T)Array.get(value(), index);
+	}
+
+	private int length() {
+		return Array.getLength(value());
+	}
+
+	@Override
+	public String toString() {
+		if (valueIsNull())
+			return null;
+		return STRINGIFIERS.getOrDefault(value().getClass().getComponentType(), (x) -> x.toString()).apply(value());
+	}
 }

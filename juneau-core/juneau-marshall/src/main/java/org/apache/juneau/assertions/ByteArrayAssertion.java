@@ -28,6 +28,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="ByteArrayAssertion")
 public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -46,6 +50,10 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	public ByteArrayAssertion(byte[] value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

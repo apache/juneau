@@ -22,6 +22,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="BooleanAssertion")
 public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -40,6 +44,10 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 	public BooleanAssertion(Boolean value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

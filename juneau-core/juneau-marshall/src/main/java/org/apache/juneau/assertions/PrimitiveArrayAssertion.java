@@ -32,6 +32,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="PrimitiveArrayAssertion<T>")
 public class PrimitiveArrayAssertion<T> extends FluentPrimitiveArrayAssertion<T,PrimitiveArrayAssertion<T>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -52,6 +56,10 @@ public class PrimitiveArrayAssertion<T> extends FluentPrimitiveArrayAssertion<T,
 		Class<?> c = value == null ? null : value.getClass();
 		assertArg(c == null || c.isArray() && c.getComponentType().isPrimitive(), "Value wasn't a primitive array.");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

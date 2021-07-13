@@ -38,7 +38,7 @@ import org.apache.juneau.serializer.*;
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
 		MSG_unexpectedComparison = MESSAGES.getString("unexpectedComparison"),
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
@@ -64,6 +64,10 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
 	private final T value;
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -86,25 +90,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		this.value = value;
 	}
 
-	/**
-	 * Asserts that the object is an instance of the specified class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).isType(MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param parent The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isType(Class<?> parent) throws AssertionError {
-		assertArgNotNull("parent", parent);
-		if (! ClassInfo.of(value()).isChildOf(parent))
-			throw error(MSG_unexpectedType, className(parent), className(value));
-		return returns();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this object to text using the specified serializer and returns it as a new assertion.
@@ -195,269 +183,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public FluentObjectAssertion<T,R> apply(Function<T,T> function) {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
-	/**
-	 * Verifies that two objects are equivalent after converting them both to JSON.
-	 *
-	 * @param o The object to compare against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isSameJsonAs(Object o) throws AssertionError {
-		return isSameSerializedAs(o, JSON);
-	}
-
-	/**
-	 * Verifies that two objects are equivalent after converting them both to sorted JSON.
-	 *
-	 * <p>
-	 * Properties, maps, and collections are all sorted on both objects before comparison.
-	 *
-	 * @param o The object to compare against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isSameSortedAs(Object o) {
-		return isSameSerializedAs(o, JSON_SORTED);
-	}
-
-	/**
-	 * Asserts that the specified object is the same as this object after converting both to strings using the specified serializer.
-	 *
-	 * @param o The object to compare against.
-	 * @param serializer The serializer to use to serialize this object.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
-		try {
-			String s1 = serializer.serialize(value);
-			String s2 = serializer.serialize(o);
-			if (ne(s1, s2))
-				throw error(MSG_unexpectedComparison, s2, s1);
-		} catch (SerializeException e) {
-			throw runtimeException(e);
-		}
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEqual(Object value) throws AssertionError {
-		if (this.value == value)
-			return returns();
-		if (! value().equals(equivalent(value)))
-			throw error(MSG_unexpectedValue, value, this.value);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isEqual(Object)}.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(Object value) throws AssertionError {
-		return isEqual(equivalent(value));
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotEqual(Object value) throws AssertionError {
-		if (this.value == null && value != null || this.value != null && value == null)
-			return returns();
-		if (this.value == null || this.value.equals(equivalent(value)))
-			throw error(MSG_unexpectedValueDidNotExpect, value, orElse(null));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the specified object is the same object as this object.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isSameObjectAs(Object value) throws AssertionError {
-		if (this.value == value)
-			return returns();
-		throw error(MSG_notTheSameValue, value, this.value);
-	}
-
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R passes(Predicate<T> test) throws AssertionError {
-		if (test != null && ! test.test(value))
-			throw error(getFailureMessage(test, value));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the object is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R exists() throws AssertionError {
-		return isNotNull();
-	}
-
-	/**
-	 * Asserts that the object is null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotExist() throws AssertionError {
-		return isNull();
-	}
-
-	/**
-	 * Asserts that the object is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotNull() throws AssertionError {
-		if (value == null)
-			throw error(MSG_valueWasNull);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the object i null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNull() throws AssertionError {
-		if (value != null)
-			throw error(MSG_valueWasNotNull);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #doesNotEqual(Object)}.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNot(Object value) throws AssertionError {
-		return doesNotEqual(equivalent(value));
-	}
-
-	/**
-	 * Asserts that the value is one of the specified values.
-	 *
-	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isAny(Object...values) throws AssertionError {
-		for (Object v : values)
-			if (value().equals(equivalent(v)))
-				return returns();
-		throw error(MSG_expectedValueNotFound, values, value);
-	}
-
-	/**
-	 * Asserts that the value is one of the specified values.
-	 *
-	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotAny(Object...values) throws AssertionError {
-		for (Object v : values)
-			if (value().equals(equivalent(v)))
-				throw error(MSG_unexpectedValueFound, v, value);
-		return returns();
-	}
-
-	/**
-	 * Subclasses can override this method to provide special conversions on objects being compared.
-	 *
-	 * @param o The object to cast.
-	 * @return The cast object.
-	 */
-	protected Object equivalent(Object o) {
-		return o;
-	}
-
-	/**
-	 * Converts this object to a string using {@link Object#toString} and runs the {@link FluentStringAssertion#is(String)} on the result.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).is(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @param value The expected string value.
-	 * @return This object (for method chaining).
-	 */
-	public R isString(String value) {
-		return asString().is(value);
-	}
-
-	/**
-	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
-	 * </p>
-	 *
-	 * @param value The expected string value.
-	 * @return This object (for method chaining).
-	 */
-	public R isJson(String value) {
-		return asJson().is(value);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T2> T2 cast(Class<T2> c) throws AssertionError {
-		Object o = value;
-		if (o == null || c.isInstance(o))
-			return (T2)o;
-		throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());
 	}
 
 	/**
@@ -714,8 +439,333 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Asserts that the object is an instance of the specified class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).isType(MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param parent The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isType(Class<?> parent) throws AssertionError {
+		assertArgNotNull("parent", parent);
+		if (! ClassInfo.of(value()).isChildOf(parent))
+			throw error(MSG_unexpectedType, className(parent), className(value));
+		return returns();
+	}
+
+	/**
+	 * Verifies that two objects are equivalent after converting them both to JSON.
+	 *
+	 * @param o The object to compare against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSameJsonAs(Object o) throws AssertionError {
+		return isSameSerializedAs(o, JSON);
+	}
+
+	/**
+	 * Verifies that two objects are equivalent after converting them both to sorted JSON.
+	 *
+	 * <p>
+	 * Properties, maps, and collections are all sorted on both objects before comparison.
+	 *
+	 * @param o The object to compare against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSameSortedAs(Object o) {
+		return isSameSerializedAs(o, JSON_SORTED);
+	}
+
+	/**
+	 * Asserts that the specified object is the same as this object after converting both to strings using the specified serializer.
+	 *
+	 * @param o The object to compare against.
+	 * @param serializer The serializer to use to serialize this object.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
+		try {
+			String s1 = serializer.serialize(value);
+			String s2 = serializer.serialize(o);
+			if (ne(s1, s2))
+				throw error(MSG_unexpectedComparison, s2, s1);
+		} catch (SerializeException e) {
+			throw runtimeException(e);
+		}
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEqual(Object value) throws AssertionError {
+		if (this.value == value)
+			return returns();
+		if (! value().equals(equivalent(value)))
+			throw error(MSG_unexpectedValue, value, this.value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isEqual(Object)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(Object value) throws AssertionError {
+		return isEqual(equivalent(value));
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotEqual(Object value) throws AssertionError {
+		if (this.value == null && value != null || this.value != null && value == null)
+			return returns();
+		if (this.value == null || this.value.equals(equivalent(value)))
+			throw error(MSG_unexpectedValueDidNotExpect, value, orElse(null));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the specified object is the same object as this object.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSameObjectAs(Object value) throws AssertionError {
+		if (this.value == value)
+			return returns();
+		throw error(MSG_notTheSameValue, value, this.value);
+	}
+
+	/**
+	 * Asserts that the value passes the specified predicate test.
+	 *
+	 * @param test The predicate to use to test the value.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R passes(Predicate<T> test) throws AssertionError {
+		if (test != null && ! test.test(value))
+			throw error(getFailureMessage(test, value));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R exists() throws AssertionError {
+		return isNotNull();
+	}
+
+	/**
+	 * Asserts that the object is null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotExist() throws AssertionError {
+		return isNull();
+	}
+
+	/**
+	 * Asserts that the object is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotNull() throws AssertionError {
+		if (value == null)
+			throw error(MSG_valueWasNull);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object i null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNull() throws AssertionError {
+		if (value != null)
+			throw error(MSG_valueWasNotNull);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * <p>
+	 * Equivalent to {@link #doesNotEqual(Object)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNot(Object value) throws AssertionError {
+		return doesNotEqual(equivalent(value));
+	}
+
+	/**
+	 * Asserts that the value is one of the specified values.
+	 *
+	 * @param values The values to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isAny(Object...values) throws AssertionError {
+		for (Object v : values)
+			if (value().equals(equivalent(v)))
+				return returns();
+		throw error(MSG_expectedValueNotFound, values, value);
+	}
+
+	/**
+	 * Asserts that the value is one of the specified values.
+	 *
+	 * @param values The values to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotAny(Object...values) throws AssertionError {
+		for (Object v : values)
+			if (value().equals(equivalent(v)))
+				throw error(MSG_unexpectedValueFound, v, value);
+		return returns();
+	}
+
+	/**
+	 * Converts this object to a string using {@link Object#toString} and runs the {@link FluentStringAssertion#is(String)} on the result.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param value The expected string value.
+	 * @return This object (for method chaining).
+	 */
+	public R isString(String value) {
+		return asString().is(value);
+	}
+
+	/**
+	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * </p>
+	 *
+	 * @param value The expected string value.
+	 * @return This object (for method chaining).
+	 */
+	public R isJson(String value) {
+		return asJson().is(value);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public FluentObjectAssertion<T,R> msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentObjectAssertion<T,R> out(PrintStream value) {
+		super.out(value);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentObjectAssertion<T,R> silent() {
+		super.silent();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentObjectAssertion<T,R> stdout() {
+		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentObjectAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+		super.throwable(value);
+		return this;
+	}
+
+	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Subclasses can override this method to provide special conversions on objects being compared.
+	 *
+	 * @param o The object to cast.
+	 * @return The cast object.
+	 */
+	protected Object equivalent(Object o) {
+		return o;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T2> T2 cast(Class<T2> c) throws AssertionError {
+		Object o = value;
+		if (o == null || c.isInstance(o))
+			return (T2)o;
+		throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());
+	}
 
 	/**
 	 * Returns the inner value after asserting it is not <jk>null</jk>.
@@ -800,38 +850,4 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public String toString() {
 		return value == null ? null : value.toString();
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<T,R> msg(String msg, Object...args) {
-		super.msg(msg, args);
-		return this;
-	}
-
-	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<T,R> out(PrintStream value) {
-		super.out(value);
-		return this;
-	}
-
-	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<T,R> silent() {
-		super.silent();
-		return this;
-	}
-
-	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<T,R> stdout() {
-		super.stdout();
-		return this;
-	}
-
-	@Override /* GENERATED - Assertion */
-	public FluentObjectAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
-		return this;
-	}
-
-	// </FluentSetters>
 }

@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
- * 
+ *
  * 	String[] <jv>array</jv> = {<js>"foo"</js>};
  * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);
  * </p>
@@ -31,6 +31,10 @@ import org.apache.juneau.internal.*;
  */
 @FluentSetters(returns="ArrayAssertion<E>")
 public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>> {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creator.
@@ -50,6 +54,10 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	public ArrayAssertion(E[] value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

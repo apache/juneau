@@ -28,6 +28,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="LongAssertion")
 public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -46,6 +50,10 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	public LongAssertion(Long value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

@@ -31,6 +31,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="CollectionAssertion<E>")
 public class CollectionAssertion<E> extends FluentCollectionAssertion<E,CollectionAssertion<E>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -49,6 +53,10 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	public CollectionAssertion(Collection<E> value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

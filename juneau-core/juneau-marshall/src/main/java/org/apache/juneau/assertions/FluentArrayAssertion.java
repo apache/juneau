@@ -34,13 +34,17 @@ import org.apache.juneau.internal.*;
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
 		MSG_arrayWasEmpty = MESSAGES.getString("arrayWasEmpty"),
 		MSG_arrayUnexpectedSize = MESSAGES.getString("arrayUnexpectedSize"),
 		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
 		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
 		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -63,10 +67,71 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		super(creator, contents, returns);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* FluentObjectAssertion */
 	public FluentArrayAssertion<E,R> apply(Function<E[],E[]> function) {
 		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
+
+	@Override /* FluentBaseAssertion */
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, toString(), returns());
+	}
+
+	/**
+	 * Converts this assertion into a {@link FluentBeanListAssertion}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Extracts the 'foo' property from an array of beans and validates their values.</jc>.
+	 * 	<jsm>assertObject<jsm>(myArrayOfBeans).asBeanList().property(<js>"foo"</js>).sorted().equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentBeanListAssertion<E,R> asBeanList() {
+		return new FluentBeanListAssertion<>(this, toList(), returns());
+	}
+
+	/**
+	 * Returns an object assertion on the item specified at the specified index.
+	 *
+	 * <p>
+	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
+	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @param index The index of the item to retrieve from the array.
+	 * @return A new assertion.
+	 */
+	public FluentObjectAssertion<E,R> item(int index) {
+		return new FluentObjectAssertion<>(this, at(index), returns());
+	}
+
+	/**
+	 * Sorts the entries in this list.
+	 *
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> sorted() {
+		return new FluentListAssertion<>(this, toSortedList(null), returns());
+	}
+
+	/**
+	 * Sorts the entries in this list using the specified comparator.
+	 *
+	 * @param comparator The comparator to use to sort the list.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> sorted(Comparator<E> comparator) {
+		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that at least one value in the array passes the specified test.
@@ -176,54 +241,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	/**
-	 * Returns an object assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentObjectAssertion<E,R> item(int index) {
-		return new FluentObjectAssertion<>(this, at(index), returns());
-	}
-
-	/**
-	 * Converts this assertion into a {@link FluentBeanListAssertion}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Extracts the 'foo' property from an array of beans and validates their values.</jc>.
-	 * 	<jsm>assertObject<jsm>(myArrayOfBeans).asBeanList().property(<js>"foo"</js>).sorted().equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent string assertion.
-	 */
-	public FluentBeanListAssertion<E,R> asBeanList() {
-		return new FluentBeanListAssertion<>(this, toList(), returns());
-	}
-
-	/**
-	 * Sorts the entries in this list.
-	 *
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> sorted() {
-		return new FluentListAssertion<>(this, toSortedList(null), returns());
-	}
-
-	/**
-	 * Sorts the entries in this list using the specified comparator.
-	 *
-	 * @param comparator The comparator to use to sort the list.
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> sorted(Comparator<E> comparator) {
-		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
-	}
-
-	/**
 	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
 	 *
 	 * @param entries The expected entries in this list.
@@ -256,8 +273,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
-	public R equals(E...entries) throws AssertionError {
+	public R equals(Object...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
  		return each(p);
 	}
@@ -272,7 +288,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R is(@SuppressWarnings("unchecked") E...entries) throws AssertionError {
+	public R is(Object...entries) throws AssertionError {
 		return equals(entries);
 	}
 
@@ -297,35 +313,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		return returns();
 	}
 
-	@Override /* FluentBaseAssertion */
-	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, toString(), returns());
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private int length() {
-		return value().length;
-	}
-
-	private List<E> toList() {
-		return valueIsNull() ? null : AList.of(value());
-	}
-
-	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : AList.of(value()).sortWith(comparator);
-	}
-
-	private E at(int index) {
-		return valueIsNull() || index >= length() ? null : value()[index];
-	}
-
-	@Override
-	public String toString() {
-		return valueIsNull() ? null : Arrays.toString(value());
-	}
 
 	// <FluentSetters>
 
@@ -360,4 +350,29 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private int length() {
+		return value().length;
+	}
+
+	private List<E> toList() {
+		return valueIsNull() ? null : AList.of(value());
+	}
+
+	private List<E> toSortedList(Comparator<E> comparator) {
+		return valueIsNull() ? null : AList.of(value()).sortWith(comparator);
+	}
+
+	private E at(int index) {
+		return valueIsNull() || index >= length() ? null : value()[index];
+	}
+
+	@Override
+	public String toString() {
+		return valueIsNull() ? null : Arrays.toString(value());
+	}
 }

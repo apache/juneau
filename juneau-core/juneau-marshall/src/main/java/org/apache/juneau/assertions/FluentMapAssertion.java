@@ -35,12 +35,16 @@ import org.apache.juneau.internal.*;
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>  {
 
 	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_mapWasNotEmpty = MESSAGES.getString("mapWasNotEmpty"),
 		MSG_mapDidNotContainExpectedKey = MESSAGES.getString("mapDidNotContainExpectedKey"),
 		MSG_mapContainedUnexpectedKey = MESSAGES.getString("mapContainedUnexpectedKey"),
 		MSG_mapWasEmpty = MESSAGES.getString("mapWasEmpty"),
 		MSG_mapDidNotHaveTheExpectedSize = MESSAGES.getString("mapDidNotHaveTheExpectedSize");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -62,6 +66,10 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	public FluentMapAssertion(Assertion creator, Map<K,V> contents, R returns) {
 		super(creator, contents, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
 	public FluentMapAssertion<K,V,R> apply(Function<Map<K,V>,Map<K,V>> function) {
@@ -109,6 +117,10 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 				m2.put(k, m1.get(k));
 		return new FluentMapAssertion<>(this, m2, returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the map exists and is empty.
@@ -174,16 +186,8 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private V get(K key) {
-		return orElse(emptyMap()).get(key);
-	}
-
-	private int size() {
-		return value().size();
-	}
 
 	// <FluentSetters>
 
@@ -218,4 +222,16 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private V get(K key) {
+		return orElse(emptyMap()).get(key);
+	}
+
+	private int size() {
+		return value().size();
+	}
 }

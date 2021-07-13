@@ -31,11 +31,15 @@ import org.apache.juneau.internal.*;
 public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentComparableAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_valueWasNotGreaterThanExpected = MESSAGES.getString("valueWasNotGreaterThanExpected"),
 		MSG_valueWasNotGreaterOrEqualsToExpected = MESSAGES.getString("valueWasNotGreaterOrEqualsToExpected"),
 		MSG_valueWasNotLessThanExpected = MESSAGES.getString("valueWasNotLessThanExpected"),
 		MSG_valueWasNotLessOrEqualsToExpected = MESSAGES.getString("valueWasNotLessOrEqualsToExpected");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -58,10 +62,18 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		super(creator, value, returns);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* FluentObjectAssertion */
 	public FluentComparableAssertion<T,R> apply(Function<T,T> function) {
 		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value is greater than the specified value.
@@ -192,16 +204,9 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		return returns();
 	}
 
-	/**
-	 * Perform a comparison with the specified object.
-	 *
-	 * @param value The object to compare against.
-	 * @return The comparison value.
-	 * @throws AssertionError If value was <jk>null</jk>.
-	 */
-	protected int compareTo(Object value) throws AssertionError {
-		return value().compareTo(equivalent(value));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 
@@ -236,4 +241,19 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Perform a comparison with the specified object.
+	 *
+	 * @param value The object to compare against.
+	 * @return The comparison value.
+	 * @throws AssertionError If value was <jk>null</jk>.
+	 */
+	protected int compareTo(Object value) throws AssertionError {
+		return value().compareTo(equivalent(value));
+	}
 }

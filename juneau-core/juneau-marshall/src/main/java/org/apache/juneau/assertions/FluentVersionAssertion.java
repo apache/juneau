@@ -34,6 +34,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentVersionAssertion<R>")
 public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -54,6 +58,10 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	public FluentVersionAssertion(Assertion creator, Version value, R returns) {
 		super(creator, value, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Extracts the specified version part (zero-indexed position).
@@ -91,6 +99,10 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	public FluentIntegerAssertion<R> maintenance() {
 		return part(2);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

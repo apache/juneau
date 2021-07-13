@@ -24,6 +24,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="ComparableAssertion<T>")
 public class ComparableAssertion<T extends Comparable<T>> extends FluentComparableAssertion<T,ComparableAssertion<T>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -42,6 +46,10 @@ public class ComparableAssertion<T extends Comparable<T>> extends FluentComparab
 	public ComparableAssertion(T value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

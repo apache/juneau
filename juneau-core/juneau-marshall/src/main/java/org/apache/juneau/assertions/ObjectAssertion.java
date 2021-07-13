@@ -30,6 +30,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="ObjectAssertion<T>")
 public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<T>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -48,6 +52,10 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 	public ObjectAssertion(T value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

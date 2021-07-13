@@ -28,6 +28,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="IntegerAssertion")
 public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -46,6 +50,10 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	public IntegerAssertion(Integer value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

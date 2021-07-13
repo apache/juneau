@@ -29,6 +29,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="DateAssertion")
 public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -47,6 +51,10 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	public DateAssertion(Date value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

@@ -30,6 +30,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="StringAssertion")
 public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -48,6 +52,10 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	public StringAssertion(Object text) {
 		super(stringify(text), null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

@@ -34,6 +34,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentIntegerAssertion<R>")
 public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -55,17 +59,9 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer
 		super(creator, value, returns);
 	}
 
-	@Override
-	protected int compareTo(Object value) {
-		return value().compareTo(((Number)value).intValue());
-	}
-
-	@Override
-	protected Object equivalent(Object o) {
-		if (o instanceof Number)
-			return ((Number)o).intValue();
-		return o;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 
@@ -100,4 +96,20 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	protected int compareTo(Object value) {
+		return value().compareTo(((Number)value).intValue());
+	}
+
+	@Override
+	protected Object equivalent(Object o) {
+		if (o instanceof Number)
+			return ((Number)o).intValue();
+		return o;
+	}
 }

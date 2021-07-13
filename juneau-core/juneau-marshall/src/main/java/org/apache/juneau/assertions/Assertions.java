@@ -28,7 +28,7 @@ import org.apache.juneau.cp.*;
 public class Assertions {
 
 	private static final Messages MESSAGES = Messages.of(Assertions.class, "Messages");
-	static final String
+	private static final String
 		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull");
 
 	/**

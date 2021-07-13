@@ -33,10 +33,14 @@ public class Assertion {
 		MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull"),
 		MSG_causedBy = MESSAGES.getString("causedBy");
 
-	String msg;
-	Object[] msgArgs;
-	PrintStream out = System.err;
-	Class<? extends RuntimeException> throwable;
+	private String msg;
+	private Object[] msgArgs;
+	private PrintStream out = System.err;
+	private Class<? extends RuntimeException> throwable;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor used when this assertion is being created from within another assertion.
@@ -50,6 +54,10 @@ public class Assertion {
 			this.throwable = creator.throwable;
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Config
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Allows to to specify the assertion failure message.
@@ -148,6 +156,18 @@ public class Assertion {
 		return new BasicAssertionError(cause, msg);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <FluentSetters>
+
+	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Convenience method for getting the class name for an object.
 	 *
@@ -168,8 +188,4 @@ public class Assertion {
 	protected static <E> Class<E[]> arrayClass(Class<E> c) {
 		return (Class<E[]>)Array.newInstance(c,0).getClass();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

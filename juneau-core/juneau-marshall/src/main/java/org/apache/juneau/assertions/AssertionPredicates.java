@@ -49,13 +49,12 @@ public class AssertionPredicates {
 	private static Function<Object,String> TYPENAME = x -> x == null ? null : x.getClass().getName();
 
 	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
-	static final String
+	private static final String
 		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
 		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
 		MSG_valueDidNotMatchExpected = MESSAGES.getString("valueDidNotMatchExpected"),
 		MSG_valueDidNotContainExpected = MESSAGES.getString("valueDidNotContainExpected"),
 		MSG_valueUnexpectedlyMatched = MESSAGES.getString("valueUnexpectedlyMatched"),
-		MSG_valueDidNotMatchValue = MESSAGES.getString("valueDidNotMatchValue"),
 		MSG_valueWasNotExpectedType = MESSAGES.getString("valueWasNotExpectedType"),
 		MSG_valueDidNotMatchPattern = MESSAGES.getString("valueDidNotMatchPattern");
 

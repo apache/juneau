@@ -27,6 +27,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentByteArrayAssertion<R>")
 public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<byte[],R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -47,6 +51,10 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<b
 	public FluentByteArrayAssertion(Assertion creator, byte[] contents, R returns) {
 		super(creator, contents, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this byte array to a UTF-8 encoded string and returns it as a new assertion.
@@ -124,6 +132,10 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<b
 	public FluentStringAssertion<R> asSpacedHex() {
 		return new FluentStringAssertion<>(this, valueIsNull() ? null : toSpacedHex(value()), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

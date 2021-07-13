@@ -27,9 +27,13 @@ import org.apache.juneau.internal.*;
 public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentBooleanAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_valueWasFalse = MESSAGES.getString("valueWasFalse"),
 		MSG_valueWasTrue = MESSAGES.getString("valueWasTrue");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -51,6 +55,10 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	public FluentBooleanAssertion(Assertion creator, Boolean value, R returns) {
 		super(creator, value, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value is true.
@@ -75,6 +83,10 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 			throw error(MSG_valueWasTrue);
 		return returns();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

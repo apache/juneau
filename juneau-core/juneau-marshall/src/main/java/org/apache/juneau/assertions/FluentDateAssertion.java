@@ -40,10 +40,14 @@ import org.apache.juneau.internal.*;
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentDateAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
 		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
 		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -65,6 +69,10 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	public FluentDateAssertion(Assertion creator, Date value, R returns) {
 		super(creator, value, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value equals the specified value at the specified precision.
@@ -144,6 +152,10 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		isAfter(lower);
 		return returns();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

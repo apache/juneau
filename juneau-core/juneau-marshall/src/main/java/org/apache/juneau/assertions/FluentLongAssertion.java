@@ -34,6 +34,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentLongAssertion<R>")
 public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -55,6 +59,10 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 		super(creator, value, returns);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Converts this long into an integer and then returns it as an integer assertion.
 	 *
@@ -65,17 +73,9 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 		return new FluentIntegerAssertion<>(this, map(Long::intValue).orElse(null), returns());
 	}
 
-	@Override
-	protected int compareTo(Object value) {
-		return value().compareTo(((Number)value).longValue());
-	}
-
-	@Override
-	protected Object equivalent(Object o) {
-		if (o instanceof Number)
-			return ((Number)o).longValue();
-		return o;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 
@@ -110,4 +110,20 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	protected int compareTo(Object value) {
+		return value().compareTo(((Number)value).longValue());
+	}
+
+	@Override
+	protected Object equivalent(Object o) {
+		if (o instanceof Number)
+			return ((Number)o).longValue();
+		return o;
+	}
 }

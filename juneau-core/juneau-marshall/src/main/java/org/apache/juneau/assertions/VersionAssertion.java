@@ -29,6 +29,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="VersionAssertion")
 public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -47,6 +51,10 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	public VersionAssertion(Version value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

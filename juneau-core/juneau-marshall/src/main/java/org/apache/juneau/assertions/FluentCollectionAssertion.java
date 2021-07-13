@@ -31,13 +31,17 @@ import org.apache.juneau.internal.*;
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),
 		MSG_collectionDidNotContainExpectedValue = MESSAGES.getString("collectionDidNotContainExpectedValue"),
 		MSG_collectionDidNotContainTestedValue = MESSAGES.getString("collectionDidNotContainTestedValue"),
 		MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue"),
 		MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),
 		MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -60,10 +64,18 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		super(creator, contents, returns);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* FluentObjectAssertion */
 	public FluentCollectionAssertion<E,R> apply(Function<Collection<E>,Collection<E>> function) {
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the collection exists and is empty.
@@ -158,15 +170,9 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return returns();
 	}
 
-	/**
-	 * Returns the size of this collection if it is not <jk>null</jk>.
-	 *
-	 * @return the size of this collection if it is not <jk>null</jk>.
-	 * @throws AssertionError If value was <jk>null</jk>.
-	 */
-	protected int size() throws AssertionError {
-		return value().size();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 
@@ -201,4 +207,18 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the size of this collection if it is not <jk>null</jk>.
+	 *
+	 * @return the size of this collection if it is not <jk>null</jk>.
+	 * @throws AssertionError If value was <jk>null</jk>.
+	 */
+	protected int size() throws AssertionError {
+		return value().size();
+	}
 }

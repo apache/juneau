@@ -32,8 +32,12 @@ import org.apache.juneau.internal.*;
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentListAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_listDidNotContainExpectedValueAt = MESSAGES.getString("listDidNotContainExpectedValueAt");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -55,6 +59,10 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	public FluentListAssertion(Assertion creator, List<E> contents, R returns) {
 		super(creator, contents, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies a transform on the inner object and returns a new inner object.
@@ -98,6 +106,10 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	public FluentListAssertion<E,R> sorted(Comparator<E> comparator) {
 		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
@@ -175,22 +187,9 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return returns();
 	}
 
-	@Override
-	protected List<E> value() throws AssertionError {
-		return (List<E>)super.value();
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private E at(int index) throws AssertionError {
-		return valueIsNull() || index >= size() ? null : value().get(index);
-	}
-
-	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : AList.of(value()).sortWith(comparator);
-	}
 
 	// <FluentSetters>
 
@@ -225,4 +224,21 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	protected List<E> value() throws AssertionError {
+		return (List<E>)super.value();
+	}
+
+	private E at(int index) throws AssertionError {
+		return valueIsNull() || index >= size() ? null : value().get(index);
+	}
+
+	private List<E> toSortedList(Comparator<E> comparator) {
+		return valueIsNull() ? null : AList.of(value()).sortWith(comparator);
+	}
 }

@@ -31,6 +31,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="ListAssertion<E>")
 public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -49,6 +53,10 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	public ListAssertion(List<E> value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

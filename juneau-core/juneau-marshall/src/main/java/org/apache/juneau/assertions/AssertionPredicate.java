@@ -56,17 +56,18 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	public static final Function<Object,String> VALUE = x -> stringify(x);
 
 	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
-	static final String
+	private static final String
 		MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest"),
-		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue"),
-		MSG_predicateTestFailed = MESSAGES.getString("predicateTestFailed"),
-		MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed"),
-		MSG_predicateTestsUnexpectedlyPassed = MESSAGES.getString("predicateTestsUnexpectedlyPassed");
+		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
 
-	final Predicate<T> inner;
-	final String message;
-	final Object[] args;
+	private final Predicate<T> inner;
+	private final String message;
+	private final Object[] args;
 	final ThreadLocal<String> failedMessage = new ThreadLocal<>();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -100,6 +101,10 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		this.args = null;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Predicate */
 	@SuppressWarnings({"unchecked","rawtypes"})
 	public boolean test(T t) {
@@ -123,14 +128,22 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		return inner.test(t);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the error message from the last call to this assertion.
 	 *
 	 * @return The error message, or <jk>null</jk> if there was no failure.
 	 */
-	public String getFailureMessage() {
+	protected String getFailureMessage() {
 		return failedMessage.get();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Subclasses
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Encapsulates multiple predicates into a single AND operation.
@@ -144,6 +157,10 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	public static class And<T> extends AssertionPredicate<T> {
 
 		private final Predicate<T>[] inner;
+
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final String
+			MSG_predicateTestFailed = MESSAGES.getString("predicateTestFailed");
 
 		/**
 		 * Constructor.
@@ -186,6 +203,10 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static class Or<T> extends AssertionPredicate<T> {
 
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final String
+			MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed");
+
 		private final Predicate<T>[] inner;
 
 		/**
@@ -221,6 +242,10 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static class Not<T> extends AssertionPredicate<T> {
 
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final String
+			MSG_predicateTestsUnexpectedlyPassed = MESSAGES.getString("predicateTestsUnexpectedlyPassed");
+
 		private final Predicate<T> inner;
 
 		/**
@@ -246,5 +271,4 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			return true;
 		}
 	}
-
 }

@@ -29,6 +29,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentBeanListAssertion<E,R>")
 public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -49,6 +53,10 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	public FluentBeanListAssertion(Assertion creator, List<E> contents, R returns) {
 		super(creator, contents, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
@@ -73,12 +81,8 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private static BeanMap<?> beanMap(Object o) {
-		return BeanMap.of(o);
-	}
 
 	// <FluentSetters>
 
@@ -113,4 +117,12 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static BeanMap<?> beanMap(Object o) {
+		return BeanMap.of(o);
+	}
 }

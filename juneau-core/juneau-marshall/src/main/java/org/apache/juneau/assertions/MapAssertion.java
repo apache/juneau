@@ -32,6 +32,10 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="MapAssertion<K,V>")
 public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creator.
 	 *
@@ -50,6 +54,10 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	public MapAssertion(Map<K,V> value) {
 		super(value, null);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

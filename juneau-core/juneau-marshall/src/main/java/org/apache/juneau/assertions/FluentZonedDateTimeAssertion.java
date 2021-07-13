@@ -40,10 +40,14 @@ import org.apache.juneau.internal.*;
 public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
 
 	private static final Messages MESSAGES = Messages.of(FluentZonedDateTimeAssertion.class, "Messages");
-	static final String
+	private static final String
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
 		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
 		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -65,6 +69,10 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	public FluentZonedDateTimeAssertion(Assertion creator, ZonedDateTime value, R returns) {
 		super(creator, value, returns);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value equals the specified value at the specified precision.
@@ -145,6 +153,10 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		isAfter(lower);
 		return returns();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

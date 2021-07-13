@@ -26,6 +26,10 @@ public abstract class FluentAssertion<R> extends Assertion {
 
 	private final R returns;
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -37,15 +41,9 @@ public abstract class FluentAssertion<R> extends Assertion {
 		this.returns = returns;
 	}
 
-	/**
-	 * Returns the object that the fluent methods on this class should return.
-	 *
-	 * @return The response object.
-	 */
-	@SuppressWarnings("unchecked")
-	protected R returns() {
-		return returns != null ? returns : (R)this;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 
@@ -80,4 +78,19 @@ public abstract class FluentAssertion<R> extends Assertion {
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the object that the fluent methods on this class should return.
+	 *
+	 * @return The response object.
+	 */
+	@SuppressWarnings("unchecked")
+	protected R returns() {
+		return returns != null ? returns : (R)this;
+	}
+
 }
