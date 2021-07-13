@@ -68,7 +68,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a04_serializer_bad() throws Exception {
-		assertThrown(()->serializedEntity(null,OpenApiSerializer.DEFAULT).schema(schema().required().build()).build().asString()).contains("Required value not provided.");
+		assertThrown(()->serializedEntity(null,OpenApiSerializer.DEFAULT).schema(schema().required().build()).build().asString()).messages().contains("Required value not provided.");
 	}
 
 	@Test

@@ -2124,27 +2124,27 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_outOfBounds() {
-		assertThrown(()->ma.getParameterType(2, HashMap.class)).is("Invalid type index. index=2, argsLength=2");
+		assertThrown(()->ma.getParameterType(2, HashMap.class)).message().is("Invalid type index. index=2, argsLength=2");
 	}
 
 	@Test
 	public void getParameterType_notASubclass() {
-		assertThrown(()->aClass.getParameterType(2, HashMap.class)).is("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
+		assertThrown(()->aClass.getParameterType(2, HashMap.class)).message().is("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
 	}
 
 	@Test
 	public void getParameterType_nullParameterizedType() {
-		assertThrown(()->aClass.getParameterType(2, null)).is("Argument \"pt\" cannot be null.");
+		assertThrown(()->aClass.getParameterType(2, null)).message().is("Argument \"pt\" cannot be null.");
 	}
 
 	@Test
 	public void getParameterType_notParamerizedType() {
-		assertThrown(()->mb.getParameterType(2, MA.class)).is("Class 'MA' is not a parameterized type");
+		assertThrown(()->mb.getParameterType(2, MA.class)).message().is("Class 'MA' is not a parameterized type");
 	}
 
 	@Test
 	public void getParameterType_unresolvedTypes() {
-		assertThrown(()->mc.getParameterType(1, HashMap.class)).is("Could not resolve variable 'E' to a type.");
+		assertThrown(()->mc.getParameterType(1, HashMap.class)).message().is("Could not resolve variable 'E' to a type.");
 	}
 
 	@Test
@@ -2174,12 +2174,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_unresolvedGenericArrayType() {
-		assertThrown(()->mi.getParameterType(1, HashMap.class)).is("Could not resolve variable 'X[]' to a type.");
+		assertThrown(()->mi.getParameterType(1, HashMap.class)).message().is("Could not resolve variable 'X[]' to a type.");
 	}
 
 	@Test
 	public void getParameterType_wildcardType() {
-		assertThrown(()->mj.getParameterType(1, HashMap.class)).is("Could not resolve variable 'X' to a type.");
+		assertThrown(()->mj.getParameterType(1, HashMap.class)).message().is("Could not resolve variable 'X' to a type.");
 	}
 
 	@Test

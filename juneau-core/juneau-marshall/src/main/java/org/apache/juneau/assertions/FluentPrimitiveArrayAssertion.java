@@ -78,6 +78,39 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 			throw new BasicAssertionError(MSG_objectWasNotAnArray, contents.getClass());
 	}
 
+	@Override /* FluentObjectAssertion */
+	public FluentPrimitiveArrayAssertion<T,R> apply(Function<T,T> function) {
+		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
+	/**
+	 * Asserts that at least one value in the array passes the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R any(Predicate<T> test) throws AssertionError {
+		for (int i = 0, j = length(); i < j; i++)
+			if (test.test(at(i)))
+				return returns();
+		throw error(MSG_arrayDidNotContainExpectedValue, value());
+	}
+
+	/**
+	 * Asserts that all values in the array pass the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R all(Predicate<T> test) throws AssertionError {
+		for (int i = 0, j = length(); i < j; i++)
+			if (! test.test(at(i)))
+				throw error(MSG_arrayDidNotContainExpectedValue, value());
+		return returns();
+	}
+
 	@Override /* FluentBaseAssertion */
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(this, toString(), returns());
@@ -143,7 +176,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 */
 	public R equals(String...entries) throws AssertionError {
 		Predicate<T>[] p = stream(entries).map(StringUtils::stringify).map(AssertionPredicates::eq).toArray(Predicate[]::new);
-		return passes(p);
+		return each(p);
 	}
 
 	/**
@@ -170,7 +203,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	@SuppressWarnings("unchecked")
 	public R equals(T...entries) throws AssertionError {
 		Predicate<T>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
-		return passes(p);
+		return each(p);
 	}
 
 	/**
@@ -196,7 +229,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
-	public R passes(Predicate<T>...tests) throws AssertionError {
+	public R each(Predicate<T>...tests) throws AssertionError {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
 			Predicate<T> t = tests[i];

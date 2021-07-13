@@ -15,25 +15,66 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ComparableAssertion_Test {
+@SuppressWarnings("serial")
+public class Assertion_Test {
 
-	private <T extends Comparable<T>> ComparableAssertion<T> test(T value) {
-		return assertComparable(value).silent();
+	public static class A1 extends RuntimeException {
+		public A1(String msg, Throwable cause) {
+			super(msg, cause);
+		}
+	}
+
+	public static class A2 extends RuntimeException {
+		public A2(String msg, Throwable cause) {
+			super(msg, cause);
+		}
+	}
+
+	public static class A3 extends RuntimeException {
+		public A3(String msg) {
+			throw new A2("fromA3", null);
+		}
+	}
+
+	public static class A extends StringAssertion {
+		public A(Object text) {
+			super(text);
+		}
+		public A doError() {
+			throw error(new A1("foo", null), "bar {0}", "baz");
+		}
 	}
 
 	@Test
-	public void a01_basic() throws Exception {
-		test(null).doesNotExist();
-		test(1).isGte(1);
-	}
+	public void a01_error() throws Exception {
+		A a = new A("xxx");
+		a.silent();
 
-	@Test
-	public void a02_other() throws Exception {
-		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
-		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
-		test(null).stdout().silent();
+		assertThrown(()->a.doError())
+			.isExactType(BasicAssertionError.class)
+			.message().is("bar baz")
+			.causedBy().isExactType(A1.class)
+			.causedBy().message().is("foo")
+			.causedBy().causedBy().isNull();
+
+		a.throwable(A2.class);
+		assertThrown(()->a.doError())
+			.isExactType(A2.class)
+			.message().is("bar baz")
+			.causedBy().isExactType(A1.class)
+			.causedBy().message().is("foo")
+			.causedBy().causedBy().isNull();
+
+		a.throwable(A3.class);
+		assertThrown(()->a.doError())
+			.isExactType(RuntimeException.class)
+			.message().is("bar baz")
+			.causedBy().isExactType(A1.class)
+			.causedBy().message().is("foo")
+			.causedBy().causedBy().isNull();
 	}
 }

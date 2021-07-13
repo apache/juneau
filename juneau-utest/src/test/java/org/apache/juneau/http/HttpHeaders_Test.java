@@ -59,8 +59,8 @@ public class HttpHeaders_Test {
 		assertObject(HttpHeaders.cast(x8)).isType(Header.class).asJson().is("'X8: 8'");
 		assertObject(HttpHeaders.cast(x9)).isType(Header.class).asJson().is("'X9: 9'");
 
-		assertThrown(()->HttpHeaders.cast("X")).is("Object of type java.lang.String could not be converted to a Header.");
-		assertThrown(()->HttpHeaders.cast(null)).is("Object of type null could not be converted to a Header.");
+		assertThrown(()->HttpHeaders.cast("X")).message().is("Object of type java.lang.String could not be converted to a Header.");
+		assertThrown(()->HttpHeaders.cast(null)).message().is("Object of type null could not be converted to a Header.");
 
 		assertTrue(HttpHeaders.canCast(x1));
 		assertTrue(HttpHeaders.canCast(x2));

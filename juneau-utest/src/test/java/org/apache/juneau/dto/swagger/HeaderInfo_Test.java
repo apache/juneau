@@ -556,9 +556,9 @@ public class HeaderInfo_Test {
 	public void c01_strict() throws Exception {
 		HeaderInfo t = new HeaderInfo().strict();
 		t.collectionFormat("csv");
-		assertThrown(()->t.collectionFormat("foo")).contains("Invalid");
+		assertThrown(()->t.collectionFormat("foo")).message().contains("Invalid");
 		t.type("string");
-		assertThrown(()->t.type("foo")).contains("Invalid");
+		assertThrown(()->t.type("foo")).message().contains("Invalid");
 	}
 
 	@Test

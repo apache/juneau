@@ -188,6 +188,16 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Applies a transform on the inner object and returns a new inner object.
+	 *
+	 * @param function The function to apply.
+	 * @return This object (for method chaining).
+	 */
+	public FluentObjectAssertion<T,R> apply(Function<T,T> function) {
+		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
+	/**
 	 * Verifies that two objects are equivalent after converting them both to JSON.
 	 *
 	 * @param o The object to compare against.

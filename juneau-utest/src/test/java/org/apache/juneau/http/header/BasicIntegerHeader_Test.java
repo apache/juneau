@@ -63,7 +63,7 @@ public class BasicIntegerHeader_Test {
 		c.get().header(integerHeader(null,()->null)).run().assertBody().isEmpty();
 		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertBody().isEmpty();
 		c.get().header(integerHeader(null,(Supplier<Integer>)null)).run().assertBody().isEmpty();
-		assertThrown(()->integerHeader(HEADER,"foo")).contains("Value 'foo' could not be parsed as an integer.");
+		assertThrown(()->integerHeader(HEADER,"foo")).message().is("Value 'foo' could not be parsed as an integer.");
 	}
 
 	@Test

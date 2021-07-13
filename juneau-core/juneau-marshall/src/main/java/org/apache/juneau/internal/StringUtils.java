@@ -32,7 +32,7 @@ import javax.xml.bind.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
@@ -2517,15 +2517,10 @@ public final class StringUtils {
 			return ((ClassMeta<?>)o).getFullName();
 		if (o instanceof Class)
 			return ((Class<?>)o).getName();
-		if (BeanContext.DEFAULT == null)
-			return o.toString();
-		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);
-		if (cm.isMapOrBean() || cm.isCollectionOrArray())
-			return SimpleJsonSerializer.DEFAULT.toString(o);
-		if (cm.isClass())
-			return ((Class<?>)o).getName();
-		if (cm.isMethod())
+		if (o instanceof Method)
 			return MethodInfo.of((Method)o).getShortName();
+		if (o.getClass().isArray())
+			o = ArrayUtils.toObjectList(o);
 		return o.toString();
 	}
 
@@ -3115,5 +3110,37 @@ public final class StringUtils {
 	 */
 	public static final String decompress(byte[] is) throws Exception {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
+	}
+
+	/**
+	 * Converts the specified object to simplified JSON.
+	 *
+	 * @param o The object to convert.
+	 * @return The specified object as simplified JSON.
+	 */
+	public static final String json(Object o) {
+		return SimpleJson.DEFAULT == null ? stringify(o) : SimpleJson.DEFAULT.toString(o);
+	}
+
+	/**
+	 * Converts the specified object to a comma-delimited list.
+	 *
+	 * @param o The object to convert.
+	 * @return The specified object as a comma-delimited list.
+	 */
+	public static final String cdl(Object o) {
+		if (o == null)
+			return null;
+		if (o.getClass().isArray()) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0, j = Array.getLength(o); i < j; i++) {
+				if (i > 0) sb.append(", ");
+				sb.append(Array.get(o, i));
+			}
+			return sb.toString();
+		}
+		if (o instanceof Collection)
+			return join((Collection<?>)o, ", ");
+		return o.toString();
 	}
 }

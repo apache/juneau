@@ -44,7 +44,7 @@ public class ClassUtilsTest {
 
 		FB t2 = null;
 
-		assertThrown(()->ClassUtils.castOrCreate(FB.class, FB.class, true)).is("Could not instantiate class org.apache.juneau.utils.ClassUtilsTest$FB");
+		assertThrown(()->ClassUtils.castOrCreate(FB.class, FB.class, true)).message().is("Could not instantiate class org.apache.juneau.utils.ClassUtilsTest$FB");
 
 		t2 = ClassUtils.castOrCreate(FB.class, FB.class, true, "foo");
 		assertEquals(1, t2.c);

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -102,13 +103,13 @@ public abstract class ComboSerializeTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertThrowable(e).contains(comboInput.exceptionMsg);
+			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertThrowable(e).contains(comboInput.exceptionMsg);
+			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
 		}
 	}
 

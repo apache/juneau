@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.processors;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -103,7 +105,7 @@ public final class SerializedPojoProcessor implements ResponseProcessor {
 
 		throw new NotAcceptable(
 			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
-			req.getHeader("Accept").orElse(""), res.getOpContext().getSerializers().getSupportedMediaTypes()
+			req.getHeader("Accept").orElse(""), json(res.getOpContext().getSerializers().getSupportedMediaTypes())
 		);
 	}
 }

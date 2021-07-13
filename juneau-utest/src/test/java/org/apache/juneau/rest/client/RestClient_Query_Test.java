@@ -144,8 +144,8 @@ public class RestClient_Query_Test {
 	public void a11_queryPairs_Objects() throws Exception {
 		client().queryDataPairs("foo","bar","baz","qux").build().get("/query").run().assertBody().is("foo=bar&baz=qux");
 		client().build().get("/query").queryDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
-		assertThrown(()->client().queryDataPairs("foo","bar","baz")).contains("Odd number of parameters");
-		assertThrown(()->client().build().get().queryDataPairs("foo","bar","baz")).contains("Odd number of parameters");
+		assertThrown(()->client().queryDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into queryDataPairs(String...)");
+		assertThrown(()->client().build().get().queryDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into queryDataPairs(String...)");
 	}
 
 	public static class A12 extends Reader {
@@ -160,7 +160,7 @@ public class RestClient_Query_Test {
 	@Test
 	public void a12_queryCustom_Object() throws Exception {
 		client().build().get("/query").queryCustom("foo=bar").run().assertBody().contains("foo=bar");
-		assertThrown(()->client().build().get("").queryCustom(new A12())).contains("foo");
+		assertThrown(()->client().build().get("").queryCustom(new A12())).messages().contains("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

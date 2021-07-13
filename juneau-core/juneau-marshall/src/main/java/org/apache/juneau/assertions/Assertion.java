@@ -134,14 +134,15 @@ public class Assertion {
 	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
 		msg = format(msg, args);
 		if (this.msg != null)
-			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg).replace("<<<CAUSED-BY>>>", cause == null ? "" : MSG_causedBy + ": " + cause.getMessage());
+			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
 		if (out != null)
 			out.println(msg);
 		if (throwable != null) {
 			try {
-				throw BeanStore.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).addBean(Object[].class, new Object[0]).createBean(throwable);
+				throw BeanStore.create().build().addBean(Throwable.class, cause).addBean(String.class, msg).createBean(throwable);
 			} catch (ExecutableException e) {
-				throw runtimeException(e);
+				// If we couldn't create requested exception, just throw a RuntimeException.
+				throw runtimeException(cause, msg);
 			}
 		}
 		return new BasicAssertionError(cause, msg);

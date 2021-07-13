@@ -478,7 +478,7 @@ public class RequestBody {
 		ContentType ct = req.getContentType();
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			ct.isPresent() ? ct.asMediaType().orElse(null) : "not-specified", req.getOpContext().getParsers().getSupportedMediaTypes()
+			ct.isPresent() ? ct.asMediaType().orElse(null) : "not-specified", json(req.getOpContext().getParsers().getSupportedMediaTypes())
 		);
 	}
 
@@ -491,7 +491,7 @@ public class RequestBody {
 				if (encoder == null)
 					throw new UnsupportedMediaType(
 						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						req.getHeader("content-encoding").orElse(null), encoders.getSupportedEncodings()
+						req.getHeader("content-encoding").orElse(null), json(encoders.getSupportedEncodings())
 					);
 			}
 

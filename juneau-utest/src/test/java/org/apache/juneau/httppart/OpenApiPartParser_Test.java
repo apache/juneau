@@ -50,8 +50,8 @@ public class OpenApiPartParser_Test {
 	public void a01_inputValidations_nullInput() throws Exception {
 		assertNull(parse(T_NONE, null, String.class));
 		assertNull(parse(tNone().required(false).build(), null, String.class));
-		assertThrown(()->parse(tNone().required().build(), null, String.class)).is("No value specified.");
-		assertThrown(()->parse(tNone().required(true).build(), null, String.class)).is("No value specified.");
+		assertThrown(()->parse(tNone().required().build(), null, String.class)).message().is("No value specified.");
+		assertThrown(()->parse(tNone().required(true).build(), null, String.class)).message().is("No value specified.");
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class OpenApiPartParser_Test {
 		s = tNone().allowEmptyValue().build();
 		assertEquals("", parse(s, "", String.class));
 
-		assertThrown(()->parse(tNone().allowEmptyValue(false).build(), "", String.class)).is("Empty value not allowed.");
+		assertThrown(()->parse(tNone().allowEmptyValue(false).build(), "", String.class)).message().is("Empty value not allowed.");
 
 		assertEquals(" ", parse(s, " ", String.class));
 	}
@@ -75,8 +75,8 @@ public class OpenApiPartParser_Test {
 		assertEquals("xx", parse(s, "xx", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		assertThrown(()->parse(s, "y", String.class)).is("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->parse(s, "", String.class)).is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->parse(s, "y", String.class)).message().is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->parse(s, "", String.class)).message().is("Value does not match expected pattern.  Must match pattern: x.*");
 
 		// Blank/null patterns are ignored.
 		assertEquals("x", parse(tNone().pattern("").allowEmptyValue().build(), "x", String.class));
@@ -90,8 +90,8 @@ public class OpenApiPartParser_Test {
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		assertThrown(()->parse(s, "bar", String.class)).is("Value does not match one of the expected values.  Must be one of the following: ['foo']");
-		assertThrown(()->parse(s, "", String.class)).is("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->parse(s, "bar", String.class)).message().is("Value does not match one of the expected values.  Must be one of the following:  foo");
+		assertThrown(()->parse(s, "", String.class)).message().is("Value does not match one of the expected values.  Must be one of the following:  foo");
 
 		assertEquals("foo", parse(tNone()._enum((Set<String>)null).build(), "foo", String.class));
 		assertEquals("foo", parse(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo", String.class));
@@ -106,11 +106,11 @@ public class OpenApiPartParser_Test {
 		assertEquals("1", parse(s, "1", String.class));
 		assertEquals("12", parse(s, "12", String.class));
 
-		assertThrown(()->parse(s, "", String.class)).is("Minimum length of value not met.");
-		assertThrown(()->parse(s, "123", String.class)).is("Maximum length of value exceeded.");
-		assertThrown(()->tNone().minLength(2l).maxLength(1l).build()).contains("maxLength cannot be less than minLength.");
-		assertThrown(()->tNone().minLength(-2l).build()).contains("minLength cannot be less than zero.");
-		assertThrown(()->tNone().maxLength(-2l).build()).contains("maxLength cannot be less than zero.");
+		assertThrown(()->parse(s, "", String.class)).message().is("Minimum length of value not met.");
+		assertThrown(()->parse(s, "123", String.class)).message().is("Maximum length of value exceeded.");
+		assertThrown(()->tNone().minLength(2l).maxLength(1l).build()).message().contains("maxLength cannot be less than minLength.");
+		assertThrown(()->tNone().minLength(-2l).build()).message().contains("minLength cannot be less than zero.");
+		assertThrown(()->tNone().maxLength(-2l).build()).message().contains("maxLength cannot be less than zero.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

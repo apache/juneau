@@ -372,7 +372,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw runtimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, VALID_COLLECTION_FORMATS
+				value, json(VALID_COLLECTION_FORMATS)
 			);
 		collectionFormat = value;
 	}
@@ -950,7 +950,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_IN))
 			throw runtimeException(
 				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, VALID_IN
+				value, json(VALID_IN)
 			);
 		in = value;
 		if ("path".equals(value))
@@ -1792,7 +1792,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw runtimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, VALID_TYPES
+				value, json(VALID_TYPES)
 			);
 		type = value;
 	}

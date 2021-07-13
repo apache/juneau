@@ -31,24 +31,24 @@ public class ListAssertion_Test {
 	public void a01_basic() throws Exception {
 		List<String> x1 = AList.create(), x2 = AList.of("a","b");
 
-		assertThrown(()->test(null).exists()).is("Value was null.");
+		assertThrown(()->test(null).exists()).message().is("Value was null.");
 		test(x1).exists();
 
 		test(null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).is("Value was not null.");
+		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
 
-		assertThrown(()->test(null).isSize(0)).is("Value was null.");
+		assertThrown(()->test(null).isSize(0)).message().is("Value was null.");
 		test(x1).isSize(0);
-		assertThrown(()->test(x1).isSize(1)).is("Collection did not have the expected size.\n\tExpect=1.\n\tActual=0.");
+		assertThrown(()->test(x1).isSize(1)).message().is("Collection did not have the expected size.\n\tExpect=1.\n\tActual=0.");
 		test(x2).isSize(2);
-		assertThrown(()->test(x2).isSize(0)).is("Collection did not have the expected size.\n\tExpect=0.\n\tActual=2.");
+		assertThrown(()->test(x2).isSize(0)).message().is("Collection did not have the expected size.\n\tExpect=0.\n\tActual=2.");
 
-		assertThrown(()->test(null).isEmpty()).is("Value was null.");
+		assertThrown(()->test(null).isEmpty()).message().is("Value was null.");
 		test(x1).isEmpty();
-		assertThrown(()->test(x2).isEmpty()).is("Collection was not empty.");
+		assertThrown(()->test(x2).isEmpty()).message().is("Collection was not empty.");
 
-		assertThrown(()->test(null).isNotEmpty()).is("Value was null.");
-		assertThrown(()->test(x1).isNotEmpty()).is("Collection was empty.");
+		assertThrown(()->test(null).isNotEmpty()).message().is("Value was null.");
+		assertThrown(()->test(x1).isNotEmpty()).message().is("Collection was empty.");
 		test(x2).isNotEmpty();
 
 		test(null).item(0).doesNotExist();
@@ -58,8 +58,8 @@ public class ListAssertion_Test {
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
 		test(null).stdout();
 	}
 }

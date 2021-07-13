@@ -63,7 +63,7 @@ public class BasicLongHeader_Test {
 		c.get().header(longHeader(null,()->null)).run().assertBody().isEmpty();
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertBody().isEmpty();
 		c.get().header(longHeader(null,(Supplier<Long>)null)).run().assertBody().isEmpty();
-		assertThrown(()->longHeader(HEADER,"foo")).contains("Value 'foo' could not be parsed as a long.");
+		assertThrown(()->longHeader(HEADER,"foo")).message().is("Value 'foo' could not be parsed as a long.");
 	}
 
 	@Test

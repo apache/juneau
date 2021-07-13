@@ -13,12 +13,11 @@
 package org.apache.juneau.mstat;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
-
-import org.apache.juneau.marshall.*;
 
 /**
  * Represents an entry in {@link ThrownStore}.
@@ -177,7 +176,7 @@ public class ThrownStats implements Cloneable {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+		return json(this);
 	}
 
 	@Override /* Object */

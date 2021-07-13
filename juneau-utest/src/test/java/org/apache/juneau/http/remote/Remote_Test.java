@@ -14,6 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -280,7 +281,7 @@ public class Remote_Test {
 	@Test
 	public void c02_rootUriNotSpecified() throws Exception {
 		C1 x = client(C.class).rootUri("").build().getRemote(C1.class);
-		assertThrown(()->x.x1()).contains("Root URI has not been specified.");
+		assertThrown(()->x.x1()).message().is("Invalid remote definition found on class org.apache.juneau.http.remote.Remote_Test$C1. Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 	}
 
 
@@ -373,16 +374,16 @@ public class Remote_Test {
 	@Test
 	public void c04_rethrownExceptions() throws Exception {
 		C4b x = remote(C4a.class,C4b.class);
-		assertThrown(()->x.x1()).is("foo");
-		assertThrown(()->x.x1a().get()).contains("foo");
-		assertThrown(()->x.x1b().get()).contains("foo");
-		assertThrown(()->x.x2()).contains("foo");
-		assertThrown(()->x.x3().get()).contains("foo");
-		assertThrown(()->x.x4()).is("foo");
-		assertThrown(()->x.x4a().get()).contains("foo");
-		assertThrown(()->x.x4b().get()).contains("foo");
-		assertThrown(()->x.x5()).contains("foo");
-		assertThrown(()->x.x6().get()).contains("foo");
+		assertThrown(()->x.x1()).message().is("foo");
+		assertThrown(()->x.x1a().get()).messages().contains("foo");
+		assertThrown(()->x.x1b().get()).messages().contains("foo");
+		assertThrown(()->x.x2()).message().is("foo");
+		assertThrown(()->x.x3().get()).messages().contains("foo");
+		assertThrown(()->x.x4()).message().is("foo");
+		assertThrown(()->x.x4a().get()).messages().contains("foo");
+		assertThrown(()->x.x4b().get()).messages().contains("foo");
+		assertThrown(()->x.x5()).message().is("foo");
+		assertThrown(()->x.x6().get()).messages().contains("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -426,8 +427,8 @@ public class Remote_Test {
 		assertEquals(400,x.x7().intValue());
 		assertEquals(false,x.x8());
 		assertEquals(false,x.x9());
-		assertThrown(()->x.x5()).contains("Only integer and booleans types are valid.");
-		assertThrown(()->x.x10()).contains("Only integer and booleans types are valid.");
+		assertThrown(()->x.x5()).messages().any(contains("Only integer and booleans types are valid."));
+		assertThrown(()->x.x10()).messages().any(contains("Only integer and booleans types are valid."));
 	}
 
 	@Rest
@@ -488,7 +489,7 @@ public class Remote_Test {
 	@Test
 	public void e02_rrpc_noRootPath() throws Exception {
 		RestClient x = client(E.class).rootUri("").build();
-		assertThrown(()->x.getRrpcInterface(E1.class)).contains("Root URI has not been specified.");
+		assertThrown(()->x.getRrpcInterface(E1.class)).message().is("Invalid remote definition found on class org.apache.juneau.http.remote.Remote_Test$E1. Root URI has not been specified.  Cannot construct absolute path to remote interface.");
 	}
 
 	@Remote(path="/proxy")
@@ -540,7 +541,7 @@ public class Remote_Test {
 	@Test
 	public void e05_rrpc_rethrownCheckedException() throws Exception {
 		RestClient x = client(E5.class).build();
-		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).is("foobar");
+		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).message().is("foobar");
 	}
 
 	@Rest
@@ -559,7 +560,7 @@ public class Remote_Test {
 	@Test
 	public void e06_rrpc_rethrownUncheckedException() throws Exception {
 		RestClient x = client(E6.class).build();
-		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).contains("foobar");
+		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).messages().any(contains("foobar"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -610,7 +611,7 @@ public class Remote_Test {
 
 	@Test
 	public void f02_headers_badSupplier() throws Exception {
-		assertThrown(()->client(F.class).build().getRemote(F2a.class)).contains("foo");
+		assertThrown(()->client(F.class).build().getRemote(F2a.class)).messages().contains("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -628,7 +629,7 @@ public class Remote_Test {
 
 	@Test
 	public void g01_badMethodName() throws Exception {
-		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).contains("Invalid value");
+		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).message().contains("Invalid value");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

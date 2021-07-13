@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * Represents a parsed URL path-info string.
@@ -112,6 +111,6 @@ public class UrlPath {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(toMap());
+		return json(toMap());
 	}
 }

@@ -35,24 +35,24 @@ public class BooleanAssertion_Test {
 	@Test
 	public void a01_basic() throws Exception {
 
-		assertThrown(()->test((Boolean)null).exists()).is("Value was null.");
+		assertThrown(()->test((Boolean)null).exists()).message().is("Value was null.");
 		test(true).exists();
-		assertThrown(()->test(empty()).exists()).is("Value was null.");
+		assertThrown(()->test(empty()).exists()).message().is("Value was null.");
 		test(true).exists();
 
 		test(empty()).doesNotExist();
-		assertThrown(()->test(true).doesNotExist()).is("Value was not null.");
+		assertThrown(()->test(true).doesNotExist()).message().is("Value was not null.");
 
 		test(empty()).isEqual(null);
 		test(true).isEqual(true);
 		test(of(true)).isEqual(true);
 
 		test(true).isTrue();
-		assertThrown(()->test(true).isFalse()).is("Value was true.");
+		assertThrown(()->test(true).isFalse()).message().is("Value was true.");
 		test(false).isFalse();
-		assertThrown(()->test(false).isTrue()).is("Value was false.");
+		assertThrown(()->test(false).isTrue()).message().is("Value was false.");
 
-		assertThrown(()->test(true).isEqual(false)).contains("Unexpected value.");
+		assertThrown(()->test(true).isEqual(false)).message().contains("Unexpected value.");
 		test(empty()).isEqual(null);
 
 		test(true).isNot("true");
@@ -60,8 +60,8 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->test((Boolean)null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		assertThrown(()->test((Boolean)null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
+		assertThrown(()->test((Boolean)null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
+		assertThrown(()->test((Boolean)null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
 		test((Boolean)null).stdout();
 	}
 }

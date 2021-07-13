@@ -13,13 +13,13 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshall.SimpleJson;
 
 /**
  * Utility class for comparing two versions of a POJO.
@@ -230,6 +230,6 @@ public class BeanDiff {
 
 	@Override
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+		return json(this);
 	}
 }

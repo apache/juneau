@@ -13,8 +13,11 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static java.util.Collections.*;
 
 import java.io.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -57,6 +60,11 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		super(creator, value, returns);
 	}
 
+	@Override /* FluentObjectAssertion */
+	public FluentThrowableAssertion<T,R> apply(Function<T,T> function) {
+		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	/**
 	 * Asserts that this throwable is of the specified type.
 	 *
@@ -96,52 +104,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		if (type != value().getClass())
 			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
 		return returns();
-	}
-
-	/**
-	 * Asserts that this throwable or any parent throwables contains all of the specified substrings.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).contains(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @param substrings The substrings to check for.
-	 * @return This object (for method chaining).
-	 */
-	public R contains(String...substrings) {
-		assertArgNotNull("substrings", substrings);
-		for (String substring : substrings) {
-			if (substring != null) {
-				Throwable e2 = value();
-				boolean found = false;
-				while (e2 != null && ! found) {
-					found |= StringUtils.contains(e2.getMessage(), substring);
-					e2 = e2.getCause();
-				}
-				if (! found) {
-					throw error(MSG_exceptionMessageDidNotContainExpectedSubstring, substring, value().getMessage());
-				}
-			}
-		}
-		return returns();
-	}
-
-	/**
-	 * Asserts that this throwable has the specified message.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws an exception with the message 'foobar'.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).is(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @param msg The message to check for.
-	 * @return This object (for method chaining).
-	 */
-	public R is(String msg) {
-		return message().is(msg);
 	}
 
 	/**
@@ -196,6 +158,34 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	}
 
 	/**
+	 * Returns an assertion against the throwable message and all caused-by messages.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).messages().containsMatch(<js>".*foobar.*"</js>);
+	 * </p>
+	 *
+	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
+	 */
+	public FluentListAssertion<String,R> messages() {
+		List<String> l = null;
+		Throwable t = orElse(null);
+		if (t == null)
+			l = emptyList();
+		else if (t.getCause() == null)
+			l = singletonList(t.getMessage());
+		else {
+			l = new ArrayList<>();
+			while (t != null) {
+				l.add(t.getMessage());
+				t = t.getCause();
+			}
+		}
+		return new FluentListAssertion<>(this, l, returns());
+	}
+
+	/**
 	 * Returns an assertion against the throwable localized message.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -208,6 +198,34 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	public FluentStringAssertion<R> localizedMessage() {
 		return new FluentStringAssertion<>(this, map(Throwable::getLocalizedMessage).orElse(null), returns());
+	}
+
+	/**
+	 * Returns an assertion against the throwable message and all caused-by messages.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).localizedMessages().contains(<js>".*foobar.*"</js>);
+	 * </p>
+	 *
+	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
+	 */
+	public FluentListAssertion<String,R> localizedMessages() {
+		List<String> l = null;
+		Throwable t = orElse(null);
+		if (t == null)
+			l = emptyList();
+		else if (t.getCause() == null)
+			l = singletonList(t.getMessage());
+		else {
+			l = new ArrayList<>();
+			while (t != null) {
+				l.add(t.getLocalizedMessage());
+				t = t.getCause();
+			}
+		}
+		return new FluentListAssertion<>(this, l, returns());
 	}
 
 	/**

@@ -58,7 +58,7 @@ public class SwaggerBuilder_Test {
 
 		t = headerInfoStrict("string");
 		assertObject(t).asJson().is("{type:'string'}");
-		assertThrown(()->headerInfoStrict("foo")).is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrown(()->headerInfoStrict("foo")).message().is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class SwaggerBuilder_Test {
 
 		t = itemsStrict("string");
 		assertObject(t).asJson().is("{type:'string'}");
-		assertThrown(()->itemsStrict("foo")).is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrown(()->itemsStrict("foo")).message().is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class SwaggerBuilder_Test {
 
 		t = parameterInfoStrict("query", "bar");
 		assertObject(t).asJson().is("{'in':'query',name:'bar'}");
-		assertThrown(()->parameterInfoStrict("foo", "bar")).is("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
+		assertThrown(()->parameterInfoStrict("foo", "bar")).message().is("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
 	}
 
 	@Test

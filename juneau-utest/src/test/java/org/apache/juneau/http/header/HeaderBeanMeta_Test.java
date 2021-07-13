@@ -75,12 +75,12 @@ public class HeaderBeanMeta_Test {
 		HeaderBeanMeta<A1> a1 = HeaderBeanMeta.of(A1.class);
 		assertTrue(a1 == HeaderBeanMeta.of(A1.class));
 		assertObject(a1.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
-		assertThrown(()->a1.construct("foo")).contains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
+		assertThrown(()->a1.construct("foo")).message().contains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
 		assertString(a1.getSchema().getName()).isNull();
 
 		HeaderBeanMeta<A2> a2 = HeaderBeanMeta.of(A2.class);
 		assertObject(a2.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
-		assertThrown(()->a2.construct("foo")).contains("Constructor for type "+TNAME+"$A2 requires a name as the first argument.");
+		assertThrown(()->a2.construct("foo")).message().contains("Constructor for type "+TNAME+"$A2 requires a name as the first argument.");
 		assertString(a2.getSchema().getName()).isNull();
 
 		HeaderBeanMeta<A3> a3 = HeaderBeanMeta.of(A3.class);
@@ -94,10 +94,10 @@ public class HeaderBeanMeta_Test {
 		assertString(a4.getSchema().getName()).is("A4");
 
 		HeaderBeanMeta<A5> a5 = HeaderBeanMeta.of(A5.class);
-		assertThrown(()->a5.construct("foo")).contains("Constructor for type "+TNAME+"$A5 could not be found.");
+		assertThrown(()->a5.construct("foo")).message().contains("Constructor for type "+TNAME+"$A5 could not be found.");
 		assertString(a5.getSchema().getName()).is("A5");
 
 		HeaderBeanMeta<A6> a6 = HeaderBeanMeta.of(A6.class);
-		assertThrown(()->a6.construct("X", "foo")).contains("oops");
+		assertThrown(()->a6.construct("X", "foo")).messages().contains("oops");
 	}
 }

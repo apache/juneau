@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
 
@@ -48,6 +49,6 @@ public class BasicHttpRequestRetryHandler_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
-		assertThrown(()->x.get().run()).contains("foo");
+		assertThrown(()->x.get().run()).messages().any(contains("foo"));
 	}
 }

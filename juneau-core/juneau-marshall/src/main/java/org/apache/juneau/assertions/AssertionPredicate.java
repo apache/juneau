@@ -26,9 +26,9 @@ import org.apache.juneau.cp.*;
  * Typically used wherever predicates are allowed for testing of {@link Assertion} objects such as...
  * <ul>
  * 	<li>{@link FluentObjectAssertion#passes(Predicate)}
- * 	<li>{@link FluentArrayAssertion#passes(Predicate...)}
- * 	<li>{@link FluentPrimitiveArrayAssertion#passes(Predicate...)}
- * 	<li>{@link FluentListAssertion#passes(Predicate...)}
+ * 	<li>{@link FluentArrayAssertion#each(Predicate...)}
+ * 	<li>{@link FluentPrimitiveArrayAssertion#each(Predicate...)}
+ * 	<li>{@link FluentListAssertion#each(Predicate...)}
  * </ul>
  *
  * <p>

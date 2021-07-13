@@ -18,7 +18,9 @@ import static java.util.Arrays.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -61,6 +63,11 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		super(creator, contents, returns);
 	}
 
+	@Override /* FluentObjectAssertion */
+	public FluentMapAssertion<K,V,R> apply(Function<Map<K,V>,Map<K,V>> function) {
+		return new FluentMapAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	/**
 	 * Returns an object assertion on the value specified at the specified key.
 	 *
@@ -85,7 +92,22 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return A new assertion.
 	 */
 	public FluentListAssertion<Object,R> values(@SuppressWarnings("unchecked") K...keys) {
-		return new FluentListAssertion<>(stream(keys).map(x -> get(x)).collect(toList()), returns());
+		return new FluentListAssertion<>(this, stream(keys).map(x -> get(x)).collect(toList()), returns());
+	}
+
+	/**
+	 * Extracts a subset of this map.
+	 *
+	 * @param keys The entries to extract.
+	 * @return The response object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public FluentMapAssertion<K,V,R> extract(K...keys) {
+		Map<K,V> m1 = orElse(null), m2 = AMap.create();
+		if (m1 != null)
+			for (K k : keys)
+				m2.put(k, m1.get(k));
+		return new FluentMapAssertion<>(this, m2, returns());
 	}
 
 	/**

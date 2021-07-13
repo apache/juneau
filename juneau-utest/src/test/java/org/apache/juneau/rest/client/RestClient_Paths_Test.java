@@ -55,7 +55,7 @@ public class RestClient_Paths_Test {
 	public void a01_path_String_Object() throws Exception {
 		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
 		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
-		assertThrown(()->client().build().get("/echo/{x}").pathData("y","foo").run()).is("Path variable {y} was not found in path.");
+		assertThrown(()->client().build().get("/echo/{x}").pathData("y","foo").run()).message().is("Path variable {y} was not found in path.");
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class RestClient_Paths_Test {
 	@Test
 	public void a04_pathPairs_Objects() throws Exception {
 		client().build().get("/echo/{x}").pathDataPairs("x","1").run().assertBody().contains("GET /echo/1 HTTP/1.1");
-		assertThrown(()->client().build().get("/echo/{x}").pathDataPairs("x")).is("Odd number of parameters passed into pathDataPairs(String...)");
+		assertThrown(()->client().build().get("/echo/{x}").pathDataPairs("x")).message().is("Odd number of parameters passed into pathDataPairs(String...)");
 	}
 
 	@Test

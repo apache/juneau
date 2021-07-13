@@ -90,8 +90,8 @@ public class BasicPart_Test {
 		assertObject(BasicPart.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
 		assertObject(BasicPart.cast(x8)).isType(NameValuePair.class).asJson().is("'X8=8'");
 
-		assertThrown(()->BasicPart.cast("X")).is("Object of type java.lang.String could not be converted to a Part.");
-		assertThrown(()->BasicPart.cast(null)).is("Object of type null could not be converted to a Part.");
+		assertThrown(()->BasicPart.cast("X")).message().is("Object of type java.lang.String could not be converted to a Part.");
+		assertThrown(()->BasicPart.cast(null)).message().is("Object of type null could not be converted to a Part.");
 
 		assertTrue(BasicPart.canCast(x1));
 		assertTrue(BasicPart.canCast(x2));

@@ -31,9 +31,9 @@ import org.apache.juneau.internal.*;
  * Typically used wherever predicates are allowed for testing of {@link Assertion} objects such as...
  * <ul>
  * 	<li>{@link FluentObjectAssertion#passes(Predicate)}
- * 	<li>{@link FluentArrayAssertion#passes(Predicate...)}
- * 	<li>{@link FluentPrimitiveArrayAssertion#passes(Predicate...)}
- * 	<li>{@link FluentListAssertion#passes(Predicate...)}
+ * 	<li>{@link FluentArrayAssertion#each(Predicate...)}
+ * 	<li>{@link FluentPrimitiveArrayAssertion#each(Predicate...)}
+ * 	<li>{@link FluentListAssertion#each(Predicate...)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -53,6 +53,7 @@ public class AssertionPredicates {
 		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
 		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
 		MSG_valueDidNotMatchExpected = MESSAGES.getString("valueDidNotMatchExpected"),
+		MSG_valueDidNotContainExpected = MESSAGES.getString("valueDidNotContainExpected"),
 		MSG_valueUnexpectedlyMatched = MESSAGES.getString("valueUnexpectedlyMatched"),
 		MSG_valueDidNotMatchValue = MESSAGES.getString("valueDidNotMatchValue"),
 		MSG_valueWasNotExpectedType = MESSAGES.getString("valueWasNotExpectedType"),
@@ -168,6 +169,20 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> eqic(String value) {
 		return test(x -> StringUtils.eqic(stringify(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+	}
+
+	/**
+	 * Predicate that returns <jk>true</jk> if the tested value converted to a string contains the specified substring.
+	 *
+	 * <p>
+	 * Assertion error message is <js>"Value did not contain expected.  Expected='{0}', Actual='{1}'."</js>.
+	 *
+	 * @param <T> The object type being tested.
+	 * @param value The specified value.
+	 * @return A new predicate.
+	 */
+	public static final <T> AssertionPredicate<T> contains(String value) {
+		return test(x -> StringUtils.contains(stringify(x), value), MSG_valueDidNotContainExpected, value, VALUE);
 	}
 
 	/**

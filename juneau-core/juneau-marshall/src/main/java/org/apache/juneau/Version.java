@@ -220,11 +220,16 @@ public class Version implements Comparable<Version> {
 	 * @param v The version to compare to.
 	 * @return <jk>true</jk> if the specified version is equal to this version.
 	 */
-	public boolean isEqualsTo(Version v) {
+	public boolean equals(Version v) {
 		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++)
 			if (v.parts[i] - parts[i] != 0)
 				return false;
 		return true;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		return o instanceof Version && equals((Version)o);
 	}
 
 	@Override /* Object */

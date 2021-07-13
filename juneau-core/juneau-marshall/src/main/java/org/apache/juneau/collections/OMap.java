@@ -23,7 +23,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -1940,6 +1939,6 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+		return json(this);
 	}
 }

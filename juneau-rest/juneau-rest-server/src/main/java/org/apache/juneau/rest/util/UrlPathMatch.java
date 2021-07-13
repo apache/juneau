@@ -18,7 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * Represents a URL path pattern match.
@@ -145,7 +144,7 @@ public class UrlPathMatch {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(toMap());
+		return json(toMap());
 	}
 }
 

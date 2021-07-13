@@ -22,7 +22,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -1078,6 +1077,6 @@ public class OList extends LinkedList<Object> {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+		return json(this);
 	}
 }

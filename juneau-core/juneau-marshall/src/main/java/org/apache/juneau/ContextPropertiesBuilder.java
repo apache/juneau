@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -811,7 +812,7 @@ public class ContextPropertiesBuilder {
 
 		@Override
 		public String toString() {
-			return (SimpleJson.DEFAULT == null ? "" : SimpleJson.DEFAULT.toString(properties));
+			return json(properties);
 		}
 	}
 

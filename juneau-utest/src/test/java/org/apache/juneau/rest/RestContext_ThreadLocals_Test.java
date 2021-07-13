@@ -36,8 +36,8 @@ public class RestContext_ThreadLocals_Test {
 
 		@RestHook(HookEvent.END_CALL)
 		public void assertThreadsNotSet() {
-			assertThrown(()->getRequest()).contains("No active request on current thread.");
-			assertThrown(()->getResponse()).contains("No active request on current thread.");
+			assertThrown(()->getRequest()).message().contains("No active request on current thread.");
+			assertThrown(()->getResponse()).message().contains("No active request on current thread.");
 		}
 	}
 	static MockRestClient a = MockRestClient.build(A.class);
@@ -62,8 +62,8 @@ public class RestContext_ThreadLocals_Test {
 	public static class B extends BasicRestServletGroup {
 		@RestHook(HookEvent.END_CALL)
 		public void assertThreadsNotSet2() {
-			assertThrown(()->getRequest()).contains("No active request on current thread.");
-			assertThrown(()->getResponse()).contains("No active request on current thread.");
+			assertThrown(()->getRequest()).message().contains("No active request on current thread.");
+			assertThrown(()->getResponse()).message().contains("No active request on current thread.");
 		}
 	}
 	static MockRestClient b = MockRestClient.build(B.class);

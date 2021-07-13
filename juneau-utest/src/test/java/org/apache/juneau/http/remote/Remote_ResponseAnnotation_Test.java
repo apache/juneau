@@ -120,7 +120,7 @@ public class Remote_ResponseAnnotation_Test {
 		assertEquals("{f:1}",x.getBody().toString());
 
 		A3a x2 = client(A3.class).build().getRemote(A3b.class).get();
-		assertThrown(()->x2.getBody()).contains("Unsupported media-type");
+		assertThrown(()->x2.getBody()).messages().contains("Unsupported media-type in request header 'Content-Type': 'application/json'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

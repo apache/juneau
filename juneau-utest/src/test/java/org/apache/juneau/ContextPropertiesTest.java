@@ -773,7 +773,7 @@ public class ContextPropertiesTest {
 		b.clear();
 		b.set("A.f1.sms", "{foo:'bar'}");
 		testError(b, "A.f1.sms/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
-		assertThrown(()->b.removeFrom("A.f1.sms", "foo")).is("Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
+		assertThrown(()->b.removeFrom("A.f1.sms", "foo")).message().is("Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
 	}
 
 	@Test
@@ -809,7 +809,7 @@ public class ContextPropertiesTest {
 		b.clear();
 		b.set("A.f1.smi", "{foo:'123'}");
 		testError(b, "A.f1.smi/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
-		assertThrown(()->b.removeFrom("A.f1.smi", "foo")).is("Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
+		assertThrown(()->b.removeFrom("A.f1.smi", "foo")).message().is("Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
 	}
 
 	@Test
@@ -839,7 +839,7 @@ public class ContextPropertiesTest {
 		b.clear();
 		b.set("A.f1.smc/put.foo", String.class);
 		testError(b, "A.f1.smc/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
-		assertThrown(()->b.removeFrom("A.f1.smc", "foo")).is("Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
+		assertThrown(()->b.removeFrom("A.f1.smc", "foo")).message().is("Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
 	}
 
 	@Test
@@ -876,7 +876,7 @@ public class ContextPropertiesTest {
 		b.clear();
 		b.set("A.f1.smo", "{foo:'123'}");
 		testError(b, "A.f1.smo/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
-		assertThrown(()->b.removeFrom("A.f1.smo", "foo")).is("Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
+		assertThrown(()->b.removeFrom("A.f1.smo", "foo")).message().is("Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1603,16 +1603,16 @@ public class ContextPropertiesTest {
 	@Test
 	public void testRemoveFromInvalidListOfObjects() {
 		ContextPropertiesBuilder b = ContextProperties.create();
-		assertThrown(()->b.removeFrom("A.foo.ss", "[xxx]")).contains("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).");
-		assertThrown(()->b.removeFrom("A.foo.ls", "[xxx]")).contains("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).");
+		assertThrown(()->b.removeFrom("A.foo.ss", "[xxx]")).message().contains("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).");
+		assertThrown(()->b.removeFrom("A.foo.ls", "[xxx]")).message().contains("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).");
 	}
 
 	@Test
 	public void testAddToInvalidMapOfObjects() {
 		ContextPropertiesBuilder b = ContextProperties.create();
-		assertThrown(()->b.putAllTo("A.foo.sms", "{xxx}")).contains("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>).");
-		assertThrown(()->b.putAllTo("A.foo.sms", "xxx")).is("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).");
-		assertThrown(()->b.putAllTo("A.foo.sms", new StringBuilder("foo"))).is("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).");
+		assertThrown(()->b.putAllTo("A.foo.sms", "{xxx}")).message().contains("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>).");
+		assertThrown(()->b.putAllTo("A.foo.sms", "xxx")).message().is("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).");
+		assertThrown(()->b.putAllTo("A.foo.sms", new StringBuilder("foo"))).message().is("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).");
 	}
 
 	@Test
@@ -1825,7 +1825,7 @@ public class ContextPropertiesTest {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private void testError(ContextPropertiesBuilder b, String key, Object val, String msg) {
-		assertThrown(()->b.set(key, val)).is(msg);
+		assertThrown(()->b.set(key, val)).message().is(msg);
 	}
 
 	private void testEquals(ContextPropertiesBuilder b1, ContextPropertiesBuilder b2) {

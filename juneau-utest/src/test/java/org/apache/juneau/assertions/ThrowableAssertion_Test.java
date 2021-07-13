@@ -31,30 +31,26 @@ public class ThrowableAssertion_Test {
 		RuntimeException x1 = new RuntimeException("foo");
 
 		test(x1).isType(Exception.class).isType(RuntimeException.class);
-		assertThrown(()->test(x1).isType(IOException.class)).is("Exception was not expected type.\n\tExpect=\"java.io.IOException\".\n\tActual=\"java.lang.RuntimeException\".");
-		assertThrown(()->test(null).isType(IOException.class)).is("Exception was not thrown.");
-		assertThrown(()->test(x1).isType(null)).is("Argument \"type\" cannot be null.");
+		assertThrown(()->test(x1).isType(IOException.class)).message().is("Exception was not expected type.\n\tExpect=\"java.io.IOException\".\n\tActual=\"java.lang.RuntimeException\".");
+		assertThrown(()->test(null).isType(IOException.class)).message().is("Exception was not thrown.");
+		assertThrown(()->test(x1).isType(null)).message().is("Argument \"type\" cannot be null.");
 
-		test(x1).contains("foo");
-		assertThrown(()->test(x1).contains("bar")).is("Exception message did not contain expected substring.\n\tSubstring=\"bar\".\n\tValue=\"foo\".");
-		assertThrown(()->test(null).contains("foo")).is("Exception was not thrown.");
-		assertThrown(()->test(x1).contains((String[])null)).is("Argument \"substrings\" cannot be null.");
-		test(x1).contains((String)null);
+		test(x1).message().is("foo");
 
 		test(null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).is("Exception was thrown.");
+		assertThrown(()->test(x1).doesNotExist()).message().is("Exception was thrown.");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: \"java.lang.RuntimeException: foo\".");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).message().is("Unexpected value: \"java.lang.RuntimeException: foo\".");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: \"java.lang.RuntimeException: foo\".");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).message().is("Unexpected value: \"java.lang.RuntimeException: foo\".");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: \"java.lang.RuntimeException: foo\".");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).message().is("Unexpected value: \"java.lang.RuntimeException: foo\".");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
-		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).is("Unexpected value: \"java.lang.RuntimeException: foo\".");
+		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).message().is("Unexpected value: \"java.lang.RuntimeException: foo\".");
 
 		test(x1).message().is("foo");
 		test(new RuntimeException()).message().doesNotExist();
@@ -83,8 +79,8 @@ public class ThrowableAssertion_Test {
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
 		test(null).stdout();
 	}
 }

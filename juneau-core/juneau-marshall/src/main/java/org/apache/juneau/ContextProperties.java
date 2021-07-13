@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.PropertyType.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -24,7 +25,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 
 
@@ -647,7 +647,7 @@ public final class ContextProperties {
 
 		@Override /* Object */
 		public String toString() {
-			return "[hash="+hashCode()+"]" + (SimpleJson.DEFAULT == null ? "" : SimpleJson.DEFAULT.toString(properties));
+			return "[hash="+hashCode()+"]" + json(properties);
 		}
 
 		void hashCodes(StringBuilder sb) {

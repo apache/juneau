@@ -13,6 +13,7 @@
 package org.apache.juneau.mstat;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import java.util.*;
 
@@ -216,7 +217,7 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b04_builder_implClass_bad() {
-		assertThrown(()->ThrownStore.create().implClass(B4.class).build()).contains("foobar");
+		assertThrown(()->ThrownStore.create().implClass(B4.class).build()).messages().contains("foobar");
 	}
 
 	public static class B5a {}
@@ -239,7 +240,7 @@ public class ThrownStore_Test {
 	public void b05_builder_beanFactory() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->ThrownStore.create().beanStore(bs).implClass(B5b.class).build()).contains("Public constructor found but could not find prerequisites: B5a");
+		assertThrown(()->ThrownStore.create().beanStore(bs).implClass(B5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: B5a"));
 		assertObject(ThrownStore.create().beanStore(bs).implClass(B5c.class).build()).isType(B5c.class);
 
 		bs.addBean(B5a.class, new B5a());
@@ -272,7 +273,7 @@ public class ThrownStore_Test {
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		assertThrown(()->ThrownStore.create().beanStore(bs).statsImplClass(B6b.class).build().add(t1)).contains("Public constructor found but could not find prerequisites: B6a");
+		assertThrown(()->ThrownStore.create().beanStore(bs).statsImplClass(B6b.class).build().add(t1)).messages().any(contains("Public constructor found but could not find prerequisites: B6a"));
 		assertObject(ThrownStore.create().beanStore(bs).statsImplClass(B6c.class).build().add(t1)).isType(B6c.class);
 
 		bs.addBean(B6a.class, new B6a());

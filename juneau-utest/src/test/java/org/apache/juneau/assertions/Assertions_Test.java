@@ -61,7 +61,7 @@ public class Assertions_Test {
 		assertReader(Optional.of(new StringReader("foo"))).is("foo");
 		assertReader(Optional.empty()).doesNotExist();
 
-		assertThrown(()->{throw new RuntimeException("foo");}).is("foo");
+		assertThrown(()->{throw new RuntimeException("foo");}).message().is("foo");
 		assertThrown(()->{}).doesNotExist();
 
 		assertZonedDateTime(ZonedDateTime.now()).exists();
@@ -79,7 +79,7 @@ public class Assertions_Test {
 	@Test
 	public void a02_stdout_stderr() throws Exception {
 		assertThrown(()->assertObject(null).msg("Test message").stdout().exists()).exists();
-		assertThrown(()->assertObject(Optional.empty()).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
+		assertThrown(()->assertObject(Optional.empty()).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
 		assertObject(assertObject("foo").silent().error("test {0}", "message").getMessage()).is("test message");
 	}
 }

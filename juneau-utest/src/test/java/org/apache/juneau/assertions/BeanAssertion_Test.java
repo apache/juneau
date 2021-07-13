@@ -32,24 +32,24 @@ public class BeanAssertion_Test {
 	public void a01_basic() throws Exception {
 		A a = new A();
 
-		assertThrown(()->test((Object)null).exists()).is("Value was null.");
+		assertThrown(()->test((Object)null).exists()).message().is("Value was null.");
 		test(a).exists();
 
 		assertCollection(null).doesNotExist();
-		assertThrown(()->test(a).doesNotExist()).is("Value was not null.");
+		assertThrown(()->test(a).doesNotExist()).message().is("Value was not null.");
 
 		test(a).property("f1").asInteger().is(1);
 		test(a).property("x").asInteger().isNull();
-		assertThrown(()->test((Object)null).property("x")).is("Value was null.");
+		assertThrown(()->test((Object)null).property("x")).message().is("Value was null.");
 
-		test(a).mapOf("f2,f1").asJson().is("{f2:2,f1:1}");
-		test(a).mapOf("x").asJson().is("{}");
+		test(a).extract("f2,f1").asJson().is("{f2:2,f1:1}");
+		test(a).extract("x").asJson().is("{}");
 	}
 
 	@Test
 	public void a02_other() throws Exception {
-		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).is("Foo 1");
-		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
+		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
 		test(null).stdout();
 	}
 }

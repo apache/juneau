@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
@@ -72,8 +73,8 @@ public class RestClient_Response_Headers_Test {
 		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).contains("Value 'bar' could not be parsed as an integer.");
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).contains("Could not determine a method to construct type");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).message().contains("Value 'bar' could not be parsed as an integer.");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).message().contains("Could not determine a method to construct type");
 
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagArrayHeader().assertName().is("Foo").assertValue().is("*");
@@ -128,7 +129,7 @@ public class RestClient_Response_Headers_Test {
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m3,cm1);
 		assertObject(m3.get()).asJson().is("[1,2]");
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asType(m2,cm1)).contains("Invalid number");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asType(m2,cm1)).messages().any(contains("Invalid number"));
 
 		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(LinkedList.class,Integer.class);
 		assertObject(o1.get()).asJson().is("[1,2]");

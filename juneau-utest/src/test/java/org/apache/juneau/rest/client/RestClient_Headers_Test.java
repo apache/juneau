@@ -98,8 +98,8 @@ public class RestClient_Headers_Test {
 	public void a05_headerPairs_Objects() throws Exception {
 		checkFooClient().headerPairs("Foo","bar").build().get("/headers").headerPairs("Foo","baz").run().assertBody().is("['bar','baz']");
 		checkFooClient().headerPairs("Foo","bar","Foo","baz").header("Foo","qux").build().get("/headers").headerPairs("Foo","q1x","Foo","q2x").run().assertBody().is("['bar','baz','qux','q1x','q2x']");
-		assertThrown(()->client().headerPairs("Foo")).contains("Odd number of parameters");
-		assertThrown(()->client().build().get("").headerPairs("Foo")).contains("Odd number of parameters");
+		assertThrown(()->client().headerPairs("Foo")).message().is("Odd number of parameters passed into headerPairs(String...)");
+		assertThrown(()->client().build().get("").headerPairs("Foo")).message().is("Odd number of parameters passed into headerPairs(String...)");
 	}
 
 	@Test
@@ -190,7 +190,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a12_badSerialization() throws Exception {
-		assertThrown(()->checkFooClient().header(header("Foo","bar",null).serializer(new A12())).build().get().run()).contains("bad");
+		assertThrown(()->checkFooClient().header(header("Foo","bar",null).serializer(new A12())).build().get().run()).messages().contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

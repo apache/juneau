@@ -102,8 +102,8 @@ public class RestClient_FormData_Test {
 
 		client().build().post("/formData").formDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
 
-		assertThrown(()->client().formDataPairs("foo","bar","baz")).is("Odd number of parameters passed into formDataPairs(String...)");
-		assertThrown(()->client().build().post("").formDataPairs("foo","bar","baz")).is("Odd number of parameters passed into formDataPairs(String...)");
+		assertThrown(()->client().formDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into formDataPairs(String...)");
+		assertThrown(()->client().build().post("").formDataPairs("foo","bar","baz")).message().is("Odd number of parameters passed into formDataPairs(String...)");
 	}
 
 	@Test
@@ -196,7 +196,7 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a12_badSerialization() throws Exception {
-		assertThrown(()->client().formData(part("Foo","bar",null).serializer(new A12())).build().post("/").run()).contains("bad");
+		assertThrown(()->client().formData(part("Foo","bar",null).serializer(new A12())).build().post("/").run()).messages().contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

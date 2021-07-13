@@ -24,7 +24,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
@@ -1679,7 +1678,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
-		return annotations(MarshalledAnnotation.create(pojoClass).example(SimpleJson.DEFAULT.toString(o)).build());
+		return annotations(MarshalledAnnotation.create(pojoClass).example(json(o)).build());
 	}
 
 	/**

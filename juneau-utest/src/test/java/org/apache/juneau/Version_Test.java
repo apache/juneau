@@ -86,10 +86,10 @@ public class Version_Test {
 	public void a04_isEqualsTo() {
 		Version x = of("1.2.3");
 
-		assertTrue(x.isEqualsTo(of("1.2.3")));
-		assertTrue(x.isEqualsTo(of("1.2")));
-		assertTrue(x.isEqualsTo(of("1.2.3.4")));
-		assertFalse(x.isEqualsTo(of("1.2.4")));
+		assertTrue(x.equals(of("1.2.3")));
+		assertTrue(x.equals(of("1.2")));
+		assertTrue(x.equals(of("1.2.3.4")));
+		assertFalse(x.equals(of("1.2.4")));
 	}
 
 	@Test

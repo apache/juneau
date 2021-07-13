@@ -15,6 +15,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 
 import java.io.*;
+import java.util.function.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -55,6 +56,11 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public FluentComparableAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
+	}
+
+	@Override /* FluentObjectAssertion */
+	public FluentComparableAssertion<T,R> apply(Function<T,T> function) {
+		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
 	/**

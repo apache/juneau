@@ -312,7 +312,7 @@ public class XmlTest {
 	public void testXmlNsWithoutMatchingNsUri() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		K t = new K();
-		assertThrown(()->s.serialize(t)).is("Found @Xml.prefix annotation with no matching URI.  prefix='foo'");
+		assertThrown(()->s.serialize(t)).message().is("Found @Xml.prefix annotation with no matching URI.  prefix='foo'");
 	}
 
 	@Xml(prefix="foo")

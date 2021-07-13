@@ -82,7 +82,7 @@ public class HeaderList_Test {
 		x = headerList("Foo","1","Foo","2");
 		assertObject(x).isString("[Foo: 1, Foo: 2]");
 
-		assertThrown(()->headerList("Foo")).is("Odd number of parameters passed into HeaderList.ofPairs()");
+		assertThrown(()->headerList("Foo")).message().is("Odd number of parameters passed into HeaderList.ofPairs()");
 
 		x = HeaderList.of((List<Header>)null);
 		assertObject(x).isString("[]");
@@ -177,7 +177,7 @@ public class HeaderList_Test {
 		assertObject(x.get("Bar", Allow.class)).isNull();
 		assertObject(x.get(Foo.class)).isString("Foo: 1, 2, 3");
 		final HeaderList x2 = x;
-		assertThrown(()->x2.get(String.class)).contains("Header name could not be found on bean type 'java.lang.String'");
+		assertThrown(()->x2.get(String.class)).message().is("Header name could not be found on bean type 'java.lang.String'");
 	}
 
 	@Test
@@ -448,27 +448,27 @@ public class HeaderList_Test {
 		HeaderIterator i1 = x.iterator();
 		assertObject(i1.nextHeader()).isString("Accept: text/xml");
 		assertObject(i1.nextHeader()).isString("Content-Type: text/xml");
-		assertThrown(()->i1.nextHeader()).contains("Iteration already finished.");
+		assertThrown(()->i1.nextHeader()).message().is("Iteration already finished.");
 
 		HeaderIterator i2 = x.iterator();
 		assertObject(i2.next()).isString("Accept: text/xml");
 		assertObject(i2.nextHeader()).isString("Content-Type: text/xml");
-		assertThrown(()->i2.next()).contains("Iteration already finished.");
+		assertThrown(()->i2.next()).message().is("Iteration already finished.");
 
 		HeaderIterator i3 = x.iterator("accept");
 		assertObject(i3.nextHeader()).isString("Accept: text/xml");
-		assertThrown(()->i3.nextHeader()).contains("Iteration already finished.");
+		assertThrown(()->i3.nextHeader()).message().is("Iteration already finished.");
 
 		HeaderList x2 = HeaderList.create().append(Accept.TEXT_XML,ContentType.TEXT_XML).caseSensitive().build();
 
 		HeaderIterator i4 = x2.iterator("Accept");
 		assertObject(i4.nextHeader()).isString("Accept: text/xml");
-		assertThrown(()->i4.nextHeader()).contains("Iteration already finished.");
+		assertThrown(()->i4.nextHeader()).message().is("Iteration already finished.");
 
 		HeaderIterator i5 = x2.iterator("accept");
-		assertThrown(()->i5.nextHeader()).contains("Iteration already finished.");
+		assertThrown(()->i5.nextHeader()).message().is("Iteration already finished.");
 
-		assertThrown(()->i5.remove()).contains("Remove is not supported.");
+		assertThrown(()->i5.remove()).message().is("Remove is not supported.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

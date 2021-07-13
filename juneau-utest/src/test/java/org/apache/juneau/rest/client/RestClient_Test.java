@@ -111,19 +111,19 @@ public class RestClient_Test {
 	public void a04_request_whenClosed() throws Exception {
 		RestClient rc = client().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request("get","/bean",null)).contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request("get","/bean",null)).message().contains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a05_request_whenClosed_withStackCreation() throws Exception {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request("get","/bean",null)).contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request("get","/bean",null)).message().contains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a06_request_runCalledTwice() throws Exception {
-		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).is("run() already called.");
+		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).message().is("run() already called.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

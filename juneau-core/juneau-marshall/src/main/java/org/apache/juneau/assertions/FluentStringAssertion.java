@@ -82,6 +82,11 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		super(creator, text, returns);
 	}
 
+	@Override /* FluentObjectAssertion */
+	public FluentStringAssertion<R> apply(Function<String,String> function) {
+		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	/**
 	 * When enabled, text in the message is converted to valid Java strings.
 	 *
@@ -157,16 +162,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public FluentStringAssertion<R> uc() {
 		return apply(x->x == null ? null : x.toUpperCase());
-	}
-
-	/**
-	 * Applies an abitrary function against the text in this assertion.
-	 *
-	 * @param f The function to apply.
-	 * @return The response object (for method chaining).
-	 */
-	public FluentStringAssertion<R> apply(Function<String,String> f) {
-		return new FluentStringAssertion<>(this, f.apply(orElse(null)), returns());
 	}
 
 	/**

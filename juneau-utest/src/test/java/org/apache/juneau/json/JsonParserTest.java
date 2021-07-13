@@ -52,32 +52,32 @@ public class JsonParserTest {
 		String s;
 
 		// Strict mode does not allow unquoted values.
-		assertThrown(()->sp.parse("123", String.class)).contains("Did not find quote character");
+		assertThrown(()->sp.parse("123", String.class)).message().contains("Did not find quote character");
 
 		s = p.parse(json, String.class);
 		assertEquals("123", s);
 
 		json = " 123 ";
 		// Strict mode does not allow unquoted values.
-		assertThrown(()->sp.parse(" 123 ", String.class)).contains("Did not find quote character");
+		assertThrown(()->sp.parse(" 123 ", String.class)).message().contains("Did not find quote character");
 
 		s = p.parse(json, String.class);
 		assertEquals("123", s);
 
 		json = "{\"fa\":123}";
-		assertThrown(()->sp.parse("{\"fa\":123}", A.class)).contains("Did not find quote character");
+		assertThrown(()->sp.parse("{\"fa\":123}", A.class)).message().contains("Did not find quote character");
 
 		A a = p.parse(json, A.class);
 		assertEquals("123", a.fa);
 
 		json = " { \"fa\" : 123 } ";
-		assertThrown(()->sp.parse(" { \"fa\" : 123 } ", A.class)).contains("Did not find quote character");
+		assertThrown(()->sp.parse(" { \"fa\" : 123 } ", A.class)).message().contains("Did not find quote character");
 
 		a = p.parse(json, A.class);
 		assertEquals("123", a.fa);
 
 		json = "'123'";
-		assertThrown(()->sp.parse("'123'", String.class)).contains("Invalid quote character");
+		assertThrown(()->sp.parse("'123'", String.class)).message().contains("Invalid quote character");
 	}
 
 	public static class A {
@@ -87,13 +87,13 @@ public class JsonParserTest {
 	@Test
 	public void testStrictMode() throws Exception {
 		JsonParser p = sp;
-		assertThrown(()->p.parse("{\"foo\":,\"bar\":}", OMap.class)).contains("Missing value detected.");
-		assertThrown(()->p.parse("{\"foo\":'bar'}", OMap.class)).contains("Invalid quote character");
-		assertThrown(()->p.parse("{'foo':\"bar\"}", OMap.class)).contains("Invalid quote character");
-		assertThrown(()->p.parse("{foo:\"bar\"}", OMap.class)).contains("Unquoted attribute detected.");
-		assertThrown(()->p.parse("{\"foo\":\"bar\"+\"baz\"}", OMap.class)).contains("String concatenation detected.");
-		assertThrown(()->p.parse("{\"foo\":\"bar\" + \"baz\"}", OMap.class)).contains("String concatenation detected.");
-		assertThrown(()->p.parse("{\"foo\":/*comment*/\"bar\"}", OMap.class)).contains("Javascript comment detected.");
+		assertThrown(()->p.parse("{\"foo\":,\"bar\":}", OMap.class)).message().contains("Missing value detected.");
+		assertThrown(()->p.parse("{\"foo\":'bar'}", OMap.class)).message().contains("Invalid quote character");
+		assertThrown(()->p.parse("{'foo':\"bar\"}", OMap.class)).message().contains("Invalid quote character");
+		assertThrown(()->p.parse("{foo:\"bar\"}", OMap.class)).message().contains("Unquoted attribute detected.");
+		assertThrown(()->p.parse("{\"foo\":\"bar\"+\"baz\"}", OMap.class)).message().contains("String concatenation detected.");
+		assertThrown(()->p.parse("{\"foo\":\"bar\" + \"baz\"}", OMap.class)).message().contains("String concatenation detected.");
+		assertThrown(()->p.parse("{\"foo\":/*comment*/\"bar\"}", OMap.class)).message().contains("Javascript comment detected.");
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class JsonParserTest {
 		r = p1.parse(s, Number.class);
 		assertEquals(0, r.intValue());
 		assertTrue(r instanceof Integer);
-		assertThrown(()->p2.parse("\"\"", Number.class)).contains("Invalid JSON number");
+		assertThrown(()->p2.parse("\"\"", Number.class)).message().contains("Invalid JSON number");
 
 		// Either should allow 0 or -0.
 		s = "0";
@@ -166,24 +166,24 @@ public class JsonParserTest {
 		r = p1.parse(s, Number.class);
 		assertEquals(0123, r.intValue());
 		assertTrue(r instanceof Integer);
-		assertThrown(()->p2.parse("0123", Number.class)).contains("Invalid JSON number");
+		assertThrown(()->p2.parse("0123", Number.class)).message().contains("Invalid JSON number");
 		s = "-0123";
 		r = p1.parse(s, Number.class);
 		assertEquals(-0123, r.intValue());
 		assertTrue(r instanceof Integer);
-		assertThrown(()->p2.parse("-0123", Number.class)).contains("Invalid JSON number");
+		assertThrown(()->p2.parse("-0123", Number.class)).message().contains("Invalid JSON number");
 
 		// Lax allows 0x123 and -0x123, strict does not.
 		s = "0x123";
 		r = p1.parse(s, Number.class);
 		assertEquals(0x123, r.intValue());
 		assertTrue(r instanceof Integer);
-		assertThrown(()->p2.parse("0x123", Number.class)).contains("Invalid JSON number");
+		assertThrown(()->p2.parse("0x123", Number.class)).message().contains("Invalid JSON number");
 		s = "-0x123";
 		r = p1.parse(s, Number.class);
 		assertEquals(-0x123, r.intValue());
 		assertTrue(r instanceof Integer);
-		assertThrown(()->p2.parse("-0x123", Number.class)).contains("Invalid JSON number");
+		assertThrown(()->p2.parse("-0x123", Number.class)).message().contains("Invalid JSON number");
 	}
 
 	//====================================================================================================
@@ -228,7 +228,7 @@ public class JsonParserTest {
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p.parse(r, OMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		assertThrown(()->p.parse(r, OMap.class)).contains("Reader is closed");
+		assertThrown(()->p.parse(r, OMap.class)).message().contains("Reader is closed");
 	}
 
 	//====================================================================================================

@@ -39,8 +39,8 @@ public class RestServletException extends ServletException {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param cause The cause. 
+	 *
+	 * @param cause The cause.
 	 * @param message The detailed message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

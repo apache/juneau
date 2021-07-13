@@ -259,6 +259,23 @@ public final class ArrayUtils {
 	}
 
 	/**
+	 * Recursively converts the specified array into a list of objects.
+	 *
+	 * @param array The array to convert.
+	 * @return A new {@link ArrayList}
+	 */
+	public static List<Object> toObjectList(Object array) {
+		List<Object> l = new ArrayList<>(Array.getLength(array));
+		for (int i = 0; i < Array.getLength(array); i++) {
+			Object o = Array.get(array, i);
+			if (o != null && o.getClass().isArray())
+				o = toObjectList(o);
+			l.add(o);
+		}
+		return l;
+	}
+
+	/**
 	 * Shortcut for calling <c>myList.toArray(new T[myList.size()]);</c>
 	 *
 	 * @param c The collection being converted to an array.

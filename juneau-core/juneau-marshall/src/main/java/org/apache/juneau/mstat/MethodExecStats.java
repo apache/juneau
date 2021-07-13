@@ -13,12 +13,11 @@
 package org.apache.juneau.mstat;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
-
-import org.apache.juneau.marshall.*;
 
 /**
  * Method execution statistics.
@@ -196,6 +195,6 @@ public class MethodExecStats {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+		return json(this);
 	}
 }

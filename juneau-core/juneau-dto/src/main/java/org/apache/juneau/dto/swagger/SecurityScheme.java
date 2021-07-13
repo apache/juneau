@@ -615,7 +615,7 @@ public class SecurityScheme extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw runtimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, VALID_TYPES
+				value, json(VALID_TYPES)
 			);
 		type = value;
 	}

@@ -63,6 +63,39 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		super(creator, contents, returns);
 	}
 
+	@Override /* FluentObjectAssertion */
+	public FluentArrayAssertion<E,R> apply(Function<E[],E[]> function) {
+		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
+	/**
+	 * Asserts that at least one value in the array passes the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R any(Predicate<E> test) throws AssertionError {
+		for (E v : value())
+			if (test.test(v))
+				return returns();
+		throw error(MSG_arrayDidNotContainExpectedValue, value());
+	}
+
+	/**
+	 * Asserts that all values in the array passes the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R all(Predicate<E> test) throws AssertionError {
+		for (E v : value())
+			if (! test.test(v))
+				throw error(MSG_arrayDidNotContainExpectedValue, value());
+		return returns();
+	}
+
 	/**
 	 * Asserts that the collection exists and is empty.
 	 *
@@ -199,7 +232,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R equals(String...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return passes(p);
+ 		return each(p);
 	}
 
 	/**
@@ -226,7 +259,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	@SuppressWarnings("unchecked")
 	public R equals(E...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return passes(p);
+ 		return each(p);
 	}
 
 	/**
@@ -254,7 +287,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SafeVarargs
-	public final R passes(Predicate<E>...tests) throws AssertionError {
+	public final R each(Predicate<E>...tests) throws AssertionError {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
 			Predicate<E> t = tests[i];

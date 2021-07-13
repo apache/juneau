@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.*;
 import static java.util.Arrays.*;
 
 import java.io.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -51,6 +52,11 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		super(creator, value, returns);
 	}
 
+	@Override /* FluentObjectAssertion */
+	public FluentBeanAssertion<T,R> apply(Function<T,T> function) {
+		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	/**
 	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
 	 * a new {@link MapAssertion}.
@@ -58,7 +64,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
 	 * @return The response object (for method chaining).
 	 */
-	public FluentMapAssertion<String,Object,R> mapOf(String...names) {
+	public FluentMapAssertion<String,Object,R> extract(String...names) {
 		return new FluentMapAssertion<>(this, toBeanMap().getProperties(split(names, ',')), returns());
 	}
 
@@ -80,7 +86,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 */
 	public FluentListAssertion<Object,R> properties(String...names) {
 		BeanMap<T> bm = toBeanMap();
-		return new FluentListAssertion<>(stream(names).map(x -> bm.get(x)).collect(toList()), returns());
+		return new FluentListAssertion<>(this, stream(names).map(x -> bm.get(x)).collect(toList()), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

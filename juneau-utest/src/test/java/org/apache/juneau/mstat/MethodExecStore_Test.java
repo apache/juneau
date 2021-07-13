@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -59,7 +60,7 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a04_builder_implClass_bad() {
-		assertThrown(()->MethodExecStore.create().implClass(A4.class).build()).contains("foobar");
+		assertThrown(()->MethodExecStore.create().implClass(A4.class).build()).messages().contains("foobar");
 	}
 
 	public static class A5a {}
@@ -82,7 +83,7 @@ public class MethodExecStore_Test {
 	public void a05_builder_beanFactory() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->MethodExecStore.create().beanStore(bs).implClass(A5b.class).build()).contains("Public constructor found but could not find prerequisites: A5a");
+		assertThrown(()->MethodExecStore.create().beanStore(bs).implClass(A5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: A5a"));
 		assertObject(MethodExecStore.create().beanStore(bs).implClass(A5c.class).build()).isType(A5c.class);
 
 		bs.addBean(A5a.class, new A5a());
@@ -114,7 +115,7 @@ public class MethodExecStore_Test {
 		BeanStore bs = BeanStore.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
-		assertThrown(()->MethodExecStore.create().beanStore(bs).statsImplClass(A6b.class).build().getStats(m)).contains("Public constructor found but could not find prerequisites: A6a");
+		assertThrown(()->MethodExecStore.create().beanStore(bs).statsImplClass(A6b.class).build().getStats(m)).messages().any(contains("Public constructor found but could not find prerequisites: A6a"));
 		assertObject(MethodExecStore.create().beanStore(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
 
 		bs.addBean(A6a.class, new A6a());

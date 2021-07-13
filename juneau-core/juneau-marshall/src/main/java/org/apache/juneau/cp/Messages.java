@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshall.*;
 
 /**
  * An enhanced {@link ResourceBundle}.
@@ -291,11 +290,11 @@ public class Messages extends ResourceBundle {
 		return Collections.enumeration(keySet());
 	}
 
-	@Override
+	@Override /* Object */
 	public String toString() {
 		OMap om = new OMap();
 		for (String k : new TreeSet<>(keySet()))
 			om.put(k, getString(k));
-		return SimpleJson.DEFAULT.toString(om);
+		return json(om);
 	}
 }
