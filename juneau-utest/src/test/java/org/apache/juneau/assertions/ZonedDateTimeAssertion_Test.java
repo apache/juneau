@@ -58,12 +58,12 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x2).isEqual(x1, ChronoUnit.DAYS)).message().contains("Unexpected value.");
 
 		assertThrown(()->test(empty()).isBefore(x1)).message().is("Value was null.");
-		assertThrown(()->test(x1).isBefore(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(x1).isBefore(null)).message().is("Argument 'value' cannot be null.");
 		test(x1).isBefore(x2);
 		assertThrown(()->test(x2).isBefore(x1)).message().contains("Value was not before expected.");
 
 		assertThrown(()->test(empty()).isAfter(x1)).message().is("Value was null.");
-		assertThrown(()->test(x1).isAfter(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(x1).isAfter(null)).message().is("Argument 'value' cannot be null.");
 		test(x2).isAfter(x1);
 		assertThrown(()->test(x1).isAfter(x2)).message().contains("Value was not after expected.");
 
@@ -76,8 +76,8 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).isAfterNow()).message().contains("Value was not after expected.");
 
 		assertThrown(()->test(empty()).isBetween(x1,x2)).message().is("Value was null.");
-		assertThrown(()->test(now).isBetween(null,x2)).message().is("Argument \"lower\" cannot be null.");
-		assertThrown(()->test(now).isBetween(x1,null)).message().is("Argument \"upper\" cannot be null.");
+		assertThrown(()->test(now).isBetween(null,x2)).message().is("Argument 'lower' cannot be null.");
+		assertThrown(()->test(now).isBetween(x1,null)).message().is("Argument 'upper' cannot be null.");
 		test(now).isBetween(x1, x2);
 		assertThrown(()->test(x1).isBetween(now,x2)).message().contains("Value was not after expected.");
 		assertThrown(()->test(x2).isBetween(x1,now)).message().contains("Value was not before expected.");

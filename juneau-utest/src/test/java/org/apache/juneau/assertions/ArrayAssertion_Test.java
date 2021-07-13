@@ -53,11 +53,11 @@ public class ArrayAssertion_Test {
 		test(x2).item(0).exists();
 
 		test(x2).contains("foo");
-		assertThrown(()->test(x2).contains("z")).message().is("Array did not contain expected value.\n\tExpect=\"z\".\n\tActual=\"[foo, bar]\".");
+		assertThrown(()->test(x2).contains("z")).message().is("Array did not contain expected value.\n\tExpect='z'.\n\tActual='[foo, bar]'.");
 
 		test(x1).doesNotContain("foo");
-		assertThrown(()->test(x2).doesNotContain("foo")).message().is("Array contained unexpected value.\n\tUnexpected=\"foo\".\n\tActual=\"[foo, bar]\".");
-		assertThrown(()->test(x2).doesNotContain("bar")).message().is("Array contained unexpected value.\n\tUnexpected=\"bar\".\n\tActual=\"[foo, bar]\".");
+		assertThrown(()->test(x2).doesNotContain("foo")).message().is("Array contained unexpected value.\n\tUnexpected='foo'.\n\tActual='[foo, bar]'.");
+		assertThrown(()->test(x2).doesNotContain("bar")).message().is("Array contained unexpected value.\n\tUnexpected='bar'.\n\tActual='[foo, bar]'.");
 	}
 
 	@Test

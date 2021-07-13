@@ -51,61 +51,61 @@ public class IntegerAssertion_Test {
 		test(empty()).isEqual(null);
 
 		assertThrown(()->test(empty()).isGreaterThan(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isGreaterThan(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isGreaterThan(null)).message().is("Argument 'value' cannot be null.");
 		test(2).isGreaterThan(1);
-		assertThrown(()->test(1).isGreaterThan(2)).message().is("Value was not greater than expected.\n\tExpect=\"2\".\n\tActual=\"1\".");
-		assertThrown(()->test(1).isGreaterThan(1)).message().is("Value was not greater than expected.\n\tExpect=\"1\".\n\tActual=\"1\".");
+		assertThrown(()->test(1).isGreaterThan(2)).message().is("Value was not greater than expected.\n\tExpect='2'.\n\tActual='1'.");
+		assertThrown(()->test(1).isGreaterThan(1)).message().is("Value was not greater than expected.\n\tExpect='1'.\n\tActual='1'.");
 
 		assertThrown(()->test(empty()).isGt(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isGt(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isGt(null)).message().is("Argument 'value' cannot be null.");
 		test(2).isGt(1);
-		assertThrown(()->test(1).isGt(2)).message().is("Value was not greater than expected.\n\tExpect=\"2\".\n\tActual=\"1\".");
-		assertThrown(()->test(1).isGt(1)).message().is("Value was not greater than expected.\n\tExpect=\"1\".\n\tActual=\"1\".");
+		assertThrown(()->test(1).isGt(2)).message().is("Value was not greater than expected.\n\tExpect='2'.\n\tActual='1'.");
+		assertThrown(()->test(1).isGt(1)).message().is("Value was not greater than expected.\n\tExpect='1'.\n\tActual='1'.");
 
 		assertThrown(()->test(empty()).isGreaterThanOrEqual(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isGreaterThanOrEqual(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isGreaterThanOrEqual(null)).message().is("Argument 'value' cannot be null.");
 		test(2).isGreaterThanOrEqual(1);
-		assertThrown(()->test(1).isGreaterThanOrEqual(2)).message().is("Value was not greater than or equals to expected.\n\tExpect=\"2\".\n\tActual=\"1\".");
+		assertThrown(()->test(1).isGreaterThanOrEqual(2)).message().is("Value was not greater than or equals to expected.\n\tExpect='2'.\n\tActual='1'.");
 		test(1).isGreaterThanOrEqual(1);
 
 		assertThrown(()->test(empty()).isGte(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isGte(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isGte(null)).message().is("Argument 'value' cannot be null.");
 		test(2).isGte(1);
-		assertThrown(()->test(1).isGte(2)).message().is("Value was not greater than or equals to expected.\n\tExpect=\"2\".\n\tActual=\"1\".");
+		assertThrown(()->test(1).isGte(2)).message().is("Value was not greater than or equals to expected.\n\tExpect='2'.\n\tActual='1'.");
 		test(1).isGte(1);
 
 		assertThrown(()->test(empty()).isLessThan(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isLessThan(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isLessThan(null)).message().is("Argument 'value' cannot be null.");
 		test(1).isLessThan(2);
-		assertThrown(()->test(2).isLessThan(1)).message().is("Value was not less than expected.\n\tExpect=\"1\".\n\tActual=\"2\".");
-		assertThrown(()->test(1).isLessThan(1)).message().is("Value was not less than expected.\n\tExpect=\"1\".\n\tActual=\"1\".");
+		assertThrown(()->test(2).isLessThan(1)).message().is("Value was not less than expected.\n\tExpect='1'.\n\tActual='2'.");
+		assertThrown(()->test(1).isLessThan(1)).message().is("Value was not less than expected.\n\tExpect='1'.\n\tActual='1'.");
 
 		assertThrown(()->test(empty()).isLt(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isLt(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isLt(null)).message().is("Argument 'value' cannot be null.");
 		test(1).isLt(2);
-		assertThrown(()->test(2).isLt(1)).message().is("Value was not less than expected.\n\tExpect=\"1\".\n\tActual=\"2\".");
-		assertThrown(()->test(1).isLt(1)).message().is("Value was not less than expected.\n\tExpect=\"1\".\n\tActual=\"1\".");
+		assertThrown(()->test(2).isLt(1)).message().is("Value was not less than expected.\n\tExpect='1'.\n\tActual='2'.");
+		assertThrown(()->test(1).isLt(1)).message().is("Value was not less than expected.\n\tExpect='1'.\n\tActual='1'.");
 
 		assertThrown(()->test(empty()).isLessThanOrEqual(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isLessThanOrEqual(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isLessThanOrEqual(null)).message().is("Argument 'value' cannot be null.");
 		test(1).isLessThanOrEqual(2);
-		assertThrown(()->test(2).isLessThanOrEqual(1)).message().is("Value was not less than or equals to expected.\n\tExpect=\"1\".\n\tActual=\"2\".");
+		assertThrown(()->test(2).isLessThanOrEqual(1)).message().is("Value was not less than or equals to expected.\n\tExpect='1'.\n\tActual='2'.");
 		test(1).isLessThanOrEqual(1);
 
 		assertThrown(()->test(empty()).isLte(1)).message().is("Value was null.");
-		assertThrown(()->test(1).isLte(null)).message().is("Argument \"value\" cannot be null.");
+		assertThrown(()->test(1).isLte(null)).message().is("Argument 'value' cannot be null.");
 		test(1).isLte(2);
-		assertThrown(()->test(2).isLte(1)).message().is("Value was not less than or equals to expected.\n\tExpect=\"1\".\n\tActual=\"2\".");
+		assertThrown(()->test(2).isLte(1)).message().is("Value was not less than or equals to expected.\n\tExpect='1'.\n\tActual='2'.");
 		test(1).isLte(1);
 
 		assertThrown(()->test(empty()).isBetween(1,3)).message().is("Value was null.");
-		assertThrown(()->test(2).isBetween(null,3)).message().is("Argument \"lower\" cannot be null.");
-		assertThrown(()->test(2).isBetween(1,null)).message().is("Argument \"upper\" cannot be null.");
+		assertThrown(()->test(2).isBetween(null,3)).message().is("Argument 'lower' cannot be null.");
+		assertThrown(()->test(2).isBetween(1,null)).message().is("Argument 'upper' cannot be null.");
 		test(2).isBetween(1,3);
 		test(1).isBetween(1,3);
 		test(3).isBetween(1,3);
-		assertThrown(()->test(2).isBetween(1,1)).message().is("Value was not less than or equals to expected.\n\tExpect=\"1\".\n\tActual=\"2\".");
-		assertThrown(()->test(2).isBetween(3,3)).message().is("Value was not greater than or equals to expected.\n\tExpect=\"3\".\n\tActual=\"2\".");
+		assertThrown(()->test(2).isBetween(1,1)).message().is("Value was not less than or equals to expected.\n\tExpect='1'.\n\tActual='2'.");
+		assertThrown(()->test(2).isBetween(3,3)).message().is("Value was not greater than or equals to expected.\n\tExpect='3'.\n\tActual='2'.");
 
 		test(2).isNot("2");
 	}

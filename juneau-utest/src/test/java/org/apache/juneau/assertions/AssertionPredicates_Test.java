@@ -54,75 +54,75 @@ public class AssertionPredicates_Test {
 	public void a04_eq() {
 		x1.passes(eq("foo"));
 		x1.passes(eq((Object)"foo"));
-		assertThrown(()->x1.passes(eq("FOO"))).message().is("Value did not match expected.\n\tExpect=\"FOO\".\n\tActual=\"foo\".");
-		assertThrown(()->x1.passes(eq("bar"))).message().is("Value did not match expected.\n\tExpect=\"bar\".\n\tActual=\"foo\".");
-		assertThrown(()->x1.passes(eq((Object)"bar"))).message().is("Value did not match expected.\n\tExpect=\"bar\".\n\tActual=\"foo\".");
+		assertThrown(()->x1.passes(eq("FOO"))).message().is("Value did not match expected.\n\tExpect='FOO'.\n\tActual='foo'.");
+		assertThrown(()->x1.passes(eq("bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
+		assertThrown(()->x1.passes(eq((Object)"bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
 		x2.passes(eq(null));
-		assertThrown(()->x2.passes(eq("foo"))).message().is("Value did not match expected.\n\tExpect=\"foo\".\n\tActual=\"null\".");
+		assertThrown(()->x2.passes(eq("foo"))).message().is("Value did not match expected.\n\tExpect='foo'.\n\tActual='null'.");
 	}
 
 	@Test
 	public void a05_eqic() {
 		x1.passes(eqic("foo"));
 		x1.passes(eqic("FOO"));
-		assertThrown(()->x1.passes(eqic("bar"))).message().is("Value did not match expected.\n\tExpect=\"bar\".\n\tActual=\"foo\".");
+		assertThrown(()->x1.passes(eqic("bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
 		x2.passes(eqic(null));
-		assertThrown(()->x2.passes(eqic("bar"))).message().is("Value did not match expected.\n\tExpect=\"bar\".\n\tActual=\"null\".");
+		assertThrown(()->x2.passes(eqic("bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='null'.");
 	}
 
 	@Test
 	public void a06_ne() {
 		x1.passes(ne("bar"));
 		x1.passes(ne((Object)"bar"));
-		assertThrown(()->x1.passes(ne("foo"))).message().is("Value unexpectedly matched.\n\tValue=\"foo\".");
-		assertThrown(()->x1.passes(ne((Object)"foo"))).message().is("Value unexpectedly matched.\n\tValue=\"foo\".");
+		assertThrown(()->x1.passes(ne("foo"))).message().is("Value unexpectedly matched.\n\tValue='foo'.");
+		assertThrown(()->x1.passes(ne((Object)"foo"))).message().is("Value unexpectedly matched.\n\tValue='foo'.");
 		x2.passes(ne("bar"));
-		assertThrown(()->x2.passes(ne(null))).message().is("Value unexpectedly matched.\n\tValue=\"null\".");
+		assertThrown(()->x2.passes(ne(null))).message().is("Value unexpectedly matched.\n\tValue='null'.");
 	}
 
 	@Test
 	public void a07_type() {
 		x1.passes(type(String.class));
 		x1.passes(type(Object.class));
-		assertThrown(()->x1.passes(type(Integer.class))).message().is("Value was not expected type.\n\tExpect=\"java.lang.Integer\".\n\tActual=\"java.lang.String\".");
-		assertThrown(()->x2.passes(type(String.class))).message().is("Value was not expected type.\n\tExpect=\"java.lang.String\".\n\tActual=\"null\".");
+		assertThrown(()->x1.passes(type(Integer.class))).message().is("Value was not expected type.\n\tExpect='java.lang.Integer'.\n\tActual='java.lang.String'.");
+		assertThrown(()->x2.passes(type(String.class))).message().is("Value was not expected type.\n\tExpect='java.lang.String'.\n\tActual='null'.");
 	}
 
 	@Test
 	public void a08_exactType() {
 		x1.passes(exactType(String.class));
-		assertThrown(()->x1.passes(exactType(Object.class))).message().is("Value was not expected type.\n\tExpect=\"java.lang.Object\".\n\tActual=\"java.lang.String\".");
-		assertThrown(()->x2.passes(exactType(Object.class))).message().is("Value was not expected type.\n\tExpect=\"java.lang.Object\".\n\tActual=\"null\".");
+		assertThrown(()->x1.passes(exactType(Object.class))).message().is("Value was not expected type.\n\tExpect='java.lang.Object'.\n\tActual='java.lang.String'.");
+		assertThrown(()->x2.passes(exactType(Object.class))).message().is("Value was not expected type.\n\tExpect='java.lang.Object'.\n\tActual='null'.");
 	}
 
 	@Test
 	public void a03_() {
 		x1.passes(match("fo*"));
-		assertThrown(()->x1.passes(match("ba*"))).message().is("Value did not match pattern.\n\tPattern=\"ba*\".\n\tValue=\"foo\".");
-		assertThrown(()->x2.passes(match("ba*"))).message().is("Value did not match pattern.\n\tPattern=\"ba*\".\n\tValue=\"null\".");
+		assertThrown(()->x1.passes(match("ba*"))).message().is("Value did not match pattern.\n\tPattern='ba*'.\n\tValue='foo'.");
+		assertThrown(()->x2.passes(match("ba*"))).message().is("Value did not match pattern.\n\tPattern='ba*'.\n\tValue='null'.");
 	}
 
 
 	@Test
 	public void a10_regex() {
 		x1.passes(regex("fo.*"));
-		assertThrown(()->x1.passes(regex("ba.*"))).message().is("Value did not match pattern.\n\tPattern=\"ba.*\".\n\tValue=\"foo\".");
-		assertThrown(()->x2.passes(regex("ba.*"))).message().is("Value did not match pattern.\n\tPattern=\"ba.*\".\n\tValue=\"null\".");
+		assertThrown(()->x1.passes(regex("ba.*"))).message().is("Value did not match pattern.\n\tPattern='ba.*'.\n\tValue='foo'.");
+		assertThrown(()->x2.passes(regex("ba.*"))).message().is("Value did not match pattern.\n\tPattern='ba.*'.\n\tValue='null'.");
 	}
 
 	@Test
 	public void a11_regex_wFlags() {
 		x1.passes(regex("FO.*", CASE_INSENSITIVE));
-		assertThrown(()->x1.passes(regex("BA.*", CASE_INSENSITIVE))).message().is("Value did not match pattern.\n\tPattern=\"BA.*\".\n\tValue=\"foo\".");
-		assertThrown(()->x2.passes(regex("BA.*", CASE_INSENSITIVE))).message().is("Value did not match pattern.\n\tPattern=\"BA.*\".\n\tValue=\"null\".");
+		assertThrown(()->x1.passes(regex("BA.*", CASE_INSENSITIVE))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='foo'.");
+		assertThrown(()->x2.passes(regex("BA.*", CASE_INSENSITIVE))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='null'.");
 	}
 
 	@Test
 	public void a12_regex_wPattern() {
 		Pattern p1 = Pattern.compile("FO.*", CASE_INSENSITIVE), p2 = Pattern.compile("BA.*", CASE_INSENSITIVE);
 		x1.passes(regex(p1));
-		assertThrown(()->x1.passes(regex(p2))).message().is("Value did not match pattern.\n\tPattern=\"BA.*\".\n\tValue=\"foo\".");
-		assertThrown(()->x2.passes(regex(p2))).message().is("Value did not match pattern.\n\tPattern=\"BA.*\".\n\tValue=\"null\".");
+		assertThrown(()->x1.passes(regex(p2))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='foo'.");
+		assertThrown(()->x2.passes(regex(p2))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='null'.");
 	}
 
 	@Test
@@ -152,6 +152,6 @@ public class AssertionPredicates_Test {
 	@Test
 	public void a16_test() {
 		x1.passes(test(eq("foo")));
-		assertThrown(()->x1.passes(test(eq("bar")))).message().is("Value did not pass test.\n\tValue did not match expected.\n\tExpect=\"bar\".\n\tActual=\"foo\".");
+		assertThrown(()->x1.passes(test(eq("bar")))).message().is("Value did not pass test.\n\tValue did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
 	}
 }

@@ -58,11 +58,11 @@ public class ObjectAssertion_Test {
 		test(of(1)).exists();
 
 		assertThrown(()->test(empty()).isType(String.class)).message().is("Value was null.");
-		assertThrown(()->test("foo").isType(null)).message().is("Argument \"parent\" cannot be null.");
+		assertThrown(()->test("foo").isType(null)).message().is("Argument 'parent' cannot be null.");
 		test("foo").isType(String.class);
 		test("foo").isType(CharSequence.class);
 		test("foo").isType(Comparable.class);
-		assertThrown(()->test(1).isType(String.class)).message().is("Unexpected type.\n\tExpect=\"java.lang.String\".\n\tActual=\"java.lang.Integer\".");
+		assertThrown(()->test(1).isType(String.class)).message().is("Unexpected type.\n\tExpect='java.lang.String'.\n\tActual='java.lang.Integer'.");
 
 		test("foo").asString(JsonSerializer.DEFAULT).is("\"foo\"");
 		test(empty()).asString(JsonSerializer.DEFAULT).is("null");
@@ -76,39 +76,39 @@ public class ObjectAssertion_Test {
 
 		int[] x1 = {1,2}, x2 = {2,1};
 		test(x2).asJsonSorted().is("[1,2]");
-		assertThrown(()->test(x2).asJsonSorted().is("[2,1]")).message().is("Unexpected value.\n\tExpect=\"[2,1]\".\n\tActual=\"[1,2]\".");
+		assertThrown(()->test(x2).asJsonSorted().is("[2,1]")).message().is("Unexpected value.\n\tExpect='[2,1]'.\n\tActual='[1,2]'.");
 		test(empty()).asJsonSorted().is("null");
 
 		test(x1).isSameJsonAs(x1);
-		assertThrown(()->test(x1).isSameJsonAs(x2)).message().is("Unexpected comparison.\n\tExpect=\"[2,1]\".\n\tActual=\"[1,2]\".");
+		assertThrown(()->test(x1).isSameJsonAs(x2)).message().is("Unexpected comparison.\n\tExpect='[2,1]'.\n\tActual='[1,2]'.");
 		test(empty()).isSameJsonAs(null);
 		assertThrown(()->test(new A1()).isSameJsonAs(null)).messages().any(contains("Could not call getValue() on property 'foo'"));
 
 		test(x1).isSameSortedAs(x1);
 		test(x1).isSameSortedAs(x2);
-		assertThrown(()->test(x1).isSameJsonAs(null)).message().is("Unexpected comparison.\n\tExpect=\"null\".\n\tActual=\"[1,2]\".");
+		assertThrown(()->test(x1).isSameJsonAs(null)).message().is("Unexpected comparison.\n\tExpect='null'.\n\tActual='[1,2]'.");
 		test(empty()).isSameSortedAs(null);
 
 		test(x1).doesNotEqual(null);
 		test(empty()).doesNotEqual(x1);
 		test(x1).doesNotEqual(x2);
 
-		assertThrown(()->test(empty()).doesNotEqual(null)).message().is("Unexpected value.\n\tDid not expect=\"null\".\n\tActual=\"null\".");
-		assertThrown(()->test(x1).doesNotEqual(x1)).message().is("Unexpected value.\n\tDid not expect=\"[1, 2]\".\n\tActual=\"[1, 2]\".");
+		assertThrown(()->test(empty()).doesNotEqual(null)).message().is("Unexpected value.\n\tDid not expect='null'.\n\tActual='null'.");
+		assertThrown(()->test(x1).doesNotEqual(x1)).message().is("Unexpected value.\n\tDid not expect='[1, 2]'.\n\tActual='[1, 2]'.");
 
 		test(x1).passes(x->x != null);
-		assertThrown(()->test(x1).passes(x->x == null)).message().is("Unexpected value: \"[1, 2]\".");
+		assertThrown(()->test(x1).passes(x->x == null)).message().is("Unexpected value: '[1, 2]'.");
 
 		test(x1).passes(x->x[0] == 1);
-		assertThrown(()->test(x1).passes(x->x[0]==2)).message().is("Unexpected value: \"[1, 2]\".");
+		assertThrown(()->test(x1).passes(x->x[0]==2)).message().is("Unexpected value: '[1, 2]'.");
 
 		test(x1).isNot(null);
 
 		test(x1).isAny(x1,x2);
-		assertThrown(()->test(x1).isAny(x2)).message().is("Expected value not found.\n\tExpect=\"[[2, 1]]\".\n\tActual=\"[1, 2]\".");
+		assertThrown(()->test(x1).isAny(x2)).message().is("Expected value not found.\n\tExpect='[[2, 1]]'.\n\tActual='[1, 2]'.");
 
 		test(x1).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1,x2)).message().is("Unexpected value found.\n\tUnexpected=\"[1, 2]\".\n\tActual=\"[1, 2]\".");
+		assertThrown(()->test(x1).isNotAny(x1,x2)).message().is("Unexpected value found.\n\tUnexpected='[1, 2]'.\n\tActual='[1, 2]'.");
 
 		Date d1 = new Date(0), d2 = new Date(0);
 		test(d1).is(d2);
@@ -129,10 +129,10 @@ public class ObjectAssertion_Test {
 	@Test
 	public void a03_conversions() throws Exception {
 		test(new String[]{"foo"}).asArray(String.class).item(0).is("foo");
-		assertThrown(()->test("foo").asArray(String.class)).message().contains("Object was not type \"java.lang.String[]\".\n\tActual=\"java.lang.String\".");
+		assertThrown(()->test("foo").asArray(String.class)).message().contains("Object was not type 'java.lang.String[]'.\n\tActual='java.lang.String'.");
 
 		test(true).asBoolean().isTrue();
-		assertThrown(()->test("foo").asBoolean()).message().contains("Object was not type \"java.lang.Boolean\".\n\tActual=\"java.lang.String\".");
+		assertThrown(()->test("foo").asBoolean()).message().contains("Object was not type 'java.lang.Boolean'.\n\tActual='java.lang.String'.");
 
 		test(new byte[]{123}).asByteArray().asJson().is("[123]");
 		test(AList.of(123)).asCollection().asJson().is("[123]");

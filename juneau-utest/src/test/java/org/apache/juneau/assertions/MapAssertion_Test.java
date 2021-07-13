@@ -56,11 +56,11 @@ public class MapAssertion_Test {
 		test((Map<String,Object>)null).value("a").asInteger().isNull();
 
 		test(x2).containsKey("a");
-		assertThrown(()->test(x2).containsKey("x")).message().is("Map did not contain expected key.\n\tExpected key=\"x\".\n\tValue=\"{a=1, b=2}\".");
+		assertThrown(()->test(x2).containsKey("x")).message().is("Map did not contain expected key.\n\tExpected key='x'.\n\tValue='{a=1, b=2}'.");
 		assertThrown(()->test((Map<?,?>)null).containsKey("x")).message().is("Value was null.");
 
 		test(x2).doesNotContainKey("x");
-		assertThrown(()->test(x2).doesNotContainKey("a")).message().is("Map contained unexpected key.\n\tUnexpected key=\"a\".\n\tValue=\"{a=1, b=2}\".");
+		assertThrown(()->test(x2).doesNotContainKey("a")).message().is("Map contained unexpected key.\n\tUnexpected key='a'.\n\tValue='{a=1, b=2}'.");
 		assertThrown(()->test((Map<?,?>)null).containsKey("x")).message().is("Value was null.");
 	}
 

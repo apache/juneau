@@ -33,23 +33,23 @@ public class Verify_Test {
 		Verify x1 = verify("foo"), x2 = verify(null), x3 = verify(new Date(0));
 
 		test(x1.is("foo")).doesNotExist();
-		test(x1.is("bar")).is("Expected \"bar\" but was \"foo\".");
-		test(x1.is(null)).is("Expected \"null\" but was \"foo\".");
+		test(x1.is("bar")).is("Expected 'bar' but was 'foo'.");
+		test(x1.is(null)).is("Expected 'null' but was 'foo'.");
 		test(x2.is(null)).doesNotExist();
-		test(x2.is("foo")).is("Expected \"foo\" but was \"null\".");
+		test(x2.is("foo")).is("Expected 'foo' but was 'null'.");
 		test(x3.is(new Date(0))).doesNotExist();
 
 		test(x1.isType(String.class)).doesNotExist();
-		test(x1.isType(Integer.class)).is("Expected type \"java.lang.Integer\" but was \"java.lang.String\".");
+		test(x1.isType(Integer.class)).is("Expected type 'java.lang.Integer' but was 'java.lang.String'.");
 		test(x2.isType(null)).doesNotExist();
-		test(x2.isType(String.class)).is("Expected type \"java.lang.String\" but was \"null\".");
-		test(x1.isType(null)).is("Expected type \"null\" but was \"java.lang.String\".");
+		test(x2.isType(String.class)).is("Expected type 'java.lang.String' but was 'null'.");
+		test(x1.isType(null)).is("Expected type 'null' but was 'java.lang.String'.");
 
 
 		test(verify(true).isTrue()).doesNotExist();
 		test(verify(false).isFalse()).doesNotExist();
-		test(verify(null).isTrue()).is("Expected \"true\" but was \"null\".");
-		test(verify(null).isFalse()).is("Expected \"false\" but was \"null\".");
+		test(verify(null).isTrue()).is("Expected 'true' but was 'null'.");
+		test(verify(null).isFalse()).is("Expected 'false' but was 'null'.");
 		test(verify(Boolean.TRUE).isTrue()).doesNotExist();
 		test(verify(Boolean.FALSE).isFalse()).doesNotExist();
 		test(x1.is("foo")).doesNotExist();

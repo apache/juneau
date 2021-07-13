@@ -52,10 +52,10 @@ public class CollectionAssertion_Test {
 		test(x2).isNotEmpty();
 
 		test(x2).contains("a");
-		assertThrown(()->test(x2).contains("z")).message().is("Collection did not contain expected value.\n\tExpect=\"z\".\n\tValue=\"[a, b]\".");
+		assertThrown(()->test(x2).contains("z")).message().is("Collection did not contain expected value.\n\tExpect='z'.\n\tValue='[a, b]'.");
 
 		test(x1).doesNotContain("a");
-		assertThrown(()->test(x2).doesNotContain("a")).message().is("Collection contained unexpected value.\n\tUnexpected=\"a\".\n\tValue=\"[a, b]\".");
+		assertThrown(()->test(x2).doesNotContain("a")).message().is("Collection contained unexpected value.\n\tUnexpected='a'.\n\tValue='[a, b]'.");
 	}
 
 	@Test

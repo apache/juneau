@@ -69,22 +69,22 @@ public class ByteArrayAssertion_Test {
 		test(empty()).asString().isNull();
 		test(x1).asString().is("");
 		test(x2).asString().is("ab");
-		assertThrown(()->test(x2).asString().is("xx")).message().is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"ab\".");
+		assertThrown(()->test(x2).asString().is("xx")).message().is("Unexpected value.\n\tExpect='xx'.\n\tActual='ab'.");
 
 		test(empty()).asBase64().isNull();
 		test(x1).asBase64().is("");
 		test(x2).asBase64().is("YWI=");
-		assertThrown(()->test(x2).asBase64().is("xx")).message().is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"YWI=\".");
+		assertThrown(()->test(x2).asBase64().is("xx")).message().is("Unexpected value.\n\tExpect='xx'.\n\tActual='YWI='.");
 
 		test(empty()).asHex().isNull();
 		test(x1).asHex().is("");
 		test(x2).asHex().is("6162");
-		assertThrown(()->test(x2).asHex().is("xx")).message().is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"6162\".");
+		assertThrown(()->test(x2).asHex().is("xx")).message().is("Unexpected value.\n\tExpect='xx'.\n\tActual='6162'.");
 
 		test(empty()).asSpacedHex().isNull();
 		test(x1).asSpacedHex().is("");
 		test(x2).asSpacedHex().is("61 62");
-		assertThrown(()->test(x2).asSpacedHex().is("xx")).message().is("Unexpected value.\n\tExpect=\"xx\".\n\tActual=\"61 62\".");
+		assertThrown(()->test(x2).asSpacedHex().is("xx")).message().is("Unexpected value.\n\tExpect='xx'.\n\tActual='61 62'.");
 	}
 
 	@Test
