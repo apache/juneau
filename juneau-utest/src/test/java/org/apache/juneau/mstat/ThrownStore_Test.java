@@ -77,7 +77,7 @@ public class ThrownStore_Test {
 		db.add(t1);
 		db.reset();
 
-		assertObject(db.getStats(t1)).isNull();
+		assertOptional(db.getStats(t1)).isNull();
 	}
 
 	@Test

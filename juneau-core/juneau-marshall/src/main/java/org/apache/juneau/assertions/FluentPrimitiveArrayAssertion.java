@@ -110,6 +110,19 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 		return new FluentObjectAssertion<>(this, at(index), returns());
 	}
 
+	/**
+	 * Returns an integer assertion on the length of this array.
+	 *
+	 * <p>
+	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
+	 * (meaning {@link FluentIntegerAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentIntegerAssertion<R> length() {
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : Array.getLength(value()), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -122,7 +135,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R any(Predicate<T> test) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
+		for (int i = 0, j = length2(); i < j; i++)
 			if (test.test(at(i)))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, value());
@@ -136,7 +149,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R all(Predicate<T> test) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
+		for (int i = 0, j = length2(); i < j; i++)
 			if (! test.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValue, value());
 		return returns();
@@ -149,7 +162,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
-		if (length() != 0)
+		if (length2() != 0)
 			throw error(MSG_arrayWasNotEmpty);
 		return returns();
 	}
@@ -161,7 +174,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() throws AssertionError {
-		if (length() == 0)
+		if (length2() == 0)
 			throw error(MSG_arrayWasEmpty);
 		return returns();
 	}
@@ -174,7 +187,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSize(int size) throws AssertionError {
-		if (length() != size)
+		if (length2() != size)
 			throw error(MSG_arrayDidNotHaveExpectedSize, size, length());
 		return returns();
 	}
@@ -187,7 +200,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R contains(Object entry) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
+		for (int i = 0, j = length2(); i < j; i++)
 			if (eq(at(i), entry))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
@@ -256,8 +269,8 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 */
 	@SuppressWarnings("unchecked")
 	public R each(Predicate<T>...tests) throws AssertionError {
-		isSize(tests.length);
-		for (int i = 0, j = length(); i < j; i++) {
+		length().is(tests.length);
+		for (int i = 0, j = length2(); i < j; i++) {
 			Predicate<T> t = tests[i];
 			if (t != null && ! t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
@@ -273,7 +286,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotContain(Object entry) throws AssertionError {
-		for (int i = 0; i < length(); i++)
+		for (int i = 0; i < length2(); i++)
 			if (eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
 		return returns();
@@ -323,10 +336,10 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 
 	@SuppressWarnings("unchecked")
 	private T at(int index) {
-		return valueIsNull() || index >= length() ? null : (T)Array.get(value(), index);
+		return valueIsNull() || index >= length2() ? null : (T)Array.get(value(), index);
 	}
 
-	private int length() {
+	private int length2() {
 		return Array.getLength(value());
 	}
 

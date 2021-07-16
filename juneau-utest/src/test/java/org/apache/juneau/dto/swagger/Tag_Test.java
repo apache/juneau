@@ -62,13 +62,13 @@ public class Tag_Test {
 		Tag t = new Tag();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObject(t.externalDocs()).asJson().is("{url:'foo'}");
+		assertOptional(t.externalDocs()).asJson().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");;
+		assertOptional(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");;
 
 		t.externalDocs((String)null);
-		assertObject(t.externalDocs()).isNull();
+		assertOptional(t.externalDocs()).isNull();
 	}
 
 	/**

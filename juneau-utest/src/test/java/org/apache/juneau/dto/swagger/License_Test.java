@@ -49,16 +49,16 @@ public class License_Test {
 		License t = new License();
 
 		t.url(URI.create("foo"));
-		assertObject(t.url()).isType(URI.class).asString().is("foo");
+		assertOptional(t.url()).isType(URI.class).asString().is("foo");
 
 		t.url("bar");
-		assertObject(t.url()).isType(URI.class).asString().is("bar");
+		assertOptional(t.url()).isType(URI.class).asString().is("bar");
 
 		t.url(new URL("http://baz"));
-		assertObject(t.url()).isType(URI.class).asString().is("http://baz");
+		assertOptional(t.url()).isType(URI.class).asString().is("http://baz");
 
 		t.url((String)null);
-		assertObject(t.url()).isNull();
+		assertOptional(t.url()).isNull();
 	}
 
 	/**

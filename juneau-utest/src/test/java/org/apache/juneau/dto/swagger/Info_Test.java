@@ -75,13 +75,13 @@ public class Info_Test {
 		Info t = new Info();
 
 		t.contact(contact("foo"));
-		assertObject(t.contact()).asJson().is("{name:'foo'}");
+		assertOptional(t.contact()).asJson().is("{name:'foo'}");
 
 		t.contact("{name:'foo'}");
-		assertObject(t.contact()).isType(Contact.class).asJson().is("{name:'foo'}");
+		assertOptional(t.contact()).isType(Contact.class).asJson().is("{name:'foo'}");
 
 		t.contact((String)null);
-		assertObject(t.contact()).isNull();
+		assertOptional(t.contact()).isNull();
 	}
 
 	/**
@@ -92,13 +92,13 @@ public class Info_Test {
 		Info t = new Info();
 
 		t.license(license("foo"));
-		assertObject(t.license()).isType(License.class).asJson().is("{name:'foo'}");
+		assertOptional(t.license()).isType(License.class).asJson().is("{name:'foo'}");
 
 		t.license("{name:'foo'}");
-		assertObject(t.license()).isType(License.class).asJson().is("{name:'foo'}");
+		assertOptional(t.license()).isType(License.class).asJson().is("{name:'foo'}");
 
 		t.license((String)null);
-		assertObject(t.license()).isNull();
+		assertOptional(t.license()).isNull();
 	}
 
 	/**

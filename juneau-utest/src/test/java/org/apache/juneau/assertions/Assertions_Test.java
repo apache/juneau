@@ -19,67 +19,141 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Assertions_Test {
 
 	@Test
-	public void a01_basic() throws Exception {
-
-		assertDate(new Date()).isAfter(new Date(0));
-
-		assertInteger(2).isGt(1);
-
-		assertLong(2l).isGt(1l);
-
-		assertObject("foo").asJson().is("'foo'");
-
-		assertString("foo").is("foo");
-
-		assertThrowable(null).doesNotExist();
-
-		assertArray(new String[0]).isEmpty();
-
-		assertCollection(AList.create()).isEmpty();
-
-		assertList(AList.create()).isEmpty();
-
-		assertStream(new ByteArrayInputStream("foo".getBytes())).asString().is("foo");
-		assertStream((InputStream)null).asString().doesNotExist();
-		assertStream(Optional.of(new ByteArrayInputStream("foo".getBytes()))).asString().is("foo");
-		assertStream(Optional.empty()).asString().doesNotExist();
-
-		assertBytes("foo".getBytes()).asString().is("foo");
-		assertBytes((byte[])null).asString().doesNotExist();
-		assertBytes(Optional.of("foo".getBytes())).asString().is("foo");
-		assertBytes(Optional.empty()).asString().doesNotExist();
-
-		assertReader(new StringReader("foo")).is("foo");
-		assertReader((Reader)null).doesNotExist();
-		assertReader(Optional.of(new StringReader("foo"))).is("foo");
-		assertReader(Optional.empty()).doesNotExist();
-
-		assertThrown(()->{throw new RuntimeException("foo");}).message().is("foo");
-		assertThrown(()->{}).doesNotExist();
-
-		assertZonedDateTime(ZonedDateTime.now()).exists();
-		assertZonedDateTime(Optional.of(ZonedDateTime.now())).exists();
-
-		assertBean("123").exists();
-		assertBean(Optional.of("123")).exists();
-
-		assertBoolean(true).isTrue();
-		assertBoolean(Optional.of(true)).isTrue();
-
+	public void a00_basic() {
 		new Assertions();
 	}
 
 	@Test
-	public void a02_stdout_stderr() throws Exception {
-		assertThrown(()->assertObject(null).msg("Test message").stdout().exists()).exists();
-		assertThrown(()->assertObject(Optional.empty()).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
-		assertObject(assertObject("foo").silent().error("test {0}", "message").getMessage()).is("test message");
+	public void a01_assertDate() throws Exception {
+		assertDate(new Date()).isAfter(new Date(0));
+	}
+
+	@Test
+	public void a02_assertInteger() throws Exception {
+		assertInteger(2).isGt(1);
+	}
+
+	@Test
+	public void a03_assertLong() throws Exception {
+		assertLong(2l).isGt(1l);
+	}
+
+	@Test
+	public void a04_assertObject() throws Exception {
+		assertObject("foo").asJson().is("'foo'");
+	}
+
+	@Test
+	public void a05_assertString() throws Exception {
+		assertString("foo").is("foo");
+	}
+
+	@Test
+	public void a06_assertThrowable() throws Exception {
+		assertThrowable(null).doesNotExist();
+	}
+
+	@Test
+	public void a07_assertArray() throws Exception {
+		assertArray(new String[0]).isEmpty();
+	}
+
+	@Test
+	public void a08_assertCollection() throws Exception {
+		assertCollection(AList.create()).isEmpty();
+	}
+
+	@Test
+	public void a09_assertList() throws Exception {
+		assertList(AList.create()).isEmpty();
+	}
+
+	@Test
+	public void a10_assertStream() throws Exception {
+		assertStream(new ByteArrayInputStream("foo".getBytes())).asString().is("foo");
+		assertStream((InputStream)null).asString().doesNotExist();
+	}
+
+	@Test
+	public void a11_assertBytes() throws Exception {
+		assertBytes("foo".getBytes()).asString().is("foo");
+		assertBytes((byte[])null).asString().doesNotExist();
+	}
+
+	@Test
+	public void a12_assertReader() throws Exception {
+		assertReader(new StringReader("foo")).is("foo");
+		assertReader((Reader)null).doesNotExist();
+	}
+
+	@Test
+	public void a13_assertThrown() throws Exception {
+		assertThrown(()->{throw new RuntimeException("foo");}).message().is("foo");
+		assertThrown(()->{}).doesNotExist();
+		assertThrown(StringIndexOutOfBoundsException.class, ()->"x".charAt(1)).message().is("String index out of range: 1");
+		assertThrown(
+			() ->assertThrown(StringIndexOutOfBoundsException.class, ()->{throw new RuntimeException();})
+		).message().is("Exception not of expected type.\n\tExpect='java.lang.StringIndexOutOfBoundsException'.\n\tActual='java.lang.RuntimeException'.");
+	}
+
+	@Test
+	public void a14_assertZonedDateTime() throws Exception {
+		assertZonedDateTime(ZonedDateTime.now()).exists();
+	}
+
+	@Test
+	public void a15_assertBean() throws Exception {
+		assertBean("123").exists();
+	}
+
+	@Test
+	public void a16_assertBoolean() throws Exception {
+		assertBoolean(true).isTrue();
+	}
+
+	@Test
+	public void a17_assertVersion() throws Exception {
+		assertVersion(Version.of("2")).isGreaterThan(Version.of("1"));
+	}
+
+	@Test
+	public void a18_assertComparable() throws Exception {
+		assertComparable(2).isGreaterThan(1);
+	}
+
+	@Test
+	public void a19_assertBeanList() throws Exception {
+		assertBeanList(AList.of(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
+	}
+
+	@Test
+	public void a20_assertPrimitiveArray() throws Exception {
+		assertPrimitiveArray(new int[]{1}).length().is(1);
+	}
+
+	@Test
+	public void a21_assertMap() throws Exception {
+		assertMap(AMap.of(1,2)).size().is(1);
+	}
+
+	@Test
+	public void a22_assertArgNotNull() throws Exception {
+		assertArgNotNull("foo", 123);
+		assertThrown(()->assertArgNotNull("foo", null)).message().is("Argument 'foo' cannot be null.");
+	}
+
+	@Test
+	public void a23_assertArg() throws Exception {
+		assertArg(true, "foo {0}", 1);
+		assertThrown(()->assertArg(false, "foo {0}", 1)).message().is("foo 1");
 	}
 }

@@ -37,13 +37,13 @@ public class BeanStore_Test {
 	public void a01_addBean() {
 		BeanStore bs = new BeanStore();
 		assertBoolean(bs.hasBean(A.class)).isFalse();
-		assertObject(bs.getBean(A.class)).doesNotExist();
+		assertOptional(bs.getBean(A.class)).doesNotExist();
 		bs.addBean(A.class, new A());
 		assertBoolean(bs.hasBean(A.class)).isTrue();
-		assertObject(bs.getBean(A.class)).exists();
+		assertOptional(bs.getBean(A.class)).exists();
 		bs = BeanStore.of(bs);
 		assertBoolean(bs.hasBean(A.class)).isTrue();
-		assertObject(bs.getBean(A.class)).exists();
+		assertOptional(bs.getBean(A.class)).exists();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

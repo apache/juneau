@@ -119,8 +119,8 @@ public class BasicHttpResource_Test {
 		HeaderList x = stringResource("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar")).doesNotExist();
-		assertObject(x.getLast("Bar")).doesNotExist();
+		assertOptional(x.getFirst("Bar")).doesNotExist();
+		assertOptional(x.getLast("Bar")).doesNotExist();
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz']");
 	}
 

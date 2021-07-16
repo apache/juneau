@@ -65,13 +65,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.items(items("foo"));
-		assertObject(t.items()).asJson().is("{type:'foo'}");
+		assertOptional(t.items()).asJson().is("{type:'foo'}");
 
 		t.items("{type:'foo'}");
-		assertObject(t.items()).isType(Items.class).asJson().is("{type:'foo'}");
+		assertOptional(t.items()).isType(Items.class).asJson().is("{type:'foo'}");
 
 		t.items((String)null);
-		assertObject(t.items()).isNull();
+		assertOptional(t.items()).isNull();
 	}
 
 	/**
@@ -96,13 +96,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t._default("foo");
-		assertObject(t._default()).is("foo");
+		assertOptional(t._default()).is("foo");
 
 		t._default(new StringBuilder("foo"));
-		assertObject(t._default()).isType(StringBuilder.class).asString().is("foo");
+		assertOptional(t._default()).isType(StringBuilder.class).asString().is("foo");
 
 		t._default(null);
-		assertObject(t._default()).isNull();
+		assertOptional(t._default()).isNull();
 	}
 
 	/**
@@ -113,16 +113,16 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.maximum(123);
-		assertObject(t.maximum()).isType(Integer.class).is(123);
+		assertOptional(t.maximum()).isType(Integer.class).is(123);
 
 		t.maximum(123f);
-		assertObject(t.maximum()).isType(Float.class).is(123f);
+		assertOptional(t.maximum()).isType(Float.class).is(123f);
 
 		t.maximum("123");
-		assertObject(t.maximum()).isType(Integer.class).is(123);
+		assertOptional(t.maximum()).isType(Integer.class).is(123);
 
 		t.maximum((String)null);
-		assertObject(t.maximum()).isNull();
+		assertOptional(t.maximum()).isNull();
 	}
 
 	/**
@@ -133,13 +133,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.exclusiveMaximum(true);
-		assertObject(t.exclusiveMaximum()).isType(Boolean.class).is(true);
+		assertOptional(t.exclusiveMaximum()).isType(Boolean.class).is(true);
 
 		t.exclusiveMaximum("true");
-		assertObject(t.exclusiveMaximum()).isType(Boolean.class).is(true);
+		assertOptional(t.exclusiveMaximum()).isType(Boolean.class).is(true);
 
 		t.exclusiveMaximum((String)null);
-		assertObject(t.exclusiveMaximum()).isNull();
+		assertOptional(t.exclusiveMaximum()).isNull();
 	}
 
 	/**
@@ -150,16 +150,16 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.minimum(123);
-		assertObject(t.minimum()).isType(Integer.class).is(123);
+		assertOptional(t.minimum()).isType(Integer.class).is(123);
 
 		t.minimum(123f);
-		assertObject(t.minimum()).isType(Float.class).is(123f);
+		assertOptional(t.minimum()).isType(Float.class).is(123f);
 
 		t.minimum("123");
-		assertObject(t.minimum()).isType(Integer.class).is(123);
+		assertOptional(t.minimum()).isType(Integer.class).is(123);
 
 		t.minimum((String)null);
-		assertObject(t.minimum()).isNull();
+		assertOptional(t.minimum()).isNull();
 	}
 
 	/**
@@ -170,13 +170,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.exclusiveMinimum(true);
-		assertObject(t.exclusiveMinimum()).isType(Boolean.class).is(true);
+		assertOptional(t.exclusiveMinimum()).isType(Boolean.class).is(true);
 
 		t.exclusiveMinimum("true");
-		assertObject(t.exclusiveMinimum()).isType(Boolean.class).is(true);
+		assertOptional(t.exclusiveMinimum()).isType(Boolean.class).is(true);
 
 		t.exclusiveMinimum((String)null);
-		assertObject(t.exclusiveMinimum()).isNull();
+		assertOptional(t.exclusiveMinimum()).isNull();
 	}
 
 	/**
@@ -187,13 +187,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.maxLength(123);
-		assertObject(t.maxLength()).isType(Integer.class).is(123);
+		assertOptional(t.maxLength()).isType(Integer.class).is(123);
 
 		t.maxLength("123");
-		assertObject(t.maxLength()).isType(Integer.class).is(123);
+		assertOptional(t.maxLength()).isType(Integer.class).is(123);
 
 		t.maxLength((String)null);
-		assertObject(t.maxLength()).isNull();
+		assertOptional(t.maxLength()).isNull();
 	}
 
 	/**
@@ -204,13 +204,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.minLength(123);
-		assertObject(t.minLength()).isType(Integer.class).is(123);
+		assertOptional(t.minLength()).isType(Integer.class).is(123);
 
 		t.minLength("123");
-		assertObject(t.minLength()).isType(Integer.class).is(123);
+		assertOptional(t.minLength()).isType(Integer.class).is(123);
 
 		t.minLength((String)null);
-		assertObject(t.minLength()).isNull();
+		assertOptional(t.minLength()).isNull();
 	}
 
 	/**
@@ -235,13 +235,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.maxItems(123);
-		assertObject(t.maxItems()).isType(Integer.class).is(123);
+		assertOptional(t.maxItems()).isType(Integer.class).is(123);
 
 		t.maxItems("123");
-		assertObject(t.maxItems()).isType(Integer.class).is(123);
+		assertOptional(t.maxItems()).isType(Integer.class).is(123);
 
 		t.maxItems((String)null);
-		assertObject(t.maxItems()).isNull();
+		assertOptional(t.maxItems()).isNull();
 	}
 
 	/**
@@ -252,13 +252,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.minItems(123);
-		assertObject(t.minItems()).isType(Integer.class).is(123);
+		assertOptional(t.minItems()).isType(Integer.class).is(123);
 
 		t.minItems("123");
-		assertObject(t.minItems()).isType(Integer.class).is(123);
+		assertOptional(t.minItems()).isType(Integer.class).is(123);
 
 		t.minItems((String)null);
-		assertObject(t.minItems()).isNull();
+		assertOptional(t.minItems()).isNull();
 	}
 
 	/**
@@ -269,13 +269,13 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.uniqueItems(true);
-		assertObject(t.uniqueItems()).isType(Boolean.class).is(true);
+		assertOptional(t.uniqueItems()).isType(Boolean.class).is(true);
 
 		t.uniqueItems("true");
-		assertObject(t.uniqueItems()).isType(Boolean.class).is(true);
+		assertOptional(t.uniqueItems()).isType(Boolean.class).is(true);
 
 		t.uniqueItems((String)null);
-		assertObject(t.uniqueItems()).isNull();
+		assertOptional(t.uniqueItems()).isNull();
 	}
 
 	/**
@@ -286,16 +286,16 @@ public class Items_Test {
 		Items t = new Items();
 
 		t._enum(ASet.of("foo","bar"));
-		assertObject(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
+		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t._enum("foo","baz");
-		assertObject(t._enum()).isType(Set.class).asJson().is("['foo','baz']");
+		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','baz']");
 
 		t._enum(ASet.of());
-		assertObject(t._enum()).isType(Set.class).asJson().is("[]");
+		assertOptional(t._enum()).isType(Set.class).asJson().is("[]");
 
 		t._enum((Collection<Object>)null);
-		assertObject(t._enum()).isNull();
+		assertOptional(t._enum()).isNull();
 
 		t.addEnum(ASet.of("foo","bar"));
 		assertObject(t.getEnum()).isType(Set.class).asJson().is("['foo','bar']");
@@ -315,16 +315,16 @@ public class Items_Test {
 		Items t = new Items();
 
 		t.multipleOf(123);
-		assertObject(t.multipleOf()).isType(Integer.class).is(123);
+		assertOptional(t.multipleOf()).isType(Integer.class).is(123);
 
 		t.multipleOf(123f);
-		assertObject(t.multipleOf()).isType(Float.class).is(123f);
+		assertOptional(t.multipleOf()).isType(Float.class).is(123f);
 
 		t.multipleOf("123");
-		assertObject(t.multipleOf()).isType(Integer.class).is(123);
+		assertOptional(t.multipleOf()).isType(Integer.class).is(123);
 
 		t.multipleOf((String)null);
-		assertObject(t.multipleOf()).isNull();
+		assertOptional(t.multipleOf()).isNull();
 	}
 
 	/**

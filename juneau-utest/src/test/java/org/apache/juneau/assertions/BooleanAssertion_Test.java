@@ -15,10 +15,6 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
-
-import static java.util.Optional.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -28,24 +24,16 @@ public class BooleanAssertion_Test {
 		return assertBoolean(value).silent();
 	}
 
-	private BooleanAssertion test(Optional<Boolean> value) {
-		return assertBoolean(value).silent();
-	}
-
 	@Test
 	public void a01_basic() throws Exception {
 
 		assertThrown(()->test((Boolean)null).exists()).message().is("Value was null.");
 		test(true).exists();
-		assertThrown(()->test(empty()).exists()).message().is("Value was null.");
 		test(true).exists();
 
-		test(empty()).doesNotExist();
 		assertThrown(()->test(true).doesNotExist()).message().is("Value was not null.");
 
-		test(empty()).isEqual(null);
 		test(true).isEqual(true);
-		test(of(true)).isEqual(true);
 
 		test(true).isTrue();
 		assertThrown(()->test(true).isFalse()).message().is("Value was true.");
@@ -53,7 +41,6 @@ public class BooleanAssertion_Test {
 		assertThrown(()->test(false).isTrue()).message().is("Value was false.");
 
 		assertThrown(()->test(true).isEqual(false)).message().contains("Unexpected value.");
-		test(empty()).isEqual(null);
 
 		test(true).isNot("true");
 	}

@@ -29,7 +29,8 @@ public class Assertions {
 
 	private static final Messages MESSAGES = Messages.of(Assertions.class, "Messages");
 	private static final String
-		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull");
+		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull"),
+		MSG_exceptionNotOfExpectedType = MESSAGES.getString("exceptionNotOfExpectedType");
 
 	/**
 	 * Used for assertion calls against {@link Date} objects.
@@ -45,23 +46,6 @@ public class Assertions {
 	 */
 	public static final DateAssertion assertDate(Date value) {
 		return DateAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against {@link Date} objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified date is after the current date.</jc>
-	 * 	<jsm>assertDate</jsm>(<jv>myDate</jv>).isAfterNow();
-	 * </p>
-	 *
-	 * @param value The date being wrapped.
-	 * @return A new {@link DateAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final DateAssertion assertDate(Optional<Date> value) {
-		assertArgNotNull("value", value);
-		return assertDate(value.orElse(null));
 	}
 
 	/**
@@ -81,23 +65,6 @@ public class Assertions {
 	}
 
 	/**
-	 * Used for assertion calls against {@link Version} objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified major version is greater than 2.</jc>
-	 * 	<jsm>assertVersion</jsm>(<jv>version</jv>).major().isGreaterThan(2);
-	 * </p>
-	 *
-	 * @param value The version object being wrapped.
-	 * @return A new {@link VersionAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final VersionAssertion assertVersion(Optional<Version> value) {
-		assertArgNotNull("value", value);
-		return assertVersion(value.orElse(null));
-	}
-
-	/**
 	 * Used for assertion calls against {@link ZonedDateTime} objects.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -111,23 +78,6 @@ public class Assertions {
 	 */
 	public static final ZonedDateTimeAssertion assertZonedDateTime(ZonedDateTime value) {
 		return ZonedDateTimeAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against {@link ZonedDateTime} objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified date is after the current date.</jc>
-	 * 	<jsm>assertZonedDateTime</jsm>(<jv>byZdt</jv>).isAfterNow();
-	 * </p>
-	 *
-	 * @param value The date being wrapped.
-	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final ZonedDateTimeAssertion assertZonedDateTime(Optional<ZonedDateTime> value) {
-		assertArgNotNull("value", value);
-		return assertZonedDateTime(value.orElse(null));
 	}
 
 	/**
@@ -147,23 +97,6 @@ public class Assertions {
 	}
 
 	/**
-	 * Used for assertion calls against integers.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response status code is 200 or 404.</jc>
-	 * 	<jsm>assertInteger</jsm>(<jv>httpReponse<jv>).isAny(200,404);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link IntegerAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final IntegerAssertion assertInteger(Optional<Integer> value) {
-		assertArgNotNull("value", value);
-		return assertInteger(value.orElse(null));
-	}
-
-	/**
 	 * Used for assertion calls against longs.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -177,23 +110,6 @@ public class Assertions {
 	 */
 	public static final LongAssertion assertLong(Long value) {
 		return LongAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against longs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response length isn't too long.</jc>
-	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final LongAssertion assertLong(Optional<Long> value) {
-		assertArgNotNull("value", value);
-		return assertLong(value.orElse(null));
 	}
 
 	/**
@@ -225,24 +141,25 @@ public class Assertions {
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static final <T> ObjectAssertion<T> assertObject(T value) {
+		if (value instanceof Optional)
+			throw new RuntimeException("XXX");
 		return ObjectAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against arbitrary POJOs.
+	 * Used for assertion calls against {@link Optional Optionals}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
+	 * 	<jsm>assertOptional</jsm>(<jv>opt</jv>).isType(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final <V> ObjectAssertion<V> assertObject(Optional<V> value) {
-		assertArgNotNull("value", value);
-		return assertObject(value.orElse(null));
+	public static final <T> ObjectAssertion<T> assertOptional(Optional<T> value) {
+		return ObjectAssertion.create(value.orElse(null));
 	}
 
 	/**
@@ -259,23 +176,6 @@ public class Assertions {
 	 */
 	public static final <V> BeanAssertion<V> assertBean(V value) {
 		return BeanAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against Java beans.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>).isType(MyBean.<jk>class</jk>).fields(<js>"foo"</js>).asJson().is(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <V> BeanAssertion<V> assertBean(Optional<V> value) {
-		assertArgNotNull("value", value);
-		return assertBean(value.orElse(null));
 	}
 
 	/**
@@ -309,24 +209,9 @@ public class Assertions {
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static final StringAssertion assertString(Object value) {
+		if (value instanceof Optional)
+			value = ((Optional<?>)value).orElse(null);
 		return StringAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against string objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	<jsm>assertString</jsm>(<jv>httpBody</jv>).is(<js>"OK"</js>);
-	 * </p>
-	 *
-	 * @param value The string being wrapped.
-	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final StringAssertion assertString(Optional<?> value) {
-		assertArgNotNull("value", value);
-		return assertString(value.orElse(null));
 	}
 
 	/**
@@ -343,23 +228,6 @@ public class Assertions {
 	 */
 	public static final BooleanAssertion assertBoolean(Boolean value) {
 		return BooleanAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against boolean objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the specified boolean object exists and is true.</jc>
-	 * 	<jsm>assertBoolean</jsm>(<jv>myBoolean</jv>).exists().isTrue();
-	 * </p>
-	 *
-	 * @param value The boolean being wrapped.
-	 * @return A new {@link BooleanAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final BooleanAssertion assertBoolean(Optional<Boolean> value) {
-		assertArgNotNull("value", value);
-		return assertBoolean(value.orElse(null));
 	}
 
 	/**
@@ -500,7 +368,7 @@ public class Assertions {
 		} catch (Throwable e) {
 			if (type.isInstance(e))
 				return assertThrowable((T)e);
-			throw new BasicAssertionError("Exception not of expected type.\n\tExpected: {1}.\n\tActual: {2}", type, e.getClass());
+			throw new BasicAssertionError(MSG_exceptionNotOfExpectedType, type, e.getClass());
 		}
 		return assertThrowable(null);
 	}
@@ -526,24 +394,6 @@ public class Assertions {
 	}
 
 	/**
-	 * Used for assertion calls against the contents of input streams.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the stream contains the string "foo".</jc>
-	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).asHex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * @param value The input stream being wrapped.
-	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
-	 * @throws IOException If thrown while reading contents from stream.
-	 */
-	public static final ByteArrayAssertion assertStream(Optional<InputStream> value) throws IOException {
-		assertArgNotNull("value", value);
-		return assertStream(value.orElse(null));
-	}
-
-	/**
 	 * Used for assertion calls against byte arrays.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -557,23 +407,6 @@ public class Assertions {
 	 */
 	public static final ByteArrayAssertion assertBytes(byte[] value) {
 		return ByteArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against byte arrays.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).asHex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * @param value The byte array being wrapped.
-	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final ByteArrayAssertion assertBytes(Optional<byte[]> value) {
-		assertArgNotNull("value", value);
-		return assertBytes(value.orElse(null));
 	}
 
 	/**
@@ -591,24 +424,6 @@ public class Assertions {
 	 */
 	public static final StringAssertion assertReader(Reader value) throws IOException {
 		return assertString(read(value));
-	}
-
-	/**
-	 * Used for assertion calls against the contents of readers.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
-	 * 	<jsm>assertReader</jsm>(<jv>myReader</jv>).is(<js>"foo"</js>);
-	 * </p>
-	 *
-	 * @param value The reader being wrapped.
-	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
-	 * @throws IOException If thrown while reading contents from reader.
-	 */
-	public static final StringAssertion assertReader(Optional<Reader> value) throws IOException {
-		assertArgNotNull("value", value);
-		return assertReader(value.orElse(null));
 	}
 
 	/**

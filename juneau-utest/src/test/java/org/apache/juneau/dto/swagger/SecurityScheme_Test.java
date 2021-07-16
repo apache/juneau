@@ -134,22 +134,22 @@ public class SecurityScheme_Test {
 		SecurityScheme t = new SecurityScheme();
 
 		t.scopes(AMap.of("foo","bar"));
-		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
+		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.scopes(AMap.create());
-		assertObject(t.scopes()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.scopes()).isType(Map.class).asJson().is("{}");
 
 		t.scopes((Map<String,String>)null);
-		assertObject(t.scopes()).isNull();
+		assertOptional(t.scopes()).isNull();
 
 		t.addScopes(AMap.of("foo","bar"));
-		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
+		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.addScopes(AMap.create());
-		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
+		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.addScopes(null);
-		assertObject(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
+		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 	}
 
 	/**

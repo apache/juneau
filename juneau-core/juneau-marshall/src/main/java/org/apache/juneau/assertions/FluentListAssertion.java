@@ -179,7 +179,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	@SafeVarargs
 	public final R each(Predicate<E>...tests) throws AssertionError {
 		isSize(tests.length);
-		for (int i = 0, j = size(); i < j; i++) {
+		for (int i = 0, j = getSize(); i < j; i++) {
 			Predicate<E> t = tests[i];
 			if (t != null && ! t.test(at(i)))
 				throw error(MSG_listDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
@@ -235,7 +235,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	}
 
 	private E at(int index) throws AssertionError {
-		return valueIsNull() || index >= size() ? null : value().get(index);
+		return valueIsNull() || index >= getSize() ? null : value().get(index);
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {

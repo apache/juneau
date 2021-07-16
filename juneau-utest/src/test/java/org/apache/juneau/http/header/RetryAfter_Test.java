@@ -79,9 +79,9 @@ public class RetryAfter_Test {
 
 	@Test
 	public void a03_asInt() throws Exception {
-		assertObject(retryAfter(123).asInteger()).is(123);
-		assertObject(new RetryAfter((String)null).asInteger()).isNull();
-		assertObject(retryAfter(()->null).asInteger()).isNull();
+		assertOptional(retryAfter(123).asInteger()).is(123);
+		assertOptional(new RetryAfter((String)null).asInteger()).isNull();
+		assertOptional(retryAfter(()->null).asInteger()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -52,13 +52,13 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.info(info("foo", "bar"));
-		assertObject(t.info()).asJson().is("{title:'foo',version:'bar'}");
+		assertOptional(t.info()).asJson().is("{title:'foo',version:'bar'}");
 
 		t.info("{title:'foo',version:'bar'}");
-		assertObject(t.info()).isType(Info.class).asJson().is("{title:'foo',version:'bar'}");
+		assertOptional(t.info()).isType(Info.class).asJson().is("{title:'foo',version:'bar'}");
 
 		t.info((String)null);
-		assertObject(t.info()).isNull();
+		assertOptional(t.info()).isNull();
 	}
 
 	/**
@@ -97,22 +97,22 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.schemes(ASet.of("foo","bar"));
-		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
+		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t.schemes(ASet.of());
-		assertObject(t.schemes()).isType(Set.class).asJson().is("[]");
+		assertOptional(t.schemes()).isType(Set.class).asJson().is("[]");
 
 		t.schemes((Collection<String>)null);
-		assertObject(t.schemes()).isNull();
+		assertOptional(t.schemes()).isNull();
 
 		t.addSchemes(ASet.of("foo","bar"));
-		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
+		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t.addSchemes(ASet.of());
-		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
+		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t.addSchemes(null);
-		assertObject(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
+		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
 	}
 
 	/**
@@ -123,22 +123,22 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.consumes(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.consumes(ASet.of());
-		assertObject(t.consumes()).isType(Set.class).asJson().is("[]");
+		assertOptional(t.consumes()).isType(Set.class).asJson().is("[]");
 
 		t.consumes((Collection<MediaType>)null);
-		assertObject(t.consumes()).isNull();
+		assertOptional(t.consumes()).isNull();
 
 		t.addConsumes(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addConsumes(ASet.of());
-		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addConsumes(null);
-		assertObject(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
 	}
 
 	/**
@@ -149,22 +149,22 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.produces(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.produces(ASet.of());
-		assertObject(t.produces()).isType(Set.class).asJson().is("[]");
+		assertOptional(t.produces()).isType(Set.class).asJson().is("[]");
 
 		t.produces((Collection<MediaType>)null);
-		assertObject(t.produces()).isNull();
+		assertOptional(t.produces()).isNull();
 
 		t.addProduces(ASet.of(MediaType.of("text/foo")));
-		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addProduces(ASet.of());
-		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 
 		t.addProduces(null);
-		assertObject(t.produces()).isType(Set.class).asJson().is("['text/foo']");
+		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
 	}
 
 	/**
@@ -175,28 +175,28 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.paths(AMap.of("foo", new OperationMap().append("bar",operation().summary("baz"))));
-		assertObject(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
+		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
 
 		t.paths(AMap.create());
-		assertObject(t.paths()).isNull();
+		assertOptional(t.paths()).isNull();
 
 		t.paths((Map<String,OperationMap>)null);
-		assertObject(t.paths()).isNull();
+		assertOptional(t.paths()).isNull();
 
 		t.addPaths(AMap.of("foo",new OperationMap().append("bar",operation().summary("baz"))));
-		assertObject(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
+		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
 
 		t.addPaths(AMap.create());
-		assertObject(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
+		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
 
 		t.addPaths(null);
-		assertObject(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
+		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
 
 		t.setPaths(null);
 		t.path("a", "a1", operation().description("a2"));
 		t.path("b", null, null);
 
-		assertObject(t.paths()).asJson().is("{a:{a1:{description:'a2'}},b:{null:null}}");
+		assertOptional(t.paths()).asJson().is("{a:{a1:{description:'a2'}},b:{null:null}}");
 	}
 
 	/**
@@ -207,29 +207,29 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.definitions(AMap.of("foo",OMap.of("type","bar")));
-		assertObject(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.definitions(AMap.create());
-		assertObject(t.definitions()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.definitions()).isType(Map.class).asJson().is("{}");
 
 		t.definitions((Map<String,OMap>)null);
-		assertObject(t.definitions()).isNull();
+		assertOptional(t.definitions()).isNull();
 
 		t.addDefinitions(AMap.of("foo",OMap.of("type", "bar")));
-		assertObject(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.addDefinitions(AMap.create());
-		assertObject(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.addDefinitions(null);
-		assertObject(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.setDefinitions(null);
 		t.definition("a", OMap.of("type","a1"));
 		t.definition("b", (OMap)null);
 		t.definition(null, OMap.of("type", "c1"));
 
-		assertObject(t.definitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
+		assertOptional(t.definitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
 	}
 
 	/**
@@ -240,29 +240,29 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.parameters(AMap.of("foo",parameterInfo().name("bar")));
-		assertObject(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
+		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
 
 		t.parameters(AMap.create());
-		assertObject(t.parameters()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.parameters()).isType(Map.class).asJson().is("{}");
 
 		t.parameters((Map<String,ParameterInfo>)null);
-		assertObject(t.parameters()).isNull();
+		assertOptional(t.parameters()).isNull();
 
 		t.addParameters(AMap.of("foo",parameterInfo().name("bar")));
-		assertObject(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
+		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
 
 		t.addParameters(AMap.create());
-		assertObject(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
+		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
 
 		t.addParameters(null);
-		assertObject(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
+		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
 
 		t.setParameters(null);
 		t.parameter("a", parameterInfo().in("a1"));
 		t.parameter("b", null);
 		t.parameter(null, parameterInfo().in("c1"));
 
-		assertObject(t.parameters()).asJson().is("{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
+		assertOptional(t.parameters()).asJson().is("{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
 	}
 
 	/**
@@ -273,29 +273,29 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.responses(AMap.of("123",responseInfo("bar")));
-		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
+		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.responses(AMap.create());
-		assertObject(t.responses()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.responses()).isType(Map.class).asJson().is("{}");
 
 		t.responses((Map<String,ResponseInfo>)null);
-		assertObject(t.responses()).isNull();
+		assertOptional(t.responses()).isNull();
 
 		t.addResponses(AMap.of("123",responseInfo("bar")));
-		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
+		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.addResponses(AMap.create());
-		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
+		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.addResponses(null);
-		assertObject(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
+		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 
 		t.setResponses(null);
 		t.response("a", responseInfo("a1"));
 		t.response(null, responseInfo("b1"));
 		t.response("c", null);
 
-		assertObject(t.responses()).asJson().is("{a:{description:'a1'},null:{description:'b1'},c:null}");
+		assertOptional(t.responses()).asJson().is("{a:{description:'a1'},null:{description:'b1'},c:null}");
 	}
 
 	/**
@@ -306,29 +306,29 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.securityDefinitions(AMap.of("foo",securityScheme("bar")));
-		assertObject(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.securityDefinitions(AMap.create());
-		assertObject(t.securityDefinitions()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{}");
 
 		t.securityDefinitions((Map<String,SecurityScheme>)null);
-		assertObject(t.securityDefinitions()).isNull();
+		assertOptional(t.securityDefinitions()).isNull();
 
 		t.addSecurityDefinitions(AMap.of("foo",securityScheme("bar")));
-		assertObject(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.addSecurityDefinitions(AMap.create());
-		assertObject(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.addSecurityDefinitions(null);
-		assertObject(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.setSecurityDefinitions(null);
 		t.securityDefinition("a", securityScheme("a1"));
 		t.securityDefinition("b", null);
 		t.securityDefinition(null, securityScheme("c1"));
 
-		assertObject(t.securityDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
+		assertOptional(t.securityDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
 	}
 
 	/**
@@ -339,29 +339,29 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.security(ASet.of(AMap.of("foo",AList.of("bar"))));
-		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
+		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.security(ASet.of());
-		assertObject(t.security()).isType(List.class).asJson().is("[]");
+		assertOptional(t.security()).isType(List.class).asJson().is("[]");
 
 		t.security((Collection<Map<String, List<String>>>)null);
-		assertObject(t.security()).isNull();
+		assertOptional(t.security()).isNull();
 
 		t.addSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
-		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
+		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.addSecurity(ASet.of());
-		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
+		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.addSecurity(null);
-		assertObject(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
+		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.setSecurity(null);
 		t.security("a", "a1", "a2");
 		t.security("b", (String)null);
 		t.security(null, "d1", "d2");
 
-		assertObject(t.security()).asJson().is("[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
+		assertOptional(t.security()).asJson().is("[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
 	}
 
 	/**
@@ -372,22 +372,22 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.tags(ASet.of(tag("foo")));
-		assertObject(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
+		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
 
 		t.tags(ASet.of());
-		assertObject(t.tags()).isType(Set.class).asJson().is("[]");
+		assertOptional(t.tags()).isType(Set.class).asJson().is("[]");
 
 		t.tags((Collection<Tag>)null);
-		assertObject(t.tags()).isNull();
+		assertOptional(t.tags()).isNull();
 
 		t.addTags(ASet.of(tag("foo")));
-		assertObject(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
+		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
 
 		t.addTags(ASet.of());
-		assertObject(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
+		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
 
 		t.addTags(null);
-		assertObject(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
+		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
 	}
 
 	/**
@@ -398,13 +398,13 @@ public class Swagger_Test {
 		Swagger t = new Swagger();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObject(t.externalDocs()).asJson().is("{url:'foo'}");
+		assertOptional(t.externalDocs()).asJson().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObject(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
+		assertOptional(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
 
 		t.externalDocs((String)null);
-		assertObject(t.externalDocs()).isNull();
+		assertOptional(t.externalDocs()).isNull();
 	}
 
 	/**

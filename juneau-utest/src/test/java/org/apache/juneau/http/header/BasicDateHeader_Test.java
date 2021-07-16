@@ -71,7 +71,7 @@ public class BasicDateHeader_Test {
 
 	@Test
 	public void a02_asZonedDateTime() throws Exception {
-		assertObject(dateHeader(HEADER,VALUE).asZonedDateTime()).asString().is("1994-10-29T19:43:31Z");
+		assertOptional(dateHeader(HEADER,VALUE).asZonedDateTime()).asString().is("1994-10-29T19:43:31Z");
 	}
 
 	@Test

@@ -33,14 +33,14 @@ public class Version_Test {
 		assertObject(of("")).asString().is("0");
 
 		Version x = of("1.2.3");
-		assertInteger(x.getMajor()).is(1);
-		assertInteger(x.getMinor()).is(2);
-		assertInteger(x.getMaintenance()).is(3);
-		assertInteger(x.getPart(0)).is(1);
-		assertInteger(x.getPart(1)).is(2);
-		assertInteger(x.getPart(2)).is(3);
-		assertInteger(x.getPart(-1)).isNull();
-		assertInteger(x.getPart(3)).isNull();
+		assertInteger(x.getMajor().orElse(null)).is(1);
+		assertInteger(x.getMinor().orElse(null)).is(2);
+		assertInteger(x.getMaintenance().orElse(null)).is(3);
+		assertInteger(x.getPart(0).orElse(null)).is(1);
+		assertInteger(x.getPart(1).orElse(null)).is(2);
+		assertInteger(x.getPart(2).orElse(null)).is(3);
+		assertInteger(x.getPart(-1).orElse(null)).isNull();
+		assertInteger(x.getPart(3).orElse(null)).isNull();
 
 		x = of("1..x");
 		assertString(x).is("1.0.2147483647");

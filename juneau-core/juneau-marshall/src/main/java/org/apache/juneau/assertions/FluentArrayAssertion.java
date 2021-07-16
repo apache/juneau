@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Arrays.*;
@@ -40,7 +41,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		MSG_arrayUnexpectedSize = MESSAGES.getString("arrayUnexpectedSize"),
 		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
 		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
-		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt");
+		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
+		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
+		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
@@ -141,10 +144,11 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R any(Predicate<E> test) throws AssertionError {
+		assertArgNotNull("test", test);
 		for (E v : value())
 			if (test.test(v))
 				return returns();
-		throw error(MSG_arrayDidNotContainExpectedValue, value());
+		throw error(MSG_arrayDidntContainAnyMatchingValue, (Object)value());
 	}
 
 	/**
@@ -155,9 +159,10 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R all(Predicate<E> test) throws AssertionError {
-		for (E v : value())
-			if (! test.test(v))
-				throw error(MSG_arrayDidNotContainExpectedValue, value());
+		assertArgNotNull("test", test);
+		for (int i = 0, j = length(); i < j; i++)
+			if (! test.test(at(i)))
+				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
 		return returns();
 	}
 
@@ -241,6 +246,20 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	/**
+	 * Asserts that the array does not contain the expected value.
+	 *
+	 * @param entry The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotContain(String entry) throws AssertionError {
+		for (int i = 0, j = length(); i < j; i++)
+			if (eq(stringify(at(i)), entry))
+				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
+		return returns();
+	}
+
+	/**
 	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
 	 *
 	 * @param entries The expected entries in this list.
@@ -249,7 +268,19 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R equals(String...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return each(p);
+ 		return is(p);
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equals(Object...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
 	}
 
 	/**
@@ -264,18 +295,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R is(String...entries) throws AssertionError {
 		return equals(entries);
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R equals(Object...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return each(p);
 	}
 
 	/**
@@ -303,12 +322,13 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SafeVarargs
-	public final R each(Predicate<E>...tests) throws AssertionError {
+	public final R is(Predicate<E>...tests) throws AssertionError {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
 			Predicate<E> t = tests[i];
-			if (t != null && ! t.test(at(i)))
-				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
+			if (t != null)
+				if (! t.test(at(i)))
+					throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
 	}
@@ -368,7 +388,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	private E at(int index) {
-		return valueIsNull() || index >= length() ? null : value()[index];
+		return valueIsNull() || index >= length() || index < 0 ? null : value()[index];
 	}
 
 	@Override

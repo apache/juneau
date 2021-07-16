@@ -353,7 +353,7 @@ public class ReflectionMapTest {
 
 	@Test
 	public void f01_cdl() {
-		assertObject(RM_F.find(F1.class, null)).asJson().is("1");
+		assertOptional(RM_F.find(F1.class, null)).asJson().is("1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

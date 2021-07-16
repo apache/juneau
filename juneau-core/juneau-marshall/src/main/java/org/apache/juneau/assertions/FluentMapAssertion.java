@@ -118,6 +118,19 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		return new FluentMapAssertion<>(this, m2, returns());
 	}
 
+	/**
+	 * Returns an integer assertion on the size of this map.
+	 *
+	 * <p>
+	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
+	 * (meaning {@link FluentIntegerAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentIntegerAssertion<R> size() {
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -180,8 +193,8 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isSize(int size) throws AssertionError {
-		if (size() != size)
-			throw error(MSG_mapDidNotHaveTheExpectedSize, size, size());
+		if (size2() != size)
+			throw error(MSG_mapDidNotHaveTheExpectedSize, size, size2());
 		return returns();
 	}
 
@@ -231,7 +244,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		return orElse(emptyMap()).get(key);
 	}
 
-	private int size() {
+	private int size2() {
 		return value().size();
 	}
 }

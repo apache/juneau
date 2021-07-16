@@ -96,8 +96,8 @@ public class AnnotationInfoTest {
 		ClassInfo c1 = ClassInfo.of(C1.class);
 		AnnotationInfo<?> ai = c1.getAnnotationInfos(C.class).get(0);
 		assertString(ai.getValue(String.class, "foo")).is("bar");
-		assertObject(ai.getValue(Integer.class, "foo")).isNull();
-		assertObject(ai.getValue(String.class, "bar")).isNull();
+		assertOptional(ai.getValue(Integer.class, "foo")).isNull();
+		assertOptional(ai.getValue(String.class, "bar")).isNull();
 	}
 
 

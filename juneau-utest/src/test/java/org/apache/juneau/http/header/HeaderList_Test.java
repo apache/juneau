@@ -149,12 +149,12 @@ public class HeaderList_Test {
 	@Test
 	public void a06_getCondensed() {
 		HeaderList x = HeaderList.of(FOO_1);
-		assertObject(x.get((String)null)).isNull();
-		assertObject(x.get("Foo")).isString("Foo: 1");
-		assertObject(x.get("Bar")).isNull();
+		assertOptional(x.get((String)null)).isNull();
+		assertOptional(x.get("Foo")).isString("Foo: 1");
+		assertOptional(x.get("Bar")).isNull();
 		x = HeaderList.of(FOO_1, FOO_2, FOO_3, X_x);
-		assertObject(x.get("Foo")).isString("Foo: 1, 2, 3");
-		assertObject(x.get("Bar")).isNull();
+		assertOptional(x.get("Foo")).isString("Foo: 1, 2, 3");
+		assertOptional(x.get("Bar")).isNull();
 	}
 
 	@org.apache.juneau.http.annotation.Header("Foo")
@@ -169,13 +169,13 @@ public class HeaderList_Test {
 	@Test
 	public void a07_getCondensed_asType() {
 		HeaderList x = HeaderList.of(FOO_1);
-		assertObject(x.get(null, Allow.class)).isNull();
-		assertObject(x.get("Foo", Allow.class)).isString("Allow: 1");
-		assertObject(x.get("Bar", Allow.class)).isNull();
+		assertOptional(x.get(null, Allow.class)).isNull();
+		assertOptional(x.get("Foo", Allow.class)).isString("Allow: 1");
+		assertOptional(x.get("Bar", Allow.class)).isNull();
 		x = HeaderList.of(FOO_1, FOO_2, FOO_3, X_x);
-		assertObject(x.get("Foo", Allow.class)).isString("Allow: 1, 2, 3");
-		assertObject(x.get("Bar", Allow.class)).isNull();
-		assertObject(x.get(Foo.class)).isString("Foo: 1, 2, 3");
+		assertOptional(x.get("Foo", Allow.class)).isString("Allow: 1, 2, 3");
+		assertOptional(x.get("Bar", Allow.class)).isNull();
+		assertOptional(x.get(Foo.class)).isString("Foo: 1, 2, 3");
 		final HeaderList x2 = x;
 		assertThrown(()->x2.get(String.class)).message().is("Header name could not be found on bean type 'java.lang.String'");
 	}
@@ -192,19 +192,19 @@ public class HeaderList_Test {
 	@Test
 	public void a09_getFirst() {
 		HeaderList x = HeaderList.of(FOO_1, FOO_2, X_x);
-		assertObject(x.getFirst(null)).isNull();
-		assertObject(x.getFirst("Foo")).isString("Foo: 1");
-		assertObject(x.getFirst("FOO")).isString("Foo: 1");
-		assertObject(x.getFirst("Bar")).isNull();
+		assertOptional(x.getFirst(null)).isNull();
+		assertOptional(x.getFirst("Foo")).isString("Foo: 1");
+		assertOptional(x.getFirst("FOO")).isString("Foo: 1");
+		assertOptional(x.getFirst("Bar")).isNull();
 	}
 
 	@Test
 	public void a10_getLast() {
 		HeaderList x = HeaderList.of(FOO_1, FOO_2, X_x);
-		assertObject(x.getLast(null)).isNull();
-		assertObject(x.getLast("Foo")).isString("Foo: 2");
-		assertObject(x.getLast("FOO")).isString("Foo: 2");
-		assertObject(x.getLast("Bar")).isNull();
+		assertOptional(x.getLast(null)).isNull();
+		assertOptional(x.getLast("Foo")).isString("Foo: 2");
+		assertOptional(x.getLast("FOO")).isString("Foo: 2");
+		assertOptional(x.getLast("Bar")).isNull();
 	}
 
 	@Test

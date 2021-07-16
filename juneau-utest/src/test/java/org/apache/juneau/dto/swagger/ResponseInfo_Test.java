@@ -51,13 +51,13 @@ public class ResponseInfo_Test {
 		ResponseInfo t = new ResponseInfo();
 
 		t.schema(schemaInfo().title("foo"));
-		assertObject(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
+		assertOptional(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
 
 		t.schema("{title:'foo'}");
-		assertObject(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
+		assertOptional(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
 
 		t.schema((String)null);
-		assertObject(t.schema()).isNull();
+		assertOptional(t.schema()).isNull();
 	}
 
 	/**
@@ -68,25 +68,25 @@ public class ResponseInfo_Test {
 		ResponseInfo t = new ResponseInfo();
 
 		t.headers(AMap.of("foo",headerInfo("bar")));
-		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.headers(AMap.create());
-		assertObject(t.headers()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.headers()).isType(Map.class).asJson().is("{}");
 
 		t.headers((Map<String,HeaderInfo>)null);
-		assertObject(t.headers()).isNull();
+		assertOptional(t.headers()).isNull();
 
 		t.addHeaders(AMap.of("foo",headerInfo("bar")));
-		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.addHeaders(AMap.create());
-		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
 		t.addHeaders(null);
-		assertObject(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 	}
 
@@ -98,29 +98,29 @@ public class ResponseInfo_Test {
 		ResponseInfo t = new ResponseInfo();
 
 		t.examples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
+		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.examples(AMap.create());
-		assertObject(t.examples()).isType(Map.class).asJson().is("{}");
+		assertOptional(t.examples()).isType(Map.class).asJson().is("{}");
 
 		t.examples((Map<String,Object>)null);
-		assertObject(t.examples()).isNull();
+		assertOptional(t.examples()).isNull();
 
 		t.addExamples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
+		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(AMap.create());
-		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
+		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(null);
-		assertObject(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
+		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.examples(AMap.create());
 		t.example("text/a", "a");
 		t.example("text/b", null);
 		t.example(null, "c");
 
-		assertObject(t.examples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
+		assertOptional(t.examples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
 	}
 
 	/**

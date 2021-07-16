@@ -417,6 +417,16 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Converts this object assertion into a bean assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a bean.
+	 */
+	public FluentBeanAssertion<T,R> asBean() {
+		return new FluentBeanAssertion<>(this, orElse(null), returns());
+	}
+
+	/**
 	 * Converts this object assertion into a list-of-beans assertion.
 	 *
 	 * @param beanType The bean type.

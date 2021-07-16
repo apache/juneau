@@ -75,13 +75,13 @@ public class Xml_Test {
 		Xml t = new Xml();
 
 		t.attribute(true);
-		assertObject(t.attribute()).isType(Boolean.class).is(true);
+		assertOptional(t.attribute()).isType(Boolean.class).is(true);
 
 		t.attribute("true");
-		assertObject(t.attribute()).isType(Boolean.class).is(true);
+		assertOptional(t.attribute()).isType(Boolean.class).is(true);
 
 		t.attribute((String)null);
-		assertObject(t.attribute()).isNull();
+		assertOptional(t.attribute()).isNull();
 	}
 
 	/**
@@ -92,13 +92,13 @@ public class Xml_Test {
 		Xml t = new Xml();
 
 		t.wrapped(true);
-		assertObject(t.wrapped()).isType(Boolean.class).is(true);
+		assertOptional(t.wrapped()).isType(Boolean.class).is(true);
 
 		t.wrapped("true");
-		assertObject(t.wrapped()).isType(Boolean.class).is(true);
+		assertOptional(t.wrapped()).isType(Boolean.class).is(true);
 
 		t.wrapped((String)null);
-		assertObject(t.wrapped()).isNull();
+		assertOptional(t.wrapped()).isNull();
 	}
 
 	/**

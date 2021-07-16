@@ -15,66 +15,58 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings("serial")
-public class Assertion_Test {
+public class BeanListAssertion_Test {
 
-	public static class A1 extends RuntimeException {
-		public A1(String msg, Throwable cause) {
-			super(msg, cause);
-		}
+	private BeanListAssertion<?> test(Object...value) {
+		return assertBeanList(value == null ? null : AList.of(value)).silent();
 	}
 
-	public static class A2 extends RuntimeException {
-		public A2(String msg, Throwable cause) {
-			super(msg, cause);
+	public static class A {
+		public Integer f1, f2;
+		public A() {}
+		public A(Integer f1, Integer f2) {
+			this.f1 = f1;
+			this.f2 = f2;
 		}
-	}
-
-	public static class A3 extends RuntimeException {
-		public A3(String msg) {
-			throw new A2("fromA3", null);
-		}
-	}
-
-	public static class A extends StringAssertion {
-		public A(Object text) {
-			super(text);
-		}
-		public A doError() {
-			throw error(new A1("foo", null), "bar {0}", "baz");
+		public static A of(Integer f1, Integer f2) {
+			return new A(f1, f2);
 		}
 	}
 
 	@Test
-	public void a01_basicErrorHandling() throws Exception {
-		A a = new A("xxx");
-		a.silent();
+	public void a01_basic() throws Exception {
+		A a = A.of(1,2);
 
-		assertThrown(()->a.doError())
-			.isExactType(BasicAssertionError.class)
-			.message().is("bar baz")
-			.causedBy().isExactType(A1.class)
-			.causedBy().message().is("foo")
-			.causedBy().causedBy().isNull();
+		assertThrown(()->test((Object[])null).exists()).message().is("Value was null.");
+		test(a).exists();
+	}
 
-		a.throwable(A2.class);
-		assertThrown(()->a.doError())
-			.isExactType(A2.class)
-			.message().is("bar baz")
-			.causedBy().isExactType(A1.class)
-			.causedBy().message().is("foo")
-			.causedBy().causedBy().isNull();
+	@Test
+	public void a02_extract() throws Exception {
+		A a1 = A.of(1,2), a2 = A.of(3,4);
+		test(a1, a2).extract("f1").asJson().is("[{f1:1},{f1:3}]");
+		test(a1, a2).extract("f1,f2").asJson().is("[{f1:1,f2:2},{f1:3,f2:4}]");
+		test(a1, a2).extract("f1","f2").asJson().is("[{f1:1,f2:2},{f1:3,f2:4}]");
+		test(a1, a2).extract("bad").asJson().is("[{},{}]");
+		test(a1, a2).extract((String)null).asJson().is("[{},{}]");
+	}
 
-		a.throwable(A3.class);
-		assertThrown(()->a.doError())
-			.isExactType(RuntimeException.class)
-			.message().is("bar baz")
-			.causedBy().isExactType(A1.class)
-			.causedBy().message().is("foo")
-			.causedBy().causedBy().isNull();
+	@Test
+	public void a03_property() throws Exception {
+		A a1 = A.of(1,2), a2 = A.of(3,4);
+		test(a1, a2).property("f1").asJson().is("[1,3]");
+		test(a1, a2).property("bad").asJson().is("[null,null]");
+		test(a1, a2).property(null).asJson().is("[null,null]");
+	}
+
+	@Test
+	public void b01_other() throws Exception {
+		assertThrown(()->test((Object[])null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
+		assertThrown(()->test((Object[])null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
+		test((Object[])null).stdout();
 	}
 }

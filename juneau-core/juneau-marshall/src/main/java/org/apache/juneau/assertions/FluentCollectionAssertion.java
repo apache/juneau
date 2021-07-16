@@ -73,6 +73,20 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
+
+	/**
+	 * Returns an integer assertion on the size of this collection.
+	 *
+	 * <p>
+	 * If the collection is <jk>null</jk>, the returned assertion is a null assertion
+	 * (meaning {@link FluentIntegerAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentIntegerAssertion<R> size() {
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -165,8 +179,8 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isSize(int size) throws AssertionError {
-		if (size() != size)
-			throw error(MSG_collectionDidNotHaveExpectedSize, size, size());
+		if (getSize() != size)
+			throw error(MSG_collectionDidNotHaveExpectedSize, size, getSize());
 		return returns();
 	}
 
@@ -218,7 +232,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return the size of this collection if it is not <jk>null</jk>.
 	 * @throws AssertionError If value was <jk>null</jk>.
 	 */
-	protected int size() throws AssertionError {
+	protected int getSize() throws AssertionError {
 		return value().size();
 	}
 }

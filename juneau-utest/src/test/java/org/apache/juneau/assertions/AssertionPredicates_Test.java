@@ -154,4 +154,10 @@ public class AssertionPredicates_Test {
 		x1.passes(test(eq("foo")));
 		assertThrown(()->x1.passes(test(eq("bar")))).message().is("Value did not pass test.\n\tValue did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
 	}
+
+	@Test
+	public void a17_contains() {
+		x1.passes(test(contains("o")));
+		assertThrown(()->x1.passes(test(contains("x")))).message().is("Value did not pass test.\n\tValue did not contain expected.\n\tExpect='x'.\n\tActual='foo'.");
+	}
 }
