@@ -26,7 +26,7 @@ public class ComparableAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		test(null).doesNotExist();
+		test(null).isNull();
 		test(1).isGte(1);
 	}
 

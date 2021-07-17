@@ -239,7 +239,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/foo/bar");
 
 		create(null, "/foo", null, "http://foobar/foo/bar", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
@@ -247,7 +247,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/bar");
 
 		create(null, "/", "/foo", "http://foobar/foo/bar", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("")
@@ -255,7 +255,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/bar");
 
 		create(null, "/foo", "/bar", "http://foobar/foo/bar", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
@@ -263,7 +263,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("");
 
 		create(null, "/foo", "/bar", "http://foobar/foo/bar/baz", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
@@ -271,7 +271,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/baz");
 
 		create(null, "/foo/bar", "/baz", "http://foobar/foo/bar/baz", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo/bar")
@@ -279,7 +279,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("");
 
 		create(null, "/foo", "/bar/baz", "http://foobar/foo/bar/baz", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
@@ -287,7 +287,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("");
 
 		create(null, "/foo", "/bar/baz", "http://foobar/foo/bar/baz/qux", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
@@ -295,7 +295,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/qux");
 
 		create(null, "/foo", "/bar/baz", "http://foobar/foo/bar/baz/qux/quux", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux/quux")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
@@ -303,21 +303,21 @@ public class PathResolverTest {
 			.assertPathInfo().is("/qux/quux");
 
 		create(null, "/foo", "/bar/{x}", "http://foobar/foo/bar/baz/qux/quux", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux/quux")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
 			.assertServletPath().is("/bar/baz")
 			.assertPathInfo().is("/qux/quux");
 		create(null, "/{x}", "/{x}/{x}", "http://foobar/foo/bar/baz/qux/quux", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux/quux")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
 			.assertServletPath().is("/bar/baz")
 			.assertPathInfo().is("/qux/quux");
 		create(null, "/{bar}", "/{bar}/{bar}", "http://foobar/foo/bar/baz/qux/quux", vars)
-			.assertError().doesNotExist()
+			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux/quux")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")

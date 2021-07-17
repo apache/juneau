@@ -82,7 +82,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isGreaterThan(Comparable value) throws AssertionError {
+	public R isGt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (compareTo(value) <= 0)
 			throw error(MSG_valueWasNotGreaterThanExpected, value, value());
@@ -90,27 +90,13 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	/**
-	 * Asserts that the value is greater than the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isGreaterThan(Comparable)}
-	 *
-	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isGt(Comparable value) throws AssertionError {
-		return isGreaterThan(value);
-	}
-
-	/**
 	 * Asserts that the value is greater than or equal to the specified value.
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isGreaterThanOrEqual(Comparable value) throws AssertionError {
+	public R isGte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (compareTo(value) < 0)
 				throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
@@ -118,27 +104,13 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	/**
-	 * Asserts that the value is greater than or equal to the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isGreaterThanOrEqual(Comparable)}
-	 *
-	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isGte(Comparable value) throws AssertionError {
-		return isGreaterThanOrEqual(value);
-	}
-
-	/**
 	 * Asserts that the value is less than the specified value.
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isLessThan(Comparable value) throws AssertionError {
+	public R isLt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (compareTo(value) >= 0)
 				throw error(MSG_valueWasNotLessThanExpected, value, value());
@@ -146,45 +118,17 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	/**
-	 * Asserts that the value is less than the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isLessThan(Comparable)}
-	 *
-	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isLt(Comparable value) throws AssertionError {
-		return isLessThan(value);
-	}
-
-	/**
 	 * Asserts that the value is less than or equals to the specified value.
-	 *
-	 * @param value The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isLessThanOrEqual(Comparable value) throws AssertionError {
-		assertArgNotNull("value", value);
-		if (compareTo(value) > 0)
-				throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value is less than or equals to the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isLessThanOrEqual(Comparable)}
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLte(Comparable value) throws AssertionError {
-		return isLessThanOrEqual(value);
+		assertArgNotNull("value", value);
+		if (compareTo(value) > 0)
+				throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
+		return returns();
 	}
 
 	/**
@@ -199,8 +143,8 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		exists();
 		assertArgNotNull("lower", lower);
 		assertArgNotNull("upper", upper);
-		isLessThanOrEqual(upper);
-		isGreaterThanOrEqual(lower);
+		isLte(upper);
+		isGte(lower);
 		return returns();
 	}
 

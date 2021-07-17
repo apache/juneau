@@ -49,8 +49,8 @@ public class StringRanges_Test {
 		assertString(of("foo").getRange(0)).isNotNull();
 		assertString(of(null).getRange(0)).isNull();
 		assertString(of("").getRange(0)).isNull();
-		assertString(of(null).getRange(-1)).doesNotExist();
-		assertString(of(null).getRange(1)).doesNotExist();
+		assertString(of(null).getRange(-1)).isNull();
+		assertString(of(null).getRange(1)).isNull();
 	}
 
 	@Test

@@ -40,11 +40,11 @@ public class ArrayAssertion_Test {
 		assertThrown(()->test(null).exists()).message().is("Value was null.");
 		test(x1).exists();
 
-		test(null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
+		test(null).isNull();
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
-		test(null).item(0).doesNotExist();
-		test(x1).item(0).doesNotExist();
+		test(null).item(0).isNull();
+		test(x1).item(0).isNull();
 		test(x2).item(0).exists();
 
 	}
@@ -84,9 +84,9 @@ public class ArrayAssertion_Test {
 	public void b04_item() throws Exception {
 		ABean[] x = new ABean[]{ABean.get(),ABean.get()};
 		test(x).item(0).asBean().property("a").is(1);
-		test(x).item(-1).doesNotExist();
-		test(x).item(2).doesNotExist();
-		test((Object[])null).item(0).doesNotExist();
+		test(x).item(-1).isNull();
+		test(x).item(2).isNull();
+		test((Object[])null).item(0).isNull();
 	}
 
 	@Test
@@ -178,18 +178,6 @@ public class ArrayAssertion_Test {
 		assertThrown(()->test(x2).doesNotContain("1")).message().is("Array contained unexpected value.\n\tUnexpected='1'.\n\tActual='[null, 1, 2]'.");
 		test(x2).doesNotContain(3);
 		assertThrown(()->test(x2).doesNotContain(1)).message().is("Array contained unexpected value.\n\tUnexpected='1'.\n\tActual='[null, 1, 2]'.");
-	}
-
-	@Test
-	public void c08_equals() throws Exception {
-		String[] x1 = {null,"foo","bar"};
-		test(x1).equals(null,"foo","bar");
-		assertThrown(()->test(x1).equals(null,"foo","baz")).message().is("Array did not contain expected value at index 2.\n\tValue did not match expected.\n\tExpect='baz'.\n\tActual='bar'.");
-
-		Integer[] x2={null,1,2};
-		test(x2).equals(null,1,2);
-		test(x2).equals(null,"1","2");
-		assertThrown(()->test(x2).equals(null,1,3)).message().is("Array did not contain expected value at index 2.\n\tValue did not match expected.\n\tExpect='3'.\n\tActual='2'.");
 	}
 
 	@Test

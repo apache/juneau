@@ -55,11 +55,13 @@ public class Assertions_Test {
 	@Test
 	public void a05_assertString() throws Exception {
 		assertString("foo").is("foo");
+		assertString(Optional.of("foo")).is("foo");
+		assertString(Optional.empty()).isNull();
 	}
 
 	@Test
 	public void a06_assertThrowable() throws Exception {
-		assertThrowable(null).doesNotExist();
+		assertThrowable(null).isNull();
 	}
 
 	@Test
@@ -80,25 +82,25 @@ public class Assertions_Test {
 	@Test
 	public void a10_assertStream() throws Exception {
 		assertStream(new ByteArrayInputStream("foo".getBytes())).asString().is("foo");
-		assertStream((InputStream)null).asString().doesNotExist();
+		assertStream((InputStream)null).asString().isNull();
 	}
 
 	@Test
 	public void a11_assertBytes() throws Exception {
 		assertBytes("foo".getBytes()).asString().is("foo");
-		assertBytes((byte[])null).asString().doesNotExist();
+		assertBytes((byte[])null).asString().isNull();
 	}
 
 	@Test
 	public void a12_assertReader() throws Exception {
 		assertReader(new StringReader("foo")).is("foo");
-		assertReader((Reader)null).doesNotExist();
+		assertReader((Reader)null).isNull();
 	}
 
 	@Test
 	public void a13_assertThrown() throws Exception {
 		assertThrown(()->{throw new RuntimeException("foo");}).message().is("foo");
-		assertThrown(()->{}).doesNotExist();
+		assertThrown(()->{}).isNull();
 		assertThrown(StringIndexOutOfBoundsException.class, ()->"x".charAt(1)).message().is("String index out of range: 1");
 		assertThrown(
 			() ->assertThrown(StringIndexOutOfBoundsException.class, ()->{throw new RuntimeException();})
@@ -122,12 +124,12 @@ public class Assertions_Test {
 
 	@Test
 	public void a17_assertVersion() throws Exception {
-		assertVersion(Version.of("2")).isGreaterThan(Version.of("1"));
+		assertVersion(Version.of("2")).isGt(Version.of("1"));
 	}
 
 	@Test
 	public void a18_assertComparable() throws Exception {
-		assertComparable(2).isGreaterThan(1);
+		assertComparable(2).isGt(1);
 	}
 
 	@Test
@@ -155,5 +157,11 @@ public class Assertions_Test {
 	public void a23_assertArg() throws Exception {
 		assertArg(true, "foo {0}", 1);
 		assertThrown(()->assertArg(false, "foo {0}", 1)).message().is("foo 1");
+	}
+
+	@Test
+	public void a24_assertOptional() throws Exception {
+		assertOptional(Optional.empty()).isNull();
+		assertOptional(Optional.of(1)).isNotNull();
 	}
 }

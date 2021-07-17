@@ -47,7 +47,7 @@ public class FileFinder_Test {
 			.create()
 			.build();
 
-		assertStream(stream(x,"files/test1a")).asString().doesNotExist();
+		assertStream(stream(x,"files/test1a")).asString().isNull();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ public class FileFinder_Test {
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/test1/%2E%2E/test1/_a.txt","files/bad.txt",null,"",".","..","%2E","%2E%2E","j.class","k.properties"};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p)).doesNotExist();
+			assertStream(stream(x,p)).isNull();
 		}
 	}
 
@@ -100,7 +100,7 @@ public class FileFinder_Test {
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p)).doesNotExist();
+			assertStream(stream(x,p)).isNull();
 		}
 	}
 
@@ -143,9 +143,9 @@ public class FileFinder_Test {
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","k.properties"};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p,null)).doesNotExist();
-			assertStream(stream(x,p,JAPANESE)).doesNotExist();
-			assertStream(stream(x,p,JAPAN)).doesNotExist();
+			assertStream(stream(x,p,null)).isNull();
+			assertStream(stream(x,p,JAPANESE)).isNull();
+			assertStream(stream(x,p,JAPAN)).isNull();
 		}
 	}
 
@@ -203,7 +203,7 @@ public class FileFinder_Test {
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..","LocalizedFileStore_Test.class"};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p)).msg("pattern=[{0}]", p).doesNotExist();
+			assertStream(stream(x,p)).msg("pattern=[{0}]", p).isNull();
 		}
 	}
 
@@ -228,7 +228,7 @@ public class FileFinder_Test {
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p)).doesNotExist();
+			assertStream(stream(x,p)).isNull();
 		}
 	}
 
@@ -272,9 +272,9 @@ public class FileFinder_Test {
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p,null)).doesNotExist();
-			assertStream(stream(x,p,JAPANESE)).doesNotExist();
-			assertStream(stream(x,p,JAPAN)).doesNotExist();
+			assertStream(stream(x,p,null)).isNull();
+			assertStream(stream(x,p,JAPANESE)).isNull();
+			assertStream(stream(x,p,JAPAN)).isNull();
 		}
 	}
 
@@ -335,7 +335,7 @@ public class FileFinder_Test {
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p)).doesNotExist();
+			assertStream(stream(x,p)).isNull();
 		}
 	}
 
@@ -379,7 +379,7 @@ public class FileFinder_Test {
 		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p)).doesNotExist();
+			assertStream(stream(x,p)).isNull();
 		}
 	}
 
@@ -442,9 +442,9 @@ public class FileFinder_Test {
 		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
 
 		for (String p : badPatterns) {
-			assertStream(stream(x,p,null)).doesNotExist();
-			assertStream(stream(x,p,JAPANESE)).doesNotExist();
-			assertStream(stream(x,p,JAPAN)).doesNotExist();
+			assertStream(stream(x,p,null)).isNull();
+			assertStream(stream(x,p,JAPANESE)).isNull();
+			assertStream(stream(x,p,JAPAN)).isNull();
 		}
 	}
 
@@ -558,17 +558,17 @@ public class FileFinder_Test {
 			.exclude("(?i).*\\.(txt)")
 			.build();
 
-		assertStream(stream(x,"a.txt", null)).doesNotExist();
-		assertStream(stream(x,"a.txt", JAPANESE)).doesNotExist();
-		assertStream(stream(x,"a.txt", JAPAN)).doesNotExist();
+		assertStream(stream(x,"a.txt", null)).isNull();
+		assertStream(stream(x,"a.txt", JAPANESE)).isNull();
+		assertStream(stream(x,"a.txt", JAPAN)).isNull();
 
-		assertStream(stream(x,"dir/a.txt", null)).doesNotExist();
-		assertStream(stream(x,"dir/a.txt", JAPANESE)).doesNotExist();
-		assertStream(stream(x,"dir/a.txt", JAPAN)).doesNotExist();
+		assertStream(stream(x,"dir/a.txt", null)).isNull();
+		assertStream(stream(x,"dir/a.txt", JAPANESE)).isNull();
+		assertStream(stream(x,"dir/a.txt", JAPAN)).isNull();
 
-		assertStream(stream(x,"dir/dir/a.txt", null)).doesNotExist();
-		assertStream(stream(x,"dir/dir/a.txt", JAPANESE)).doesNotExist();
-		assertStream(stream(x,"dir/dir/a.txt", JAPAN)).doesNotExist();
+		assertStream(stream(x,"dir/dir/a.txt", null)).isNull();
+		assertStream(stream(x,"dir/dir/a.txt", JAPANESE)).isNull();
+		assertStream(stream(x,"dir/dir/a.txt", JAPAN)).isNull();
 
 		x = FileFinder
 			.create()
@@ -576,17 +576,17 @@ public class FileFinder_Test {
 			.exclude("(?i).*\\.(TXT)")
 			.build();
 
-		assertStream(stream(x,"a.txt", null)).doesNotExist();
-		assertStream(stream(x,"a.txt", JAPANESE)).doesNotExist();
-		assertStream(stream(x,"a.txt", JAPAN)).doesNotExist();
+		assertStream(stream(x,"a.txt", null)).isNull();
+		assertStream(stream(x,"a.txt", JAPANESE)).isNull();
+		assertStream(stream(x,"a.txt", JAPAN)).isNull();
 
-		assertStream(stream(x,"dir/a.txt", null)).doesNotExist();
-		assertStream(stream(x,"dir/a.txt", JAPANESE)).doesNotExist();
-		assertStream(stream(x,"dir/a.txt", JAPAN)).doesNotExist();
+		assertStream(stream(x,"dir/a.txt", null)).isNull();
+		assertStream(stream(x,"dir/a.txt", JAPANESE)).isNull();
+		assertStream(stream(x,"dir/a.txt", JAPAN)).isNull();
 
-		assertStream(stream(x,"dir/dir/a.txt", null)).doesNotExist();
-		assertStream(stream(x,"dir/dir/a.txt", JAPANESE)).doesNotExist();
-		assertStream(stream(x,"dir/dir/a.txt", JAPAN)).doesNotExist();
+		assertStream(stream(x,"dir/dir/a.txt", null)).isNull();
+		assertStream(stream(x,"dir/dir/a.txt", JAPANESE)).isNull();
+		assertStream(stream(x,"dir/dir/a.txt", JAPAN)).isNull();
 
 		x = FileFinder
 			.create()

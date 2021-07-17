@@ -34,8 +34,8 @@ public class ListAssertion_Test {
 		assertThrown(()->test(null).exists()).message().is("Value was null.");
 		test(x1).exists();
 
-		test(null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
+		test(null).isNull();
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
 		assertThrown(()->test(null).isSize(0)).message().is("Value was null.");
 		test(x1).isSize(0);
@@ -51,8 +51,8 @@ public class ListAssertion_Test {
 		assertThrown(()->test(x1).isNotEmpty()).message().is("Collection was empty.");
 		test(x2).isNotEmpty();
 
-		test(null).item(0).doesNotExist();
-		test(x1).item(0).doesNotExist();
+		test(null).item(0).isNull();
+		test(x1).item(0).isNull();
 		test(x2).item(0).exists();
 	}
 

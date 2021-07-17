@@ -32,9 +32,9 @@ public class ByteArrayAssertion_Test {
 		test(x1).exists();
 		test(x1).exists();
 
-		test((byte[])null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
-		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
+		test((byte[])null).isNull();
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
 		test(x1).length().is(0);
 		assertThrown(()->test(x1).isSize(1)).message().is("Array did not have the expected size.\n\tExpect=1.\n\tActual=0.");
@@ -48,7 +48,7 @@ public class ByteArrayAssertion_Test {
 		assertThrown(()->test(x1).isNotEmpty()).message().is("Array was empty.");
 		test(x2).isNotEmpty();
 
-		test(x1).item(0).doesNotExist();
+		test(x1).item(0).isNull();
 		test(x2).item(0).exists();
 
 		test(x1).asString().is("");

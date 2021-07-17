@@ -75,10 +75,10 @@ public class HttpException_Test {
 	@Test
 	public void a02_getRootCause() throws Exception {
 		BasicHttpException x = new BasicHttpException(100, null);
-		assertObject(x.getRootCause()).doesNotExist();
+		assertObject(x.getRootCause()).isNull();
 
 		x = new BasicHttpException(100, new BasicHttpException(100,"foo"));
-		assertObject(x.getRootCause()).doesNotExist();
+		assertObject(x.getRootCause()).isNull();
 
 		x = new BasicHttpException(100, new RuntimeException("foo"));
 		assertObject(x.getRootCause()).isType(RuntimeException.class);

@@ -110,8 +110,8 @@ public class BasicHttpResource_Test {
 		assertString(x.getContentEncoding().getValue()).is("identity");
 
 		x = stringResource("foo", null).contentEncoding((String)null).build();
-		assertObject(x.getContentType()).doesNotExist();
-		assertObject(x.getContentEncoding()).doesNotExist();
+		assertObject(x.getContentType()).isNull();
+		assertObject(x.getContentEncoding()).isNull();
 	}
 
 	@Test
@@ -119,8 +119,8 @@ public class BasicHttpResource_Test {
 		HeaderList x = stringResource("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertOptional(x.getFirst("Bar")).doesNotExist();
-		assertOptional(x.getLast("Bar")).doesNotExist();
+		assertOptional(x.getFirst("Bar")).isNull();
+		assertOptional(x.getLast("Bar")).isNull();
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz']");
 	}
 
@@ -129,8 +129,8 @@ public class BasicHttpResource_Test {
 		HeaderList x = stringResource("foo").header(null).header(header("Foo","bar")).header(header("Foo","baz")).header(header(null,"bar")).header(header("Bar",null)).header(null).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar").get().getValue()).doesNotExist();
-		assertObject(x.getLast("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getFirst("Bar").get().getValue()).isNull();
+		assertObject(x.getLast("Bar").get().getValue()).isNull();
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
 	}
 
@@ -139,8 +139,8 @@ public class BasicHttpResource_Test {
 		HeaderList x = stringResource("foo").headers(AList.of(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar").get().getValue()).doesNotExist();
-		assertObject(x.getLast("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getFirst("Bar").get().getValue()).isNull();
+		assertObject(x.getLast("Bar").get().getValue()).isNull();
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
 	}
 
@@ -149,8 +149,8 @@ public class BasicHttpResource_Test {
 		HeaderList x = stringResource("foo").headers(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar").get().getValue()).doesNotExist();
-		assertObject(x.getLast("Bar").get().getValue()).doesNotExist();
+		assertObject(x.getFirst("Bar").get().getValue()).isNull();
+		assertObject(x.getLast("Bar").get().getValue()).isNull();
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
@@ -176,7 +176,7 @@ public class BasicHttpResource_Test {
 		StringResource x1 = stringResource("foo").contentType("text/plain").build();
 		assertString(x1.getContentType().getValue()).is("text/plain");
 		StringResource x2 = stringResource("foo").contentType((String)null).build();
-		assertObject(x2.getContentType()).doesNotExist();
+		assertObject(x2.getContentType()).isNull();
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class BasicHttpResource_Test {
 		StringResource x1 = stringResource("foo").contentEncoding("identity").build();
 		assertString(x1.getContentEncoding().getValue()).is("identity");
 		StringResource x2 = stringResource("foo").contentEncoding((String)null).build();
-		assertObject(x2.getContentEncoding()).doesNotExist();
+		assertObject(x2.getContentEncoding()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

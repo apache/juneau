@@ -118,34 +118,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(String...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return each(p);
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
 	public R is(String...entries) throws AssertionError {
-		return equals(entries);
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SuppressWarnings("unchecked")
-	public R equals(E...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
  		return each(p);
 	}
@@ -153,22 +126,18 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	/**
 	 * Asserts that the contents of this list contain the specified values.
 	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}
-	 *
 	 * @param entries The expected entries in this list.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R is(@SuppressWarnings("unchecked") E...entries) throws AssertionError {
-		return equals(entries);
+	@SuppressWarnings("unchecked")
+	public R is(E...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return each(p);
 	}
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}
 	 *
 	 * @param tests
 	 * 	The tests to run.

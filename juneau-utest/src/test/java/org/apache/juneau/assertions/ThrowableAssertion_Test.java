@@ -37,8 +37,8 @@ public class ThrowableAssertion_Test {
 
 		test(x1).message().is("foo");
 
-		test(null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).message().is("Exception was thrown.");
+		test(null).isNull();
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
 		test(x1).passes(x->x.getMessage().equals("foo"));
 		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).message().is("Unexpected value: 'java.lang.RuntimeException: foo'.");
@@ -53,28 +53,28 @@ public class ThrowableAssertion_Test {
 		assertThrown(()->test(x1).passes(x->x.getMessage().equals("bar"))).message().is("Unexpected value: 'java.lang.RuntimeException: foo'.");
 
 		test(x1).message().is("foo");
-		test(new RuntimeException()).message().doesNotExist();
-		test(null).message().doesNotExist();
+		test(new RuntimeException()).message().isNull();
+		test(null).message().isNull();
 
 		test(x1).localizedMessage().is("foo");
-		test(new RuntimeException()).localizedMessage().doesNotExist();
-		test(null).localizedMessage().doesNotExist();
+		test(new RuntimeException()).localizedMessage().isNull();
+		test(null).localizedMessage().isNull();
 
 		test(x1).stackTrace().contains("RuntimeException");
 		test(new RuntimeException()).stackTrace().contains("RuntimeException");
-		test(null).stackTrace().doesNotExist();
+		test(null).stackTrace().isNull();
 
 		test(new RuntimeException(x1)).causedBy().message().is("foo");
-		test(new RuntimeException()).message().doesNotExist();
-		test(null).causedBy().message().doesNotExist();
+		test(new RuntimeException()).message().isNull();
+		test(null).causedBy().message().isNull();
 
 		test(new RuntimeException(new IOException())).find(RuntimeException.class).exists();
 		test(new RuntimeException(new IOException())).find(IOException.class).exists();
 		test(new RuntimeException(new IOException())).find(Exception.class).exists();
-		test(new RuntimeException(new IOException())).find(FileNotFoundException.class).doesNotExist();
+		test(new RuntimeException(new IOException())).find(FileNotFoundException.class).isNull();
 		test(new RuntimeException()).find(RuntimeException.class).exists();
-		test(new RuntimeException()).find(IOException.class).doesNotExist();
-		test(null).find(RuntimeException.class).doesNotExist();
+		test(new RuntimeException()).find(IOException.class).isNull();
+		test(null).find(RuntimeException.class).isNull();
 	}
 
 	@Test

@@ -59,9 +59,9 @@ public class MediaType_Test {
 	public void a03_getParameter() {
 		MediaType x1 = MediaType.of("text/json;x=1;q=1;y=2");
 		assertString(x1.getParameter("x")).is("1");
-		assertString(x1.getParameter("q")).doesNotExist();
-		assertString(x1.getParameter("y")).doesNotExist();
-		assertString(x1.getParameter(null)).doesNotExist();
+		assertString(x1.getParameter("q")).isNull();
+		assertString(x1.getParameter("y")).isNull();
+		assertString(x1.getParameter(null)).isNull();
 	}
 
 	@Test

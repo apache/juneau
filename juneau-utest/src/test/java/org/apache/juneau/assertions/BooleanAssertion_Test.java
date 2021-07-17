@@ -31,7 +31,7 @@ public class BooleanAssertion_Test {
 		test(true).exists();
 		test(true).exists();
 
-		assertThrown(()->test(true).doesNotExist()).message().is("Value was not null.");
+		assertThrown(()->test(true).isNull()).message().is("Value was not null.");
 
 		test(true).isEqual(true);
 

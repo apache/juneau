@@ -553,7 +553,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R doesNotEqual(Object value) throws AssertionError {
+	public R isNotEqual(Object value) throws AssertionError {
 		if (this.value == null && value != null || this.value != null && value == null)
 			return returns();
 		if (this.value == null || this.value.equals(equivalent(value)))
@@ -568,7 +568,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isSameObjectAs(Object value) throws AssertionError {
+	public R isSame(Object value) throws AssertionError {
 		if (this.value == value)
 			return returns();
 		throw error(MSG_notTheSameValue, value, this.value);
@@ -598,19 +598,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public R exists() throws AssertionError {
 		return isNotNull();
-	}
-
-	/**
-	 * Asserts that the object is null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotExist() throws AssertionError {
-		return isNull();
 	}
 
 	/**
@@ -647,14 +634,14 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the value equals the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #doesNotEqual(Object)}.
+	 * Equivalent to {@link #isNotEqual(Object)}.
 	 *
 	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNot(Object value) throws AssertionError {
-		return doesNotEqual(equivalent(value));
+		return isNotEqual(equivalent(value));
 	}
 
 	/**

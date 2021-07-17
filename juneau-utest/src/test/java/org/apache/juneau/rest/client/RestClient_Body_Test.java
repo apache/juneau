@@ -53,9 +53,9 @@ public class RestClient_Body_Test {
 		HttpResource x1 = stringResource("foo").build();
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
-			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").doesNotExist()
-			.assertHeader("X-Transfer-Encoding").doesNotExist()
+			.assertHeader("X-Content-Encoding").isNull()
+			.assertHeader("X-Content-Type").isNull()
+			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
 		HttpResource x2 = stringResource("foo").contentType("text/plain").contentEncoding("identity").build();
@@ -63,12 +63,12 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
 			.assertHeader("X-Content-Type").is("text/plain")
-			.assertHeader("X-Transfer-Encoding").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
 		HttpResource x3 = stringResource("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked().build();
 		client().build().post("/",x3).run()
-			.assertHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
+			.assertHeader("X-Content-Length").isNull()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
 			.assertHeader("X-Content-Type").is("text/plain")
 			.assertHeader("X-Transfer-Encoding").is("chunked")
@@ -79,7 +79,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
 			.assertHeader("X-Content-Type").is("text/plain")
-			.assertHeader("X-Transfer-Encoding").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
 		HttpResource x5 = stringResource("foo").header("Foo","bar").header(header("Baz","qux")).build();
@@ -110,9 +110,9 @@ public class RestClient_Body_Test {
 		HttpEntity x1 = stringEntity("foo").build();
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
-			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").doesNotExist()
-			.assertHeader("X-Transfer-Encoding").doesNotExist()
+			.assertHeader("X-Content-Encoding").isNull()
+			.assertHeader("X-Content-Type").isNull()
+			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
 		HttpEntity x2 = stringEntity("foo").contentType("text/plain").contentEncoding("identity").build();
@@ -120,12 +120,12 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
 			.assertHeader("X-Content-Type").is("text/plain")
-			.assertHeader("X-Transfer-Encoding").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
 		HttpEntity x3 = stringEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked().build();
 		client().build().post("/",x3).run()
-			.assertHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
+			.assertHeader("X-Content-Length").isNull()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
 			.assertHeader("X-Content-Type").is("text/plain")
 			.assertHeader("X-Transfer-Encoding").is("chunked")
@@ -136,7 +136,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
 			.assertHeader("X-Content-Type").is("text/plain")
-			.assertHeader("X-Transfer-Encoding").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
 		HttpEntity x7 = readerEntity(new StringReader("foo")).build();
@@ -160,23 +160,23 @@ public class RestClient_Body_Test {
 
 		SerializedEntity x1 = serializedEntity(ABean.get(),null,null).build();
 		client().build().post("/",x1).run()
-			.assertHeader("X-Content-Length").doesNotExist()
-			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Length").isNull()
+			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json+simple")
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
 		SerializedEntity x2 = serializedEntity(ABean.get(),js,null).build();
 		client().build().post("/",x2).run()
-			.assertHeader("X-Content-Length").doesNotExist()
-			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Length").isNull()
+			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertBody().asObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null).build();
 		client().build().post("/",x3).run()
-			.assertHeader("X-Content-Length").doesNotExist()
-			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Length").isNull()
+			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertBody().asObject(ABean.class).asJson().is("{a:1,b:'foo'}");
 	}

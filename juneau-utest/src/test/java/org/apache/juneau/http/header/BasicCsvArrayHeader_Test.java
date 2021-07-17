@@ -91,7 +91,7 @@ public class BasicCsvArrayHeader_Test {
 	@Test
 	public void a03_assertList() throws Exception {
 		csvArrayHeader("Foo", AList.of("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
-		new BasicCsvArrayHeader("Foo", (String)null).assertList().doesNotExist();
+		new BasicCsvArrayHeader("Foo", (String)null).assertList().isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -34,7 +34,7 @@ public class ZonedDateTimeAssertion_Test {
 		test(x1).exists();
 		test(x1).exists();
 
-		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
 		test(x1).isEqual(x1);
 		test(x1).isEqual(x1, ChronoUnit.DAYS);

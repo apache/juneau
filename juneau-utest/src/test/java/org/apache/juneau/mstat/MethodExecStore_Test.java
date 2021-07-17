@@ -131,12 +131,12 @@ public class MethodExecStore_Test {
 		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
 		assertList(s.getStats()).isSize(1);
-		assertObject(store.getThrownStore()).isSameObjectAs(s);
+		assertObject(store.getThrownStore()).isSame(s);
 
 		ThrownStore s2 = ThrownStore.create().build();
 		BeanStore bs = BeanStore.create().build().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create().beanStore(bs).build();
-		assertObject(store.getThrownStore()).isSameObjectAs(s2);
+		assertObject(store.getThrownStore()).isSame(s2);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ public class MethodExecStore_Test {
 		MethodExecStats stats = store.getStats(m);
 
 		assertLong(stats.getGuid()).isNot(0l);
-		assertObject(stats.getMethod()).isSameObjectAs(m);
+		assertObject(stats.getMethod()).isSame(m);
 
 		assertInteger(stats.getRuns()).is(0);
 		assertInteger(stats.getRunning()).is(0);

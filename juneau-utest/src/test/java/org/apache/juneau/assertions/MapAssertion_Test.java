@@ -34,8 +34,8 @@ public class MapAssertion_Test {
 		assertThrown(()->test(null).exists()).message().is("Value was null.");
 		test(x1).exists();
 
-		assertCollection(null).doesNotExist();
-		assertThrown(()->test(x1).doesNotExist()).message().is("Value was not null.");
+		assertCollection(null).isNull();
+		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
 		assertThrown(()->test(null).isSize(0)).message().is("Value was null.");
 		test(x1).isSize(0);

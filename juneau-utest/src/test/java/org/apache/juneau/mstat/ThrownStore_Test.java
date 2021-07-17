@@ -43,7 +43,7 @@ public class ThrownStore_Test {
 		assertInteger(db.add(t2).getCount()).is(1);
 
 		assertLong(db.getStats(t1).get().getHash()).isEqual(db.getStats(t1).get().getHash());
-		assertLong(db.getStats(t1).get().getHash()).doesNotEqual(db.getStats(t2).get().getHash());
+		assertLong(db.getStats(t1).get().getHash()).isNotEqual(db.getStats(t2).get().getHash());
 	}
 
 	@Test

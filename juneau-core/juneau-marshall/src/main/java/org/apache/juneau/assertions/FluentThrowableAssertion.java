@@ -35,7 +35,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	private static final String
 		MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType"),
 		MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown"),
-		MSG_exceptionWasThrown = MESSAGES.getString("exceptionWasThrown"),
 		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -291,24 +290,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public R exists() {
 		if (valueIsNull())
 			throw error(MSG_exceptionWasNotThrown);
-		return returns();
-	}
-
-	/**
-	 * Asserts that this throwable doesn't exist.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method doesn't throw any exception.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).notExists();
-	 * </p>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	public R doesNotExist() {
-		if (valueIsNotNull())
-			throw error(MSG_exceptionWasThrown);
 		return returns();
 	}
 

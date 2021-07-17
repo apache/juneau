@@ -35,8 +35,8 @@ public class BeanAssertion_Test {
 		assertThrown(()->test((Object)null).exists()).message().is("Value was null.");
 		test(a).exists();
 
-		assertCollection(null).doesNotExist();
-		assertThrown(()->test(a).doesNotExist()).message().is("Value was not null.");
+		assertCollection(null).isNull();
+		assertThrown(()->test(a).isNull()).message().is("Value was not null.");
 
 		test(a).property("f1").asInteger().is(1);
 		test(a).property("x").asInteger().isNull();

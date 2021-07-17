@@ -213,7 +213,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(String...entries) throws AssertionError {
+	public R is(String...entries) throws AssertionError {
 		Predicate<T>[] p = stream(entries).map(StringUtils::stringify).map(AssertionPredicates::eq).toArray(Predicate[]::new);
 		return each(p);
 	}
@@ -221,43 +221,14 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	/**
 	 * Asserts that the array contains the expected entries.
 	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}.
-	 *
-	 * @param entries The values to check for after being converted to strings.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(String...entries) throws AssertionError {
-		return equals(entries);
-	}
-
-	/**
-	 * Asserts that the array contains the expected entries.
-	 *
-	 * @param entries The values to check for.  Uses {@link Object#equals(Object)} for equivalency on entries.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SuppressWarnings("unchecked")
-	public R equals(T...entries) throws AssertionError {
-		Predicate<T>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
-		return each(p);
-	}
-
-	/**
-	 * Asserts that the array contains the expected entries.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(T...)}.
-	 *
 	 * @param entries The values to check for.  Uses {@link Object#equals(Object)} for equivalency on entries.
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
 	public R is(T...entries) throws AssertionError {
-		return equals(entries);
+		Predicate<T>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+		return each(p);
 	}
 
 	/**

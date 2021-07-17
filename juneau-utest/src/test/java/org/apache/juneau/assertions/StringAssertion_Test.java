@@ -34,8 +34,8 @@ public class StringAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		test((String)null).doesNotExist();
-		test(empty()).doesNotExist();
+		test((String)null).isNull();
+		test(empty()).isNull();
 		test(1).exists();
 
 		test("foobar").replaceAll("fo+","bar").is("barbar").is("foobar");
@@ -53,7 +53,7 @@ public class StringAssertion_Test {
 		test(empty()).urlDecode().isNull();
 
 		test("foo\nbar\nbaz").sort().is("bar\nbaz\nfoo").is("foo\nbar\nbaz");
-		test(empty()).sort().doesNotExist();
+		test(empty()).sort().isNull();
 
 		test("FOOBAR").lc().is("foobar").is("FOOBAR");
 		test(empty()).lc().isNull();

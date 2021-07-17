@@ -194,25 +194,25 @@ public class Header_AcceptEncoding_Test {
 		c.get("/a")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Encoding").isNull() // Should not be set
 			.assertHeader("Content-Type").is("text/direct")
 			.assertBody().is("foo");
 		c.get("/a")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Encoding").isNull() // Should not be set
 			.assertHeader("Content-Type").is("text/direct")
 			.assertBody().is("foo");
 
 		c.get("/b")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Encoding").isNull() // Should not be set
 			.assertBody().is("foo");
 		c.get("/b")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Encoding").isNull() // Should not be set
 			.assertBody().is("foo");
 
 		byte[] body;
@@ -232,12 +232,12 @@ public class Header_AcceptEncoding_Test {
 		c.get("/d")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Encoding").isNull() // Should not be set
 			.assertBody().is("foo");
 		c.get("/d")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Encoding").isNull() // Should not be set
 			.assertBody().is("foo");
 	}
 

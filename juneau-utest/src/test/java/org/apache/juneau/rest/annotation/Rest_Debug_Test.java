@@ -38,7 +38,7 @@ public class Rest_Debug_Test {
 	}
 
 	private static void assertNotLogged() {
-		LOGGER.assertMessageAndReset().doesNotExist();
+		LOGGER.assertMessageAndReset().isNull();
 	}
 
 	private static void assertLogged(String msg) {

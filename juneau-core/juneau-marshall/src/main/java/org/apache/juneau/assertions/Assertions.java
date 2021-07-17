@@ -263,8 +263,6 @@ public class Assertions {
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
 	public static final <T> ObjectAssertion<T> assertObject(T value) {
-		if (value instanceof Optional)
-			throw new RuntimeException("XXX");
 		return ObjectAssertion.create(value);
 	}
 

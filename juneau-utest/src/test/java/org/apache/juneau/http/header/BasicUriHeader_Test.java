@@ -71,7 +71,7 @@ public class BasicUriHeader_Test {
 	@Test
 	public void a02_asUri() throws Exception {
 		assertString(uriHeader(HEADER,"http://foo").asURI()).is("http://foo");
-		assertString(new BasicUriHeader(HEADER,(URI)null).asURI()).doesNotExist();
+		assertString(new BasicUriHeader(HEADER,(URI)null).asURI()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

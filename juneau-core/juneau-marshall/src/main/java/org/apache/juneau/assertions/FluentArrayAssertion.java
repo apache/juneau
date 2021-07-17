@@ -266,56 +266,25 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(String...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R equals(Object...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
 	public R is(String...entries) throws AssertionError {
-		return equals(entries);
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
 	}
 
 	/**
 	 * Asserts that the contents of this list contain the specified values.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}
 	 *
 	 * @param entries The expected entries in this list.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Object...entries) throws AssertionError {
-		return equals(entries);
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
 	}
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(String...)}
 	 *
 	 * @param tests The tests to run.  <jk>null</jk> entries are ignored.
 	 * @return The response object (for method chaining).

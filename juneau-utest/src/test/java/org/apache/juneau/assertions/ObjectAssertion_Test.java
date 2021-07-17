@@ -47,7 +47,7 @@ public class ObjectAssertion_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		test((Object)null).doesNotExist();
+		test((Object)null).isNull();
 		test(1).exists();
 
 		assertThrown(()->test("foo").isType(null)).message().is("Argument 'parent' cannot be null.");
@@ -76,10 +76,10 @@ public class ObjectAssertion_Test {
 		test(x1).isSameSortedAs(x2);
 		assertThrown(()->test(x1).isSameJsonAs(null)).message().is("Unexpected comparison.\n\tExpect='null'.\n\tActual='[1,2]'.");
 
-		test(x1).doesNotEqual(null);
-		test(x1).doesNotEqual(x2);
+		test(x1).isNotEqual(null);
+		test(x1).isNotEqual(x2);
 
-		assertThrown(()->test(x1).doesNotEqual(x1)).message().is("Unexpected value.\n\tDid not expect='[1, 2]'.\n\tActual='[1, 2]'.");
+		assertThrown(()->test(x1).isNotEqual(x1)).message().is("Unexpected value.\n\tDid not expect='[1, 2]'.\n\tActual='[1, 2]'.");
 
 		test(x1).passes(x->x != null);
 		assertThrown(()->test(x1).passes(x->x == null)).message().is("Unexpected value: '[1, 2]'.");

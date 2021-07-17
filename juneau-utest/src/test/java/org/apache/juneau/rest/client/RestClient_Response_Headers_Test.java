@@ -165,13 +165,13 @@ public class RestClient_Response_Headers_Test {
 	@Test
 	public void b01_assertions() throws Exception {
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").assertValue().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").assertValue().isNull();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asInteger().is(123);
-		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().isNull();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asLong().is(123l);
-		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().asLong().doesNotExist();
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().asLong().isNull();
 		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Foo").assertValue().asZonedDateTime().exists();
-		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Bar").assertValue().asZonedDateTime().doesNotExist();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Bar").assertValue().asZonedDateTime().isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
