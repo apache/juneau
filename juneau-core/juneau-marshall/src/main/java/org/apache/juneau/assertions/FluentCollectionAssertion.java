@@ -13,10 +13,12 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -73,6 +75,15 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
+	/**
+	 * Converts this assertion into a {@link FluentListAssertion} of strings.
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringListAssertion<R> asStrings() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(x -> stringify(x)).collect(Collectors.toList()), returns());
+	}
+
 
 	/**
 	 * Returns an integer assertion on the size of this collection.
@@ -104,6 +115,18 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	}
 
 	/**
+	 * Asserts that the collection exists and is not empty.
+	 *
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		if (value().isEmpty())
+			throw error(MSG_collectionWasEmpty);
+		return returns();
+	}
+
+	/**
 	 * Asserts that the collection contains the expected value.
 	 *
 	 * @param entry The value to check for.
@@ -115,34 +138,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 			if (eq(v, entry))
 				return returns();
 		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
-	}
-
-	/**
-	 * Asserts that at least one value in the collection passes the specified test.
-	 *
-	 * @param test The predicate test.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R any(Predicate<E> test) throws AssertionError {
-		for (E v : value())
-			if (test.test(v))
-				return returns();
-		throw error(MSG_collectionDidNotContainTestedValue, value());
-	}
-
-	/**
-	 * Asserts that all values in the collection pass the specified test.
-	 *
-	 * @param test The predicate test.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R all(Predicate<E> test) throws AssertionError {
-		for (E v : value())
-			if (! test.test(v))
-				throw error(MSG_collectionDidNotContainTestedValue, value());
-		return returns();
 	}
 
 	/**
@@ -160,14 +155,34 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	}
 
 	/**
-	 * Asserts that the collection exists and is not empty.
+	 * Asserts that at least one value in the collection passes the specified test.
 	 *
+	 * @param test The predicate test.
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R isNotEmpty() throws AssertionError {
-		if (value().isEmpty())
-			throw error(MSG_collectionWasEmpty);
+	public R any(Predicate<E> test) throws AssertionError {
+		if (test == null)
+			return returns();
+		for (E v : value())
+			if (test.test(v))
+				return returns();
+		throw error(MSG_collectionDidNotContainTestedValue, value());
+	}
+
+	/**
+	 * Asserts that all values in the collection pass the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R all(Predicate<E> test) throws AssertionError {
+		if (test == null)
+			return returns();
+		for (E v : value())
+			if (! test.test(v))
+				throw error(MSG_collectionDidNotContainTestedValue, value());
 		return returns();
 	}
 

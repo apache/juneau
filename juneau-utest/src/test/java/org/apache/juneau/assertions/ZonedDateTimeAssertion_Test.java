@@ -25,6 +25,18 @@ public class ZonedDateTimeAssertion_Test {
 		return assertZonedDateTime(value).silent();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test tests
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Test
 	public void a01_basic() throws Exception {
 		ZonedDateTime x1 = ZonedDateTime.parse("1950-01-01T12:34:56Z"), x2 = ZonedDateTime.parse("2050-01-01T12:34:56Z");
@@ -36,13 +48,9 @@ public class ZonedDateTimeAssertion_Test {
 
 		assertThrown(()->test(x1).isNull()).message().is("Value was not null.");
 
-		test(x1).isEqual(x1);
-		test(x1).isEqual(x1, ChronoUnit.DAYS);
-		assertThrown(()->test(x2).isEqual(x1, ChronoUnit.DAYS)).message().contains("Unexpected value.");
-
-		test(x1).isEqual(x1);
-		test(x1).isEqual(x1, ChronoUnit.DAYS);
-		assertThrown(()->test(x2).isEqual(x1, ChronoUnit.DAYS)).message().contains("Unexpected value.");
+		test(x1).is(x1);
+		test(x1).is(x1, ChronoUnit.DAYS);
+		assertThrown(()->test(x2).is(x1, ChronoUnit.DAYS)).message().contains("Unexpected value.");
 
 		assertThrown(()->test(x1).isBefore(null)).message().is("Argument 'value' cannot be null.");
 		test(x1).isBefore(x2);

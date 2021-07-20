@@ -77,13 +77,13 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	/**
-	 * Extracts the specified property as an {@link FluentObjectAssertion}.
+	 * Extracts the specified property as an {@link FluentAnyAssertion}.
 	 *
 	 * @param name The property to extract.  Can also pass in comma-delimited lists.
 	 * @return An assertion of the property value.
 	 */
-	public FluentObjectAssertion<Object,R> property(String name) {
-		return new FluentObjectAssertion<>(this, toBeanMap().get(name), returns());
+	public FluentAnyAssertion<Object,R> property(String name) {
+		return new FluentAnyAssertion<>(this, toBeanMap().get(name), returns());
 	}
 
 	/**

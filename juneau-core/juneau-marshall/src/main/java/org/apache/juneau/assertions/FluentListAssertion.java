@@ -79,13 +79,13 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 *
 	 * <p>
 	 * If the list is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentAnyAssertion#exists()} returns <jk>false</jk>).
 	 *
 	 * @param index The index of the item to retrieve from the list.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<E,R> item(int index) {
-		return new FluentObjectAssertion<>(this, at(index), returns());
+	public FluentAnyAssertion<E,R> item(int index) {
+		return new FluentAnyAssertion<>(this, at(index), returns());
 	}
 
 	/**
@@ -112,18 +112,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(String...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return each(p);
-	}
-
-	/**
 	 * Asserts that the contents of this list contain the specified values.
 	 *
 	 * @param entries The expected entries in this list.
@@ -131,7 +119,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
-	public R is(E...entries) throws AssertionError {
+	public R has(E...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
  		return each(p);
 	}
@@ -204,7 +192,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	}
 
 	private E at(int index) throws AssertionError {
-		return valueIsNull() || index >= getSize() ? null : value().get(index);
+		return valueIsNull() || index < 0 || index >= getSize() ? null : value().get(index);
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {

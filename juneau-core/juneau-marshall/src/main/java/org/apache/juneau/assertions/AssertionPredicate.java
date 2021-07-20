@@ -25,7 +25,7 @@ import org.apache.juneau.cp.*;
  * <p>
  * Typically used wherever predicates are allowed for testing of {@link Assertion} objects such as...
  * <ul>
- * 	<li>{@link FluentObjectAssertion#passes(Predicate)}
+ * 	<li>{@link FluentObjectAssertion#is(Predicate)}
  * 	<li>{@link FluentArrayAssertion#is(Predicate...)}
  * 	<li>{@link FluentPrimitiveArrayAssertion#each(Predicate...)}
  * 	<li>{@link FluentListAssertion#each(Predicate...)}
@@ -53,7 +53,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	/**
 	 * Argument placeholder for tested value.
 	 */
-	public static final Function<Object,String> VALUE = x -> stringify(x);
+	public static final Function<Object,String> VALUE = x -> stringifyDeep(x);
 
 	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
 	private static final String

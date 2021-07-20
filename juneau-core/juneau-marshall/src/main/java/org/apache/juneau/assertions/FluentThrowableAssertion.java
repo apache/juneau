@@ -100,15 +100,15 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public FluentListAssertion<String,R> messages() {
 		List<String> l = null;
 		Throwable t = orElse(null);
-		if (t == null)
-			l = emptyList();
-		else if (t.getCause() == null)
-			l = singletonList(t.getMessage());
-		else {
-			l = new ArrayList<>();
-			while (t != null) {
-				l.add(t.getMessage());
-				t = t.getCause();
+		if (t != null) {
+			if (t.getCause() == null)
+				l = singletonList(t.getMessage());
+			else {
+				l = new ArrayList<>();
+				while (t != null) {
+					l.add(t.getMessage());
+					t = t.getCause();
+				}
 			}
 		}
 		return new FluentListAssertion<>(this, l, returns());
@@ -143,15 +143,15 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public FluentListAssertion<String,R> localizedMessages() {
 		List<String> l = null;
 		Throwable t = orElse(null);
-		if (t == null)
-			l = emptyList();
-		else if (t.getCause() == null)
-			l = singletonList(t.getMessage());
-		else {
-			l = new ArrayList<>();
-			while (t != null) {
-				l.add(t.getLocalizedMessage());
-				t = t.getCause();
+		if (t != null) {
+			if (t.getCause() == null)
+				l = singletonList(t.getMessage());
+			else {
+				l = new ArrayList<>();
+				while (t != null) {
+					l.add(t.getLocalizedMessage());
+					t = t.getCause();
+				}
 			}
 		}
 		return new FluentListAssertion<>(this, l, returns());
@@ -168,8 +168,8 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
 	 */
-	public FluentStringAssertion<R> stackTrace() {
-		return new FluentStringAssertion<>(this, map(StringUtils::getStackTrace).orElse(null), returns());
+	public FluentStringListAssertion<R> stackTrace() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : Arrays.asList(StringUtils.getStackTrace(value())), returns());
 	}
 
 	/**
@@ -244,14 +244,14 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * 		.isType(RuntimeException.<jk>class</jk>);
 	 * </p>
 	 *
-	 * @param type The type.
+	 * @param parent The type.
 	 * @return This object (for method chaining).
 	 */
 	@Override
-	public R isType(Class<?> type) {
-		assertArgNotNull("type", type);
-		if (! type.isInstance(value()))
-			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
+	public R isType(Class<?> parent) {
+		assertArgNotNull("parent", parent);
+		if (! parent.isInstance(value()))
+			throw error(MSG_exceptionWasNotExpectedType, className(parent), className(value()));
 		return returns();
 	}
 
@@ -268,6 +268,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @param type The type.
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public R isExactType(Class<?> type) {
 		assertArgNotNull("type", type);
 		if (type != value().getClass())
@@ -330,4 +331,15 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	}
 
 	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	protected boolean equals(Object o1, Object o2) {
+		if (o1 instanceof Throwable && o2 instanceof Throwable)
+			return ObjectUtils.eq((Throwable)o1, (Throwable)o2, (x,y)->ObjectUtils.eq(x.getClass(),y.getClass()) && ObjectUtils.eq(x.getMessage(),y.getMessage()));
+		return super.equals(o1, o2);
+	}
 }

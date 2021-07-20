@@ -115,7 +115,7 @@ public abstract class ComboRoundTripTest {
 
 			if (isRdf) {
 				Object[] args = { comboInput.label, testName };
-				assertString(r).msg("{0}/{1} parse-normal failed", args).isEqualSortedLinesTo(expected);
+				assertString(r).msg("{0}/{1} parse-normal failed", args).isSortedLines(expected);
 			} else
 				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 
@@ -159,7 +159,7 @@ public abstract class ComboRoundTripTest {
 
 			if (isRdf) {
 				Object[] args = { comboInput.label, testName };
-				assertString(r).msg("{0}/{1} parse-normal failed", args).isEqualSortedLinesTo(expected);
+				assertString(r).msg("{0}/{1} parse-normal failed", args).isSortedLines(expected);
 			} else
 				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 

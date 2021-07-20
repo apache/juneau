@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentByteArrayAssertion<R>")
-public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<byte[],R> {
+public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<Byte,byte[],R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors

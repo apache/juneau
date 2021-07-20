@@ -27,11 +27,12 @@ import org.apache.juneau.internal.*;
 /**
  * Used for fluent assertion calls against primitive array objects (e.g. <c><jk>int</jk>[]</c>).
  *
+ * @param <E> The array element type.
  * @param <T> The array type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentPrimitiveArrayAssertion<T,R>")
-public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,R> {
+@FluentSetters(returns="FluentPrimitiveArrayAssertion<E,T,R>")
+public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
 
 	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
 	static {
@@ -87,7 +88,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentPrimitiveArrayAssertion<T,R> apply(Function<T,T> function) {
+	public FluentPrimitiveArrayAssertion<E,T,R> apply(Function<T,T> function) {
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -101,13 +102,13 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 *
 	 * <p>
 	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentAnyAssertion#exists()} returns <jk>false</jk>).
 	 *
 	 * @param index The index of the item to retrieve from the array.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<T,R> item(int index) {
-		return new FluentObjectAssertion<>(this, at(index), returns());
+	public FluentAnyAssertion<E,R> item(int index) {
+		return new FluentAnyAssertion<>(this, at(index), returns());
 	}
 
 	/**
@@ -134,7 +135,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R any(Predicate<T> test) throws AssertionError {
+	public R any(Predicate<E> test) throws AssertionError {
 		for (int i = 0, j = length2(); i < j; i++)
 			if (test.test(at(i)))
 				return returns();
@@ -148,7 +149,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R all(Predicate<T> test) throws AssertionError {
+	public R all(Predicate<E> test) throws AssertionError {
 		for (int i = 0, j = length2(); i < j; i++)
 			if (! test.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValue, value());
@@ -199,23 +200,11 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R contains(Object entry) throws AssertionError {
+	public R contains(E entry) throws AssertionError {
 		for (int i = 0, j = length2(); i < j; i++)
 			if (eq(at(i), entry))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
-	}
-
-	/**
-	 * Asserts that the array contains the expected entries.
-	 *
-	 * @param entries The values to check for after being converted to strings.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(String...entries) throws AssertionError {
-		Predicate<T>[] p = stream(entries).map(StringUtils::stringify).map(AssertionPredicates::eq).toArray(Predicate[]::new);
-		return each(p);
 	}
 
 	/**
@@ -226,8 +215,8 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
-	public R is(T...entries) throws AssertionError {
-		Predicate<T>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+	public R is(E...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
 		return each(p);
 	}
 
@@ -239,10 +228,10 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
-	public R each(Predicate<T>...tests) throws AssertionError {
+	public R each(Predicate<E>...tests) throws AssertionError {
 		length().is(tests.length);
 		for (int i = 0, j = length2(); i < j; i++) {
-			Predicate<T> t = tests[i];
+			Predicate<E> t = tests[i];
 			if (t != null && ! t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
@@ -256,7 +245,7 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R doesNotContain(Object entry) throws AssertionError {
+	public R doesNotContain(E entry) throws AssertionError {
 		for (int i = 0; i < length2(); i++)
 			if (eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
@@ -270,31 +259,31 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentPrimitiveArrayAssertion<T,R> msg(String msg, Object...args) {
+	public FluentPrimitiveArrayAssertion<E,T,R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentPrimitiveArrayAssertion<T,R> out(PrintStream value) {
+	public FluentPrimitiveArrayAssertion<E,T,R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentPrimitiveArrayAssertion<T,R> silent() {
+	public FluentPrimitiveArrayAssertion<E,T,R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentPrimitiveArrayAssertion<T,R> stdout() {
+	public FluentPrimitiveArrayAssertion<E,T,R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentPrimitiveArrayAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentPrimitiveArrayAssertion<E,T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}
@@ -306,8 +295,8 @@ public class FluentPrimitiveArrayAssertion<T,R> extends FluentObjectAssertion<T,
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("unchecked")
-	private T at(int index) {
-		return valueIsNull() || index >= length2() ? null : (T)Array.get(value(), index);
+	private E at(int index) {
+		return valueIsNull() || index < 0 || index >= length2() ? null : (E)Array.get(value(), index);
 	}
 
 	private int length2() {

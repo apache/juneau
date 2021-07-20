@@ -71,6 +71,36 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an long assertion on the epoch milliseconds of this date.
+	 *
+	 * <p>
+	 * If the date is <jk>null</jk>, the returned assertion is a null assertion
+	 * (meaning {@link FluentLongAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentLongAssertion<R> asEpochMillis() {
+		return new FluentLongAssertion<>(this, valueIsNull() ? null : value().getTime(), returns());
+	}
+
+	/**
+	 * Returns an long assertion on the epoch seconds of this date.
+	 *
+	 * <p>
+	 * If the date is <jk>null</jk>, the returned assertion is a null assertion
+	 * (meaning {@link FluentLongAssertion#exists()} returns <jk>false</jk>).
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentLongAssertion<R> asEpochSeconds() {
+		return new FluentLongAssertion<>(this, valueIsNull() ? null : value().getTime() / 1000, returns());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -82,7 +112,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqual(Date value, ChronoUnit precision) throws AssertionError {
+	public R is(Date value, ChronoUnit precision) throws AssertionError {
 		if (ne(value(), value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error(MSG_unexpectedValue, value, value());
 		return returns();
@@ -137,7 +167,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	}
 
 	/**
-	 * Asserts that the value is between (exclusive) the specified upper and lower values.
+	 * Asserts that the value is between (inclusive) the specified upper and lower values.
 	 *
 	 * @param lower The lower value to check against.
 	 * @param upper The upper value to check against.
@@ -148,8 +178,8 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		exists();
 		assertArgNotNull("lower", lower);
 		assertArgNotNull("upper", upper);
-		isBefore(upper);
-		isAfter(lower);
+		isLte(upper);
+		isGte(lower);
 		return returns();
 	}
 

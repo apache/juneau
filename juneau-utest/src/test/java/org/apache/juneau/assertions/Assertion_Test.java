@@ -22,36 +22,34 @@ import org.junit.*;
 @SuppressWarnings("serial")
 public class Assertion_Test {
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Helpers
+	//------------------------------------------------------------------------------------------------------------------
+
 	public static class A1 extends RuntimeException {
-		public A1(String msg, Throwable cause) {
-			super(msg, cause);
-		}
+		public A1(String msg, Throwable cause) { super(msg, cause); }
 	}
 
 	public static class A2 extends RuntimeException {
-		public A2(String msg, Throwable cause) {
-			super(msg, cause);
-		}
+		public A2(String msg, Throwable cause) { super(msg, cause); }
 	}
 
 	public static class A3 extends RuntimeException {
-		public A3(String msg) {
-			throw new A2("fromA3", null);
-		}
+		public A3(String msg) { throw new A2("fromA3", null); }
 	}
 
 	public static class A extends StringAssertion {
-		public A(Object text) {
-			super(text);
-		}
-		public A doError() {
-			throw error(new A1("foo", null), "bar {0}", "baz");
-		}
+		public A(Object text) { super(text); }
+		public A doError() { throw error(new A1("foo", null), "bar {0}", "baz"); }
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
 	public void a01_basicErrorHandling() throws Exception {
-		A a = new A("xxx");
+		A a = new A("");
 		a.silent();
 
 		assertThrown(()->a.doError())

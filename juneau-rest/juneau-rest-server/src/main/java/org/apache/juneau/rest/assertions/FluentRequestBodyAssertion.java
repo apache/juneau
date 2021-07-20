@@ -129,17 +129,6 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The request object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEqual(String value) throws AssertionError {
-		return asString().isEqual(value);
-	}
-
-	/**
 	 * Asserts that the body contains the specified value.
 	 *
 	 * @param values The value to check against.

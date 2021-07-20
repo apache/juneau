@@ -27,6 +27,15 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class Assertions_Test {
 
+	@SafeVarargs
+	private static <T> List<T> list(T...objects) {
+		return AList.of(objects);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Test
 	public void a00_basic() {
 		new Assertions();
@@ -71,12 +80,12 @@ public class Assertions_Test {
 
 	@Test
 	public void a08_assertCollection() throws Exception {
-		assertCollection(AList.create()).isEmpty();
+		assertCollection(list()).isEmpty();
 	}
 
 	@Test
 	public void a09_assertList() throws Exception {
-		assertList(AList.create()).isEmpty();
+		assertList(list()).isEmpty();
 	}
 
 	@Test
@@ -134,12 +143,47 @@ public class Assertions_Test {
 
 	@Test
 	public void a19_assertBeanList() throws Exception {
-		assertBeanList(AList.of(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
+		assertBeanList(list(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test
-	public void a20_assertPrimitiveArray() throws Exception {
-		assertPrimitiveArray(new int[]{1}).length().is(1);
+	public void a20a_assertIntArray() throws Exception {
+		assertIntArray(new int[]{1}).length().is(1);
+	}
+
+	@Test
+	public void a20b_assertLongArray() throws Exception {
+		assertLongArray(new long[]{1l}).length().is(1);
+	}
+
+	@Test
+	public void a20c_assertShortArray() throws Exception {
+		assertShortArray(new short[]{1}).length().is(1);
+	}
+
+	@Test
+	public void a20d_assertFloatArray() throws Exception {
+		assertFloatArray(new float[]{1}).length().is(1);
+	}
+
+	@Test
+	public void a20e_assertDoubleArray() throws Exception {
+		assertDoubleArray(new double[]{1}).length().is(1);
+	}
+
+	@Test
+	public void a20f_assertBooleanArray() throws Exception {
+		assertBooleanArray(new boolean[]{true}).length().is(1);
+	}
+
+	@Test
+	public void a20g_assertCharArray() throws Exception {
+		assertCharArray(new char[]{'a'}).length().is(1);
+	}
+
+	@Test
+	public void a20h_assertByteArray() throws Exception {
+		assertByteArray(new byte[]{1}).length().is(1);
 	}
 
 	@Test
@@ -163,5 +207,11 @@ public class Assertions_Test {
 	public void a24_assertOptional() throws Exception {
 		assertOptional(Optional.empty()).isNull();
 		assertOptional(Optional.of(1)).isNotNull();
+	}
+
+	@Test
+	public void a25_assertStringList() throws Exception {
+		assertStringList(list()).isNotNull();
+		assertStringList(null).isNull();
 	}
 }

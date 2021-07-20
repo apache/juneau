@@ -40,7 +40,7 @@ public class StringRange_Test {
 		StringRange x4 = of("foo;a=1");
 		assertObject(x3).is(x4);
 		assertObject(x3).isNot(x2);
-		assertObject(x3).isNot("foo");
+		assertObject(x3).asString().isNot("foo");
 		assertObject(x3.hashCode()).is(x4.hashCode());
 
 		assertString(of((String)null)).is("*");

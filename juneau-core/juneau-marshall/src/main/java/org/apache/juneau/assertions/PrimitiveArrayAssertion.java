@@ -27,10 +27,11 @@ import org.apache.juneau.internal.*;
  * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);
  * </p>
  *
+ * @param <E> The array element type.
  * @param <T> The array type.
  */
-@FluentSetters(returns="PrimitiveArrayAssertion<T>")
-public class PrimitiveArrayAssertion<T> extends FluentPrimitiveArrayAssertion<T,PrimitiveArrayAssertion<T>> {
+@FluentSetters(returns="PrimitiveArrayAssertion<E,T>")
+public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<E,T,PrimitiveArrayAssertion<E,T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
@@ -42,7 +43,7 @@ public class PrimitiveArrayAssertion<T> extends FluentPrimitiveArrayAssertion<T,
 	 * @param value The object being wrapped.
 	 * @return A new {@link PrimitiveArrayAssertion} object.
 	 */
-	public static <T> PrimitiveArrayAssertion<T> create(T value) {
+	public static <E,T> PrimitiveArrayAssertion<E,T> create(T value) {
 		return new PrimitiveArrayAssertion<>(value);
 	}
 
@@ -64,31 +65,31 @@ public class PrimitiveArrayAssertion<T> extends FluentPrimitiveArrayAssertion<T,
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public PrimitiveArrayAssertion<T> msg(String msg, Object...args) {
+	public PrimitiveArrayAssertion<E,T> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public PrimitiveArrayAssertion<T> out(PrintStream value) {
+	public PrimitiveArrayAssertion<E,T> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public PrimitiveArrayAssertion<T> silent() {
+	public PrimitiveArrayAssertion<E,T> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public PrimitiveArrayAssertion<T> stdout() {
+	public PrimitiveArrayAssertion<E,T> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public PrimitiveArrayAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public PrimitiveArrayAssertion<E,T> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

@@ -13,9 +13,8 @@
 package org.apache.juneau.rest.client.assertion;
 
 import java.io.*;
-import java.util.*;
+import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -146,15 +145,15 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
 	 * <p>
-	 * Converts the body to a type using {@link ResponseBody#asType(Class)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseBody#asType(Class, Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body bean is the expected value.</jc>
+	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().asObject(List.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() > 0);
+	 * 		.assertBody().asObject(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() > 0);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -167,10 +166,11 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * </ul>
 	 *
 	 * @param type The object type to create.
+	 * @param args The type arguments.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentObjectAssertion<V,R> asObject(Class<V> type) {
-		return new FluentObjectAssertion<>(valueAsType(type), returns());
+	public <V> FluentAnyAssertion<V,R> asObject(Class<V> type, Type...args) {
+		return new FluentAnyAssertion<>(valueAsType(type, args), returns());
 	}
 
 	/**
@@ -199,47 +199,19 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentObjectAssertion<Object,R> asObject() {
+	public FluentAnyAssertion<Object,R> asObject() {
 		return asObject(Object.class);
-	}
-
-	@Override
-	public <V> FluentBeanAssertion<V,R> asBean(Class<V> beanType) {
-		return new FluentBeanAssertion<>(valueAsType(beanType), returns());
-	}
-
-	@Override
-	public <V> FluentBeanListAssertion<V,R> asBeanList(Class<V> beanType) {
-		ClassMeta<List<V>> cm = BeanContext.DEFAULT.getClassMeta(List.class, beanType);
-		return new FluentBeanListAssertion<>(valueAsType(cm), returns());
-	}
-
-	@Override
-	public <E> FluentListAssertion<E,R> asList(Class<E> elementType) {
-		ClassMeta<List<E>> cm = BeanContext.DEFAULT.getClassMeta(List.class, elementType);
-		return new FluentListAssertion<>(valueAsType(cm), returns());
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEqual(String value) throws AssertionError {
-		return asString().isEqual(value);
 	}
 
 	/**
 	 * Asserts that the body contains the specified value.
 	 *
-	 * @param values The value to check against.
+	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R is(String values) throws AssertionError {
-		return asString().is(values);
+	public R is(String value) throws AssertionError {
+		return asString().is(value);
 	}
 
 	/**
@@ -304,17 +276,9 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		}
 	}
 
-	private <T> T valueAsType(Class<T> c) throws AssertionError {
+	private <T> T valueAsType(Type type, Type...args) throws AssertionError {
 		try {
-			return value.cache().asType(c);
-		} catch (RestCallException e) {
-			throw error(e, "Exception occurred during call.");
-		}
-	}
-
-	private <T> T valueAsType(ClassMeta<T> c) throws AssertionError {
-		try {
-			return value.cache().asType(c);
+			return value.cache().asType(type, args);
 		} catch (RestCallException e) {
 			throw error(e, "Exception occurred during call.");
 		}

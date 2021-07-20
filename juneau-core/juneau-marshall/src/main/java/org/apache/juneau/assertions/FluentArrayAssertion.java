@@ -20,6 +20,7 @@ import static java.util.Arrays.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
@@ -85,6 +86,15 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	/**
+	 * Converts this assertion into a {@link FluentListAssertion} of strings.
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringListAssertion<R> asStrings() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(x -> stringify(x)).collect(Collectors.toList()), returns());
+	}
+
+	/**
 	 * Converts this assertion into a {@link FluentBeanListAssertion}.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -104,13 +114,13 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 *
 	 * <p>
 	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentAnyAssertion#exists()} returns <jk>false</jk>).
 	 *
 	 * @param index The index of the item to retrieve from the array.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<E,R> item(int index) {
-		return new FluentObjectAssertion<>(this, at(index), returns());
+	public FluentAnyAssertion<E,R> item(int index) {
+		return new FluentAnyAssertion<>(this, at(index), returns());
 	}
 
 	/**
@@ -135,6 +145,38 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Asserts that the contents of this list contain the specified values.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R has(E...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
+	}
+
+	/**
+	 * Asserts that the contents of this list pass the specified tests.
+	 *
+	 * @param tests The tests to run.  <jk>null</jk> entries are ignored.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SafeVarargs
+	public final R is(Predicate<E>...tests) throws AssertionError {
+		isSize(tests.length);
+		for (int i = 0, j = length(); i < j; i++) {
+			Predicate<E> t = tests[i];
+			if (t != null)
+				if (! t.test(at(i)))
+					throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
+		}
+		return returns();
+	}
 
 	/**
 	 * Asserts that at least one value in the array passes the specified test.
@@ -210,23 +252,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R contains(Object entry) throws AssertionError {
+	public R contains(E entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
 			if (eq(at(i), entry))
-				return returns();
-		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
-	}
-
-	/**
-	 * Asserts that the array contains the expected value when value is converted to a string.
-	 *
-	 * @param entry The value to check for.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R contains(String entry) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
-			if (eq(stringify(at(i)), entry))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
 	}
@@ -238,67 +266,10 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return The object to return after the test.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R doesNotContain(Object entry) throws AssertionError {
+	public R doesNotContain(E entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
 			if (eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
-		return returns();
-	}
-
-	/**
-	 * Asserts that the array does not contain the expected value.
-	 *
-	 * @param entry The value to check for.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotContain(String entry) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
-			if (eq(stringify(at(i)), entry))
-				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
-		return returns();
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values when each entry is converted to a string.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(String...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
-	}
-
-	/**
-	 * Asserts that the contents of this list contain the specified values.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(Object...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
-	}
-
-	/**
-	 * Asserts that the contents of this list pass the specified tests.
-	 *
-	 * @param tests The tests to run.  <jk>null</jk> entries are ignored.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SafeVarargs
-	public final R is(Predicate<E>...tests) throws AssertionError {
-		isSize(tests.length);
-		for (int i = 0, j = length(); i < j; i++) {
-			Predicate<E> t = tests[i];
-			if (t != null)
-				if (! t.test(at(i)))
-					throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
-		}
 		return returns();
 	}
 

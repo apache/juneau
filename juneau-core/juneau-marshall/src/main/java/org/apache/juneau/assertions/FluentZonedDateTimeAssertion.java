@@ -13,7 +13,6 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.time.*;
@@ -82,11 +81,17 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqual(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
+	public R is(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
+		assertArgNotNull("precision", precision);
 		ZonedDateTime v = orElse(null);
-		if (ne(v, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
-			throw error(MSG_unexpectedValue, value, v);
-		return returns();
+		if (valueIsNull() && value == null)
+			return returns();
+		if (valueIsNotNull() && value != null) {
+			Duration d = Duration.between(value(), value);
+			if (d.compareTo(precision.getDuration()) <= 0)
+				return returns();
+		}
+		throw error(MSG_unexpectedValue, value, v);
 	}
 
 	/**
@@ -138,7 +143,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	}
 
 	/**
-	 * Asserts that the value is between (exclusive) the specified upper and lower values.
+	 * Asserts that the value is between (inclusive) the specified upper and lower values.
 	 *
 	 * @param lower The lower value to check against.
 	 * @param upper The upper value to check against.
@@ -149,8 +154,8 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		exists();
 		assertArgNotNull("lower", lower);
 		assertArgNotNull("upper", upper);
-		isBefore(upper);
-		isAfter(lower);
+		isLte(upper);
+		isGte(lower);
 		return returns();
 	}
 

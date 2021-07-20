@@ -25,6 +25,7 @@ import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 import java.util.regex.*;
 import java.util.zip.*;
 
@@ -1811,6 +1812,34 @@ public final class StringUtils {
 	 */
 	public static String stringify(Object o) {
 		return o == null ? null : o.toString();
+	}
+
+	/**
+	 * Converts the specified array to a string.
+	 *
+	 * @param o The array to convert to a string.
+	 * @return The array converted to a string, or <jk>null</jk> if the object was null.
+	 */
+	public static String stringifyDeep(Object o) {
+		if (o == null)
+			return null;
+		if (! o.getClass().isArray())
+			return o.toString();
+		if (o.getClass().getComponentType().isPrimitive())
+			return PRIMITIVE_ARRAY_STRINGIFIERS.get(o.getClass()).apply(o);
+		return Arrays.deepToString((Object[])o);
+	}
+
+	private static final Map<Class<?>,Function<Object,String>> PRIMITIVE_ARRAY_STRINGIFIERS = new HashMap<>();
+	static {
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(boolean[].class, x -> Arrays.toString((boolean[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(byte[].class, x -> Arrays.toString((byte[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(char[].class, x -> Arrays.toString((char[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(double[].class, x -> Arrays.toString((double[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(float[].class, x -> Arrays.toString((float[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(int[].class, x -> Arrays.toString((int[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(long[].class, x -> Arrays.toString((long[])x));
+		PRIMITIVE_ARRAY_STRINGIFIERS.put(short[].class, x -> Arrays.toString((short[])x));
 	}
 
 	/**

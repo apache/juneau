@@ -121,8 +121,8 @@ public class RestClient_Config_RestClient_Test {
 	public void a02_errorCodes() throws Exception {
 		RestClient x1 = client().errorCodes(x -> x == 200).ignoreErrors(false).build();
 		RestClient x2 = client().ignoreErrors(false).build();
-		assertThrown(()->x1.get("/echo").run()).passes(x -> ((RestCallException)x).getResponseCode() == 200);
-		assertThrown(()->x2.get("/echo").errorCodes(x -> x == 200).run()).passes(x -> ((RestCallException)x).getResponseCode() == 200);
+		assertThrown(()->x1.get("/echo").run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
+		assertThrown(()->x2.get("/echo").errorCodes(x -> x == 200).run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
 	}
 
 	@Test

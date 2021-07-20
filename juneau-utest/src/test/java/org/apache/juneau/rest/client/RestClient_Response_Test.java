@@ -172,7 +172,7 @@ public class RestClient_Response_Test {
 	public void c03_response_headerAssertions() throws Exception {
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asInteger().is(123);
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertHeader("Foo").asLong().is(123l);
-		checkFooClient(C.class).build().get().json().header(dateHeader("Foo",ZONEDDATETIME)).run().assertHeader("Foo").asZonedDateTime().isEqual(ZONEDDATETIME);
+		checkFooClient(C.class).build().get().json().header(dateHeader("Foo",ZONEDDATETIME)).run().assertHeader("Foo").asZonedDateTime().is(ZONEDDATETIME);
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertCharset().is("iso-8859-1");
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertHeader("Content-Type").is("application/json;charset=iso-8859-1");
 	}

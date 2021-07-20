@@ -12,64 +12,38 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls against longs.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Validates the response length isn't too long.</jc>
- * 	<jv>client</jv>
- * 		.get(<jsf>URL</jsf>)
- * 		.run()
- * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
- * </p>
- *
- * @param <R> The return type.
+ * Used for assertion calls against lists of strings.
  */
-@FluentSetters(returns="FluentLongAssertion<R>")
-public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
+@FluentSetters(returns="StringListAssertion")
+public class StringListAssertion extends FluentStringListAssertion<StringListAssertion> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param value The value being tested.
-	 * @param returns The object to return after the test.
+	 * @param value The object being wrapped.
+	 * @return A new {@link StringListAssertion} object.
 	 */
-	public FluentLongAssertion(Long value, R returns) {
-		this(null, value, returns);
+	public static StringListAssertion create(List<String> value) {
+		return new StringListAssertion(value);
 	}
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The value being tested.
-	 * @param returns The object to return after the test.
+	 * @param value The object being wrapped.
 	 */
-	public FluentLongAssertion(Assertion creator, Long value, R returns) {
-		super(creator, value, returns);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Converts this long into an integer and then returns it as an integer assertion.
-	 *
-	 * @return A new assertion.
-	 */
-	public FluentIntegerAssertion<R> asInteger() {
-		return new FluentIntegerAssertion<>(this, map(Long::intValue).orElse(null), returns());
+	public StringListAssertion(List<String> value) {
+		super(value, null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -79,31 +53,31 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentLongAssertion<R> msg(String msg, Object...args) {
+	public StringListAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentLongAssertion<R> out(PrintStream value) {
+	public StringListAssertion out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentLongAssertion<R> silent() {
+	public StringListAssertion silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentLongAssertion<R> stdout() {
+	public StringListAssertion stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentLongAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public StringListAssertion throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

@@ -377,7 +377,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeMap}.
 	 */
 	public final <K,V> Map<K,V> sort(Map<K,V> m) {
-		if (isSortMaps() && m != null && (! m.isEmpty()) && m.keySet().iterator().next() instanceof Comparable<?>)
+		if (isSortMaps() && isSortable(m == null ? null : m.keySet()))
 			return new TreeMap<>(m);
 		return m;
 	}
@@ -389,7 +389,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
-		if (isSortCollections() && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
+		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().collect(Collectors.toList());
 		return c;
 	}
@@ -401,9 +401,18 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> List<E> sort(List<E> c) {
-		if (isSortCollections() && c != null && (! c.isEmpty()) && c.get(0) instanceof Comparable<?>)
+		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().collect(Collectors.toList());
 		return c;
+	}
+
+	private boolean isSortable(Collection<?> c) {
+		if (c == null)
+			return false;
+		for (Object o : c)
+			if (! (o instanceof Comparable))
+				return false;
+		return true;
 	}
 
 	/**

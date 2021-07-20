@@ -81,13 +81,13 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 *
 	 * <p>
 	 * If the map is <jk>null</jk> or the map doesn't contain the specified key, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentAnyAssertion#exists()} returns <jk>false</jk>).
 	 *
 	 * @param key The key of the item to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentObjectAssertion<V,R> value(K key) {
-		return new FluentObjectAssertion<>(this, get(key), returns());
+	public FluentAnyAssertion<V,R> value(K key) {
+		return new FluentAnyAssertion<>(this, get(key), returns());
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return A new assertion.
 	 */
 	public FluentListAssertion<Object,R> values(@SuppressWarnings("unchecked") K...keys) {
-		return new FluentListAssertion<>(this, stream(keys).map(x -> get(x)).collect(toList()), returns());
+		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(x -> get(x)).collect(toList()), returns());
 	}
 
 	/**
@@ -111,7 +111,9 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 */
 	@SuppressWarnings("unchecked")
 	public FluentMapAssertion<K,V,R> extract(K...keys) {
-		Map<K,V> m1 = orElse(null), m2 = AMap.create();
+		if (valueIsNull())
+			return new FluentMapAssertion<>(this, null, returns());
+		Map<K,V> m1 = value(), m2 = AMap.create();
 		if (m1 != null)
 			for (K k : keys)
 				m2.put(k, m1.get(k));
@@ -148,6 +150,18 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	/**
+	 * Asserts that the map exists and is not empty.
+	 *
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		if (value().isEmpty())
+			throw error(MSG_mapWasEmpty);
+		return returns();
+	}
+
+	/**
 	 * Asserts that the map contains the expected key.
 	 *
 	 * @param name The key name to check for.
@@ -171,18 +185,6 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		if (! value().containsKey(name))
 			return returns();
 		throw error(MSG_mapContainedUnexpectedKey, name, value());
-	}
-
-	/**
-	 * Asserts that the map exists and is not empty.
-	 *
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isNotEmpty() throws AssertionError {
-		if (value().isEmpty())
-			throw error(MSG_mapWasEmpty);
-		return returns();
 	}
 
 	/**

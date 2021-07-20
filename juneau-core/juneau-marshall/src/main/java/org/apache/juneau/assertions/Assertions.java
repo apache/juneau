@@ -252,6 +252,22 @@ public class Assertions {
 
 	/**
 	 * Used for assertion calls against arbitrary POJOs.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
+	 * 	<jsm>assertAny</jsm>(<jv>myPojo</jv>).asBean(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final <T> AnyAssertion<T> assertAny(T value) {
+		return AnyAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against arbitrary POJOs.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -278,23 +294,87 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final <T> ObjectAssertion<T> assertOptional(Optional<T> value) {
-		return ObjectAssertion.create(value.orElse(null));
+	public static final <T> AnyAssertion<T> assertOptional(Optional<T> value) {
+		return AnyAssertion.create(value.orElse(null));
 	}
 
 	/**
-	 * Used for assertion calls against primitive arrays.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>int</jk>[] <jv>array</jv> = {1,2,3};
-	 * 	<jsm>assertPrimitiveArray</jsm>(<jv>array</jv>).isSize(3);
-	 * </p>
+	 * Used for assertion calls against primitive int arrays.
 	 *
 	 * @param value The object being wrapped.
 	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static final <E> PrimitiveArrayAssertion<E> assertPrimitiveArray(E value) {
+	public static final PrimitiveArrayAssertion<Integer,int[]> assertIntArray(int[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive short arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Short,short[]> assertShortArray(short[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive long arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Long,long[]> assertLongArray(long[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive float arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Float,float[]> assertFloatArray(float[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive double arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Double,double[]> assertDoubleArray(double[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive boolean arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Boolean,boolean[]> assertBooleanArray(boolean[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive char arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Character,char[]> assertCharArray(char[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against primitive byte arrays.
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Byte,byte[]> assertByteArray(byte[] value) {
 		return PrimitiveArrayAssertion.create(value);
 	}
 
@@ -314,6 +394,16 @@ public class Assertions {
 		if (value instanceof Optional)
 			value = ((Optional<?>)value).orElse(null);
 		return StringAssertion.create(value);
+	}
+
+	/**
+	 * Used for assertion calls against string lists.
+	 *
+	 * @param value The string list being wrapped.
+	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static final StringListAssertion assertStringList(List<String> value) {
+		return StringListAssertion.create(value);
 	}
 
 	/**

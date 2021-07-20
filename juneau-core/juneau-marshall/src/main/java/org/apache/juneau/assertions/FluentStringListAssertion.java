@@ -12,27 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import java.io.*;
+import static java.util.stream.Collectors.*;
 
-import org.apache.juneau.*;
+import java.io.*;
+import java.util.*;
+
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls against {@link Version} objects.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Validates the response expiration is after the current date.</jc>
- * 	<jv>client</jv>
- * 		.get(<jsf>URL</jsf>)
- * 		.run()
- * 		.getHeader(ClientVersion.<jk>class</jk>).assertVersion().major().isGreaterThanOrEqual(2);
- * </p>
+ * Used for fluent assertion calls against lists of strings.
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentVersionAssertion<R>")
-public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
+@FluentSetters(returns="FluentStringListAssertion<R>")
+public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
@@ -41,22 +34,22 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value being tested.
+	 * @param contents The string list being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentVersionAssertion(Version value, R returns) {
-		this(null, value, returns);
+	public FluentStringListAssertion(List<String> contents, R returns) {
+		this(null, contents, returns);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param creator The assertion that created this assertion.
-	 * @param value The value being tested.
+	 * @param contents The string list being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentVersionAssertion(Assertion creator, Version value, R returns) {
-		super(creator, value, returns);
+	public FluentStringListAssertion(Assertion creator, List<String> contents, R returns) {
+		super(creator, contents, returns);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -64,40 +57,34 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Extracts the specified version part (zero-indexed position).
+	 * Concatenates this list of strings into a {@link FluentStringAssertion}.
 	 *
-	 * @param index The index of the version part to extract.
-	 * @return The response object (for method chaining).
+	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> part(int index) {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().getPart(index).orElse(null), returns());
+	public FluentStringAssertion<R> join() {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : value().stream().collect(joining()), returns());
 	}
 
 	/**
-	 * Extracts the major part of the version string (index position 0).
+	 * Concatenates this list of strings into a {@link FluentStringAssertion}.
 	 *
-	 * @return The response object (for method chaining).
+	 * @param delimiter The delimiter to be used between each element.
+	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> major() {
-		return part(0);
+	public FluentStringAssertion<R> join(String delimiter) {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : value().stream().collect(joining(delimiter)), returns());
 	}
 
 	/**
-	 * Extracts the minor part of the version string (index position 1).
+	 * Concatenates this list of strings into a {@link FluentStringAssertion}.
 	 *
-	 * @return The response object (for method chaining).
+	 * @param delimiter The delimiter to be used between each element.
+	 * @param prefix The sequence of characters to be used at the beginning of the joined result.
+	 * @param suffix The sequence of characters to be used at the end of the joined result.
+	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> minor() {
-		return part(1);
-	}
-
-	/**
-	 * Extracts the maintenance part of the version string (index position 2).
-	 *
-	 * @return The response object (for method chaining).
-	 */
-	public FluentIntegerAssertion<R> maintenance() {
-		return part(2);
+	public FluentStringAssertion<R> join(String delimiter, String prefix, String suffix) {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : value().stream().collect(joining(delimiter, prefix, suffix)), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,31 +94,31 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> msg(String msg, Object...args) {
+	public FluentStringListAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> out(PrintStream value) {
+	public FluentStringListAssertion<R> out(PrintStream value) {
 		super.out(value);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> silent() {
+	public FluentStringListAssertion<R> silent() {
 		super.silent();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> stdout() {
+	public FluentStringListAssertion<R> stdout() {
 		super.stdout();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentVersionAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentStringListAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
 		super.throwable(value);
 		return this;
 	}

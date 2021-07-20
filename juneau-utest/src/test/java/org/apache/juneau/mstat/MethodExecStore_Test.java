@@ -177,7 +177,7 @@ public class MethodExecStore_Test {
 		assertInteger(stats.getMinTime()).is(0);
 		assertInteger(stats.getMaxTime()).is(0);
 		assertInteger(stats.getAvgTime()).is(0);
-		assertLong(stats.getTotalTime()).is(0);
+		assertLong(stats.getTotalTime()).is(0l);
 
 		stats.started().finished(100*1000000).started().finished(200*1000000).started().error(new Throwable());
 
@@ -187,7 +187,7 @@ public class MethodExecStore_Test {
 		assertInteger(stats.getMinTime()).is(100);
 		assertInteger(stats.getMaxTime()).is(200);
 		assertInteger(stats.getAvgTime()).is(150);
-		assertLong(stats.getTotalTime()).is(300);
+		assertLong(stats.getTotalTime()).is(300l);
 
 		assertObject(stats).asString().contains("300");
 	}

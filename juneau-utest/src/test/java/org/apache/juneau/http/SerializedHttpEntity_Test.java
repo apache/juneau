@@ -85,7 +85,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a07_getContentLength() throws Exception {
-		assertLong(serializedEntity(ABean.get(),null).build().getContentLength()).is(-1);
+		assertLong(serializedEntity(ABean.get(),null).build().getContentLength()).is(-1l);
 	}
 
 	@Test

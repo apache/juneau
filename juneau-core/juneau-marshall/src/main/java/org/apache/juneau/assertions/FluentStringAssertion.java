@@ -14,8 +14,6 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.stream.Collectors.*;
-import static java.util.Arrays.*;
 
 import java.io.*;
 import java.util.*;
@@ -47,7 +45,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		MSG_stringDifferedAtPosition = MESSAGES.getString("stringDifferedAtPosition"),
 		MSG_expectedStringHadDifferentNumbersOfLines = MESSAGES.getString("expectedStringHadDifferentNumbersOfLines"),
 		MSG_expectedStringHadDifferentValuesAtLine = MESSAGES.getString("expectedStringHadDifferentValuesAtLine"),
-		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
 		MSG_stringEqualedUnexpected = MESSAGES.getString("stringEqualedUnexpected"),
 		MSG_stringDidNotContainExpectedSubstring = MESSAGES.getString("stringDidNotContainExpectedSubstring"),
 		MSG_stringContainedUnexpectedSubstring = MESSAGES.getString("stringContainedUnexpectedSubstring"),
@@ -55,7 +52,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		MSG_stringWasNull = MESSAGES.getString("stringWasNull"),
 		MSG_stringWasEmpty = MESSAGES.getString("stringWasEmpty"),
 		MSG_stringDidNotMatchExpectedPattern = MESSAGES.getString("stringDidNotMatchExpectedPattern"),
-		MSG_stringMatchedUnexpectedPattern = MESSAGES.getString("stringMatchedUnexpectedPattern"),
 		MSG_stringDidNotStartWithExpected = MESSAGES.getString("stringDidNotStartWithExpected"),
 		MSG_stringDidNotEndWithExpected = MESSAGES.getString("stringDidNotEndWithExpected");
 
@@ -150,15 +146,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Sorts the contents of the text by lines.
-	 *
-	 * @return The response object (for method chaining).
-	 */
-	public FluentStringAssertion<R> sort() {
-		return apply(x->x == null ? null : stream(x.trim().split("[\r\n]+")).sorted().collect(joining("\n")));
-	}
-
-	/**
 	 * Converts the text to lowercase.
 	 *
 	 * @return The response object (for method chaining).
@@ -174,6 +161,24 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public FluentStringAssertion<R> uc() {
 		return apply(x->x == null ? null : x.toUpperCase());
+	}
+
+	/**
+	 * Splits the string into lines.
+	 *
+	 * @return The response object (for method chaining).
+	 */
+	public FluentListAssertion<String,R> lines() {
+		return new FluentListAssertion<>(this, valueIsNull() ? null : Arrays.asList(value().trim().split("[\r\n]+")), returns());
+	}
+
+	/**
+	 * Converts the text to uppercase.
+	 *
+	 * @return The response object (for method chaining).
+	 */
+	public FluentStringAssertion<R> oneLine() {
+		return apply(x->x == null ? null : x.replaceAll("[\r\n]+\t*",""));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -201,10 +206,26 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqualTo(String value) throws AssertionError {
+	@Override
+	public R is(String value) throws AssertionError {
 		String s = orElse(null);
 		if (ne(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(value, s), fix(value), fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@Override
+	public R isNot(String value) throws AssertionError {
+		String s = orElse(null);
+		if (eq(value, s))
+			throw error(MSG_stringEqualedUnexpected, fix(s));
 		return returns();
 	}
 
@@ -230,7 +251,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqualLinesTo(String...lines) throws AssertionError {
+	public R isLines(String...lines) throws AssertionError {
 		assertArgNotNull("lines", lines);
 		String v = join(lines, '\n');
 		String s = value();
@@ -261,7 +282,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqualSortedLinesTo(String...lines) {
+	public R isSortedLines(String...lines) {
 		assertArgNotNull("lines", lines);
 
 		// Must work for windows too.
@@ -281,73 +302,17 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Asserts that the text equals the specified value.
-	 *
-	 * <p>
-	 * Similar to {@link #isEqualTo(String)} except error message doesn't state diff position.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.assertBody().is(<js>"OK"</js>);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The value to check against.
-	 * 	<br>If multiple values are specified, they are concatenated with newlines.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(String value) throws AssertionError {
-		String s = orElse(null);
-		if (ne(value, s))
-			throw error(MSG_unexpectedValue, fix(value), fix(s));
-		return isEqualTo(value);
-	}
-
-	/**
 	 * Asserts that the text equals the specified value ignoring case.
 	 *
 	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqualIgnoreCaseTo(String value) throws AssertionError {
+	public R isIc(String value) throws AssertionError {
 		String s = orElse(null);
 		if (neic(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
 		return returns();
-	}
-
-	/**
-	 * Asserts that the text equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotEqual(String value) throws AssertionError {
-		String s = orElse(null);
-		if (eq(value, s))
-			throw error(MSG_stringEqualedUnexpected, fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text equals the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #doesNotEqual(String)}.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNot(String value) throws AssertionError {
-		return doesNotEqual(value);
 	}
 
 	/**
@@ -357,7 +322,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R doesNotEqualIc(String value) throws AssertionError {
+	public R isNotIc(String value) throws AssertionError {
 		String s = orElse(null);
 		if (eqic(value, s))
 			throw error(MSG_stringEqualedUnexpected, fix(s));
@@ -425,17 +390,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Asserts that the text matches the specified regular expression.
-	 *
-	 * @param regex The pattern to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R matches(String regex) throws AssertionError {
-		return matches(regex, 0);
-	}
-
-	/**
 	 * Asserts that the text matches the specified pattern containing <js>"*"</js> meta characters.
 	 *
 	 * <p>
@@ -445,21 +399,20 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R matchesSimple(String searchPattern) throws AssertionError {
+	public R matches(String searchPattern) throws AssertionError {
 		assertArgNotNull("searchPattern", searchPattern);
-		return matches(getMatchPattern(searchPattern));
+		return regex(getMatchPattern(searchPattern));
 	}
 
 	/**
-	 * Asserts that the text doesn't match the specified regular expression.
+	 * Asserts that the text matches the specified regular expression.
 	 *
 	 * @param regex The pattern to test for.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R doesNotMatch(String regex) throws AssertionError {
-		assertArgNotNull("regex", regex);
-		return doesNotMatch(regex, 0);
+	public R regex(String regex) throws AssertionError {
+		return regex(regex, 0);
 	}
 
 	/**
@@ -470,7 +423,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R matches(String regex, int flags) throws AssertionError {
+	public R regex(String regex, int flags) throws AssertionError {
 		assertArgNotNull("regex", regex);
 		Pattern p = Pattern.compile(regex, flags);
 		String s = value();
@@ -480,45 +433,17 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Asserts that the text doesn't match the specified regular expression.
-	 *
-	 * @param regex The pattern to test for.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotMatch(String regex, int flags) throws AssertionError {
-		assertArgNotNull("regex", regex);
-		return doesNotMatch(Pattern.compile(regex, flags));
-	}
-
-	/**
 	 * Asserts that the text matches the specified regular expression pattern.
 	 *
 	 * @param pattern The pattern to test for.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R matches(Pattern pattern) throws AssertionError {
+	public R regex(Pattern pattern) throws AssertionError {
 		assertArgNotNull("pattern", pattern);
 		String s = value();
 		if (! pattern.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text doesn't match the specified regular expression pattern.
-	 *
-	 * @param pattern The pattern to test for.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotMatch(Pattern pattern) throws AssertionError {
-		assertArgNotNull("pattern", pattern);
-		String s = orElse(null);
-		if (s != null && pattern.matcher(s).matches())
-			throw error(MSG_stringMatchedUnexpectedPattern, fix(pattern.pattern()), fix(s));
 		return returns();
 	}
 
