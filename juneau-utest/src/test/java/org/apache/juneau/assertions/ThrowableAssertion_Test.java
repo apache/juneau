@@ -202,9 +202,9 @@ public class ThrowableAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.Expect='java.lang.RuntimeException: 2'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.Expect='null'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.Expect='java.lang.RuntimeException: 2'.Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.  Expect='java.lang.RuntimeException: 2'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.  Expect='java.lang.RuntimeException: 2'.  Actual='null'.");
 	}
 
 	@Test
@@ -212,7 +212,7 @@ public class ThrowableAssertion_Test {
 		Throwable x1 = throwable("1");
 		test(x1).is(x->x.getMessage().equals("1"));
 		assertThrown(()->test(x1).is(x->x.getMessage().length()==4)).message().oneLine().is("Unexpected value: 'java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.Value='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='java.lang.RuntimeException: 1'.");
 	}
 
 	@Test
@@ -221,17 +221,17 @@ public class ThrowableAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.Did not expect='java.lang.RuntimeException: 1'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.Did not expect='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.  Did not expect='java.lang.RuntimeException: 1'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test
 	public void ca06_isAny() throws Exception {
 		Throwable x1 = throwable("1"), x1a = throwable("1"), x2 = throwable("2"), nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[java.lang.RuntimeException: 2]'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.Expect='[]'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[java.lang.RuntimeException: 2]'.Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[java.lang.RuntimeException: 2]'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[java.lang.RuntimeException: 2]'.  Actual='null'.");
 	}
 
 	@Test
@@ -240,8 +240,8 @@ public class ThrowableAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.Unexpected='java.lang.RuntimeException: 1'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.Unexpected='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='java.lang.RuntimeException: 1'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -249,9 +249,9 @@ public class ThrowableAssertion_Test {
 		Throwable x1 = throwable("1"), x1a = throwable("1"), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='java.lang.RuntimeException: 1(RuntimeException@*)'.Actual='java.lang.RuntimeException: 1(RuntimeException@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='java.lang.RuntimeException: 1(RuntimeException@*)'.Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.Expect='null(null)'.Actual='java.lang.RuntimeException: 1(RuntimeException@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='java.lang.RuntimeException: 1(RuntimeException@*)'.  Actual='java.lang.RuntimeException: 1(RuntimeException@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='java.lang.RuntimeException: 1(RuntimeException@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='java.lang.RuntimeException: 1(RuntimeException@*)'.");
 	}
 
 	@Test
@@ -259,9 +259,9 @@ public class ThrowableAssertion_Test {
 		Throwable x1 = throwable("1"), x1a = throwable("1"), x2 = throwable("2"), nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect=''java.lang.RuntimeException: 2''.Actual=''java.lang.RuntimeException: 1''.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect=''java.lang.RuntimeException: 2''.Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''java.lang.RuntimeException: 1''.");
 	}
 
 	@Test
@@ -269,9 +269,9 @@ public class ThrowableAssertion_Test {
 		Throwable x1 = throwable("1"), x1a = throwable("1"), x2 = throwable("2"), nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect=''java.lang.RuntimeException: 2''.Actual=''java.lang.RuntimeException: 1''.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect=''java.lang.RuntimeException: 2''.Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''java.lang.RuntimeException: 1''.");
 	}
 
 	@Test
@@ -280,9 +280,9 @@ public class ThrowableAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect=''java.lang.RuntimeException: 2''.Actual=''java.lang.RuntimeException: 1''.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect=''java.lang.RuntimeException: 2''.Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''java.lang.RuntimeException: 1''.");
 	}
 
 	@Test
@@ -290,7 +290,7 @@ public class ThrowableAssertion_Test {
 		Throwable x = throwable(), nil = null;
 		test(x).isType(Exception.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Exception was not expected type.Expect='java.lang.String'.Actual='java.lang.RuntimeException'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Exception was not expected type.  Expect='java.lang.String'.  Actual='java.lang.RuntimeException'.");
 		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Exception was not thrown.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -299,8 +299,8 @@ public class ThrowableAssertion_Test {
 	public void ca13_isExactType() throws Exception {
 		Throwable x = throwable(), nil = null;
 		test(x).isExactType(RuntimeException.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Exception was not expected type.Expect='java.lang.Object'.Actual='java.lang.RuntimeException'.");
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Exception was not expected type.Expect='java.lang.String'.Actual='java.lang.RuntimeException'.");
+		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Exception was not expected type.  Expect='java.lang.Object'.  Actual='java.lang.RuntimeException'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Exception was not expected type.  Expect='java.lang.String'.  Actual='java.lang.RuntimeException'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Exception was not thrown.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'type' cannot be null.");
 	}
@@ -310,9 +310,9 @@ public class ThrowableAssertion_Test {
 		Throwable x = throwable("1"), nil = null;
 		test(x).isString("java.lang.RuntimeException: 1");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='java.lang.RuntimeException: 1'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='java.lang.RuntimeException: 1'.");
+		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -320,8 +320,8 @@ public class ThrowableAssertion_Test {
 		Throwable x = throwable("1"), nil = null;
 		test(x).isJson("'java.lang.RuntimeException: 1'");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual=''java.lang.RuntimeException: 1''.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual=''java.lang.RuntimeException: 1''.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual=''java.lang.RuntimeException: 1''.");
+		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 }

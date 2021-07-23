@@ -173,12 +173,12 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Converts the text to uppercase.
+	 * Removes any newlines from the string.
 	 *
 	 * @return The response object (for method chaining).
 	 */
 	public FluentStringAssertion<R> oneLine() {
-		return apply(x->x == null ? null : x.replaceAll("[\r\n]+\t*",""));
+		return apply(x->x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*","  "));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

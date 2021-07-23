@@ -103,7 +103,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, stringify(value), returns());
+		return new FluentStringAssertion<>(this, toString(), returns());
 	}
 
 	/**
@@ -354,14 +354,10 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
-		try {
-			String s1 = serializer.serialize(value);
-			String s2 = serializer.serialize(o);
-			if (ne(s1, s2))
-				throw error(MSG_unexpectedComparison, s2, s1);
-		} catch (SerializeException e) {
-			throw runtimeException(e);
-		}
+		String s1 = serializer.toString(value);
+		String s2 = serializer.toString(o);
+		if (ne(s1, s2))
+			throw error(MSG_unexpectedComparison, s2, s1);
 		return returns();
 	}
 
@@ -553,7 +549,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
 	/**
 	 * Checks two objects for equality.
-	 * 
+	 *
 	 * @param o1 The first object.
 	 * @param o2 The second object.
 	 * @return <jk>true</jk> if the objects are equal.
@@ -567,10 +563,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 			return true;
 		if (o1.getClass().isArray())
 			return stringifyDeep(o1).equals(stringifyDeep(o2));
-		if (o1.getClass() == o2.getClass())
-			return false;
-		if (stringify(o1).equals(stringify(o2)))
-			return true;
 		return false;
 	}
 

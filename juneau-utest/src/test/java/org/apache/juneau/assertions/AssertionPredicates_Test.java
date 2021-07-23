@@ -58,81 +58,81 @@ public class AssertionPredicates_Test {
 	public void a04_eq() {
 		A1.is(eq("foo"));
 		A1.is(eq((Object)"foo"));
-		assertThrown(()->A1.is(eq("FOO"))).message().is("Value did not match expected.\n\tExpect='FOO'.\n\tActual='foo'.");
-		assertThrown(()->A1.is(eq("bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
-		assertThrown(()->A1.is(eq((Object)"bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
+		assertThrown(()->A1.is(eq("FOO"))).message().oneLine().is("Value did not match expected.  Expect='FOO'.  Actual='foo'.");
+		assertThrown(()->A1.is(eq("bar"))).message().oneLine().is("Value did not match expected.  Expect='bar'.  Actual='foo'.");
+		assertThrown(()->A1.is(eq((Object)"bar"))).message().oneLine().is("Value did not match expected.  Expect='bar'.  Actual='foo'.");
 		A2.is(eq(null));
-		assertThrown(()->A2.is(eq("foo"))).message().is("Value did not match expected.\n\tExpect='foo'.\n\tActual='null'.");
+		assertThrown(()->A2.is(eq("foo"))).message().oneLine().is("Value did not match expected.  Expect='foo'.  Actual='null'.");
 	}
 
 	@Test
 	public void a05_eqic() {
 		A1.is(eqic("foo"));
 		A1.is(eqic("FOO"));
-		assertThrown(()->A1.is(eqic("bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
+		assertThrown(()->A1.is(eqic("bar"))).message().oneLine().is("Value did not match expected.  Expect='bar'.  Actual='foo'.");
 		A2.is(eqic(null));
-		assertThrown(()->A2.is(eqic("bar"))).message().is("Value did not match expected.\n\tExpect='bar'.\n\tActual='null'.");
+		assertThrown(()->A2.is(eqic("bar"))).message().oneLine().is("Value did not match expected.  Expect='bar'.  Actual='null'.");
 	}
 
 	@Test
 	public void a06_ne() {
 		A1.is(ne("bar"));
 		A1.is(ne((Object)"bar"));
-		assertThrown(()->A1.is(ne("foo"))).message().is("Value unexpectedly matched.\n\tValue='foo'.");
-		assertThrown(()->A1.is(ne((Object)"foo"))).message().is("Value unexpectedly matched.\n\tValue='foo'.");
+		assertThrown(()->A1.is(ne("foo"))).message().oneLine().is("Value unexpectedly matched.  Value='foo'.");
+		assertThrown(()->A1.is(ne((Object)"foo"))).message().oneLine().is("Value unexpectedly matched.  Value='foo'.");
 		A2.is(ne("bar"));
-		assertThrown(()->A2.is(ne(null))).message().is("Value unexpectedly matched.\n\tValue='null'.");
+		assertThrown(()->A2.is(ne(null))).message().oneLine().is("Value unexpectedly matched.  Value='null'.");
 	}
 
 	@Test
 	public void a07_type() {
 		A1.is(type(String.class));
 		A1.is(type(Object.class));
-		assertThrown(()->A1.is(type(Integer.class))).message().is("Value was not expected type.\n\tExpect='java.lang.Integer'.\n\tActual='java.lang.String'.");
-		assertThrown(()->A2.is(type(String.class))).message().is("Value was not expected type.\n\tExpect='java.lang.String'.\n\tActual='null'.");
+		assertThrown(()->A1.is(type(Integer.class))).message().oneLine().is("Value was not expected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
+		assertThrown(()->A2.is(type(String.class))).message().oneLine().is("Value was not expected type.  Expect='java.lang.String'.  Actual='null'.");
 	}
 
 	@Test
 	public void a08_exactType() {
 		A1.is(exactType(String.class));
-		assertThrown(()->A1.is(exactType(Object.class))).message().is("Value was not expected type.\n\tExpect='java.lang.Object'.\n\tActual='java.lang.String'.");
-		assertThrown(()->A2.is(exactType(Object.class))).message().is("Value was not expected type.\n\tExpect='java.lang.Object'.\n\tActual='null'.");
+		assertThrown(()->A1.is(exactType(Object.class))).message().oneLine().is("Value was not expected type.  Expect='java.lang.Object'.  Actual='java.lang.String'.");
+		assertThrown(()->A2.is(exactType(Object.class))).message().oneLine().is("Value was not expected type.  Expect='java.lang.Object'.  Actual='null'.");
 	}
 
 	@Test
 	public void a03_() {
 		A1.is(match("fo*"));
-		assertThrown(()->A1.is(match("ba*"))).message().is("Value did not match pattern.\n\tPattern='ba*'.\n\tValue='foo'.");
-		assertThrown(()->A2.is(match("ba*"))).message().is("Value did not match pattern.\n\tPattern='ba*'.\n\tValue='null'.");
+		assertThrown(()->A1.is(match("ba*"))).message().oneLine().is("Value did not match pattern.  Pattern='ba*'.  Value='foo'.");
+		assertThrown(()->A2.is(match("ba*"))).message().oneLine().is("Value did not match pattern.  Pattern='ba*'.  Value='null'.");
 	}
 
 
 	@Test
 	public void a10_regex() {
 		A1.is(regex("fo.*"));
-		assertThrown(()->A1.is(regex("ba.*"))).message().is("Value did not match pattern.\n\tPattern='ba.*'.\n\tValue='foo'.");
-		assertThrown(()->A2.is(regex("ba.*"))).message().is("Value did not match pattern.\n\tPattern='ba.*'.\n\tValue='null'.");
+		assertThrown(()->A1.is(regex("ba.*"))).message().oneLine().is("Value did not match pattern.  Pattern='ba.*'.  Value='foo'.");
+		assertThrown(()->A2.is(regex("ba.*"))).message().oneLine().is("Value did not match pattern.  Pattern='ba.*'.  Value='null'.");
 	}
 
 	@Test
 	public void a11_regex_wFlags() {
 		A1.is(regex("FO.*", CASE_INSENSITIVE));
-		assertThrown(()->A1.is(regex("BA.*", CASE_INSENSITIVE))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='foo'.");
-		assertThrown(()->A2.is(regex("BA.*", CASE_INSENSITIVE))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='null'.");
+		assertThrown(()->A1.is(regex("BA.*", CASE_INSENSITIVE))).message().oneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='foo'.");
+		assertThrown(()->A2.is(regex("BA.*", CASE_INSENSITIVE))).message().oneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='null'.");
 	}
 
 	@Test
 	public void a12_regex_wPattern() {
 		Pattern p1 = Pattern.compile("FO.*", CASE_INSENSITIVE), p2 = Pattern.compile("BA.*", CASE_INSENSITIVE);
 		A1.is(regex(p1));
-		assertThrown(()->A1.is(regex(p2))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='foo'.");
-		assertThrown(()->A2.is(regex(p2))).message().is("Value did not match pattern.\n\tPattern='BA.*'.\n\tValue='null'.");
+		assertThrown(()->A1.is(regex(p2))).message().oneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='foo'.");
+		assertThrown(()->A2.is(regex(p2))).message().oneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='null'.");
 	}
 
 	@Test
 	public void a13_and() {
 		A1.is(and(notNull(),eq("foo"),null,x->x.equals("foo")));
-		assertThrown(()->A1.is(and(isNull()))).message().is("Predicate test #1 failed.\n\tValue was not null.");
+		assertThrown(()->A1.is(and(isNull()))).message().oneLine().is("Predicate test #1 failed.  Value was not null.");
 		assertThrown(()->A1.is(and(x -> x.equals("bar")))).message().is("Predicate test #1 failed.");
 	}
 
@@ -156,12 +156,12 @@ public class AssertionPredicates_Test {
 	@Test
 	public void a16_test() {
 		A1.is(test(eq("foo")));
-		assertThrown(()->A1.is(test(eq("bar")))).message().is("Value did not pass test.\n\tValue did not match expected.\n\tExpect='bar'.\n\tActual='foo'.");
+		assertThrown(()->A1.is(test(eq("bar")))).message().oneLine().is("Value did not pass test.  Value did not match expected.  Expect='bar'.  Actual='foo'.");
 	}
 
 	@Test
 	public void a17_contains() {
 		A1.is(test(contains("o")));
-		assertThrown(()->A1.is(test(contains("x")))).message().is("Value did not pass test.\n\tValue did not contain expected.\n\tExpect='x'.\n\tActual='foo'.");
+		assertThrown(()->A1.is(test(contains("x")))).message().oneLine().is("Value did not pass test.  Value did not contain expected.  Expect='x'.  Actual='foo'.");
 	}
 }

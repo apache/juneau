@@ -13,7 +13,10 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 import static org.junit.runners.MethodSorters.*;
+
+import java.io.*;
 
 import org.apache.juneau.*;
 import org.junit.*;
@@ -74,5 +77,16 @@ public class Assertion_Test {
 			.causedBy().isExactType(A1.class)
 			.causedBy().message().is("foo")
 			.causedBy().causedBy().isNull();
+	}
+
+	@Test
+	public void a02_out() throws Exception {
+		PrintStream out = printStream();
+
+		try {
+			assertString("x").out(out).isNull();
+		} catch (BasicAssertionError e) {}
+
+		assertString(out).contains("Value was not null.");
 	}
 }

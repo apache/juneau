@@ -205,9 +205,9 @@ public class BeanListAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.Expect='[(a=1,b=2), (a=5,b=6)]'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.Expect='null'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.Expect='[(a=1,b=2), (a=5,b=6)]'.Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.  Expect='[(a=1,b=2), (a=5,b=6)]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.  Expect='[(a=1,b=2), (a=5,b=6)]'.  Actual='null'.");
 	}
 
 	@Test
@@ -215,7 +215,7 @@ public class BeanListAssertion_Test {
 		List<A> x1 = list(A1,A2);
 		test(x1).is(x->x.size()==2);
 		assertThrown(()->test(x1).is(x->x.size()==3)).message().oneLine().is("Unexpected value: '[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.Value='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='[(a=1,b=2), (a=3,b=4)]'.");
 	}
 
 	@Test
@@ -224,8 +224,8 @@ public class BeanListAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.Did not expect='[(a=1,b=2), (a=3,b=4)]'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.Did not expect='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.  Did not expect='[(a=1,b=2), (a=3,b=4)]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -233,9 +233,9 @@ public class BeanListAssertion_Test {
 	public void ca06_isAny() throws Exception {
 		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[[(a=1,b=2), (a=5,b=6)]]'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.Expect='[]'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[[(a=1,b=2), (a=5,b=6)]]'.Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[[(a=1,b=2), (a=5,b=6)]]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[[(a=1,b=2), (a=5,b=6)]]'.  Actual='null'.");
 	}
 
 	@Test
@@ -245,8 +245,8 @@ public class BeanListAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.Unexpected='[(a=1,b=2), (a=3,b=4)]'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.Unexpected='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='[(a=1,b=2), (a=3,b=4)]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -254,9 +254,9 @@ public class BeanListAssertion_Test {
 		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='[(a=1,b=2), (a=3,b=4)](AList@*)'.Actual='[(a=1,b=2), (a=3,b=4)](AList@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='[(a=1,b=2), (a=3,b=4)](AList@*)'.Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.Expect='null(null)'.Actual='[(a=1,b=2), (a=3,b=4)](AList@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](AList@*)'.  Actual='[(a=1,b=2), (a=3,b=4)](AList@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](AList@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='[(a=1,b=2), (a=3,b=4)](AList@*)'.");
 	}
 
 	@Test
@@ -264,9 +264,9 @@ public class BeanListAssertion_Test {
 		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[{a:1,b:2},{a:5,b:6}]'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[{a:1,b:2},{a:5,b:6}]'.Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
 	}
 
 	@Test
@@ -274,9 +274,9 @@ public class BeanListAssertion_Test {
 		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[{a:1,b:2},{a:5,b:6}]'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[{a:1,b:2},{a:5,b:6}]'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
 	}
 
 	@Test
@@ -285,9 +285,9 @@ public class BeanListAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='[{a:1,b:2},{a:5,b:6}]'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='[{a:1,b:2},{a:5,b:6}]'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
 	}
 
 	@Test
@@ -295,7 +295,7 @@ public class BeanListAssertion_Test {
 		List<A> x = list(A1,A2), nil = null;
 		test(x).isType(List.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='org.apache.juneau.collections.AList'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.collections.AList'.");
 		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -304,7 +304,7 @@ public class BeanListAssertion_Test {
 	public void ca13_isExactType() throws Exception {
 		List<A> x = list(A1,A2), nil = null;
 		test(x).isExactType(AList.class);
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='org.apache.juneau.collections.AList'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.collections.AList'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -314,9 +314,9 @@ public class BeanListAssertion_Test {
 		List<A> x = list(A1,A2), nil = null;
 		test(x).isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='[(a=1,b=2), (a=3,b=4)]'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
+		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -324,9 +324,9 @@ public class BeanListAssertion_Test {
 		List<A> x = list(A1,A2), nil = null;
 		test(x).isJson("[{a:1,b:2},{a:3,b:4}]");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='[{a:1,b:2},{a:3,b:4}]'.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
+		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -349,7 +349,7 @@ public class BeanListAssertion_Test {
 	public void cb03_contains() throws Exception {
 		List<A> x = list(A1), nil = null;
 		test(x).contains(A1);
-		assertThrown(()->test(x).contains(A2)).message().oneLine().is("Collection did not contain expected value.Expect='(a=3,b=4)'.Value='[(a=1,b=2)]'.");
+		assertThrown(()->test(x).contains(A2)).message().oneLine().is("Collection did not contain expected value.  Expect='(a=3,b=4)'.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).contains(A2)).message().is("Value was null.");
 	}
 
@@ -357,7 +357,7 @@ public class BeanListAssertion_Test {
 	public void cb04_doesNotContain() throws Exception {
 		List<A> x = list(A1), nil = null;
 		test(x).doesNotContain(A2);
-		assertThrown(()->test(x).doesNotContain(A1)).message().oneLine().is("Collection contained unexpected value.Unexpected='(a=1,b=2)'.Value='[(a=1,b=2)]'.");
+		assertThrown(()->test(x).doesNotContain(A1)).message().oneLine().is("Collection contained unexpected value.  Unexpected='(a=1,b=2)'.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).doesNotContain(A2)).message().is("Value was null.");
 	}
 
@@ -365,7 +365,7 @@ public class BeanListAssertion_Test {
 	public void cb05_any() throws Exception {
 		List<A> x1 = list(A1), nil = null;
 		test(x1).any(x->x.equals(A1));
-		assertThrown(()->test(x1).any(x->x.equals(A2))).message().oneLine().is("Collection did not contain tested value.Value='[(a=1,b=2)]'.");
+		assertThrown(()->test(x1).any(x->x.equals(A2))).message().oneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).any(x->x.equals(A2))).message().is("Value was null.");
 	}
 
@@ -373,7 +373,7 @@ public class BeanListAssertion_Test {
 	public void cb06_all() throws Exception {
 		List<A> x1 = list(A1), nil = null;
 		test(x1).all(x->x!=null);
-		assertThrown(()->test(x1).all(x->x.equals(A2))).message().oneLine().is("Collection did not contain tested value.Value='[(a=1,b=2)]'.");
+		assertThrown(()->test(x1).all(x->x.equals(A2))).message().oneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).all(x->x.equals(A2))).message().is("Value was null.");
 	}
 
@@ -381,7 +381,7 @@ public class BeanListAssertion_Test {
 	public void cb07_isSize() throws Exception {
 		List<A> x = list(A1), nil = null;
 		test(x).isSize(1);
-		assertThrown(()->test(x).isSize(0)).message().oneLine().is("Collection did not have the expected size.Expect=0.Actual=1.");
+		assertThrown(()->test(x).isSize(0)).message().oneLine().is("Collection did not have the expected size.  Expect=0.  Actual=1.");
 		assertThrown(()->test(nil).isSize(0)).message().is("Value was null.");
 	}
 
@@ -389,8 +389,8 @@ public class BeanListAssertion_Test {
 	public void cc01_has() throws Exception {
 		List<A> x = list(A1,A2), nil = null;
 		test(x).has(A1,A2);
-		assertThrown(()->test(x).has(A1)).message().oneLine().is("Collection did not have the expected size.Expect=1.Actual=2.");
-		assertThrown(()->test(x).has(A1,A3)).message().oneLine().is("List did not contain expected value at index 1.Value did not match expected.Expect='(a=5,b=6)'.Actual='(a=3,b=4)'.");
+		assertThrown(()->test(x).has(A1)).message().oneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
+		assertThrown(()->test(x).has(A1,A3)).message().oneLine().is("List did not contain expected value at index 1.  Value did not match expected.  Expect='(a=5,b=6)'.  Actual='(a=3,b=4)'.");
 		assertThrown(()->test(nil).has(A1,A3)).message().is("Value was null.");
 	}
 
@@ -398,8 +398,8 @@ public class BeanListAssertion_Test {
 	public void cc02_each() throws Exception {
 		List<A> x1 = list(A1,A2), nil = null;
 		test(x1).each(x->x!=null,x->x!=null);
-		assertThrown(()->test(x1).each(x->x==null)).message().oneLine().is("Collection did not have the expected size.Expect=1.Actual=2.");
-		assertThrown(()->test(x1).each(x->x==null,x->x==null)).message().oneLine().is("List did not contain expected value at index 0.Unexpected value: '(a=1,b=2)'.");
+		assertThrown(()->test(x1).each(x->x==null)).message().oneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
+		assertThrown(()->test(x1).each(x->x==null,x->x==null)).message().oneLine().is("List did not contain expected value at index 0.  Unexpected value: '(a=1,b=2)'.");
 		assertThrown(()->test(nil).each(x->x==null)).message().is("Value was null.");
 	}
 }

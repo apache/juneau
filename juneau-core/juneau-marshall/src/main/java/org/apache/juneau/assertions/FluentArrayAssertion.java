@@ -155,6 +155,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	@SuppressWarnings("unchecked")
 	public R has(E...entries) throws AssertionError {
+		assertArgNotNull("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
  		return is(p);
 	}

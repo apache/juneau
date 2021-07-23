@@ -161,9 +161,9 @@ public class MapAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.Expect='{2=3}'.Actual='{1=2}'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.Expect='null'.Actual='{1=2}'.");
-		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.Expect='{2=3}'.Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.  Expect='{2=3}'.  Actual='{1=2}'.");
+		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='{1=2}'.");
+		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.  Expect='{2=3}'.  Actual='null'.");
 	}
 
 	@Test
@@ -171,7 +171,7 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x1 = map(1,2);
 		test(x1).is(x->x.size()==1);
 		assertThrown(()->test(x1).is(x->x.size()==2)).message().oneLine().is("Unexpected value: '{1=2}'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.Value='{1=2}'.");
+		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='{1=2}'.");
 	}
 
 	@Test
@@ -180,8 +180,8 @@ public class MapAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.Did not expect='{1=2}'.Actual='{1=2}'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.Did not expect='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.  Did not expect='{1=2}'.  Actual='{1=2}'.");
+		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -189,9 +189,9 @@ public class MapAssertion_Test {
 	public void ca06_isAny() throws Exception {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[{3=4}]'.Actual='{1=2}'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.Expect='[]'.Actual='{1=2}'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[{3=4}]'.Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[{3=4}]'.  Actual='{1=2}'.");
+		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='{1=2}'.");
+		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[{3=4}]'.  Actual='null'.");
 	}
 
 	@Test
@@ -201,8 +201,8 @@ public class MapAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.Unexpected='{1=2}'.Actual='{1=2}'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.Unexpected='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='{1=2}'.  Actual='{1=2}'.");
+		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -210,9 +210,9 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='{1=2}(AMap@*)'.Actual='{1=2}(AMap@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='{1=2}(AMap@*)'.Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.Expect='null(null)'.Actual='{1=2}(AMap@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='{1=2}(AMap@*)'.  Actual='{1=2}(AMap@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='{1=2}(AMap@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='{1=2}(AMap@*)'.");
 	}
 
 	@Test
@@ -220,9 +220,9 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='{'3':4}'.Actual='{'1':2}'.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='{'3':4}'.Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='{'1':2}'.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='{'1':2}'.");
 	}
 
 	@Test
@@ -230,9 +230,9 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='{'3':4}'.Actual='{'1':2}'.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='{'3':4}'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='{'1':2}'.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='{'1':2}'.");
 	}
 
 	@Test
@@ -241,9 +241,9 @@ public class MapAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='{'3':4}'.Actual='{'1':2}'.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='{'3':4}'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='{'1':2}'.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='{'1':2}'.");
 	}
 
 	@Test
@@ -251,7 +251,7 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x = map(1,2), nil = null;
 		test(x).isType(Map.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='org.apache.juneau.collections.AMap'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.collections.AMap'.");
 		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -260,8 +260,8 @@ public class MapAssertion_Test {
 	public void ca13_isExactType() throws Exception {
 		Map<Integer,Integer> x = map(1,2), nil = null;
 		test(x).isExactType(AMap.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.Expect='java.lang.Object'.Actual='org.apache.juneau.collections.AMap'.");
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='org.apache.juneau.collections.AMap'.");
+		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='org.apache.juneau.collections.AMap'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.collections.AMap'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -271,9 +271,9 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x = map(1,2), nil = null;
 		test(x).isString("{1=2}");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='{1=2}'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='{1=2}'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='{1=2}'.");
+		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='{1=2}'.");
+		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -281,9 +281,9 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x = map(1,2), nil = null;
 		test(x).isJson("{'1':2}");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='{'1':2}'.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='{'1':2}'.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='{'1':2}'.");
+		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='{'1':2}'.");
+		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -306,7 +306,7 @@ public class MapAssertion_Test {
 	public void cb03_containsKey() throws Exception {
 		Map<String,Integer> x = map("a",1,"b",2), nil = null;
 		test(x).containsKey("a");
-		assertThrown(()->test(x).containsKey("x")).message().is("Map did not contain expected key.\n\tExpected key='x'.\n\tValue='{a=1, b=2}'.");
+		assertThrown(()->test(x).containsKey("x")).message().oneLine().is("Map did not contain expected key.  Expected key='x'.  Value='{a=1, b=2}'.");
 		assertThrown(()->test(nil).containsKey("x")).message().is("Value was null.");
 	}
 
@@ -314,7 +314,15 @@ public class MapAssertion_Test {
 	public void cb04_doesNotContainKey() throws Exception {
 		Map<String,Integer> x = map("a",1,"b",2), nil = null;
 		test(x).doesNotContainKey("x");
-		assertThrown(()->test(x).doesNotContainKey("a")).message().is("Map contained unexpected key.\n\tUnexpected key='a'.\n\tValue='{a=1, b=2}'.");
+		assertThrown(()->test(x).doesNotContainKey("a")).message().oneLine().is("Map contained unexpected key.  Unexpected key='a'.  Value='{a=1, b=2}'.");
 		assertThrown(()->test(nil).containsKey("x")).message().is("Value was null.");
+	}
+
+	@Test
+	public void cb05_isSize() throws Exception {
+		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		test(x).isSize(2);
+		assertThrown(()->test(x).isSize(1)).message().oneLine().is("Map did not have the expected size.  Expect=1.  Actual=2.");
+		assertThrown(()->test(nil).isSize(0)).message().is("Value was null.");
 	}
 }

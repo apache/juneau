@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Arrays.*;
 
@@ -54,7 +55,9 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		MSG_arrayDidNotHaveExpectedSize = MESSAGES.getString("arrayDidNotHaveExpectedSize"),
 		MSG_arrayDidNotContainExpectedValue = MESSAGES.getString("arrayDidNotContainExpectedValue"),
 		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
-		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue");
+		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
+		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
+		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
@@ -136,10 +139,11 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R any(Predicate<E> test) throws AssertionError {
+		assertArgNotNull("test", test);
 		for (int i = 0, j = length2(); i < j; i++)
 			if (test.test(at(i)))
 				return returns();
-		throw error(MSG_arrayDidNotContainExpectedValue, value());
+		throw error(MSG_arrayDidntContainAnyMatchingValue, value());
 	}
 
 	/**
@@ -150,9 +154,10 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R all(Predicate<E> test) throws AssertionError {
+		assertArgNotNull("test", test);
 		for (int i = 0, j = length2(); i < j; i++)
 			if (! test.test(at(i)))
-				throw error(MSG_arrayDidNotContainExpectedValue, value());
+				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
 		return returns();
 	}
 

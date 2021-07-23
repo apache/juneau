@@ -172,9 +172,9 @@ public class ArrayAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x1b)).message().oneLine().is("Unexpected value.Expect='[null, 1, 3]'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.Expect='null'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).is(x1b)).message().oneLine().is("Unexpected value.Expect='[null, 1, 3]'.Actual='null'.");
+		assertThrown(()->test(x1).is(x1b)).message().oneLine().is("Unexpected value.  Expect='[null, 1, 3]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(nil).is(x1b)).message().oneLine().is("Unexpected value.  Expect='[null, 1, 3]'.  Actual='null'.");
 	}
 
 	@Test
@@ -182,7 +182,7 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {null,1,2};
 		test(x1).is(x->x.length==3);
 		assertThrown(()->test(x1).is(x->x.length==2)).message().oneLine().is("Unexpected value: '[null, 1, 2]'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.Value='[null, 1, 2]'.");
+		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='[null, 1, 2]'.");
 	}
 
 	@Test
@@ -191,17 +191,17 @@ public class ArrayAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.Did not expect='[null, 1, 2]'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.Did not expect='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.  Did not expect='[null, 1, 2]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test
 	public void ca06_isAny() throws Exception {
 		Integer[] x1 = {null,1,2}, x1a = {null,1,2}, x2 = {null,1,3}, nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[[null, 1, 3]]'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.Expect='[]'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[[null, 1, 3]]'.Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[[null, 1, 3]]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[[null, 1, 3]]'.  Actual='null'.");
 	}
 
 	@Test
@@ -210,8 +210,8 @@ public class ArrayAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.Unexpected='[null, 1, 2]'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.Unexpected='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='[null, 1, 2]'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -219,9 +219,9 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {null,1,2}, x1a = {null,1,2}, nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='[null, 1, 2](Integer[]@*)'.Actual='[null, 1, 2](Integer[]@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='[null, 1, 2](Integer[]@*)'.Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.Expect='null(null)'.Actual='[null, 1, 2](Integer[]@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[null, 1, 2](Integer[]@*)'.  Actual='[null, 1, 2](Integer[]@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[null, 1, 2](Integer[]@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='[null, 1, 2](Integer[]@*)'.");
 	}
 
 	@Test
@@ -229,9 +229,9 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {null,1,2}, x1a = {null,1,2}, x2 = {null,1,3}, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[null,1,3]'.Actual='[null,1,2]'.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[null,1,3]'.Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='[null,1,2]'.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='[null,1,2]'.");
 	}
 
 	@Test
@@ -239,9 +239,9 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {1,2}, x1a = {2,1}, x2 = {1,3}, nil = null;  // Note that nulls are not sortable.
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[1,3]'.Actual='[1,2]'.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='[1,3]'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='[1,2]'.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[1,3]'.  Actual='[1,2]'.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[1,3]'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='[1,2]'.");
 	}
 
 	@Test
@@ -250,9 +250,9 @@ public class ArrayAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='[null,1,3]'.Actual='[null,1,2]'.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='[null,1,3]'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='[null,1,2]'.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='[null,1,2]'.");
 	}
 
 	@Test
@@ -261,7 +261,7 @@ public class ArrayAssertion_Test {
 		test(x).isType(Integer[].class);
 		test(x).isType(Object[].class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String[].class)).message().oneLine().is("Unexpected type.Expect='[Ljava.lang.String;'.Actual='[Ljava.lang.Integer;'.");
+		assertThrown(()->test(x).isType(String[].class)).message().oneLine().is("Unexpected type.  Expect='[Ljava.lang.String;'.  Actual='[Ljava.lang.Integer;'.");
 		assertThrown(()->test(nil).isType(Integer[].class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -270,7 +270,7 @@ public class ArrayAssertion_Test {
 	public void ca13_isExactType() throws Exception {
 		Integer[] x = {}, nil = null;
 		test(x).isExactType(Integer[].class);
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='[Ljava.lang.Integer;'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='[Ljava.lang.Integer;'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -280,9 +280,9 @@ public class ArrayAssertion_Test {
 		Integer[] x = {null,1,2}, nil = null;
 		test(x).isString("[null, 1, 2]");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -290,9 +290,9 @@ public class ArrayAssertion_Test {
 		Integer[] x = {null,1,2}, nil = null;
 		test(x).isJson("[null,1,2]");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='[null,1,2]'.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='[null,1,2]'.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='[null,1,2]'.");
+		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -300,7 +300,7 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {null,1,2}, nil = null;
 		test(x1).is(isNull(),eq("1"),eq("2"));
 		test(x1).is(isNull(),eq(1),eq(2));
-		assertThrown(()->test(x1).is(isNull(),eq("1"),eq("3"))).message().oneLine().is("Array did not contain expected value at index 2.Value did not match expected.Expect='3'.Actual='2'.");
+		assertThrown(()->test(x1).is(isNull(),eq("1"),eq("3"))).message().oneLine().is("Array did not contain expected value at index 2.  Value did not match expected.  Expect='3'.  Actual='2'.");
 		assertThrown(()->test(nil).is(isNull(),eq("1"),eq("3"))).message().is("Value was null.");
 		test(x1).is((Predicate<Integer>)null,null,null);
 	}
@@ -310,7 +310,7 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {2,3,1}, nil = null;
 		test(x1).any(x -> x .equals(3));
 		test(x1).any(eq(3));
-		assertThrown(()->test(x1).any(x -> x.equals(4))).message().is("Array did not contain any matching value.\n\tValue='[2, 3, 1]'.");
+		assertThrown(()->test(x1).any(x -> x.equals(4))).message().oneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
 		assertThrown(()->test(x1).any(null)).message().is("Argument 'test' cannot be null.");
 		assertThrown(()->test(nil).any(x->true)).message().is("Value was null.");
 	}
@@ -319,8 +319,8 @@ public class ArrayAssertion_Test {
 	public void cb03_all() throws Exception {
 		Integer[] x1 = {2,3,1}, nil = null;
 		test(x1).all(x -> x < 4);
-		assertThrown(()->test(x1).all(x -> x < 3)).message().is("Array contained non-matching value at index 1.\n\tUnexpected value: '3'.");
-		assertThrown(()->test(x1).all(ne(3))).message().is("Array contained non-matching value at index 1.\n\tValue unexpectedly matched.\n\tValue='3'.");
+		assertThrown(()->test(x1).all(x -> x < 3)).message().oneLine().is("Array contained non-matching value at index 1.  Unexpected value: '3'.");
+		assertThrown(()->test(x1).all(ne(3))).message().oneLine().is("Array contained non-matching value at index 1.  Value unexpectedly matched.  Value='3'.");
 		assertThrown(()->test(x1).all(null)).message().is("Argument 'test' cannot be null.");
 		assertThrown(()->test(nil).all(x->true)).message().is("Value was null.");
 	}
@@ -346,7 +346,7 @@ public class ArrayAssertion_Test {
 		Integer[] x1 = {null,1,2}, nil = null;
 		test(x1).contains(null);
 		test(x1).contains(1);
-		assertThrown(()->test(x1).contains(3)).message().oneLine().is("Array did not contain expected value.Expect='3'.Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).contains(3)).message().oneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[null, 1, 2]'.");
 		assertThrown(()->test(nil).contains(3)).message().is("Value was null.");
 		assertThrown(()->test(nil).contains(null)).message().is("Value was null.");
 	}
@@ -355,8 +355,8 @@ public class ArrayAssertion_Test {
 	public void cb07_doesNotContain() throws Exception {
 		Integer[] x1 = {null,1,2}, nil = null;
 		test(x1).doesNotContain(3);
-		assertThrown(()->test(x1).doesNotContain(1)).message().oneLine().is("Array contained unexpected value.Unexpected='1'.Actual='[null, 1, 2]'.");
-		assertThrown(()->test(x1).doesNotContain(null)).message().oneLine().is("Array contained unexpected value.Unexpected='null'.Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).doesNotContain(1)).message().oneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[null, 1, 2]'.");
+		assertThrown(()->test(x1).doesNotContain(null)).message().oneLine().is("Array contained unexpected value.  Unexpected='null'.  Actual='[null, 1, 2]'.");
 		assertThrown(()->test(nil).doesNotContain(3)).message().is("Value was null.");
 	}
 
@@ -365,8 +365,18 @@ public class ArrayAssertion_Test {
 		String[] x1={}, x2={"foo","bar"}, nil = null;
 		test(x1).isSize(0);
 		test(x2).isSize(2);
-		assertThrown(()->test(x1).isSize(2)).message().is("Array did not have the expected size.\n\tExpect=2.\n\tActual=0.");
-		assertThrown(()->test(x2).isSize(0)).message().is("Array did not have the expected size.\n\tExpect=0.\n\tActual=2.");
+		assertThrown(()->test(x1).isSize(2)).message().oneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
+		assertThrown(()->test(x2).isSize(0)).message().oneLine().is("Array did not have the expected size.  Expect=0.  Actual=2.");
 		assertThrown(()->test(nil).isSize(0)).message().is("Value was null.");
+	}
+
+	@Test
+	public void cb09_has() throws Exception {
+		String[] x={"foo","bar"}, nil = null;
+		test(x).has("foo","bar");
+		assertThrown(()->test(x).has("foo","baz")).message().oneLine().is("Array did not contain expected value at index 1.  Value did not match expected.  Expect='baz'.  Actual='bar'.");
+		assertThrown(()->test(x).has("foo")).message().oneLine().is("Array did not have the expected size.  Expect=1.  Actual=2.");
+		assertThrown(()->test(x).has(nil)).message().oneLine().is("Argument 'entries' cannot be null.");
+		assertThrown(()->test(nil).has("foo")).message().oneLine().is("Value was null.");
 	}
 }

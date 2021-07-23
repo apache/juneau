@@ -127,7 +127,7 @@ public class AnyAssertion_Test {
 		String x2 = "";
 		test(x1).asArray(Integer.class).item(0).is(1);
 		test(nil).asArray(Integer.class).isNull();
-		assertThrown(()->test(x2).asArray(Integer.class)).message().oneLine().is("Object was not type 'java.lang.Integer[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asArray(Integer.class)).message().oneLine().is("Object was not type 'java.lang.Integer[]'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x2).asArray(null)).message().oneLine().is("Argument 'elementType' cannot be null.");
 	}
 
@@ -137,7 +137,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asIntArray().isString("[1]");
 		test(nil).asIntArray().isNull();
-		assertThrown(()->test(x2).asIntArray()).message().oneLine().is("Object was not type 'int[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asIntArray()).message().oneLine().is("Object was not type 'int[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asLongArray().isString("[1]");
 		test(nil).asLongArray().isNull();
-		assertThrown(()->test(x2).asLongArray()).message().oneLine().is("Object was not type 'long[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asLongArray()).message().oneLine().is("Object was not type 'long[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -155,7 +155,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asShortArray().isString("[1]");
 		test(nil).asShortArray().isNull();
-		assertThrown(()->test(x2).asShortArray()).message().oneLine().is("Object was not type 'short[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asShortArray()).message().oneLine().is("Object was not type 'short[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -164,7 +164,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asFloatArray().isString("[1.0]");
 		test(nil).asFloatArray().isNull();
-		assertThrown(()->test(x2).asFloatArray()).message().oneLine().is("Object was not type 'float[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asFloatArray()).message().oneLine().is("Object was not type 'float[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -173,7 +173,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asDoubleArray().isString("[1.0]");
 		test(nil).asDoubleArray().isNull();
-		assertThrown(()->test(x2).asDoubleArray()).message().oneLine().is("Object was not type 'double[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asDoubleArray()).message().oneLine().is("Object was not type 'double[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -182,7 +182,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asCharArray().isString("[a]");
 		test(nil).asCharArray().isNull();
-		assertThrown(()->test(x2).asCharArray()).message().oneLine().is("Object was not type 'char[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asCharArray()).message().oneLine().is("Object was not type 'char[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -191,7 +191,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asByteArray().isString("[1]");
 		test(nil).asByteArray().isNull();
-		assertThrown(()->test(x2).asByteArray()).message().oneLine().is("Object was not type 'byte[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asByteArray()).message().oneLine().is("Object was not type 'byte[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -200,7 +200,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asBooleanArray().isString("[true]");
 		test(nil).asBooleanArray().isNull();
-		assertThrown(()->test(x2).asBooleanArray()).message().oneLine().is("Object was not type 'boolean[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asBooleanArray()).message().oneLine().is("Object was not type 'boolean[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asBoolean().isString("true");
 		test(nil).asBoolean().isNull();
-		assertThrown(()->test(x2).asBoolean()).message().oneLine().is("Object was not type 'java.lang.Boolean'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asBoolean()).message().oneLine().is("Object was not type 'java.lang.Boolean'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asBytes().isString("a");
 		test(nil).asBytes().isNull();
-		assertThrown(()->test(x2).asBytes()).message().oneLine().is("Object was not type 'byte[]'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asBytes()).message().oneLine().is("Object was not type 'byte[]'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -227,7 +227,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asCollection().isString("[1]");
 		test(nil).asCollection().isNull();
-		assertThrown(()->test(x2).asCollection()).message().oneLine().is("Object was not type 'java.util.Collection'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asCollection()).message().oneLine().is("Object was not type 'java.util.Collection'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -236,7 +236,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asCollection(Integer.class).isString("[1]");
 		test(nil).asCollection(Integer.class).isNull();
-		assertThrown(()->test(x2).asCollection(Integer.class)).message().oneLine().is("Object was not type 'java.util.Collection'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asCollection(Integer.class)).message().oneLine().is("Object was not type 'java.util.Collection'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x1).asCollection(null)).message().is("Argument 'elementType' cannot be null.");
 	}
 
@@ -246,7 +246,7 @@ public class AnyAssertion_Test {
 		Object x2 = list();
 		test(x1).asComparable().isString("1");
 		test(nil).asComparable().isNull();
-		assertThrown(()->test(x2).asComparable()).message().oneLine().is("Object was not type 'java.lang.Comparable'.Actual='org.apache.juneau.collections.AList'.");
+		assertThrown(()->test(x2).asComparable()).message().oneLine().is("Object was not type 'java.lang.Comparable'.  Actual='org.apache.juneau.collections.AList'.");
 	}
 
 	@Test
@@ -255,7 +255,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asDate().asString().matches("*2000");
 		test(nil).asDate().isNull();
-		assertThrown(()->test(x2).asDate()).message().oneLine().is("Object was not type 'java.util.Date'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asDate()).message().oneLine().is("Object was not type 'java.util.Date'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -264,7 +264,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asInteger().isString("1");
 		test(nil).asInteger().isNull();
-		assertThrown(()->test(x2).asInteger()).message().oneLine().is("Object was not type 'java.lang.Integer'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asInteger()).message().oneLine().is("Object was not type 'java.lang.Integer'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -273,7 +273,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asLong().isString("1");
 		test(nil).asLong().isNull();
-		assertThrown(()->test(x2).asLong()).message().oneLine().is("Object was not type 'java.lang.Long'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asLong()).message().oneLine().is("Object was not type 'java.lang.Long'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -282,7 +282,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asList().isString("[1]");
 		test(nil).asList().isNull();
-		assertThrown(()->test(x2).asList()).message().oneLine().is("Object was not type 'java.util.List'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asList()).message().oneLine().is("Object was not type 'java.util.List'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -291,7 +291,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asList(Integer.class).isString("[1]");
 		test(nil).asList(Integer.class).isNull();
-		assertThrown(()->test(x2).asList(Integer.class)).message().oneLine().is("Object was not type 'java.util.List'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asList(Integer.class)).message().oneLine().is("Object was not type 'java.util.List'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x1).asCollection(null)).message().is("Argument 'elementType' cannot be null.");
 	}
 
@@ -301,7 +301,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asMap().isString("{a=2}");
 		test(nil).asMap().isNull();
-		assertThrown(()->test(x2).asMap()).message().oneLine().is("Object was not type 'java.util.Map'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asMap()).message().oneLine().is("Object was not type 'java.util.Map'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -310,7 +310,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asMap(String.class,Integer.class).isString("{a=2}");
 		test(nil).asMap(String.class,Integer.class).isNull();
-		assertThrown(()->test(x2).asMap(String.class,Integer.class)).message().oneLine().is("Object was not type 'java.util.Map'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asMap(String.class,Integer.class)).message().oneLine().is("Object was not type 'java.util.Map'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x1).asMap(null,Integer.class)).message().is("Argument 'keyType' cannot be null.");
 		assertThrown(()->test(x1).asMap(String.class,null)).message().is("Argument 'valueType' cannot be null.");
 	}
@@ -327,8 +327,8 @@ public class AnyAssertion_Test {
 		A1 x1 = A1, nil = null;
 		Object x2 = "";
 		test(x1).asBean().isString("a=1,b=2");
-		test(nil).asBean().isNull();
-		assertThrown(()->test(x2).asBean(A2.class)).message().oneLine().is("Object was not type 'org.apache.juneau.assertions.AnyAssertion_Test$A2'.Actual='java.lang.String'.");
+		test(nil).asBean(A1.class).isNull();
+		assertThrown(()->test(x2).asBean(A2.class)).message().oneLine().is("Object was not type 'org.apache.juneau.assertions.AnyAssertion_Test$A2'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x1).asBean(null)).message().is("Argument 'beanType' cannot be null.");
 	}
 
@@ -338,7 +338,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
 		test(nil).asBeanList(A1.class).isNull();
-		assertThrown(()->test(x2).asBeanList(A2.class)).message().oneLine().is("Object was not type 'java.util.List'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asBeanList(A2.class)).message().oneLine().is("Object was not type 'java.util.List'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x1).asBeanList(null)).message().is("Argument 'beanType' cannot be null.");
 	}
 
@@ -348,7 +348,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asZonedDateTime().asString().matches("2000*");
 		test(nil).asZonedDateTime().isNull();
-		assertThrown(()->test(x2).asZonedDateTime()).message().oneLine().is("Object was not type 'java.time.ZonedDateTime'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asZonedDateTime()).message().oneLine().is("Object was not type 'java.time.ZonedDateTime'.  Actual='java.lang.String'.");
 	}
 
 	@Test
@@ -357,7 +357,7 @@ public class AnyAssertion_Test {
 		Object x2 = "";
 		test(x1).asStringList().isString("[1]");
 		test(nil).asStringList().isNull();
-		assertThrown(()->test(x2).asStringList()).message().oneLine().is("Object was not type 'java.util.List'.Actual='java.lang.String'.");
+		assertThrown(()->test(x2).asStringList()).message().oneLine().is("Object was not type 'java.util.List'.  Actual='java.lang.String'.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -391,9 +391,9 @@ public class AnyAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.Expect='2'.Actual='1'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.Expect='null'.Actual='1'.");
-		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.Expect='2'.Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.  Expect='2'.  Actual='1'.");
+		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='1'.");
+		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.  Expect='2'.  Actual='null'.");
 	}
 
 	@Test
@@ -401,7 +401,7 @@ public class AnyAssertion_Test {
 		Integer x1 = 1;
 		test(x1).is(x->x==1);
 		assertThrown(()->test(x1).is(x->x==2)).message().oneLine().is("Unexpected value: '1'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.Value='1'.");
+		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='1'.");
 	}
 
 	@Test
@@ -410,17 +410,17 @@ public class AnyAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.Did not expect='1'.Actual='1'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.Did not expect='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.  Did not expect='1'.  Actual='1'.");
+		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test
 	public void ca06_isAny() throws Exception {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[2]'.Actual='1'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.Expect='[]'.Actual='1'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.Expect='[2]'.Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
+		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
+		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[2]'.  Actual='null'.");
 	}
 
 	@Test
@@ -429,8 +429,8 @@ public class AnyAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.Unexpected='1'.Actual='1'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.Unexpected='null'.Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='1'.  Actual='1'.");
+		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -438,9 +438,9 @@ public class AnyAssertion_Test {
 		Integer x1 = new Integer(1), x1a = new Integer(1), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='1(Integer@*)'.Actual='1(Integer@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.Expect='1(Integer@*)'.Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.Expect='null(null)'.Actual='1(Integer@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='1(Integer@*)'.  Actual='1(Integer@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='1(Integer@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='1(Integer@*)'.");
 	}
 
 	@Test
@@ -448,9 +448,9 @@ public class AnyAssertion_Test {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='2'.Actual='1'.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='2'.Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='1'.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='2'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='1'.");
 	}
 
 	@Test
@@ -458,9 +458,9 @@ public class AnyAssertion_Test {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='2'.Actual='1'.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.Expect='2'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='1'.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='2'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='1'.");
 	}
 
 	@Test
@@ -469,9 +469,9 @@ public class AnyAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='2'.Actual='1'.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.Expect='2'.Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.Expect='null'.Actual='1'.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect='2'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual='1'.");
 	}
 
 	@Test
@@ -479,7 +479,7 @@ public class AnyAssertion_Test {
 		Integer x = 1, nil = null;
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='java.lang.Integer'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
 		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -488,8 +488,8 @@ public class AnyAssertion_Test {
 	public void ca13_isExactType() throws Exception {
 		Integer x = 1, nil = null;
 		test(x).isExactType(Integer.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.Expect='java.lang.Object'.Actual='java.lang.Integer'.");
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.Expect='java.lang.String'.Actual='java.lang.Integer'.");
+		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -499,9 +499,9 @@ public class AnyAssertion_Test {
 		Integer x = 1, nil = null;
 		test(x).isString("1");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='1'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='1'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
+		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='1'.");
+		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -509,8 +509,8 @@ public class AnyAssertion_Test {
 		Integer x = 1, nil = null;
 		test(x).isJson("1");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='1'.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.Expect='null'.Actual='1'.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.Expect='bad'.Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
+		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='1'.");
+		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 }

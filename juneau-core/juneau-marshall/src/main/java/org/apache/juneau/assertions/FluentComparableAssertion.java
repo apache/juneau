@@ -13,7 +13,6 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -85,7 +84,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public R isGt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (compare(value(), value) <= 0)
+		if (value().compareTo(value) <= 0)
 			throw error(MSG_valueWasNotGreaterThanExpected, value, value());
 		return returns();
 	}
@@ -99,7 +98,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public R isGte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (compare(value(), value) < 0)
+		if (value().compareTo(value) < 0)
 				throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
 		return returns();
 	}
@@ -113,7 +112,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public R isLt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (compare(value(), value) >= 0)
+		if (value().compareTo(value) >= 0)
 				throw error(MSG_valueWasNotLessThanExpected, value, value());
 		return returns();
 	}
@@ -127,7 +126,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public R isLte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
-		if (compare(value(), value) > 0)
+		if (value().compareTo(value) > 0)
 				throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
 		return returns();
 	}
@@ -186,30 +185,4 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	// </FluentSetters>
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Perform a comparison with the specified object.
-	 *
-	 * @param value The object to compare against.
-	 * @return The comparison value.
-	 * @throws AssertionError If value was <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	private int compare(Object o1, Object o2) throws AssertionError {
-		if (o1 == o2)
-			return 0;
-		if (o1 == null)
-			return -1;
-		if (o2 == null)
-			return 1;
-		if (o1.equals(o2))
-			return 0;
-		if (o1 instanceof Comparable && o1.getClass() == o2.getClass())
-			return ((Comparable)o1).compareTo(o2);
-		return stringify(o1).compareTo(stringify(o2));
-	}
 }
