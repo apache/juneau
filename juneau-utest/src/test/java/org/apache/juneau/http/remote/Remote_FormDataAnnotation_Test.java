@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.math.*;
@@ -36,7 +37,6 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -123,17 +123,17 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{k1:'f=1'}",x.postX12(AMap.of("k1",Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.postX13(AMap.of("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.postX14(AMap.of("k1",Bean.create())));
-		assertEquals("{x:'1'}",x.postX15(new StringReader("x=1")));
-		assertEquals("{x:'1'}",x.postX16(new StringReader("x=1")));
-		assertEquals("{x:'1'}",x.postX17(new StringInputStream("x=1")));
-		assertEquals("{x:'1'}",x.postX18(new StringInputStream("x=1")));
+		assertEquals("{x:'1'}",x.postX15(reader("x=1")));
+		assertEquals("{x:'1'}",x.postX16(reader("x=1")));
+		assertEquals("{x:'1'}",x.postX17(inputStream("x=1")));
+		assertEquals("{x:'1'}",x.postX18(inputStream("x=1")));
 		assertEquals("{foo:'bar'}",x.postX19(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.postX20(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.postX21(part("foo","bar")));
 		assertEquals("{foo:'bar'}",x.postX22("foo=bar"));
 		assertEquals("{}",x.postX22(null));
-		assertEquals("{foo:'bar'}",x.postX23(new ByteArrayInputStream("foo=bar".getBytes())));
-		assertEquals("{foo:'bar'}",x.postX24(new StringReader("foo=bar")));
+		assertEquals("{foo:'bar'}",x.postX23(inputStream("foo=bar")));
+		assertEquals("{foo:'bar'}",x.postX24(reader("foo=bar")));
 		assertEquals("{f:'1'}",x.postX25(Bean2.create()));
 		assertEquals("{foo:'bar'}",x.postX26(AList.of(part("foo","bar"))));
 	}
@@ -895,7 +895,7 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K5a {
 		@FormData("*")
 		public Reader getA() {
-			return new StringReader("foo=bar&baz=qux");
+			return reader("foo=bar&baz=qux");
 		}
 	}
 

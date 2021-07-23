@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.testutils.StreamUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -47,14 +49,14 @@ public class ReaderSwapTest extends OneWayStringSwapTest<Reader> {
 			//----------------------------------------------------------------------------------------------------------
 			{
 				"[0] Basic string",
-				new StringReader("foo"),
+				reader("foo"),
 				SWAP,
 				"foo",
 				BS
 			},
 			{
 				"[1] Blank string",
-				new StringReader(""),
+				reader(""),
 				SWAP,
 				"",
 				BS

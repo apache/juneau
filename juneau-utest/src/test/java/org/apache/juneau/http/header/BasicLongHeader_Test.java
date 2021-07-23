@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -39,7 +40,7 @@ public class BasicLongHeader_Test {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER,multi=true) String[] h) {
-			return new StringReader(h == null ? "null" : StringUtils.join(h, '|'));
+			return reader(h == null ? "null" : StringUtils.join(h, '|'));
 		}
 	}
 

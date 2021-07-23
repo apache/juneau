@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.header.ContentType.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -91,7 +92,7 @@ public class RestClient_BasicCalls_Test {
 		}
 		@RestOp(path="/",method="*")
 		public Reader echoMethod(@Method String method) {
-			return new StringReader(method);
+			return reader(method);
 		}
 	}
 
@@ -165,8 +166,8 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a07_put_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = AList.<Object>of(
-			new StringReader("{f:1}"),
-			new ByteArrayInputStream("{f:1}".getBytes()),
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
@@ -208,8 +209,8 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a11_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = AList.<Object>of(
-			new StringReader("{f:1}"),
-			new ByteArrayInputStream("{f:1}".getBytes()),
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
@@ -307,8 +308,8 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a20_formPost_exhaustiveBodyTypes() throws Exception {
 		Supplier<Object>
-			s1 = () -> new StringReader("f=1"),
-			s2 = () -> new ByteArrayInputStream("f=1".getBytes());
+			s1 = () -> reader("f=1"),
+			s2 = () -> inputStream("f=1");
 		List<Object> bodies = AList.of(
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
@@ -348,8 +349,8 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a24_patch_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = AList.<Object>of(
-			new StringReader("{f:1}"),
-			new ByteArrayInputStream("{f:1}".getBytes()),
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
@@ -385,8 +386,8 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = AList.<Object>of(
-			new StringReader("{f:1}"),
-			new ByteArrayInputStream("{f:1}".getBytes()),
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),

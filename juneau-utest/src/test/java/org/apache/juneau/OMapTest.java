@@ -15,8 +15,8 @@ package org.apache.juneau;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -322,7 +322,7 @@ public class OMapTest {
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObject(OMap.ofJson(new StringReader("{foo:'bar'}"))).asJson().is("{foo:'bar'}");
+		assertObject(OMap.ofJson(reader("{foo:'bar'}"))).asJson().is("{foo:'bar'}");
 	}
 
 	//====================================================================================================

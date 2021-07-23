@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.logging.*;
@@ -111,7 +112,7 @@ public class RestClient_Logging_Test {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
 		c.assertContents().isLines(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
@@ -130,7 +131,7 @@ public class RestClient_Logging_Test {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
 		c.assertContents().isEmpty();
 		c.reset();
 

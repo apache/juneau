@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -1096,7 +1097,7 @@ public class ConfigTest {
 
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
-		cf.load(new StringReader("[s1]\nfoo* = mypassword2\n"), true);
+		cf.load(reader("[s1]\nfoo* = mypassword2\n"), true);
 
 		assertEquals("mypassword2", cf.getString("s1/foo"));
 

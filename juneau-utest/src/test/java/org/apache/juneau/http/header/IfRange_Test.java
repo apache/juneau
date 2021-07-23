@@ -17,6 +17,7 @@ import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.time.*;
@@ -44,7 +45,7 @@ public class IfRange_Test {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER,multi=true) String[] h) {
-			return new StringReader(h == null ? "null" : StringUtils.join(h, ','));
+			return reader(h == null ? "null" : StringUtils.join(h, ','));
 		}
 	}
 

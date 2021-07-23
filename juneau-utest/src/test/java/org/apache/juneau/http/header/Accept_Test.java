@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -41,7 +42,7 @@ public class Accept_Test {
 	public static class A {
 		@RestGet
 		public StringReader get(@Header(name=HEADER,multi=true) String[] h) {
-			return new StringReader(h == null ? "null" : StringUtils.join(h, ','));
+			return reader(h == null ? "null" : StringUtils.join(h, ','));
 		}
 	}
 

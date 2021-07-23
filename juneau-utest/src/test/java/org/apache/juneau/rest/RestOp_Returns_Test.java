@@ -17,8 +17,8 @@ import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -140,11 +140,11 @@ public class RestOp_Returns_Test {
 		}
 		@RestGet
 		public HttpResource e() throws Exception {
-			return streamResource(new ByteArrayInputStream("foo".getBytes())).build();
+			return streamResource(inputStream("foo")).build();
 		}
 		@RestGet
 		public HttpResource f() throws Exception {
-			return readerResource(new StringReader("foo")).build();
+			return readerResource(reader("foo")).build();
 		}
 	}
 

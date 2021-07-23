@@ -14,6 +14,7 @@ package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -39,7 +40,7 @@ public class ReaderFilterTest {
 		Reader r;
 		Map<String,Object> m;
 
-		r = new StringReader("{foo:'bar',baz:'quz'}");
+		r = reader("{foo:'bar',baz:'quz'}");
 		m = new HashMap<>();
 		m.put("X", r);
 		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
@@ -55,7 +56,7 @@ public class ReaderFilterTest {
 		Reader r;
 		Map<String,Object> m;
 
-		r = new StringReader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
+		r = reader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
 		m = new HashMap<>();
 		m.put("X", r);
 		assertEquals("<object><X _type='object'><foo>bar</foo><baz>quz</baz></X></object>", s.serialize(m));
@@ -71,7 +72,7 @@ public class ReaderFilterTest {
 		Reader r;
 		Map<String,Object> m;
 
-		r = new StringReader("<table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table>");
+		r = reader("<table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table>");
 		m = new HashMap<>();
 		m.put("X", r);
 		assertEquals("<table><tr><td>X</td><td><table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table></td></tr></table>", s.serialize(m));
@@ -87,7 +88,7 @@ public class ReaderFilterTest {
 		Reader r;
 		Map<String,Object> m;
 
-		r = new StringReader("{foo:'bar',baz:'quz'}");
+		r = reader("{foo:'bar',baz:'quz'}");
 		m = new HashMap<>();
 		m.put("X", r);
 		assertEquals("{X:'{foo:\\'bar\\',baz:\\'quz\\'}'}", s.serialize(m));
@@ -103,7 +104,7 @@ public class ReaderFilterTest {
 		Reader r;
 		Map<String,Object> m;
 
-		r = new StringReader("(foo=bar,baz=quz)");
+		r = reader("(foo=bar,baz=quz)");
 		m = new HashMap<>();
 		m.put("X", r);
 		assertEquals("(X=(foo=bar,baz=quz))", s.serialize(m));
@@ -119,7 +120,7 @@ public class ReaderFilterTest {
 		Reader r;
 		Map<String,Object> m;
 
-		r = new StringReader("foo=bar&baz=quz");
+		r = reader("foo=bar&baz=quz");
 		m = new HashMap<>();
 		m.put("X", r);
 		assertEquals("X='foo=bar%26baz=quz'", s.serialize(m));

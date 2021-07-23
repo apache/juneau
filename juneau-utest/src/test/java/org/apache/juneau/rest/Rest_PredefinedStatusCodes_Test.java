@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.header.ContentType.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
@@ -39,7 +40,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	public static class A {
 		@RestPut
 		public Reader a(@Body String b) {
-			return new StringReader(b);
+			return reader(b);
 		}
 	}
 

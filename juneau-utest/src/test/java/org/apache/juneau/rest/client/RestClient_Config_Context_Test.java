@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.json.JsonSerializer.*;
 import static org.apache.juneau.rest.mock.MockRestClient.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
@@ -183,7 +184,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a10_putAllTo() throws Exception {
-		A10a x = client().implClass(A10a.class,A10b.class).build().post("/echoBody",new StringReader("{foo:1}")).run().getBody().asType(A10a.class);
+		A10a x = client().implClass(A10a.class,A10b.class).build().post("/echoBody",reader("{foo:1}")).run().getBody().asType(A10a.class);
 		assertEquals(1,x.getFoo());
 		assertTrue(x instanceof A10b);
 	}

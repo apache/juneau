@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.testutils.StreamUtils.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -48,14 +49,14 @@ public class InputStreamBase64SwapTest extends OneWayStringSwapTest<InputStream>
 			//----------------------------------------------------------------------------------------------------------
 			{
 				"[0] Basic string",
-				new StringInputStream("foo"),
+				inputStream("foo"),
 				SWAP,
 				"Zm9v",
 				BS
 			},
 			{
 				"[1] Blank string",
-				new StringInputStream(""),
+				inputStream(""),
 				SWAP,
 				"",
 				BS

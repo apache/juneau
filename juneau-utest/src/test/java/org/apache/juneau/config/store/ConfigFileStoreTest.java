@@ -15,6 +15,7 @@ package org.apache.juneau.config.store;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -171,9 +172,9 @@ public class ConfigFileStoreTest {
 					latch.countDown();
 			}
 		});
-		pipe(new StringReader("zzz"), new File(DIR, "Z.ini"));
-		pipe(new StringReader("xxx"), new File(DIR, "X.cfg"));
-		pipe(new StringReader("yyy"), new File(DIR, "Y.cfg"));
+		pipe(reader("zzz"), new File(DIR, "Z.ini"));
+		pipe(reader("xxx"), new File(DIR, "X.cfg"));
+		pipe(reader("yyy"), new File(DIR, "Y.cfg"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}
@@ -233,7 +234,7 @@ public class ConfigFileStoreTest {
 		assertFalse(cs.exists("foo.cfg"));
 		assertFalse(cs.exists("foo"));
 
-		pipe(new StringReader("xxx"), new File("Foox.cfg"));
+		pipe(reader("xxx"), new File("Foox.cfg"));
 		assertTrue(cs.exists("Foox.cfg"));
 		assertTrue(cs.exists("Foox"));
 		new File("Foox.cfg").delete();

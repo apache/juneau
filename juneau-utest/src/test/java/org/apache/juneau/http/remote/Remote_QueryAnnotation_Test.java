@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.math.*;
@@ -34,7 +35,6 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @SuppressWarnings({"resource"})
@@ -108,10 +108,10 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{k1:'f=1'}",x.getX12(AMap.of("k1",Bean.create())));
 		assertEquals("{x:'(k1=(f=1))'}",x.getX13(AMap.of("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX14(AMap.of("k1",Bean.create())));
-		assertEquals("{x:'1'}",x.getX15(new StringReader("x=1")));
-		assertEquals("{x:'1'}",x.getX16(new StringReader("x=1")));
-		assertEquals("{x:'1'}",x.getX17(new StringInputStream("x=1")));
-		assertEquals("{x:'1'}",x.getX18(new StringInputStream("x=1")));
+		assertEquals("{x:'1'}",x.getX15(reader("x=1")));
+		assertEquals("{x:'1'}",x.getX16(reader("x=1")));
+		assertEquals("{x:'1'}",x.getX17(inputStream("x=1")));
+		assertEquals("{x:'1'}",x.getX18(inputStream("x=1")));
 		assertEquals("{foo:'bar'}",x.getX19(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX20(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX21(part("foo","bar")));
@@ -166,7 +166,7 @@ public class Remote_QueryAnnotation_Test {
 		}
 		@RestGet
 		public Reader b(RestRequest req) {
-			return new StringReader(req.getQueryString());
+			return reader(req.getQueryString());
 		}
 	}
 
@@ -859,7 +859,7 @@ public class Remote_QueryAnnotation_Test {
 	public static class K5a {
 		@Query("*")
 		public Reader getA() {
-			return new StringReader("foo=bar&baz=qux");
+			return reader("foo=bar&baz=qux");
 		}
 	}
 

@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -342,7 +343,7 @@ public class RestClient_Response_Body_Test {
 	}
 
 	private static InputStreamEntity inputStreamEntity(String in) {
-		return new InputStreamEntity(new ByteArrayInputStream(in.getBytes()));
+		return new InputStreamEntity(inputStream(in));
 	}
 
 	private static <T> ClassMeta<T> cm(Class<T> t) {

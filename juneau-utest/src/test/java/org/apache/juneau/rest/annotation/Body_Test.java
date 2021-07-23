@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.http.header.ContentType.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -526,7 +527,7 @@ public class Body_Test {
 		}
 		@RestPut(path="/StringTransform")
 		public Reader d(@Body D1 b) throws Exception {
-			return new StringReader(b.toString());
+			return reader(b.toString());
 		}
 		public static class D1 {
 			private String s;
@@ -535,7 +536,7 @@ public class Body_Test {
 		}
 		@RestPut(path="/InputStreamTransform")
 		public Reader e(@Body D2 b) throws Exception {
-			return new StringReader(b.toString());
+			return reader(b.toString());
 		}
 		public static class D2 {
 			String s;
@@ -544,7 +545,7 @@ public class Body_Test {
 		}
 		@RestPut(path="/ReaderTransform")
 		public Reader f(@Body D3 b) throws Exception {
-			return new StringReader(b.toString());
+			return reader(b.toString());
 		}
 		public static class D3 {
 			private String s;
@@ -553,7 +554,7 @@ public class Body_Test {
 		}
 		@RestPut(path="/StringTransformBodyOnPojo")
 		public Reader g(D4 b) throws Exception {
-			return new StringReader(b.toString());
+			return reader(b.toString());
 		}
 		@Body
 		public static class D4 {
@@ -563,7 +564,7 @@ public class Body_Test {
 		}
 		@RestPut(path="/InputStreamTransformBodyOnPojo")
 		public Reader h(D5 b) throws Exception {
-			return new StringReader(b.toString());
+			return reader(b.toString());
 		}
 		@Body
 		public static class D5 {
@@ -574,7 +575,7 @@ public class Body_Test {
 
 		@RestPut(path="/ReaderTransformBodyOnPojo")
 		public Reader i(D6 b) throws Exception {
-			return new StringReader(b.toString());
+			return reader(b.toString());
 		}
 		@Body
 		public static class D6 {
@@ -736,7 +737,7 @@ public class Body_Test {
 				@Body F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
 				@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
-			return new StringReader("bean=["+SimpleJsonSerializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
+			return reader("bean=["+SimpleJsonSerializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
 		}
 		public static class F1 {
 			public String p1;

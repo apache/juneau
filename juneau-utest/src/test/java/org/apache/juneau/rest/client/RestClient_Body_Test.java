@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -94,10 +95,10 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Baz").is("qux")
 		;
 
-		HttpResource x7 = readerResource(new StringReader("foo")).build();
+		HttpResource x7 = readerResource(reader("foo")).build();
 		client().build().post("/",x7).run().assertBody().is("foo");
 
-		HttpResource x8 = readerResource(new StringReader("foo")).cached().build();
+		HttpResource x8 = readerResource(reader("foo")).cached().build();
 		client().build().post("/",x8).run().assertBody().is("foo");
 		client().build().post("/",x8).run().assertBody().is("foo");
 
@@ -139,10 +140,10 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpEntity x7 = readerEntity(new StringReader("foo")).build();
+		HttpEntity x7 = readerEntity(reader("foo")).build();
 		client().build().post("/",x7).run().assertBody().is("foo");
 
-		HttpEntity x8 = readerEntity(new StringReader("foo")).cached().build();
+		HttpEntity x8 = readerEntity(reader("foo")).cached().build();
 		client().build().post("/",x8).run().assertBody().is("foo");
 		client().build().post("/",x8).run().assertBody().is("foo");
 

@@ -15,8 +15,8 @@ package org.apache.juneau;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -106,7 +106,7 @@ public class OListTest {
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObject(new OList(new StringReader("[1,2,3]"))).asJson().is("[1,2,3]");
+		assertObject(new OList(reader("[1,2,3]"))).asJson().is("[1,2,3]");
 	}
 
 	//====================================================================================================

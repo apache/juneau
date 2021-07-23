@@ -10,24 +10,50 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.testutils;
 
 import java.io.*;
 
 /**
- * Convenience class for creating an input stream from a simple string.
- *
- * <p>
- * Used primarily for testing purposes.
+ * Various stream convenience methods.
  */
-public class StringInputStream extends ByteArrayInputStream {
+public class StreamUtils {
 
 	/**
-	 * Constructor.
+	 * Creates an input stream from the specified string.
 	 *
-	 * @param in The string to create an input stream from.
+	 * @param in The contents of the reader.
+	 * @return A new input stream.
 	 */
-	public StringInputStream(String in) {
-		super(in.getBytes());
+	public static final ByteArrayInputStream inputStream(String in) {
+		return new ByteArrayInputStream(in.getBytes());
+	}
+
+	/**
+	 * Creates a reader from the specified string.
+	 *
+	 * @param in The contents of the reader.
+	 * @return A new reader.
+	 */
+	public static final StringReader reader(String in) {
+		return new StringReader(in);
+	}
+
+	/**
+	 * Returns a capturing print stream.
+	 *
+	 * <p>
+	 * Print stream contents can be retrieved by calling {@link Object#toString()} on the object.
+	 *
+	 * @return A new print stream.
+	 */
+	public static final PrintStream printStream() {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		return new PrintStream(baos, true) {
+			@Override
+			public String toString() {
+				return baos.toString();
+			}
+		};
 	}
 }

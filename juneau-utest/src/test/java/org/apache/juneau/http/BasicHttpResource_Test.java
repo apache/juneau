@@ -17,6 +17,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
@@ -43,7 +44,7 @@ public class BasicHttpResource_Test {
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = readerResource(new StringReader("foo")).build();
+		x = readerResource(reader("foo")).build();
 		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
@@ -53,7 +54,7 @@ public class BasicHttpResource_Test {
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = streamResource(new ByteArrayInputStream("foo".getBytes())).build();
+		x = streamResource(inputStream("foo")).build();
 		assertStream(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
@@ -73,7 +74,7 @@ public class BasicHttpResource_Test {
 		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
-		x = readerResource(new StringReader("foo")).cached().build();
+		x = readerResource(reader("foo")).cached().build();
 		assertStream(x.getContent()).asString().is("foo");
 		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
@@ -83,7 +84,7 @@ public class BasicHttpResource_Test {
 		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
-		x = streamResource(new ByteArrayInputStream("foo".getBytes())).cached().build();
+		x = streamResource(inputStream("foo")).cached().build();
 		assertStream(x.getContent()).asString().is("foo");
 		assertStream(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
@@ -102,8 +103,8 @@ public class BasicHttpResource_Test {
 		assertLong(byteArrayResource("foo".getBytes()).build().getContentLength()).is(3l);
 		assertLong(fileResource(f).build().getContentLength()).is(0l);
 
-		assertLong(readerResource(new StringReader("foo")).build().getContentLength()).is(-1l);
-		assertLong(readerResource(new StringReader("foo")).contentLength(3).build().getContentLength()).is(3l);
+		assertLong(readerResource(reader("foo")).build().getContentLength()).is(-1l);
+		assertLong(readerResource(reader("foo")).contentLength(3).build().getContentLength()).is(3l);
 
 		x = stringResource("foo", contentType("text/plain")).contentEncoding("identity").build();
 		assertString(x.getContentType().getValue()).is("text/plain");

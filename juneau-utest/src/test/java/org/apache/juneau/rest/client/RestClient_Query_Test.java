@@ -17,6 +17,7 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -40,7 +41,7 @@ public class RestClient_Query_Test {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public Reader query(org.apache.juneau.rest.RestRequest req) {
-			return new StringReader(req.getQueryParams().asQueryString());
+			return reader(req.getQueryParams().asQueryString());
 		}
 	}
 

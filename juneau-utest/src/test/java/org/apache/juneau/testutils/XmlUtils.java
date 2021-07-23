@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils;
 
-import java.io.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -191,7 +192,7 @@ public class XmlUtils {
 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse(new InputSource(new StringReader(xml)));
+		Document doc = db.parse(new InputSource(reader(xml)));
 
 		XmlUtils.SortedNode n = new XmlUtils.SortedNode(doc.getDocumentElement());
 		return n.toString();

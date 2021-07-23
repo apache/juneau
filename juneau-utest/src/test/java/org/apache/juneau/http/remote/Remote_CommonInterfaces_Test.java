@@ -30,8 +30,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -836,11 +836,11 @@ public class Remote_CommonInterfaces_Test {
 	public static class G1 implements G {
 		@Override
 		public Reader reader() {
-			return new StringReader("foo");
+			return StreamUtils.reader("foo");
 		}
 		@Override
 		public InputStream inputStream() {
-			return new StringInputStream("foo");
+			return StreamUtils.inputStream("foo");
 		}
 	}
 

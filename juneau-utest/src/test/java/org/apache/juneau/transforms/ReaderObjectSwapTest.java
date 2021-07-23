@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.testutils.StreamUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -361,7 +363,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 	public static class PojoToSimpleReaderSwap extends PojoSwap<PojoToSimpleReader,Reader> {
 		@Override
 		public Reader swap(BeanSession session, PojoToSimpleReader o) throws Exception {
-			return new StringReader("foo");
+			return reader("foo");
 		}
 	}
 
@@ -376,7 +378,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 	public static class PojoToDynamicReaderSwap extends PojoSwap<PojoToDynamicReader,Object> {
 		@Override
 		public Object swap(BeanSession session, PojoToDynamicReader o) throws Exception {
-			return new StringReader(o.f + "-" + session.getMediaType().getSubTypes().get(0));
+			return reader(o.f + "-" + session.getMediaType().getSubTypes().get(0));
 		}
 	}
 
@@ -393,7 +395,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		public Object swap(BeanSession session, SometimesSwappedBean1 o) throws Exception {
 			MediaType mt = session.getMediaType();
 			if (mt.hasSubType("json") || mt.hasSubType("xml"))
-				return new StringReader(o.f + "-" + mt);
+				return reader(o.f + "-" + mt);
 			return o;
 		}
 	}
@@ -412,7 +414,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			MediaType mt = session.getMediaType();
 			if (mt.hasSubType("json") || mt.hasSubType("xml"))
 				return o;
-			return new StringReader(o.f + "-" + mt);
+			return reader(o.f + "-" + mt);
 		}
 	}
 

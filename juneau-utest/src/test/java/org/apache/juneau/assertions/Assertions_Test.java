@@ -13,6 +13,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -90,7 +91,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a10_assertStream() throws Exception {
-		assertStream(new ByteArrayInputStream("foo".getBytes())).asString().is("foo");
+		assertStream(inputStream("foo")).asString().is("foo");
 		assertStream((InputStream)null).asString().isNull();
 	}
 
@@ -102,7 +103,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a12_assertReader() throws Exception {
-		assertReader(new StringReader("foo")).is("foo");
+		assertReader(reader("foo")).is("foo");
 		assertReader((Reader)null).isNull();
 	}
 

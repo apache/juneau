@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.testutils.StreamUtils.*;
+
 import java.io.*;
-import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -36,7 +37,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				new ComboInput<Reader>(
 					"SimpleReader",
 					Reader.class,
-					() -> new StringReader("foobar")
+					() -> reader("foobar")
 				)
 				.json("foobar")
 				.jsonT("foobar")
@@ -64,7 +65,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				new ComboInput<InputStream>(
 					"SimpleInputStream",
 					InputStream.class,
-					() -> new ByteArrayInputStream("foobar".getBytes(Charset.forName("UTF-8")))
+					() -> inputStream("foobar")
 				)
 				.json("foobar")
 				.jsonT("foobar")
@@ -299,7 +300,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	public static class BeanWithReaderField {
 		public Reader f;
 		public BeanWithReaderField init() {
-			f = new StringReader("fv");
+			f = reader("fv");
 			return this;
 		}
 	}
@@ -307,7 +308,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	public static class BeanWithReader1dField {
 		public Reader[] f;
 		public BeanWithReader1dField init() {
-			f = new Reader[]{new StringReader("fv1"),new StringReader("fv2"),null};
+			f = new Reader[]{reader("fv1"),reader("fv2"),null};
 			return this;
 		}
 	}
@@ -323,7 +324,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	public static class BeanWithReaderListField {
 		public List<Reader> f;
 		public BeanWithReaderListField init() {
-			f = AList.of(new StringReader("fv1"),new StringReader("fv2"),null);
+			f = AList.of(reader("fv1"),reader("fv2"),null);
 			return this;
 		}
 	}
@@ -331,7 +332,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	public static class BeanWithReaderMapField {
 		public Map<String,Reader> f;
 		public BeanWithReaderMapField init() {
-			f = AMap.of("foo",new StringReader("fv1"),"bar",null,null,new StringReader("fv2"));
+			f = AMap.of("foo",reader("fv1"),"bar",null,null,reader("fv2"));
 			return this;
 		}
 	}
@@ -360,12 +361,12 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 		public Map<String,Reader> f5;
 
 		public B init() {
-			f1 = new StringReader("f1v");
-			f2 = new Reader[]{new StringReader("f2v1"),new StringReader("f2v2"),null};
+			f1 = reader("f1v");
+			f2 = new Reader[]{reader("f2v1"),reader("f2v2"),null};
 			f3 = null;
-			f4 = AList.of(new StringReader("f4v1"),new StringReader("f4v2"),null)
+			f4 = AList.of(reader("f4v1"),reader("f4v2"),null)
 			;
-			f5 = AMap.of("foo",new StringReader("f5v1"),"bar",null,null,new StringReader("f5v2"));
+			f5 = AMap.of("foo",reader("f5v1"),"bar",null,null,reader("f5v2"));
 			return this;
 		}
 	}

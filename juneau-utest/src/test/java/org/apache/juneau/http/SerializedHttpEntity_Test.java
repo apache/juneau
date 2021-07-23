@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
@@ -105,7 +106,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(new StringReader("foo"),null).contentType("text/foo").build()).run().assertBody().is("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).contentType("text/foo").build()).run().assertBody().is("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

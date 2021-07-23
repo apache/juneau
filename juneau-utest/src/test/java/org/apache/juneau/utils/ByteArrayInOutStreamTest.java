@@ -15,6 +15,7 @@ package org.apache.juneau.utils;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
@@ -29,7 +30,7 @@ public class ByteArrayInOutStreamTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		InputStream is = new ByteArrayInputStream("foobar".getBytes(UTF8));
+		InputStream is = inputStream("foobar");
 		ByteArrayInOutStream baios = new ByteArrayInOutStream();
 		pipe(is, baios);
 		assertEquals("foobar", read(baios.getInputStream()));
