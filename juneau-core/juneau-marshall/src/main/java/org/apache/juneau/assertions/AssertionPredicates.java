@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <ul>
  * 	<li>{@link FluentObjectAssertion#is(Predicate)}
  * 	<li>{@link FluentArrayAssertion#is(Predicate...)}
- * 	<li>{@link FluentPrimitiveArrayAssertion#each(Predicate...)}
+ * 	<li>{@link FluentPrimitiveArrayAssertion#is(Predicate...)}
  * 	<li>{@link FluentListAssertion#each(Predicate...)}
  * </ul>
  *

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.Assertions.*;
-
 import java.io.*;
 
 import org.apache.juneau.internal.*;
@@ -54,8 +52,6 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	 */
 	public PrimitiveArrayAssertion(T value) {
 		super(value, null);
-		Class<?> c = value == null ? null : value.getClass();
-		assertArg(c == null || c.isArray() && c.getComponentType().isPrimitive(), "Value wasn't a primitive array.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

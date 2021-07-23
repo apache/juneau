@@ -153,14 +153,14 @@ public class StringListAssertion_Test {
 	public void bd01b_join_wDelim() throws Exception {
 		List<String> x = list("1","2"), nil = null;
 		test(x).join(",").isString("1,2");
-		test(nil).join().isNull();
+		test(nil).join(",").isNull();
 	}
 
 	@Test
 	public void bd01c_join_wDelim_wXfix() throws Exception {
 		List<String> x = list("1","2"), nil = null;
 		test(x).join(",","[","]").isString("[1,2]");
-		test(nil).join().isNull();
+		test(nil).join(",","[","]").isNull();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

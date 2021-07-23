@@ -16,6 +16,8 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.function.*;
+
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -52,7 +54,8 @@ public class PrimitiveArrayAssertion_Test {
 
 	@Test
 	public void a03_invalidUsage() throws Exception {
-		assertThrown(()->new FluentPrimitiveArrayAssertion<>("foo", null)).message().oneLine().is("Object was not an array.  Actual='java.lang.String'.");
+		assertThrown(()->PrimitiveArrayAssertion.create("foo")).message().oneLine().is("Object was not an array.  Actual='java.lang.String'.");
+		assertThrown(()->PrimitiveArrayAssertion.create(new Integer[0])).message().oneLine().is("Object was not an array.  Actual='[Ljava.lang.Integer;'.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -271,67 +274,85 @@ public class PrimitiveArrayAssertion_Test {
 	}
 
 	@Test
-	public void cb01_isEmpty() throws Exception {
-		byte[] x1={}, x2={1,2}, nil = null;
-		assertThrown(()->byteArray(nil).isEmpty()).message().is("Value was null.");
-		byteArray(x1).isEmpty();
-		assertThrown(()->byteArray(x2).isEmpty()).message().is("Array was not empty.");
+	public void cb01_is_predicates() throws Exception {
+		int[] x1 = {1,2}, nil = null;
+		intArray(x1).is(eq("1"),eq("2"));
+		intArray(x1).is(eq(1),eq(2));
+		assertThrown(()->intArray(x1).is(eq("1"),eq("3"))).message().oneLine().is("Array did not contain expected value at index 1.  Value did not match expected.  Expect='3'.  Actual='2'.");
+		assertThrown(()->intArray(nil).is(eq("1"),eq("3"))).message().is("Value was null.");
+		intArray(x1).is((Predicate<Integer>)null,null);
 	}
 
 	@Test
-	public void cb02_isNotEmpty() throws Exception {
-		byte[] x1={}, x2={1,2}, nil = null;
-		assertThrown(()->byteArray(nil).isNotEmpty()).message().is("Value was null.");
-		assertThrown(()->byteArray(x1).isNotEmpty()).message().is("Array was empty.");
-		byteArray(x2).isNotEmpty();
+	public void cb02_any() throws Exception {
+		int[] x1 = {2,3,1}, nil = null;
+		intArray(x1).any(x -> x .equals(3));
+		intArray(x1).any(eq(3));
+		assertThrown(()->intArray(x1).any(x -> x.equals(4))).message().oneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
+		assertThrown(()->intArray(x1).any(null)).message().is("Argument 'test' cannot be null.");
+		assertThrown(()->intArray(nil).any(x->true)).message().is("Value was null.");
 	}
 
 	@Test
-	public void cb03_contains() throws Exception {
-		byte[] x1 = {1,2}, nil = null;
-		byteArray(x1).contains((byte)1);
-		assertThrown(()->byteArray(x1).contains((byte)3)).message().oneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[1, 2]'.");
-		assertThrown(()->byteArray(nil).contains((byte)3)).message().is("Value was null.");
-		assertThrown(()->byteArray(nil).contains(null)).message().is("Value was null.");
+	public void cb03_all() throws Exception {
+		int[] x1 = {2,3,1}, nil = null;
+		intArray(x1).all(x -> x < 4);
+		assertThrown(()->intArray(x1).all(x -> x < 3)).message().oneLine().is("Array contained non-matching value at index 1.  Unexpected value: '3'.");
+		assertThrown(()->intArray(x1).all(ne(3))).message().oneLine().is("Array contained non-matching value at index 1.  Value unexpectedly matched.  Value='3'.");
+		assertThrown(()->intArray(x1).all(null)).message().is("Argument 'test' cannot be null.");
+		assertThrown(()->intArray(nil).all(x->true)).message().is("Value was null.");
 	}
 
 	@Test
-	public void cb04_doesNotContain() throws Exception {
-		byte[] x1 = {1,2}, nil = null;
-		byteArray(x1).doesNotContain((byte)3);
-		byteArray(x1).doesNotContain(null);
-		assertThrown(()->byteArray(nil).doesNotContain((byte)3)).message().is("Value was null.");
-		assertThrown(()->byteArray(x1).doesNotContain((byte)1)).message().oneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[1, 2]'.");
+	public void cb04_isEmpty() throws Exception {
+		int[] x1={}, x2={1,2}, nil = null;
+		intArray(x1).isEmpty();
+		assertThrown(()->intArray(x2).isEmpty()).message().is("Array was not empty.");
+		assertThrown(()->intArray(nil).isEmpty()).message().is("Value was null.");
 	}
 
 	@Test
-	public void cb05_isSize() throws Exception {
-		byte[] x1={}, x2={1,2}, nil = null;
-		byteArray(x1).isSize(0);
-		byteArray(x2).isSize(2);
-		assertThrown(()->byteArray(nil).isSize(0)).message().is("Value was null.");
-		assertThrown(()->byteArray(x1).isSize(2)).message().oneLine().oneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
-		assertThrown(()->byteArray(x2).isSize(0)).message().oneLine().oneLine().is("Array did not have the expected size.  Expect=0.  Actual=2.");
+	public void cb05_isNotEmpty() throws Exception {
+		int[] x1={}, x2={1,2}, nil = null;
+		intArray(x2).isNotEmpty();
+		assertThrown(()->intArray(x1).isNotEmpty()).message().is("Array was empty.");
+		assertThrown(()->intArray(nil).isNotEmpty()).message().is("Value was null.");
 	}
 
 	@Test
-	public void cb06_any() throws Exception {
-		byte[] x1 = {2,3,1}, nil = null;
-		byteArray(x1).any(x -> x.equals((byte)3));
-		byteArray(x1).any(eq((byte)3));
-		assertThrown(()->byteArray(x1).any(x -> x.equals((byte)4))).message().oneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
-		assertThrown(()->byteArray(x1).any(null)).message().is("Argument 'test' cannot be null.");
-		assertThrown(()->byteArray(nil).any(x->true)).message().is("Value was null.");
+	public void cb06_contains() throws Exception {
+		int[] x1 = {1,2}, nil = null;
+		intArray(x1).contains(1);
+		assertThrown(()->intArray(x1).contains(3)).message().oneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[1, 2]'.");
+		assertThrown(()->intArray(nil).contains(3)).message().is("Value was null.");
+		assertThrown(()->intArray(nil).contains(null)).message().is("Value was null.");
 	}
 
 	@Test
-	public void cb07_all() throws Exception {
-		byte[] x1 = {2,3,1}, nil = null;
-		byteArray(x1).all(x -> x < 4);
-		assertThrown(()->byteArray(x1).all(x -> x < 3)).message().oneLine().is("Array contained non-matching value at index 1.  Unexpected value: '3'.");
-		assertThrown(()->byteArray(x1).all(ne((byte)3))).message().oneLine().is("Array contained non-matching value at index 1.  Value unexpectedly matched.  Value='3'.");
-		assertThrown(()->byteArray(x1).all(null)).message().is("Argument 'test' cannot be null.");
-		assertThrown(()->byteArray(nil).all(x->true)).message().is("Value was null.");
+	public void cb07_doesNotContain() throws Exception {
+		int[] x1 = {1,2}, nil = null;
+		intArray(x1).doesNotContain(3);
+		assertThrown(()->intArray(x1).doesNotContain(1)).message().oneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[1, 2]'.");
+		assertThrown(()->intArray(nil).doesNotContain(3)).message().is("Value was null.");
 	}
 
+	@Test
+	public void cb08_isSize() throws Exception {
+		int[] x1={}, x2={1,2}, nil = null;
+		intArray(x1).isSize(0);
+		intArray(x2).isSize(2);
+		assertThrown(()->intArray(x1).isSize(2)).message().oneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
+		assertThrown(()->intArray(x2).isSize(0)).message().oneLine().is("Array did not have the expected size.  Expect=0.  Actual=2.");
+		assertThrown(()->intArray(nil).isSize(0)).message().is("Value was null.");
+	}
+
+	@Test
+	public void cb09_has() throws Exception {
+		int[] x={1,2}, nil = null;
+		intArray(x).has(1,2);
+		assertThrown(()->intArray(x).has(1,3)).message().oneLine().is("Array did not contain expected value at index 1.  Value did not match expected.  Expect='3'.  Actual='2'.");
+		assertThrown(()->intArray(x).has(1)).message().oneLine().is("Array did not have the expected size.  Expect=1.  Actual=2.");
+		assertThrown(()->intArray(x).has((Integer[])null)).message().oneLine().is("Argument 'entries' cannot be null.");
+		assertThrown(()->intArray(nil).has(1)).message().oneLine().is("Value was null.");
+	}
 }

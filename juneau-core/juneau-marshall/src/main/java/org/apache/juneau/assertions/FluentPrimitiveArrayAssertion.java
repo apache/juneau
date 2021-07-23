@@ -82,8 +82,11 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 */
 	public FluentPrimitiveArrayAssertion(Assertion creator, T contents, R returns) {
 		super(creator, contents, returns);
-		if (contents != null && ! contents.getClass().isArray())
-			throw new BasicAssertionError(MSG_objectWasNotAnArray, contents.getClass());
+		if (contents != null) {
+			Class<?> c = contents.getClass();
+			if (! (c.isArray() && c.getComponentType().isPrimitive()))
+				throw new BasicAssertionError(MSG_objectWasNotAnArray, contents.getClass());
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -130,6 +133,39 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Asserts that the contents of this list contain the specified values.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R has(E...entries) throws AssertionError {
+		assertArgNotNull("entries", entries);
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
+	}
+
+	/**
+	 * Asserts that the contents of this list pass the specified tests.
+	 *
+	 * @param tests The tests to run.  <jk>null</jk> entries are ignored.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SafeVarargs
+	public final R is(Predicate<E>...tests) throws AssertionError {
+		isSize(tests.length);
+		for (int i = 0, j = length2(); i < j; i++) {
+			Predicate<E> t = tests[i];
+			if (t != null)
+				if (! t.test(at(i)))
+					throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
+		}
+		return returns();
+	}
 
 	/**
 	 * Asserts that at least one value in the array passes the specified test.
@@ -213,37 +249,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	/**
-	 * Asserts that the array contains the expected entries.
-	 *
-	 * @param entries The values to check for.  Uses {@link Object#equals(Object)} for equivalency on entries.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SuppressWarnings("unchecked")
-	public R is(E...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
-		return each(p);
-	}
-
-	/**
-	 * Asserts that the entries in this array pass the specified tests for each entry.
-	 *
-	 * @param tests The tests to run.  <jk>null</jk> values are ignored.
-	 * @return The object to return after the test.
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SuppressWarnings("unchecked")
-	public R each(Predicate<E>...tests) throws AssertionError {
-		length().is(tests.length);
-		for (int i = 0, j = length2(); i < j; i++) {
-			Predicate<E> t = tests[i];
-			if (t != null && ! t.test(at(i)))
-				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
-		}
-		return returns();
-	}
-
-	/**
 	 * Asserts that the array does not contain the expected value.
 	 *
 	 * @param entry The value to check for.
@@ -312,6 +317,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public String toString() {
 		if (valueIsNull())
 			return null;
-		return STRINGIFIERS.getOrDefault(value().getClass().getComponentType(), (x) -> x.toString()).apply(value());
+		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 }

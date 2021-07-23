@@ -157,6 +157,7 @@ public class ThrowableAssertion_Test {
 		test(x1).causedBy(RuntimeException.class).message().is("1");
 		test(x2).causedBy(RuntimeException.class).isNull();
 		test(nil).causedBy(RuntimeException.class).isNull();
+		assertThrown(()->test(x1).causedBy(IOException.class)).message().oneLine().is("Caused-by exception not of expected type.  Expected='java.io.IOException'.  Actual='java.lang.RuntimeException'.");
 	}
 
 	@Test

@@ -314,6 +314,7 @@ public class StringAssertion_Test {
 		assertThrown(()->test(x).isIc(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='foobar'.");
 	}
 
+	@Test
 	public void cb02_isNotIc() throws Exception {
 		String x = "foobar", nil = null;
 		test(x).isNotIc("foobaz");
