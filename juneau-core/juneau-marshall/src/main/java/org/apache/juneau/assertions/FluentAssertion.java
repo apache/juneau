@@ -48,16 +48,18 @@ import org.apache.juneau.internal.*;
  *  ;
  * </p>
  *
- * <ul>
- * 	<li>Test methods:
+ *
+ * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
  * 		<li>None
  * 	</ul>
- * 	<li>Transform methods:
+ *
+ * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li>None
  * 	</ul>
- * 	<li>Configuration methods:
+ *
+ * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
  * 		<li class='jm'>{@link Assertion#out(PrintStream)}
@@ -65,7 +67,6 @@ import org.apache.juneau.internal.*;
  * 		<li class='jm'>{@link Assertion#stdout()}
  * 		<li class='jm'>{@link Assertion#throwable(Class)}
  * 	</ul>
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc Assertions}

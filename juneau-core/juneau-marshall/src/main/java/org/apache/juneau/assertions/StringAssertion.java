@@ -30,8 +30,8 @@ import org.apache.juneau.serializer.*;
  * 	<jsm>assertString</jsm>(<jv>httpBody</jv>).is(<js>"OK"</js>);
  * </p>
  *
- * <ul>
- * 	<li>Test methods:
+ *
+ * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentStringAssertion#is(String)}
  * 		<li class='jm'>{@link FluentStringAssertion#isNot(String)}
@@ -66,7 +66,9 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
  * 	</ul>
- * 	<li>Transform methods:
+ *
+ * <h5 class='topic'>Transform Methods</h5>
+ * 	<ul>
  * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}
@@ -84,7 +86,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
  *	</ul>
- * 	<li>Configuration methods:
+ *
+ * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentStringAssertion#javaStrings()}
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
@@ -93,7 +96,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link Assertion#stdout()}
  * 		<li class='jm'>{@link Assertion#throwable(Class)}
  * 	</ul>
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc Assertions}

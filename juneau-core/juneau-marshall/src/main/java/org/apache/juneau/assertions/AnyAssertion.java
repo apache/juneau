@@ -58,6 +58,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
  * 	</ul>
+ *
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentAnyAssertion#asArray(Class)}
@@ -94,6 +95,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
  *	</ul>
+ *
  * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}

@@ -29,7 +29,7 @@ import org.apache.juneau.serializer.*;
  * Used for assertion calls against generic POJOs.
  *
  * <p>
- * Extends from {@link ObjectAssertion} allowing you to perform basic assertions, but adds several transform
+ * Extends from {@link FluentObjectAssertion} allowing you to perform basic assertions, but adds several transform
  * methods to convert to more-specific assertion types.
  *
  * <h5 class='section'>Example:</h5>
@@ -46,8 +46,8 @@ import org.apache.juneau.serializer.*;
  * 				.is(<js>"bar"</js>);  <jc>// Performs test.</jc>
  * </p>
  *
- * <ul>
- * 	<li>Test methods:
+ *
+ * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
  * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
@@ -66,7 +66,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
  * 	</ul>
- * 	<li>Transform methods:
+ *
+ * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentAnyAssertion#asArray(Class)}
  * 		<li class='jm'>{@link FluentAnyAssertion#asIntArray()}
@@ -102,7 +103,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
  *	</ul>
- * 	<li>Configuration methods:
+ *
+ * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
  * 		<li class='jm'>{@link Assertion#out(PrintStream)}
@@ -110,7 +112,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link Assertion#stdout()}
  * 		<li class='jm'>{@link Assertion#throwable(Class)}
  * 	</ul>
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc Assertions}

@@ -25,8 +25,8 @@ import org.apache.juneau.serializer.*;
 /**
  * Used for fluent assertion calls against lists of beans.
  *
- * <ul>
- * 	<li>Test methods:
+ *
+ * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentListAssertion#has(E...)}
  * 		<li class='jm'>{@link FluentListAssertion#each(Predicate...)}
@@ -54,7 +54,9 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
  * 	</ul>
- * 	<li>Transform methods:
+ *
+ * <h5 class='topic'>Transform Methods</h5>
+ * 	<ul>
  * 		<li class='jm'>{@link FluentBeanListAssertion#extract(String...)}
  * 		<li class='jm'>{@link FluentBeanListAssertion#property(String)}
  * 		<li class='jm'>{@link FluentListAssertion#item(int)}
@@ -70,7 +72,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
  *	</ul>
- * 	<li>Configuration methods:
+ *
+ * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
  * 		<li class='jm'>{@link Assertion#out(PrintStream)}
@@ -78,7 +81,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link Assertion#stdout()}
  * 		<li class='jm'>{@link Assertion#throwable(Class)}
  * 	</ul>
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc Assertions}

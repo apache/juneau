@@ -33,8 +33,8 @@ import org.apache.juneau.serializer.*;
  * 		.assertStatus().code().isAny(200,404);
  * </p>
  *
- * <ul>
- * 	<li>Test methods:
+ *
+ * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
  * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
@@ -53,7 +53,9 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
  * 	</ul>
- * 	<li>Transform methods:
+ *
+ * <h5 class='topic'>Transform Methods</h5>
+ * 	<ul>
  * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#code()}
  * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#reason()}
  * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#protocol()}
@@ -67,7 +69,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
  *	</ul>
- * 	<li>Configuration methods:
+ *
+ * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
  * 		<li class='jm'>{@link Assertion#out(PrintStream)}
@@ -75,7 +78,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link Assertion#stdout()}
  * 		<li class='jm'>{@link Assertion#throwable(Class)}
  * 	</ul>
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc Assertions}
