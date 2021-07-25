@@ -13,11 +13,13 @@
 package org.apache.juneau.rest.client.assertion;
 
 import java.io.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against a response {@link StatusLine} object.
@@ -31,12 +33,62 @@ import org.apache.juneau.internal.*;
  * 		.assertStatus().code().isAny(200,404);
  * </p>
  *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#code()}
+ * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#reason()}
+ * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#protocol()}
+ * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#major()}
+ * 		<li class='jm'>{@link FluentResponseStatusLineAssertion#minor()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ *	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
+ *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentResponseStatusLineAssertion<R>")
 public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<StatusLine,R> {
 
-	private final StatusLine statusLine;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -45,10 +97,13 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 * @param returns The object to return after the test.
 	 */
 	public FluentResponseStatusLineAssertion(StatusLine statusLine, R returns) {
-		super(null, returns);
-		this.statusLine = statusLine;
+		super(statusLine, returns);
 		throwable(BadRequest.class);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an assertion against the status code on the response status object.
@@ -56,7 +111,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 * @return An assertion against the status code on the response status object.
 	 */
 	public FluentIntegerAssertion<R> code() {
-		return new FluentIntegerAssertion<>(this, statusLine.getStatusCode(), returns());
+		return new FluentIntegerAssertion<>(this, value().getStatusCode(), returns());
 	}
 
 	/**
@@ -65,7 +120,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 * @return An assertion against the reason phrase on the response status object.
 	 */
 	public FluentStringAssertion<R> reason() {
-		return new FluentStringAssertion<>(this, statusLine.getReasonPhrase(), returns());
+		return new FluentStringAssertion<>(this, value().getReasonPhrase(), returns());
 	}
 
 	/**
@@ -74,7 +129,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 * @return An assertion against the protocol on the response status object.
 	 */
 	public FluentStringAssertion<R> protocol() {
-		return new FluentStringAssertion<>(this, statusLine.getProtocolVersion().getProtocol(), returns());
+		return new FluentStringAssertion<>(this, value().getProtocolVersion().getProtocol(), returns());
 	}
 
 	/**
@@ -83,7 +138,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 * @return An assertion against the protocol major version on the response status object.
 	 */
 	public FluentIntegerAssertion<R> major() {
-		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMajor(), returns());
+		return new FluentIntegerAssertion<>(this, value().getProtocolVersion().getMajor(), returns());
 	}
 
 	/**
@@ -92,8 +147,12 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 * @return An assertion against the protocol minor version on the response status object.
 	 */
 	public FluentIntegerAssertion<R> minor() {
-		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMinor(), returns());
+		return new FluentIntegerAssertion<>(this, value().getProtocolVersion().getMinor(), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

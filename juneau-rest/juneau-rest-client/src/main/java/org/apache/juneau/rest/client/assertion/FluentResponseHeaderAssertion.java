@@ -13,21 +13,103 @@
 package org.apache.juneau.rest.client.assertion;
 
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.regex.*;
 
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link ResponseHeader} objects.
  *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link FluentStringAssertion#is(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNot(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isLines(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isSortedLines(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isIc(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNotIc(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#contains(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#doesNotContain(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isEmpty()}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNotEmpty()}
+ * 		<li class='jm'>{@link FluentStringAssertion#matches(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#regex(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#regex(String,int)}
+ * 		<li class='jm'>{@link FluentStringAssertion#regex(Pattern)}
+ * 		<li class='jm'>{@link FluentStringAssertion#startsWith(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#endsWith(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asBoolean()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asInteger()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asLong()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asZonedDateTime()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asType(Class,Type...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}
+ * 		<li class='jm'>{@link FluentStringAssertion#lc()}
+ * 		<li class='jm'>{@link FluentStringAssertion#uc()}
+ * 		<li class='jm'>{@link FluentStringAssertion#lines()}
+ * 		<li class='jm'>{@link FluentStringAssertion#split(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#length()}
+ * 		<li class='jm'>{@link FluentStringAssertion#oneLine()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ *	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
+ *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentResponseHeaderAssertion<R>")
-public class FluentResponseHeaderAssertion<R> extends FluentObjectAssertion<String,R> {
+public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 
 	private final ResponseHeader value;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -36,10 +118,14 @@ public class FluentResponseHeaderAssertion<R> extends FluentObjectAssertion<Stri
 	 * @param returns The object to return after the test.
 	 */
 	public FluentResponseHeaderAssertion(ResponseHeader value, R returns) {
-		super(null, value.getValue(), returns);
+		super(null, value.asString().orElse(null), returns);
 		this.value = value;
 		throwable(BadRequest.class);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this object assertion into a boolean assertion.
@@ -82,67 +168,34 @@ public class FluentResponseHeaderAssertion<R> extends FluentObjectAssertion<Stri
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this response header.
-	 *
-	 * <p>
-	 * Converts the header to a type using {@link ResponseHeader#asType(Class)} and then returns the value as an object assertion.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response header exists and is the specified value.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<js>"/myBean"</js>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Foo"</js>).asObject(Integer.<jk>class</jk>).exists().passes(<mv>x</mv> -&gt; <mv>x</mv> > 0);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
+	 * Converts the parameter value to a type using {@link ResponseHeader#asType(Class)} and then returns the value as an any-object assertion.
 	 *
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
+	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <V> FluentObjectAssertion<V,R> asObject(Class<V> type) throws RestCallException {
-		return new FluentObjectAssertion<>(value.asType(type).orElse(null), returns());
+	public <V> FluentAnyAssertion<V,R> asType(Class<V> type) throws RestCallException {
+		return new FluentAnyAssertion<>(value.asType(type).orElse(null), returns());
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this response header.
+	 * Converts the parameter value to a type using {@link ResponseHeader#asType(Type,Type...)} and then returns the value as an any-object assertion.
 	 *
 	 * <p>
-	 * Converts the header to a generic Java object using {@link ResponseHeader#asType(Class)} and then returns the value as an object assertion.
+	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response header exists and is the specified value.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<js>"/myBean"</js>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Foo"</js>).asObject().exists().asJson().is(<js>"'foobar'"</js>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
+	 * @param type The object type to create.
+	 * @param args Optional type arguments.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
+	 * @throws RestCallException If value could not be parsed.
 	 */
-	public FluentObjectAssertion<Object,R> asObject() throws RestCallException {
-		return new FluentObjectAssertion<>(value.asType(Object.class), returns());
+	public FluentAnyAssertion<Object,R> asType(Type type, Type...args) throws RestCallException {
+		return new FluentAnyAssertion<>(value.asType(type, args).orElse(null), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

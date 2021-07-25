@@ -19,6 +19,58 @@ import org.apache.juneau.internal.*;
 /**
  * Parent class of all fluent assertion calls.
  *
+ * <p>
+ * Defines a {@link #returns()} method that returns an original object.
+ * Assertion test methods that pass use this method to return to the origin of the call.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+ * MyPojo myPojo = ...;
+ * MyTestedBean myTestedBean = ...;
+ *
+ * Assertion assertion = new FluentBeanAssertion<MyPojo,MyTestedBean>(myPojo, myTestedBean);
+ * myPojo = assertion.test(x -> x.getMyProperty().equals("foo"));  <jc>// Returns myPojo after test.</jc>
+ * </p>
+ *
+ * For subclasses such as {@link IntegerAssertion}, the return object is simply itself so that multiple tests
+ * can be performed using the same assertion.
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> IntegerAssertion <jk>extends</jk> FluentIntegerAssertion&lt;IntegerAssertion&gt; {
+ *  	...
+ *  }
+ *
+ * 	Assertion <jv>assertion</jv> = <jk>new</jk> IntegerAssertion(123);
+ * 	<jv>assertion</jv>
+ * 		.isNotNull()
+ * 		.isGt(100)
+ *  ;
+ * </p>
+ *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li>None
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 	<ul>
+ * 		<li>None
+ * 	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
+ *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentAssertion<R>")

@@ -13,19 +13,77 @@
 package org.apache.juneau.rest.assertions;
 
 import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link RequestBody} objects.
+ *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#is(String)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#contains(String...)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#doesNotContain(String...)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#isEmpty()}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#isNotEmpty()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#asBytes()}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#asType(Class,Type...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ *	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
  *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentRequestBodyAssertion<R>")
 public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<RequestBody,R> {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -34,45 +92,13 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * @param returns The object to return after the test.
 	 */
 	public FluentRequestBodyAssertion(RequestBody value, R returns) {
-		super(null, returns);
+		super(value, returns);
 		throwable(BadRequest.class);
 	}
 
-	/**
-	 * Provides the ability to perform fluent-style assertions on this request body.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the request body equals the text "OK".</jc>
-	 * 	<jv>request</jv>
-	 * 		.assertBody().is(<js>"OK"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * The assertion test returns the original request object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the request body matches a regular expression.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>request</jv>
-	 * 		.assertBody().asString().matches(<js>".*OK.*"</js>);
-	 * 		.assertBody().asString().doesNotMatch(<js>".*ERROR.*"</js>)
-	 * 		.getBody().asType(MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	@Override
-	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(valueAsString(), returns());
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on the bytes of the request body.
@@ -100,16 +126,15 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on this request body.
-	 *
-	 * <p>
 	 * Converts the body to a type using {@link RequestBody#asType(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the request body bean is the expected value.</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody().asType(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * 		.assertBody()
+	 * 		.asType(MyBean.<jk>class</jk>)
+	 * 			.json().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -121,12 +146,51 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
+	 * <p>
+	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 *
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 */
 	public <V> FluentObjectAssertion<V,R> asType(Class<V> type) {
 		return new FluentObjectAssertion<>(valueAsType(type), returns());
 	}
+
+	/**
+	 * Converts the body to a type using {@link RequestBody#asType(Type,Type...)} and then returns the value as an object assertion.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the request body bean is the expected value.</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertBody()
+	 * 		.asType(Map.<jk>class</jk>,String.<jk>class</jk>,Integer.<jk>class</jk>)
+	 * 			.json().is(<js>"{foo:123}"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * <p>
+	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 *
+	 * @param type The object type to create.
+	 * @param args Optional type arguments.
+	 * @return A new fluent assertion object.
+	 */
+	public <V> FluentObjectAssertion<V,R> asType(Type type, Type...args) {
+		return new FluentObjectAssertion<>(valueAsType(type, args), returns());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the body contains the specified value.
@@ -185,7 +249,8 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private String valueAsString() throws AssertionError {
+	@Override
+	protected String valueAsString() throws AssertionError {
 		try {
 			return value().cache().asString();
 		} catch (IOException e) {
@@ -208,6 +273,18 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 			throw error(e, "Exception occurred during call.");
 		}
 	}
+
+	private <T> T valueAsType(Type c, Type...args) throws AssertionError {
+		try {
+			return value().cache().asType(c, args);
+		} catch (IOException e) {
+			throw error(e, "Exception occurred during call.");
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

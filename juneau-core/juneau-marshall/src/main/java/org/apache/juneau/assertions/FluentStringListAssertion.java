@@ -16,11 +16,74 @@ import static java.util.stream.Collectors.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against lists of strings.
+ *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link FluentListAssertion#has(Object...)}
+ * 		<li class='jm'>{@link FluentListAssertion#each(Predicate...)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isEmpty()}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isNotEmpty()}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#contains(Object)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#doesNotContain(Object)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#any(Predicate)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#all(Predicate)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isSize(int size)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 		<li class='jm'>{@link FluentStringListAssertion#join()}
+ * 		<li class='jm'>{@link FluentStringListAssertion#join(String)}
+ * 		<li class='jm'>{@link FluentStringListAssertion#join(String,String,String)}
+ * 		<li class='jm'>{@link FluentStringListAssertion#trim()}
+ * 		<li class='jm'>{@link FluentListAssertion#item(int)}
+ * 		<li class='jm'>{@link FluentListAssertion#sorted()}
+ * 		<li class='jm'>{@link FluentListAssertion#sorted(Comparator)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#size()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ *	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
  *
  * @param <R> The return type.
  */
@@ -85,6 +148,15 @@ public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> 
 	 */
 	public FluentStringAssertion<R> join(String delimiter, String prefix, String suffix) {
 		return new FluentStringAssertion<>(this, valueIsNull() ? null : value().stream().collect(joining(delimiter, prefix, suffix)), returns());
+	}
+
+	/**
+	 * Trims all strings in this list (ignoring null) and returns it as a new string-list assertion.
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentStringListAssertion<R> trim() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(x -> StringUtils.trim(x)).collect(toList()), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

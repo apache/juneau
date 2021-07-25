@@ -13,19 +13,71 @@
 package org.apache.juneau.rest.assertions;
 
 import java.io.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link ProtocolVersion} objects.
+ *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 		<li class='jm'>{@link FluentProtocolVersionAssertion#protocol()}
+ * 		<li class='jm'>{@link FluentProtocolVersionAssertion#major()}
+ * 		<li class='jm'>{@link FluentProtocolVersionAssertion#minor()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ *	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
  *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentProtocolVersionAssertion<R>")
 public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<ProtocolVersion,R> {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -34,9 +86,13 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	 * @param returns The object to return after the test.
 	 */
 	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
-		super(null, returns);
+		super(value, returns);
 		throwable(BadRequest.class);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Transform methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the protocol string as a new assertion.
@@ -64,6 +120,10 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	public FluentIntegerAssertion<R> minor() {
 		return new FluentIntegerAssertion<>(value().getMinor(), returns());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
 
 	// <FluentSetters>
 

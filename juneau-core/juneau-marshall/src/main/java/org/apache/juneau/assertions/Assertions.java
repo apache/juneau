@@ -23,7 +23,49 @@ import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 
 /**
- * Main class for creation of assertions for testing.
+ * Main class for creation of assertions for stand-alone testing.
+ *
+ * <p>
+ *
+ *
+ * <p>
+ * The following methods are provided for creating
+ * assertAny(T)
+ * assertArray(E[])
+ * assertBean(V)
+ * assertBeanList(List<E>)
+ * assertBoolean(Boolean)
+ * assertBooleanArray(boolean[])
+ * assertByteArray(byte[])
+ * assertBytes(byte[])
+ * assertCharArray(char[])
+ * assertCollection(Collection<E>)
+ * assertComparable(T)
+ * assertDate(Date)
+ * assertDoubleArray(double[])
+ * assertFloatArray(float[])
+ * assertIntArray(int[])
+ * assertInteger(Integer)
+ * assertList(List<E>)
+ * assertLong(Long)
+ * assertLongArray(long[])
+ * assertMap(Map<K, V>)
+ * assertObject(T)
+ * assertOptional(Optional<T>)
+ * assertReader(Reader)
+ * assertShortArray(short[])
+ * assertStream(InputStream)
+ * assertString(Object)
+ * assertStringList(List<String>)
+ * assertThrowable(V)
+ * assertVersion(Version)
+ * assertZonedDateTime(ZonedDateTime)
+ *
+ * assertArg(boolean, String, Object...)
+ * assertArgNotNull(String, T)
+ *
+ * assertThrown(Class<T>, Snippet)
+ * assertThrown(Snippet)
  */
 public class Assertions {
 
@@ -252,7 +294,7 @@ public class Assertions {
 
 	/**
 	 * Used for assertion calls against arbitrary POJOs.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>

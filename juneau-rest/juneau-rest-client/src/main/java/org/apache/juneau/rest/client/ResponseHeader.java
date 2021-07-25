@@ -345,6 +345,9 @@ public class ResponseHeader implements Header {
 	/**
 	 * Converts this header to the specified type.
 	 *
+	 * <p>
+	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
@@ -357,6 +360,9 @@ public class ResponseHeader implements Header {
 
 	/**
 	 * Same as {@link #asType(Type,Type...)} but sets the value in a mutable for fluent calls.
+	 *
+	 * <p>
+	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param m The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.

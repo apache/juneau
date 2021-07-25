@@ -1,3 +1,4 @@
+Assertions = #juneau-marshall.Assertions, Overview > juneau-marshall > Assertions
 AutoPojoSwaps = #juneau-marshall.Transforms.AutoPojoSwaps, Overview > juneau-marshall > Transforms > Auto-detected POJO swaps
 BasicHtmlDocTemplate = #juneau-marshall.HtmlDetails.BasicHtmlDocTemplate, Overview > juneau-marshall > HTML Details > BasicHtmlDocTemplate
 BasicRest = #juneau-rest-server.RestInstantiation.BasicRest, Overview > juneau-rest-server > Instantiation > BasicRest
@@ -98,6 +99,7 @@ ExtSwaggerSchemaObject = https://swagger.io/specification/v2#schemaObject, Swagg
 ExtSwaggerSecuritySchemeObject = https://swagger.io/specification/v2#securitySchemeObject, Swagger SecurityScheme Object
 ExtSwaggerTagObject = https://swagger.io/specification/v2#tagObject, Swagger Tag Object
 Features = #Introduction.Features, Overview > Introduction > Features
+Generics = #juneau-marshall.Assertions, Overview > juneau-marshall > Generics
 Glossaries = #Glossaries, Overview > Glossaries
 GlossaryAnnotations = #Glossaries.GlossaryAnnotations, Overview > Glossaries > Annotations
 GlossaryConfigurableProperties = #Glossaries.GlossaryConfigurableProperties, Overview > Glossaries > Configurable Properties

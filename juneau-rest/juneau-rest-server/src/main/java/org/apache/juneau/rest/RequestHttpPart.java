@@ -140,6 +140,9 @@ public abstract class RequestHttpPart {
 	/**
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
+	 * <p>
+	 * See {@doc Generics Generics} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.

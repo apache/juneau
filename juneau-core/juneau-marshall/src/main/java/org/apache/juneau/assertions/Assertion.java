@@ -24,6 +24,29 @@ import org.apache.juneau.internal.*;
 
 /**
  * Base class for all assertion objects.
+ *
+ * <ul>
+ * 	<li>Test methods:
+ * 	<ul>
+ * 		<li>None
+ * 	</ul>
+ * 	<li>Transform methods:
+ * 	<ul>
+ * 		<li>None
+ * 	</ul>
+ * 	<li>Configuration methods:
+ * 	<ul>
+ * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#out(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#silent()}
+ * 		<li class='jm'>{@link Assertion#stdout()}
+ * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * 	</ul>
+ * </ul>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
  */
 @FluentSetters
 public class Assertion {
@@ -120,6 +143,19 @@ public class Assertion {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <FluentSetters>
+
+	// </FluentSetters>
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+
 	/**
 	 * Creates a new {@link BasicAssertionError}.
 	 *
@@ -155,18 +191,6 @@ public class Assertion {
 		}
 		return new BasicAssertionError(cause, msg);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Convenience method for getting the class name for an object.
