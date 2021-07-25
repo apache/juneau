@@ -97,19 +97,23 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <E> ArrayAssertion<E> create(E[] value) {
 		return new ArrayAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ArrayAssertion(E[] value) {
 		super(value, null);

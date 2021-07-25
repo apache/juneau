@@ -62,7 +62,7 @@ public class Thrown extends BasicCsvArrayHeader {
 	public static final Thrown EMPTY = new Thrown((String)null);
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -76,7 +76,7 @@ public class Thrown extends BasicCsvArrayHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param values
 	 * 	The header value.

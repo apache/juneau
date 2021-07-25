@@ -36,7 +36,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -52,7 +52,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The header name.
 	 * @param value

@@ -79,19 +79,23 @@ public class ComparableAssertion<T extends Comparable<T>> extends FluentComparab
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ComparableAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <T extends Comparable<T>> ComparableAssertion<T> create(T value) {
 		return new ComparableAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ComparableAssertion(T value) {
 		super(value, null);

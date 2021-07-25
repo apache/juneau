@@ -41,7 +41,7 @@ public class ThrownStore {
 	private final Set<String> ignoreClasses;
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @return A new builder for this object.
 	 */

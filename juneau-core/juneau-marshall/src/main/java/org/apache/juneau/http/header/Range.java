@@ -148,7 +148,7 @@ public class Range extends BasicStringHeader {
 	private static final String NAME = "Range";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -162,7 +162,7 @@ public class Range extends BasicStringHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

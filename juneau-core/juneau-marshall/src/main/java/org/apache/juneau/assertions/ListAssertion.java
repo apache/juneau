@@ -95,19 +95,23 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ListAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <E> ListAssertion<E> create(List<E> value) {
 		return new ListAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ListAssertion(List<E> value) {
 		super(value, null);

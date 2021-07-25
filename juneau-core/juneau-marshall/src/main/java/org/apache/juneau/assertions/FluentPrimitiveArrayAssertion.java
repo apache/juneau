@@ -121,26 +121,41 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	/**
 	 * Constructor.
 	 *
-	 * @param contents The byte array being tested.
-	 * @param returns The object to return after the test.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
-	public FluentPrimitiveArrayAssertion(T contents, R returns) {
-		this(null, contents, returns);
+	public FluentPrimitiveArrayAssertion(T value, R returns) {
+		this(null, value, returns);
 	}
 
 	/**
-	 * Constructor.
+	 * Chained constructor.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param contents The byte array being tested.
-	 * @param returns The object to return after the test.
+	 * <p>
+	 * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.
+	 *
+	 * @param creator
+	 * 	The assertion that created this assertion.
+	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
-	public FluentPrimitiveArrayAssertion(Assertion creator, T contents, R returns) {
-		super(creator, contents, returns);
-		if (contents != null) {
-			Class<?> c = contents.getClass();
+	public FluentPrimitiveArrayAssertion(Assertion creator, T value, R returns) {
+		super(creator, value, returns);
+		if (value != null) {
+			Class<?> c = value.getClass();
 			if (! (c.isArray() && c.getComponentType().isPrimitive()))
-				throw new BasicAssertionError(MSG_objectWasNotAnArray, contents.getClass());
+				throw new BasicAssertionError(MSG_objectWasNotAnArray, value.getClass());
 		}
 	}
 

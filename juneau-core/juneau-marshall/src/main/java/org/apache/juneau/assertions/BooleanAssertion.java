@@ -79,19 +79,23 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link BooleanAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static BooleanAssertion create(Boolean value) {
 		return new BooleanAssertion(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public BooleanAssertion(Boolean value) {
 		super(value, null);

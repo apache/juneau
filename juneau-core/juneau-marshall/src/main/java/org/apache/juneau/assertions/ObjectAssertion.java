@@ -80,19 +80,23 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ObjectAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <T> ObjectAssertion<T> create(T value) {
 		return new ObjectAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ObjectAssertion(T value) {
 		super(value, null);

@@ -81,7 +81,7 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	private static final Cache<String,AcceptCharset> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -99,7 +99,7 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -113,7 +113,7 @@ public class AcceptCharset extends BasicStringRangeArrayHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

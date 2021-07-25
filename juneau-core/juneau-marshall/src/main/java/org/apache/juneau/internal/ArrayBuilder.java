@@ -31,7 +31,7 @@ public class ArrayBuilder<T> {
 	private final boolean skipNulls;
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @param elementType The element type.
 	 * @param size The array size.

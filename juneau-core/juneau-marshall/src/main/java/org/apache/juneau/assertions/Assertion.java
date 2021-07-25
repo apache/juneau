@@ -67,6 +67,7 @@ public class Assertion {
 
 	/**
 	 * Constructor used when this assertion is being created from within another assertion.
+	 *
 	 * @param creator The creator of this assertion.
 	 */
 	protected Assertion(Assertion creator) {
@@ -83,10 +84,20 @@ public class Assertion {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Allows to to specify the assertion failure message.
+	 * Allows you to override the assertion failure message.
 	 *
 	 * <p>
 	 * String can contain <js>"{msg}"</js> to represent the original message.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Throws an assertion with a custom message instead of the default "Value was null."</jc>
+	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
+	 * 		.msg(<js>"My string was bad:  {msg}"</js>)
+	 * 		.isNotNull();
+	 * </p>
 	 *
 	 * @param msg The assertion failure message.
 	 * @param args Optional message arguments.
@@ -100,7 +111,7 @@ public class Assertion {
 	}
 
 	/**
-	 * If an error occurs, send the error message to STDOUT.
+	 * If an error occurs, send the error message to STDOUT instead of STDERR.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -110,9 +121,11 @@ public class Assertion {
 	}
 
 	/**
-	 * If an error occurs, send the error message to the specified stream.
+	 * If an error occurs, send the error message to the specified stream instead of STDERR.
 	 *
-	 * @param value The output stream.  Can be <jk>null</jk>.
+	 * @param value
+	 * 	The output stream.
+	 * 	Can be <jk>null</jk> to suppress output.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -122,7 +135,10 @@ public class Assertion {
 	}
 
 	/**
-	 * Suppresses output.
+	 * Suppresses output to STDERR.
+	 *
+	 * <p>
+	 * This is the equivalent to calling <c>out(<jk>null</jk>)</c>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -132,7 +148,27 @@ public class Assertion {
 	}
 
 	/**
-	 * If an error occurs, throw this exception when {@link #error(String, Object...)} is called.
+	 * If an error occurs, throw this exception instead of the standard {@link AssertionError}.
+	 *
+	 * <p>
+	 * The throwable class must have a public constructor that takes in any of the following parameters:
+	 * <ul>
+	 * 	<li>{@link Throwable} - The caused-by exception (if there is one).
+	 * 	<li>{@link String} - The assertion failure message.
+	 * </ul>
+	 *
+	 * <p>
+	 * If the throwable cannot be instantiated, a {@link RuntimeException} is thrown instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Throws a BadRequest instead of an AssertionError if the string is null.</jc>
+	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
+	 * 		.throwable(BadRequest.<jk>class</jk>)
+	 * 		.isNotNull();
+	 * </p>
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).

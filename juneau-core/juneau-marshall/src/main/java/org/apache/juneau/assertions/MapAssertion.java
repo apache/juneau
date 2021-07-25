@@ -91,19 +91,23 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link MapAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <K,V> MapAssertion<K,V> create(Map<K,V> value) {
 		return new MapAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public MapAssertion(Map<K,V> value) {
 		super(value, null);

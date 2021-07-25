@@ -74,7 +74,7 @@ public class ContentLocation extends BasicUriHeader {
 	private static final String NAME = "Content-Location";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -89,7 +89,7 @@ public class ContentLocation extends BasicUriHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -103,7 +103,7 @@ public class ContentLocation extends BasicUriHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

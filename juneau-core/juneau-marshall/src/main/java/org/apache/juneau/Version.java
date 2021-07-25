@@ -29,7 +29,7 @@ public class Version implements Comparable<Version> {
 	private int[] parts;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	A string of the form <js>"#.#..."</js> where there can be any number of parts.

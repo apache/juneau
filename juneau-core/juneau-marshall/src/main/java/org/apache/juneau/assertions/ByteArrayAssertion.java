@@ -95,19 +95,23 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The contents being wrapped.
-	 * @return A new {@link ByteArrayAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static ByteArrayAssertion create(byte[] value) {
 		return new ByteArrayAssertion(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The contents being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ByteArrayAssertion(byte[] value) {
 		super(value, null);

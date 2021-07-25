@@ -114,19 +114,34 @@ public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R>
 	/**
 	 * Constructor.
 	 *
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
 	public FluentRequestFormParamAssertion(RequestFormParam value, R returns) {
 		this(null, value, returns);
 	}
 
 	/**
-	 * Constructor.
+	 * Chained constructor.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
+	 * <p>
+	 * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.
+	 *
+	 * @param creator
+	 * 	The assertion that created this assertion.
+	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
 	public FluentRequestFormParamAssertion(Assertion creator, RequestFormParam value, R returns) {
 		super(creator, value.asString().orElse(null), returns);

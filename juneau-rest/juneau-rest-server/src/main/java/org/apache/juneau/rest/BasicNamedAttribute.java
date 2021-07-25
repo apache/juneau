@@ -31,7 +31,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	private final Object value;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -59,7 +59,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Value is re-evaluated on each call to {@link #getValue()}.

@@ -91,19 +91,23 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The date being wrapped.
-	 * @return A new {@link ZonedDateTimeAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static ZonedDateTimeAssertion create(ZonedDateTime value) {
 		return new ZonedDateTimeAssertion(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The date being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ZonedDateTimeAssertion(ZonedDateTime value) {
 		super(value, null);

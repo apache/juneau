@@ -39,7 +39,7 @@ public class SerializedHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -54,7 +54,7 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
@@ -72,7 +72,7 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The HTTP header name name.
 	 * @param value
@@ -95,7 +95,7 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

@@ -83,7 +83,7 @@ public class ContentType extends BasicMediaTypeHeader {
 		WILDCARD = of("*/*");
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -101,7 +101,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -115,7 +115,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

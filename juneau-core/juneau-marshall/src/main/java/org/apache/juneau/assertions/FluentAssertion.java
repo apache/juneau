@@ -85,8 +85,13 @@ public abstract class FluentAssertion<R> extends Assertion {
 	/**
 	 * Constructor.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param returns The object to return after the test.
+	 * @param creator
+	 * 	The assertion that created this assertion.
+	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
 	protected FluentAssertion(Assertion creator, R returns) {
 		super(creator);

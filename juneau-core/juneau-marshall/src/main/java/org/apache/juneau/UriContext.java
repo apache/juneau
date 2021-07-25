@@ -52,7 +52,7 @@ public class UriContext {
 	private String aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param authority
 	 * 	The authority portion of URL (e.g. <js>"http://hostname:port"</js>)

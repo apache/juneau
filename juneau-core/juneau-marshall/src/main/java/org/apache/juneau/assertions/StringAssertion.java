@@ -107,22 +107,26 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The string being wrapped.
-	 * @return A new {@link StringAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static StringAssertion create(Object value) {
 		return new StringAssertion(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param text The string being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public StringAssertion(Object text) {
-		super(stringify(text), null);
+	public StringAssertion(Object value) {
+		super(stringify(value), null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -92,19 +92,23 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link PrimitiveArrayAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <E,T> PrimitiveArrayAssertion<E,T> create(T value) {
 		return new PrimitiveArrayAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public PrimitiveArrayAssertion(T value) {
 		super(value, null);

@@ -43,7 +43,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	VarResolverSession resolver;
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @return A new parser session arguments object.
 	 */

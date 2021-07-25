@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
 public class Tuple5<A,B,C,D,E> {
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @param <A> Object 1 type.
 	 * @param <B> Object 2 type.

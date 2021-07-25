@@ -67,7 +67,7 @@ public class ContentLength extends BasicLongHeader {
 	private static final String NAME = "Content-Length";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -82,7 +82,7 @@ public class ContentLength extends BasicLongHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -96,7 +96,7 @@ public class ContentLength extends BasicLongHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

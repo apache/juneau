@@ -36,7 +36,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -52,7 +52,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -67,7 +67,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

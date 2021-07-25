@@ -113,7 +113,7 @@ public class Messages extends ResourceBundle {
 	private final Set<String> rbKeys;
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @param forClass
 	 * 	The class we're creating this object for.

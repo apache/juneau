@@ -88,19 +88,23 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <V extends Throwable> ThrowableAssertion<V> create(V value) {
 		return new ThrowableAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The throwable being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ThrowableAssertion(T value) {
 		super(value, null);

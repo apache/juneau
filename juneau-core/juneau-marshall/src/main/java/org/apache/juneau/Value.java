@@ -27,7 +27,7 @@ import org.apache.juneau.reflect.*;
 public class Value<T> {
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @param object The object being wrapped.
 	 * @return A new {@link Value} object.

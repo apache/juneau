@@ -88,19 +88,23 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The version being wrapped.
-	 * @return A new {@link VersionAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static VersionAssertion create(Version value) {
 		return new VersionAssertion(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The version being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public VersionAssertion(Version value) {
 		super(value, null);

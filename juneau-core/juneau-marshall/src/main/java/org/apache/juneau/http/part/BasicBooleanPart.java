@@ -27,7 +27,7 @@ import org.apache.juneau.assertions.*;
 public class BasicBooleanPart extends BasicPart {
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -47,7 +47,7 @@ public class BasicBooleanPart extends BasicPart {
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.

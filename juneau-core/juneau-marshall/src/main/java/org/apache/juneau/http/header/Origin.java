@@ -26,7 +26,7 @@ public class Origin extends BasicStringHeader {
 	private static final String NAME = "Origin";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -40,7 +40,7 @@ public class Origin extends BasicStringHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

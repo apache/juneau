@@ -50,7 +50,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = new HeaderElement[] {};
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The parameter name.
 	 * @param value
@@ -65,7 +65,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param o The name value pair that makes up the header name and value.
 	 * 	The parameter value.

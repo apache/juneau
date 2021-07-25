@@ -56,7 +56,7 @@ public class UriResolver {
 	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param resolution Rule on how URIs should be resolved.
 	 * @param relativity Rule on what relative URIs are relative to.

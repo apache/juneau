@@ -75,7 +75,7 @@ public class Allow extends BasicCsvArrayHeader {
 	private static final String NAME = "Allow";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -89,7 +89,7 @@ public class Allow extends BasicCsvArrayHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -103,7 +103,7 @@ public class Allow extends BasicCsvArrayHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

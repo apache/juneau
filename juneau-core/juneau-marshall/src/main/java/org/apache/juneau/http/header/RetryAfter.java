@@ -70,7 +70,7 @@ public class RetryAfter extends BasicDateHeader {
 	private static final String NAME = "Retry-After";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -85,7 +85,7 @@ public class RetryAfter extends BasicDateHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -99,7 +99,7 @@ public class RetryAfter extends BasicDateHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -113,7 +113,7 @@ public class RetryAfter extends BasicDateHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

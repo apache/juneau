@@ -82,11 +82,37 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	/**
 	 * Constructor.
 	 *
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
 	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
-		super(value, returns);
+		this(null, value, returns);
+	}
+
+	/**
+	 * Chained constructor.
+	 *
+	 * <p>
+	 * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.
+	 *
+	 * @param creator
+	 * 	The assertion that created this assertion.
+	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentProtocolVersionAssertion(Assertion creator, ProtocolVersion value, R returns) {
+		super(creator, value, returns);
 		throwable(BadRequest.class);
 	}
 

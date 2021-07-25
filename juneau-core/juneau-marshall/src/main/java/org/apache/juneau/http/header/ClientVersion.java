@@ -48,7 +48,7 @@ public class ClientVersion extends BasicStringHeader {
 	private static final Cache<String,ClientVersion> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -66,7 +66,7 @@ public class ClientVersion extends BasicStringHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -80,7 +80,7 @@ public class ClientVersion extends BasicStringHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

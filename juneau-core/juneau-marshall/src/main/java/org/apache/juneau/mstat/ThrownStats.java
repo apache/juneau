@@ -35,7 +35,7 @@ public class ThrownStats implements Cloneable {
 	private final AtomicLong firstOccurrence, lastOccurrence;
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @return A new builder for this object.
 	 */

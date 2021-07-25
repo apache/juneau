@@ -37,7 +37,7 @@ public class EntityTag {
 	private final boolean isWeak, isAny;
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @param value The validator string value.
 	 * @return A new header bean or <jk>null</jk> if the value was <jk>null</jk>.

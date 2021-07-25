@@ -65,7 +65,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	private static final String NAME = "Max-Forwards";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -80,7 +80,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -94,7 +94,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

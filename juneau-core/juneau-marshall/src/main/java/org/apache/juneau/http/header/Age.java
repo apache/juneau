@@ -64,7 +64,7 @@ public class Age extends BasicIntegerHeader {
 	private static final String NAME = "Age";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -79,7 +79,7 @@ public class Age extends BasicIntegerHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -93,7 +93,7 @@ public class Age extends BasicIntegerHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

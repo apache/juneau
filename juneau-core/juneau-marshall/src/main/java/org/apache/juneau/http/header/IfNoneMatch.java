@@ -101,7 +101,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	private static final String NAME = "If-None-Match";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -116,7 +116,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -130,7 +130,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

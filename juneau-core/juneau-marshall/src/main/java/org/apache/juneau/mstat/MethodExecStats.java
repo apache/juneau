@@ -41,7 +41,7 @@ public class MethodExecStats {
 		totalTime = new AtomicLong();
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @return A new builder for this object.
 	 */

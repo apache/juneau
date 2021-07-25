@@ -27,7 +27,7 @@ import org.apache.http.*;
 public class BasicUriPart extends BasicPart {
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -46,7 +46,7 @@ public class BasicUriPart extends BasicPart {
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.

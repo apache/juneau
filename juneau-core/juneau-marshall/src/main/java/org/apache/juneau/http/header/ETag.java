@@ -56,7 +56,7 @@ public class ETag extends BasicEntityTagHeader {
 	private static final String NAME = "ETag";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -71,7 +71,7 @@ public class ETag extends BasicEntityTagHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -85,7 +85,7 @@ public class ETag extends BasicEntityTagHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

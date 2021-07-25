@@ -21,8 +21,25 @@ import org.apache.juneau.serializer.*;
 /**
  * Used for assertion calls against generic POJOs.
  *
- * <ul>
- * 	<li>Test methods:
+ * <p>
+ * Extends from {@link ObjectAssertion} allowing you to perform basic assertions, but adds several transform
+ * methods to convert to more-specific assertion types.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ *
+ * 	List&lt;MyBean&gt; <jv>listOfBeans</jv> = ...;
+ * 	<jsm>assertList</jsm>(<jv>listOfBeans</jv>)
+ * 		.item(1)  <jc>// Returns an AnyAssertion.</jc>
+ * 		.asBean()  <jc>// Transforms to BeanAssertion.</jc>
+ * 			.property(<js>"foo"</js>)  <jc>// Returns an AnyAssertion.</jc>
+ * 			.asString()  <jc>// Transforms to StringAssertion.</jc>
+ * 				.is(<js>"bar"</js>);  <jc>// Performs test.</jc>
+ * </p>
+ *
+ *
+ * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
  * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
@@ -41,7 +58,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
  * 	</ul>
- * 	<li>Transform methods:
+ * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentAnyAssertion#asArray(Class)}
  * 		<li class='jm'>{@link FluentAnyAssertion#asIntArray()}
@@ -77,7 +94,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
  *	</ul>
- * 	<li>Configuration methods:
+ * <h5 class='topic'>Configuration Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
  * 		<li class='jm'>{@link Assertion#out(PrintStream)}
@@ -85,7 +102,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link Assertion#stdout()}
  * 		<li class='jm'>{@link Assertion#throwable(Class)}
  * 	</ul>
- * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc Assertions}
@@ -101,19 +117,23 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link AnyAssertion} object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
 	 */
 	public static <T> AnyAssertion<T> create(T value) {
 		return new AnyAssertion<>(value);
 	}
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param value The object being wrapped.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public AnyAssertion(T value) {
 		super(value, null);

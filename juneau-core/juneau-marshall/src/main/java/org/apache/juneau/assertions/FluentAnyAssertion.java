@@ -26,7 +26,25 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * An assertion against generic POJOs that can be used to convert them into specialized assertions.
+ * Used for assertion calls against generic POJOs.
+ *
+ * <p>
+ * Extends from {@link ObjectAssertion} allowing you to perform basic assertions, but adds several transform
+ * methods to convert to more-specific assertion types.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ *
+ * 	List&lt;MyBean&gt; <jv>listOfBeans</jv> = ...;
+ * 	FluentAnyAssertion<
+ * 	<jsm>assertList</jsm>(<jv>listOfBeans</jv>)
+ * 		.item(1)  <jc>// Returns an AnyAssertion.</jc>
+ * 		.asBean()  <jc>// Transforms to BeanAssertion.</jc>
+ * 			.property(<js>"foo"</js>)  <jc>// Returns an AnyAssertion.</jc>
+ * 			.asString()  <jc>// Transforms to StringAssertion.</jc>
+ * 				.is(<js>"bar"</js>);  <jc>// Performs test.</jc>
+ * </p>
  *
  * <ul>
  * 	<li>Test methods:
@@ -115,19 +133,34 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
 	public FluentAnyAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
 
 	/**
-	 * Constructor.
+	 * Chained constructor.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The object being tested.
-	 * @param returns The object to return after the test.
+	 * <p>
+	 * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.
+	 *
+	 * @param creator
+	 * 	The assertion that created this assertion.
+	 * 	<br>Should be <jk>null</jk> if this is the top-level assertion.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
 	public FluentAnyAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);

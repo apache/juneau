@@ -29,7 +29,7 @@ import org.apache.juneau.collections.*;
 public class BasicCsvArrayPart extends BasicPart {
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The part name.
 	 * @param value
@@ -51,7 +51,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.

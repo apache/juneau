@@ -77,7 +77,7 @@ public class LastModified extends BasicDateHeader {
 	private static final String NAME = "Last-Modified";
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -92,7 +92,7 @@ public class LastModified extends BasicDateHeader {
 	}
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param value
 	 * 	The header value.
@@ -106,7 +106,7 @@ public class LastModified extends BasicDateHeader {
 	}
 
 	/**
-	 * Convenience creator with delayed value.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.

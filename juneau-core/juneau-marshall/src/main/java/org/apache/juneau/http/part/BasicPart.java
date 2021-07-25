@@ -49,7 +49,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	private final Object value;
 
 	/**
-	 * Convenience creator.
+	 * Static creator.
 	 *
 	 * @param name The part name.
 	 * @param value The part value.
@@ -77,7 +77,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	}
 
 	/**
-	 * Convenience creator using supplier.
+	 * Static creator with delayed value.
 	 *
 	 * <p>
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.

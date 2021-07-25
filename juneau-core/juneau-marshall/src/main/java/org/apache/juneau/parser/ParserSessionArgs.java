@@ -37,7 +37,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	public static final ParserSessionArgs DEFAULT = new ParserSessionArgs();
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
 	 * @return A new parser session arguments object.
 	 */
