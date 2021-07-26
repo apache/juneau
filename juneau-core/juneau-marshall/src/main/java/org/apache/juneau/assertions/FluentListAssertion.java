@@ -182,6 +182,18 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
 	}
 
+	public FluentListAssertion<E,R> first(int count) {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	public FluentListAssertion<E,R> last(int count) {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	public FluentListAssertion<E,R> sublist(int start, int end) {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
