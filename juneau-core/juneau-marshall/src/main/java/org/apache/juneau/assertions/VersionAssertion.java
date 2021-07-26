@@ -79,7 +79,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc Assertions}
+ * 	<li class='link'>{@doc FluentAssertions}
  * </ul>
  */
 @FluentSetters(returns="VersionAssertion")
