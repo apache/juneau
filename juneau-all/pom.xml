@@ -85,6 +85,7 @@
 							<include>org.apache.juneau:juneau-rest-client</include>
 							<include>org.apache.juneau:juneau-rest-mock</include>
 							<include>org.apache.juneau:juneau-microservice-core</include>
+							<include>org.apache.httpcomponents:httpcore</include>
 						</includes>
 					</artifactSet>
 				</configuration>

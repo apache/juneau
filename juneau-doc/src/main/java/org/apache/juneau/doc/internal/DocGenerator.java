@@ -17,7 +17,10 @@ import static org.apache.juneau.doc.internal.Console.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.*;
+
+import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Utility for generating the overview.html page.
@@ -242,6 +245,7 @@ public class DocGenerator {
 		int pageNumber, dirNumber;
 		String tags = "";
 		File file, dir;
+		TitleMap titleMap;
 
 		Set<PageFile> pageFiles = new TreeSet<>();
 
@@ -261,14 +265,18 @@ public class DocGenerator {
 				i = s.indexOf("\n");
 				title = s.substring(0, i);
 				if (title.startsWith("{")) {
-					tags = title.substring(1, title.indexOf('}'));
-					tags = Arrays.stream(tags.split(";"))
-						.map(x -> x.trim().replaceAll(juneauTagPattern, "<b>$0</b>").replaceAll("\\:\s+", ": "))
-						.map(x -> (x.toLowerCase().contains("todo") || x.toLowerCase().contains("review")) ? "<b><red>"+x+"</red></b>" : x)
-						.collect(Collectors.joining(", "));
-					s = s.substring(i+1);
-					i = s.indexOf("\n");
-					title = s.substring(0, i);
+					titleMap = SimpleJson.DEFAULT.read(title, TitleMap.class);
+					List<String> tags = AList.create();
+					if (titleMap.created != null)
+						tags.add("created: " + highlightCurrentVersion(titleMap.created));
+					if (titleMap.updated != null)
+						tags.add("updated: " + highlightCurrentVersion(titleMap.updated));
+					if (titleMap.deprecated != null)
+						tags.add("deprecated: " + highlightCurrentVersion(titleMap.deprecated));
+					if (titleMap.flags != null)
+						Arrays.stream(titleMap.flags.split(",")).forEach(x -> tags.add("<b><red>"+x+"</red></b>"));
+					title = titleMap.title;
+					this.tags = StringUtils.join(tags, ", ");
 				}
 				if (s.contains("{@link org.apache.juneau."))
 					WARNINGS.add("Found {@link org.apache.juneau...} in file " + f.getAbsolutePath());
@@ -301,6 +309,10 @@ public class DocGenerator {
 					}
 				}
 			}
+		}
+
+		private static String highlightCurrentVersion(String s) {
+			return s.replaceAll(juneauTagPattern, "<b>$0</b>");
 		}
 
 		public String getPageDirName(File f) {
