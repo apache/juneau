@@ -111,10 +111,6 @@ public class Assertions_Test {
 	public void a13_assertThrown() throws Exception {
 		assertThrown(()->{throw new RuntimeException("foo");}).message().is("foo");
 		assertThrown(()->{}).isNull();
-		assertThrown(StringIndexOutOfBoundsException.class, ()->"x".charAt(1)).message().is("String index out of range: 1");
-		assertThrown(
-			() ->assertThrown(StringIndexOutOfBoundsException.class, ()->{throw new RuntimeException();})
-		).message().oneLine().is("Exception not of expected type.  Expect='java.lang.StringIndexOutOfBoundsException'.  Actual='java.lang.RuntimeException'.");
 	}
 
 	@Test

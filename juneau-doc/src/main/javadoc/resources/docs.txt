@@ -1,4 +1,4 @@
-Assertions = #juneau-marshall.Assertions, Overview > juneau-marshall > 
+Assertions = #juneau-marshall.Assertions, Overview > juneau-marshall > Assertions
 AutoPojoSwaps = #juneau-marshall.Transforms.AutoPojoSwaps, Overview > juneau-marshall > Transforms > Auto-detected POJO swaps
 BasicHtmlDocTemplate = #juneau-marshall.HtmlDetails.BasicHtmlDocTemplate, Overview > juneau-marshall > HTML Details > BasicHtmlDocTemplate
 BasicRest = #juneau-rest-server.RestInstantiation.BasicRest, Overview > juneau-rest-server > Instantiation > BasicRest

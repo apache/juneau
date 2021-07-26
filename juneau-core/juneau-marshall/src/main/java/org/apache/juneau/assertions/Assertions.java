@@ -26,154 +26,750 @@ import org.apache.juneau.cp.*;
  * Main class for creation of assertions for stand-alone testing.
  *
  * <p>
+ * Provides assertions for various common POJO types.
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ *
+ *	<jc>// Assert string is greater than 100 characters and contains "foo".</jc>
+ * 	<jsm>assertString</jsm>(<jv>myString</jv>)
+ * 		.length().isGt(100)
+ * 		.contains(<js>"foo"</js>);
+ * </p>
  *
  * <p>
- * The following methods are provided for creating
- * assertAny(T)
- * assertArray(E[])
- * assertBean(V)
- * assertBeanList(List<E>)
- * assertBoolean(Boolean)
- * assertBooleanArray(boolean[])
- * assertByteArray(byte[])
- * assertBytes(byte[])
- * assertCharArray(char[])
- * assertCollection(Collection<E>)
- * assertComparable(T)
- * assertDate(Date)
- * assertDoubleArray(double[])
- * assertFloatArray(float[])
- * assertIntArray(int[])
- * assertInteger(Integer)
- * assertList(List<E>)
- * assertLong(Long)
- * assertLongArray(long[])
- * assertMap(Map<K, V>)
- * assertObject(T)
- * assertOptional(Optional<T>)
- * assertReader(Reader)
- * assertShortArray(short[])
- * assertStream(InputStream)
- * assertString(Object)
- * assertStringList(List<String>)
- * assertThrowable(V)
- * assertVersion(Version)
- * assertZonedDateTime(ZonedDateTime)
+ * Provides simple testing that {@link Throwable Throwables} are being thrown correctly.
  *
- * assertArg(boolean, String, Object...)
- * assertArgNotNull(String, T)
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
  *
- * assertThrown(Class<T>, Snippet)
- * assertThrown(Snippet)
+ *	<jc>// Assert that calling doBadCall() causes a RuntimeException.</jc>
+ * 	<jsm>assertThrown</jsm>(() -&gt; <jv>myPojo</jv>.doBadCall())
+ * 		.isType(RuntimeException.<jk>class</jk>)
+ * 		.message().contains(<js>"Bad thing happened."</js>);
+ * </p>
+ *
+ * <p>
+ * Provides other assertion convenience methods such as asserting non-null method arguments.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ *
+ *	<jk>public</jk> String getFoo(String <jv>bar</jv>) {
+ *		<jsm>assertArgNotNull</jsm>(<js>"bar"</js>, <jv>bar</jv>);
+ *		...
+ *	}
+ * </p>
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc Assertions}
+ * </ul>
  */
 public class Assertions {
 
 	private static final Messages MESSAGES = Messages.of(Assertions.class, "Messages");
 	private static final String
-		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull"),
-		MSG_exceptionNotOfExpectedType = MESSAGES.getString("exceptionNotOfExpectedType");
+		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull");
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent assertions
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Used for assertion calls against Java object arrays.
+	 * Performs an assertion on an arbitrary POJO.
+	 *
+	 * <p>
+	 * The distinction between {@link ObjectAssertion} and {@link AnyAssertion} is that the latter supports all
+	 * the operations of the former, but adds various transform methods for conversion to specific assertion types.
+	 *
+	 * <p>
+	 * Various transform methods such as {@link FluentListAssertion#item(int)} and {@link FluentBeanAssertion#property(String)}
+	 * return generic any-assertions so that they can be easily transformed into other assertion types.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] <jv>array</jv> = {<js>"foo"</js>};
-	 * 	<jsm>assertArray</jsm>(<jv>array</jv>).isSize(1);
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the property 'foo' of a bean is 'bar'.</jc>
+	 * 	<jsm>assertAny</jsm>(<jv>myPojo</jv>)  <jc>// Start with AnyAssertion.</jc>
+	 * 		.asBean(MyBean.<jk>class</jk>)  <jc>// Transform to BeanAssertion.</jc>
+	 * 			.property(<js>"foo"</js>).is(<js>"bar"</js>);
 	 * </p>
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link AnyAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <T> AnyAssertion<T> assertAny(T value) {
+		return AnyAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on an array of POJOs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts that an Integer array contains [1,2,3].</jc>
+	 * 	Integer[] <jv>array</jv> = {...};
+	 * 	<jsm>assertArray</jsm>(<jv>array</jv>)
+	 * 		.asJson().is(<js>"[1,2,3]"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final <E> ArrayAssertion<E> assertArray(E[] value) {
 		return ArrayAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against Java beans.
+	 * Performs an assertion on a Java bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>).isType(MyBean.<jk>class</jk>).fields(<js>"foo"</js>).asJson().is(<js>"{foo:'bar'}"</js>);
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts that the 'foo' and 'bar' properties of a bean are 1 and 2 respectively.</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>)
+	 * 		.isType(MyBean.<jk>class</jk>)
+	 * 		.extract(<js>"foo,bar"</js>)
+	 * 			.asJson().is(<js>"{foo:1,bar:2}"</js>);
 	 * </p>
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link BeanAssertion} object.  Never <jk>null</jk>.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link BeanAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final <V> BeanAssertion<V> assertBean(V value) {
 		return BeanAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against lists of Java beans.
+	 * Performs an assertion on a list of Java beans.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified list contains 3 beans with the specified values for the 'foo' property.</jc>
-	 * 	<jsm>assertBeanList</jsm>(<jv>myBeanList</jv>)
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts that a bean list has 3 entries with 'foo' property values of 'bar','baz','qux'.</jc>
+	 * 	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
+	 * 		.isSize(3)
 	 * 		.property(<js>"foo"</js>)
-	 * 		.is(<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>);
+	 * 			.is(<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>);
 	 * </p>
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link BeanListAssertion} object.  Never <jk>null</jk>.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link BeanListAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final <E> BeanListAssertion<E> assertBeanList(List<E> value) {
 		return BeanListAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against boolean objects.
+	 * Performs an assertion on a Boolean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the specified boolean object exists and is true.</jc>
-	 * 	<jsm>assertBoolean</jsm>(<jv>myBoolean</jv>).exists().isTrue();
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts that a Boolean is not null and TRUE.</jc>
+	 * 	<jsm>assertBoolean</jsm>(<jv>myBoolean</jv>)
+	 * 		.isTrue();
 	 * </p>
 	 *
-	 * @param value The boolean being wrapped.
-	 * @return A new {@link BooleanAssertion} object.  Never <jk>null</jk>.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link BooleanAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final BooleanAssertion assertBoolean(Boolean value) {
 		return BooleanAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against byte arrays.
+	 * Performs an assertion on a boolean array.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).asHex().is(<js>"666F6F"</js>);
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts that a Boolean array has size of 3 and all entries are TRUE.</jc>
+	 * 	<jsm>assertBooleanArray</jsm>(<jv>myBooleanArray</jv>)
+	 * 		.isSize(3)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> == <jk>true</jk>);
 	 * </p>
 	 *
-	 * @param value The byte array being wrapped.
-	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Boolean,boolean[]> assertBooleanArray(boolean[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a byte array.
+	 *
+	 * <p>
+	 * The distinction between {@link #assertByteArray} and {@link #assertBytes} is that the former returns an assertion
+	 * more tied to general byte arrays and the latter returns an assertion more tied to dealing with binary streams
+	 * that can be decoded or transformed into a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts that a byte array has size of 3 and all bytes are larger than 10.</jc>
+	 * 	<jsm>assertByteArray</jsm>(<jv>myByteArray</jv>)
+	 * 		.isSize(3)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 10);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Byte,byte[]> assertByteArray(byte[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a byte array.
+	 *
+	 * <p>
+	 * The distinction between {@link #assertByteArray} and {@link #assertBytes} is that the former returns an assertion
+	 * more tied to general byte arrays and the latter returns an assertion more tied to dealing with binary streams
+	 * that can be decoded or transformed into a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the byte array contains the string "foo".</jc>
+	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>)
+	 * 		.asHex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final ByteArrayAssertion assertBytes(byte[] value) {
 		return ByteArrayAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against the contents of input streams.
+	 * Performs an assertion on a char array.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates that the stream contains the string "foo".</jc>
-	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).asHex().is(<js>"666F6F"</js>);
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the char array contains the string "foo".</jc>
+	 * 	<jsm>assertCharArray</jsm>(<jv>myCharArray</jv>)
+	 * 		.asString().is(<js>"foo"</js>);
 	 * </p>
 	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
 	 * @param value
-	 * 	The input stream being wrapped.
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Character,char[]> assertCharArray(char[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a collection of POJOs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that a collection of strings has only one entry of 'foo'.</jc>
+	 * 	<jsm>assertCollection</jsm>(<jv>myCollectionOfStrings</jv>)
+	 * 		.isSize(1)
+	 * 		.contains(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * In general, use {@link #assertList(List)} if you're performing an assertion on a list since {@link ListAssertion}
+	 * provides more functionality than {@link CollectionAssertion}.
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link CollectionAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <E> CollectionAssertion<E> assertCollection(Collection<E> value) {
+		return CollectionAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a Comparable.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts a comparable is less than another comparable.</jc>
+	 * 	<jsm>assertComparable</jsm>(<jv>myComparable</jv>)
+	 * 		.isLt(<jv>anotherComparable</jv>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ComparableAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <T extends Comparable<T>> ComparableAssertion<T> assertComparable(T value) {
+		return ComparableAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a Date.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts the specified date is after the current date.</jc>
+	 * 	<jsm>assertDate</jsm>(<jv>myDate</jv>)
+	 * 		.isAfterNow();
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link DateAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final DateAssertion assertDate(Date value) {
+		return DateAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a double array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that a double array is at least size 100 and all values are greater than 1000.</jc>
+	 * 	<jsm>assertDoubleArray</jsm>(<jv>myDoubleArray</jv>)
+	 * 		.size().isGte(100f)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000f);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Double,double[]> assertDoubleArray(double[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a float array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that a float array is at least size 100 and all values are greater than 1000.</jc>
+	 * 	<jsm>assertFloatArray</jsm>(<jv>myFloatArray</jv>)
+	 * 		.size().isGte(100f)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000f);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Float,float[]> assertFloatArray(float[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on an int array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that a double array is at least size 100 and all values are greater than 1000.</jc>
+	 * 	<jsm>assertIntArray</jsm>(<jv>myIntArray</jv>)
+	 * 		.size().isGte(100)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Integer,int[]> assertIntArray(int[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on an Integer.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Assert that an HTTP response status code is 200 or 404.</jc>
+	 * 	<jsm>assertInteger</jsm>(<jv>httpReponse</jv>)
+	 * 		.isAny(200,404);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link IntegerAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final IntegerAssertion assertInteger(Integer value) {
+		return IntegerAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a list of POJOs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Assert that the first entry in a list is "{foo:'bar'}" when serialized to simplified JSON.</jc>
+	 * 	<jsm>assertList</jsm>(<jv>myList</jv>)
+	 * 		.item(0)
+	 * 			.asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ListAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <E> ListAssertion<E> assertList(List<E> value) {
+		return ListAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a Long.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Throw a BadReqest if an HTTP response length is greater than 100k.</jc>
+	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>)
+	 * 		.throwable(BadRequest.<jk>class</jk>)
+	 * 		.msg(<js>"Request is too large"</js>)
+	 * 		.isLt(100000);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link LongAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final LongAssertion assertLong(Long value) {
+		return LongAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a long array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that a long array is at least size 100 and all values are greater than 1000.</jc>
+	 * 	<jsm>assertLongArray</jsm>(<jv>myLongArray</jv>)
+	 * 		.size().isGte(100)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Long,long[]> assertLongArray(long[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a map.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Assert the specified map is a HashMap and contains the key "foo".</jc>
+	 * 	<jsm>assertMap</jsm>(<jv>myMap</jv>)
+	 * 		.isType(HashMap.<jk>class</jk>)
+	 * 		.containsKey(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link MapAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <K,V> MapAssertion<K,V> assertMap(Map<K,V> value) {
+		return MapAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a Java Object.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts the specified POJO is of type MyBean and is "{foo:'bar'}" </jc>
+	 * 	<jc>// when serialized to Simplified JSON.</jc>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.isType(MyBean.<jk>class</jk>)
+	 * 		.asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ObjectAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <T> ObjectAssertion<T> assertObject(T value) {
+		return ObjectAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on a Java Object wrapped in an Optional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts the specified POJO is of type MyBean and is "{foo:'bar'}" </jc>
+	 * 	<jc>// when serialized to Simplified JSON.</jc>
+	 * 	<jsm>assertOptional</jsm>(<jv>opt</jv>)
+	 * 		.isType(MyBean.<jk>class</jk>)
+	 * 		.asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link AnyAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <T> AnyAssertion<T> assertOptional(Optional<T> value) {
+		return AnyAssertion.create(value.orElse(null));
+	}
+
+	/**
+	 * Performs an assertion on the contents of a Reader.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts the contents of the Reader contains "foo".</jc>
+	 * 	<jsm>assertReader</jsm>(<jv>myReader</jv>)
+	 * 		.contains(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link StringAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Reader is automatically closed.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 * @throws IOException If thrown while reading contents from reader.
+	 */
+	public static final StringAssertion assertReader(Reader value) throws IOException {
+		return assertString(read(value));
+	}
+
+	/**
+	 * Performs an assertion on a short array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that a float array is at least size 10 and all values are greater than 100.</jc>
+	 * 	<jsm>assertShortArray</jsm>(<jv>myShortArray</jv>)
+	 * 		.size().isGte(10)
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 100);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final PrimitiveArrayAssertion<Short,short[]> assertShortArray(short[] value) {
+		return PrimitiveArrayAssertion.create(value);
+	}
+
+	/**
+	 * Performs an assertion on the contents of an input stream.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the stream contains the string "foo".</jc>
+	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>)
+	 * 		.asHex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br>Stream is automatically closed.
-	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 * @throws IOException If thrown while reading contents from stream.
 	 */
 	public static final ByteArrayAssertion assertStream(InputStream value) throws IOException {
@@ -181,256 +777,27 @@ public class Assertions {
 	}
 
 	/**
-	 * Used for assertion calls against {@link Collection} objects.
+	 * Performs an assertion on a String.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	List=&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>);
-	 * 	<jsm>assertCollection</jsm>(<jv>list</jv>).isNotEmpty();
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts a string is at least 100 characters long and contains "foo".</jc>
+	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
+	 * 		.size().isGte(100)
+	 * 		.contains(<js>"foo"</js>);
 	 * </p>
 	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link CollectionAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <E> CollectionAssertion<E> assertCollection(Collection<E> value) {
-		return CollectionAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against longs.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link StringAssertion} for supported operations on this type.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response length isn't too long.</jc>
-	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <T extends Comparable<T>> ComparableAssertion<T> assertComparable(T value) {
-		return ComparableAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against {@link Date} objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified date is after the current date.</jc>
-	 * 	<jsm>assertDate</jsm>(<jv>myDate</jv>).isAfterNow();
-	 * </p>
-	 *
-	 * @param value The date being wrapped.
-	 * @return A new {@link DateAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final DateAssertion assertDate(Date value) {
-		return DateAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against integers.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response status code is 200 or 404.</jc>
-	 * 	<jsm>assertInteger</jsm>(<jv>httpReponse<jv>).isAny(200,404);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link IntegerAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final IntegerAssertion assertInteger(Integer value) {
-		return IntegerAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against {@link Collection} objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	List=&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>);
-	 * 	<jsm>assertList</jsm>(<jv>list</jv>).item(0).is(<js>"foo"</js>);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ListAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <E> ListAssertion<E> assertList(List<E> value) {
-		return ListAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against longs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response length isn't too long.</jc>
-	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final LongAssertion assertLong(Long value) {
-		return LongAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against maps.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified POJO is the specified type and contains the specified key.</jc>
-	 * 	<jsm>assertMap</jsm>(<jv>myMap</jv>).isType(HashMap.<jk>class</jk>).containsKey(<js>"foo"</js>);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link MapAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <K,V> MapAssertion<K,V> assertMap(Map<K,V> value) {
-		return MapAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against arbitrary POJOs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertAny</jsm>(<jv>myPojo</jv>).asBean(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <T> AnyAssertion<T> assertAny(T value) {
-		return AnyAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against arbitrary POJOs.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <T> ObjectAssertion<T> assertObject(T value) {
-		return ObjectAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against {@link Optional Optionals}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertOptional</jsm>(<jv>opt</jv>).isType(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final <T> AnyAssertion<T> assertOptional(Optional<T> value) {
-		return AnyAssertion.create(value.orElse(null));
-	}
-
-	/**
-	 * Used for assertion calls against primitive int arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Integer,int[]> assertIntArray(int[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive short arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Short,short[]> assertShortArray(short[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive long arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Long,long[]> assertLongArray(long[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive float arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Float,float[]> assertFloatArray(float[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive double arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Double,double[]> assertDoubleArray(double[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive boolean arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Boolean,boolean[]> assertBooleanArray(boolean[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive char arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Character,char[]> assertCharArray(char[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against primitive byte arrays.
-	 *
-	 * @param value The object being wrapped.
-	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
-	 */
-	public static final PrimitiveArrayAssertion<Byte,byte[]> assertByteArray(byte[] value) {
-		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Used for assertion calls against string objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	<jsm>assertString</jsm>(<jv>httpBody</jv>).is(<js>"OK"</js>);
-	 * </p>
-	 *
-	 * @param value The string being wrapped.
-	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final StringAssertion assertString(Object value) {
 		if (value instanceof Optional)
@@ -439,125 +806,140 @@ public class Assertions {
 	}
 
 	/**
-	 * Used for assertion calls against string lists.
+	 * Performs an assertion on a list of Strings.
 	 *
-	 * @param value The string list being wrapped.
-	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jc>// Asserts a list of strings contain "foo,bar,baz" after trimming all and joining.</jc>
+	 * 	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
+	 * 		.isSize(3)
+	 * 		.trim()
+	 * 		.join(<js>","</js>)
+	 * 		.is(<js>"foo,bar,baz"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link StringListAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final StringListAssertion assertStringList(List<String> value) {
 		return StringListAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against the contents of readers.
+	 * Performs an assertion on a Throwable.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
-	 * 	<jsm>assertReader</jsm>(<jv>myReader</jv>).is(<js>"foo"</js>);
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts a throwable is a RuntimeException containing 'foobar' in the message.</jc>
+	 * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>)
+	 * 		.isExactType(RuntimeException.<jk>class</jk>)
+	 * 		.message().contains(<js>"foobar"</js>);
 	 * </p>
 	 *
-	 * @param value The reader being wrapped.
-	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
-	 * @throws IOException If thrown while reading contents from reader.
-	 */
-	public static final StringAssertion assertReader(Reader value) throws IOException {
-		return assertString(read(value));
-	}
-
-	/**
-	 * Used for assertion calls against throwable objects.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ThrowableAssertion} for supported operations on this type.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
-	 * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
-	 * </p>
-	 *
-	 * @param value The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.  Never <jk>null</jk>.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final <V extends Throwable> ThrowableAssertion<V> assertThrowable(V value) {
 		return ThrowableAssertion.create(value);
 	}
 
 	/**
-	 * Executes an arbitrary snippet of code and captures anything thrown from it.
+	 * Performs an assertion on a Version.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "Foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
-	 * 		.exists()
-	 * 		.isType(RuntimeException.<jk>class</jk>)
-	 * 		.contains(<js>"Foobar"</js>);
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts the specified major version is at least 2.</jc>
+	 * 	<jsm>assertVersion</jsm>(<jv>version</jv>)
+	 * 		.major().isGte(2);
 	 * </p>
 	 *
-	 * @param snippet The snippet of code to execute.
-	 * @return A new assertion object.  Never <jk>null</jk>.
-	 */
-	public static final ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
-		return assertThrown(Throwable.class, snippet);
-	}
-
-	/**
-	 * Executes an arbitrary snippet of code and captures anything thrown from it.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link VersionAssertion} for supported operations on this type.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "Foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
-	 * 		.exists()
-	 * 		.isType(RuntimeException.<jk>class</jk>)
-	 * 		.contains(<js>"Foobar"</js>);
-	 * </p>
-	 *
-	 * @param type The expected exception type.
-	 * @param snippet The snippet of code to execute.
-	 * @return A new assertion object.  Never <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T extends Throwable> ThrowableAssertion<Throwable> assertThrown(Class<T> type, Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Throwable e) {
-			if (type.isInstance(e))
-				return assertThrowable((T)e);
-			throw new BasicAssertionError(MSG_exceptionNotOfExpectedType, type, e.getClass());
-		}
-		return assertThrowable(null);
-	}
-
-	/**
-	 * Used for assertion calls against {@link Version} objects.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified major version is greater than 2.</jc>
-	 * 	<jsm>assertVersion</jsm>(<jv>version</jv>).major().isGreaterThan(2);
-	 * </p>
-	 *
-	 * @param value The version object being wrapped.
-	 * @return A new {@link VersionAssertion} object.  Never <jk>null</jk>.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final VersionAssertion assertVersion(Version value) {
 		return VersionAssertion.create(value);
 	}
 
 	/**
-	 * Used for assertion calls against {@link ZonedDateTime} objects.
+	 * Performs an assertion on a ZonedDateTime.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the specified date is after the current date.</jc>
-	 * 	<jsm>assertZonedDateTime</jsm>(<jv>byZdt</jv>).isAfterNow();
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts the specified date is after the current date.</jc>
+	 * 	<jsm>assertZonedDateTime</jsm>(<jv>myZonedDateTime</jv>)
+	 * 		.isAfterNow();
 	 * </p>
 	 *
-	 * @param value The date being wrapped.
-	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
+	 * <p>
+	 * See {@doc Assertions Assertions} for general assertion usage and {@link ZonedDateTimeAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public static final ZonedDateTimeAssertion assertZonedDateTime(ZonedDateTime value) {
 		return ZonedDateTimeAssertion.create(value);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Snippet assertions
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Executes an arbitrary snippet of code and captures anything thrown from it as a Throwable assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "foobar" in the message. </jc>
+	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
+	 * 		.isType(RuntimeException.<jk>class</jk>)
+	 * 		.message().contains(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param snippet The snippet of code to execute.
+	 * @return A new assertion object.  Never <jk>null</jk>.
+	 */
+	public static final ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (Throwable e) {
+			return assertThrowable(e);
+		}
+		return assertThrowable(null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -566,6 +948,16 @@ public class Assertions {
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jk>public</jk> String setFoo(String <jv>foo</jv>) {
+	 *		<jsm>assertArgNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>);
+	 *		...
+	 *	}
+	 * </p>
 	 *
 	 * @param <T> The argument data type.
 	 * @param name The argument name.
@@ -580,6 +972,16 @@ public class Assertions {
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
+	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> && ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
+	 *		...
+	 *	}
+	 * </p>
 	 *
 	 * @param expression The boolean expression to check.
 	 * @param msg The exception message.
