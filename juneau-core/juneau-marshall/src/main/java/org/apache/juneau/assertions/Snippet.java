@@ -24,7 +24,7 @@ package org.apache.juneau.assertions;
 public interface Snippet {
 
 	/**
-	 * Run.
+	 * Run arbitrary code and optionally throw an exception.
 	 *
 	 * @throws Throwable
 	 */

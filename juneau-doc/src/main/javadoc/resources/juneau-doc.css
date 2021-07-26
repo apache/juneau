@@ -533,6 +533,14 @@ div.severe {
 	background-color:#FD8;
 }
 
+yellow {
+	color:yellow;
+}
+
+red {
+	color:red;
+}
+
 review {
 	display: block;
 	background-color: #ffdf00;
@@ -542,6 +550,7 @@ review {
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 	margin: 20px 0px;
 	font-weight: bold;
+	width:800px !important;
 }
 
 reviewed {
@@ -553,4 +562,5 @@ reviewed {
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 	margin: 20px 0px;
 	font-weight: bold;
+	width:800px !important;
 }

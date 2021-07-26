@@ -17,6 +17,7 @@ import static org.apache.juneau.doc.internal.Console.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Utility for generating the overview.html page.
@@ -41,7 +42,7 @@ public class DocGenerator {
 	;
 
 	static String juneauVersion = System.getProperty("juneauVersion");
-	static String juneauTagPattern = juneauVersion.replace(".", "\\.") + "\\-\\w+";
+	static String juneauTagPattern = juneauVersion.replace(".", "\\.");
 
 	/**
 	 * Entry point.
@@ -261,8 +262,10 @@ public class DocGenerator {
 				title = s.substring(0, i);
 				if (title.startsWith("{")) {
 					tags = title.substring(1, title.indexOf('}'));
-					if (juneauTagPattern != null)
-						tags = tags.replaceAll(juneauTagPattern, "<b>$0</b>");
+					tags = Arrays.stream(tags.split(";"))
+						.map(x -> x.trim().replaceAll(juneauTagPattern, "<b>$0</b>").replaceAll("\\:\s+", ": "))
+						.map(x -> (x.toLowerCase().contains("todo") || x.toLowerCase().contains("review")) ? "<b><red>"+x+"</red></b>" : x)
+						.collect(Collectors.joining(", "));
 					s = s.substring(i+1);
 					i = s.indexOf("\n");
 					title = s.substring(0, i);
