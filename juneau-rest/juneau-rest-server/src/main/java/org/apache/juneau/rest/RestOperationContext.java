@@ -196,8 +196,8 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * The subclass must have a public constructor that takes in any of the following arguments:
 	 * <ul>
 	 * 	<li>{@link RestOperationContextBuilder} - The builder for the object.
-	 * 	<li>Any beans found in the specified {@link #REST_beanStore bean store}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #REST_beanStore bean store}.
+	 * 	<li>Any beans found in the specified {@link RestContext#REST_beanStore bean store}.
+	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link RestContext#REST_beanStore bean store}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -789,7 +789,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_converters} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_converters} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#converters(Class...)}/{@link RestContextBuilder#converters(RestConverter...)}
 	 * 			<li>{@link RestOp#converters()}.
@@ -812,7 +812,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The result converters for this REST resource method.
 	 * @throws Exception If result converters could not be instantiated.
-	 * @seealso #REST_converters
+	 * @see #REST_converters
 	 */
 	protected RestConverterList createConverters(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -841,7 +841,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_guards} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_guards} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#guards(Class...)}/{@link RestContextBuilder#guards(RestGuard...)}
 	 * 			<li>{@link RestOp#guards()}.
@@ -864,7 +864,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The guards for this REST resource method.
 	 * @throws Exception If guards could not be instantiated.
-	 * @seealso #REST_guards
+	 * @see #REST_guards
 	 */
 	protected RestGuardList createGuards(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -925,7 +925,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The method matchers for this REST resource method.
 	 * @throws Exception If method matchers could not be instantiated.
-	 * @seealso #RESTMETHOD_matchers
+	 * @see #RESTOP_matchers
 	 */
 	protected RestMatcherList createMatchers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -957,7 +957,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_encoders} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_encoders} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#encoders(Class...)}/{@link RestContextBuilder#encoders(Encoder...)}
 	 * 			<li>{@link RestOp#encoders()}.
@@ -980,7 +980,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The encoders for this REST resource method.
 	 * @throws Exception If encoders could not be instantiated.
-	 * @seealso #REST_encoders
+	 * @see #REST_encoders
 	 */
 	protected EncoderGroup createEncoders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1016,7 +1016,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_serializers} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_serializers} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Serializer...)}
 	 * 			<li>{@link Rest#serializers()}.
@@ -1037,7 +1037,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
-	 * @seealso #REST_serializers
+	 * @see #REST_serializers
 	 */
 	protected SerializerGroup createSerializers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1077,7 +1077,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * <p>
 	 * Instantiates based on the following logic:
 	 * <ul>
-	 * 	<li>Looks for {@link #REST_parsers} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_parsers} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Parser...)}
 	 * 			<li>{@link Rest#parsers()}.
@@ -1098,7 +1098,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
-	 * @seealso #REST_parsers
+	 * @see #REST_parsers
 	 */
 	protected ParserGroup createParsers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1139,7 +1139,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-	 * 	<li>Looks for {@link #REST_partSerializer} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_partSerializer} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}/{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
 	 * 			<li>{@link Rest#partSerializer()}.
@@ -1160,7 +1160,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
-	 * @seealso #REST_partSerializer
+	 * @see #REST_partSerializer
 	 */
 	protected HttpPartSerializer createPartSerializer(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1197,7 +1197,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Instantiates based on the following logic:
 	 * <ul>
 	 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
-	 * 	<li>Looks for {@link #REST_partParser} value set via any of the following:
+	 * 	<li>Looks for {@link RestContext#REST_partParser} value set via any of the following:
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#partParser(Class)}/{@link RestContextBuilder#partParser(HttpPartParser)}
 	 * 			<li>{@link Rest#partParser()}.
@@ -1218,7 +1218,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
-	 * @seealso #REST_partParser
+	 * @see #REST_partParser
 	 */
 	protected HttpPartParser createPartParser(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1256,7 +1256,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
-	 * @seealso #RESTMETHOD_paths
+	 * @see #RESTOP_path
 	 */
 	protected UrlPathMatcherList createPathMatchers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 

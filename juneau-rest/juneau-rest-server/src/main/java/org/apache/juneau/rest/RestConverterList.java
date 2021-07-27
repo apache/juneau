@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link RestConverter} objects.
+ * A list of {@link RestConverter} objects.
  */
 public class RestConverterList extends AList<RestConverter> {
 

@@ -199,9 +199,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Specifies the default implementation class if not specified via {@link #REST_contextClass}.
+	 * Specifies the default implementation class if not specified via {@link RestContext#REST_contextClass}.
 	 *
-	 * @return The default implementation class if not specified via {@link #REST_contextClass}.
+	 * @return The default implementation class if not specified via {@link RestContext#REST_contextClass}.
 	 */
 	protected Class<? extends RestContext> getDefaultImplClass() {
 		return RestContext.class;
@@ -821,7 +821,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Default debug mode.
 	 *
 	 * <p>
-	 * The default value for the {@link #REST_debug} setting.
+	 * The default value for the {@link RestContext#REST_debug} setting.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
@@ -1413,7 +1413,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder parsers(Object...values) {
+	public RestContextBuilder parsers(Parser...values) {
 		return prependTo(REST_parsers, values);
 	}
 
@@ -1431,7 +1431,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder parsersReplace(Object...values) {
+	public RestContextBuilder parsersReplace(Parser...values) {
 		return set(REST_parsers, values);
 	}
 
@@ -1845,7 +1845,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder serializers(Object...values) {
+	public RestContextBuilder serializers(Serializer...values) {
 		return prependTo(REST_serializers, values);
 	}
 
@@ -1863,7 +1863,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder serializersReplace(Object...values) {
+	public RestContextBuilder serializersReplace(Serializer...values) {
 		return set(REST_serializers, values);
 	}
 

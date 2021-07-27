@@ -17,7 +17,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link NamedAttribute} objects.
+ * A list of {@link NamedAttribute} objects.
  */
 public class NamedAttributeList extends AList<NamedAttribute> {
 

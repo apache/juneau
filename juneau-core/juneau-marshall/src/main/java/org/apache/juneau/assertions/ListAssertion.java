@@ -32,7 +32,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
- * 		<li class='jm'>{@link FluentListAssertion#has(E...)}
+ * 		<li class='jm'>{@link FluentListAssertion#has(Object...)}
  * 		<li class='jm'>{@link FluentListAssertion#each(Predicate...)}
  * 		<li class='jm'>{@link FluentCollectionAssertion#isEmpty()}
  * 		<li class='jm'>{@link FluentCollectionAssertion#isNotEmpty()}

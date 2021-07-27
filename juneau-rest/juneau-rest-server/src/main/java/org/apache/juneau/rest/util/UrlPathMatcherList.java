@@ -15,7 +15,7 @@ package org.apache.juneau.rest.util;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link UrlPathMatcher} objects.
+ * A list of {@link UrlPathMatcher} objects.
  */
 public class UrlPathMatcherList extends AList<UrlPathMatcher> {
 

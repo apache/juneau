@@ -248,27 +248,21 @@
 						<taglets>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.PropertyTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.FragmentTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.SourceTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.ReviewTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.ReviewedTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 						</taglets>
 						<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>

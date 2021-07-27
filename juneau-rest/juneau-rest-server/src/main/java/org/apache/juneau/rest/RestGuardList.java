@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link RestGuard} objects.
+ * A list of {@link RestGuard} objects.
  */
 public class RestGuardList extends AList<RestGuard> {
 

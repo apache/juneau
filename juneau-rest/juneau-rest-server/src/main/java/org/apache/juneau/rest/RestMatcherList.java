@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link RestMatcher} objects.
+ * A list of {@link RestMatcher} objects.
  */
 public class RestMatcherList extends AList<RestMatcher> {
 

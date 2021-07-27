@@ -58,8 +58,8 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentMapAssertion#value(Object)}
- * 		<li class='jm'>{@link FluentMapAssertion#values(K...)}
- * 		<li class='jm'>{@link FluentMapAssertion#extract(K...)}
+ * 		<li class='jm'>{@link FluentMapAssertion#values(Object...)}
+ * 		<li class='jm'>{@link FluentMapAssertion#extract(Object...)}
  * 		<li class='jm'>{@link FluentMapAssertion#size()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}

@@ -323,7 +323,7 @@ public class AssertionPredicates {
 	 * 	<br>Supports {@link MessageFormat}-style arguments.
 	 * @param args
 	 * 	Optional message arguments.
-	 * 	<br>Can contain {@link #VALUE} to specify the value itself as an argument.
+	 * 	<br>Can contain {@code #VALUE} to specify the value itself as an argument.
 	 * 	<br>Can contain {@link Function functions} to apply to the tested value.
 	 * @return A new predicate.
 	 */

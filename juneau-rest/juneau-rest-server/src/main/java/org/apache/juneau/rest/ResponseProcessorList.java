@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import org.apache.juneau.collections.*;
 
 /**
- * A list of {@Link ResponseProcessor} objects.
+ * A list of {@link ResponseProcessor} objects.
  */
 public class ResponseProcessorList extends AList<ResponseProcessor> {
 
