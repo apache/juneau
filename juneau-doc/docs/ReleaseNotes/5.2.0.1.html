@@ -25,33 +25,33 @@
 		Any line that begins with whitespace is interpreted as a continuation of the previous line.
 	<li>Support for <js>'\uXXXX'</js> character sequences in config files.
 	<li>Fixed issue in {@link oaj.xml.XmlSerializer} where <js>'\r'</js> and <js>'\n'</js> characters were not being handled per XML specs.
-	<li>New methods on {@link oaj.ObjectList}:  
+	<li>New methods on {@del oaj.ObjectList}:  
 		<ul>
-			<li><dc>ObjectList.getAt(Class,String)</dc>
-			<li>{@link oaj.ObjectList#putAt(String,Object)}
-			<li>{@link oaj.ObjectList#postAt(String,Object)}
-			<li>{@link oaj.ObjectList#deleteAt(String)}
+			<li>{@del ObjectList#getAt(Class,String)}
+			<li>{@del oaj.ObjectList#putAt(String,Object)}
+			<li>{@del oaj.ObjectList#postAt(String,Object)}
+			<li>{@del oaj.ObjectList#deleteAt(String)}
 		</ul>
-	<li>New methods on {@link oaj.ObjectMap}:  
+	<li>New methods on {@del oaj.ObjectMap}:  
 		<ul>
-			<li><dc>ObjectMap.getAt(Class,String)</dc>
-			<li>{@link oaj.ObjectMap#putAt(String,Object)}
-			<li>{@link oaj.ObjectMap#postAt(String,Object)}
-			<li>{@link oaj.ObjectMap#deleteAt(String)}
+			<li>{@del ObjectMap#getAt(Class,String)}
+			<li>{@del oaj.ObjectMap#putAt(String,Object)}
+			<li>{@del oaj.ObjectMap#postAt(String,Object)}
+			<li>{@del oaj.ObjectMap#deleteAt(String)}
 		</ul>
-	<li><dc>@ThreadSafe</dc> annotation.
+	<li>{@del @ThreadSafe} annotation.
 	<li>New <c>ClassFilter</c> class.
-	<li><dc>ConfigFile.getResolving(StringVarResolver,boolean)</dc> method.
-	<li><dc>ConfigFile.getStringVar()</dc> method.
-	<li>New <dc>ParserContext.PARSER_trimStrings</dc> property.
-	<li>New <dc>SerializerContext.SERIALIZER_trimStrings</dc> property.
-	<li><dc>Args.getStringVar()}</dc> method.
+	<li>{@del ConfigFile#getResolving(StringVarResolver,boolean)} method.
+	<li>{@del ConfigFile#getStringVar()} method.
+	<li>New {@del ParserContext#PARSER_trimStrings} property.
+	<li>New {@del SerializerContext#SERIALIZER_trimStrings} property.
+	<li>{@del Args#getStringVar()} method.
 	<li>New {@link oaj.utils.ManifestFile} class
-	<li>New {@link oaj.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
-	<li>New <dc>StringMapVar</dc> class.
-	<li>New <dc>StringVars</dc> class with reusable common <dc>StringVar</dc> instances.
-	<li>New {@link oaj.internal.JuneauLogger} class.
-	<li>Default value for <dc>XmlParserContext.XML_trimWhitespace</dc> changed to <jk>true</jk>.			
+	<li>New {@del oaj.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
+	<li>New {@del StringMapVar} class.
+	<li>New {@del StringVars} class with reusable common {@del StringVar} instances.
+	<li>New {@del oaj.internal.JuneauLogger} class.
+	<li>Default value for {@del XmlParserContext#XML_trimWhitespace} changed to <jk>true</jk>.			
 </ul>
 
 <h5 class='topic w800'>Server</h5>

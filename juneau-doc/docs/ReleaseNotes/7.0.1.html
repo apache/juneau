@@ -41,7 +41,7 @@
 			<li>{@link oaj.parser.ParserGroup#create()}
 			<li>{@link oaj.encoders.EncoderGroup#create()}
 			<li>{@link oajrc.RestClient#create()}
-			<li><dc>ConfigFile.create()</dc>
+			<li>{@del ConfigFile#create()}
 		</ul>
 	<li>
 		The order of the parameters in {@link oaj.serializer.SerializerSession#serialize(Object,Object)}
@@ -63,8 +63,8 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		New <dc>@RestResource(maxInput)</dc> and 
-		{@link oajr.annotation.RestMethod#maxInput() @RestMethod(maxInput)} for alleviating
+		New {@del @RestResource(maxInput)} and 
+		{@del oajr.annotation.RestMethod#maxInput() @RestMethod(maxInput)} for alleviating
 		potential DoS attacks.
 </ul>
 
@@ -134,7 +134,7 @@
 			<li>New methods on {@link oaj.microservice.Microservice}
 				<ul>
 					<li>{@link oaj.microservice.Microservice#startConsole() startConsole()}
-					<li><dc>createConsoleCommands()</dc>
+					<li>{@del createConsoleCommands()}
 					<li>{@link oaj.microservice.Microservice#getConsoleReader() getConsoleReader()}
 					<li>{@link oaj.microservice.Microservice#getConsoleWriter() getConsoleWriter()}
 				</ul>	

@@ -27,11 +27,11 @@
 		</ul>
 	</li>
 	<li>
-		New <dc>XmlFormat.CONTENT</dc> enum value.<br>
+		New {@del XmlFormat#CONTENT} enum value.<br>
 		Allows bean properties to be persisted as XML element text.
 	</li>
 	<li>
-		New <dc>XmlContentHandler</dc> class and <dc>@Xml.contentHandler</dc> annotation.<br>
+		New {@del XmlContentHandler} class and {@del @Xml#contentHandler} annotation.<br>
 		Allows customized serialization and parsing of beans to XML element text.<br>
 		Added for support of ATOM text content that must support both plain text and embedded XHTML.
 	</li>
@@ -42,13 +42,13 @@
 		Removed <c><ja>@Xml</ja>.valAttr</c> annotation since it's now redundant with <c><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</c>.
 		</li>
 		<li>
-		Fixed timezone bug in {@link oaj.transforms.CalendarSwap}.
+		Fixed timezone bug in {@del oaj.transforms.CalendarSwap}.
 	</li>
 		<li>
 		Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
 	</li>
 	<li>
-		Fixed bug where lists returned by {@link oaj.ObjectMap#getObjectList(String)} were not updatable.
+		Fixed bug where lists returned by {@del oaj.ObjectMap#getObjectList(String)} were not updatable.
 	</li>
 	<li>
 		Eliminated old RDF/XML serializer.

@@ -49,20 +49,20 @@
 			and auto-generated Swagger documentation:
 		<ul class='doctree'>
 			<li class='ja'>{@link oaj.http.annotation.Contact}
-			<li class='ja'><dc>ExternalDocs</dc>
-			<li class='ja'><dc>Items</dc>
+			<li class='ja'>{@del ExternalDocs}
+			<li class='ja'>{@del Items}
 			<li class='ja'>{@link oaj.http.annotation.License}
-			<li class='ja'><dc>Schema</dc>
-			<li class='ja'><dc>SubItems</dc>
-			<li class='ja'>{@link oaj.http.annotation.Tag}
+			<li class='ja'>{@del Schema}
+			<li class='ja'>{@del SubItems}
+			<li class='ja'>{@del oaj.http.annotation.Tag}
 		</ul>
 		<br>Additionally, the <ja>@Remoteable</ja> annotation has been split into the following two annotations:
 		<ul class='doctree'>
-			<li class='ja'>{@link oaj.remote.RemoteInterface} 
+			<li class='ja'>{@del oaj.remote.RemoteInterface} 
 				- Used for remote proxy interfaces served up through 
-				<dc>RemoteInterfaceServlet</dc> or REST <js>"PROXY"</js> methods.
+				{@del RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
 				<br>Defaults to <js>"POST"</js> with method signatures as paths.
-			<li class='ja'><dc>RemoteResource</dc> 
+			<li class='ja'>{@del RemoteResource} 
 				- Used for 3rd-party REST interfaces.
 				<br>Defaults to <js>"GET"</js> with standardized naming conventions for paths.
 		</ul>
@@ -78,13 +78,13 @@
 	<li>
 		Support for POJO examples:
 		<ul class='doctree'>
-			<li class='jf'>{@link oaj.BeanContext#BEAN_examples}
+			<li class='jf'>{@del BeanContext#BEAN_examples}
 			<li class='ja'>{@link oaj.annotation.Example}
 		</ul>
 	<li>
 		Fixed bug where parsers could report the wrong line number when an error occurred.
 	<li>
-		A runtime exception is now thrown if you define a <dc>@BeanProperty(name)</dc> but forget to
+		A runtime exception is now thrown if you define a {@del @BeanProperty(name)} but forget to
 		add it to your <c><ja>@Bean</ja>(properties)</c> annotation.
 	<li>
 		<c><ja>@Html</ja>(asXml)</c> and <c><ja>@Html</ja>(asPlainText)</c> replaced with
@@ -102,8 +102,8 @@
 	<li>
 		Added support for auto-detection of fluent-style setters:
 		<ul class='doctree'>
-			<li class='jf'>{@link oaj.BeanContext#BEAN_fluentSetters}
-			<li class='ja'>{@link oaj.annotation.Bean#fluentSetters()}
+			<li class='jf'>{@del oaj.BeanContext#BEAN_fluentSetters}
+			<li class='ja'>{@del oaj.annotation.Bean#fluentSetters()}
 		</ul>
 	<li>
 		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
@@ -138,7 +138,7 @@
 		New property {@link oaj.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
 		using their name or the <c>toString()</c> method.
 	<li>
-		New property {@link oaj.BeanContext#BEAN_examples} for defining examples of POJOs.
+		New property {@del BeanContext#BEAN_examples} for defining examples of POJOs.
 	<li>
 		New {@link oaj.annotation.Example @Example} annotation for defining examples of POJOs.
 		<br>Used heavily in JSON-Schema support.
@@ -148,14 +148,14 @@
 	<li>
 		Significant improvements to JSON-Schema serialization support.
 		<ul>
-			<li>New <dc>@JsonSchema</dc> annotation.
+			<li>New {@del @JsonSchema} annotation.
 		</ul>
 	<li>
 		Fixed <c>NullPointerException</c> when serializing beans with a dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>)
 		which returns a <jk>null</jk> value.
 	<li>
 		New option for dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>) using a method that returns a collection of extra keys.
-		<br>See new options #4 on {@link oaj.annotation.BeanProperty#name()}
+		<br>See new options #4 on {@del oaj.annotation.BeanProperty#name()}
 	<li>
 		New formats for the {@link oaj.html.annotation.Html#format() @Html(format)} annotation:
 		<ul class='doctree'>
@@ -167,19 +167,19 @@
 		<br>For example, the accept media type on <c>JsonSerializer.Simple</c> is <js>"application/json+simple,application/json;q=0.9"</js>.
 		<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
 	<li>
-		New methods for creating unmodifiable {@link oaj.ObjectMap ObjectMaps} and {@link oaj.ObjectList ObjectLists}.
+		New methods for creating unmodifiable {@del oaj.ObjectMap ObjectMaps} and {@del oaj.ObjectList ObjectLists}.
 		<ul class='doctree'>
-			<li class='jc'>{@link oaj.ObjectMap}
+			<li class='jc'>{@del oaj.ObjectMap}
 			<ul>
-				<li class='jm'>{@link oaj.ObjectMap#isUnmodifiable() isUnmodifable()}
-				<li class='jm'>{@link oaj.ObjectMap#unmodifiable() unmodifiable()}
-				<li class='jm'>{@link oaj.ObjectMap#modifiable() modifiable()}
+				<li class='jm'>{@del oaj.ObjectMap#isUnmodifiable() isUnmodifable()}
+				<li class='jm'>{@del oaj.ObjectMap#unmodifiable() unmodifiable()}
+				<li class='jm'>{@del oaj.ObjectMap#modifiable() modifiable()}
 			</ul>
-			<li class='jp'>{@link oaj.ObjectList}
+			<li class='jp'>{@del oaj.ObjectList}
 			<ul>
-				<li class='jm'>{@link oaj.ObjectList#isUnmodifiable() isUnmodifable()}
-				<li class='jm'>{@link oaj.ObjectList#unmodifiable() unmodifiable()}
-				<li class='jm'>{@link oaj.ObjectList#modifiable() modifiable()}
+				<li class='jm'>{@del oaj.ObjectList#isUnmodifiable() isUnmodifable()}
+				<li class='jm'>{@del oaj.ObjectList#unmodifiable() unmodifiable()}
+				<li class='jm'>{@del oaj.ObjectList#modifiable() modifiable()}
 			</ul>
 		</ul>
 	<li>
@@ -246,7 +246,7 @@
 <h5 class='topic w800'>juneau-dto</h5>
 <ul class='spaced-list'>
 	<li>
-		Fixed bug where Swagger {@link oaj.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
+		Fixed bug where Swagger {@del oaj.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
 		instead of a list of strings.
 	<li>
 		Boolean attributes are now handled correctly for HTML5.
@@ -258,16 +258,16 @@
 	<li>
 		Auto-generated {@doc RestSwagger Swagger UI}.
 	<li>
-		Simplified <dc>@RestResource(swagger)</dc>
-		and {@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
+		Simplified {@del @RestResource(swagger)}
+		and {@del oajr.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
 	<li>
 		Fixed bug in <c>UriResolver</c> when request path info had special characters.
 	<li>
 		Fixed bug where incorrect media type was being set on responses (e.g. <c>text/html+schema</c> instead of <c>text/html</c> for schema documents).
 	<li>
-		The <c>RemoteableServlet</c> class has been moved and renamed to <dc>RemoteInterfaceServlet</dc>.
+		The <c>RemoteableServlet</c> class has been moved and renamed to {@del RemoteInterfaceServlet}.
 	<li>
-		<dc>RemoteInterfaceServlet</dc> now provides a form page for invoking remote interface methods in a browser.
+		{@del RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
 	<li>
 		Newlines were being stripped from <c><ja>@HtmlDoc</ja>(script)</c> when serialized which could cause script lines to become commented out.
 	<li>
@@ -292,86 +292,86 @@
 			<ul>
 				<li class='jc'>{@link oajr.helper.BeanDescription}
 				<li class='jc'>{@link oajr.helper.ChildResourceDescriptions}
-				<li class='jc'><dc>ReaderResource</dc>
-				<li class='jc'><dc>ReaderResourceBuilder</dc>
+				<li class='jc'>{@del ReaderResource}
+				<li class='jc'>{@del ReaderResourceBuilder}
 				<li class='jc'>{@link oajr.helper.SeeOtherRoot}
 				<li class='jc'>{@link oajr.helper.ResourceDescription}
-				<li class='jc'><dc>StreamResource</dc>
-				<li class='jc'><dc>StreamResourceBuilder</dc>
+				<li class='jc'>{@del StreamResource}
+				<li class='jc'>{@del StreamResourceBuilder}
 			</ul>
 		</ul>
 	<li>
 		Predefined HTTP responses.
 		<ul class='doctree'>
-			<li class='jp'>{@link oajr.response}
+			<li class='jp'>{@del oajr.response}
 			<ul>
-				<li class='jc'>{@link oajr.response.Accepted}
-				<li class='jc'>{@link oajr.response.AlreadyReported}
-				<li class='jc'>{@link oajr.response.Continue}
-				<li class='jc'>{@link oajr.response.Created}
-				<li class='jc'>{@link oajr.response.EarlyHints}
-				<li class='jc'>{@link oajr.response.Found}
-				<li class='jc'>{@link oajr.response.IMUsed}
-				<li class='jc'>{@link oajr.response.MovedPermanently}
-				<li class='jc'>{@link oajr.response.MultipleChoices}
-				<li class='jc'>{@link oajr.response.MultiStatus}
-				<li class='jc'>{@link oajr.response.NoContent}
-				<li class='jc'>{@link oajr.response.NonAuthoritiveInformation}
-				<li class='jc'>{@link oajr.response.NotModified}
-				<li class='jc'>{@link oajr.response.Ok}
-				<li class='jc'>{@link oajr.response.PartialContent}
-				<li class='jc'>{@link oajr.response.PermanentRedirect}
-				<li class='jc'>{@link oajr.response.Processing}
-				<li class='jc'>{@link oajr.response.ResetContent}
-				<li class='jc'>{@link oajr.response.SeeOther}
-				<li class='jc'>{@link oajr.response.SwitchingProtocols}
-				<li class='jc'>{@link oajr.response.TemporaryRedirect}
-				<li class='jc'>{@link oajr.response.UseProxy}			
+				<li class='jc'>{@del oajr.response.Accepted}
+				<li class='jc'>{@del oajr.response.AlreadyReported}
+				<li class='jc'>{@del oajr.response.Continue}
+				<li class='jc'>{@del oajr.response.Created}
+				<li class='jc'>{@del oajr.response.EarlyHints}
+				<li class='jc'>{@del oajr.response.Found}
+				<li class='jc'>{@del oajr.response.IMUsed}
+				<li class='jc'>{@del oajr.response.MovedPermanently}
+				<li class='jc'>{@del oajr.response.MultipleChoices}
+				<li class='jc'>{@del oajr.response.MultiStatus}
+				<li class='jc'>{@del oajr.response.NoContent}
+				<li class='jc'>{@del oajr.response.NonAuthoritiveInformation}
+				<li class='jc'>{@del oajr.response.NotModified}
+				<li class='jc'>{@del oajr.response.Ok}
+				<li class='jc'>{@del oajr.response.PartialContent}
+				<li class='jc'>{@del oajr.response.PermanentRedirect}
+				<li class='jc'>{@del oajr.response.Processing}
+				<li class='jc'>{@del oajr.response.ResetContent}
+				<li class='jc'>{@del oajr.response.SeeOther}
+				<li class='jc'>{@del oajr.response.SwitchingProtocols}
+				<li class='jc'>{@del oajr.response.TemporaryRedirect}
+				<li class='jc'>{@del oajr.response.UseProxy}			
 			</ul>
 		</ul>
 	<li>
 		Predefined HTTP error throwables.
 		<br>When added to REST Java methods, reflected in generated Swagger documentation.
 		<ul class='doctree'>
-			<li class='jp'>{@link oajr.exception}
+			<li class='jp'>{@del oajr.exception}
 			<ul>
-				<li class='jc'>{@link oajr.exception.BadRequest}
-				<li class='jc'>{@link oajr.exception.Conflict}
-				<li class='jc'>{@link oajr.exception.ExpectationFailed}
-				<li class='jc'>{@link oajr.exception.FailedDependency}
-				<li class='jc'>{@link oajr.exception.Forbidden}
-				<li class='jc'>{@link oajr.exception.Gone}
-				<li class='jc'>{@link oajr.exception.HttpVersionNotSupported}
-				<li class='jc'>{@link oajr.exception.InsufficientStorage}
-				<li class='jc'>{@link oajr.exception.InternalServerError}
-				<li class='jc'>{@link oajr.exception.LengthRequired}
-				<li class='jc'>{@link oajr.exception.Locked}
-				<li class='jc'>{@link oajr.exception.LoopDetected}
-				<li class='jc'>{@link oajr.exception.MethodNotAllowed}
-				<li class='jc'>{@link oajr.exception.MisdirectedRequest}
-				<li class='jc'>{@link oajr.exception.NetworkAuthenticationRequired}
-				<li class='jc'>{@link oajr.exception.NotAcceptable}
-				<li class='jc'>{@link oajr.exception.NotExtended}
-				<li class='jc'>{@link oajr.exception.NotFound}
-				<li class='jc'>{@link oajr.exception.NotImplemented}
-				<li class='jc'>{@link oajr.exception.PayloadTooLarge}
-				<li class='jc'>{@link oajr.exception.PreconditionFailed}
-				<li class='jc'>{@link oajr.exception.PreconditionRequired}
-				<li class='jc'>{@link oajr.exception.RangeNotSatisfiable}
-				<li class='jc'>{@link oajr.exception.RequestHeaderFieldsTooLarge}
-				<li class='jc'>{@link oajr.exception.ServiceUnavailable}
-				<li class='jc'>{@link oajr.exception.TooManyRequests}
-				<li class='jc'>{@link oajr.exception.Unauthorized}
-				<li class='jc'>{@link oajr.exception.UnavailableForLegalReasons}
-				<li class='jc'>{@link oajr.exception.UnprocessableEntity}
-				<li class='jc'>{@link oajr.exception.UnsupportedMediaType}
-				<li class='jc'>{@link oajr.exception.UpgradeRequired}
-				<li class='jc'>{@link oajr.exception.UriTooLong}
-				<li class='jc'>{@link oajr.exception.VariantAlsoNegotiates}
+				<li class='jc'>{@del oajr.exception.BadRequest}
+				<li class='jc'>{@del oajr.exception.Conflict}
+				<li class='jc'>{@del oajr.exception.ExpectationFailed}
+				<li class='jc'>{@del oajr.exception.FailedDependency}
+				<li class='jc'>{@del oajr.exception.Forbidden}
+				<li class='jc'>{@del oajr.exception.Gone}
+				<li class='jc'>{@del oajr.exception.HttpVersionNotSupported}
+				<li class='jc'>{@del oajr.exception.InsufficientStorage}
+				<li class='jc'>{@del oajr.exception.InternalServerError}
+				<li class='jc'>{@del oajr.exception.LengthRequired}
+				<li class='jc'>{@del oajr.exception.Locked}
+				<li class='jc'>{@del oajr.exception.LoopDetected}
+				<li class='jc'>{@del oajr.exception.MethodNotAllowed}
+				<li class='jc'>{@del oajr.exception.MisdirectedRequest}
+				<li class='jc'>{@del oajr.exception.NetworkAuthenticationRequired}
+				<li class='jc'>{@del oajr.exception.NotAcceptable}
+				<li class='jc'>{@del oajr.exception.NotExtended}
+				<li class='jc'>{@del oajr.exception.NotFound}
+				<li class='jc'>{@del oajr.exception.NotImplemented}
+				<li class='jc'>{@del oajr.exception.PayloadTooLarge}
+				<li class='jc'>{@del oajr.exception.PreconditionFailed}
+				<li class='jc'>{@del oajr.exception.PreconditionRequired}
+				<li class='jc'>{@del oajr.exception.RangeNotSatisfiable}
+				<li class='jc'>{@del oajr.exception.RequestHeaderFieldsTooLarge}
+				<li class='jc'>{@del oajr.exception.ServiceUnavailable}
+				<li class='jc'>{@del oajr.exception.TooManyRequests}
+				<li class='jc'>{@del oajr.exception.Unauthorized}
+				<li class='jc'>{@del oajr.exception.UnavailableForLegalReasons}
+				<li class='jc'>{@del oajr.exception.UnprocessableEntity}
+				<li class='jc'>{@del oajr.exception.UnsupportedMediaType}
+				<li class='jc'>{@del oajr.exception.UpgradeRequired}
+				<li class='jc'>{@del oajr.exception.UriTooLong}
+				<li class='jc'>{@del oajr.exception.VariantAlsoNegotiates}
 			</ul>
 		</ul>	
 	<li>
-		The {@link oajr.annotation.HtmlDoc#nav() @HtmlDoc(nav)} and {@link oajr.annotation.HtmlDoc#navlinks() @HtmlDoc(navlinks)}
+		The {@del oajr.annotation.HtmlDoc#nav() @HtmlDoc(nav)} and {@del oajr.annotation.HtmlDoc#navlinks() @HtmlDoc(navlinks)}
 		can now both be used on the same annotation.
 		<br>The contents of <c>nav()</c> are free-form HTML that gets rendered immediately after the navigation links.
 	<li>
@@ -396,14 +396,14 @@
 		<br>It should be noted that you cannot use the <c>$F</c> variable to retrieve localized versions of files (since you're not within
 		the scope of a client request.
 	<li>
-		The <dc>RestResource.nowrap()</dc> annotation has been changed to a string with a default value of <js>"true"</js>.
+		The {@del RestResource#nowrap()} annotation has been changed to a string with a default value of <js>"true"</js>.
 		<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 	<li>
 		The {@link oaj.http.annotation.Path#name()} annotation parameter is now required.
 	<li>
 		New class for mock unit testing of REST resources:
 		<ul class='doctree'>
-			<li class='jc'><dc>MockRest</dc>
+			<li class='jc'>{@del MockRest}
 		</ul>
 	<li>
 		<c><ja>@RestMethod</ja>(inherit)</c> annotation has been removed and replaced with the following classes:
@@ -413,14 +413,14 @@
 		</ul>
 		<br>These can be used in the following locations:
 		<ul class='doctree'>
-			<li class='ja'><dc>RestResource.serializers()</dc>
-			<li class='ja'><dc>RestResource.parsers()</dc>
-			<li class='ja'><dc>RestResource.beanFilters()</dc>
-			<li class='ja'><dc>RestResource.pojoSwaps()</dc>
-			<li class='ja'>{@link oajr.annotation.RestMethod#serializers()}
-			<li class='ja'>{@link oajr.annotation.RestMethod#parsers()}
-			<li class='ja'>{@link oajr.annotation.RestMethod#beanFilters()}
-			<li class='ja'>{@link oajr.annotation.RestMethod#pojoSwaps()}
+			<li class='ja'>{@del RestResource#serializers()}
+			<li class='ja'>{@del RestResource#parsers()}
+			<li class='ja'>{@del RestResource#beanFilters()}
+			<li class='ja'>{@del RestResource#pojoSwaps()}
+			<li class='ja'>{@del oajr.annotation.RestMethod#serializers()}
+			<li class='ja'>{@del oajr.annotation.RestMethod#parsers()}
+			<li class='ja'>{@del RestMethod#beanFilters()}
+			<li class='ja'>{@del oajr.annotation.RestMethod#pojoSwaps()}
 		</ul>
 		<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <c>Inherit</c> class. 
 	<li>
@@ -437,8 +437,8 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link oajr.widget.MenuItemWidget}
 			<ul>
-				<li class='jm'><dc>getBeforeShowScript(RestRequest)</dc>
-				<li class='jm'><dc>getAfterShowScript(RestRequest)</dc>
+				<li class='jm'>{@del getBeforeShowScript(RestRequest)}
+				<li class='jm'>{@del getAfterShowScript(RestRequest)}
 			</ul>
 		</ul>
 	<li>
@@ -446,16 +446,16 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link oajr.widget.Widget}
 			<ul>
-				<li class='jm'><dc>loadHtmlWithVars(RestRequest,String)</dc>
-				<li class='jm'><dc>loadScriptWithVars(RestRequest,String)</dc>
-				<li class='jm'><dc>loadStyleWithVars(RestRequest,String)</dc>
+				<li class='jm'>{@del loadHtmlWithVars(RestRequest,String)}
+				<li class='jm'>{@del loadScriptWithVars(RestRequest,String)}
+				<li class='jm'>{@del loadStyleWithVars(RestRequest,String)}
 			</ul>
 		</ul>
 	<li>
 		New/updated documentation: 
 		<br><dc>juneau-rest-server.UnitTesting</dc>
 	<li>
-		The behavior of the default values for {@link oajr.annotation.RestMethod#name()} and {@link oajr.annotation.RestMethod#path()}
+		The behavior of the default values for {@del oajr.annotation.RestMethod#name()} and {@del oajr.annotation.RestMethod#path()}
 		have changed.
 		<br>If not specified, the values are inferred from the Java method name.
 		<br>See Also: {@doc RestMethod}
@@ -475,15 +475,15 @@
 	<li>
 		New convenience annotations for specifying default <c>Accept</c> and <c>Content-Type</c> headers:
 		<ul class='doctree'>	
-			<li class='jc'><dc>RestResource</dc>
+			<li class='jc'>{@del RestResource}
 			<ul>
-				<li class='jf'><dc>defaultAccept</dc>
-				<li class='jf'><dc>defaultContentType</dc>
+				<li class='jf'>{@del defaultAccept}
+				<li class='jf'>{@del defaultContentType}
 			</ul>	
-			<li class='jc'>{@link oajr.annotation.RestMethod}
+			<li class='jc'>{@del oajr.annotation.RestMethod}
 			<ul>
-				<li class='jf'>{@link oajr.annotation.RestMethod#defaultAccept defaultAccept}
-				<li class='jf'>{@link oajr.annotation.RestMethod#defaultContentType defaultContentType}
+				<li class='jf'>{@del oajr.annotation.RestMethod#defaultAccept defaultAccept}
+				<li class='jf'>{@del oajr.annotation.RestMethod#defaultContentType defaultContentType}
 			</ul>	
 		</ul>
 </ul>
@@ -498,13 +498,13 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link oajrc.RestClientBuilder}
 			<ul>
-				<li class='jf'>{@link oajrc.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
-				<li class='jf'>{@link oajrc.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
-				<li class='jf'>{@link oajrc.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
-				<li class='jf'>{@link oajrc.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-				<li class='jf'>{@link oajrc.RestClientBuilder#trustManagers(TrustManager...)}
-				<li class='jf'>{@link oajrc.RestClientBuilder#secureRandom(SecureRandom)}
-				<li class='jf'>{@link oajrc.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#trustManagers(TrustManager...)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#secureRandom(SecureRandom)}
+				<li class='jf'>{@del oajrc.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
 			</ul>
 		</ul>
 	<li>
@@ -521,7 +521,7 @@
 				<li class='jf'>{@link oajrc.RestClientBuilder#html() html()}
 				<li class='jf'>{@link oajrc.RestClientBuilder#uon() uon()}
 				<li class='jf'>{@link oajrc.RestClientBuilder#urlEnc() urlEnc()}
-				<li class='jf'>{@link oajrc.RestClientBuilder#msgpack() msgpack()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#msgPack() msgPack()}
 				<li class='jf'>{@link oajrc.RestClientBuilder#plainText() plainText()}
 			</ul>
 		</ul>
@@ -530,14 +530,14 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link oajrc.RestClientBuilder}
 			<ul>
-				<li class='jf'><dc>mockHttpConnection(MockHttpConnection)</dc>
+				<li class='jf'>{@del mockHttpConnection(MockHttpConnection)}
 			</ul>
 		</ul>
 	<li>
 		Removed the deprecated <c>RestCall.execute()</c> method.
-		<br>Use {@link oajrc.RestCall#run()}.
+		<br>Use {@del oajrc.RestCall#run()}.
 	<li>
-		<c>RestCall.input(Object)</c> method renamed to {@link oajrc.RestCall#body(Object)} to match OpenAPI terminology.
+		<c>RestCall.input(Object)</c> method renamed to {@del oajrc.RestCall#body(Object)} to match OpenAPI terminology.
 	<li>
 		Made constructors on <c>RestClient</c> and <c>RestClientBuilder</c> protected so that they can be subclassed.
 	<li>
@@ -545,12 +545,12 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link oajrc.RestClient}
 			<ul>
-				<li class='jm'><dc>RestClient.getRemoteInterface(Class)</dc>
-				<li class='jm'><dc>RestClient.getRemoteInterface(Class,Object)</dc>
-				<li class='jm'><dc>RestClient.getRemoteInterface(Class,Object,Serializer,Parser)</dc>
-				<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class)}
-				<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class,Object)}
-				<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
+				<li class='jm'>{@del RestClient#getRemoteInterface(Class)}
+				<li class='jm'>{@del RestClient#getRemoteInterface(Class,Object)}
+				<li class='jm'>{@del RestClient#getRemoteInterface(Class,Object,Serializer,Parser)}
+				<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class)}
+				<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class,Object)}
+				<li class='jm'>{@del oajrc.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
 			</ul>
 		</ul>
 </ul>

@@ -212,7 +212,7 @@
 	}
 </p>
 <p>
-	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property or {@link oaj.annotation.BeanConfig#examples() @BeanConfig(examples)} annotation at either the class or method level.
+	Examples can also be specified via generic properties as well using the {@link oaj.BeanContextBuilder#example(Class,Object)} setting or {@del oaj.annotation.BeanConfig#examples() @BeanConfig(examples)} annotation at either the class or method level.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -224,9 +224,9 @@
 </p>
 <ul class='seealso'>
 	<li class='ja'>{@link oaj.annotation.Example}
-	<li class='jc'>{@link oaj.BeanContext}
+	<li class='jc'>{@link oaj.BeanContextBuilder}
 	<ul>
-		<li class='jf'>{@link oaj.BeanContext#BEAN_examples BEAN_examples}
+		<li class='jf'>{@link oaj.BeanContextBuilder#example(Class,Object) example(Class,Object)}
 	</ul>
 	<li class='jc'>{@link oaj.jsonschema.JsonSchemaGenerator}
 	<ul>

@@ -17,7 +17,7 @@
 
 <p>
 Juneau 8.2.0 is a major release. 
-The most significant change is the addition of an entirely new {@link oajr.client2.RestClient} API build from scratch
+The most significant change is the addition of an entirely new {@del oajr.client2.RestClient} API build from scratch
 with near 100% unit test coverage.
 The new API is located in the <c>org.apache.juneau.rest.client2</c> package and will replace the old API in 9.0.
 </p>
@@ -59,14 +59,14 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		<ul class='javatree'>
 			<li class='jc'>{@link oaj.BeanContextBuilder}
 			<ul>
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpi(Class,String) bpi(Class,String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpi(String,String) bpi(String,String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpx(Class,String) bpx(Class,String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpx(String,String) bpx(String,String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpro(Class,String) bpro(Class,String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpro(String,String) bpro(String,String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(Class,String) bpwo(Class,String}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(String,String) bpwo(String,String}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpi(Class,String) bpi(Class,String)}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpi(String,String) bpi(String,String)}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpx(Class,String) bpx(Class,String)}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpx(String,String) bpx(String,String)}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpro(Class,String) bpro(Class,String)}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpro(String,String) bpro(String,String)}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpwo(Class,String) bpwo(Class,String}
+				<li class='jm'>{@del oaj.BeanContextBuilder#bpwo(String,String) bpwo(String,String}
 			</ul>
 		</ul>
 	<li>
@@ -94,7 +94,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 			<li class'jc'>{@link oaj.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.NameProperty}
 			<li class'jc'>{@link oaj.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.ParentProperty}
 			<li class'jc'>{@link oaj.annotation.SwapAnnotation} <jk>implements</jk> {@link oaj.annotation.Swap}
-			<li class'jc'>{@link oaj.annotation.UriAnnotation} <jk>implements</jk> {@link oaj.annotation.URI}
+			<li class'jc'>{@link oaj.annotation.UriAnnotation} <jk>implements</jk> {@del oaj.annotation.URI}
 			<li class'jc'>{@link oaj.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link oaj.csv.annotation.Csv}
 			<li class'jc'>{@link oaj.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link oaj.html.annotation.Html}
 			<li class'jc'>{@link oaj.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link oaj.jso.annotation.Jso}
@@ -168,11 +168,11 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 			<li class='jc'>{@link oaj.collections.OList}
 		</ul>
 	<li>
-		{@link oaj.ObjectMap} is being deprecated and replaced with {@link oaj.collections.OMap}.
+		{@del oaj.ObjectMap} is being deprecated and replaced with {@link oaj.collections.OMap}.
 	<li>
-		{@link oaj.ObjectList} is being deprecated and replaced with {@link oaj.collections.OList}.
+		{@del oaj.ObjectList} is being deprecated and replaced with {@link oaj.collections.OList}.
 	<li>
-		All classes in the {@link oaj.http.response} and {@link oaj.http.exception} now have <c>header(String,Object)</c>
+		All classes in the {@link oaj.http.response} and {@del oaj.http.exception} now have <c>header(String,Object)</c>
 		methods for adding response headers.
 		<p class='bcode w800'>
 	<jc>// Method that performs a BASIC Auth handshake.</jc>
@@ -269,73 +269,73 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link oajr.RestContext#REST_context REST_context}/{@link oajr.annotation.Rest#context() @Rest(context)} setting to allow you to extend the {@link oajr.RestContext}
+		New {@del oajr.RestContext#REST_context REST_context}/{@del oajr.annotation.Rest#context() @Rest(context)} setting to allow you to extend the {@link oajr.RestContext}
 		class.
 	<li>
 		{@link oajr.annotation.Rest}-annotated classes can now implement the following interfaces directly instead of having
 		to define secondary classes and hook them up through annotations:
 		<ul>
-			<li class='jic'>{@link oajr.RestCallHandler} - Normally defined through {@link oajr.annotation.Rest#callHandler() @Rest.callHandler()}.
-			<li class='jic'>{@link oajr.RestInfoProvider} - Normally defined through {@link oajr.annotation.Rest#infoProvider() @Rest.infoProvider()}.
-			<li class='jic'>{@link oajr.RestCallLogger} - Normally defined through {@link oajr.annotation.Rest#callLogger() @Rest.callLogger()}.
-			<li class='jic'>{@link oaj.utils.ClasspathResourceFinder} - Normally defined through {@link oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
+			<li class='jic'>{@del oajr.RestCallHandler} - Normally defined through {@del oajr.annotation.Rest#callHandler() @Rest.callHandler()}.
+			<li class='jic'>{@del oajr.RestInfoProvider} - Normally defined through {@del oajr.annotation.Rest#infoProvider() @Rest.infoProvider()}.
+			<li class='jic'>{@del oajr.RestCallLogger} - Normally defined through {@del oajr.annotation.Rest#callLogger() @Rest.callLogger()}.
+			<li class='jic'>{@del oaj.utils.ClasspathResourceFinder} - Normally defined through {@del oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
 		</ul>
-		<br>The methods added for {@link oajr.RestInfoProvider} are:
+		<br>The methods added for {@del oajr.RestInfoProvider} are:
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oajr.RestServlet#getSwagger(RestRequest) getSwagger(RestRequest)}
-				<li class='jm'>{@link oajr.RestServlet#getSiteName(RestRequest) getSiteName(RestRequest)}
-				<li class='jm'>{@link oajr.RestServlet#getTitle(RestRequest) getTitle(RestRequest)}
-				<li class='jm'>{@link oajr.RestServlet#getDescription(RestRequest) getDescription(RestRequest)}
-				<li class='jm'>{@link oajr.RestServlet#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
-				<li class='jm'>{@link oajr.RestServlet#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+				<li class='jm'>{@del getSwagger(RestRequest)}
+				<li class='jm'>{@del getSiteName(RestRequest)}
+				<li class='jm'>{@del getTitle(RestRequest)}
+				<li class='jm'>{@del getDescription(RestRequest)}
+				<li class='jm'>{@del getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@del getMethodDescription(Method,RestRequest)}
 			</ul>
-			<li class='jac'>{@link oajr.BasicRest}
+			<li class='jac'>{@del BasicRest}
 			<ul>
-				<li class='jm'>{@link oajr.BasicRest#getSwagger(RestRequest) getSwagger(RestRequest)}
-				<li class='jm'>{@link oajr.BasicRest#getSiteName(RestRequest) getSiteName(RestRequest)}
-				<li class='jm'>{@link oajr.BasicRest#getTitle(RestRequest) getTitle(RestRequest)}
-				<li class='jm'>{@link oajr.BasicRest#getDescription(RestRequest) getDescription(RestRequest)}
-				<li class='jm'>{@link oajr.BasicRest#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
-				<li class='jm'>{@link oajr.BasicRest#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+				<li class='jm'>{@del getSwagger(RestRequest)}
+				<li class='jm'>{@del getSiteName(RestRequest)}
+				<li class='jm'>{@del getTitle(RestRequest)}
+				<li class='jm'>{@del getDescription(RestRequest)}
+				<li class='jm'>{@del getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@del getMethodDescription(Method,RestRequest)}
 			</ul>
 		</ul>
-		<br>The methods added for {@link oajr.RestCallLogger} are:
+		<br>The methods added for {@del oajr.RestCallLogger} are:
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oajr.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@del oajr.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
 			</ul>
-			<li class='jac'>{@link oajr.BasicRest}
+			<li class='jac'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@link oajr.BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@del oajr.BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
 			</ul>
 		</ul>
-		<br>The methods added for {@link oaj.utils.ClasspathResourceFinder} are:
+		<br>The methods added for {@del oaj.utils.ClasspathResourceFinder} are:
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oajr.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
+				<li class='jm'>{@del oajr.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
 			</ul>
-			<li class='jac'>{@link oajr.BasicRest}
+			<li class='jac'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@link oajr.BasicRest#findResource(Class,String,Locale) findResource(Class,String,Locale)}
+				<li class='jm'>{@del oajr.BasicRest#findResource(Class,String,Locale) findResource(Class,String,Locale)}
 			</ul>
 		</ul>
-		<br>The methods added for {@link oajr.RestResourceResolver} are:
+		<br>The methods added for {@del oajr.RestResourceResolver} are:
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oajr.RestServlet#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+				<li class='jm'>{@del oajr.RestServlet#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
 			</ul>
-			<li class='jac'>{@link oajr.BasicRest}
+			<li class='jac'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@link oajr.BasicRest#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+				<li class='jm'>{@del oajr.BasicRest#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
 			</ul>
 		</ul>
 	<li>
-		Added the following convenience hook methods on the {@link oajr.RestServlet} and {@link oajr.BasicRest} classes:
+		Added the following convenience hook methods on the {@link oajr.RestServlet} and {@del oajr.BasicRest} classes:
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
@@ -348,16 +348,16 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 				<li class='jm'>{@link oajr.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
 				<li class='jm'>{@link oajr.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
 			</ul>
-			<li class='jac'>{@link oajr.BasicRest}
+			<li class='jac'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@link oajr.BasicRest#onInit(RestContextBuilder) onInit(RestContextBuilder)}
-				<li class='jm'>{@link oajr.BasicRest#onPostInit(RestContext) onPostInit(RestContext)}
-				<li class='jm'>{@link oajr.BasicRest#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
-				<li class='jm'>{@link oajr.BasicRest#onDestroy(RestContext) onDestroy(RestContext)}
-				<li class='jm'>{@link oajr.BasicRest#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
-				<li class='jm'>{@link oajr.BasicRest#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
-				<li class='jm'>{@link oajr.BasicRest#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
-				<li class='jm'>{@link oajr.BasicRest#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@del oajr.BasicRest#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@del oajr.BasicRest#onPostInit(RestContext) onPostInit(RestContext)}
+				<li class='jm'>{@del oajr.BasicRest#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+				<li class='jm'>{@del oajr.BasicRest#onDestroy(RestContext) onDestroy(RestContext)}
+				<li class='jm'>{@del oajr.BasicRest#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@del oajr.BasicRest#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+				<li class='jm'>{@del oajr.BasicRest#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+				<li class='jm'>{@del oajr.BasicRest#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
 			</ul>
 		</ul>
 	<li>
@@ -377,17 +377,17 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		}
 		 </p>
 	<li>
-		{@link oajr.BasicRestConfig} has been broken up into {@link oajr.BasicRestConfig} and {@link oajr.BasicRestMethods} so that
+		{@del oajr.BasicRestConfig} has been broken up into {@del BasicRestConfig} and {@del oajr.BasicRestMethods} so that
 		you're not forced to implement methods such as <c>getOptions()</c> and <c>getStats()</c> if you're implementing the interface
 		to configure your REST class.
 	<li>
 		Any of the following classes can now be instantiated with <c><jk>public static</jk> <jsm>create</jsm>()</c> methods:
 		<ul>
-			<li class='jc'>{@link oajr.RestCallHandler}
-			<li class='jc'>{@link oajr.RestCallLogger}
-			<li class='jc'>{@link oajr.RestInfoProvider}
-			<li class='jc'>{@link oaj.utils.ClasspathResourceFinder}
-			<li class='jc'>{@link oajr.RestResourceResolver}
+			<li class='jc'>{@del oajr.RestCallHandler}
+			<li class='jc'>{@del oajr.RestCallLogger}
+			<li class='jc'>{@del oajr.RestInfoProvider}
+			<li class='jc'>{@del oaj.utils.ClasspathResourceFinder}
+			<li class='jc'>{@del oajr.RestResourceResolver}
 			<li class='jc'>{@link oajr.RestGuard}
 			<li class='jc'>{@link oajr.ResponseHandler}
 		</ul>
@@ -413,7 +413,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 		</p>
 		<br>This allows the child resource to be mapped to multiple parents that may resolve various different path variables.
 	<li>
-		New {@link oajr.annotation.RestMethod#paths() @RestMethod(paths)} annotation that allows you to map multiple
+		New {@del oajr.annotation.RestMethod#paths() @RestMethod(paths)} annotation that allows you to map multiple
 		paths to the same Java method.
 		<br>Example:
 		<p class='bcode w800'>
@@ -424,7 +424,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
 		</p>
 	<li>
-		The {@link oajr.annotation.RestMethod @RestMethod} annotation is now implied on all unannotated methods of a {@link oajr.annotation.Rest @Rest}-annotated
+		The {@del oajr.annotation.RestMethod @RestMethod} annotation is now implied on all unannotated methods of a {@link oajr.annotation.Rest @Rest}-annotated
 		interface.
 		<p class='bcode w800'>
 	<ja>@Rest
@@ -439,7 +439,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>
 <ul class='spaced-list'>
 	<li>
-		{@link oajr.springboot.JuneauRestInitializer} now provides a no-arg constructor so that it can be used in
+		{@del oajr.springboot.JuneauRestInitializer} now provides a no-arg constructor so that it can be used in
 		the <c><ja>@ConfigurationContext</ja>(initializers=JuneauRestInitializer.<jk>class</jk>)</c> when unit testing
 		using <ja>@SpringBootTest</ja>.
 	<li>
@@ -477,7 +477,7 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 	<ul>
 		<li>{@link oaj.http.remote.Remote#version version} - Adds a client version header to all requests.
 		<li>{@link oaj.http.remote.Remote#headers headers} - Adds a set of headers to all requests.
-		<li>{@link oaj.http.remote.Remote#headerSupplier headerSupplier} - Adds a dynamic supplier of headers to all requests.
+		<li>{@del headerSupplier} - Adds a dynamic supplier of headers to all requests.
 	</ul>
 </ul>
 
@@ -485,6 +485,6 @@ The new API is located in the <c>org.apache.juneau.rest.client2</c> package and 
 <ul class='spaced-list'>
 	<li>
 		The <c>MockRest</c> and <c>MockRemote</c> classes have been remove entirely and all existing functions
-		have been moved into the improved {@link oajr.mock2.MockRestClient} class.  All REST test mocking can be 
+		have been moved into the improved {@del oajr.mock2.MockRestClient} class.  All REST test mocking can be 
 		done through this single class.
 </ui>

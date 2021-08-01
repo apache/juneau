@@ -26,7 +26,7 @@ import org.apache.juneau.dto.swagger.*;
  * Identifies a REST operation Java method on a {@link RestServlet} implementation class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestOp}
+ * 	<li class='link'>{@doc RestMethod}
  * </ul>
  */
 @Documented

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Interface Filters'}
+{title:'Interface Filters', flags:'todo'}
 
 <p>
 	Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
@@ -23,9 +23,9 @@
 	Interface filters are defined through the following:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@link oaj.BeanContext#BEAN_beanFilters}
+	<li class='jf'>{@del BeanContext#BEAN_beanFilters}
 	<li class='ja'>{@link oaj.annotation.Bean#interfaceClass() Bean(interfaceClass)}
-	<li class='jm'>{@link oaj.transform.BeanFilterBuilder#interfaceClass(Class)}
+	<li class='jm'>{@del oaj.transform.BeanFilterBuilder#interfaceClass(Class)}
 </ul>
 <p>
 	For example, let's define the following interface and implementation:
@@ -71,7 +71,7 @@
 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>object</jv>);  
 </p>	
 <p>
-	The {@link oaj.BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
+	The {@del BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
 	non-<c>BeanFilter</c> classes passed in as meaning interface classes. 
 	So in the previous example, the <c>BeanFilter</c> class could have been avoided altogether by just 
 	passing in <c>MyInterface.<jk>class</jk></c> to the serializer, like so:

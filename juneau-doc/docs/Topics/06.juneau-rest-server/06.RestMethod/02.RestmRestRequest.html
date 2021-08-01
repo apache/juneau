@@ -31,16 +31,13 @@
 	<li class='jc'><c>{@link oajr.RestRequest} <jk>extends</jk> HttpServletRequest</c>
 	<ul>
 		<li class='jm'>{@link oajr.RestRequest#getHeaders() getHeaders()} - HTTP request headers.
-		<li class='jm'>{@link oajr.RestRequest#getQuery() getQuery()} - Query parameters.
-		<li class='jm'>{@link oajr.RestRequest#getFormData() getFormData()} - Form-data parameters.
+		<li class='jm'>{@link oajr.RestRequest#getQueryParams() getQueryParams()} - Query parameters.
+		<li class='jm'>{@link oajr.RestRequest#getFormParams() getFormParams()} - Form-data parameters.
+		<li class='jm'>{@link oajr.RestRequest#getPathParams() getPathParams()} - Path match variables.
 		<li class='jm'>{@link oajr.RestRequest#getBody() getBody()} - HTTP request body.
-		<li class='jm'>{@link oajr.RestRequest#getPathMatch() getPathMatch()} - Path match variables.
-		<li class='jm'>{@link oajr.RestRequest#getLogger() getLogger()} - Logging.
-		<li class='jm'>{@link oajr.RestRequest#getInfoProvider() getInfoProvider()} - Swagger documentation provider.
 		<li class='jm'>{@link oajr.RestRequest#getSwagger() getSwagger()} - Generated Swagger information.
 		<li class='jm'>{@link oajr.RestRequest#getConfig() getConfig()} - External configuration API.
 		<li class='jm'>{@link oajr.RestRequest#getVarResolverSession() getVarResolverSession()} - String variable resolver.
 		<li class='jm'>{@link oajr.RestRequest#getMessages() getMessages()} - Localized messages.
-		<li class='jm'>{@link oajr.RestRequest#getProperties() getProperties()} - Configuration properties.
 	</ul>
 </ul>

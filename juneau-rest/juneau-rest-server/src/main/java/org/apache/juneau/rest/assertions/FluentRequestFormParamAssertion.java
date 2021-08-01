@@ -71,7 +71,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentRequestFormParamAssertion#asInteger()}
  * 		<li class='jm'>{@link FluentRequestFormParamAssertion#asLong()}
  * 		<li class='jm'>{@link FluentRequestFormParamAssertion#asZonedDateTime()}
- * 		<li class='jm'>{@link FluentRequestFormParamAssertion#asType(Class,Type...)}
+ * 		<li class='jm'>{@link FluentRequestFormParamAssertion#asType(Class)}
+ * 		<li class='jm'>{@link FluentRequestFormParamAssertion#asType(Type,Type...)}
  * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}

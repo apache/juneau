@@ -147,14 +147,15 @@
 	}
 </p>
 <p>
-	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property 
-	or {@link oaj.annotation.BeanConfig#examples @BeanConfig(examples)} annotation at either the class or method level.
+	Examples can also be specified via generic properties as well using the {@del oaj.BeanContextBuilder#example(String,Object)} setting 
+	or {@link oaj.annotation.Bean#example @Bean(example)} annotation at either the class or method level.
 </p>
 <p class='bpcode w800'>
 	<jc>// Examples defined at class level.</jc>
 	<ja>@Rest</ja>(...)
-	<ja>@BeanConfig</ja>(
-		examples=<js>"{PetCreate: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
+	<ja>@Bean</ja>(
+		onClass=PetCreate.<jk>class</jk>,
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
 	)
 </p>
 <p>

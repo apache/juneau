@@ -25,53 +25,53 @@
 	<li class='ja'>
 		{@link oajr.annotation.Rest}
 		<ul>
-			<li class='jm'>{@link oajr.annotation.Rest#logging() logging()} - Class-level logging configuration and rules.
+			<li class='jm'>{@del logging()} - Class-level logging configuration and rules.
 			<li class='jm'>{@link oajr.annotation.Rest#debug() debug()} - Enable debug mode.
 		</ul>
 	</li>
 	<li class='ja'>
 		{@link oajr.annotation.RestOp}
 		<ul>
-			<li class='jm'>{@link oajr.annotation.RestOp#logging() logging()} - Class-level logging configuration.
+			<li class='jm'>{@del logging()} - Class-level logging configuration.
 			<li class='jm'>{@link oajr.annotation.RestOp#debug() debug()} - Enable debug mode.
 		</ul>
 	</li>
 	<li class='jc'>
 		{@link oajr.RestContext}
 		<ul>
-			<li class='jf'>{@link oajr.RestContext#REST_callLoggerConfig REST_callLoggerConfig} - Underlying configuration property for {@link oajr.annotation.Rest#logging() @Rest(logging)}.
+			<li class='jf'>{@del RestContext#REST_callLoggerConfig} - Underlying configuration property for {@del @Rest(logging)}.
 			<li class='jf'>{@link oajr.RestContext#REST_debug REST_debug} - Underlying configuration property for {@link oajr.annotation.Rest#debug() @Rest(debug)}.
 		</ul>
 	</li>
 	<li class='ja'>
-		{@link oajr.annotation.Logging} - Annotation for {@link oajr.annotation.Rest#logging() @Rest(logging)} and {@link oajr.annotation.RestOp#logging() @RestOp(logging)}
+		{@del oajr.annotation.Logging} - Annotation for {@del @Rest(logging)} and {@del @RestOp(logging)}
 		<ul>
-			<li class='jm'>{@link oajr.annotation.Logging#level() level()} - The logging level.
-			<li class='jm'>{@link oajr.annotation.Logging#rules() rules()} - The logging rules.
-			<li class='jm'>{@link oajr.annotation.Logging#useStackTraceHashing() useStackTraceHashing()} - Enables de-duplication of logged stack traces and replacement with hash IDs. 
-			<li class='jm'>{@link oajr.annotation.Logging#stackTraceHashingTimeout() stackTraceHashingTimeout()} - Controls how frequently hashed stack traces are re-logged.
-			<li class='jm'>{@link oajr.annotation.Logging#disabled() disabled()} - Disables logging completely or per-request.
+			<li class='jm'>{@del oajr.annotation.Logging#level() level()} - The logging level.
+			<li class='jm'>{@del oajr.annotation.Logging#rules() rules()} - The logging rules.
+			<li class='jm'>{@del oajr.annotation.Logging#useStackTraceHashing() useStackTraceHashing()} - Enables de-duplication of logged stack traces and replacement with hash IDs. 
+			<li class='jm'>{@del oajr.annotation.Logging#stackTraceHashingTimeout() stackTraceHashingTimeout()} - Controls how frequently hashed stack traces are re-logged.
+			<li class='jm'>{@del oajr.annotation.Logging#disabled() disabled()} - Disables logging completely or per-request.
 		</ul>
 	</li>
 	<li class='ja'>
-		{@link oajr.annotation.LoggingRule} - Annotation for {@link oajr.annotation.Logging#rules() @Logging(rules)}
+		{@del oajr.annotation.LoggingRule} - Annotation for {@del oajr.annotation.Logging#rules() @Logging(rules)}
 		<ul>
-			<li class='jm'>{@link oajr.annotation.LoggingRule#level() level()} - The logging level.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#codes() codes()} - Status code patterns and ranges to match against.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#exceptions() exceptions()} - Exception class names and patterns to match against.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#debugOnly() debugOnly()} - Match only if debug is set on the request.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#req() req()} - The level of request detail.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#res() res()} - The level of response detail.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#verbose() verbose()} - Shortcut for <jsf>LONG</jsf> request and response detail.
-			<li class='jm'>{@link oajr.annotation.LoggingRule#disabled() disabled()} - Disables logging completely or per-request.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#level() level()} - The logging level.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#codes() codes()} - Status code patterns and ranges to match against.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#exceptions() exceptions()} - Exception class names and patterns to match against.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#debugOnly() debugOnly()} - Match only if debug is set on the request.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#req() req()} - The level of request detail.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#res() res()} - The level of response detail.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#verbose() verbose()} - Shortcut for <jsf>LONG</jsf> request and response detail.
+			<li class='jm'>{@del oajr.annotation.LoggingRule#disabled() disabled()} - Disables logging completely or per-request.
 		</ul>
 	</li>
 </ul>
 
 <h5 class='topic'>Request/response details</h5>
 <p>
-	The amount of detail on requests and responses is controlled via the {@link oajr.annotation.LoggingRule#req() @LoggingRule(req)} 
-	and {@link oajr.annotation.LoggingRule#res() @LoggingRule(res)} annotations:
+	The amount of detail on requests and responses is controlled via the {@del oajr.annotation.LoggingRule#req() @LoggingRule(req)} 
+	and {@del oajr.annotation.LoggingRule#res() @LoggingRule(res)} annotations:
 </p>
 <ul>
 	<li><js>"short"</js> - Results in simple one-line log lines containing the HTTP method + url + response code.
@@ -250,7 +250,7 @@
 
 <h5 class='topic'>No-trace (disabled) mode</h5>
 <p>
-	The {@link oajr.annotation.Logging#disabled() @Logging(disabled)} and {@link oajr.annotation.LoggingRule#disabled() @LoggingRule(disabled)} annotations
+	The {@del oajr.annotation.Logging#disabled() @Logging(disabled)} and {@del oajr.annotation.LoggingRule#disabled() @LoggingRule(disabled)} annotations
 	can be used to disable logging entirely or on a per-request basis:
 </p>
 <p class='bpcode'>
@@ -285,7 +285,7 @@
 
 <h5 class='topic'>Stacktrace hashing</h5>
 <p>
-	The {@link oajr.annotation.Logging#useStackTraceHashing() @Logging(useStackTraceHashing)} setting can be used to eliminate duplicate stacktraces
+	The {@del oajr.annotation.Logging#useStackTraceHashing() @Logging(useStackTraceHashing)} setting can be used to eliminate duplicate stacktraces
 	in your log file by logging them once and then logging identifying hash IDs.
 </p>
 <p>
@@ -342,6 +342,6 @@
 	WARNING: [500,9b85cc96.2] HTTP POST /foo
 </p>
 <p>
-	The {@link oajr.annotation.Logging#stackTraceHashingTimeout() @Logging(stackTraceHashingTimeout)} setting can be used to periodically log the stacktrace
+	The {@del oajr.annotation.Logging#stackTraceHashingTimeout() @Logging(stackTraceHashingTimeout)} setting can be used to periodically log the stacktrace
 	to the log file again.
 </p>

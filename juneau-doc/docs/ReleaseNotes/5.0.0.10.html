@@ -20,17 +20,17 @@
 </p>
 <h5 class='topic w800'>Core API changes</h5>
 <ul class='spaced-list'>
-	<li>New {@link oaj.ObjectMap#findKeyIgnoreCase(String)} method.
+	<li>New {@del oaj.ObjectMap#findKeyIgnoreCase(String)} method.
 	<li>HtmlSerializer will now create 2-dimensional tables for collections of mixed beans/maps if all object have the same set of property names/keys.</li>
 </ul>
 <h5 class='topic w800'>REST server API changes</h5>
 <ul class='spaced-list'>
 	<li>New <c>RestServletProperties</c> class that defines all the class-level properties that can be set on the servlet.</li>
-	<li>Properties can be set through <dc>@RestResource.propertie</dc> annotation, or new <dc>RestServlet.setProperty(String,Object)</dc> method.</li>
+	<li>Properties can be set through {@del @RestResource#properties} annotation, or new {@del RestServlet#setProperty(String,Object)} method.</li>
 	<li>New <js>"?noTrace"</js> URL parameter to prevent stack traces from being logged (for JUnit testing of error conditions).</li>
 	<li>New <c>RestServletProperties.REST_useStackTraceHashes</c> property to prevent the same stack trace from being logged multiple times.</li>
 	<li>New <c>RestServletProperties.REST_renderResponseStackTraces</c> property for preventing stack traces in responses for security reasons.</li>
-	<li>New overridable <c>RestServlet.onError(HttpServletRequest,HttpServletResponse,RestException,boolean)</c> and <dc>RestServlet.onSuccess(RestRequest,RestResponse,long)</dc> methods for plugging in your own logging and peformance monitoring.</li>
-	<li>Eliminated <c>RestServlet.getInitParams()</c> method, since it's now redundant with <dc>RestServlet.getProperties()</dc>.</li>
+	<li>New overridable <c>RestServlet.onError(HttpServletRequest,HttpServletResponse,RestException,boolean)</c> and {@del RestServlet#onSuccess(RestRequest,RestResponse,long)} methods for plugging in your own logging and peformance monitoring.</li>
+	<li>Eliminated <c>RestServlet.getInitParams()</c> method, since it's now redundant with {@del RestServlet#getProperties()}.</li>
 	<li>Header parameters passed as URL parameters are now case-insensitive.</li>			
 </ul>

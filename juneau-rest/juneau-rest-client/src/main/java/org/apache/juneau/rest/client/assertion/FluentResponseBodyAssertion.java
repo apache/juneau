@@ -56,7 +56,8 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentResponseBodyAssertion#asBytes()}
- * 		<li class='jm'>{@link FluentResponseBodyAssertion#asType(Class,Type...)}
+ * 		<li class='jm'>{@link FluentResponseBodyAssertion#asType(Class)}
+ * 		<li class='jm'>{@link FluentResponseBodyAssertion#asType(Type,Type...)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
@@ -229,7 +230,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
-	 * Converts the body to a type using {@link ResponseBody#asType(Class, Type...)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseBody#asType(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -248,7 +249,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
-	 * Converts the body to a type using {@link ResponseBody#asType(Class, Type...)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseBody#asType(Type,Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>

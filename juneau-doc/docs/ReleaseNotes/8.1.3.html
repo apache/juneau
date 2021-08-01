@@ -43,7 +43,7 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li> 
-		Fixed bug in <dc>BasicRestCallHandler</dc> where if you have the following REST methods...
+		Fixed bug in {@del BasicRestCallHandler} where if you have the following REST methods...
 		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo"</js>)
 	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/bar"</js>)
@@ -53,7 +53,7 @@
 		Fixed an issue involving using Juneau REST with Spring Security.  When Spring Security cannot authenticate a 
 		request, it sets the URL on the request to <js>"/error"</js> with a 401 status.  When Juneau then processes
 		this request, it cannot find that mapping and changes the status to 404 which messes with HTTP clients.
-		<br>Solution was to add a default no-op error method to the {@link oajr.BasicRestConfig} (and implementers):
+		<br>Solution was to add a default no-op error method to the {@del oajr.BasicRestConfig} (and implementers):
 		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/error"</js>)
 	<jk>public void</jk> error() {}
@@ -64,11 +64,11 @@
 	<li>
 		Renamed the following annotations:
 		<ul>
-			<li><ja>@Rest(attrs)</ja> --&gt; {@link oajr.annotation.Rest#reqAttrs() @Rest(reqAttrs)}
-			<li><ja>@Rest(defaultRequestHeaders)</ja> --&gt; {@link oajr.annotation.Rest#reqHeaders() @Rest(reqHeaders)}
-			<li><ja>@Rest(defaultResponseHeaders)</ja> --&gt; {@link oajr.annotation.Rest#resHeaders() @Rest(resHeaders)}
-			<li><ja>@RestMethod(attrs)</ja> --&gt; {@link oajr.annotation.RestMethod#reqAttrs() @RestMethod(reqAttrs)}
-			<li><ja>@RestMethod(defaultRequestHeaders)</ja> --&gt; {@link oajr.annotation.RestMethod#reqHeaders() @RestMethod(reqHeaders)}
+			<li><ja>@Rest(attrs)</ja> --&gt; {@del oajr.annotation.Rest#reqAttrs() @Rest(reqAttrs)}
+			<li><ja>@Rest(defaultRequestHeaders)</ja> --&gt; {@del oajr.annotation.Rest#reqHeaders() @Rest(reqHeaders)}
+			<li><ja>@Rest(defaultResponseHeaders)</ja> --&gt; {@del oajr.annotation.Rest#resHeaders() @Rest(resHeaders)}
+			<li><ja>@RestMethod(attrs)</ja> --&gt; {@del oajr.annotation.RestMethod#reqAttrs() @RestMethod(reqAttrs)}
+			<li><ja>@RestMethod(defaultRequestHeaders)</ja> --&gt; {@del oajr.annotation.RestMethod#reqHeaders() @RestMethod(reqHeaders)}
 		</ul>
 	<li>
 		New auto-generated REST method execution statistics: {@doc RestExecutionStatistics}

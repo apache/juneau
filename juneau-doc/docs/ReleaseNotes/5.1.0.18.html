@@ -23,17 +23,17 @@
 <ul class='spaced-list'>
 	<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 	<li>Servlet and method labels and descriptions can now contain embedded string variables.
-	<li>New <dc>RestMethod.input()</dc> and <dc>RestMethod.responses()</dc>
+	<li>New {@del RestMethod#input()} and {@del RestMethod#responses()}
 		annotations.
 		These replace the various <c>description</c> annotations added 2 days ago with a simpler design.
 	<li>New methods on {@link oajr.RestServlet}:
 		<ul>
-			<li><dc>RestServlet.getMethodDescription(String,RestRequest)</dc> so that subclasses
+			<li>{@del RestServlet#getMethodDescription(String,RestRequest)} so that subclasses
 				can override the method description in the OPTIONS page.
-			<li><dc>RestServlet.createRequestVarResolver(RestRequest)</dc> so that subclasses
+			<li>{@del RestServlet#createRequestVarResolver(RestRequest)} so that subclasses
 				can override and augment the variable resolver.
-			<li><dc>RestServlet.resolveChild(Class)</dc> and <dc>RestServlet.replaceChild(RestServlet)</dc>
+			<li>{@del RestServlet#resolveChild(Class)} and {@del RestServlet#replaceChild(RestServlet)}
 				classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
 		</ul> 
-	<li>Reverted the <dc>MethodDescription</dc> back to 5.1.0.16 since it was being used by someone.
+	<li>Reverted the {@del MethodDescription} back to 5.1.0.16 since it was being used by someone.
 </ul>

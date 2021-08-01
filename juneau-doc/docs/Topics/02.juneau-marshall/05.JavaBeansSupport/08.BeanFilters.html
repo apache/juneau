@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'BeanFilter Class'}
+{title:'BeanFilter Class', flags:'todo'}
 
 <p>
-	The {@link oaj.transform.BeanFilter} class is the programmatic equivalent to the
+	The {@del oaj.transform.BeanFilter} class is the programmatic equivalent to the
 	{@link oaj.annotation.Bean @Bean} annotation.
 </p>
 <p>
@@ -26,7 +26,7 @@
 	to existing code.
 </p>
 <p>
-	Bean filters are defined through {@link oaj.transform.BeanFilterBuilder BeanFilterBuilders}.
+	Bean filters are defined through {@del oaj.transform.BeanFilterBuilder BeanFilterBuilders}.
 </p>
 <p>
 	In the previous examples, we defined this bean annotation:
@@ -51,8 +51,8 @@
 	Bean filters are added to serializers and parsers using the following:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@link oaj.BeanContext#BEAN_beanFilters}
-	<li class='jm'>{@link oaj.BeanContextBuilder#beanFilters(Object...)}
+	<li class='jf'>{@del BEAN_beanFilters}
+	<li class='jm'>{@del BeanContextBuilder#beanFilters(Object...)}</dc>
 </ul>
 <p>
 	For example:
@@ -69,8 +69,8 @@
 	The annotations will be detected and bean filters will automatically be created for them.
 </p>
 <p>
-	The {@link oaj.BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
-	Any class that's not a subclass of {@link oaj.transform.BeanFilterBuilder} get interpreted 
+	The {@del BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
+	Any class that's not a subclass of {@del oaj.transform.BeanFilterBuilder} get interpreted 
 	as bean interface classes.
 	These cause bean implementations of those interfaces to only expose the properties defined on the 
 	interface.

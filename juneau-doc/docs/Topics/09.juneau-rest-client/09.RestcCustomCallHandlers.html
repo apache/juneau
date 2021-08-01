@@ -16,18 +16,18 @@
 {title:'Custom Call Handlers', created:'8.2.0', flags:'todo'}
 
 <p>
-	The {@link oajr.client2.RestCallHandler} interface provides the ability to provide custom handling of requests.
+	The {@del oajr.client2.RestCallHandler} interface provides the ability to provide custom handling of requests.
 </p>
 
 <ul class='javatree'>
-	<li class='jc'>{@link oajr.client2.RestClientBuilder}
+	<li class='jc'>{@del oajr.client2.RestClientBuilder}
 	<ul>
-		<li class='jm'>{@link oajr.client2.RestClientBuilder#callHandler(Class) callHandler(Class&lt;? extends RestCallHandler&gt;)}
-		<li class='jm'>{@link oajr.client2.RestClientBuilder#callHandler(RestCallHandler) callHandler(RestCallHandler)}
+		<li class='jm'>{@del oajr.client2.RestClientBuilder#callHandler(Class) callHandler(Class&lt;? extends RestCallHandler&gt;)}
+		<li class='jm'>{@del oajr.client2.RestClientBuilder#callHandler(RestCallHandler) callHandler(RestCallHandler)}
 	</ul>
-	<li class='jic'>{@link oajr.client2.RestCallHandler}
+	<li class='jic'>{@del oajr.client2.RestCallHandler}
 	<ul>
-		<li class='jm'><c>{@link oajr.client2.RestCallHandler#run(HttpHost,HttpRequest,HttpContext) run(HttpHost,HttpRequest,HttpContext)} <jk>returns</jk> HttpResponse</c>
+		<li class='jm'><c>{@del oajr.client2.RestCallHandler#run(HttpHost,HttpRequest,HttpContext) run(HttpHost,HttpRequest,HttpContext)} <jk>returns</jk> HttpResponse</c>
 	</ul>
 </ul>
 
@@ -61,8 +61,8 @@
 </p>
  
 <p>
-	Note that there are other ways of accomplishing this such as extending the {@link oajr.client2.RestClient} class and overriding
-	the {@link oaj.rest.client2.RestClient#run(HttpHost,HttpRequest,HttpContext)} method
+	Note that there are other ways of accomplishing this such as extending the {@del oajr.client2.RestClient} class and overriding
+	the {@del oaj.rest.client2.RestClient#run(HttpHost,HttpRequest,HttpContext)} method
 	or by defining your own {@link org.apache.http.protocol.HttpRequestExecutor}.  Using this interface is often simpler though.
 </p>
 	

@@ -24,23 +24,23 @@
 	<li>
 		{@link oaj.utils.PojoQuery} improvements.
 	<li>
-		New <dc>RemoteMethod.returns()</dc> annotation.
+		New {@del RemoteMethod#returns()} annotation.
 		<br>Allows you to specify whether the remote method returns the HTTP body or status code.
 	<li>
-		Fixed bugs with <dc>BEAN_includeProperties</dc> and <dc>BEAN_excludeProperties</dc> settings.
+		Fixed bugs with {@del BEAN_includeProperties} and {@del BEAN_excludeProperties} settings.
 	<li>
-		New/modified settings in <dc>HtmlDocSerializerContext</dc>:
+		New/modified settings in {@del HtmlDocSerializerContext}:
 		<ul>
-			<li><dc>HTMLDOC_script</dc>
-			<li><dc>HTMLDOC_style</dc> - Was <jsf>HTMLDOC_css</jsf>.
-			<li><dc>HTMLDOC_stylesheet</dc> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
+			<li>{@del HTMLDOC_script}
+			<li>{@del HTMLDOC_style} - Was <jsf>HTMLDOC_css</jsf>.
+			<li>{@del HTMLDOC_stylesheet} - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
 		</ul>
 	<li>
-		New <dc>ResourceFinder</dc> utility class.
+		New {@del ResourceFinder} utility class.
 		Allows you to search for resources up the parent hierarchy chain.
 		Also allows you to search for localized resources.
 	<li>
-		Eliminated the following properties from <dc>HtmlDocSerializerContext</dc>:
+		Eliminated the following properties from {@del HtmlDocSerializerContext}:
 		<jsf>HTMLDOC_title</jsf>, <jsf>HTMLDOC_description</jsf>, <jsf>HTMLDOC_description</jsf>
 		<br>See below on changes to simplify HTML headers.
 	<li>
@@ -64,7 +64,7 @@
 	<li>
 		Modifications to the following <ja>@HtmlDoc</ja> annotations:
 		<ul>
-			<li>{@link oajr.annotation.HtmlDoc#navlinks() navlinks()} - Now an array of strings instead of a JSON object.  Simplified syntax.
+			<li>{@del oajr.annotation.HtmlDoc#navlinks() navlinks()} - Now an array of strings instead of a JSON object.  Simplified syntax.
 				<br>For example:
 				<p class='bcode w800'>
 	<jc>// Old syntax</jc>
@@ -93,12 +93,12 @@
 			<li>Several annotations are now arrays of strings instead of simple strings.
 				Values are simply concatenated with newlines which makes multi-line values cleaner.
 				<ul>
-					<li>{@link oajr.annotation.HtmlDoc#header() header()}
-					<li>{@link oajr.annotation.HtmlDoc#nav() nav()}
-					<li>{@link oajr.annotation.HtmlDoc#aside() aside()}
-					<li>{@link oajr.annotation.HtmlDoc#footer() footer()}
-					<li>{@link oajr.annotation.HtmlDoc#script() script()}
-					<li>{@link oajr.annotation.HtmlDoc#style() style()}
+					<li>{@del oajr.annotation.HtmlDoc#header() header()}
+					<li>{@del oajr.annotation.HtmlDoc#nav() nav()}
+					<li>{@del oajr.annotation.HtmlDoc#aside() aside()}
+					<li>{@del oajr.annotation.HtmlDoc#footer() footer()}
+					<li>{@del oajr.annotation.HtmlDoc#script() script()}
+					<li>{@del oajr.annotation.HtmlDoc#style() style()}
 				</ul>
 				Additionally, the <js>"INHERIT"</js> string literal can be used to combine the value with
 				the value defined on the servlet or parent class.  Links can also be inserted at specific
@@ -110,14 +110,14 @@
 			<li>
 				You can now add arbitrary CSS and Javascript along with your widgets through new methods:
 				<ul>
-					<li><dc>Widget#getHtml(RestRequest)</dc>
-					<li><dc>Widget#getScript(RestRequest)</dc>
-					<li><dc>Widget#getStyle(RestRequest)</dc>
+					<li>{@del Widget#getHtml(RestRequest)}
+					<li>{@del Widget#getScript(RestRequest)}
+					<li>{@del Widget#getStyle(RestRequest)}
 				</ul>
 			</li>
 			<li>
-				Declaration of widgets moved to {@link oajr.annotation.HtmlDoc#widgets() @HtmlDoc(widgets)} 
-				instead of separately on <dc>@RestResource</dc> and <ja>@RestMethod</ja> annotations.
+				Declaration of widgets moved to {@del oajr.annotation.HtmlDoc#widgets() @HtmlDoc(widgets)} 
+				instead of separately on {@del @RestResource} and <ja>@RestMethod</ja> annotations.
 			<li>
 				{@link oajr.widget.Widget#getName()} now defaults to the simple class name.
 				<br>So now you can just refer to the class name: <js>"$W{ContentTypeMenuItem}"</js>.
@@ -144,37 +144,37 @@
 				<br><img src='doc-files/ReleaseNotes.631.StyleMenuItem.png'>
 		</ul>
 	<li>
-		New/modified annotations on {@link oajr.annotation.HtmlDoc @HtmlDoc}:
+		New/modified annotations on {@del oajr.annotation.HtmlDoc @HtmlDoc}:
 		<ul>
-			<li>{@link oajr.annotation.HtmlDoc#style() style()} - Renamed from <c>css()</c>.
-			<li>{@link oajr.annotation.HtmlDoc#stylesheet() stylesheet()} - Renamed from <c>cssUrl()</c>.
+			<li>{@del oajr.annotation.HtmlDoc#style() style()} - Renamed from <c>css()</c>.
+			<li>{@del oajr.annotation.HtmlDoc#stylesheet() stylesheet()} - Renamed from <c>cssUrl()</c>.
 				<br>Can now be a comma-delimited list of URLs.
-			<li>{@link oajr.annotation.HtmlDoc#script() script()} - Add arbitrary Javascript to page header.
+			<li>{@del oajr.annotation.HtmlDoc#script() script()} - Add arbitrary Javascript to page header.
 		</ul>
 
 	<li>
-		Bug fix with {@link oajr.annotation.HtmlDoc#nowrap() @HtmlDoc(nowrap)} so that the setting only applies
+		Bug fix with {@del oajr.annotation.HtmlDoc#nowrap() @HtmlDoc(nowrap)} so that the setting only applies
 		to the data contents, not the whole page.
 	<li>
 		Two convenience methods added to {@link oajr.RestRequest}:
 		<ul>
-			<li>{@link oajr.RestRequest#attr(String,Object) attr(String,Object)}
-			<li>{@link oajr.RestRequest#prop(String,Object) prop(String,Object)}
+			<li>{@del RestRequest#attr(String,Object)}
+			<li>{@del RestRequest#prop(String,Object)}
 		</ul>
 	</li>
 	<li>
 		Annotations added:
 		<ul>
-			<li><dc>@RestResource(siteName)</dc>
-			<li><dc>@RestResource(flags)</dc>
-			<li>{@link oajr.annotation.RestMethod#flags() @RestMethod(flags)}
+			<li>{@del @RestResource(siteName)}
+			<li>{@del @RestResource(flags)}
+			<li>{@del oajr.annotation.RestMethod#flags() @RestMethod(flags)}
 		</ul>
 	</li>
 	<li>
-		Eliminated the <dc>@RestResource(stylesheet)</dc> annotation.  
+		Eliminated the {@del @RestResource(stylesheet)} annotation.  
 		It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 	<li>
-		Eliminated the following annotations since they are now redundant with {@link oajr.annotation.HtmlDoc#header() @HtmlDoc(header)}:
+		Eliminated the following annotations since they are now redundant with {@del oajr.annotation.HtmlDoc#header() @HtmlDoc(header)}:
 		<ul>
 			<li><c>title()</c>
 			<li><c>description()</c>
@@ -204,13 +204,13 @@
 	)
 		</p>
 	<li>
-		New <dc>ReaderResource.toCommentStrippedString()</dc> method.
+		New {@del ReaderResource#toCommentStrippedString()} method.
 	<li>
 		The <c>bpIncludes()</c> and <c>bpExcludes()</c> annotations on <ja>@RestMethod</ja>
 		has been replaced with the following:
 		<ul>
-			<li>{@link oajr.annotation.RestMethod#bpi() bpi()} - Now an array of simplified values instead of LAX JSON.
-			<li>{@link oajr.annotation.RestMethod#bpx() bpx()} - Now an array of simplified values instead of LAX JSON.
+			<li>{@del oajr.annotation.RestMethod#bpi() bpi()} - Now an array of simplified values instead of LAX JSON.
+			<li>{@del oajr.annotation.RestMethod#bpx() bpx()} - Now an array of simplified values instead of LAX JSON.
 		</ul>
 	<li>
 		Two new variables added to <c>$R</c> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>

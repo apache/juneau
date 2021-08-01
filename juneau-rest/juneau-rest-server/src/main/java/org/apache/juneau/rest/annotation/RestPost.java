@@ -28,7 +28,7 @@ import org.apache.juneau.dto.swagger.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>POST</jsf>)</c>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc RestOp}
+ * 	<li class='link'>{@doc RestMethod}
  * </ul>
  */
 @Documented

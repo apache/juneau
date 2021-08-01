@@ -31,7 +31,7 @@
 		so that they can be used when building REST proxy interfaces while only pulling in the marshall bundle.
 		<ul>
 			<li class='jp'>{@link oaj.http.response}
-			<li class='jp'>{@link oaj.http.exception}
+			<li class='jp'>{@del oaj.http.exception}
 			<li class='jp'>{@link oaj.http.remote}
 		</ul>
 		These replace the <c>org.apache.juneau.rest.response</c>, <c>org.apache.juneau.rest.exception</c>, and <c>org.apache.juneau.rest.client.remote</c> packages.
@@ -49,10 +49,10 @@
 		Support for {@link java.util.Optional} on method parameters annotated with {@link oaj.http.annotation.Header}, {@link oaj.http.annotation.FormData},  
 		{@link oaj.http.annotation.Query}, {@link oaj.http.annotation.Path}.
 	<li>
-		Fixed issue where {@link oajr.annotation.RestMethod#debug() RestMethod.debug()} annotation wasn't resulting
+		Fixed issue where {@del oajr.annotation.RestMethod#debug() RestMethod.debug()} annotation wasn't resulting
 		in the HTTP request being logged.
 	<li>
-		{@link oajr.RestException} has been deprecated and replaced by {@link oaj.http.exception.HttpException}.
+		{@del oajr.RestException} has been deprecated and replaced by {@del oaj.http.exception.HttpException}.
 	<li>
 		Resolved issue where parameterized types on <ja>@RestMethod</ja>-annotated method parameters of Spring beans.
 		This is due to Spring relying on CGLIB for runtime-recompilation of beans that results in loss of parameterized-type
@@ -66,28 +66,28 @@
 		The fix involves resolving the original bean class for resolving parameterized type while leaving
 		method invocation on the proxy method so as not to bypass Spring features.
 	<li>
-		New methods on {@link oajr.BasicRest} to provide feature-parity with {@link oajr.RestServlet}:
+		New methods on {@del oajr.BasicRest} to provide feature-parity with {@link oajr.RestServlet}:
 		<ul class='javatree'>
-			<li class='jc'>{@link oajr.BasicRest}
+			<li class='jc'>{@del oajr.BasicRest}
 			<ul>
-				<li class='jm'>{@link oajr.BasicRest#getContext() getContext()}
-				<li class='jm'>{@link oajr.BasicRest#getRequest() getRequest()}
-				<li class='jm'>{@link oajr.BasicRest#getResponse() getResponse()}
-				<li class='jm'>{@link oajr.BasicRest#log(String) log(String)}
-				<li class='jm'>{@link oajr.BasicRest#log(String,Throwable) log(String,Throwable)}
-				<li class='jm'>{@link oajr.BasicRest#log(Level,String,Object[]) log(Level,String,Object[])}
-				<li class='jm'><dc>logObjects(Level,String,Object[])</dc>
-				<li class='jm'>{@link oajr.BasicRest#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
+				<li class='jm'>{@del oajr.BasicRest#getContext() getContext()}
+				<li class='jm'>{@del oajr.BasicRest#getRequest() getRequest()}
+				<li class='jm'>{@del oajr.BasicRest#getResponse() getResponse()}
+				<li class='jm'>{@del oajr.BasicRest#log(String) log(String)}
+				<li class='jm'>{@del oajr.BasicRest#log(String,Throwable) log(String,Throwable)}
+				<li class='jm'>{@del oajr.BasicRest#log(Level,String,Object[]) log(Level,String,Object[])}
+				<li class='jm'>{@del oajr.BasicRest#logObjects(Level,String,Object[])}
+				<li class='jm'>{@del oajr.BasicRest#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
 			</ul>
 		</ul>
 	<li>
-		The <dc>@RestResource(staticFiles)</dc> annotation now supports absolute path locations and multiple mappings:
+		The {@del @RestResource(staticFiles)} annotation now supports absolute path locations and multiple mappings:
 		<p class='bcode w800'>
 	<jc>// Resolves static files in root package "htdocs" or working directory "htdocs", and then relative package "htdocs".</jc>
 	<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocsfolder,htdocs:htdocs.package"</js>)
 		</p>
 	<li>
-		Fixed a bug in <dc>@RestResource(staticFiles)</dc> where the order of lookup between parent and child resources
+		Fixed a bug in {@del @RestResource(staticFiles)} where the order of lookup between parent and child resources
 		was wrong.
 </ul>
 

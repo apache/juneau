@@ -100,20 +100,20 @@ specific language governing permissions and limitations under the License.
 	The classes are closely tied to Apache HttpClient, yet provide lots of additional functionality:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oajr.client2.RestClient} <jk>extends</jk> {@link org.apache.http.client.HttpClient}, creates {@link oajr.client2.RestRequest} objects.
-	<li class='jc'>{@link oajr.client2.RestRequest} <jk>extends</jk> {@link org.apache.http.client.methods.HttpUriRequest}, creates {@link oajr.client2.RestResponse} objects.
-	<li class='jc'>{@link oajr.client2.RestResponse} <jk>extends</jk> {@link org.apache.http.HttpResponse}, creates {@link oajr.client2.RestResponseBody} and {@link oajr.client2.RestResponseHeader} objects.
-	<li class='jc'>{@link oajr.client2.RestResponseBody} <jk>extends</jk> {@link org.apache.http.HttpEntity}
-	<li class='jc'>{@link oajr.client2.RestResponseHeader} <jk>extends</jk> {@link org.apache.http.Header}
+	<li class='jc'>{@del oajr.client2.RestClient} <jk>extends</jk> {@link org.apache.http.client.HttpClient}, creates {@del oajr.client2.RestRequest} objects.
+	<li class='jc'>{@del oajr.client2.RestRequest} <jk>extends</jk> {@link org.apache.http.client.methods.HttpUriRequest}, creates {@del oajr.client2.RestResponse} objects.
+	<li class='jc'>{@del oajr.client2.RestResponse} <jk>extends</jk> {@link org.apache.http.HttpResponse}, creates {@del oajr.client2.RestResponseBody} and {@del oajr.client2.RestResponseHeader} objects.
+	<li class='jc'>{@del oajr.client2.RestResponseBody} <jk>extends</jk> {@link org.apache.http.HttpEntity}
+	<li class='jc'>{@del oajr.client2.RestResponseHeader} <jk>extends</jk> {@link org.apache.http.Header}
 </ul>
 
 <p>
-	Instances of this class are built using the {@link oajr.client2.RestClientBuilder} class which can be constructed using
-	the {@link oajr.client2.RestClient#create() RestClient.create()} method as shown above.
+	Instances of this class are built using the {@del oajr.client2.RestClientBuilder} class which can be constructed using
+	the {@del oajr.client2.RestClient#create() RestClient.create()} method as shown above.
 </p>
 <p>
 	Clients are typically created with a root URI so that relative URIs can be used when making requests.
-	This is done using the {@link oajr.client2.RestClientBuilder#rootUri(Object)} method.
+	This is done using the {@del oajr.client2.RestClientBuilder#rootUri(Object)} method.
 </p>
 
 <h5 class='figure'>Example:</h5>
@@ -126,41 +126,41 @@ specific language governing permissions and limitations under the License.
 </p>
 
 <p>
-	The {@link oajr.client2.RestClient} class creates {@link oajr.client2.RestRequest} objects using the following methods:
+	The {@del oajr.client2.RestClient} class creates {@del oajr.client2.RestRequest} objects using the following methods:
 </p>
 
 <ul class='javatree'>
-	<li class='jc'>{@link oajr.client2.RestClient}
+	<li class='jc'>{@del oajr.client2.RestClient}
 	<ul>
-		<li class='jm'>{@link oajr.client2.RestClient#get(Object) get(uri)} / {@link oajr.client2.RestClient#get() get()}
-		<li class='jm'>{@link oajr.client2.RestClient#put(Object,Object) put(uri,body)} / {@link oajr.client2.RestClient#put(Object) put(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#post(Object) post(uri,body)} / {@link oajr.client2.RestClient#post(Object) post(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#patch(Object,Object) patch(uri,body)} / {@link oajr.client2.RestClient#patch(Object) patch(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#delete(Object) delete(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#head(Object) head(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#options(Object) options(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#formPost(Object,Object) formPost(uri,body)} / {@link oajr.client2.RestClient#formPost(Object) formPost(uri)}
-		<li class='jm'>{@link oajr.client2.RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
-		<li class='jm'>{@link oajr.client2.RestClient#request(String,Object,Object) request(method,uri,body)}
+		<li class='jm'>{@del oajr.client2.RestClient#get(Object) get(uri)} / {@del oajr.client2.RestClient#get() get()}
+		<li class='jm'>{@del oajr.client2.RestClient#put(Object,Object) put(uri,body)} / {@del oajr.client2.RestClient#put(Object) put(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#post(Object) post(uri,body)} / {@del oajr.client2.RestClient#post(Object) post(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#patch(Object,Object) patch(uri,body)} / {@del oajr.client2.RestClient#patch(Object) patch(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#delete(Object) delete(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#head(Object) head(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#options(Object) options(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#formPost(Object,Object) formPost(uri,body)} / {@del oajr.client2.RestClient#formPost(Object) formPost(uri)}
+		<li class='jm'>{@del oajr.client2.RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
+		<li class='jm'>{@del oajr.client2.RestClient#request(String,Object,Object) request(method,uri,body)}
 	</ul>
 </ul>
  
 <p>
-	The {@link oajr.client2.RestRequest} class creates {@link oajr.client2.RestResponse} objects using the following methods:
+	The {@del oajr.client2.RestRequest} class creates {@del oajr.client2.RestResponse} objects using the following methods:
 </p>
 
 <ul class='javatree'>
-	<li class='jc'>{@link oajr.client2.RestRequest}
+	<li class='jc'>{@del oajr.client2.RestRequest}
 	<ul>
-		<li class='jm'>{@link oajr.client2.RestRequest#run() run()}
-		<li class='jm'>{@link oajr.client2.RestRequest#complete() complete()}
+		<li class='jm'>{@del oajr.client2.RestRequest#run() run()}
+		<li class='jm'>{@del oajr.client2.RestRequest#complete() complete()}
 	</ul>
 </ul>
 
 <p>
-	The distinction between the two methods is that {@link oajr.client2.RestRequest#complete() complete()} automatically consumes the response body and
-	{@link oajr.client2.RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
-	for reuse!  The {@link java.io.InputStream InputStreams} returned by the {@link oajr.client2.RestResponseBody} object are auto-closing once
+	The distinction between the two methods is that {@del oajr.client2.RestRequest#complete() complete()} automatically consumes the response body and
+	{@del oajr.client2.RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
+	for reuse!  The {@link java.io.InputStream InputStreams} returned by the {@del oajr.client2.RestResponseBody} object are auto-closing once
 	they are exhausted, so it is often not necessary to explicitly close them.
 </p>
 

@@ -16,16 +16,16 @@
 {title:'Response Status', created:'8.1.0', flags:'todo'}
 
 <p>
-	After execution using {@link oajr.client2.RestRequest#run()} or {@link oajr.client2.RestRequest#complete()}, the following methods can be used
+	After execution using {@del oajr.client2.RestRequest#run()} or {@del oajr.client2.RestRequest#complete()}, the following methods can be used
 	to get the response status:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oajr.client2.RestResponse}
+	<li class='jc'>{@del oajr.client2.RestResponse}
 	<ul>
-		<li class='jm'><c>{@link oajr.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
-		<li class='jm'><c>{@link oajr.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
-		<li class='jm'><c>{@link oajr.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
-		<li class='jm'><c>{@link oajr.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link oajr.client2.RestResponseStatusLineAssertion}</c>
+		<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
+		<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
+		<li class='jm'><c>{@del oajr.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@del oajr.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@del oajr.client2.RestResponseStatusLineAssertion}</c>
 	</ul>
 </ul>
 
@@ -50,8 +50,8 @@
 </p>
 
 <ul class='notes'>
-	<li>If you are only interested in the response status and not the response body, be sure to use {@link oajr.client2.RestRequest#complete()} instead
-		of {@link oajr.client2.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
+	<li>If you are only interested in the response status and not the response body, be sure to use {@del oajr.client2.RestRequest#complete()} instead
+		of {@del oajr.client2.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
 		consume the response yourself.
 </ul>
 

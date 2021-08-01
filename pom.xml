@@ -247,6 +247,9 @@
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
 						<taglets>
 							<taglet>
+								<tagletClass>org.apache.juneau.doc.internal.DelTag</tagletClass>
+							</taglet>
+							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
 							</taglet>
 							<taglet>

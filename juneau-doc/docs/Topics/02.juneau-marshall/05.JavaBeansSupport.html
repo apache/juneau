@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Java Beans Support', created:'8.2.0'} 
+{title:'Java Beans Support', created:'8.2.0', flags:'todo'} 
 
 <p>
 	Out-of-the-box, Juneau supports marshalling of Java beans with standard public getters and setters, public
@@ -68,34 +68,34 @@
 	Several settings exist to allow you to customize how bean properties are handled by serializers and parsers:
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.BeanContext}
+	<li class='jc'>{@link oaj.BeanContextBuilder}
 	<ul>
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility} - Allows non-public POJOs to be treated as beans.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility} - Allows non-public constructors to be used on beans.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility} - Allows non-public fields to be used as bean properties.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility} - Allows non-public methods to be used as bean getters and setters.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor} - Don't treat a POJO as a bean if it doesn't have a default no-arg constructor.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable} - Don't treat a POJO as a bean if it doesn't implement <c>Serializable</c>.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters} - Ignore getter methods if they don't have setter methods.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties} - Don't treat a POJO as a bean if it doesn't have at least one property defined.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)} - Allows non-public POJOs to be treated as beans.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanConstructorVisibility beanConstructorVisibility(Visibility)} - Allows non-public constructors to be used on beans.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanFieldVisibility beanFieldVisibility(Visibility)} - Allows non-public fields to be used as bean properties.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanMethodVisibility beanMethodVisibility(Visibility)} - Allows non-public methods to be used as bean getters and setters.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()} - Don't treat a POJO as a bean if it doesn't have a default no-arg constructor.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beansRequireSerializable() beansRequireSerializable()} - Don't treat a POJO as a bean if it doesn't implement <c>Serializable</c>.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beansRequireSettersForGetters beansRequireSettersForGetters} - Ignore getter methods if they don't have setter methods.
+		<li class='jm'>{@link oaj.BeanContextBuilder#disableBeansRequireSomeProperties disableBeansRequireSomeProperties} - Don't treat a POJO as a bean if it doesn't have at least one property defined.
 	</ul>
 </ul>
 <p>
 	Settings and equivalent annotations are also available to control which properties are marshalled and how they are ordered.
 </p>
 <ul class='javatree'>
-	<li class='jc'>{@link oaj.BeanContext}
+	<li class='jc'>{@link oaj.BeanContextBuilder}
 	<ul>
-		<li class='jf'>{@link oaj.BeanContext#BEAN_bpi BEAN_bpi} - Specifies properties to include and property order during marshalling.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_bpx BEAN_bpx} - Specifies properties to exclude during marshalling.
-		<li class='jf'>{@link oaj.BeanContext#BEAN_bpro BEAN_bpro} - Specifies read-only properties (ignored during parsing).
-		<li class='jf'>{@link oaj.BeanContext#BEAN_bpwo BEAN_bpwo} - Specifies write-only properties (ignored during reading).
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanProperties(Class,String) beanProperties(Class,String)} - Specifies properties to include and property order during marshalling.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)} - Specifies properties to exclude during marshalling.
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String) } - Specifies read-only properties (ignored during parsing).
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)} - Specifies write-only properties (ignored during reading).
 	</ul>
 </ul>
 <p>
-	It's common to use the {@link oaj.annotation.Bean#bpi @Bean(bpi)} annotation to force the ordering
+	It's common to use the {@link oaj.annotation.Bean#properties @Bean(properties|p)} annotation to force the ordering
 	of properties during marshalling.  IBM JVMs keep the ordering of fields and methods in the compiled bytecode, but
-	Oracle JVMs do not and return fields/methods in random order.  The {@link oaj.annotation.Bean#bpi @Bean(bpi)} annotation was added to 
+	Oracle JVMs do not and return fields/methods in random order.  The {@link oaj.annotation.Bean#properties @Bean(properties|p)} annotation was added to 
 	help with this limitation.
 </p>
 <p class='bpcode w800'>

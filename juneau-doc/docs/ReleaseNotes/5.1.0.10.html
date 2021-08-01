@@ -29,7 +29,7 @@
 	</li>
 	<li>Fix bug where <c>BeanRuntimeExceptions</c> weren't being thrown on subsequent calls to {@link oaj.BeanContext#getClassMeta(Class)}.
 	<li>Moved logic for <c>BeanContext.getPrimitiveDefault(Class)</c> to new {@link oaj.ClassMeta#getPrimitiveDefault()} method for performance reasons.
-	<li>Fixed bug in <dc>BeanContext.addTransforms(Class[])</dc> that would cause filter order to get messed up.
+	<li>Fixed bug in {@del BeanContext#addTransforms(Class[])} that would cause filter order to get messed up.
 	<li>{@link oaj.ClassMeta#newInstance()} can now create array instances.
 	<li>Fixed indentation bugs in {@link oaj.html.HtmlSerializer}.
 	<li>Fixed issue in {@link oaj.html.HtmlSerializer} where newlines were not being converted into line breaks.
@@ -39,30 +39,30 @@
 <h5 class='topic w800'>Server</h5>		
 <ul class='spaced-list'>
 	<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
-		Calling <dc>HttpServlet.getParameter(String)</dc> was forcing the underlying servlet code to process the HTTP body itself, preventing the <c>UrlEncodingSerializer</c>
+		Calling {@del HttpServlet#getParameter(String)} was forcing the underlying servlet code to process the HTTP body itself, preventing the <c>UrlEncodingSerializer</c>
 		class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
-	<li>New <dc>RestRequest.getQueryParameter(String)</dc>, <dc>RestRequest.hasQueryParameter(String)</dc>, and <dc>RestRequest.hasAnyQueryParameters(String[])</dc>
+	<li>New {@del RestRequest#getQueryParameter(String)}, {@del RestRequest#hasQueryParameter(String)}, and {@del RestRequest#hasAnyQueryParameters(String[])}
 		methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
-	<li>New <dc>@QParam</dc> and <dc>@HasQParam</dc> annotations for accessing query parameters from the URL query string.
+	<li>New {@del @QParam} and {@del @HasQParam} annotations for accessing query parameters from the URL query string.
 	<li><c>&amp;plainText</c> parameter can now specify a false value.
-	<li>Removed properties parameters from <dc>RestServlet.onPreCall(RestRequest)</dc> and <dc>RestServlet#onPostCall(RestRequest,RestResponse)</dc> methods
+	<li>Removed properties parameters from {@del RestServlet#onPreCall(RestRequest)} and {@del RestServlet#onPostCall(RestRequest,RestResponse)} methods
 		since the properties are already accessible through <c>RestRequest.getProperties()</c>.
 	<li>Added {@link oaj.uon.UonSerializer} and {@link oaj.uon.UonParser} to serializer and parser lists on 
-		{@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc>.
+		{@link oajr.BasicRestServlet} and {@del RestServletJenaDefault}.
 </ul>
 
 <h5 class='topic w800'>Client</h5>		
 <ul class='spaced-list'>
 	<li>Moved to Apache HttpClient 4.3 to match Jazz 6.0.
-	<li>Renamed <c>RestResponseEntity</c> to {@link oajrc.RestRequestEntity}.
+	<li>Renamed <c>RestResponseEntity</c> to {@del oajrc.RestRequestEntity}.
 	<li>Improved performance on URL-Encoded form posts by serializing directly to output stream instead of serialized to string first.
 	<li>New methods on {@link oajrc.RestClient} class that makes it easier to associate serializer and parser attributes with registered serializer and parser:
 		<ul>
-			<li><dc>RestClient#setProperty(String,Object)</dc>			
-			<li><dc>RestClient#setProperties(ObjectMap)</dc>	
-			<li><dc>RestClient#addNotBeanClasses(Class[])</dc>		
-			<li><dc>RestClient.addTransforms(Class[])</dc>		
-			<li><dc>RestClient#addImplClass(Class,Class)</dc>	
+			<li>{@del RestClient#setProperty(String,Object)}			
+			<li>{@del RestClient#setProperties(ObjectMap)}	
+			<li>{@del RestClient#addNotBeanClasses(Class[])}		
+			<li>{@del RestClient#addTransforms(Class[])}		
+			<li>{@del RestClient#addImplClass(Class,Class)}	
 		</ul>
 	<li>Renamed <c>RestClient.shutdown()</c> to {@link oajrc.RestClient#close()} to mirror change in Apache API.		
 </ul>

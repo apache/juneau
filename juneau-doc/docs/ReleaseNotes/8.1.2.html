@@ -24,29 +24,29 @@
 	<li>
 		Support for read-only and write-only properties.
 		<ul>
-			<li class='ja'>{@link oaj.annotation.Bean#bpro()}
-			<li class='ja'>{@link oaj.annotation.Bean#bpwo()}
+			<li class='ja'>{@del oaj.annotation.Bean#bpro()}
+			<li class='ja'>{@del oaj.annotation.Bean#bpwo()}
 			<li class='ja'>{@link oaj.annotation.Beanp#ro()}
 			<li class='ja'>{@link oaj.annotation.Beanp#wo()}
-			<li class='jf'>{@link oaj.BeanContext#BEAN_bpro}
-			<li class='jf'>{@link oaj.BeanContext#BEAN_bpwo}
-			<li class='jm'>{@link oaj.BeanContextBuilder#bpro(Map)}
-			<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(Map)}
+			<li class='jf'>{@del BEAN_bpro}
+			<li class='jf'>{@del BEAN_bpwo}
+			<li class='jm'>{@del oaj.BeanContextBuilder#bpro(Map)}
+			<li class='jm'>{@del oaj.BeanContextBuilder#bpwo(Map)}
 		</ul>
 	<li>
 		New convenience methods:
 		<ul>	
-			<li class='jm'>{@link oaj.ObjectMap#parse(CharSequence)}
-			<li class='jm'>{@link oaj.ObjectList#parse(CharSequence)}
+			<li class='jm'>{@del oaj.ObjectMap#parse(CharSequence)}
+			<li class='jm'>{@del oaj.ObjectList#parse(CharSequence)}
 		</ul>
 	<li>
 		{@link oaj.marshall.CharMarshall} and {@link oaj.marshall.StreamMarshall} now have public constructors.
 	<li>
-		{@link oaj.annotation.Beanp @Beanp} replaces {@link oaj.annotation.BeanProperty @BeanProperty}.
+		{@link oaj.annotation.Beanp @Beanp} replaces {@del oaj.annotation.BeanProperty @BeanProperty}.
 	<li>
-		{@link oaj.annotation.Beanc @Beanc} replaces {@link oaj.annotation.BeanConstructor @BeanConstructor}.
+		{@link oaj.annotation.Beanc @Beanc} replaces {@del oaj.annotation.BeanConstructor @BeanConstructor}.
 	<li>
-		{@link oaj.http.remote.Remote @Remote} replaces {@link oaj.http.remote.RemoteResource @RemoteResource}.
+		{@link oaj.http.remote.Remote @Remote} replaces {@del oaj.http.remote.RemoteResource @RemoteResource}.
 	<li>
 		Shortened names for {@link oaj.annotation.Bean#dictionary @Bean(dictionary)} and {@link oaj.BeanContextBuilder#dictionary(Object...)}.
 </ul>
@@ -54,9 +54,9 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		{@link oajr.annotation.Rest @Rest} replaces {@link oajr.annotation.RestResource @RestResource} with shorter syntax.
+		{@link oajr.annotation.Rest @Rest} replaces {@del oajr.annotation.RestResource @RestResource} with shorter syntax.
 	<li>
-		New method {@link oajr.RestResponse#setHeaderSafe(String,String)} to strip invalid characters from header values.
+		New method {@del oajr.RestResponse#setHeaderSafe(String,String)} to strip invalid characters from header values.
 	<li>
 		Fixed issues related to invalid characters being set on HTTP header values.
 </ul>
@@ -65,7 +65,7 @@
 <ul class='spaced-list'>
 	<li>
 		{@link oajrc.RestClient} is now extendible.  The constructor has been made public and simplified to:
-		{@link oajrc.RestClient#RestClient(RestClientBuilder)}.
+		{@del oajrc.RestClient#RestClient(RestClientBuilder)}.
 	<li>
 		Duplicate methods between {@link oajrc.RestClientBuilder} and {@link org.apache.http.impl.client.HttpClientBuilder}
 		have been made deprecated on the former.  This eliminates the need to try to keep the two builder classes in

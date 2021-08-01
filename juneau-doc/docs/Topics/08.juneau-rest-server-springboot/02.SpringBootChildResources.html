@@ -16,7 +16,7 @@
 {title:'Child Resources', created:'8.1.0', flags:'todo'}
 
 <p>
-	When using the <ja>@JuneauRestRoot</ja> annotation, servlet are given an instance of {@link oajr.springboot.SpringRestResourceResolver}.  
+	When using the <ja>@JuneauRestRoot</ja> annotation, servlet are given an instance of {@del oajr.springboot.SpringRestResourceResolver}.  
 	The resource resolver gets passed down through the children hierarchy, allowing child resources to be defined as injectable Spring beans.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -59,7 +59,7 @@
 <p>
 	Because Spring Boot will automatically register any beans that extend from <c>HttpServlet</c>, we
 	DON'T want the child classes to extend from <c>HttpServlet</c>.  Instead, we extend from
-	{@link oajr.BasicRestGroup} and {@link oajr.BasicRest} instead:
+	{@del oajr.BasicRestGroup} and {@del oajr.BasicRest} instead:
 </p>
 
 <p class='bpcode w800'>

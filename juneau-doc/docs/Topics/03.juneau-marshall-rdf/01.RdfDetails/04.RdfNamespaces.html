@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Namespaces
+{title:'Namespaces', flags:'review'}
 
 <p>
 	You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
@@ -75,18 +75,17 @@ Namespaces
 	<xt>&lt;/rdf:RDF&gt;</xt>
 </p>
 <p>
-	Namespace auto-detection ({@link oaj.xml.XmlSerializer#XML_autoDetectNamespaces}) is 
-	enabled on serializers by default.
+	Namespace auto-detection is enabled on serializers by default.
 	This causes the serializer to make a first-pass over the data structure to look for namespaces.
 	In high-performance environments, you may want to consider disabling auto-detection and providing an 
-	explicit list of namespaces to the serializer to avoid this scanning step.
+	explicit list of namespaces to the serializer to avoid this scanning step using {@link oaj.xml.XmlSerializerBuilder#disableAutoDetectNamespaces()}.
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
 	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
-		.autoDetectNamespaces(<jk>false</jk>)
+		.disableAutoDetectNamespaces()
 		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
 		.build();
 </p>

@@ -58,7 +58,7 @@
 </p>
 <div class='warn'>
 	If you're using form input beans, DO NOT use the <l>@FormData</l> attribute or 
-	{@link oajr.RestRequest#getParameter(String)} method since this will cause the 
+	{@del RestRequest#getParameter(String)} method since this will cause the 
 	underlying JEE servlet to parse the HTTP body as a form post.
 	<br>Your input bean will end up being null since there won't be any content left after the servlet 
 	has parsed the body of the request.

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Namespaces'}
+{title:'Namespaces', flags:'review'}
 
 <p>
 	Let's go back to the example of our original <c>Person</c> bean class, but add some namespace annotations:
@@ -160,12 +160,11 @@
 	<xt>&lt;/person&gt;</xt>
 </p>
 <p>
-	One important property on the XML serializer class is 
-	{@link oaj.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
-	This property tells the serializer to make a first-pass over the data structure to look for namespaces 
+	By default, the XML serializer class will make a first-pass over the data structure to look for namespaces 
 	defined on classes and bean properties.
 	In high-performance environments, you may want to consider disabling auto-detection and providing your 
-	own explicit list of namespaces to the serializer to avoid this scanning step.
+	own explicit list of namespaces to the serializer to avoid this scanning step using 
+	{@link oaj.xml.XmlSerializerBuilder#disableAutoDetectNamespaces()}.
 </p>
 <p>
 	The following code will produce the same output as before, but will perform slightly better since it 

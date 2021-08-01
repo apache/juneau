@@ -76,7 +76,7 @@
 <ul class='javatree'>
 	<li class='jm'>{@link oajr.RestContext#getVarResolver()}
 	<li class='jm'>{@link oajr.RestRequest#getVarResolverSession()}
-	<li class='jm'>{@link oajr.RestRequest#getClasspathHttpResource(String,boolean)}
+	<li class='jm'>{@del RestRequest#getClasspathHttpResource(String,boolean)}
 </ul>
 <p>
 	There are two distinct groups of variables:
@@ -86,7 +86,7 @@
 		<br>These are variables that can be used in many of the annotations in {@link oajr.annotation.Rest @Rest}. 
 		<br>The {@link oajr.RestContext#getVarResolver()} method returns initialization-time variables only.
 	<li><l>Request-time variables</l>
-		<br>These are variables that are available during HTTP-requests and can be used on annotation such as {@link oajr.annotation.HtmlDoc @HtmlDoc}. 
+		<br>These are variables that are available during HTTP-requests and can be used on annotation such as {@del oajr.annotation.HtmlDoc @HtmlDoc}. 
 		<br>{@link oajr.RestRequest#getVarResolverSession()} method returns initialization and request-time variables.
 </ul>
 <p>
@@ -276,7 +276,7 @@
 		<td class='code'>$U{servlet:/foo?bar=$UE{$RA{bar}}</td>
 	</tr>
 	<tr class='dark dd'>
-		<td>{@link oajr.vars.WidgetVar}</td>
+		<td>{@del oajr.vars.WidgetVar}</td>
 		<td class='code'>$W{name}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>

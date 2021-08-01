@@ -19,12 +19,24 @@
 Juneau 9.0.0 is a major release. 
 </p>
 
+<h5 class='topic w800'>General changes</h5>
+<ul class='spaced-list'>
+	<li>Configuration property names that are enabled by default have been replaced with disabler properties.
+		<br>For example, <jsf>BEAN_useInterfaceProxies</jsf> which was enabled by default has been replaced with <jsf>BEAN_disableUseInterfaceProxies</jsf>.
+</ul>
+
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link aoj.annotation.Marshalled @Marshalled} annotation for non-bean classes.
+		New {@del oaj.annotation.Marshalled @Marshalled} annotation for non-bean classes.
 	<li>
-		New {@link aoj.annotation.Bean#example() @Bean(example)} annotation.
+		New {@link oaj.annotation.Bean#example() @Bean(example)} annotation.
+	<li>
+		Changes to {@link oaj.annotation.Bean @Bean} annotation.
+		<ul>
+			<li><c>@Bean(bpi|bpx|bpro|bpwo)</c> replaced with <c>@Bean(properties|propertiesExclude|propertiesReadOnly|propertiesWriteOnly|p|xp|ro|o)</c>
+			<li>New {@link oaj.annotation.Bean#example() @Bean(example)} annotation.
+		</ul>
 	<li>
 		Eliminated the various <c><ja>@XConfig</ja>(applyX={...})</c> annotations and replaced them with the ability
 		to apply targeted annotations directly to configuration classes and methods (such as REST classes/methods).
@@ -41,13 +53,13 @@ Juneau 9.0.0 is a major release.
 	}
 		</p>
 	<li>
-		New shortened form {@link oaj.http.remote.annotation.RemoteMethod#value()} for specifying http method name and path.
+		New shortened form {@link oaj.http.remote.RemoteOp#value()} for specifying http method name and path.
 		<p class='bpcode w800'>
 	<jc>// Normal form</jc>
-	<ja>@RemoteMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
+	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
 	
 	<jc>// Shortened form</jc>
-	<ja>@RemoteMethod</ja>(<js>"PUT /foo"</js>)
+	<ja>@RemoteOp</ja>(<js>"PUT /foo"</js>)
 		</p>
 </ul>
 
@@ -58,7 +70,7 @@ Juneau 9.0.0 is a major release.
 	<li>
 		Removed the <c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
 	<li>
-		New shortened form {@link oajr.annotation.RestMethod#value()} for specifying http method name and path.
+		New shortened form {@del oajr.annotation.RestMethod#value()} for specifying http method name and path.
 		<p class='bpcode w800'>
 	<jc>// Normal form</jc>
 	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)

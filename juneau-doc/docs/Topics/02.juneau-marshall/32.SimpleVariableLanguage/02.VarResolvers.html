@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'VarResolvers and VarResolverSessions'}
+{title:'VarResolvers and VarResolverSessions', flags:'todo'}
 
 <p>
 	The main class for performing variable resolution is {@link oaj.svl.VarResolver}.
@@ -48,15 +48,15 @@
 	Context and session objects are set through the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@link oaj.svl.VarResolverBuilder#contextObject(String,Object)} - Context objects.
-	<li class='jm'>{@link oaj.svl.VarResolverSession#sessionObject(String,Object)} - Session objects.
-	<li class='jm'>{@link oaj.svl.VarResolver#createSession(Map)} - Session objects.
+	<li class='jm'>{@del VarResolverBuilder#contextObject(String,Object)} - Context objects.
+	<li class='jm'>{@del VarResolverSession#sessionObject(String,Object)} - Session objects.
+	<li class='jm'>{@del VarResolver#createSession(Map)} - Session objects.
 </ul>
 <p>
 	Both kinds of objects are accessible through the following method:
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@link oaj.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
+	<li class='jm'>{@del VarResolverSession#getSessionObject(Class, String, boolean)}
 </ul>
 <p>
 	Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#copy()} method.

@@ -24,13 +24,13 @@
 	</li>
 	<li>
 		Changed the way child REST resources are defined.<br>
-		Eliminated the <ja>@RestChild</ja> annotation on getter methods and replaced it with <dc>@RestResource(children)</dc> defined on the resource class itself.<br>
-		Child resource paths are specified through <dc>@RestResource(path)</dc>.
+		Eliminated the <ja>@RestChild</ja> annotation on getter methods and replaced it with {@del @RestResource(children)} defined on the resource class itself.<br>
+		Child resource paths are specified through {@del @RestResource(path)}.
    		</li>
    		<li>
-   			New <dc>ChildResourceDescriptions</dc> bean for automatically generating the contents of router resource pages.
+   			New {@del ChildResourceDescriptions} bean for automatically generating the contents of router resource pages.
    		</li>
    		<li>
-		Changed <c><ja>@RestMethod</ja>.pattern()</c> to {@link oajr.annotation.RestMethod#path() @RestMethod(path)} for naming consistency.
+		Changed <c><ja>@RestMethod</ja>.pattern()</c> to {@del oajr.annotation.RestMethod#path() @RestMethod(path)} for naming consistency.
 	</li>
 </ul>

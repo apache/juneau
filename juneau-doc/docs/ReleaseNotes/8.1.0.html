@@ -211,16 +211,16 @@
 			<li class='jc'>{@link oajr.RequestAttributes}
 			<li class='jc'>{@link oajr.RestContext}
 			<ul>
-				<li class='jf'><dc>REST_attrs</dc>
+				<li class='jf'>{@del REST_attrs}
 			</ul>
 			<li class='jc'>{@link oajr.RestContextBuilder}
 			<ul>
-				<li class='jm'><dc>attrs(String...)</dc>
-				<li class='jm'><dc>attr(String,Object)</dc>
+				<li class='jm'>{@del attrs(String...)}
+				<li class='jm'>{@del attr(String,Object)}
 			</ul>
-			<li class='jc'>{@link oajr.RestMethodContext}
+			<li class='jc'>{@del oajr.RestMethodContext}
 			<ul>
-				<li class='jf'>{@link oajr.RestMethodContext#RESTMETHOD_attrs RESTMETHOD_attrs}
+				<li class='jf'>{@del oajr.RestMethodContext#RESTMETHOD_attrs RESTMETHOD_attrs}
 			</ul>
 			<li class='jc'>{@link oajr.RestRequest}
 			<ul>
@@ -232,17 +232,17 @@
 				<li class='jm'>{@link oajr.RestResponse#attr(String,Object) attr(String,Object)}
 			</ul>
 			<li class='ja'>{@link oajr.annotation.Attr}
-			<li class='ja'><dc>RestMethod#attrs()</dc>
-			<li class='ja'><dc>RestResource.attrs()</dc>
+			<li class='ja'>{@del RestMethod#attrs()}
+			<li class='ja'>{@del RestResource#attrs()}
 		</ul>
 		<br>This deprecates the following APIs:
 		<ul class='javatree'>
-			<li class='jc'>{@link oajr.RequestProperties}
-			<li class='jc'>{@link oajr.RestMethodProperties}
+			<li class='jc'>{@del oajr.RequestProperties}
+			<li class='jc'>{@del oajr.RestMethodProperties}
 			<li class='jc'>{@link oajr.RestRequest}
 			<ul>
-				<li class='jm'>{@link oajr.RestRequest#getProperties() getProperties()}
-				<li class='jm'>{@link oajr.RestRequest#prop(String,Object) prop(String,Object)}
+				<li class='jm'>{@del oajr.RestRequest#getProperties() getProperties()}
+				<li class='jm'>{@del oajr.RestRequest#prop(String,Object) prop(String,Object)}
 			</ul>
 		</ul>
 	<li>
@@ -250,8 +250,8 @@
 		<br>This fixes an issue where instances of {@link oajr.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  
 		<ul class='javatree'>
-			<li class='jac'>{@link oajr.BasicRest} - Non-servlet equivalent to {@link oajr.BasicRestServlet}
-			<li class='jac'>{@link oajr.BasicRestGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletGroup}
+			<li class='jac'>{@del oajr.BasicRest} - Non-servlet equivalent to {@link oajr.BasicRestServlet}
+			<li class='jac'>{@del oajr.BasicRestGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletGroup}
 			<li class='jac'>{@link oajr.BasicRestJena} - Non-servlet equivalent to {@link oajr.BasicRestServletJena}
 			<li class='jac'>{@link oajr.BasicRestJenaGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletJenaGroup}
 		</ul>
@@ -260,29 +260,29 @@
 	<li>
 		New annotations for simplified role-based guards on classes and methods:
 		<ul class='javatree'>
-			<li class='ja'><dc>RestResource</dc> 
+			<li class='ja'>{@del RestResource} 
 			<ul>
-				<li class='jm'><dc>roleGuard()</dc>
-				<li class='jm'><dc>rolesDeclared()</dc>
+				<li class='jm'>{@del roleGuard()}
+				<li class='jm'>{@del rolesDeclared()}
 			</ul>
-			<li class='ja'>{@link oajr.annotation.RestMethod} 
+			<li class='ja'>{@del oajr.annotation.RestMethod} 
 			<ul>
-				<li class='jm'>{@link oajr.annotation.RestMethod#roleGuard roleGuard()}
-				<li class='jm'>{@link oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
+				<li class='jm'>{@del oajr.annotation.RestMethod#roleGuard roleGuard()}
+				<li class='jm'>{@del oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
 			</ul>
 		</ul>
 	<li>
 		New annotations for fine-tuned handling of http-methods/http-headers as query parameters and others:
 		<ul class='javatree'>
-			<li class='ja'><dc>RestResource</dc> 
+			<li class='ja'>{@del RestResource} 
 			<ul>
-				<li class='jm'><dc>allowedHeaderParams()</dc>
-				<li class='jm'><dc>allowedMethodHeaders()}</dc>
-				<li class='jm'><dc>allowedMethodParams()</dc>
+				<li class='jm'>{@del allowedHeaderParams()}
+				<li class='jm'>{@del allowedMethodHeaders()}
+				<li class='jm'>{@del allowedMethodParams()}
 			</ul>
 		</ul>
 	<li>
-		The <dc>@RestResource(path)</dc> annotation can now use variables:
+		The {@del @RestResource(path)} annotation can now use variables:
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		path=<js>"/myResource/{foo}/{bar}"</js>
@@ -304,13 +304,13 @@
 	<li>
 		New interface method for catching arbitrary thrown objects and converting them to other throwables.
 		<ul class='javatree'>
-			<li class='jc'>{@link oajr.RestCallHandler}
+			<li class='jc'>{@del oajr.RestCallHandler}
 			<ul>
-				<li class='jm'>{@link oajr.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
+				<li class='jm'>{@del oajr.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
 			</ul>
-			<li class='jc'><dc>BasicRestCallHandler</dc>
+			<li class='jc'>{@del BasicRestCallHandler}
 			<ul>
-				<li class='jm'><dc>convertThrowable(Throwable)</dc>
+				<li class='jm'>{@del convertThrowable(Throwable)}
 			</ul>
 		</ul>
 	<li>

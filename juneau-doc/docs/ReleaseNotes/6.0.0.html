@@ -52,17 +52,17 @@
 		The following features were added to enable this support:
 		<ul>
 			<li>{@link oaj.annotation.Bean#typeName() @Bean(typeName)} - Annotation that defines an identifying name for a bean class.
-			<li>{@link oaj.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
+			<li>{@del oaj.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
 			<li>{@link oaj.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 				during parsing. 
-			<li><dc>BEAN_beanTypePropertyName</dc> - The overridable type property name.  Default is <js>"_type"</js>.
-			<li><dc>@BeanProperty(beanDictionary)</dc> - Define a type dictionary
+			<li>{@del BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
+			<li>{@del @BeanProperty(beanDictionary)} - Define a type dictionary
 				for a particular bean property value.  This overrides the value specified using {@link oaj.BeanContext#BEAN_beanDictionary}.
-			<li><dc>SerializerContext.SERIALIZER_addBeanTypeProperties</dc> - Controls whether type properties are serialized.
+			<li>{@del SerializerContext#SERIALIZER_addBeanTypeProperties} - Controls whether type properties are serialized.
 		</ul>
 		In addition, the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} value replaces the <c>@Xml(name)</c> annotation, and the 
 		<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
-	<li>Refactor bean filter support to use {@link oaj.transform.BeanFilterBuilder} class.
+	<li>Refactor bean filter support to use {@del oaj.transform.BeanFilterBuilder} class.
 		Allows the <c>BeanFilter</c> class to use final fields.
 	<li>{@link oaj.msgpack MessagePack} support.
 	<li>Serializers can now serialize directly to {@link java.io.File Files}.
@@ -76,40 +76,40 @@
 	<li>New methods on {@link oaj.parser.Parser}:
 		<ul>
 			<li><c>org.apache.juneau.parser.Parser.createSession(ObjectMap,Method,Object)</c>
-			<li><dc>Parser.getMediaRanges()</dc>
+			<li>{@del Parser#getMediaRanges()}
 		</ul>
 	</li>
 	<li>New methods on {@link oaj.serializer.Serializer}:
 		<ul>
 			<li><c>org.apache.juneau.serializer.Serializer.createSession(ObjectMap,Method)</c>
-			<li><dc>Serializer.getMediaRanges()</dc>
+			<li>{@del Serializer#getMediaRanges()}
 		</ul>
 	</li>
 	<li>New {@link oaj.annotation.Bean#sort() @Bean(sort)} annotation.
 	<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
 		between IBM and Oracle JVMs.<br>
 		IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
-	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via <dc>ClassUtils.getReadableClassName(Class)</dc>.
+	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via {@del ClassUtils#getReadableClassName(Class)}.
 	<li>Eliminated the <c>ClassFilter</c> class since it's no longer needed.
 	<li>Code and concurrency improvements to {@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup}.
-	<li>Various enhancements to <dc>BeanContext.convertToType(Object,Class)</dc>.
+	<li>Various enhancements to {@del BeanContext#convertToType(Object,Class)}.
 	<li>New properties on {@link oaj.html.HtmlSerializer}:
 		<ul>
-			<li><dc>HtmlSerializerContext.HTML_detectLinksInStrings</dc> - Automatically detect hyperlinks in strings.
-			<li><dc>HtmlSerializerContext.HTML_lookForLabelParameters</dc> - Specify anchor text by appending <c>&amp;label=MyLabel</c> to URL.
-			<li><dc>HtmlSerializerContext.HTML_labelParameter</dc> - Specify what URL parameter to use as the anchor text label.
-			<li><dc>HtmlSerializerContext.URI_ANCHOR</dc> option for <dc>HtmlSerializerContext.HTML_uriAnchorText</dc>.				
+			<li>{@del HtmlSerializerContext#HTML_detectLinksInStrings} - Automatically detect hyperlinks in strings.
+			<li>{@del HtmlSerializerContext#HTML_lookForLabelParameters} - Specify anchor text by appending <c>&amp;label=MyLabel</c> to URL.
+			<li>{@del HtmlSerializerContext#HTML_labelParameter} - Specify what URL parameter to use as the anchor text label.
+			<li>{@del HtmlSerializerContext#URI_ANCHOR} option for {@del HtmlSerializerContext#HTML_uriAnchorText}.				
 		</ul>
 	</li>
 	<li>Removed generics from {@link oaj.BeanPropertyMeta}.
 	<li>Introduced new classes to eliminate the references to language-specific metadata in the core metadata classes:
 		<ul>
-			<li><dc>ClassMetaExtended</dc> / <dc>ClassMeta.getExtendedMeta(Class)</dc> 
-			<li><dc>BeanMetaExtended</dc> /<dc>BeanMeta.getExtendedMeta(Class)</dc> 
-			<li><dc>BeanPropertyMetaExtended</dc> / <dc>BeanPropertyMeta.getExtendedMeta(Class)</dc> 
+			<li>{@del ClassMetaExtended} / {@del ClassMeta#getExtendedMeta(Class)} 
+			<li>{@del BeanMetaExtended} /{@del BeanMeta#getExtendedMeta(Class)} 
+			<li>{@del BeanPropertyMetaExtended} / {@del BeanPropertyMeta#getExtendedMeta(Class)} 
 		</ul>
 	</li>
-	<li>Renamed <c>@Transform</c> annotation to <dc>@Pojo</dc> so that it can be used for various POJO-related behavior, not just associating transforms.  
+	<li>Renamed <c>@Transform</c> annotation to {@del @Pojo} so that it can be used for various POJO-related behavior, not just associating transforms.  
 	<li>Introduced {@link oaj.dto.swagger Swagger DTOs}.
 </ul>		
 
@@ -122,47 +122,47 @@
 			<li>Eliminated <c>ResourceOptions</c> and related code.
 			<li>New annotations and related methods:
 				<ul>
-					<li><dc>@RestResource(title)</dc> / {@link oajr.RestInfoProvider#getTitle(RestRequest)}
-					<li><dc>@RestResource(description)</dc> / {@link oajr.RestInfoProvider#getDescription(RestRequest)}
-					<li><dc>@RestResource(termsOfService)</dc> / <dc>RestInfoProvider.getTermsOfService(RestRequest)</dc>
-					<li><dc>@RestResource(contact)</dc> / <dc>RestInfoProvider.getContact(RestRequest)</dc>
-					<li><dc>@RestResource(license)</dc> / <dc>RestInfoProvider.getLicense(RestRequest)</dc>
-					<li><dc>@RestResource(version)</dc> / <dc>RestInfoProvider.getVersion(RestRequest)</dc>
-					<li><dc>@RestResource(tags)</dc> / <dc>RestInfoProvider.getTags(RestRequest)</dc>
-					<li><dc>@RestResource(externalDocs)</dc> / <dc>RestInfoProvidergetExternalDocs(RestRequest)</dc>
-					<li>{@link oajr.annotation.RestMethod#summary() @RestMethod(summary)} / <dc>RestInfoProvider.getMethodSummary(String,RestRequest)</dc>
-					<li>{@link oajr.annotation.RestMethod#description() @RestMethod(description)} /<dc>RestInfoProvider.getMethodDescription(String,RestRequest)</dc>
-					<li><dc>@RestMethod(externalDocs)</dc>
-					<li><dc>@RestMethod(tags)</dc>
-					<li><dc>@RestMethod(deprecated)</dc> 
-					<li><dc>@RestMethod(parameters)</dc> 
-					<li><dc>@RestMethod(responses)</dc>
+					<li>{@del @RestResource(title)} / {@del oajr.RestInfoProvider#getTitle(RestRequest)}
+					<li>{@del @RestResource(description)} / {@del oajr.RestInfoProvider#getDescription(RestRequest)}
+					<li>{@del @RestResource(termsOfService)} / {@del RestInfoProvider#getTermsOfService(RestRequest)}
+					<li>{@del @RestResource(contact)} / {@del RestInfoProvider#getContact(RestRequest)}
+					<li>{@del @RestResource(license)} / {@del RestInfoProvider#getLicense(RestRequest)}
+					<li>{@del @RestResource(version)} / {@del RestInfoProvider#getVersion(RestRequest)}
+					<li>{@del @RestResource(tags)} / {@del RestInfoProvider#getTags(RestRequest)}
+					<li>{@del @RestResource(externalDocs)} / {@del RestInfoProvidergetExternalDocs(RestRequest)}
+					<li>{@del oajr.annotation.RestMethod#summary() @RestMethod(summary)} / {@del RestInfoProvider#getMethodSummary(String,RestRequest)}
+					<li>{@del oajr.annotation.RestMethod#description() @RestMethod(description)} /{@del RestInfoProvider#getMethodDescription(String,RestRequest)}
+					<li>{@del @RestMethod(externalDocs)}
+					<li>{@del @RestMethod(tags)}
+					<li>{@del @RestMethod(deprecated)} 
+					<li>{@del @RestMethod(parameters)} 
+					<li>{@del @RestMethod(responses)}
 				</ul>
 			</li>					
 		</ul>
-	<li>New <dc>RestServletContext.paramFormat</dc> context property.
+	<li>New {@del RestServletContext#paramFormat} context property.
 	<li>New/updated methods on {@link oajr.RestServlet}:
 		<ul>
-			<li><dc>RestServlet.createProperties()</dc>
-			<li><dc>RestServlet.createBeanContext(ObjectMap,Class[],Class[])</dc>
-			<li><dc>RestServlet.createBeanFilters()</dc>
-			<li><dc>RestServlet.createPojoSwaps()</dc>
-			<li><dc>RestServlet.createParsers(ObjectMap,Class[],Class[])</dc>
-			<li><dc>RestServlet.createUrlEncodingSerializer(ObjectMap,Class[],Class[])</dc>
-			<li><dc>RestServlet.createUrlEncodingParser(ObjectMap,Class[],Class[])</dc>
-			<li><dc>RestServlet.createConverters(ObjectMap)</dc>
-			<li><dc>RestServlet.createDefaultRequestHeaders(ObjectMap)</dc>
-			<li><dc>RestServlet.createDefaultResponseHeaders(ObjectMap)</dc>
-			<li><dc>RestServlet.createEncoders(ObjectMap)</dc>
-			<li><dc>RestServlet.createGuards(ObjectMap)</dc>
-			<li><dc>RestServlet.createMimetypesFileTypeMap(ObjectMap)</dc>
-			<li><dc>RestServlet.createResponseHandlers(ObjectMap)</dc>
+			<li>{@del RestServlet#createProperties()}
+			<li>{@del RestServlet#createBeanContext(ObjectMap,Class[],Class[])}
+			<li>{@del RestServlet#createBeanFilters()}
+			<li>{@del RestServlet#createPojoSwaps()}
+			<li>{@del RestServlet#createParsers(ObjectMap,Class[],Class[])}
+			<li>{@del RestServlet#createUrlEncodingSerializer(ObjectMap,Class[],Class[])}
+			<li>{@del RestServlet#createUrlEncodingParser(ObjectMap,Class[],Class[])}
+			<li>{@del RestServlet#createConverters(ObjectMap)}
+			<li>{@del RestServlet#createDefaultRequestHeaders(ObjectMap)}
+			<li>{@del RestServlet#createDefaultResponseHeaders(ObjectMap)}
+			<li>{@del RestServlet#createEncoders(ObjectMap)}
+			<li>{@del RestServlet#createGuards(ObjectMap)}
+			<li>{@del RestServlet#createMimetypesFileTypeMap(ObjectMap)}
+			<li>{@del RestServlet#createResponseHandlers(ObjectMap)}
 		</ul>
 	</li>
 	<li>New client-version annotations:
 		<ul>
-			<li><dc>RestResource.clientVersionHeader</dc>  - The name of the header used to identify the client version.
-			<li>{@link oajr.annotation.RestMethod#clientVersion}  - The client version range applied to a Java method.
+			<li>{@del RestResource#clientVersionHeader}  - The name of the header used to identify the client version.
+			<li>{@del oajr.annotation.RestMethod#clientVersion}  - The client version range applied to a Java method.
 		</ul>
 	</li>
 </ul>
@@ -170,5 +170,5 @@
 <h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 <ul class='spaced-list'>
 	<li>Removed the <c>JazzRestClient</c> class.
-	<li>New method <dc>RestClient.setClientVersion(String)</dc>.
+	<li>New method {@del RestClient#setClientVersion(String)}.
 </ul>		

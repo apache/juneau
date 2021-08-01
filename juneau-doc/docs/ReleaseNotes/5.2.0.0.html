@@ -25,40 +25,40 @@
 	<li>Significant changes and enhancements to the <c>org.apache.juneau.config</c> API.
 		<ul>
 			<li>More consistent handling of comma-delimited lists of objects.
-			<li>New methods in <dc>ConfigFile</dc>:
+			<li>New methods in {@del ConfigFile}:
 				<ul>
-					<li><dc>ConfigFile.getStringArray(String)</dc>,<dc>ConfigFile.getStringArray(String,String[])</dc>
-					<li><dc>ConfigFile.getSectionAsBean(String,Class)</dc> - Instantiate a new bean with property values in the specified section..
-					<li><dc>ConfigFile.writeProperties(String,Object,boolean,Class[])</dc> - Copy the properties in a config file section into properties on an existing bean or POJO.
-					<li><dc>ConfigFile.getSectionMap(String)</dc> - Get all the resolved values in a section.
-					<li><dc>ConfigFile.containsNonEmptyValue(String)</dc> 
-					<li><dc>ConfigFile.isEncoded(String)</dc> 
-					<li><dc>ConfigFile.addListener(ConfigFileListener)</dc> - Listen for modification events on the config file.
-					<li><dc>ConfigFile.merge(ConfigFile)</dc> - Merge the contents of another config file into this config file.
-					<li><dc>ConfigFile.getResolving()</dc>, <dc>ConfigFile.getResolving(StringVarResolver)</dc> - Return an instance of the config file that resolves string variables.
+					<li>{@del ConfigFile#getStringArray(String)},{@del ConfigFile#getStringArray(String,String[])}
+					<li>{@del ConfigFile#getSectionAsBean(String,Class)} - Instantiate a new bean with property values in the specified section..
+					<li>{@del ConfigFile#writeProperties(String,Object,boolean,Class[])} - Copy the properties in a config file section into properties on an existing bean or POJO.
+					<li>{@del ConfigFile#getSectionMap(String)} - Get all the resolved values in a section.
+					<li>{@del ConfigFile#containsNonEmptyValue(String)} 
+					<li>{@del ConfigFile#isEncoded(String)} 
+					<li>{@del ConfigFile#addListener(ConfigFileListener)} - Listen for modification events on the config file.
+					<li>{@del ConfigFile#merge(ConfigFile)} - Merge the contents of another config file into this config file.
+					<li>{@del ConfigFile#getResolving()}, {@del ConfigFile#getResolving(StringVarResolver)} - Return an instance of the config file that resolves string variables.
 						Much more efficient than the previous design since the same underlying config file object is shared.
-					<li><dc>ConfigFile.toWritable()</dc> - Wraps the config file in a {@link oaj.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
-					<li><dc>ConfigFile.getInt(String)</dc> - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
+					<li>{@del ConfigFile#toWritable()} - Wraps the config file in a {@link oaj.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
+					<li>{@del ConfigFile#getInt(String)} - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
 				</ul>
-			<li>New methods in <dc>ConfigMgr</dc>:
+			<li>New methods in {@del ConfigMgr}:
 				<ul>
-					<li><dc>ConfigMgr.create()</dc>, <dc>ConfigMgr.create(Reader)</dc>, <dc>ConfigMgr.create(File)</dc>
-					<li><dc>ConfigMgr.deleteAll()</dc>	
+					<li>{@del ConfigMgr#create()}, {@del ConfigMgr#create(Reader)}, {@del ConfigMgr#create(File)}
+					<li>{@del ConfigMgr#deleteAll()}	
 				</ul>
-			<li>New methods in <dc>Section</dc>:
+			<li>New methods in {@del Section}:
 				<ul>
-					<li><dc>Section.setParent(ConfigFileImpl)</dc> - Used by parsers to set the config file for this section.
-					<li><dc>Section.setName(String)</dc> - Used by parsers to set the name for this section.
+					<li>{@del Section#setParent(ConfigFileImpl)} - Used by parsers to set the config file for this section.
+					<li>{@del Section#setName(String)} - Used by parsers to set the name for this section.
 				</ul>
 			<li>New interfaces:
 				<ul>
-					<li><dc>org.apache.juneau.config.ConfigFileListener</dc>
-					<li><dc>org.apache.juneau.config.SectionListener</dc>
-					<li><dc>org.apache.juneau.config.EntryListener</dc> 
+					<li>{@del org.apache.juneau.config.ConfigFileListener}
+					<li>{@del org.apache.juneau.config.SectionListener}
+					<li>{@del org.apache.juneau.config.EntryListener}
 				</ul>
-			<li><dc>org.apache.juneau.config.Encoder</dc> methods have access to field names to use them as salt values.
+			<li>{@del org.apache.juneau.config.Encoder} methods have access to field names to use them as salt values.
 			<li>The name of the default section is now <js>"default"</js>.  Before it was just <jk>null</jk>.
-			<li><dc>org.apache.juneau.config.XorEncoder</dc> XOR key can be overridden through the <js>"org.apache.juneau.config.XorEncoder.key"</js> system property.
+			<li>{@del org.apache.juneau.config.XorEncoder} XOR key can be overridden through the <js>"org.apache.juneau.config.XorEncoder.key"</js> system property.
 		</ul> 
 	<li>Support for converting Strings to POJOs if the POJO class has any of the following static methods: 
 		<ul>
@@ -82,32 +82,32 @@
 	<li>Parsers have been enhanced to allow parent POJOs and field names to be passed into child POJOs.
 		New {@link oaj.annotation.NameProperty @NameProperty} and {@link oaj.annotation.ParentProperty @ParentProperty}
 			annotations are provided for identifying methods for setting names and parent POJOs on child POJOs.
-		For example, the config file <dc>Section</dc> class represents a section
-		in a config file.  It needs to know it's own name and have a link to the <dc>ConfigFile</dc> 
+		For example, the config file {@del Section} class represents a section
+		in a config file.  It needs to know it's own name and have a link to the {@del ConfigFile} 
 		that it belongs to.  With these new annotations, config files can be reconstructed using any of the parsers.
 	<li>New classes and interfaces:
 		<ul>
 			<li>{@link oaj.Streamable} interface for identifying objects that can be serialized directly to an output stream.
 			<li>{@link oaj.Writable} interface for identifying objects that can be serialized directly to a writer.
-			<li><dc>StringObject</dc> class that can be used for delayed object serialization.
-			<li><dc>ByteArrayCache</dc>
+			<li>{@del StringObject} class that can be used for delayed object serialization.
+			<li>{@del ByteArrayCache}
 			<li>{@link oaj.internal.ByteArrayInOutStream} 
 			<li>{@link oaj.internal.FileUtils}
 			<li>{@link oaj.internal.ThrowableUtils}
-			<li><dc>StringVarMultipart</dc>
-			<li><dc>StringVarWithDefault</dc>
+			<li>{@del StringVarMultipart}
+			<li>{@del StringVarWithDefault}
 		</ul> 
-	<li>New fields on {@link oaj.ObjectList}:
+	<li>New fields on {@del oaj.ObjectList}:
 		<ul>
-			<li>{@link oaj.ObjectList#EMPTY_LIST}
+			<li>{@del oaj.ObjectList#EMPTY_LIST}
 		</ul>
-	<li>New fields and methods on {@link oaj.ObjectMap}:
+	<li>New fields and methods on {@del oaj.ObjectMap}:
 		<ul>
-			<li>{@link oaj.ObjectMap#EMPTY_MAP}
-			<li>{@link oaj.ObjectMap#getStringArray(String)}
-			<li>{@link oaj.ObjectMap#getStringArray(String,String[])}
-			<li>{@link oaj.ObjectMap#putIfNull(String,Object)}
-			<li>{@link oaj.ObjectMap#putIfEmpty(String,Object)}
+			<li>{@del oaj.ObjectMap#EMPTY_MAP}
+			<li>{@del oaj.ObjectMap#getStringArray(String)}
+			<li>{@del oaj.ObjectMap#getStringArray(String,String[])}
+			<li>{@del oaj.ObjectMap#putIfNull(String,Object)}
+			<li>{@del oaj.ObjectMap#putIfEmpty(String,Object)}
 		</ul>
 	<li>New methods in {@link oaj.internal.ArrayUtils}:
 		<ul>
@@ -117,14 +117,14 @@
 		</ul>	
 	<li>New methods in {@link oaj.internal.IOUtils}:
 		<ul>
-			<li><dc>IOUtils.pipe(Reader,Writer)</dc>
+			<li>{@del IOUtils#pipe(Reader,Writer)}
 			<li>{@link oaj.internal.IOUtils#read(File)}
-			<li>{@link oaj.internal.IOUtils#readFile(String)}
-			<li>{@link oaj.internal.IOUtils#write(File,Reader)}
+			<li>{@del IOUtils#readFile(String)}
+			<li>{@del IOUtils#write(File,Reader)}
 		</ul>
 	<li>New methods on {@link oaj.utils.PojoRest}:
 		<ul>
-			<li><dc>PojoRest.get(Class,String,Object)</dc>
+			<li>{@del PojoRest#get(Class,String,Object)}
 			<li>{@link oaj.utils.PojoRest#getString(String)}
 			<li>{@link oaj.utils.PojoRest#getString(String,String)}
 			<li>{@link oaj.utils.PojoRest#getInt(String)}
@@ -137,19 +137,19 @@
 			<li>{@link oaj.utils.PojoRest#getMap(String,Map)}
 			<li>{@link oaj.utils.PojoRest#getList(String)}
 			<li>{@link oaj.utils.PojoRest#getList(String,List)}
-			<li>{@link oaj.utils.PojoRest#getObjectMap(String)}
-			<li>{@link oaj.utils.PojoRest#getObjectMap(String,ObjectMap)}
-			<li>{@link oaj.utils.PojoRest#getObjectList(String)}
-			<li>{@link oaj.utils.PojoRest#getObjectList(String,ObjectList)}
+			<li>{@del getObjectMap(String)}
+			<li>{@del getObjectMap(String,ObjectMap)}
+			<li>{@del getObjectList(String)}
+			<li>{@del getObjectList(String,ObjectList)}
 		</ul>
-	<li>New methods on {@link oaj.utils.ProcBuilder}:
+	<li>New methods on {@del oaj.utils.ProcBuilder}:
 		<ul>
-			<li>{@link oaj.utils.ProcBuilder#pipeTo(Writer,boolean)}
-			<li>{@link oaj.utils.ProcBuilder#pipeTo(Writer)}
-			<li>{@link oaj.utils.ProcBuilder#logTo(Writer,boolean)}
-			<li>{@link oaj.utils.ProcBuilder#logTo(Writer)}
-			<li>{@link oaj.utils.ProcBuilder#logTo(Level,Logger)}
-			<li>{@link oaj.utils.ProcBuilder#maxExitStatus(int)}
+			<li>{@del oaj.utils.ProcBuilder#pipeTo(Writer,boolean)}
+			<li>{@del oaj.utils.ProcBuilder#pipeTo(Writer)}
+			<li>{@del oaj.utils.ProcBuilder#logTo(Writer,boolean)}
+			<li>{@del oaj.utils.ProcBuilder#logTo(Writer)}
+			<li>{@del oaj.utils.ProcBuilder#logTo(Level,Logger)}
+			<li>{@del oaj.utils.ProcBuilder#maxExitStatus(int)}
 		</ul>
 	<li>New methods on {@link oaj.internal.StringUtils}:
 		<ul>
@@ -161,34 +161,34 @@
 			<li>{@link oaj.internal.StringUtils#base64Decode(String)}
 			<li>{@link oaj.internal.StringUtils#generateUUID(int)}
 			<li>{@link oaj.internal.StringUtils#trim(String)}
-			<li><dc>StringUtils.parseISO8601Date(String)</dc>
+			<li>{@del StringUtils#parseISO8601Date(String)}
 			<li>{@link oaj.internal.StringUtils#replaceVars(String,Map)}
 			<li>{@link oaj.internal.StringUtils#pathStartsWith(String,String)}
 			<li>{@link oaj.internal.StringUtils#pathStartsWith(String,String[])}
 		</ul>
-	<li>New <dc>StringVar.doResolve(String)</dc> method.
-	<li>New <dc>StringVarResolver.DEFAULT</dc> field.
+	<li>New {@del StringVar#doResolve(String)} method.
+	<li>New {@del StringVarResolver#DEFAULT} field.
 	<li>Eliminated dependency on <c>javax.mail.internet.MimeUtility</c> by implementing our own {@link oaj.internal.StringUtils#base64Encode(byte[])} method.
-	<li>{@link oaj.transforms.CalendarSwap} and {@link oaj.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
+	<li>{@del oaj.transforms.CalendarSwap} and {@del oaj.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 	<li>{@link oaj.html.HtmlDocSerializer} specifies the default CSS location as <c>/servletPath/style.css</c> instead of <c>/servletPath/htdocs/juneau.css</c>.  
 		This coincides with enhancements made in the server code for specifying styles.
 	<li>{@link oaj.html.HtmlDocSerializer} wraps output in two div tags instead of one (e.g. <c>&lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</c>).
 		Needed for supporting the new devops look-and-feel.
 	<li>Fixed indentation inconsistencies in {@link oaj.html.HtmlDocSerializer}.
-	<li>Renamed <del>HtmlSchemaSerializer</del> to <del>HtmlSchemaDocSerializer</del>.
+	<li>Renamed {@del HtmlSchemaSerializer} to {@del HtmlSchemaDocSerializer}.
 	<li>RDF serializers and parsers now support <c>RdfProperties.RDF_looseCollection</c> loose collections.
 	<li>RDF parser handles case where resources point to themselves (an unfortunate behavior in JFS RDF documents).
 	<li>JSON parser with throw an exception in strict mode if it encounters numbers that are valid in Java but invalid in JSON (e.g. octal, hexadecimal numbers).
 	<li>{@link oaj.parser.Parser} methods now check for <jk>null</jk> input.
 	<li>{@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
 	<li>{@link oaj.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
-	<li>New <dc>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</dc> serializer.
-	<li>Changes to <dc>Args</dc>:
+	<li>New {@del UrlEncodingSerializer#DEFAULT_SIMPLE_EXPANDED} serializer.
+	<li>Changes to {@del Args}:
 		<ul>
-			<li><c>getMainArg(int)</c> changed to <dc>Args.getArg(int)</dc>.  
+			<li><c>getMainArg(int)</c> changed to {@del Args#getArg(int)}.  
 				Non-existent arguments are returned as <jk>null</jk> instead of blank strings.  
 				This is more inline with the behavior of the rest of the library.
-			<li>New <dc>Args.hasArg(int)</dc> method.
+			<li>New {@del Args#hasArg(int)} method.
 		</ul> 
 	<li>Removed <c>org.apache.juneau.utils.CharsetUtils</c> class.
 	<li>Removed <c>org.apache.juneau.utils.ConcurrentIdentityList</c> class.
@@ -197,10 +197,10 @@
 		Simplifies the API on the class.
 	<li>{@link oaj.utils.PojoRest} must now be instantiated with a <c>ReaderParser</c>.
 		Simplifies the API on the class.
-	<li>{@link oaj.utils.MessageBundle} and <c>SafeResourceMultiBundle</c> moved from server component.
-	<li>Several bug fixes and performance improvements in <dc>StringVarResolver</dc>.
-	<li>Various enhancements to {@link oaj.internal.TeeWriter} and {@link oaj.internal.TeeOutputStream}.
-	<li>Renamed <del>CharSet</del> to {@link oaj.internal.AsciiSet}.
+	<li>{@del oaj.utils.MessageBundle} and <c>SafeResourceMultiBundle</c> moved from server component.
+	<li>Several bug fixes and performance improvements in {@del StringVarResolver}.
+	<li>Various enhancements to {@del oaj.internal.TeeWriter} and {@del oaj.internal.TeeOutputStream}.
+	<li>Renamed {@del CharSet} to {@link oaj.internal.AsciiSet}.
 	<li>{@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup} now ignores <c>NoClassDefFoundErrors</c>
 		so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 	<li>New {@link oaj.internal.FileUtils#createTempFile(String)} method.
@@ -212,100 +212,100 @@
 	<li>Upgraded to use Apache HttpClient 4.5.
 	<li>New classes:
 		<ul>
-			<li>{@link oajrc.AllowAllRedirects}
-			<li>{@link oajrc.HttpMethod}
-			<li>{@link oajrc.ResponsePattern}
-			<li>{@link oajrc.SimpleX509TrustManager}
-			<li><dc>SSLOpts</dc>
+			<li>{@del oajrc.AllowAllRedirects}
+			<li>{@del oajrc.HttpMethod}
+			<li>{@del oajrc.ResponsePattern}
+			<li>{@del oajrc.SimpleX509TrustManager}
+			<li>{@del SSLOpts}
 		</ul>
 	<li>Removed <c>org.apache.juneau.rest.client.LaxRedirectStrategy</c>.  Use HTTP Client equivalent.
-	<li>New methods on {@link oajrc.RestCall}:
+	<li>New methods on {@del oajrc.RestCall}:
 		<ul>
-			<li><dc>RestCall#addInterceptor(RestCallInterceptor)</dc>
-			<li>{@link oajrc.RestCall#pipeTo(Writer)}
-			<li>{@link oajrc.RestCall#pipeTo(Writer,boolean)}
-			<li>{@link oajrc.RestCall#pipeTo(String,Writer,boolean)}
-			<li>{@link oajrc.RestCall#getWriter(String)}
-			<li>{@link oajrc.RestCall#pipeTo(OutputStream)}
-			<li>{@link oajrc.RestCall#pipeTo(OutputStream,boolean)}
-			<li>{@link oajrc.RestCall#pipeTo(String,OutputStream,boolean)}
-			<li>{@link oajrc.RestCall#getOutputStream(String)}
-			<li>{@link oajrc.RestCall#byLines()}
-			<li>{@link oajrc.RestCall#captureResponse()}
-			<li>{@link oajrc.RestCall#successPattern(String)}
-			<li>{@link oajrc.RestCall#failurePattern(String)}
-			<li><dc>RestCall#addResponsePattern(ResponsePattern)</dc>
-			<li>{@link oajrc.RestCall#run()} - Renamed from <c>execute()</c>.
-			<li>{@link oajrc.RestCall#getCapturedResponse()}
-			<li>{@link oajrc.RestCall#getResponsePojoRest(Class)}
-			<li>{@link oajrc.RestCall#getResponsePojoRest()}
-			<li>{@link oajrc.RestCall#logTo(Level,Logger)}
-			<li>{@link oajrc.RestCall#setConfig(RequestConfig)}
+			<li>{@del RestCall#addInterceptor(RestCallInterceptor)}
+			<li>{@del oajrc.RestCall#pipeTo(Writer)}
+			<li>{@del oajrc.RestCall#pipeTo(Writer,boolean)}
+			<li>{@del oajrc.RestCall#pipeTo(String,Writer,boolean)}
+			<li>{@del oajrc.RestCall#getWriter(String)}
+			<li>{@del oajrc.RestCall#pipeTo(OutputStream)}
+			<li>{@del oajrc.RestCall#pipeTo(OutputStream,boolean)}
+			<li>{@del oajrc.RestCall#pipeTo(String,OutputStream,boolean)}
+			<li>{@del oajrc.RestCall#getOutputStream(String)}
+			<li>{@del oajrc.RestCall#byLines()}
+			<li>{@del oajrc.RestCall#captureResponse()}
+			<li>{@del oajrc.RestCall#successPattern(String)}
+			<li>{@del oajrc.RestCall#failurePattern(String)}
+			<li>{@del RestCall#addResponsePattern(ResponsePattern)}
+			<li>{@del oajrc.RestCall#run()} - Renamed from <c>execute()</c>.
+			<li>{@del oajrc.RestCall#getCapturedResponse()}
+			<li>{@del oajrc.RestCall#getResponsePojoRest(Class)}
+			<li>{@del oajrc.RestCall#getResponsePojoRest()}
+			<li>{@del oajrc.RestCall#logTo(Level,Logger)}
+			<li>{@del oajrc.RestCall#setConfig(RequestConfig)}
 		</ul>
-	<li>New lifecycle listener methods on {@link oajrc.RestCallInterceptor}:
+	<li>New lifecycle listener methods on {@del oajrc.RestCallInterceptor}:
 		<ul>
-			<li>{@link oajrc.RestCallInterceptor#onInit(RestCall)}
-			<li>{@link oajrc.RestCallInterceptor#onClose(RestCall)}
+			<li>{@del RestCallInterceptor#onInit(RestCall)}
+			<li>{@del RestCallInterceptor#onClose(RestCall)}
 		</ul>
 	<li>New methods on {@link oajrc.RestClient}:
 		<ul>
-			<li><dc>RestClient.setBasicAuth(String,int,String,String)</dc>
-			<li><dc>RestClient.logTo(Level,Logger)</dc>
-			<li><dc>RestClient.setRootUrl(String)</dc>
-			<li><dc>RestClient.enableSSL(SSLOpts)</dc>
-			<li><dc>RestClient.enableLaxSSL()</dc>
-			<li>{@link oajrc.RestClient#doCall(HttpMethod,Object,Object)}
-			<li><dc>RestClient.createHttpClientBuilder()</dc>
+			<li>{@del RestClient#setBasicAuth(String,int,String,String)}
+			<li>{@del RestClient#logTo(Level,Logger)}
+			<li>{@del RestClient#setRootUrl(String)}
+			<li>{@del RestClient#enableSSL(SSLOpts)}
+			<li>{@del RestClient#enableLaxSSL()}
+			<li>{@del RestClient#doCall(HttpMethod,Object,Object)}
+			<li>{@del RestClient#createHttpClientBuilder()}
 		</ul>
 	<li>New passthrough methods on {@link oajrc.RestClient} defined on <c>HttpClientBuilder</c>:
 		<ul>
-			<li><dc>RestClient.setRedirectStrategy(RedirectStrategy)</dc>
-			<li><dc>RestClient.setDefaultCookieSpecRegistry(Lookup)</dc>
-			<li><dc>RestClient.setRequestExecutor(HttpRequestExecutor)</dc>
-			<li><dc>RestClient.setSSLHostnameVerifier(HostnameVerifier)</dc>
-			<li><dc>RestClient.setPublicSuffixMatcher(PublicSuffixMatcher)</dc>
-			<li><dc>RestClient.setSSLContext(SSLContext)</dc>
-			<li><dc>RestClient.setSSLSocketFactory(LayeredConnectionSocketFactory)</dc>
-			<li><dc>RestClient.setMaxConnTotal(int)</dc>
-			<li><dc>RestClient.setMaxConnPerRoute(int)</dc>
-			<li><dc>RestClient.setDefaultSocketConfig(SocketConfig)</dc>
-			<li><dc>RestClient.setDefaultConnectionConfig(ConnectionConfig)</dc>
-			<li><dc>RestClient.setConnectionTimeToLive(long,TimeUnit)</dc>
-			<li><dc>RestClient.setConnectionManager(HttpClientConnectionManager)</dc>
-			<li><dc>RestClient.setConnectionManagerShared(boolean)</dc>
-			<li><dc>RestClient.setConnectionReuseStrategy(ConnectionReuseStrategy)</dc>
-			<li><dc>RestClient.setKeepAliveStrategy(ConnectionKeepAliveStrategy)</dc>
-			<li><dc>RestClient.setTargetAuthenticationStrategy(AuthenticationStrategy)</dc>
-			<li><dc>RestClient.setProxyAuthenticationStrategy(AuthenticationStrategy)</dc>
-			<li><dc>RestClient.setUserTokenHandler(UserTokenHandler)</dc>
-			<li><dc>RestClient.disableConnectionState()</dc>
-			<li><dc>RestClient.setSchemePortResolver(SchemePortResolver)</dc>
-			<li><dc>RestClient.setUserAgent(String userAgent)</dc>
-			<li><dc>RestClient.setDefaultHeaders(Collection)</dc>
-			<li><dc>RestClient.addInterceptorFirst(HttpResponseInterceptor)</dc>
-			<li><dc>RestClient.addInterceptorLast(HttpResponseInterceptor)</dc>
-			<li><dc>RestClient.addInterceptorFirst(HttpRequestInterceptor)</dc>
-			<li><dc>RestClient.addInterceptorLast(HttpRequestInterceptor)</dc>
-			<li><dc>RestClient.disableCookieManagement()</dc>
-			<li><dc>RestClient.disableContentCompression()</dc>
-			<li><dc>RestClient.disableAuthCaching()</dc>
-			<li><dc>RestClient.setHttpProcessor(HttpProcessor)</dc>
-			<li><dc>RestClient.setRetryHandler(HttpRequestRetryHandler)</dc>
-			<li><dc>RestClient.disableAutomaticRetries()</dc>
-			<li><dc>RestClient.setProxy(HttpHost)</dc>
-			<li><dc>RestClient.setRoutePlanner(HttpRoutePlanner)</dc>
-			<li><dc>RestClient.disableRedirectHandling()</dc>
-			<li><dc>RestClient.setConnectionBackoffStrategy(ConnectionBackoffStrategy)</dc>
-			<li><dc>RestClient.setBackoffManager(BackoffManager)</dc>
-			<li><dc>RestClient.setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)</dc>
-			<li><dc>RestClient.setDefaultCookieStore(CookieStore)</dc>
-			<li><dc>RestClient.setDefaultCredentialsProvider(CredentialsProvider)</dc>
-			<li><dc>RestClient.setDefaultAuthSchemeRegistry(Lookup)</dc>
-			<li><dc>RestClient.setContentDecoderRegistry(Map)</dc>
-			<li><dc>RestClient.setDefaultRequestConfig(RequestConfig)</dc>
-			<li><dc>RestClient.useSystemProperties()</dc>
-			<li><dc>RestClient.evictExpiredConnections()</dc>
-			<li><dc>RestClient.evictIdleConnections(long,TimeUnit)</dc>
+			<li>{@del RestClient#setRedirectStrategy(RedirectStrategy)}
+			<li>{@del RestClient#setDefaultCookieSpecRegistry(Lookup)}
+			<li>{@del RestClient#setRequestExecutor(HttpRequestExecutor)}
+			<li>{@del RestClient#setSSLHostnameVerifier(HostnameVerifier)}
+			<li>{@del RestClient#setPublicSuffixMatcher(PublicSuffixMatcher)}
+			<li>{@del RestClient#setSSLContext(SSLContext)}
+			<li>{@del RestClient#setSSLSocketFactory(LayeredConnectionSocketFactory)}
+			<li>{@del RestClient#setMaxConnTotal(int)}
+			<li>{@del RestClient#setMaxConnPerRoute(int)}
+			<li>{@del RestClient#setDefaultSocketConfig(SocketConfig)}
+			<li>{@del RestClient#setDefaultConnectionConfig(ConnectionConfig)}
+			<li>{@del RestClient#setConnectionTimeToLive(long,TimeUnit)}
+			<li>{@del RestClient#setConnectionManager(HttpClientConnectionManager)}
+			<li>{@del RestClient#setConnectionManagerShared(boolean)}
+			<li>{@del RestClient#setConnectionReuseStrategy(ConnectionReuseStrategy)}
+			<li>{@del RestClient#setKeepAliveStrategy(ConnectionKeepAliveStrategy)}
+			<li>{@del RestClient#setTargetAuthenticationStrategy(AuthenticationStrategy)}
+			<li>{@del RestClient#setProxyAuthenticationStrategy(AuthenticationStrategy)}
+			<li>{@del RestClient#setUserTokenHandler(UserTokenHandler)}
+			<li>{@del RestClient#disableConnectionState()}
+			<li>{@del RestClient#setSchemePortResolver(SchemePortResolver)}
+			<li>{@del RestClient.setUserAgent(String)}
+			<li>{@del RestClient#setDefaultHeaders(Collection)}
+			<li>{@del RestClient#addInterceptorFirst(HttpResponseInterceptor)}
+			<li>{@del RestClient#addInterceptorLast(HttpResponseInterceptor)}
+			<li>{@del RestClient#addInterceptorFirst(HttpRequestInterceptor)}
+			<li>{@del RestClient#addInterceptorLast(HttpRequestInterceptor)}
+			<li>{@del RestClient#disableCookieManagement()}
+			<li>{@del RestClient#disableContentCompression()}
+			<li>{@del RestClient#disableAuthCaching()}
+			<li>{@del RestClient#setHttpProcessor(HttpProcessor)}
+			<li>{@del RestClient#setRetryHandler(HttpRequestRetryHandler)}
+			<li>{@del RestClient#disableAutomaticRetries()}
+			<li>{@del RestClient#setProxy(HttpHost)}
+			<li>{@del RestClient#setRoutePlanner(HttpRoutePlanner)}
+			<li>{@del RestClient#disableRedirectHandling()}
+			<li>{@del RestClient#setConnectionBackoffStrategy(ConnectionBackoffStrategy)}
+			<li>{@del RestClient#setBackoffManager(BackoffManager)}
+			<li>{@del RestClient#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)}
+			<li>{@del RestClient#setDefaultCookieStore(CookieStore)}
+			<li>{@del RestClient#setDefaultCredentialsProvider(CredentialsProvider)}
+			<li>{@del RestClient#setDefaultAuthSchemeRegistry(Lookup)}
+			<li>{@del RestClient#setContentDecoderRegistry(Map)}
+			<li>{@del RestClient#setDefaultRequestConfig(RequestConfig)}
+			<li>{@del RestClient#useSystemProperties()}
+			<li>{@del RestClient#evictExpiredConnections()}
+			<li>{@del RestClient#evictIdleConnections(long,TimeUnit)}
 		</ul>
 	<li><c>JazzRestClient</c> now supports OIDC authentication.
 	<li>These classes are now deprecated and will be removed in a future release:
@@ -321,19 +321,19 @@
 
 <h5 class='topic w800'>Server</h5>
 <ul class='spaced-list'>
-	<li>New <dc>ReaderResource</dc> class.   
+	<li>New {@del ReaderResource} class.   
 		Represents the contents of a text file with convenience methods for resolving
-		<dc>StringVar</dc> variables and adding HTTP response headers.	
+		{@del StringVar} variables and adding HTTP response headers.	
 		REST Java methods can return instances of these to serialize <c>Readers</c>
-			containing text with <dc>StringVarResolver</dc> variables in them.
-	<li>New <dc>StreamResource</dc> class.   
+			containing text with {@del StringVarResolver} variables in them.
+	<li>New {@del StreamResource} class.   
 		REST Java methods can return instances of these to serialize <c>OutputStreams</c>.
-	<li>Fixed a bug in the stack trace hash algorithm in {@link oajr.RestException}.
+	<li>Fixed a bug in the stack trace hash algorithm in {@del oajr.RestException}.
 	<li>New methods in {@link oajr.RestRequest}:
 		<ul>
-			<li><dc>RestRequest.getReaderResource(String)</dc> - Replaces <c>getVarResource(String)</c>.
-			<li><dc>RestRequest.getReaderResource(String,boolean)</dc> 
-			<li><dc>RestRequest.getReaderResource(String,boolean,String)</dc>
+			<li>{@del RestRequest#getReaderResource(String)} - Replaces <c>getVarResource(String)</c>.
+			<li>{@del RestRequest#getReaderResource(String,boolean)} 
+			<li>{@del RestRequest#getReaderResource(String,boolean,String)}
 		</ul>
 	<li>Changes in {@link oajr.RestResponse}:
 		<ul>
@@ -341,42 +341,42 @@
 		</ul>
 	<li>New methods in {@link oajr.RestServlet}:
 		<ul>
-			<li><dc>RestServlet.getChildClasses()</dc>  - Programmatic equivalent to <dc>@RestResource(children)</dc> annotation.
-			<li><dc>RestServlet.shouldLog(HttpServletRequest,HttpServletResponse,RestException)</dc> 
-			<li><dc>RestServlet.shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</dc> 
-			<li><dc>RestServlet.logObjects(Level,String,Object[])</dc> 
-			<li><dc>RestServlet.resolveStaticFile(String)</dc> 
-			<li><dc>RestServlet.createStyleSheet()</dc> 
-			<li><dc>RestServlet.createFavIcon()</dc> 
-			<li><dc>RestServlet.createStaticFilesMap()</dc> 
-			<li><dc>RestServlet.getConfigMgr()</dc>
+			<li>{@del RestServlet#getChildClasses()}  - Programmatic equivalent to {@del @RestResource(children)} annotation.
+			<li>{@del RestServlet#shouldLog(HttpServletRequest,HttpServletResponse,RestException)} 
+			<li>{@del RestServlet#shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)} 
+			<li>{@del RestServlet#logObjects(Level,String,Object[])} 
+			<li>{@del RestServlet#resolveStaticFile(String)} 
+			<li>{@del RestServlet#createStyleSheet()} 
+			<li>{@del RestServlet#createFavIcon()} 
+			<li>{@del RestServlet#createStaticFilesMap()} 
+			<li>{@del RestServlet#getConfigMgr()}
 		</ul>
 	<li>Removed {@link oaj.jso.JsoParser}
-		from {@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc>.  
+		from {@link oajr.BasicRestServlet} and {@del RestServletJenaDefault}.  
 		These may represent a security risk if not handled correctly, so removed
 		them as a precaution.
-	<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with <dc>@RestResource(staticFiles)</dc>}.
-	<li>New annotations on <dc>@RestResource</dc>.
+	<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with {@del @RestResource(staticFiles)}}.
+	<li>New annotations on {@del @RestResource}.
 		<ul>
-			<li><dc>RestResource.stylesheet()</dc>
-			<li><dc>RestResource.favicon()</dc>
-			<li><dc>@RestResource(staticFiles)</dc>
+			<li>{@del RestResource#stylesheet()}
+			<li>{@del RestResource#favicon()}
+			<li>{@del @RestResource(staticFiles)}
 		</ul>
 	<li>Eliminated <c>org.apache.juneau.rest.jaxrs.JsonProvider</c> class.  
 		Some JAX-RS implementations use code scanning to find providers, so if you were using <c>DefaultJenaProvider</c>, it would
 		pick up <c>JsonProvider</c> as well.  It's easy enough to create your own implementation if needed.
 	<li>OPTIONS pages now specify <c>consumes</c> and <c>produces</c> fields instead of <c>accept</c> and <c>contentType</c> which was confusing.  
 	<li>Eliminated <c>properties</c> from OPTIONS pages. 
-	<li>New <dc>ResourceLink.ResourceLink(String,RestRequest,String,Object[])</dc> constructor.
+	<li>New {@del ResourceLink#ResourceLink(String,RestRequest,String,Object[])} constructor.
 	<li>New response handlers:
 		<ul>
-			<li><dc>StreamableHandler</dc> - Allows REST Java methods to return instances of {@link oaj.Streamable}.
-			<li><dc>WritableHandler</dc> - Allows REST Java methods to return instances of {@link oaj.Writable}.
+			<li>{@del StreamableHandler} - Allows REST Java methods to return instances of {@link oaj.Streamable}.
+			<li>{@del WritableHandler} - Allows REST Java methods to return instances of {@link oaj.Writable}.
 		</ul>
 	<li>New DevOps stylesheet.
 	<li>Servlet initialization and HTTP requests are now logged at <JSF>FINE</JSF> level.
 	<li>Added <jk>abstract</jk> modifier on various <l>RestServlet</l> subclasses to indicate that they're meant to be subclassed.
-	<li>New <dc>RestUtils.trimPathInfo(StringBuffer,String,String)</dc> method.
+	<li>New {@del RestUtils#trimPathInfo(StringBuffer,String,String)} method.
 </ul>
 
 <h5 class='topic w800'>Microservice</h5>
@@ -384,7 +384,7 @@
 	<li>Completely revamped API.
 	<li>New {@link oaj.microservice.Microservice} class that serves as a generic
 		interface for microservices and their lifecycles.
-	<li>New <dc>RestMicroservice</dc> class that implements a microservice
+	<li>New {@del RestMicroservice} class that implements a microservice
 		consisting of a REST interface.
 		<ul>
 			<li>REST resources and configuration settings can be defined through either manifest files
@@ -396,14 +396,14 @@
 		</ul>
 	<li>Eliminated <c>org.apache.juneau.microservice.Main</c> class.  This is replaced by
 		the microservice classes defined above.
-	<li><dc>Resource</dc> and <dc>ResourceGroup</dc>
+	<li>{@del Resource} and {@del ResourceGroup}
 		classes now support the following new string variables:
 		<ul>
 			<li><js>"$A{key,default}""</js> - Command line arguments.
 			<li><js>"$MF{key,default}""</js> - Manifest file entries.
 		</ul> 
 	<li>CSS stylesheet now configurable through config file entry <js>"REST/stylesheet"</js>.
-	<li>New <dc>BasicRestServletJena</dc> class if you want your REST interface to support RDF.
+	<li>New {@del BasicRestServletJena} class if you want your REST interface to support RDF.
 	<li>Eliminated the following classes:
 		<ul>
 			<li><c>org.apache.juneau.microservice.RootResource</c>
@@ -426,11 +426,11 @@
 
 <h5 class='topic w800'>Documentation Updates</h5>
 <ul class='spaced-list'>
-	<li><del>org.apache.juneau.microservice</del> - New package-level javadoc.
-	<li><del>org.apache.juneau.config</del> - New package-level javadoc.
-	<li><dc>StringVarResolver</dc> - New documentation.
-	<li><del>org.apache.juneau.rest.client</del> - New package-level javadoc.
+	<li>{@del org.apache.juneau.microservice} - New package-level javadoc.
+	<li>{@del org.apache.juneau.config} - New package-level javadoc.
+	<li>{@del StringVarResolver} - New documentation.
+	<li>{@del org.apache.juneau.rest.client} - New package-level javadoc.
 	<li><dc>Overview / Samples</dc> - New section.
-	<li><del>org.apache.juneau.transform / Stop Classes</del> - New section.
-	<li><del>org.apache.juneau.rest</del> - Extensive updates.
+	<li><dc>org.apache.juneau.transform / Stop Classes</dc> - New section.
+	<li>{@del org.apache.juneau.rest} - Extensive updates.
 </ul>

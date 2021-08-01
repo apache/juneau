@@ -26,26 +26,26 @@
 <h5 class='topic w800'>Core</h5>		
 <ul class='spaced-list'>
 	<li>Simplified {@link oaj.utils.PojoIntrospector} class.
-	<li>New <dc>ClassUtils.getMethodSignature(Method)</dc> method.
+	<li>New {@del ClassUtils#getMethodSignature(Method)} method.
 </ul>
 
 <h5 class='topic w800'>Client</h5>		
 <ul class='spaced-list'>
 	<li>New methods in {@link oajrc.RestClient} for working with remoteable services:
 	<ul>
-		<li><dc>RestClient.setRemoteableServletUri(String)</dc>
-		<li><dc>RestClient#getRemoteableProxy(Class)</dc>
+		<li>{@del RestClient#setRemoteableServletUri(String)}
+		<li>{@del RestClient#getRemoteableProxy(Class)}
 	</ul>
 </ul>
 
 <h5 class='topic w800'>Server</h5>		
 <ul class='spaced-list'>
-	<li>Added a default OPTIONS page to {@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc>.
+	<li>Added a default OPTIONS page to {@link oajr.BasicRestServlet} and {@del RestServletJenaDefault}.
 	<li><c>RestServletProperties.REST_allowMethodParam</c> has been enhanced to allow you to
 		explicitly specify which HTTP methods can be used in the <c>&amp;method</c> parameter.
 	<li>New methods added to {@link oajr.RestRequest}:
 	<ul>
-		<li><dc>RestRequest.getParser()</dc>
-		<li><dc>RestRequest.getReaderParser()</dc>
+		<li>{@del RestRequest#getParser()}
+		<li>{@del RestRequest#getReaderParser()}
 	</ul>
 </ul>

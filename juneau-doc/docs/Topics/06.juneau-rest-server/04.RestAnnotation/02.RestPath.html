@@ -16,14 +16,14 @@
 {title:'@Rest(path)', created:'8.1.0', updated:'8.1.2', flags:'todo'}
 
 <p>
-	The {@link oajr.annotation.RestResource#path() @RestResource(path)} annotation is used in the following situations:
+	The {@del oajr.annotation.RestResource#path() @RestResource(path)} annotation is used in the following situations:
 <p>
 <ul class='spaced-list'>
 	<li>
-		On child resources (resource classes attached to parents via the {@link oajr.annotation.RestResource#children() @RestResource(children)} annotation) to identify
+		On child resources (resource classes attached to parents via the {@del oajr.annotation.RestResource#children() @RestResource(children)} annotation) to identify
 		the subpath used to access the child resource relative to the parent.
 	<li>
-		On top-level {@link oajr.RestServlet} classes deployed as Spring beans when {@link oajr.springboot.JuneauRestInitializer} is being used.
+		On top-level {@link oajr.RestServlet} classes deployed as Spring beans when {@del oajr.springboot.JuneauRestInitializer} is being used.
 </ul>
 
 <h5 class='topic'>On child resources</h5>
@@ -70,7 +70,7 @@
 
 <h5 class='topic'>On top-level resources deployed as Spring beans</h5>
 <p>
-	The path can also be used on top-level resources deployed as Spring beans when used with the {@link oajr.springboot.JuneauRestInitializer}
+	The path can also be used on top-level resources deployed as Spring beans when used with the {@del oajr.springboot.JuneauRestInitializer}
 	Spring Boot initializer class:
 </p>
 <h5 class='figure'>Example:</h5>
@@ -108,7 +108,7 @@
 <h5 class='topic'>Path variables</h5>
 <p>
 	The path can contain variables that get resolved to {@link oaj.http.annotation.Path @Path} parameters
-	or access through the {@link oajr.RestRequest#getPathMatch()} method.
+	or access through the {@link oajr.RestRequest#getPathParams()} method.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode'>

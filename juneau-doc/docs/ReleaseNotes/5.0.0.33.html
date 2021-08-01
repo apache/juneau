@@ -34,12 +34,12 @@
 		<ul>
 			<li>{@link oaj.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
 			<li>{@link oaj.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
-			<li>{@link oaj.BeanContext#BEAN_notBeanPackages_add}
-			<li>{@link oaj.BeanContext#BEAN_notBeanPackages_remove}
+			<li>{@del BEAN_notBeanPackages_add}
+			<li>{@del BEAN_notBeanPackages_remove}
 		</ul>
 	</li>
 	<li>
-		Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@link oaj.BeanContext#BEAN_notBeanPackages_add} / {@link oaj.BeanContext#BEAN_notBeanPackages_remove} properties.
+		Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@del BeanContext#BEAN_notBeanPackages_add} / {@del BeanContext#BEAN_notBeanPackages_remove} properties.
 	</li>
 	<li>
 		New settings in <c>RestServletProperties</c>.

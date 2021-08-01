@@ -71,7 +71,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asInteger()}
  * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asLong()}
  * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asZonedDateTime()}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asType(Class,Type...)}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asType(Class)}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asType(Type,Type...)}
  * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}

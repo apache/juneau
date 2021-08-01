@@ -20,11 +20,11 @@
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oajr.springboot.annotation.JuneauRestRoot}
-	<li class='jc'>{@link oajr.springboot.JuneauRestInitializer}
-	<li class='jc'>{@link oajr.springboot.SpringRestResourceResolver}
+	<li class='jc'>{@del oajr.springboot.JuneauRestInitializer}
+	<li class='jc'>{@del oajr.springboot.SpringRestResourceResolver}
 </ul>
 <p>
-	A typical Spring Boot application can use the {@link oajr.springboot.JuneauRestInitializer} to find
+	A typical Spring Boot application can use the {@del oajr.springboot.JuneauRestInitializer} to find
 	and register Juneau REST servlets via the {@link oajr.springboot.annotation.JuneauRestRoot} annotation.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -67,7 +67,7 @@
 	}
 </p>
 <p>
-	The root servlets are given an instance of {@link oajr.springboot.SpringRestResourceResolver} which allows
+	The root servlets are given an instance of {@del oajr.springboot.SpringRestResourceResolver} which allows
 	for child resources to be defined as injectable Spring beans.  
 </p>
 <p>

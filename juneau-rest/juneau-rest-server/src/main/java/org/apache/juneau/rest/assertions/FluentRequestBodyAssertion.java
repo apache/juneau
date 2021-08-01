@@ -56,7 +56,8 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentRequestBodyAssertion#asBytes()}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#asType(Class,Type...)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#asType(Class)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#asType(Type,Type...)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}

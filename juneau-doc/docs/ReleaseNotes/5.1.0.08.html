@@ -36,9 +36,9 @@
 					from being modified after being created.  The new mechanism is much more straightforward.
 		</ul>
 	</li>
-	<li>Modifications to the <del>org.apache.juneau.rest.client</del> APIs to make it easier to work with custom Apache HTTP clients.
+	<li>Modifications to the {@del org.apache.juneau.rest.client} APIs to make it easier to work with custom Apache HTTP clients.
 		<ul>
-			<li>Added overridable <dc>RestClient#createHttpClient()</dc> to allow customized subclasses to construct customized HTTP clients.
+			<li>Added overridable {@del RestClient#createHttpClient()} to allow customized subclasses to construct customized HTTP clients.
 			<li>Removed the <c>DefaultRestClient</c> class since it's now fully redundant with <c>RestClient</c>.
 			<li>Added <c>RestClient.shutdown()</c> method for cleaning up the internal HTTP client when you're done using a REST client.
 		</ul>

@@ -1787,7 +1787,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_skipEmptyFormData RESTCLIENT_skipEmptyFormData}
 	 * 	<li><b>Name:</b>  <js>"RestClient.skipEmptyFormData.b"</js>
-	 * 	<li><b>Data type:</b>  {@link Boolean}
+	 * 	<li><b>Data type:</b>  {@link java.lang.Boolean}
 	 * 	<li><b>Default:</b>  <jk>false</jk>.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1817,7 +1817,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_skipEmptyHeaders RESTCLIENT_skipEmptyHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestClient.skipEmptyHeaders.b"</js>
-	 * 	<li><b>Data type:</b>  {@link Boolean}
+	 * 	<li><b>Data type:</b>  {@link java.lang.Boolean}
 	 * 	<li><b>Default:</b>  <jk>false</jk>.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1847,7 +1847,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_skipEmptyQueryData RESTCLIENT_skipEmptyQueryData}
 	 * 	<li><b>Name:</b>  <js>"RestClient.skipEmptyQueryData.b"</js>
-	 * 	<li><b>Data type:</b>  {@link Boolean}
+	 * 	<li><b>Data type:</b>  {@link java.lang.Boolean}
 	 * 	<li><b>Default:</b>  <jk>false</jk>.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

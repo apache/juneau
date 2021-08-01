@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Test Methods</h5>
  * 	<ul>
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#has(E...)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#has(Object...)}
  * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#is(Predicate)}
  * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#any(Predicate)}
  * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#all(Predicate)}

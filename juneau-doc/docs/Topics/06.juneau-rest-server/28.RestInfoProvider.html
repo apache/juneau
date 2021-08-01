@@ -16,7 +16,7 @@
 {title:'RestInfoProvider', flags:'todo'}
 
 <p>
-	The {@link oajr.RestInfoProvider} class is used to find the title
+	The {@del oajr.RestInfoProvider} class is used to find the title
 	and description for your resource and also generate the Swagger documentation.
 	It can be overridden to provide your own custom Swagger documentation.
 </p>
@@ -24,14 +24,14 @@
 	The methods on this interface are:
 </p>
 <ul class='javatree'>
-	<li class='jic'>{@link oajr.RestInfoProvider}
+	<li class='jic'>{@del RestInfoProvider}
 	<ul>
-		<li class='jm'>{@link oajr.RestInfoProvider#getSwagger(RestRequest) getSwagger(RestRequest)}
-		<li class='jm'>{@link oajr.RestInfoProvider#getSiteName(RestRequest) getSiteName(RestRequest)}
-		<li class='jm'>{@link oajr.RestInfoProvider#getTitle(RestRequest) getTitle(RestRequest)}
-		<li class='jm'>{@link oajr.RestInfoProvider#getDescription(RestRequest) getDescription(RestRequest)}
-		<li class='jm'>{@link oajr.RestInfoProvider#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
-		<li class='jm'>{@link oajr.RestInfoProvider#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+		<li class='jm'>{@del getSwagger(RestRequest)}
+		<li class='jm'>{@del getSiteName(RestRequest)}
+		<li class='jm'>{@del getTitle(RestRequest)}
+		<li class='jm'>{@del getDescription(RestRequest)}
+		<li class='jm'>{@del getMethodSummary(Method,RestRequest)}
+		<li class='jm'>{@del getMethodDescription(Method,RestRequest)}
 	</ul>
 </ul>
 <p>
@@ -41,18 +41,18 @@
 	<li class='jc'>{@link oajr.RestRequest}
 	<ul>
 		<li class='jm'>{@link oajr.RestRequest#getSwagger() getSwagger()}
-		<li class='jm'>{@link oajr.RestRequest#getSiteName() getSiteName()}
-		<li class='jm'>{@link oajr.RestRequest#getResourceTitle() getResourceTitle()}
-		<li class='jm'>{@link oajr.RestRequest#getResourceDescription() getResourceDescription()}
-		<li class='jm'>{@link oajr.RestRequest#getMethodSummary() getMethodSummary()}
-		<li class='jm'>{@link oajr.RestRequest#getMethodDescription() getMethodDescription()}
+		<li class='jm'>{@del getSiteName()}
+		<li class='jm'>{@del getResourceTitle()}
+		<li class='jm'>{@del getResourceDescription()}
+		<li class='jm'>{@del getMethodSummary()}
+		<li class='jm'>{@del getMethodDescription()}
 	</ul>
 </ul>
 <p>
 	Info providers are registered through the following property:
 </p>
 <ul class='javatree'>
-	<li class='jf'>{@link oajr.RestContext#REST_infoProvider}
+	<li class='jf'>{@del RestContext#REST_infoProvider}
 </ul>
 <p>
 	While you can implement this interface from scratch, you may want to instead consider extending

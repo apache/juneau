@@ -16,11 +16,11 @@
 {title:'MockRestClient', created:'8.2.0', flags:'todo'}
 
 <p>
-	The {@link oajr.mock2.MockRestClient} class is used for performing serverless unit testing of {@link oajr.annotation.Rest @Rest}-annotated
+	The {@del oajr.mock2.MockRestClient} class is used for performing serverless unit testing of {@link oajr.annotation.Rest @Rest}-annotated
 	and {@link oaj.http.remote.Remote @Remote}-annotated classes.
 </p>
 <p>
-	The {@link oajr.mock2.MockRestClient} itself extends from {@link oajr.client.RestClient} providing it with the rich
+	The {@del oajr.mock2.MockRestClient} itself extends from {@link oajr.client.RestClient} providing it with the rich
 	feature set of that API.
 	The following shows a simple example of invoking a PUT method on a simple REST interface and asserting
 	the correct status code and response body: 
@@ -92,8 +92,8 @@
 	}
 </p>
 <p>
-	The concept of the design is simple.  The {@link oajr.mock2.MockRestClient} class is used to create instances of {@link oajr.mock2.MockServletRequest}
-	and {@link oajr.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link oajr.RestCallHandler#execute(HttpServletRequest,HttpServletResponse)}.
+	The concept of the design is simple.  The {@del oajr.mock2.MockRestClient} class is used to create instances of {@del oajr.mock2.MockServletRequest}
+	and {@del oajr.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@del oajr.RestCallHandler#execute(HttpServletRequest,HttpServletResponse)}.
 	In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
 	actually having to run in a servlet container.	
 	All aspects of the client and server side code are tested, yet no servlet container is required.  The actual
@@ -145,7 +145,7 @@
 
 <hr>
 <p>
-	The {@link oajr.mock2.MockRestRequest} object has convenience methods provided to allow you to set properties
+	The {@del oajr.mock2.MockRestRequest} object has convenience methods provided to allow you to set properties
 	directly on the underlying {@link javax.servlet.HttpServletRequest} object.  The following example shows how
 	this can be used to directly set roles on the request object to perform security testing.
 </p>
@@ -170,7 +170,7 @@
 </p>
 <hr>
 <p>
-	The {@link oajr.mock2.MockRestClient} class has a debug mode that will cause your HTTP requests and responses to
+	The {@del oajr.mock2.MockRestClient} class has a debug mode that will cause your HTTP requests and responses to
 	be sent to the console:
 </p>
 <p class='bpcode w800'>
@@ -182,7 +182,7 @@
 </p>
 <hr>
 <p>
-	The {@link oajr.mock2.MockRestClient} class can also be used for testing of {@link oaj.http.remote.Remote}-annotated
+	The {@del oajr.mock2.MockRestClient} class can also be used for testing of {@link oaj.http.remote.Remote}-annotated
 	interfaces against {@link oajr.annotation.Rest @Rest}-annotated resources.
 </p>
 <h5 class='figure'>Example:</h5>

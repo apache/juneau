@@ -23,7 +23,7 @@
 	These properties can be defined for serializers and parsers registered on a REST resource via the following:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.Rest#properties() Rest(properties)} 
+	<li class='ja'>{@del Rest#properties()} 
 	<li class='jc'>{@link oajr.RestContextBuilder} - Various methods on the context builder.
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -68,8 +68,8 @@
 	Properties can also be overridden at the Java method level:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestOp#properties() RestOp(properties)} 
-	<li class='jc'>{@link oajr.RequestProperties} 
+	<li class='ja'>{@del RestOp#properties()}
+	<li class='jc'>{@del oajr.RequestProperties} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// GET method with method-level properties</jc>
@@ -90,7 +90,7 @@
 	}
 </p>
 <ul class='seealso'>
-	<li class='ja'>{@link oajr.annotation.Rest#flags() Rest(flags)} - Shorthand for boolean properties.
-	<li class='ja'>{@link oajr.annotation.RestOp#flags() RestOp(flags)} - Shorthand for boolean properties.
-	<li class='jc'>{@link oajr.RestContextProperties} 
+	<li class='ja'>{@del Rest#flags()} - Shorthand for boolean properties.
+	<li class='ja'>{@del RestOp#flags()} - Shorthand for boolean properties.
+	<li class='jc'>{@del oajr.RestContextProperties} 
 </ul>

@@ -1097,7 +1097,7 @@ public class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_defaultRequestAttributes REST_defaultRequestAttributes}
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultRequestAttributes.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link NamedAttribute}[]</c>
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.rest.NamedAttribute}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestContext.defaultRequestAttributes</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEFAULTREQUESTATTRIBUTES</c>
 	 * 	<li><b>Default:</b>  empty list
@@ -1842,9 +1842,9 @@ public class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Parser...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsersReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsersReplace(Parser...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2814,9 +2814,9 @@ public class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Serializer...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Serializer...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Class...)}
 	 * 		</ul>
 	 * </ul>

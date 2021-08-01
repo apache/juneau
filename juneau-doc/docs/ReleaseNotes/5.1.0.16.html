@@ -24,15 +24,15 @@
 	<li>New methods on {@link oaj.ClassMeta} that eliminates language-specific code in 
 		the general class metadata.
 		<ul>
-			<li><dc>ClassMeta.getXmlMeta()</dc>
-			<li><dc>ClassMeta.getJsonMeta()</dc>
-			<li><dc>ClassMeta.getHtmlMeta()</dc>
-			<li><dc>ClassMeta.getUrlEncodingMeta()</dc>
-			<li><dc>ClassMeta.getRdfMeta()</dc>
+			<li>{@del ClassMeta#getXmlMeta()}
+			<li>{@del ClassMeta#getJsonMeta()}
+			<li>{@del ClassMeta#getHtmlMeta()}
+			<li>{@del ClassMeta#getUrlEncodingMeta()}
+			<li>{@del ClassMeta#getRdfMeta()}
 		</ul>
 	<li>New {@link oaj.dto.jsonschema.JsonType#ANY} enum.
-	<li>New <dc>@Html(asPlainText)</dc> annotation.
-	<li>New <dc>HtmlDocSerializerContext.HTMLDOC_cssImports</dc> property.
+	<li>New {@del @Html(asPlainText)} annotation.
+	<li>New {@del HtmlDocSerializerContext#HTMLDOC_cssImports} property.
 	<li>Significant changes to RDF support.
 		<ul>
 			<li>New {@link oaj.jena.annotation.Rdf @Rdf} and {@link oaj.jena.annotation.RdfSchema @RdfSchema}
@@ -41,16 +41,16 @@
 			<li>Support for serializing arrays/collections as RDF bags, RDF lists, and multi-valued properties.   
 			<li>Fixed warning message about <js>"tab"</js> setting when using the N3/Turtle serializers.
 		</ul>
-	<li>New <dc>SerializerContext.SERIALIZER_sortCollections</dc> and 
-		<dc>SerializerContext.SERIALIZER_sortMaps</dc> properties.
+	<li>New {@del SerializerContext#SERIALIZER_sortCollections} and 
+		{@del SerializerContext#SERIALIZER_sortMaps} properties.
 	<li>FindBug fixes.
 </ul>
 
 <h5 class='topic w800'>Server</h5>
 <ul class='spaced-list'>
-	<li>New <dc>RestRequest.getServletParentURI()</dc> method.
+	<li>New {@del RestRequest#getServletParentURI()} method.
 	<li>New <c>$R{servletParentURI}</c> variable.
-	<li>Removed final modifier from <dc>ChildResourceDescriptions</dc>.
+	<li>Removed final modifier from {@del ChildResourceDescriptions}.
 </ul>
 
 <h5 class='topic w800'>Samples</h5>

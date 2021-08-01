@@ -64,6 +64,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
+ * {@review}
  */
 @ConfigurableContext(nocache=true)
 public class RestOperationContext extends BeanContext implements Comparable<RestOperationContext>  {
@@ -87,7 +88,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_clientVersion RESTMETHOD_clientVersion}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_clientVersion RESTOP_clientVersion}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.clientVersion.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.clientVersion</c>
@@ -171,7 +172,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * Configuration property:  REST method context class.
 	 *
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_contextClass RESTMETHOD_contextClass}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_contextClass RESTOP_contextClass}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.contextClass.c"</js>
 	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestOperationContext}&gt;</c>
 	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestOperationContext}
@@ -241,7 +242,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_debug RESTMETHOD_debug}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_debug RESTOP_debug}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.debug.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Enablement}
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.debug</c>
@@ -277,9 +278,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultFormData RESTMETHOD_defaultFormData}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultFormData RESTOP_defaultFormData}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultFormData.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link NameValuePair}[]</c>
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.NameValuePair}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultFormData</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTFORMDATA</c>
 	 * 	<li><b>Default:</b>  empty list
@@ -317,9 +318,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultQuery RESTMETHOD_defaultQuery}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultQuery RESTOP_defaultQuery}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultQuery.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link NameValuePair}[]</c>
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.NameValuePair}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultQuery</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTQUERY</c>
 	 * 	<li><b>Default:</b>  empty list
@@ -356,9 +357,9 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultRequestAttributes RESTMETHOD_defaultRequestAttributes}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultRequestAttributes RESTOP_defaultRequestAttributes}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.reqAttrs.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>{@link NamedAttribute}[]</c>
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.rest.NamedAttribute}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultRequestAttributes</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTOPERATIONCONTEXT_DEFAULTREQUESTATTRIBUTES</c>
 	 * 	<li><b>Default:</b>  empty list
@@ -400,7 +401,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultRequestHeaders RESTMETHOD_defaultRequestHeaders}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultRequestHeaders RESTOP_defaultRequestHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultRequestHeaders.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.Header}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultRequestHeaders</c>
@@ -445,7 +446,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultResponseHeaders RESTMETHOD_defaultResponseHeaders}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_defaultResponseHeaders RESTOP_defaultResponseHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.defaultResponseHeaders.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>{@link org.apache.http.Header}[]</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.defaultResponseHeaders</c>
@@ -490,7 +491,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_httpMethod RESTMETHOD_httpMethod}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_httpMethod RESTOP_httpMethod}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.httpMethod.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.httpMethod</c>
@@ -559,7 +560,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_matchers RESTMETHOD_matchers}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_matchers RESTOP_matchers}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.matchers.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestMatcher}|Class&lt;{@link org.apache.juneau.rest.RestMatcher}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
@@ -606,7 +607,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_path RESTMETHOD_path}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestOperationContext#RESTOP_path RESTOP_path}
 	 * 	<li><b>Name:</b>  <js>"RestOperationContext.path.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>String[]</c>
 	 * 	<li><b>System property:</b>  <c>RestOperationContext.path</c>
@@ -808,11 +809,11 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * </ul>
 	 *
 	 * @param resource The REST resource object.
-	 * @param properties xxx
+	 * @param properties TODO
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The result converters for this REST resource method.
 	 * @throws Exception If result converters could not be instantiated.
-	 * @see #REST_converters
+	 * @see RestContext#REST_converters
 	 */
 	protected RestConverterList createConverters(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -864,7 +865,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The guards for this REST resource method.
 	 * @throws Exception If guards could not be instantiated.
-	 * @see #REST_guards
+	 * @see RestContext#REST_guards
 	 */
 	protected RestGuardList createGuards(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -980,7 +981,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The encoders for this REST resource method.
 	 * @throws Exception If encoders could not be instantiated.
-	 * @see #REST_encoders
+	 * @see RestContext#REST_encoders
 	 */
 	protected EncoderGroup createEncoders(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1037,7 +1038,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The serializers for this REST resource.
 	 * @throws Exception If serializers could not be instantiated.
-	 * @see #REST_serializers
+	 * @see RestContext#REST_serializers
 	 */
 	protected SerializerGroup createSerializers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1098,7 +1099,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The parsers for this REST resource.
 	 * @throws Exception If parsers could not be instantiated.
-	 * @see #REST_parsers
+	 * @see RestContext#REST_parsers
 	 */
 	protected ParserGroup createParsers(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1160,7 +1161,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part serializer for this REST resource.
 	 * @throws Exception If serializer could not be instantiated.
-	 * @see #REST_partSerializer
+	 * @see RestContext#REST_partSerializer
 	 */
 	protected HttpPartSerializer createPartSerializer(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 
@@ -1218,7 +1219,7 @@ public class RestOperationContext extends BeanContext implements Comparable<Rest
 	 * @param beanStore The bean store to use for retrieving and creating beans.
 	 * @return The HTTP part parser for this REST resource.
 	 * @throws Exception If parser could not be instantiated.
-	 * @see #REST_partParser
+	 * @see RestContext#REST_partParser
 	 */
 	protected HttpPartParser createPartParser(Object resource, ContextProperties properties, BeanStore beanStore) throws Exception {
 

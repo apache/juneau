@@ -50,18 +50,18 @@
 			<li>{@link oaj.parser.ParserGroupBuilder}
 			<li>{@link oaj.encoders.EncoderGroupBuilder}
 		</ul>
-	<li>Revamped the config file API to use a build:  <dc>ConfigFileBuilder</dc>.
-	<li>Removed the <dc>Lockable</dc> interface.
+	<li>Revamped the config file API to use a build:  {@del ConfigFileBuilder}.
+	<li>Removed the {@del Lockable} interface.
 	<li>New <c>addBeanTypeProperties</c> setting added to serializers to override the 
-		<dc>SerializerContext.SERIALIZER_addBeanTypeProperties</dc> setting
+		{@del SerializerContext#SERIALIZER_addBeanTypeProperties} setting
 		for individual serializers in a serializer group:
 		<ul>
-			<li><dc>HtmlSerializerContext.HTML_addBeanTypeProperties</dc>
-			<li><dc>JsonSerializerContext.JSON_addBeanTypeProperties</dc>
-			<li><dc>MsgPackSerializerContext.MSGPACK_addBeanTypeProperties</dc>
-			<li><dc>UonSerializerContext.UON_addBeanTypeProperties</dc>
-			<li><dc>XmlSerializerContext.#XML_addBeanTypeProperties</dc>
-			<li><dc>RdfSerializerContext.RDF_addBeanTypeProperties</dc>
+			<li>{@del HtmlSerializerContext#HTML_addBeanTypeProperties}
+			<li>{@del JsonSerializerContext#JSON_addBeanTypeProperties}
+			<li>{@del MsgPackSerializerContext#MSGPACK_addBeanTypeProperties}
+			<li>{@del UonSerializerContext#UON_addBeanTypeProperties}
+			<li>{@del XmlSerializerContext#XML_addBeanTypeProperties}
+			<li>{@del RdfSerializerContext#RDF_addBeanTypeProperties}
 		</ul>
 	<li>UON notation serializers and parsers moved into the new <c>org.apache.juneau.uon</c> package.
 	<li>New {@link oaj.xml.annotation.XmlFormat#VOID} format to identify HTML void elements.
@@ -74,7 +74,7 @@
 		<ul>
 			<li>New {@link oaj.dto.swagger.SwaggerBuilder} class.
 			<li>Fluent-style setters added to the Swagger beans.
-			<li>Added Swagger examples <dc>here</dc> and in the <del>org.apache.juneau.dto.swagger</del> javadocs.
+			<li>Added Swagger examples {@del here} and in the {@del org.apache.juneau.dto.swagger} javadocs.
 		</ul>
 	<li>Improvements to {@link oaj.svl.VarResolver}.
 		<ul>
@@ -86,9 +86,9 @@
 	<li>Parse-args supported added to {@link oaj.msgpack.MsgPackParser} to allow it to be used in remoteable proxies. 
 	<li>Added some convenience classes for constructing collections using a fluent interface:
 		<ul>
-			<li><dc>AList</dc>
-			<li><dc>ASet</dc>
-			<li><dc>AMap</dc>
+			<li>{@del AList}
+			<li>{@del ASet}
+			<li>{@del AMap}
 		</ul>
 	<li>New {@link oaj.annotation.Bean#typePropertyName @Bean(typePropertyName)} annotation allows you to 
 		specify the name of the <js>"_type"</js> property at the class level.
@@ -97,23 +97,23 @@
 			<li>{@link oaj.dto.html5.HtmlElementContainer#getChild(int...)}
 			<li>{@link oaj.dto.html5.HtmlElementMixed#getChild(int...)}
 		</ul>
-	<li>New common serializer setting: <dc>SerializerContext.SERIALIZER_abridged</dc>.
+	<li>New common serializer setting: {@del SerializerContext#SERIALIZER_abridged}.
 	<li>Support for defining interface proxies against 3rd-party REST interfaces.
-		<br>New package <dc>org.apache.juneau.remoteable</dc> for all remoteable proxy interface annotations.
+		<br>New package {@del org.apache.juneau.remoteable} for all remoteable proxy interface annotations.
 		<br><ja>@Remoteable</ja> annotation has been moved to this package.
 	<li>Updated doc: <dc>6 - Remoteable Services</dc>
 	<li>New doc: <dc>6.1 -  Interface proxies against 3rd-party REST interfaces</dc>
-	<li>New URL-encoding serializer setting: <dc>UrlEncodingSerializerContext.URLENC_paramFormat</dc>.
+	<li>New URL-encoding serializer setting: {@del UrlEncodingSerializerContext#URLENC_paramFormat}.
 	<li>New methods on {@link oaj.urlencoding.UrlEncodingSerializerBuilder}:
 	<ul>
-		<li><dc>UrlEncodingSerializerBuilder.paramFormat(String)</dc>	
-		<li><dc>UrlEncodingSerializerBuilder.plainTextParams()</dc>	
+		<li>{@del UrlEncodingSerializerBuilder#paramFormat(String)}	
+		<li>{@del UrlEncodingSerializerBuilder#plainTextParams()}	
 	</ul> 		
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest</h5>
 <ul class='spaced-list'>
-	<li><dc>@RestResource</dc> annotation can now be applied to 
+	<li>{@del @RestResource} annotation can now be applied to 
 		any class!  You're no longer restricted to subclassing your resources from {@link oajr.RestServlet}.
 		<br>This is a major enhancement in the API.  Anything you could do by subclassing from <c>RestServlet</c>
 		should have an equivalent for non-<c>RestServlet</c> classes.
@@ -122,20 +122,20 @@
 		<br><br>
 		The majority of code has been split up into two separate classes:
 		<ul>
-			<li><dc>RestConfig</dc> - A modifiable configuration of a resource.  Subclasses from {@link javax.servlet.ServletConfig}.
+			<li>{@del RestConfig} - A modifiable configuration of a resource.  Subclasses from {@link javax.servlet.ServletConfig}.
 			<li>{@link oajr.RestContext} - A read-only configuration that's the result of a snapshot of the config.
 		</ul>
 		<br><br>
 		The {@link oajr.RestServlet} class now has the following initialization method that allows you to override
 		the config settings define via annotations:
 		<ul>
-			<li><dc>RestServlet.init(RestConfig)</dc> - A modifiable configuration of a resource.
+			<li>{@del RestServlet#init(RestConfig)} - A modifiable configuration of a resource.
 		</ul>
 		Non-<c>RestServlet</c> classes must have one of the following to allow it to be instantiated:
 		<ul>
 			<li>A <c><jk>public</jk> T(RestConfig)</c> constructor.
 			<li>A <c><jk>public</jk> T()</c> constructor.
-			<li>The parent resource must have a customized {@link oajr.RestResourceResolver} for instantiating it.
+			<li>The parent resource must have a customized {@del oajr.RestResourceResolver} for instantiating it.
 		</ul>
 		<br>
 		Non-<c>RestServlet</c> classes can optionally include the following init methods to gain access to the config and context:
@@ -143,27 +143,27 @@
 			<li><dc><jk>public</jk> init(RestConfig)</dc>
 			<li><dc><jk>public</jk> init(RestContext)</dc>
 		</ul>
-	<li>New annotations added to <dc>@RestResource</dc> to allow non-<c>RestServlet</c>
+	<li>New annotations added to {@del @RestResource} to allow non-<c>RestServlet</c>
 		resources to do the same as subclassing directly from <c>RestServlet</c>:
 		<ul>
-			<li><dc>RestResource.resourceResolver()</dc> 
-				- Specify a {@link oajr.RestResourceResolver} class for resolving child resources.
-			<li><dc>RestResource.callHandler()</dc> 
-				- Specify a {@link oajr.RestCallHandler} class for handling the lifecycle of a REST call.
-			<li><dc>RestResource.infoProvider()</dc> 
-				- Specify a {@link oajr.RestInfoProvider} class for customizing title/description/Swagger information on a REST resource.
-			<li><dc>RestResource.logger()</dc> 
-				- Specify a {@link oajr.RestLogger} class for handling logging.
+			<li>{@del RestResource#resourceResolver()} 
+				- Specify a {@del oajr.RestResourceResolver} class for resolving child resources.
+			<li>{@del RestResource#callHandler()} 
+				- Specify a {@del oajr.RestCallHandler} class for handling the lifecycle of a REST call.
+			<li>{@del RestResource#infoProvider()} 
+				- Specify a {@del oajr.RestInfoProvider} class for customizing title/description/Swagger information on a REST resource.
+			<li>{@del RestResource#logger()} 
+				- Specify a {@del oajr.RestLogger} class for handling logging.
 		</ul>
-	<li>New annotations added to <dc>@RestResource</dc> and {@link oajr.annotation.RestMethod @RestMethod}
+	<li>New annotations added to {@del @RestResource} and {@del oajr.annotation.RestMethod @RestMethod}
 		to simplify defining page title, text, and links on HTML views:
 		<ul>
-			<li><dc>@RestResource(pageTitle)</dc>
-			<li><dc>@RestMethod(pageTitle)</dc> 
-			<li><dc>@RestResource(pageText)</dc> 
-			<li><dc>@RestMethod(pageText)</dc> 
-			<li><dc>@RestResource(pageLinks)</dc> 
-			<li><dc>@RestMethod(pageLinks)</dc> 
+			<li>{@del @RestResource(pageTitle)}
+			<li>{@del @RestMethod(pageTitle)} 
+			<li>{@del @RestResource(pageText)} 
+			<li>{@del @RestMethod(pageText)} 
+			<li>{@del @RestResource(pageLinks)} 
+			<li>{@del @RestMethod(pageLinks)} 
 		</ul>				
 		<p class='bcode w800'>
 	<jc>// Old method</jc>
@@ -193,11 +193,11 @@
 		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
 	)
 		</p>
-	<li><dc>RestResource.stylesheet()</dc> can now take in a comma-delimited list of stylesheet paths.
-	<li><dc>StreamResource</dc> can now contain multiple sources from a variety of source types (e.g. <c><jk>byte</jk>[]</c> arrays, <c>InputStreams</c>, <c>Files</c>, etc...)
-		and is now immutable.  It also includes a new <dc>StreamResourceBuilder</dc> class.
+	<li>{@del RestResource#stylesheet()} can now take in a comma-delimited list of stylesheet paths.
+	<li>{@del StreamResource} can now contain multiple sources from a variety of source types (e.g. <c><jk>byte</jk>[]</c> arrays, <c>InputStreams</c>, <c>Files</c>, etc...)
+		and is now immutable.  It also includes a new {@del StreamResourceBuilder} class.
 	<li>Simplified remoteable proxies using the <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c> annotation on REST methods.
-		Used to expose interface proxies without the need for <dc>RemoteableServlet</dc>.
+		Used to expose interface proxies without the need for {@del RemoteableServlet}.
 	<p class='bcode w800'>
 	<jc>// Server side</jc>
 	<ja>@RestMethod</ja>(name=<js>"PROXY"</js>, path=<js>"/myproxy/*"</js>)
@@ -209,84 +209,84 @@
 	RestClient client = RestClient.<jsm>create</jsm>().rootUrl(<jf>samplesUrl</jf>).build();			
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 	</p>
-		See {@link oajr.annotation.RestMethod#name() @RestMethod(name)} for more information.
+		See {@del oajr.annotation.RestMethod#name() @RestMethod(name)} for more information.
 	<li>{@link oajr.RestRequest#toString()} can be called at any time to view the headers and content of the request
 		without affecting functionality.  Very useful for debugging.
-	<li>{@link oajr.annotation.RestMethod#name() @RestMethod(name)} annotation is now optional.  Defaults to <js>"GET"</js>.
+	<li>{@del oajr.annotation.RestMethod#name() @RestMethod(name)} annotation is now optional.  Defaults to <js>"GET"</js>.
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 <ul class='spaced-list'>
 	<li>Revamped the client API to use builders.
-	<li>New doc: <del>1.5 - Debugging</del>
+	<li>New doc: <dc>1.5 - Debugging</dc>
 	<li>The <c>RestClient</c> class <c>doX(Object url)</c> methods now handle HttpClient <c>URIBuilder</c> instances.
 	<li>New methods added/updated to {@link oajrc.RestClient}:
 	<ul>
-		<li><dc>RestClient.getRemoteableProxy(Class,Object)</dc> - For interface proxies defined using <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c>.
-		<li><dc>RestClient.getRemoteableProxy(Class,Object,Serializer,Parser)</dc> - Same as above, but overrides the serializer and parser defined on the client.
-		<li>{@link oajrc.RestClient#doPost(Object) doPost(Object)} 
-		<li>{@link oajrc.RestClient#doCall(HttpMethod,Object,Object) doCall(HttpMethod,Object,Object)} - Can now pass in instances of {@link oajrc.NameValuePairs} for easy form posts.
+		<li>{@del RestClient#getRemoteableProxy(Class,Object)} - For interface proxies defined using <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c>.
+		<li>{@del RestClient#getRemoteableProxy(Class,Object,Serializer,Parser)} - Same as above, but overrides the serializer and parser defined on the client.
+		<li>{@del RestClient#doPost(Object)}
+		<li>{@del RestClient#doCall(HttpMethod,Object,Object)} - Can now pass in instances of {@del oajrc.NameValuePairs} for easy form posts.
 			<br>This extends to all methods that take in the input.
 	</ul>
-	<li>New methods on {@link oajrc.RestCall}:
+	<li>New methods on {@del oajrc.RestCall}:
 		<ul>
-			<li>{@link oajrc.RestCall#uri(Object) uri(Object)}
-			<li><dc>query(String,Object,boolean,PartSerializer)</dc>
-			<li>{@link oajrc.RestCall#query(String,Object) query(String,Object)}
-			<li>{@link oajrc.RestCall#queryIfNE(String,Object) queryIfNE(String,Object)}
-			<li>{@link oajrc.RestCall#query(Map) query(Map)}
-			<li>{@link oajrc.RestCall#queryIfNE(Map) queryIfNE(Map)}
-			<li>{@link oajrc.RestCall#query(String) query(String)}
-			<li><dc>formData(String,Object,boolean,PartSerializer)</dc>
-			<li>{@link oajrc.RestCall#formData(String,Object) formData(String,Object)}
-			<li>{@link oajrc.RestCall#formDataIfNE(String,Object) formDataIfNE(String,Object)}
-			<li>{@link oajrc.RestCall#formData(Map) formData(Map)}
-			<li>{@link oajrc.RestCall#formDataIfNE(Map) formDataIfNE(Map)}
-			<li><dc>header(String,Object,boolean,PartSerializer)</dc>
-			<li>{@link oajrc.RestCall#header(String,Object) header(String,Object)}
-			<li>{@link oajrc.RestCall#headerIfNE(String,Object) headerIfNE(String,Object)}
-			<li>{@link oajrc.RestCall#headers(Map) headers(Map)}
-			<li>{@link oajrc.RestCall#headersIfNE(Map) headersIfNE(Map)}
-			<li>{@link oajrc.RestCall#host(String) host(String)}
-			<li>{@link oajrc.RestCall#port(int) port(int)}
-			<li>{@link oajrc.RestCall#userInfo(String,String) userInfo(String,String)}
-			<li>{@link oajrc.RestCall#userInfo(String) userInfo(String)}
-			<li>{@link oajrc.RestCall#scheme(String) scheme(String)}
+			<li>{@del oajrc.RestCall#uri(Object) uri(Object)}
+			<li>{@del query(String,Object,boolean,PartSerializer)}
+			<li>{@del oajrc.RestCall#query(String,Object) query(String,Object)}
+			<li>{@del oajrc.RestCall#queryIfNE(String,Object) queryIfNE(String,Object)}
+			<li>{@del oajrc.RestCall#query(Map) query(Map)}
+			<li>{@del oajrc.RestCall#queryIfNE(Map) queryIfNE(Map)}
+			<li>{@del oajrc.RestCall#query(String) query(String)}
+			<li>{@del formData(String,Object,boolean,PartSerializer)}
+			<li>{@del oajrc.RestCall#formData(String,Object) formData(String,Object)}
+			<li>{@del oajrc.RestCall#formDataIfNE(String,Object) formDataIfNE(String,Object)}
+			<li>{@del oajrc.RestCall#formData(Map) formData(Map)}
+			<li>{@del oajrc.RestCall#formDataIfNE(Map) formDataIfNE(Map)}
+			<li>{@del header(String,Object,boolean,PartSerializer)}
+			<li>{@del oajrc.RestCall#header(String,Object) header(String,Object)}
+			<li>{@del oajrc.RestCall#headerIfNE(String,Object) headerIfNE(String,Object)}
+			<li>{@del oajrc.RestCall#headers(Map) headers(Map)}
+			<li>{@del oajrc.RestCall#headersIfNE(Map) headersIfNE(Map)}
+			<li>{@del oajrc.RestCall#host(String) host(String)}
+			<li>{@del oajrc.RestCall#port(int) port(int)}
+			<li>{@del oajrc.RestCall#userInfo(String,String) userInfo(String,String)}
+			<li>{@del oajrc.RestCall#userInfo(String) userInfo(String)}
+			<li>{@del oajrc.RestCall#scheme(String) scheme(String)}
 		</ul>
 	<li>New methods added to {@link oajrc.RestClientBuilder}:
 		<ul>
 			<li>{@link oajrc.RestClientBuilder#executorService(ExecutorService,boolean) executorService(ExecutorService,boolean)}
-			<li>{@link oajrc.RestClientBuilder#paramFormat(String) paramFormat(ExecutorService,boolean)}
-			<li><dc>RestClientBuilder.plainTextParams()</dc>
+			<li>{@del RestClientBuilder#paramFormat(String)}
+			<li>{@del RestClientBuilder#plainTextParams()}
 			<li>{@link oajrc.RestClientBuilder#noTrace() noTrace()} - Adds a <c>No-Trace: true</c> header on all requests to prevent
 				the servlet from logging errors.
 				<br>Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.
 			<li>{@link oajrc.RestClientBuilder#debug() debug()} now adds a <c>Debug: true</c> header on all requests.
 		</ul>
-	<li>New methods added/updated to {@link oajrc.RestCall}:
+	<li>New methods added/updated to {@del oajrc.RestCall}:
 		<ul>
-			<li>{@link oajrc.RestCall#runFuture() runFuture()}
-			<li>{@link oajrc.RestCall#getResponseFuture(Class) getResponseFuture(Class)}
-			<li>{@link oajrc.RestCall#getResponseFuture(Type,Type...) getResponseFuture(Type,Type...)}
-			<li>{@link oajrc.RestCall#getResponseAsStringFuture() getResponseAsStringFuture()}
-			<li>{@link oajrc.RestCall#serializer(Serializer) serializer(Serializer)} - Override the serializer defined on the client for a single call.
-			<li>{@link oajrc.RestCall#parser(Parser) parser(Parser)} - Override the parser defined on the client for a single call.
-			<li><dc>input(Object)</dc> - Now accepts instances of {@link oajrc.NameValuePairs}.
-			<li>{@link oajrc.RestCall#getResponse(Class) getResponse(Class)} - Can now pass in any of the following:
+			<li>{@del oajrc.RestCall#runFuture() runFuture()}
+			<li>{@del oajrc.RestCall#getResponseFuture(Class) getResponseFuture(Class)}
+			<li>{@del oajrc.RestCall#getResponseFuture(Type,Type...) getResponseFuture(Type,Type...)}
+			<li>{@del oajrc.RestCall#getResponseAsStringFuture() getResponseAsStringFuture()}
+			<li>{@del oajrc.RestCall#serializer(Serializer) serializer(Serializer)} - Override the serializer defined on the client for a single call.
+			<li>{@del oajrc.RestCall#parser(Parser) parser(Parser)} - Override the parser defined on the client for a single call.
+			<li>{@del input(Object)} - Now accepts instances of {@del oajrc.NameValuePairs}.
+			<li>{@del oajrc.RestCall#getResponse(Class) getResponse(Class)} - Can now pass in any of the following:
 				<ul>
 					<li>{@link org.apache.http.HttpResponse} - Returns the raw <c>HttpResponse</c> returned by the inner <c>HttpClient</c>.
 					<li>{@link java.io.Reader} - Returns access to the raw reader of the response.
 					<li>{@link java.io.InputStream} - Returns access to the raw input stream of the response.
 				</ul>
 		</ul>
-	<li>New methods added to {@link oajrc.NameValuePairs}:
+	<li>New methods added to {@del oajrc.NameValuePairs}:
 		<ul>
-			<li>{@link oajrc.NameValuePairs#append(String,Object) append(String,Object)}
-			<li><dc>append(String,Object,PartSerializer)</dc>
+			<li>{@del oajrc.NameValuePairs#append(String,Object) append(String,Object)}
+			<li>{@del append(String,Object,PartSerializer)}
 		</ul>
-	<li>{@link oajrc.RetryOn} is now an abstract class with an additional method:
+	<li>{@del oajrc.RetryOn} is now an abstract class with an additional method:
 		<ul>
-			<li>{@link oajrc.RetryOn#onResponse(HttpResponse) onResponse(HttpResponse)}
+			<li>{@del oajrc.RetryOn#onResponse(HttpResponse) onResponse(HttpResponse)}
 		</ul>			
 </ul>
 
@@ -294,10 +294,10 @@
 <ul class='spaced-list'>
 	<li><js>"REST/port"</js> configuration setting can now be a comma-limited list of port numbers to try.
 		<br>You can also specify one or more <c>0</c>s to try a random port.
-	<li>Methods added to <dc>RestMicroservice</dc> class:
+	<li>Methods added to {@del RestMicroservice} class:
 	<ul>
-		<li><dc>getPort()</dc>
-		<li><dc>getURI()</dc>
+		<li>{@del getPort()}
+		<li>{@del getURI()}
 		<li>Override methods added from {@link oaj.microservice.Microservice} class for easier method chaining.
 	</ul>
 </ul>		
