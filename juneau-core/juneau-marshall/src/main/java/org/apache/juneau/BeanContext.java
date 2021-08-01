@@ -36,7 +36,7 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
 /**
  * Core class of the Juneau architecture.
  *
- * <p>
+ * <p class='w800'>
  * This class servers multiple purposes:
  * <ul class='spaced-list'>
  * 	<li>
@@ -46,15 +46,16 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  * 		{@link PropertyNamer PropertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
  *
- * <p>
+ * <p class='w800'>
  * All serializers and parsers extend from this context so that they can handle POJOs using a common framework.
  *
  * <h5 class='topic'>Bean Contexts</h5>
  *
+ * <p class='w800'>
  * Bean contexts are created through the {@link BeanContext#create() BeanContext.create()} and {@link BeanContextBuilder#build()} methods.
  * <br>These context objects are read-only, reusable, and thread-safe.
  *
- * <p>
+ * <p class='w800'>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
  * These <c>ClassMeta</c> objects are time-consuming to construct.
  * Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
@@ -64,6 +65,7 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  *
  * <h5 class='topic'>Bean Sessions</h5>
  *
+ * <p class='w800'>
  * Whereas <c>BeanContext</c> objects are permanent, unchangeable, cached, and thread-safe,
  * {@link BeanSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
@@ -71,24 +73,25 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
  *
+ * <p class='w800'>
  * <c>BeanContexts</c> have several configuration properties that can be used to tweak behavior on how beans are
  * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  *
- * <p>
+ * <p class='w800'>
  * Some settings (e.g. {@link #BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean
  * and non-bean classes.
  * Attempting to create a bean map around one of these objects will throw a {@link BeanRuntimeException}.
  * The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to
  * plain strings using the {@link Object#toString()} method.
  *
- * <p>
+ * <p class='w800'>
  * Some settings (e.g. {@link #BEAN_beanFieldVisibility}) are used to determine what kinds of properties are
  * detected on beans.
  *
- * <p>
+ * <p class='w800'>
  * Some settings (e.g. {@link #BEAN_beanMapPutReturnsOldValue}) change the runtime behavior of bean maps.
  *
- * <p>
+ * <p class='w800'>
  * Settings are specified using the {@link BeanContextBuilder#set(String, Object)} method and related convenience
  * methods.
  *
@@ -96,19 +99,20 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  *
  * <p class='bcode w800'>
  * 	<jc>// Construct a context from scratch.</jc>
- * 	BeanContext beanContext = BeanContext
+ * 	BeanContext <jv>beanContext</jv> = BeanContext
  * 		.<jsm>create</jsm>()
- * 		.set(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>)
+ * 		.beansRequireDefaultConstructor()
  * 		.notBeanClasses(Foo.<jk>class</jk>)
  * 		.build();
  * </p>
  *
  * <h5 class='topic'>Bean Maps</h5>
  *
+ * <p class='w800'>
  * {@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
  * set using the common {@link Map#put(Object,Object)} and {@link Map#get(Object)} methods.
  *
- * <p>
+ * <p class='w800'>
  * Bean maps are created in two ways...
  * <ol>
  * 	<li>{@link BeanSession#toBeanMap(Object) BeanSession.toBeanMap()} - Wraps an existing bean inside a {@code Map}
@@ -123,28 +127,28 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  * 	<jc>// A sample bean class</jc>
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> String getName();
- * 		<jk>public void</jk> setName(String name);
+ * 		<jk>public void</jk> setName(String <jv>name</jv>);
  * 		<jk>public int</jk> getAge();
- * 		<jk>public void</jk> setAge(<jk>int</jk> age);
+ * 		<jk>public void</jk> setAge(<jk>int</jk> <jv>age</jv>);
  * 	}
  *
  * 	<jc>// Create a new bean session</jc>
- * 	BeanSession session = BeanContext.<jsf>DEFAULT</jsf>.createSession();
+ * 	BeanSession <jv>session</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
  *
  * 	<jc>// Wrap an existing bean in a new bean map</jc>
- * 	BeanMap&lt;Person&gt; m1 = session.toBeanMap(<jk>new</jk> Person());
- * 	m1.put(<js>"name"</js>, <js>"John Smith"</js>);
- * 	m1.put(<js>"age"</js>, 45);
+ * 	BeanMap&lt;Person&gt; <jv>m1</jv> = <jv>session</jv>.toBeanMap(<jk>new</jk> Person());
+ * 	<jv>m1</jv>.put(<js>"name"</js>, <js>"John Smith"</js>);
+ * 	<jv>m1</jv>.put(<js>"age"</js>, 45);
  *
  * 	<jc>// Create a new bean instance wrapped in a new bean map</jc>
- * 	BeanMap&lt;Person&gt; m2 = session.newBeanMap(Person.<jk>class</jk>);
- * 	m2.put(<js>"name"</js>, <js>"John Smith"</js>);
- * 	m2.put(<js>"age"</js>, 45);
- * 	Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
+ * 	BeanMap&lt;Person&gt; <jv>m2</jv> = <jv>session</jv>.newBeanMap(Person.<jk>class</jk>);
+ * 	<jv>m2</jv>.put(<js>"name"</js>, <js>"John Smith"</js>);
+ * 	<jv>m2</jv>.put(<js>"age"</js>, 45);
+ * 	Person <jv>p</jv> = <jv>m2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ContextsBuildersSessionsPropertyStores}
+ * 	<li class='link'>{@doc BeanContext}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -156,10 +160,14 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Annotations.
 	 *
+	 * <p>
+	 * Defines annotations to apply to specific classes and methods.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_annotations BEAN_annotations}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.annotations.lo"</js>
+	 * 	<li><b>Description:</b>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c>
 	 * 	<li><b>Default:</b>  Empty list.
 	 * 	<li><b>Methods:</b>
@@ -167,181 +175,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#annotations(Annotation...)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Defines annotations to apply to specific classes and methods.
-	 *
-	 * <p>
-	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
-	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
-	 * do not have access to the code to do so.
-	 *
-	 * <p>
-	 * As a rule, any Juneau annotation with an <c>on()</c> method can be used with this property.
-	 *
-	 * <p>
-	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Class with explicit annotation.</jc>
-	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
-	 * 	<jk>public class</jk> A {...}
-	 *
-	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
-	 * 	<jk>public class</jk> B {...}
-	 *
-	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
-	 * 	<ja>@RestGet/ja>(...)
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		annotations={
-	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<js>"street,city,state"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public void</jk> doFoo() {...}
-	 * </p>
-	 *
-	 * <p>
-	 * In general, the underlying framework uses this method when it finds dynamically applied annotations on
-	 * config annotations.  However, concrete implementations of annotations are also provided that can be passed
-	 * directly into builder classes like so:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a concrete @Bean annotation.</jc>
-	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"B"</js>).bpi(<js>"street,city,state"</js>);
-	 *
-	 * 	<jc>// Apply it to a serializer.</jc>
-	 * 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(a).build();
-	 *
-	 * 	<jc>// Serialize a bean with the dynamically applied annotation.</jc>
-	 * 	String json = ws.serialize(<jk>new</jk> B());
-	 * </p>
-	 *
-	 * <p>
-	 * The following is the list of builders for annotations that can be constructed and passed into the builder
-	 * class:
-	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
-	 * </ul>
-	 *
-	 * <p>
-	 * The syntax for the <l>on()</l> pattern match parameter depends on whether it applies to a class, method, field, or constructor.
-	 * The valid pattern matches are:
-	 * <ul class='spaced-list'>
-	 *  <li>Classes:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified inner class:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
-	 * 					<li><js>"Inner1$Inner2"</js>
-	 * 					<li><js>"Inner2"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass.myMethod()"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myMethod"</js>
-	 * 				</ul>
-	 * 			<li>Simple with args:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myMethod(String,int)"</js>
-	 * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
-	 * 					<li><js>"MyClass.myMethod()"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myMethod"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
-	 * 					<li><js>"Inner1$Inner2.myMethod"</js>
-	 * 					<li><js>"Inner2.myMethod"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Fields:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myField"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myField"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2.myField"</js>
-	 * 					<li><js>"Inner1$Inner2.myField"</js>
-	 * 					<li><js>"Inner2.myField"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Constructors:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass(String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass()"</js>
-	 * 				</ul>
-	 * 			<li>Simple with args:
-	 * 				<ul>
-	 * 					<li><js>"MyClass(String,int)"</js>
-	 * 					<li><js>"MyClass(java.lang.String,int)"</js>
-	 * 					<li><js>"MyClass()"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2()"</js>
-	 * 					<li><js>"Inner1$Inner2()"</js>
-	 * 					<li><js>"Inner2()"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
 	 */
 	public static final String BEAN_annotations = PREFIX + ".annotations.lo";
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.
+	 *
+	 * <p>
+	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -361,47 +202,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanClassVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Classes are not considered beans unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <jsf>PUBLIC</jsf> and the bean class is <jk>protected</jk>, then the class
-	 * will not be interpreted as a bean class and be serialized as a string.
-	 * Use this setting to reduce the visibility requirement.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a protected class and one field.</jc>
-	 * 	<jk>protected class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that's capable of serializing the class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanClassVisibility(<jsf>PROTECTED</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanClassVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo","bar"}</jc>
-	 * 	String json = w.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
-	 * </ul>
 	 */
 	public static final String BEAN_beanClassVisibility = PREFIX + ".beanClassVisibility.s";
 
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
+	 *
+	 * <p>
+	 * Only look for constructors with the specified minimum visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -421,50 +229,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanConstructorVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Only look for constructors with the specified minimum visibility.
-	 *
-	 * <p>
-	 * This setting affects the logic for finding no-arg constructors for bean.  Normally, only <jk>public</jk> no-arg
-	 * constructors are used.  Use this setting if you want to reduce the visibility requirement.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a protected constructor and one field.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>foo</jf>;
-	 *
-	 * 		<jk>protected</jk> MyBean() {}
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser capable of calling the protected constructor.</jc>
-	 * 	ReaderParser p = ReaderParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanConstructorVisibility(<jsf>PROTECTED</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanConstructorVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it.</jc>
-	 * 	MyBean c = r.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
-	 * </ul>
 	 */
 	public static final String BEAN_beanConstructorVisibility = PREFIX + ".beanConstructorVisibility.s";
 
 	/**
 	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * The list of classes that make up the bean dictionary in this bean context.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -484,95 +256,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <p>
-	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-	 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
-	 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
-	 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON (depending on <l>addBeanTypes</l>/<l>addRootType</l> properties)
-	 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
-	 *
-	 * <p>
-	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
-	 *
-	 * <p>
-	 * Values can consist of any of the following types:
-	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
-	 * 	<li>Any array or collection of the objects above.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-	 * 	<jk>public class</jk> Foo {...}
-	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-	 * 	<jk>public class</jk> Bar {...}
-	 *
-	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <p>
-	 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
-	 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
-	 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
-	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
-	 * 	ReaderParser p = HtmlParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Parse an HTML body into HTML beans.</jc>
-	 * 	Body body = p.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc BeanDictionaries}
-	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = PREFIX + ".beanDictionary.lc";
 
 	/**
 	 * Configuration property:  Beans don't require at least one property.
+	 *
+	 * <p>
+	 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
+	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -592,44 +284,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableBeansRequireSomeProperties()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with no properties.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.disableBeansRequireSomeProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
-	 * 		even if it has no properties.
-	 * </ul>
 	 */
 	public static final String BEAN_disableBeansRequireSomeProperties = PREFIX + ".disableBeansRequireSomeProperties.b";
 
 	/**
 	 * Configuration property:  Minimum bean field visibility.
+	 *
+	 * <p>
+	 * Only look for bean fields with the specified minimum visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -649,59 +311,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFieldVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Only look for bean fields with the specified minimum visibility.
-	 *
-	 * <p>
-	 * This affects which fields on a bean class are considered bean properties.  Normally only <jk>public</jk> fields are considered.
-	 * Use this setting if you want to reduce the visibility requirement.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a protected field.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>protected</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that recognizes the protected field.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFieldVisibility(<jsf>PROTECTED</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanFieldVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * Bean fields can be ignored as properties entirely by setting the value to {@link Visibility#NONE}
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Disable using fields as properties entirely.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFieldVisibility(<jsf>NONE</jsf>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
-	 * </ul>
 	 */
 	public static final String BEAN_beanFieldVisibility = PREFIX + ".beanFieldVisibility.s";
 
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
+	 *
+	 * <p>
+	 * When enabled, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * values.  Otherwise, it returns <jk>null</jk>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -721,39 +339,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
-	 * values.  Otherwise, it returns <jk>null</jk>.
-	 *
-	 * <p>
-	 * Disabled by default because it introduces a slight performance penalty during serialization.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that creates BeanMaps with normal put() behavior.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanMapPutReturnsOldValue()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>)
-	 * 		.build();
-	 *
-	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
-	 * 	bm.put(<js>"foo"</js>, <js>"bar"</js>);
-	 * 	Object oldValue = bm.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
-	 * </p>
 	 */
 	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + ".beanMapPutReturnsOldValue.b";
 
 	/**
 	 * Configuration property:  Minimum bean method visibility.
+	 *
+	 * <p>
+	 * Only look for bean methods with the specified minimum visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -773,49 +366,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMethodVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Only look for bean methods with the specified minimum visibility.
-	 *
-	 * <p>
-	 * This affects which methods are detected as getters and setters on a bean class. Normally only <jk>public</jk> getters and setters are considered.
-	 * Use this setting if you want to reduce the visibility requirement.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a protected getter.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
-	 * 		<jk>protected</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanMethodVisibility(<jsf>PROTECTED</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanMethodVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
-	 * </ul>
 	 */
 	public static final String BEAN_beanMethodVisibility = PREFIX + ".beanMethodVisibility.s";
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
+	 *
+	 * <p>
+	 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
+	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -835,57 +394,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean without a no-arg constructor.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// A property method.</jc>
-	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 *
-	 * 		<jc>// A no-arg constructor</jc>
-	 * 		<jk>public</jk> MyBean(String foo) {
-	 * 			<jk>this</jk>.<jf>foo</jf> = foo;
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> String toString() {
-	 * 			<jk>return</jk> <js>"bar"</js>;
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beansRequireDefaultConstructor()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  "bar"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
-	 * </ul>
 	 */
 	public static final String BEAN_beansRequireDefaultConstructor = PREFIX + ".beansRequireDefaultConstructor.b";
 
 	/**
 	 * Configuration property:  Beans require Serializable interface.
+	 *
+	 * <p>
+	 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
+	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -905,52 +422,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSerializable()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean without a Serializable interface.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// A property method.</jc>
-	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> String toString() {
-	 * 			<jk>return</jk> <js>"bar"</js>;
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beansRequireSerializable()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  "bar"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
-	 * </ul>
 	 */
 	public static final String BEAN_beansRequireSerializable = PREFIX + ".beansRequireSerializable.b";
 
 	/**
 	 * Configuration property:  Beans require setters for getters.
+	 *
+	 * <p>
+	 * When enabled, ignore read-only properties (properties with getters but not setters).
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -970,50 +449,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSettersForGetters()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, ignore read-only properties (properties with getters but not setters).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean without a Serializable interface.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// A read/write property.</jc>
-	 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
-	 * 		<jk>public void</jk> setFoo(String foo) { ... }
-	 *
-	 * 		<jc>// A read-only property.</jc>
-	 * 		<jk>public</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beansRequireSettersForGetters()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
-	 * </ul>
 	 */
 	public static final String BEAN_beansRequireSettersForGetters = PREFIX + ".beansRequireSettersForGetters.b";
 
 	/**
 	 * Configuration property:  Bean type property name.
+	 *
+	 * <p>
+	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
+	 * parser knows the data type to reconstruct.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1034,53 +478,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
-	 * parser knows the data type to reconstruct.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-	 * 	<jk>public class</jk> Foo {...}
-	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-	 * 	<jk>public class</jk> Bar {...}
-	 *
-	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.typePropertyName(<js>"t"</js>)
-	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_typePropertyName</jsf>, <js>"t"</js>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{t:'foo',...}}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc BeanDictionaries}
-	 * </ul>
 	 */
 	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
 
 	/**
 	 * Configuration property:  Don't ignore transient fields.
+	 *
+	 * <p>
+	 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1100,43 +505,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreTransientFields()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a transient field.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public transient</jk> String foo = <js>"foo"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.disableIgnoreTransientFields()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
-	 * </ul>
 	 */
 	public static final String BEAN_disableIgnoreTransientFields = PREFIX + ".disableIgnoreTransientFields.b";
 
 	/**
 	 * Configuration property:  Don't ignore unknown properties with null values.
+	 *
+	 * <p>
+	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
+	 * Otherwise it will be silently ignored.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1156,40 +533,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreUnknownNullBeanProperties()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
-	 * Otherwise it will be silently ignored.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String foo;
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.disableIgnoreUnknownNullBeanProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String BEAN_disableIgnoreUnknownNullBeanProperties = PREFIX + ".disableIgnoreUnknownNullBeanProperties.b";
 
 	/**
 	 * Configuration property:  Don't silently ignore missing setters.
+	 *
+	 * <p>
+	 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
+	 * Otherwise, it will be silently ignored.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1209,46 +561,16 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreMissingSetters()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
-	 * Otherwise, it will be silently ignored.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public void</jk> getFoo() {
-	 * 			<jk>return</jk> <js>"foo"</js>;
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.disableIgnoreMissingSetters()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreMissingSetters</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Throws a ParseException.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
-	 * </ul>
 	 */
 	public static final String BEAN_disableIgnoreMissingSetters = PREFIX + ".disableIgnoreMissingSetters.b";
 
 	/**
 	 * Configuration property:  Don't use interface proxies.
+	 *
+	 * <p>
+	 * When <jk>false</jk>, interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
+	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1268,18 +590,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableInterfaceProxies()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When <jk>false</jk>, interfaces will be instantiated as proxy classes through the use of an
-	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 */
 	public static final String BEAN_disableInterfaceProxies = PREFIX + ".disableInterfaceProxies.b";
 
 	/**
 	 * Configuration property:  Find fluent setters.
+	 *
+	 * <p>
+	 * When enabled, fluent setters are detected on beans during parsing.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1300,53 +618,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#findFluentSetters()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, fluent setters are detected on beans during parsing.
-	 *
-	 * <p>
-	 * Fluent setters must have the following attributes:
-	 * <ul>
-	 * 	<li>Public.
-	 * 	<li>Not static.
-	 * 	<li>Take in one parameter.
-	 * 	<li>Return the bean itself.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a fluent setter.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> MyBean foo(String value) {...}
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that finds fluent setters.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.findFluentSetters()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_findFluentSetters</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Parse into bean using fluent setter.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
-	 * 	<li>The {@link Bean#findFluentSetters() @Bean.findFluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
-	 * </ul>
 	 */
 	public static final String BEAN_findFluentSetters = PREFIX + ".findFluentSetters.b";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
+	 *
+	 * <p>
+	 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1366,42 +646,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a property that throws an exception.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String getFoo() {
-	 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ingoreInvocationExceptionsOnGetters()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Exception is ignored.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
 	 */
 	public static final String BEAN_ignoreInvocationExceptionsOnGetters = PREFIX + ".ignoreInvocationExceptionsOnGetters.b";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
+	 *
+	 * <p>
+	 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1421,42 +674,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a property that throws an exception.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public void</jk> setFoo(String foo) {
-	 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreInvocationExceptionsOnSetters()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Exception is ignored.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + ".ignoreInvocationExceptionsOnSetters.b";
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
+	 *
+	 * <p>
+	 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1476,40 +702,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String foo;
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that ignores missing bean properties.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreUnknownBeanProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Doesn't throw an exception on unknown 'bar' property.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + ".ignoreUnknownBeanProperties.b";
 
 	/**
 	 * Configuration property:  Bean class exclusions.
+	 *
+	 * <p>
+	 * List of classes that should not be treated as beans even if they appear to be bean-like.
+	 * Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1528,55 +729,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * Not-bean classes are converted to <c>Strings</c> during serialization.
-	 *
-	 * <p>
-	 * Values can consist of any of the following types:
-	 * <ul>
-	 * 	<li>Classes.
-	 * 	<li>Arrays and collections of classes.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 *
-	 * 		<jk>public</jk> String toString() {
-	 * 			<jk>return</jk> <js>"baz"</js>;
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that doesn't treat MyBean as a bean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.notBeanClasses(MyBean.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_notBeanClasses</jsf>, MyBean.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces "baz" instead of {"foo":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
-	 * </ul>
 	 */
 	public static final String BEAN_notBeanClasses = PREFIX + ".notBeanClasses.sc";
 
 	/**
 	 * Configuration property:  Bean package exclusions.
+	 *
+	 * <p>
+	 * Used as a convenient way of defining the {@link #BEAN_notBeanClasses} property for entire packages.
+	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1606,43 +767,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Used as a convenient way of defining the {@link #BEAN_notBeanClasses} property for entire packages.
-	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
-	 *
-	 * <p>
-	 * Note that you can specify suffix patterns to include all subpackages.
-	 *
-	 * <p>
-	 * Values can consist of any of the following types:
-	 * <ul>
-	 * 	<li>Strings.
-	 * 	<li>Arrays and collections of strings.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.notBeanPackages(<js>"org.apache.foo"</js>, <js>"org.apache.bar.*"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_notBeanPackages</jsf>, <js>"org.apache.foo"</js>)
-	 * 		.addTo(<jsf>BEAN_notBeanPackages</jsf>, <js>"org.apache.bar.*"</js>)
-	 * 		.build();
-	 * </p>
 	 */
 	public static final String BEAN_notBeanPackages = PREFIX + ".notBeanPackages.ss";
 
 	/**
 	 * Configuration property:  Bean property namer.
+	 *
+	 * <p>
+	 * The class to use for calculating bean property names..
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1661,48 +793,17 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#propertyNamer(Class)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The class to use for calculating bean property names.
-	 *
-	 * <p>
-	 * Predefined classes:
-	 * <ul>
-	 * 	<li>{@link BasicPropertyNamer} - Default.
-	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
-	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names.</jc>
-	 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.propertyNamer(PropertyNamerDLC.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_propertyNamer</jsf>, PropertyNamerDLC.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
 	 */
 	public static final String BEAN_propertyNamer = PREFIX + ".propertyNamer.c";
 
 	/**
 	 * Configuration property:  Sort bean properties.
+	 *
+	 * <p>
+	 * When enabled, all bean properties will be serialized and access in alphabetical order.
+	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
+	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1723,53 +824,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, all bean properties will be serialized and access in alphabetical order.
-	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-	 *
-	 * <p>
-	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
-	 * in the Java file.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with 3 properties.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
-	 * 		<jk>public</jk> String <jf>b</jf> = <js>"2"</js>;
-	 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
-	 * </ul>
 	 */
 	public static final String BEAN_sortProperties = PREFIX + ".sortProperties.b";
 
 	/**
 	 * Configuration property:  Java object swaps.
+	 *
+	 * <p>
+	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
+	 * and "swap in" the non-serializable class during parsing..
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -1788,98 +851,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
-	 * and "swap in" the non-serializable class during parsing.
-	 *
-	 * <p>
-	 * An example of a swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
-	 *
-	 * <p>
-	 * Multiple swaps can be associated with a single class.
-	 * When multiple swaps are applicable to the same class, the media type pattern defined by
-	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
-	 *
-	 * <p>
-	 * Values can consist of any of the following types:
-	 * <ul>
-	 * 	<li>Any subclass of {@link PojoSwap}.
-	 * 	<li>Any instance of {@link PojoSwap}.
-	 * 	<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 	<li>Any array or collection of the objects above.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
-	 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
-	 * 		<jc>// ISO8601 formatter.</jc>
-	 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> String swap(BeanSession session, Date o) {
-	 * 			<jk>return</jk> <jf>format</jf>.format(o);
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> Exception {
-	 * 			<jk>return</jk> <jf>format</jf>.parse(o);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Sample bean with a Date field.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that uses our date swap.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.swaps(MyDateSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_swaps</jsf>, MyDateSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"date":"2012-03-03T04:05:06-0500"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 *
-	 * 	<jc>// Create a serializer that uses our date swap.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.swaps(MyDateSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use our parser to parse a bean.</jc>
-	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
-	 * 	<li>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc PojoSwaps}
-	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
-	 * 	<li class='link'>{@doc OneWayPojoSwaps}
-	 * 	<li class='link'>{@doc SwapAnnotation}
-	 * 	<li class='link'>{@doc AutoPojoSwaps}
-	 * 	<li class='link'>{@doc SurrogateClasses}
-	 * </ul>
 	 */
 	public static final String BEAN_swaps = PREFIX + ".swaps.lo";
 
 	/**
 	 * Configuration property:  Use enum names.
 	 *
-	 * <h5 class='section'>Property:</h5>
+	 * <p>
+	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}..
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useEnumNames BEAN_useEnumNames}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
@@ -1897,52 +877,16 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useEnumNames()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with debug enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.useEnumNames()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useEnumNames</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Enum with overridden toString().</jc>
-	 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method.</jc>
-	 * 	<jk>public enum</jk> Option {
-	 * 		<jsf>ONE</jsf>(1),
-	 * 		<jsf>TWO</jsf>(2),
-	 * 		<jsf>THREE</jsf>(3);
-	 *
-	 * 		<jk>private int</jk> <jf>i</jf>;
-	 *
-	 * 		Option(<jk>int</jk> i) {
-	 * 			<jk>this</jk>.<jf>i</jf> = i;
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> String toString() {
-	 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>i</jf>);
-	 * 		}
-	 * 	}
-	 * </p>
 	 */
 	public static final String BEAN_useEnumNames = PREFIX + ".useEnumNames.b";
 
 	/**
 	 * Configuration property:  Use Java Introspector.
 	 *
-	 * <h5 class='section'>Property:</h5>
+	 * <p>
+	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
+	 * <br>Most {@link Bean @Bean} annotations will be ignored..
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
@@ -1960,27 +904,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useJavaBeanIntrospector()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-	 * <br>Most {@link Bean @Bean} annotations will be ignored.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.useJavaBeanIntrospector()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>)
-	 * 		.build();
-	 * </p>
 	 */
 	public static final String BEAN_useJavaBeanIntrospector = PREFIX + ".useJavaBeanIntrospector.b";
 
@@ -2825,42 +1748,6 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Finds the specified annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ClassInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner());
-	}
-
-	/**
-	 * Finds the last specified annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, Class<?> c) {
-		return last(getAnnotations(a, c));
-	}
-
-	/**
-	 * Finds the last specified annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, ClassInfo c) {
-		return last(getAnnotations(a, c));
-	}
-
-	/**
 	 * Finds the specified declared annotations on the specified class.
 	 *
 	 * @param <A> The annotation type to find.
@@ -2881,43 +1768,6 @@ public class BeanContext extends Context implements MetaProvider {
 			declaredClassAnnotationCache.put(c, a, aa);
 		}
 		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified declared annotation on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, ClassInfo c) {
-		return getDeclaredAnnotations(a, c == null ? null : c.inner());
-	}
-
-
-	/**
-	 * Finds the last specified declared annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastDeclaredAnnotation(Class<A> a, Class<?> c) {
-		return last(getDeclaredAnnotations(a, c));
-	}
-
-	/**
-	 * Finds the last specified declared annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastDeclaredAnnotation(Class<A> a, ClassInfo c) {
-		return last(getDeclaredAnnotations(a, c));
 	}
 
 	/**
@@ -3015,30 +1865,6 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Finds the last specified annotations on the specified field.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, Field f) {
-		return last(getAnnotations(a, f));
-	}
-
-	/**
-	 * Finds the last specified annotations on the specified field.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, FieldInfo f) {
-		return last(getAnnotations(a, f));
-	}
-
-	/**
 	 * Finds the specified annotations on the specified constructor.
 	 *
 	 * @param <A> The annotation type to find.
@@ -3074,30 +1900,6 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Finds the last specified annotations on the specified constructor.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, Constructor<?> c) {
-		return last(getAnnotations(a, c));
-	}
-
-	/**
-	 * Finds the last specified annotations on the specified constructor.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, ConstructorInfo c) {
-		return last(getAnnotations(a, c));
-	}
-
-	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
 	 *
 	 * @param a The annotation being checked for.
@@ -3117,28 +1919,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ClassInfo c) {
 		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param c The class being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified class.
-	 */
-	public <A extends Annotation> boolean hasDeclaredAnnotation(Class<A> a, Class<?> c) {
-		return getDeclaredAnnotations(a, c).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getDeclaredAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param c The class being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified class.
-	 */
-	public <A extends Annotation> boolean hasDeclaredAnnotation(Class<A> a, ClassInfo c) {
-		return getDeclaredAnnotations(a, c == null ? null : c.inner()).size() > 0;
 	}
 
 	/**
@@ -3170,30 +1950,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param f The field being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Field f) {
-		return getAnnotations(a, f).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param f The field being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified field.
-	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, FieldInfo f) {
 		return getAnnotations(a, f == null ? null : f.inner()).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param c The constructor being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Constructor<?> c) {
-		return getAnnotations(a, c).size() > 0;
 	}
 
 	/**

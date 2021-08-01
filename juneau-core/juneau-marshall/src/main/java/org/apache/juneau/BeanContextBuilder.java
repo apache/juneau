@@ -93,9 +93,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Dynamically applied POJO annotations.
-	 *
-	 * <p>
 	 * Defines annotations to apply to specific classes and methods.
 	 *
 	 * <p>
@@ -132,13 +129,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * directly into builder classes like so:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a concrete @Bean annotation.</jc>
-	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"B"</js>).properties(<js>"street,city,state"</js>);
+	 * 	BeanAnnotation <jv>a</jv> = <jk>new</jk> BeanAnnotation(<js>"B"</js>).properties(<js>"street,city,state"</js>);
 	 *
 	 * 	<jc>// Apply it to a serializer.</jc>
-	 * 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(a).build();
+	 * 	WriterSerializer <jv>ws</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>a</jv>).build();
 	 *
 	 * 	<jc>// Serialize a bean with the dynamically applied annotation.</jc>
-	 * 	String json = ws.serialize(<jk>new</jk> B());
+	 * 	String <jv>json</jv> = <jv>ws</jv>.serialize(<jk>new</jk> B());
 	 * </p>
 	 *
 	 * <p>
@@ -277,7 +274,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Minimum bean class visibility.
+	 * Minimum bean class visibility.
 	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
@@ -328,7 +325,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Minimum bean constructor visibility.
+	 * Minimum bean constructor visibility.
 	 *
 	 * <p>
 	 * Only look for constructors with the specified minimum visibility.
@@ -382,7 +379,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Minimum bean field visibility.
+	 * Minimum bean field visibility.
 	 *
 	 * <p>
 	 * Only look for bean fields with the specified minimum visibility.
@@ -500,7 +497,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  BeanMap.put() returns old property value.
+	 * BeanMap.put() returns old property value.
 	 *
 	 * <p>
 	 * When enabled, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
@@ -540,7 +537,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Minimum bean method visibility.
+	 * Minimum bean method visibility.
 	 *
 	 * <p>
 	 * Only look for bean methods with the specified minimum visibility.
@@ -593,7 +590,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require no-arg constructors.
+	 * Beans require no-arg constructors.
 	 *
 	 * <p>
 	 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
@@ -651,7 +648,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require Serializable interface.
+	 * Beans require Serializable interface.
 	 *
 	 * <p>
 	 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
@@ -704,7 +701,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require setters for getters.
+	 * Beans require setters for getters.
 	 *
 	 * <p>
 	 * When enabled, ignore read-only properties (properties with getters but not setters).
@@ -755,7 +752,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans don't require at least one property.
+	 * Beans don't require at least one property.
 	 *
 	 * <p>
 	 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
@@ -1490,7 +1487,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
+	 * Bean dictionary.
 	 *
 	 * <p>
 	 * The list of classes that make up the bean dictionary in this bean context.
@@ -1586,7 +1583,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
+	 * Bean dictionary.
 	 *
 	 * <p>
 	 * This is identical to {@link #dictionary(Object...)}, but specifies a dictionary within the context of
@@ -1731,7 +1728,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Find fluent setters.
+	 * Find fluent setters.
 	 *
 	 * <p>
 	 * When enabled, fluent setters are detected on beans during parsing.
@@ -1785,7 +1782,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Find fluent setters.
+	 * Find fluent setters.
 	 *
 	 * <p>
 	 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.
@@ -1825,7 +1822,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore invocation errors on getters.
+	 * Ignore invocation errors on getters.
 	 *
 	 * <p>
 	 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
@@ -1868,7 +1865,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore invocation errors on setters.
+	 * Ignore invocation errors on setters.
 	 *
 	 * <p>
 	 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
@@ -1911,7 +1908,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't silently ignore missing setters.
+	 * Don't silently ignore missing setters.
 	 *
 	 * <p>
 	 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
@@ -1958,7 +1955,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't ignore transient fields.
+	 * Don't ignore transient fields.
 	 *
 	 * <p>
 	 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
@@ -2002,7 +1999,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore unknown properties.
+	 * Ignore unknown properties.
 	 *
 	 * <p>
 	 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.
@@ -2043,7 +2040,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't ignore unknown properties with null values.
+	 * Don't ignore unknown properties with null values.
 	 *
 	 * <p>
 	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
@@ -2084,7 +2081,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Implementation classes.
+	 * Implementation classes.
 	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
@@ -2129,7 +2126,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Implementation classes.
+	 * Implementation classes.
 	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
@@ -2269,7 +2266,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean class exclusions.
+	 * Bean class exclusions.
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
@@ -2332,7 +2329,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean package exclusions.
+	 * Bean package exclusions.
 	 *
 	 * <p>
 	 * Used as a convenient way of defining the {@link #notBeanClasses(Object...)} property for entire packages.
@@ -2397,7 +2394,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property namer
+	 * Bean property namer
 	 *
 	 * <p>
 	 * The class to use for calculating bean property names.
@@ -2489,7 +2486,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Sort bean properties.
+	 * Sort bean properties.
 	 *
 	 * <p>
 	 * When enabled, all bean properties will be serialized and access in alphabetical order.
@@ -2628,7 +2625,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Java object swaps.
+	 * Java object swaps.
 	 *
 	 * <p>
 	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
@@ -2770,7 +2767,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean type property name.
+	 * Bean type property name.
 	 *
 	 * <p>
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
@@ -2823,7 +2820,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean type property name.
+	 * Bean type property name.
 	 *
 	 * <p>
 	 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
@@ -2869,7 +2866,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use enum names.
+	 * Use enum names.
 	 *
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
@@ -2920,7 +2917,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't use interface proxies.
+	 * Don't use interface proxies.
 	 *
 	 * <p>
 	 * When enabled, interfaces will be instantiated as proxy classes through the use of an
@@ -2939,7 +2936,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use Java Introspector.
+	 * Use Java Introspector.
 	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.

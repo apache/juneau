@@ -13,8 +13,144 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Bean Contexts', flags:'todo'}
+{title:'Bean Contexts', created:'9.0.0', flags:'review'}
 
 <p>
-	TODO
+	At the heart of the marshalling APIs is the {@link oaj.BeanContext bean context} API that provides a common
+	framework for marshalling beans and POJOs across all serializers and parsers. 
+	All serializers and parsers (and their builders) extend from the bean context API classes.
 </p>
+<p>
+	One important feature of the bean context API is the ability to wrap Java beans inside maps to allow
+	properties to be accessed through a Map layer.  Although this is used internally by all the serializers and parsers,
+	it's often useful to use this feature by itself.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Wrap a bean in a map and do some simple get/set calls.</jc>
+	BeanMap&lt;MyBean&gt; <jv>myBeanMap</jv> = BeanContext.<jsf>DEFAULT_SESSION</jsf>.toBeanMap(<jv>myBean</jv>);
+	<jv>myBeanMap</jv>.put(<js>"myProperty"</js>, 123);
+	<jk>int</jk> <jv>myProperty</jv> = <jv>myBeanMap</jv>..get(<js>"myProperty"</js>, <jk>int</jk>.<jk>class</jk>);
+</p>
+<p>
+	The common design pattern throughout the Juneau framework is the usage of the following classes:
+</p>
+<ul>
+	<li>Builders - Modifiable objects that allow you to define configuration settings for contexts.
+	<li>Contexts - Unmodifiable thread-safe objects meant to be cacheable and reusable.
+	<li>Sessions - Modifiable objects usually meant for one-time use.
+</ul>
+<p>
+	The following shows a common usage pattern:
+</p>
+<p class='bpcode w800'>
+	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		.<jsm>create</jsm>()                 <jc>// Instantiates a builder.</jc>
+		.findFluentSetters()      <jc>// Adds a setting.</jc>
+		.build();                 <jc>// Creates a context.</jc>
+		
+	<jv>serializer</jv>.toString(<jv>myBean</jv>);  <jc>// Instantiates a session and uses it.</jc>
+</p>
+<p>
+	When a context object gets built, you don't always get a new object.  Instead, the framework caches them and
+	returns an existing context object with the same settings.  This is a critical reason why Juneau achieves
+	impressive performance.  Using Java reflection to find out all information about a bean type is expensive.
+	By caching context objects, we only need to reflect that bean type once and store that information in the context
+	for reuse by all serializers and parsers that share the same bean context configuration settings.
+</p>
+<p>
+	Sessions are typically not thread-safe and meant for one-time use.  They're the 
+	workhorse classes that perform the actual serializing or parsing work.  They can contain session-level 
+	configuration as well such as user locale and timezone.
+	You'll typically not deal with Session objects directly since they're usually instantiated and used internally
+	when calling methods on the context.  The following two method calls are equivalent:
+</p>
+<p class='bpcode w800'>
+	<jc>// Implicit session.</jc>
+	<jv>serializer</jv>
+		.serialize(<jv>myBean</jv>, <jv>myWriter</jv>);
+
+	<jc>// Explicit session.</jc>
+	<jv>serializer</jv>
+		.createSession()
+		.serialize(<jv>myBean</jv>, <jv>myWriter</jv>);
+</p>
+<ul class='notes'>
+	<li> One exception about sessions is the {@link oaj.BeanContext#DEFAULT_SESSION DEFAULT_SESSION} session which is thread-safe
+	and reusable which allows you to bypass session creation for maximum performance.
+</ul>
+<p>
+	In addition to creating bean maps, the {@link oaj.BeanSession} class also provides {@link oaj.BeanSession#convertToType(Object,Class)}
+	which is an extremely powerful method that allows you to perform a wide variety of POJO conversions from one type to another.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	BeanSession <jv>session</jv> = BeanContext.<jsf>DEFAULT_SESSION</jsf>;
+	
+	<jc>// Convert a HashMap to a bean.</jc>
+	MyBean <jv>myBean</jv> = <jv>session</jv>.convertToType(<jv>aMap</jv>, MyBean.<jk>class</jk>);
+	
+	<jc>// Convert a list of integers into an int array.</jc>
+	<jk>int</jk>[] <jv>myInts</jv> = <jv>session</jv>.convertToType(<jv>aListOfInteger</jv>, <jk>int</jk>[].<jk>class</jk>);
+</p>
+<p>
+	See {@link oaj.BeanSession#convertToType(Object,ClassMeta)} for the list of possible conversions.
+</p>
+<p>
+	The bean context API provides many settings that fine-tune how POJOs should be handled during marshalling.
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link oaj.BeanContextBuilder}
+	<ul>
+		<li class='jm'>{@link oaj.BeanContextBuilder#annotations(Annotation...) annotations(Annotation...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#apply(ContextProperties) apply(ContextProperties)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Class...) applyAnnotations(Class...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Method...) applyAnnotations(Method...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanConstructorVisibility(Visibility) beanConstructorVisibility(Visibility)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanFieldVisibility(Visibility) beanFieldVisibility(Visibility)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanInterceptor(Class,Class) beanInterceptor(Class,Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanMapPutReturnsOldValue() beanMapPutReturnsOldValue()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanMethodVisibility(Visibility) beanMethodVisibility(Visibility)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanProperties(Class,String) beanProperties(Class,String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beansRequireSerializable() beansRequireSerializable()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#beansRequireSettersForGetters() beansRequireSettersForGetters()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#debug() debug()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#dictionary(Object...) dictionary(Object...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#dictionaryOn(Class,Class...) dictionaryOn(Class,Class...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#disableBeansRequireSomeProperties() disableBeansRequireSomeProperties()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#disableIgnoreMissingSetters() disableIgnoreMissingSetters()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#disableIgnoreTransientFields() disableIgnoreTransientFields()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#disableIgnoreUnknownNullBeanProperties() disableIgnoreUnknownNullBeanProperties()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#disableInterfaceProxies() disableInterfaceProxies()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#example(Class, Object) example(Class, Object)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#findFluentSetters() findFluentSetters()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#findFluentSetters(Class) findFluentSetters(Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#ignoreInvocationExceptionsOnGetters() ignoreInvocationExceptionsOnGetters()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#ignoreInvocationExceptionsOnSetters() }
+		<li class='jm'>{@link oaj.BeanContextBuilder#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#implClass(Class,Class) implClass(Class,Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#interfaceClass(Class,Class) interfaceClass(Class,Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#interfaces(Class...) interfaces(Class...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#locale(Locale) locale(Locale)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#mediaType(MediaType) mediaType(MediaType)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#notBeanClasses(Object...) notBeanClasses(Object...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#notBeanPackages(Object...) notBeanPackages(Object...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#propertyNamer(Class,Class) propertyNamer(Class,Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#propertyNamer(Class) propertyNamer(Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#sortProperties() sortProperties()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#sortProperties(Class...) sortProperties(Class...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#stopClass(Class,Class) stopClass(Class,Class)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#swaps(Object...) swaps(Object...)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#timeZone(TimeZone) timeZone(TimeZone)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#typeName(Class,String) typeName(Class,String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#typePropertyName(Class,String) typePropertyName(Class,String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#typePropertyName(String) typePropertyName(String)}
+		<li class='jm'>{@link oaj.BeanContextBuilder#useEnumNames() useEnumNames()}
+		<li class='jm'>{@link oaj.BeanContextBuilder#useJavaBeanIntrospector() useJavaBeanIntrospector()}
+	</ul>
+</ul>

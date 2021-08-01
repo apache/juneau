@@ -312,8 +312,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * </p>
 	 *
 	 * @param property The name of the property to get.
-	 * @throws
-	 * 	RuntimeException if any of the following occur.
+	 * @return The property value.
+	 * @throws RuntimeException if any of the following occur.
 	 * 	<ol>
 	 * 		<li>BeanMapEntry does not exist on the underlying object.
 	 * 		<li>Security settings prevent access to the underlying object getter method.
@@ -327,6 +327,30 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (p == null)
 			return meta.onReadProperty(this.bean, pName, null);
 		return p.get(this, pName);
+	}
+
+	/**
+	 * Same as {@link #get(Object)} but casts the value to the specific type.
+	 *
+	 * @param <T2> The type to cast to.
+	 * @param property The name of the property to get.
+	 * @param c The type to cast to.
+	 * @return The property value.
+	 * @throws RuntimeException if any of the following occur.
+	 * 	<ol>
+	 * 		<li>BeanMapEntry does not exist on the underlying object.
+	 * 		<li>Security settings prevent access to the underlying object getter method.
+	 * 		<li>An exception occurred inside the getter method.
+	 * 	</ol>
+	 * @throws ClassCastException if property is not the specified type.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T2> T2 get(String property, Class<T2> c) {
+		String pName = stringify(property);
+		BeanPropertyMeta p = getPropertyMeta(pName);
+		if (p == null)
+			return (T2)meta.onReadProperty(this.bean, pName, null);
+		return (T2)p.get(this, pName);
 	}
 
 	/**
