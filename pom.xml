@@ -240,8 +240,8 @@
  						<links>
 							<link>https://docs.oracle.com/javase/8/docs/api/</link>
 							<link>https://docs.oracle.com/javaee/5/api/</link>
-							<link>https://hc.apache.org/httpcomponents-client-4.5.x/httpclient/apidocs/</link>
-							<link>https://hc.apache.org/httpcomponents-core-4.4.x/httpcore/apidocs/</link>
+							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
+							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
@@ -268,7 +268,7 @@
 								<tagletClass>org.apache.juneau.doc.internal.ReviewedTag</tagletClass>
 							</taglet>
 						</taglets>
-						<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
+						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>
 					<executions>
 						<execution>
