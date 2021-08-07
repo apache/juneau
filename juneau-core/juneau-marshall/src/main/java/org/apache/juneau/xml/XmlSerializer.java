@@ -23,6 +23,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to XML.
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -126,6 +127,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}
@@ -144,20 +153,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String XML_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
+	 *
+	 * <p>
+	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -177,22 +180,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
-	 *
-	 * <p>
-	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc XmlNamespaces}
-	 * </ul>
 	 */
 	public static final String XML_addNamespaceUrisToRoot = PREFIX + ".addNamespaceUrisToRoot.b";
 
 	/**
 	 * Configuration property:  Default namespace.
+	 *
+	 * <p>
+	 * Specifies the default namespace URI for this document.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -212,19 +207,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the default namespace URI for this document.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc XmlNamespaces}
-	 * </ul>
 	 */
 	public static final String XML_defaultNamespace = PREFIX + ".defaultNamespace.s";
 
 	/**
 	 * Configuration property:  Don't auto-detect namespace usage.
+	 *
+	 * <p>
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -244,37 +234,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#disableAutoDetectNamespaces()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Don't detect namespace usage before serialization.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
-	 * root element to only those that will be used in the resulting document.
-	 *
-	 * <p>
-	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
-	 * the root element is serialized.
-	 *
-	 * <p>
-	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Auto-detection of namespaces can be costly performance-wise.
-	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc XmlNamespaces}
-	 * </ul>
 	 */
 	public static final String XML_disableAutoDetectNamespaces = PREFIX + ".disableAutoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
+	 *
+	 * <p>
+	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -292,21 +259,17 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#enableNamespaces()}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#ns()}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_enableNamespaces = PREFIX + ".enableNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespaces.
+	 *
+	 * <p>
+	 * The default list of namespaces associated with this serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -325,14 +288,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_namespaces = PREFIX + ".namespaces.ls";

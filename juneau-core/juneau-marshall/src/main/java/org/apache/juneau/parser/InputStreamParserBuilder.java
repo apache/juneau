@@ -26,6 +26,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for building instances of stream-based parsers.
+ * {@review}
  */
 @FluentSetters
 public class InputStreamParserBuilder extends ParserBuilder {
@@ -60,14 +61,14 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that parses from BASE64.</jc>
-	 * 	InputStreamParser p = MsgPackParser
+	 * 	InputStreamParser <jv>parser</jv> = MsgPackParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.binaryFormat(<jsf>BASE64</jsf>)
 	 * 		.build();
 	 *
-	 * 	String input = <js>"base64-encoded-string"</js>;
+	 * 	String <jv>input</jv> = <js>"base64-encoded-string"</js>;
 	 *
-	 * 	MyBean myBean = p.parse(input, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv> .parse(<jv>input</jv> , MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>

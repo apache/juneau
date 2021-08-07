@@ -24,6 +24,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJO models to HTML.
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -138,6 +139,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}
@@ -156,20 +165,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String HTML_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
+	 *
+	 * <p>
+	 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -189,60 +192,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addKeyValueTableHeaders()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <p>
-	 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our bean class.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"foo"</js>;
-	 * 		<jk>public</jk> String <jf>f2</jf> = <js>"bar"</js>;
-	 * 	}
-	 *
-	 *  <jc>// Serializer without headers.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer.<jsf>DEFAULT</jsf>;
-	 *
-	 *  <jc>// Serializer with headers.</jc>
-	 * 	WriterSerializer s2 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.build();
-	 *
-	 * 	String withoutHeaders = s1.serialize(<jk>new</jk> MyBean());
-	 * 	String withHeaders = s2.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * The following shows the difference between the two generated outputs:
-	 *
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th><c>withoutHeaders</c></th>
-	 * 		<th><c>withHeaders</c></th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><td>f1</td><td>foo</td></tr>
-	 * 				<tr><td>f2</td><td>bar</td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td>foo</td></tr>
-	 * 				<tr><td>f2</td><td>bar</td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
 	 */
 	public static final String HTML_addKeyValueTableHeaders = PREFIX + ".addKeyValueTableHeaders.b";
 
 	/**
 	 * Configuration property:  Link label parameter name.
+	 *
+	 * <p>
+	 * The parameter name to look for when resolving link labels.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -262,18 +219,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#labelParameter(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <p>
-	 * The parameter name to look for when resolving link labels.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #HTML_disableDetectLabelParameters}
-	 * </ul>
 	 */
 	public static final String HTML_labelParameter = PREFIX + ".labelParameter.s";
 
 	/**
 	 * Configuration property:  Don't look for link labels in URIs.
+	 *
+	 * <p>
+	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -293,67 +246,15 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#disableDetectLabelParameters()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
-	 *
-	 * <p>
-	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?label=Apache%20Foundation"</js>);
-	 * 	}
-	 *
-	 *  <jc>// Serializer with label detection.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.build();
-	 *
-	 *  <jc>// Serializer without label detection.</jc>
-	 * 	WriterSerializer s2 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.disableDetectLabelParameters()
-	 * 		.build();
-	 *
-	 * 	String withLabels = s1.serialize(<jk>new</jk> MyBean());
-	 * 	String withoutLabels = s2.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * The following shows the difference between the two generated outputs.
-	 * <br>Note that they're both hyperlinks, but the anchor text differs:
-	 *
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th><c>withLabels</c></th>
-	 * 		<th><c>withoutLabels</c></th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
 	 */
 	public static final String HTML_disableDetectLabelParameters = PREFIX + ".disableDetectLabelParameters.b";
 
 	/**
 	 * Configuration property:  Don't look for URLs in {@link java.lang.String Strings}.
+	 *
+	 * <p>
+	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -373,64 +274,15 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#disableDetectLinksInStrings()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"http://www.apache.org"</js>;
-	 * 	}
-	 *
-	 *  <jc>// Serializer with link detection.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.build();
-	 *
-	 *  <jc>// Serializer without link detection.</jc>
-	 * 	WriterSerializer s2 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.disableDetectLinksInStrings()
-	 * 		.build();
-	 *
-	 * 	String withLinks = s1.serialize(<jk>new</jk> MyBean());
-	 * 	String withoutLinks = s2.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * The following shows the difference between the two generated outputs:
-	 *
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th><c>withLinks</c></th>
-	 * 		<th><c>withoutLinks</c></th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td>http://www.apache.org</td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
 	 */
 	public static final String HTML_disableDetectLinksInStrings = PREFIX + ".disableDetectLinksInStrings.b";
 
 	/**
 	 * Configuration property:  Anchor text source.
+	 *
+	 * <p>
+	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
+	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -450,157 +302,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#uriAnchorText(AnchorText)}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
-	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
-	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul>
-	 * 	<li class='jc'>{@link AnchorText}
-	 * 	<ul>
-	 * 		<li class='jf'>{@link AnchorText#TO_STRING TO_STRING} (default) - Set to whatever is returned by {@link #toString()} on the object.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with TO_STRING anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>TO_STRING</jsf>).build();
-	 *
-	 * 	<jc>// Produces: &lt;a href='http://www.apache.org?foo=bar#myAnchor'&gt;http://www.apache.org?foo=bar#myAnchor&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#PROPERTY_NAME PROPERTY_NAME} - Set to the bean property name.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with PROPERTY_NAME anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>PROPERTY_NAME</jsf>).build();
-	 *
-	 * 	<jc>// Produces: &lt;a href='http://www.apache.org?foo=bar#myAnchor'&gt;f1&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#URI URI} - Set to the URI value.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with URI anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>URI</jsf>).build();
-	 *
-	 * 	<jc>// Produces: &lt;a href='http://www.apache.org?foo=bar#myAnchor'&gt;http://www.apache.org?foo=bar&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#LAST_TOKEN LAST_TOKEN} - Set to the last token of the URI value.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/foo/bar?baz=qux#myAnchor"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with LAST_TOKEN anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>LAST_TOKEN</jsf>).build();
-	 *
-	 * 	<jc>// Produces: &lt;a href='http://www.apache.org/foo/bar?baz=qux#myAnchor'&gt;bar&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#URI_ANCHOR URI_ANCHOR} - Set to the anchor of the URL.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/foo/bar?baz=qux#myAnchor"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with URI_ANCHOR anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer.<jsm>create</jsm>().anchorText(<jsf>URI_ANCHOR</jsf>).build();
-	 *
-	 * 	<jc>// Produces: &lt;a href='http://www.apache.org/foo/bar?baz=qux#myAnchor'&gt;myAnchor&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#CONTEXT_RELATIVE CONTEXT_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a context-relative path.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with CONTEXT_RELATIVE anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.anchorText(<jsf>CONTEXT_RELATIVE</jsf>)
-	 * 		.uriResolution(<jsf>ROOT_RELATIVE</jsf>)
-	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/bar/baz'&gt;myServlet/bar/baz&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with SERVLET_RELATIVE anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.anchorText(<jsf>SERVLET_RELATIVE</jsf>)
-	 * 		.uriResolution(<jsf>ROOT_RELATIVE</jsf>)
-	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 		<li class='jf'>{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.
-	 * 			<br>
-	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	<jc>// Our bean class with a URI property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
-	 * 	}
-	 *
-	 * 	<jc>// Serializer with PATH_RELATIVE anchor text.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.anchorText(<jsf>PATH_RELATIVE</jsf>)
-	 * 		.uriResolution(<jsf>ROOT_RELATIVE</jsf>)
-	 * 		.uriRelativity(<jsf>PATH_INFO</jsf>)
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/foo/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
-	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
-	 * 			</p>
-	 * 	</ul>
 	 * </ul>
 	 */
 	public static final String HTML_uriAnchorText = PREFIX + ".uriAnchorText.s";

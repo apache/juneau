@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for building instances of reader-based parsers.
+ * {@review}
  */
 @FluentSetters
 public abstract class ReaderParserBuilder extends ParserBuilder {
@@ -52,7 +53,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>ReaderParser</l> configuration property:&emsp;</i>  File charset.
+	 * File charset.
 	 *
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
@@ -63,13 +64,13 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.fileCharset(<js>"UTF-8"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-	 * 	MyBean myBean = p.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -87,7 +88,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <i><l>ReaderParser</l> configuration property:&emsp;</i>  Input stream charset.
+	 * Input stream charset.
 	 *
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
@@ -98,13 +99,13 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
-	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>

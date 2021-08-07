@@ -25,10 +25,10 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Builder class for building instances of UON parsers.
+ * {@review}
  */
 @FluentSetters
 public class UonParserBuilder extends ReaderParserBuilder {
@@ -59,31 +59,23 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Decode <js>"%xx"</js> sequences.
+	 * Decode <js>"%xx"</js> sequences.
 	 *
 	 * <p>
-	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
-	 * decoded before being passed to this parser.
+	 * When enabled, URI encoded characters will be decoded.  Otherwise it's assumed that they've already been decoded
+	 * before being passed to this parser.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonParser#UON_decoding}
-	 * </ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a decoding UON parser.</jc>
+	 * 	ReaderParser <jv>parser</jv> = UonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.decoding()
+	 * 		.build();
 	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public UonParserBuilder decoding(boolean value) {
-		return set(UON_decoding, value);
-	}
-
-	/**
-	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Decode <js>"%xx"</js> sequences.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
+	 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
+	 * 	String[] <jv>foo</jv> = <jv>parser</jv>.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
@@ -93,14 +85,28 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public UonParserBuilder decoding() {
-		return decoding(true);
+		return set(UON_decoding);
 	}
 
 	/**
-	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Validate end.
+	 * Validate end.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
+	 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
+	 * the stream consists of only comments or whitespace.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser <jv>parser</jv> = UonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.validateEnd()
+	 * 		.build();
+	 *
+	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
+	 * 	String <jv>in</jv> = <js>"(foo=bar)(baz=qux)"</js>;
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(in, MyBean.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}

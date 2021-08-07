@@ -21,6 +21,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
+ * {@review}
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -42,6 +43,9 @@ public abstract class ReaderParser extends Parser {
 	/**
 	 * Configuration property:  File charset.
 	 *
+	 * <p>
+	 * The character set to use for reading <c>Files</c> from the file system.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.ReaderParser#RPARSER_fileCharset RPARSER_fileCharset}
@@ -60,40 +64,14 @@ public abstract class ReaderParser extends Parser {
 	 * 			<li class='jm'>{@link org.apache.juneau.parser.ReaderParserBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The character set to use for reading <c>Files</c> from the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <p>
-	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.fileCharset(<js>"UTF-8"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>RPARSER_fileCharset</jsf>, <js>"UTF-8"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-	 * 	MyBean myBean = p.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String RPARSER_fileCharset = PREFIX + ".fileCharset.s";
 
 	/**
 	 * Configuration property:  Input stream charset.
+	 *
+	 * <p>
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -113,32 +91,6 @@ public abstract class ReaderParser extends Parser {
 	 * 			<li class='jm'>{@link org.apache.juneau.parser.ReaderParserBuilder#streamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
-	 *
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>RPARSER_streamCharset</jsf>, <js>"UTF-8"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
-	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String RPARSER_streamCharset = PREFIX + ".streamCharset.s";
 

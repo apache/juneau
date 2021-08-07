@@ -30,6 +30,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Builder class for building instances of serializers, parsers, and bean contexts.
+ * {@review}
  *
  * <p>
  * All serializers and parsers extend from this class.
@@ -38,28 +39,16 @@ import org.apache.juneau.transform.*;
  * Provides a base set of common config property setters that allow you to build up serializers and parsers.
  *
  * <p class='bcode w800'>
- * 	WriterSerializer s = JsonSerializer
- * 		.<jsm>create</jsm>()
- * 		.set(<jsf>JSON_simpleMode</jsf>)
- * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>)
- * 		.set(<jsf>SERIALIZER_quoteChar</jsf>, <js>"'"</js>)
- * 		.build();
- * </p>
- *
- * <p>
- * Additional convenience methods are provided for setting properties using reduced syntax.
- *
- * <p class='bcode w800'>
- * 	WriterSerializer s = JsonSerializer
+ * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
  * 		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
  * 		.simple()  <jc>// Simple mode</jc>
- * 		.ws()  <jc>// Use whitespace</jc>
- * 		.sq()  <jc>// Use single quotes </jc>
+ * 		.ws()      <jc>// Use whitespace</jc>
+ * 		.sq()      <jc>// Use single quotes </jc>
  * 		.build();  <jc>// Create a JsonSerializer</jc>
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc GlossaryConfigurableProperties}
+ * 	<li class='link'>{@doc BeanContexts}
  * </ul>
  */
 @FluentSetters
@@ -101,7 +90,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * do not have access to the code to do so.
 	 *
 	 * <p>
-	 * As a rule, any Juneau annotation with an <c>on()</c> method can be used with this property.
+	 * As a rule, any Juneau annotation with an <l>on()</l> method can be used with this setting.
 	 *
 	 * <p>
 	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
@@ -115,11 +104,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
 	 * 	<ja>@RestGet</ja>(...)
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		annotations={
-	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)
-	 * 		}
-	 * 	)
+	 * 	<ja>@Bean</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)
 	 * 	<jk>public void</jk> doFoo() {...}
 	 * </p>
 	 *
@@ -129,13 +114,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * directly into builder classes like so:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a concrete @Bean annotation.</jc>
-	 * 	BeanAnnotation <jv>a</jv> = <jk>new</jk> BeanAnnotation(<js>"B"</js>).properties(<js>"street,city,state"</js>);
+	 * 	BeanAnnotation <jv>annotation</jv> = BeanAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>);
 	 *
 	 * 	<jc>// Apply it to a serializer.</jc>
-	 * 	WriterSerializer <jv>ws</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>a</jv>).build();
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>annotation</jv>).build();
 	 *
 	 * 	<jc>// Serialize a bean with the dynamically applied annotation.</jc>
-	 * 	String <jv>json</jv> = <jv>ws</jv>.serialize(<jk>new</jk> B());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> B());
 	 * </p>
 	 *
 	 * <p>
@@ -261,11 +246,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link BeanConfig}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_annotations}
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The values to add to this property.
+	 * 	The annotations to register with the context.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -290,19 +276,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that's capable of serializing the class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanClassVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanClassVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"foo","bar"}</jc>
-	 * 	String json = w.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -311,11 +291,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
 	 */
@@ -344,19 +325,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser capable of calling the protected constructor.</jc>
-	 * 	ReaderParser p = ReaderParser
+	 * 	ReaderParser <jv>parser</jv> = ReaderParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanConstructorVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanConstructorVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Use it.</jc>
-	 * 	MyBean c = r.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -365,11 +340,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
 	 */
@@ -396,19 +372,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that recognizes the protected field.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanFieldVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanFieldVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"foo":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
@@ -416,7 +386,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p class='bcode w800'>
 	 * 	<jc>// Disable using fields as properties entirely.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanFieldVisibility(<jsf>NONE</jsf>)
 	 * 		.build();
@@ -428,11 +398,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
 	 */
@@ -452,33 +423,33 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Interceptor that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
-	 * 		<jk>public</jk> Object readProperty(Address bean, String name, Object value) {
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+	 * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
 	 * 				<jk>return</jk> <js>"redacted"</js>;
-	 * 			<jk>return</jk> value;
+	 * 			<jk>return</jk> <jv>value</jv>;
 	 * 		}
 	 *
-	 * 		<jk>public</jk> Object writeProperty(Address bean, String name, Object value) {
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
-	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(bean.getStreet(), bean.getCity(), bean.getState());
-	 * 			<jk>return</jk> value;
+	 * 		<jk>public</jk> Object writeProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>) &amp;&amp; <js>"redacted"</js>.equals(<jv>value</jv>))
+	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(<jv>bean</jv>.getStreet(), <jv>bean</jv>.getCity(), <jv>bean</jv>.getState());
+	 * 			<jk>return</jk> <jv>value</jv>;
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Our bean class.</jc>
 	 * 	<jk>public class</jk> Address {
 	 * 		<jk>public</jk> String getTaxInfo() {...}
-	 * 		<jk>public void</jk> setTaxInfo(String s) {...}
+	 * 		<jk>public void</jk> setTaxInfo(String <jv>value</jv>) {...}
 	 * 	}
 	 *
 	 * 	<jc>// Register filter on serializer or parser.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanInterceptor(Address.<jk>class</jk>, AddressInterceptor.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"taxInfo":"redacted"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> Address());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> Address());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -488,7 +459,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param on The bean that the filter applies to.
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -508,24 +479,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that creates BeanMaps with normal put() behavior.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	<jc>// Create a context that creates BeanMaps with normal put() behavior.</jc>
+	 * 	BeanContext <jv>context</jv> = BeanContext
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanMapPutReturnsOldValue()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>)
-	 * 		.build();
-	 *
-	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
-	 * 	bm.put(<js>"foo"</js>, <js>"bar"</js>);
-	 * 	Object oldValue = bm.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
+	 * 	BeanMap&lt;MyBean&gt; <jv>myBeanMap</jv> = <jv>context</jv>.createSession().toBeanMap(<jk>new</jk> MyBean());
+	 * 	<jv>myBeanMap</jv>.put(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	Object <jv>oldValue</jv> = <jv>myBeanMap</jv>.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
 	 * </ul>
 	 *
@@ -555,19 +521,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanMethodVisibility(<jsf>PROTECTED</jsf>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanMethodVisibility</jsf>, <js>"PROTECTED"</js>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -576,11 +536,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is {@link Visibility#PUBLIC}
 	 * @return This object (for method chaining).
 	 */
@@ -605,8 +566,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 *
 	 * 		<jc>// A no-arg constructor</jc>
-	 * 		<jk>public</jk> MyBean(String foo) {
-	 * 			<jk>this</jk>.<jf>foo</jf> = foo;
+	 * 		<jk>public</jk> MyBean(String <jv>foo</jv>) {
+	 * 			<jk>this</jk>.<jf>foo</jf> = <jv>foo</jv>;
 	 * 		}
 	 *
 	 * 		<ja>@Override</ja>
@@ -616,19 +577,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireDefaultConstructor()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  "bar"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -637,6 +592,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
 	 * </ul>
 	 *
@@ -669,19 +625,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireSerializable()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  "bar"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -690,6 +640,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
 	 * </ul>
 	 *
@@ -713,26 +664,20 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * 		<jc>// A read/write property.</jc>
 	 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
-	 * 		<jk>public void</jk> setFoo(String foo) { ... }
+	 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) { ... }
 	 *
 	 * 		<jc>// A read-only property.</jc>
 	 * 		<jk>public</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beansRequireSettersForGetters()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -741,6 +686,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSettersForGetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
 	 * </ul>
 	 *
@@ -768,19 +714,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.disableBeansRequireSomeProperties()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -789,6 +729,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_disableBeansRequireSomeProperties}
 	 * </ul>
 	 *
@@ -831,19 +772,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanProperties(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName()).properties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -891,19 +832,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanProperties(AMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"foo,bar"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).properties(value.toString()));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -955,19 +896,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanProperties(<js>"MyBean"</js>, <js>"foo,bar"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClassName).properties(properties));
+	 * 	<jv>builider</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1009,19 +950,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that excludes the "bar" and "baz" properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesExcludes(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName()).excludeProperties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1061,19 +1002,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that excludes the "bar" and "baz" properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesExcludes(AMap.of(<js>"MyBean"</js>, <js>"bar,baz"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).excludeProperties(value.toString()));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1117,19 +1058,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that excludes the "bar" and "baz" properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesExcludes(<js>"MyBean"</js>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClassName).excludeProperties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1153,7 +1094,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 * Note that this is different from the <l>beanProperties</l>/<l>beanPropertiesExcludes</l> settings which include or exclude properties
+	 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 	 * for both serializers and parsers.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1164,29 +1105,29 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer with read-only property settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesReadOnly(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// All 3 properties will be serialized.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with read-only property settings.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesReadOnly(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
 	 * 		.ignoreUnknownBeanProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Parser ignores bar and baz properties.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName()).readOnlyProperties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1208,7 +1149,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies one or more properties on beans that are read-only despite having valid getters.
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 * Note that this is different from the <l>beanProperties</l>/<l>beanPropertyExcludes</l> settings which include or exclude properties
+	 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 	 * for both serializers and parsers.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1219,29 +1160,29 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer with read-only property settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesReadOnly(AMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// All 3 properties will be serialized.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with read-only property settings.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesReadOnly(AMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
 	 * 		.ignoreUnknownBeanProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Parser ignores bar and baz properties.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).readOnlyProperties(value.toString()));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1267,7 +1208,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 * Note that this is different from the <l>beanProperties</l>/<l>beanPropertyExcludes</l> settings which include or exclude properties
+	 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 	 * for both serializers and parsers.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1278,29 +1219,29 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer with read-only property settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesReadOnly(<js>"MyBean"</js>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// All 3 properties will be serialized.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with read-only property settings.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesReadOnly(<js>"MyBean"</js>, <js>"bar,baz"</js>)
 	 * 		.ignoreUnknownBeanProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Parser ignores bar and baz properties.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName).readOnlyProperties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1324,7 +1265,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 * Note that this is different from the <l>beanProperties</l>/<l>beanPropertiesExcludes</l> settings which include or exclude properties
+	 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 	 * for both serializers and parsers.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1335,28 +1276,28 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer with write-only property settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesWriteOnly(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Only foo will be serialized.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with write-only property settings.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesWriteOnly(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parser parses all 3 properties.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName).writeOnlyProperties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1378,7 +1319,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 * Note that this is different from the <l>beanProperties</l>/<l>beanPropertiesExcludes</l> settings which include or exclude properties
+	 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 	 * for both serializers and parsers.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1389,28 +1330,28 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer with write-only property settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesWriteOnly(AMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Only foo will be serialized.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with write-only property settings.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesWriteOnly(AMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Parser parses all 3 properties.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).writeOnlyProperties(value.toString()));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1436,7 +1377,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 * Note that this is different from the <l>beanProperties</l>/<l>beanPropertiesExcludes</l> settings which include or exclude properties
+	 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 	 * for both serializers and parsers.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1447,28 +1388,28 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer with write-only property settings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesWriteOnly(<js>"MyBean"</js>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Only foo will be serialized.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with write-only property settings.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanPropertiesWriteOnly(<js>"MyBean"</js>, <js>"bar,baz"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parser parses all 3 properties.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClassName).writeOnlyProperties(properties));
+	 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1493,10 +1434,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * The list of classes that make up the bean dictionary in this bean context.
 	 *
 	 * <p>
+	 * Values are prepended to the list so that later calls can override classes of earlier calls.
+	 *
+	 * <p>
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
 	 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
-	 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON (depending on <l>addBeanTypes</l>/<l>addRootType</l> properties)
+	 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
 	 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
 	 *
 	 * <p>
@@ -1520,18 +1464,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jk>public class</jk> Bar {...}
 	 *
 	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.addBeanTypes()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
@@ -1540,7 +1476,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -1560,26 +1496,55 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
-	 * 	ReaderParser p = HtmlParser
+	 * 	ReaderParser <jv>parser</jv> = HtmlParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parse an HTML body into HTML beans.</jc>
-	 * 	Body body = p.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+	 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The values to add to this property.
+	 * 	The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder dictionary(Object...values) {
 		return prependTo(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Bean dictionary.
+	 *
+	 * <p>
+	 * Same as {@link #dictionary(Object...)}, but replaces instead of prepends the values.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to replace on this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BeanContextBuilder dictionary_replace(Object...values) {
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1603,13 +1568,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.dictionaryOn(MyBean.class, Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.dictionaryOn(MyBean.<jk>class</jk>, Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -1622,7 +1587,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param on The class that the dictionary values apply to.
 	 * @param values
-	 * 	The new values for this property.
+	 * 	The new values for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -1644,14 +1609,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
+	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().setFoo(<js>"foo"</js>).setBar(123))
 	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
 	 * This is a shorthand method for the following code:
 	 * <p class='bcode w800'>
-	 * 		<jv>builder</jv>.annotations(<jk>new</jk> MarshalledAnnotation().onClass(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>o</jv>)))
+	 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>o</jv>)))
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1702,7 +1667,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This is a shorthand method for the following code:
 	 * <p class='bcode w800'>
-	 * 		<jv>builder</jv>.annotations(<jk>new</jk> MarshalledAnnotation().onClass(<jv>pojoClass</jv>).example(<jv>json</jv>))
+	 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(<jv>json</jv>))
 	 * </p>
 	 *
 	 * <p>
@@ -1746,23 +1711,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	<jc>// A bean with a fluent setter.</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> MyBean foo(String value) {...}
+	 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that finds fluent setters.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.findFluentSetters()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_findFluentSetters</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Parse into bean using fluent setter.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1771,6 +1730,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 *
@@ -1791,17 +1752,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	<jc>// A bean with a fluent setter.</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> MyBean foo(String value) {...}
+	 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that finds fluent setters.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.findFluentSetters(MyBean.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parse into bean using fluent setter.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1838,22 +1799,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.ingoreInvocationExceptionsOnGetters()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Exception is ignored.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
 	 * </ul>
 	 *
@@ -1875,28 +1831,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	<jc>// A bean with a property that throws an exception.</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public void</jk> setFoo(String foo) {
+	 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) {
 	 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignoreInvocationExceptionsOnSetters()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Exception is ignored.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
 	 * </ul>
 	 *
@@ -1924,19 +1875,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.disableIgnoreMissingSetters()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreMissingSetters</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Throws a ParseException.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1944,6 +1889,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreMissingSetters}
 	 * </ul>
 	 *
@@ -1967,20 +1913,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		<jk>public transient</jk> String <jf>foo</jf> = <js>"foo"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	<jc>// Create a serializer that doesn't ignore transient fields.</jc>
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.disableIgnoreTransientFields()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1988,6 +1928,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreTransientFields}
 	 * </ul>
 	 *
@@ -2013,22 +1954,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that ignores missing bean properties.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignoreUnknownBeanProperties()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Doesn't throw an exception on unknown 'bar' property.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
 	 * </ul>
 	 *
@@ -2054,22 +1990,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.disableIgnoreUnknownNullBeanProperties()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties}
 	 * </ul>
 	 *
@@ -2101,19 +2032,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.implClass(MyBean.<jk>class</jk>, MyBeanImpl.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Instantiates a MyBeanImpl,</jc>
-	 * 	MyBean b = p.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param interfaceClass The interface class.
@@ -2146,23 +2071,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.implClasses(AMap.<jsm>of</jsm>(MyBean.<jk>class</jk>, MyBeanImpl.<jk>class</jk>))
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, AMap.<jsm>of</jsm>(MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>))
-	 * 		.build();
-	 *
 	 * 	<jc>// Instantiates a MyBeanImpl,</jc>
-	 * 	MyBean b = p.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param values
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -2191,13 +2110,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer and define our interface class mapping.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.interfaceClass(A1.<jk>class</jk>, A.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces "{"foo":"foo"}"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> A1());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> A1());
 	 * </p>
 	 *
 	 * <p>
@@ -2210,7 +2129,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param on The class that the interface class applies to.
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -2237,13 +2156,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer and define our interface class mapping.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.interfaces(A.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces "{"foo":"foo"}"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> A1());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> A1());
 	 * </p>
 	 *
 	 * <p>
@@ -2255,7 +2174,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -2291,19 +2210,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that doesn't treat MyBean as a bean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.notBeanClasses(MyBean.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_notBeanClasses</jsf>, MyBean.<jk>class</jk>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces "baz" instead of {"foo":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -2311,11 +2224,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The values to add to this property.
+	 * 	The values to add to this setting.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
 	 * 		<li>Classes.
@@ -2326,6 +2241,26 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder notBeanClasses(Object...values) {
 		return addTo(BEAN_notBeanClasses, values);
+	}
+
+	/**
+	 * Bean class exclusions.
+	 *
+	 * <p>
+	 * Same as {@link #notBeanClasses(Object...)} but replaces any existing values.
+	 *
+	 * @param values
+	 * 	The values to add to this setting.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Classes.
+	 * 		<li>Arrays and collections of classes.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BeanContextBuilder notBeanClasses_replace(Object...values) {
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -2348,16 +2283,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.notBeanPackages(<js>"org.apache.foo"</js>, <js>"org.apache.bar.*"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_notBeanPackages</jsf>, <js>"org.apache.foo"</js>)
-	 * 		.addTo(<jsf>BEAN_notBeanPackages</jsf>, <js>"org.apache.bar.*"</js>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -2366,7 +2294,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The values to add to this property.
+	 * 	The values to add to this setting.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link Package} objects.
@@ -2416,19 +2344,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names.</jc>
 	 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.propertyNamer(PropertyNamerDLC.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_propertyNamer</jsf>, PropertyNamerDLC.<jk>class</jk>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2460,13 +2382,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names for the MyBean class only.</jc>
 	 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.propertyNamer(MyBean.<jk>class</jk>, PropertyNamerDLC.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2495,7 +2417,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 *
 	 * <p>
-	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
+	 * this setting is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * in the Java file.
 	 *
@@ -2509,19 +2431,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortProperties()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -2555,13 +2471,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that sorts properties on MyBean.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortProperties(MyBean.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2605,18 +2521,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer specifies a stop class for C3.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.stopClass(C3.<jk>class</jk>, C2.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"p3":"..."}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> C3());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> C3());
 	 * </p>
 	 *
 	 * @param on The class on which the stop class is being applied.
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -2656,13 +2572,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> String swap(BeanSession session, Date o) {
-	 * 			<jk>return</jk> <jf>format</jf>.format(o);
+	 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, Date <jv>o</jv>) {
+	 * 			<jk>return</jk> <jf>format</jf>.format(<jv>o</jv>);
 	 * 		}
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> Exception {
-	 * 			<jk>return</jk> <jf>format</jf>.parse(o);
+	 * 		<jk>public</jk> Date unswap(BeanSession <jv>session</jv>, String <jv>o</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return</jk> <jf>format</jf>.parse(<jv>o</jv>);
 	 * 		}
 	 * 	}
 	 *
@@ -2672,28 +2588,22 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that uses our date swap.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.swaps(MyDateSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_swaps</jsf>, MyDateSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Produces:  {"date":"2012-03-03T04:05:06-0500"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a serializer that uses our date swap.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.swaps(MyDateSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use our parser to parse a bean.</jc>
-	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -2706,7 +2616,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The values to add to this property.
+	 * 	The values to add to this setting.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
 	 * 		<li>Any subclass of {@link PojoSwap}.
@@ -2737,13 +2647,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jk>public class</jk> MyBean {...}
 	 *
 	 * 	<jc>// Create a serializer and specify the type name..</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.typeName(MyBean.<jk>class</jk>, <js>"mybean"</js>)
 	 * 		.build();
 	 *
-	 * 		<jc>// Produces:  {"_type":"mybean",...}</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	<jc>// Produces:  {"_type":"mybean",...}</jc>
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -2758,7 +2668,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param on
 	 * 	The class the type name is being defined on.
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -2782,18 +2692,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jk>public class</jk> Bar {...}
 	 *
 	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.typePropertyName(<js>"t"</js>)
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_typePropertyName</jsf>, <js>"t"</js>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
+	 * 		.typePropertyName(<js>"t"</js>)
+	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
@@ -2801,16 +2710,21 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
 	 * 	}
 	 *
+	 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+	 *
 	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{t:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is <js>"_type"</js>.
 	 * @return This object (for method chaining).
 	 */
@@ -2839,14 +2753,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.typePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{t:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2856,7 +2770,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param on The class the type property name applies to.
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is <js>"_type"</js>.
 	 * @return This object (for method chaining).
 	 */
@@ -2874,15 +2788,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.useEnumNames()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useEnumNames</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Enum with overridden toString().</jc>
@@ -2925,6 +2833,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_disableInterfaceProxies}
 	 * </ul>
 	 *
@@ -2945,15 +2854,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.useJavaBeanIntrospector()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>)
 	 * 		.build();
 	 * </p>
 	 *

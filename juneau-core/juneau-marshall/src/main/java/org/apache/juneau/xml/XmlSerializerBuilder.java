@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of XML serializers.
+ * {@review}
  */
 @FluentSetters
 public class XmlSerializerBuilder extends WriterSerializerBuilder {
@@ -58,13 +59,17 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Add namespace URLs to the root element.
+	 * Add namespace URLs to the root element.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>addNamespaceUrisToRoot(<jk>true</jk>)</code>.
+	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
+	 *
+	 * <p>
+	 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -75,13 +80,32 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Don't auto-detect namespace usage.
+	 * Don't auto-detect namespace usage.
 	 *
 	 * <p>
 	 * Don't detect namespace usage before serialization.
 	 *
+	 * <p>
+	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
+	 * root element to only those that will be used in the resulting document.
+	 *
+	 * <p>
+	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+	 * the root element is serialized.
+	 *
+	 * <p>
+	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Auto-detection of namespaces can be costly performance-wise.
+	 * 		<br>In high-performance environments, it's recommended that namespace detection be
+	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_disableAutoDetectNamespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -92,13 +116,14 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Default namespace.
+	 * Default namespace.
 	 *
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
 	 * @param value
@@ -112,13 +137,14 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Enable support for XML namespaces.
+	 * Enable support for XML namespaces.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
+	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -129,7 +155,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Enable support for XML namespaces.
+	 * Enable support for XML namespaces.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
@@ -146,7 +172,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -164,7 +190,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.

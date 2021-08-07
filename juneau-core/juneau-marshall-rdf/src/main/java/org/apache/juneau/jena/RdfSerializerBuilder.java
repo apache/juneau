@@ -32,6 +32,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Builder class for building instances of RDF serializers.
+ * {@review}
  */
 @FluentSetters
 public class RdfSerializerBuilder extends WriterSerializerBuilder {
@@ -62,10 +63,10 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -74,10 +75,10 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -86,7 +87,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>iri_rules</c>.
+	 * RDF/XML property: <c>iri_rules</c>.
 	 *
 	 * <p>
 	 * Set the engine for checking and resolving.
@@ -107,7 +108,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -116,7 +117,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML ARP property: <c>error-mode</c>.
+	 * RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
@@ -133,8 +134,19 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<li><js>"strict-fatal"</js>
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+	 * </ul>
+	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -143,28 +155,33 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML ARP property: <c>error-mode</c>.
+	 * RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
+	 * <ul class='seealso'>
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+	 * </ul>
+	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder arp_embedding(boolean value) {
-		return set(RDF_arp_embedding, value);
+	public RdfSerializerBuilder arp_embedding() {
+		return set(RDF_arp_embedding);
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>xmlbase</c>.
+	 * RDF/XML property: <c>xmlbase</c>.
 	 *
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -173,23 +190,21 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>longId</c>.
+	 * RDF/XML property: <c>longId</c>.
 	 *
 	 * <p>
 	 * Whether to use long ID's for anon resources.
 	 * Short ID's are easier to read, but can run out of memory on very large models.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder rdfxml_longId(boolean value) {
-		return set(RDF_rdfxml_longId, value);
+	public RdfSerializerBuilder rdfxml_longId() {
+		return set(RDF_rdfxml_longId);
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>allowBadURIs</c>.
+	 * RDF/XML property: <c>allowBadURIs</c>.
 	 *
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
@@ -202,7 +217,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>relativeURIs</c>.
+	 * RDF/XML property: <c>relativeURIs</c>.
 	 *
 	 * <p>
 	 * What sort of relative URIs should be used.
@@ -230,7 +245,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -239,7 +254,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>showXmlDeclaration</c>.
+	 * RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
 	 * <p>
 	 * Possible values:
@@ -255,7 +270,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -264,7 +279,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+	 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <p>
 	 * If disabled, an XML doctype declaration isn't included in the output.
@@ -280,13 +295,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>tab</c>.
+	 * RDF/XML property: <c>tab</c>.
 	 *
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -295,13 +310,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>attributeQuoteChar</c>.
+	 * RDF/XML property: <c>attributeQuoteChar</c>.
 	 *
 	 * <p>
 	 * The XML attribute quote character.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -310,7 +325,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
- 	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>blockRules</c>.
+ 	 * RDF/XML property: <c>blockRules</c>.
 	 *
 	 * <p>
 	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
@@ -318,7 +333,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * rules that will not be used.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -327,13 +342,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>minGap</c>.
+	 * N3/Turtle property: <c>minGap</c>.
 	 *
 	 * <p>
 	 * Minimum gap between items on a line.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -342,7 +357,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableObjectLists</c>.
+	 * N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <p>
 	 * Don't print object lists as comma separated lists.
@@ -355,13 +370,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>subjectColumn</c>.
+	 * N3/Turtle property: <c>subjectColumn</c>.
 	 *
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -370,13 +385,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>propertyColumn</c>.
+	 * N3/Turtle property: <c>propertyColumn</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -385,13 +400,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>indentProperty</c>.
+	 * N3/Turtle property: <c>indentProperty</c>.
 	 *
 	 * <p>
 	 * Width to indent properties.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -400,14 +415,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>widePropertyLen</c>.
+	 * N3/Turtle property: <c>widePropertyLen</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
 	 * Must be longer than <c>propertyColumn</c>.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -416,7 +431,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+	 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
 	 *
 	 * <p>
 	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
@@ -429,7 +444,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUsePropertySymbols</c>.
+	 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <p>
 	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
@@ -442,7 +457,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+	 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <p>
 	 * Disallow the use of <c>"""</c> to delimit long strings.
@@ -455,7 +470,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseDoubles</c>.
+	 * N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <p>
 	 * Disallow the use of doubles as <c>123.456</c>.
@@ -468,7 +483,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * <p>
 	 * Possible values:
@@ -492,7 +507,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -501,13 +516,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -516,24 +531,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Add XSI data types to non-<c>String</c> literals.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder addLiteralTypes(boolean value) {
-		return set(RDF_addLiteralTypes, value);
-	}
-
-	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Add XSI data types to non-<c>String</c> literals.
+	 * Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>addLiteralTypes(<jk>true</jk>)</code>.
@@ -546,36 +544,16 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Add RDF root identifier property to root node.
+	 * Add RDF root identifier property to root node.
 	 *
 	 * <p>
 	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
-	 * This helps locate the root node during parsing.
+	 * <br>This helps locate the root node during parsing.
 	 *
 	 * <p>
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder addRootProperty(boolean value) {
-		return set(RDF_addRootProperty, value);
-	}
-
-	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Add RDF root identifier property to root node.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>addRootProperty(<jk>true</jk>)</code>.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
@@ -589,10 +567,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Disable auto-detect namespace usage.
+	 * Disable auto-detect namespace usage.
 	 *
 	 * <p>
 	 * Don't detect namespace usage before serialization.
+	 *
+	 * <p>
+	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+	 * the root element is serialized.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableAutoDetectNamespaces}
@@ -606,7 +588,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * <p>
 	 *
@@ -621,7 +603,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>Possible values:
 	 * 	<ul>
 	 * 		<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
@@ -638,14 +620,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauBpNs}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
@@ -655,14 +637,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauNs}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
@@ -672,7 +654,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Can be any of the following:
@@ -706,10 +688,15 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * 	<li class='jm'>{@link #n3()}
+	 * 	<li class='jm'>{@link #ntriple()}
+	 * 	<li class='jm'>{@link #turtle()}
+	 * 	<li class='jm'>{@link #xml()}
+	 * 	<li class='jm'>{@link #xmlabbrev()}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -718,31 +705,51 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder looseCollections(boolean value) {
-		return set(RDF_looseCollections, value);
-	}
-
-	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Collections should be serialized and parsed as loose collections.
+	 * <p>
+	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
+	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
+	 * when serialized as loose collections.
 	 *
 	 * <p>
-	 * Shortcut for <code>looseCollections(<jk>true</jk>)</code>.
+	 * This setting is typically only useful if the beans being parsed into do not have a bean property
+	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	WriterSerializer <jv>serializer</jv> = RdfSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.xmlabbrev()
+	 * 		.looseCollections()
+	 * 		.build();
+	 *
+	 * 	ReaderParser <jv>parser</jv> = RdfParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.xml()
+	 * 		.looseCollections()
+	 * 		.build();
+	 *
+	 * 	List&lt;MyBean&gt; <jv>myList</jv> = createListOfMyBeans();
+	 *
+	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
+	 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+	 *
+	 * 	<jc>// Parse back into a Java collection</jc>
+	 * 	<jv>myList</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	MyBean[] <jv>myBeans</jv> = createArrayOfMyBeans();
+	 *
+	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
+	 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myBeans</jv>);
+	 *
+	 * 	<jc>// Parse back into a bean array</jc>
+	 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
@@ -756,7 +763,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
@@ -773,7 +780,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -782,7 +789,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
 	 * </ul>
 	 *
-	 * @param values The new value for this property.
+	 * @param values The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -791,7 +798,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
@@ -808,7 +815,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
@@ -825,7 +832,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Disable reuse of XML namespaces when RDF namespaces not specified.
+	 * Disable reuse of XML namespaces when RDF namespaces not specified.
 	 *
 	 * <p>
 	 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
@@ -844,7 +851,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
@@ -861,7 +868,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>

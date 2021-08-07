@@ -18,6 +18,7 @@ import org.apache.juneau.collections.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
+ * {@review}
  */
 @ConfigurableContext
 public abstract class OutputStreamSerializer extends Serializer {
@@ -30,6 +31,10 @@ public abstract class OutputStreamSerializer extends Serializer {
 
 	/**
 	 * Configuration property:  Binary output format.
+	 *
+	 * <p>
+	 * When using the {@link #serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -49,34 +54,6 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When using the {@link #serializeToString(Object)} method on stream-based serializers, this defines the format to use
-	 * when converting the resulting byte array to a string.
-	 *
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
-	 * 	OutputStreamSerializer s = MsgPackSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.binaryFormat(<jsf>BASE64</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	OutputStreamSerializer s = MsgPackSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_binaryOutputFormat</jsf>, <js>"BASE64"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// The bean we want to serialize.</jc>
-	 * 	<jk>public class</jk> MyBean {...}
-	 *
-	 * 	<jc>// MessagePack will generate BASE64-encoded string.</jc>
-	 * 	String msgPack = s.serializeToString(<jk>new</jk> MyBean());
-	 * </p>
 	 */
 	public static final String OSSERIALIZER_binaryFormat = PREFIX + ".binaryFormat.s";
 

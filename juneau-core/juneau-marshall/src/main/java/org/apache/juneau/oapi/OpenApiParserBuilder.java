@@ -658,12 +658,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - UonParserBuilder */
-	public OpenApiParserBuilder decoding(boolean value) {
-		super.decoding(value);
-		return this;
-	}
-
-	@Override /* GENERATED - UonParserBuilder */
 	public OpenApiParserBuilder validateEnd() {
 		super.validateEnd();
 		return this;

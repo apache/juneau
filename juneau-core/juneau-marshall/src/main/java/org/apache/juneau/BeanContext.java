@@ -35,6 +35,7 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
 
 /**
  * Core class of the Juneau architecture.
+ * {@review}
  *
  * <p class='w800'>
  * This class servers multiple purposes:
@@ -250,10 +251,12 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 */
@@ -723,10 +726,12 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses_replace()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses_replace(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 */

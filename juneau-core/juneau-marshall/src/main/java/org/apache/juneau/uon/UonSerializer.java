@@ -23,6 +23,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -130,6 +131,15 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}
@@ -148,20 +158,14 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String UON_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 * <p>
+	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -178,47 +182,17 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#encoding(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#encoding()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
-	 * URL-encoding of non-valid URI characters.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a non-encoding UON serializer.</jc>
-	 * 	UonSerializer s1 = UonSerializer.
-	 * 		.<jsm>create</jsm>()
-	 * 		.build();
-	 *
-	 * 	<jc>// Create an encoding UON serializer.</jc>
-	 * 	UonSerializer s2 = UonSerializer.
-	 * 		.<jsm>create</jsm>()
-	 * 		.encoding()
-	 * 		.build();
-	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
-	 *
-	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
-	 * 	String uon1 = s1.serialize(m)
-	 *
-	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
-	 * 	String uon2 = s2.serialize(m)
-	 * </p>
 	 */
 	public static final String UON_encoding = PREFIX + ".encoding.b";
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
+	 *
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -239,43 +213,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#paramFormatPlain()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
-	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a normal UON serializer.</jc>
-	 * 	UonSerializer s1 = UonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a plain-text UON serializer.</jc>
-	 * 	UonSerializer s2 = UonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
-	 * 		.build();
-	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(
-	 * 		<js>"foo"</js>, <js>"bar"</js>,
-	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-	 * 	);
-	 *
-	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-	 * 	String uon1 = s1.serialize(m)
-	 *
-	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-	 * 	String uon2 = s2.serialize(m)
-	 * </p>
 	 */
 	public static final String UON_paramFormat = PREFIX + ".paramFormat.s";
 

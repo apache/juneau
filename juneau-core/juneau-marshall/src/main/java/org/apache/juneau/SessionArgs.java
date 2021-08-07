@@ -23,6 +23,7 @@ import org.apache.juneau.json.*;
 
 /**
  * Runtime arguments common to all bean, serializer, and parser sessions.
+ * {@review}
  */
 @FluentSetters
 public class SessionArgs {
@@ -51,6 +52,12 @@ public class SessionArgs {
 	 * <p>
 	 * If not specified, defaults to {@link Context#CONTEXT_debug}.
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
+	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#debug()}
+	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
+	 * </ul>
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk>.
@@ -70,6 +77,12 @@ public class SessionArgs {
 	 *
 	 * <p>
 	 * If not specified, defaults to {@link Context#CONTEXT_locale}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
+	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#locale(Locale)}
+	 * 	<li class='jf'>{@link Context#CONTEXT_locale}
+	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -91,6 +104,12 @@ public class SessionArgs {
 	 * <p>
 	 * If not specified, defaults to {@link Context#CONTEXT_mediaType}.
 	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
+	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#mediaType(MediaType)}
+	 * 	<li class='jf'>{@link Context#CONTEXT_mediaType}
+	 * </ul>
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk>.
@@ -110,6 +129,12 @@ public class SessionArgs {
 	 *
 	 * <p>
 	 * If not specified, defaults to {@link BeanContext#CONTEXT_timeZone}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
+	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#timeZone(TimeZone)}
+	 * 	<li class='jf'>{@link Context#CONTEXT_timeZone}
+	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.

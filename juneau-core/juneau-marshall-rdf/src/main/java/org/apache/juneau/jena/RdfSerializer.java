@@ -25,6 +25,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Serializes POJOs to RDF.
+ * {@review}
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
  *
@@ -57,6 +58,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypes RDF_addBeanTypes}
@@ -75,15 +84,6 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String RDF_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
@@ -105,7 +105,6 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addLiteralTypes(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addLiteralTypes()}
 	 * 		</ul>
 	 * </ul>
@@ -114,6 +113,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
+	 *
+	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
+	 * to identify the root node in the graph.
+	 * <br>This helps locate the root node during parsing.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -130,25 +133,17 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addRootProperty(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addRootProperty()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
-	 * to identify the root node in the graph.
-	 * <br>This helps locate the root node during parsing.
-	 *
-	 * <p>
-	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
-	 * identify root notes, which can introduce a considerable performance degradation.
 	 */
 	public static final String RDF_addRootProperty = PREFIX + ".addRootProperty.b";
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
+	 *
+	 * <p>
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -168,19 +163,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#disableAutoDetectNamespaces()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Don't detect namespace usage before serialization.
-	 *
-	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
-	 * the root element is serialized.
 	 */
 	public static final String RDF_disableAutoDetectNamespaces = PREFIX + ".disableAutoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespaces.
+	 *
+	 * <p>
+	 * The default list of namespaces associated with this serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -201,15 +191,15 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#namespaces(Namespace...)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
 	 */
 	public static final String RDF_namespaces = PREFIX + ".namespaces.ls";
 
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * <p>
+	 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -228,11 +218,6 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#disableUseXmlNamespaces()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
-	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
 	public static final String RDF_disableUseXmlNamespaces = PREFIX + ".disableUseXmlNamespaces.b";
 

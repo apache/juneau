@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of JSON parsers.
+ * {@review}
  */
 @FluentSetters
 public class JsonParserBuilder extends ReaderParserBuilder {
@@ -58,10 +59,24 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>JsonParser</l> configuration property:&emsp;</i>  Validate end.
+	 * Validate end.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
+	 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
+	 * the stream consists of only comments or whitespace.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.validateEnd()
+	 * 		.build();
+	 *
+	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
+	 * 	String <jv>json</jv> = <js>"{foo:'bar'}{baz:'qux'}"</js>;
+	 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}

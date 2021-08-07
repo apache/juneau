@@ -15,11 +15,11 @@ package org.apache.juneau.jena;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 
 /**
  * Configurable properties common to both the {@link RdfSerializer} and {@link RdfParser} classes.
+ * {@review}
  */
 public interface RdfCommon {
 
@@ -35,6 +35,9 @@ public interface RdfCommon {
 
 	/**
 	 * Configuration property:  RDF language.
+	 *
+	 * <p>
+	 * 	The RDF language to use.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -62,39 +65,6 @@ public interface RdfCommon {
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#turtle()}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#xml()}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * 	The RDF language to use.
-	 * <p>
-	 * Can be any of the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"RDF/XML"</js>
-	 * 	<li>
-	 * 		<js>"RDF/XML-ABBREV"</js> (default)
-	 * 	<li>
-	 * 		<js>"N-TRIPLE"</js>
-	 * 	<li>
-	 * 		<js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
-	 * 		created.
-	 * 		Default is the pretty writer but can be overridden with system property
-	 * 		<c>org.apache.jena.n3.N3JenaWriter.writer</c>.
-	 * 	<li>
-	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
-	 * 		one-referenced bNodes.
-	 * 	<li>
-	 * 		<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
-	 * 		The plain writer writes records by subject.
-	 * 	<li>
-	 * 		<js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
-	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
-	 * 	<li>
-	 * 		<js>"TURTLE"</js> -  Turtle writer.
-	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 */
 	public static final String RDF_language = PREFIX + ".language.s";
@@ -150,6 +120,9 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <c>iri_rules</c>.
 	 *
+	 * <p>
+	 * Set the engine for checking and resolving.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}
@@ -162,31 +135,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#arp_iriRules()}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Set the engine for checking and resolving.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
-	 * 		is not good practice.
-	 * 	<li>
-	 * 		<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces
-	 * 		in IRIs.
-	 * 	<li>
-	 * 		<js>"iri"</js> - Sets the IRI engine to IRI
-	 * 		({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
-	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#arp_iriRules(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#arp_iriRules(String)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String RDF_arp_iriRules = PREFIX + ".jena.rdfXml.iri-rules.s";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
+	 *
+	 * <p>
+	 * This allows a coarse-grained approach to control of error handling.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -200,39 +162,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#arp_errorMode()}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * This allows a coarse-grained approach to control of error handling.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"default"</js>
-	 * 	<li><js>"lax"</js>
-	 * 	<li><js>"strict"</js>
-	 * 	<li><js>"strict-ignore"</js>
-	 * 	<li><js>"strict-warning"</js>
-	 * 	<li><js>"strict-error"</js>
-	 * 	<li><js>"strict-fatal"</js>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li>
-	 * 		{@doc ExtARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
-	 * 	<li>
-	 * 		{@doc ExtARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
-	 * 	<li>
-	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
-	 * 	<li>
-	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#arp_errorMode(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#arp_errorMode(String)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String RDF_arp_errorMode = PREFIX + ".jena.rdfXml.error-mode.s";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <c>embedding</c>.
+	 *
+	 * <p>
+	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -246,21 +189,23 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#arp_embedding()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#arp_embedding()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#arp_embedding()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li>
-	 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
-	 * </ul>
 	 */
 	public static final String RDF_arp_embedding = PREFIX + ".jena.rdfXml.embedding.b";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <c>ERR_xxx</c>.
+	 *
+	 * <p>
+	 * Provides fine-grained control over detected error conditions.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -270,10 +215,6 @@ public interface RdfCommon {
 	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.ERR_</c>
 	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_ERR_</c>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Provides fine-grained control over detected error conditions.
 	 *
 	 * <p>
 	 * Possible values:
@@ -296,6 +237,9 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML ARP property: <c>WARN_xxx</c>.
 	 *
+	 * <p>
+	 * See {@link #RDF_arp_err_} for details.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}
@@ -304,15 +248,14 @@ public interface RdfCommon {
 	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.WARN_</c>
 	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_WARN_</c>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * See {@link #RDF_arp_err_} for details.
 	 */
 	public static final String RDF_arp_warn_ = PREFIX + ".jena.rdfXml.WARN_";
 
 	/**
 	 * RDF/XML ARP property: <c>IGN_xxx</c>.
+	 *
+	 * <p>
+	 * See {@link #RDF_arp_err_} for details.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -322,15 +265,14 @@ public interface RdfCommon {
 	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.IGN_</c>
 	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_IGN_</c>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * See {@link #RDF_arp_err_} for details.
 	 */
 	public static final String RDF_arp_ign_ = PREFIX + ".jena.rdfXml.IGN_";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>xmlbase</c>.
+	 *
+	 * <p>
+	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -344,16 +286,21 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_xmlBase()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_xmlBase(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_xmlBase(String)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 */
 	public static final String RDF_rdfxml_xmlBase = PREFIX + ".jena.rdfXml.xmlbase.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>longId</c>.
+	 *
+	 * <p>
+	 * Whether to use long ID's for anon resources.
+	 * Short ID's are easier to read, but can run out of memory on very large models.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -367,17 +314,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_longId()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_longId()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_longId()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Whether to use long ID's for anon resources.
-	 * Short ID's are easier to read, but can run out of memory on very large models.
 	 */
 	public static final String RDF_rdfxml_longId = PREFIX + ".jena.rdfXml.longId.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>allowBadURIs</c>.
+	 *
+	 * <p>
+	 * URIs in the graph are, by default, checked prior to serialization.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -391,16 +341,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_allowBadUris()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_allowBadUris()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_allowBadUris()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * URIs in the graph are, by default, checked prior to serialization.
 	 */
 	public static final String RDF_rdfxml_allowBadUris = PREFIX + ".jena.rdfXml.allowBadURIs.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>relativeURIs</c>.
+	 *
+	 * <p>
+	 * What sort of relative URIs should be used.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -414,33 +368,12 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_relativeUris()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_relativeUris(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_relativeUris(String)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * What sort of relative URIs should be used.
-	 *
-	 * <p>
-	 * A comma separate list of options:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
-	 * 	<li>
-	 * 		<js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
-	 * 	<li>
-	 * 		<js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
-	 * 	<li>
-	 * 		<js>"relative"</js> - Relative path not beginning in <js>"../"</js>
-	 * 	<li>
-	 * 		<js>"parent"</js> - Relative path beginning in <js>"../"</js>
-	 * 	<li>
-	 * 		<js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
-	 * </ul>
-	 *
-	 * <p>
-	 * The default value is <js>"same-document, absolute, relative, parent"</js>.
-	 * To switch off relative URIs use the value <js>""</js>.
-	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
 	 */
 	public static final String RDF_rdfxml_relativeUris = PREFIX + ".jena.rdfXml.relativeURIs.s";
 
@@ -459,26 +392,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_showXmlDeclaration()}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"true"</js> - Add XML Declaration to the output.
-	 * 	<li>
-	 * 		<js>"false"</js> - Don't add XML Declaration to the output.
-	 * 	<li>
-	 * 		<js>"default"</js> - Only add an XML Declaration when asked to write to an <c>OutputStreamWriter</c>
-	 * 		that uses some encoding other than <c>UTF-8</c> or <c>UTF-16</c>.
-	 * 		In this case the encoding is shown in the XML declaration.
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_showXmlDeclaration(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_showXmlDeclaration(String)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String RDF_rdfxml_showXmlDeclaration = PREFIX + ".jena.rdfXml.showXmlDeclaration.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, an XML doctype declaration is not included in the output.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -492,19 +419,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_disableShowDoctypeDeclaration()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_disableShowDoctypeDeclaration()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_disableShowDoctypeDeclaration()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If true, an XML doctype declaration is included in the output.
-	 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
-	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
-	 * invocation.
 	 */
 	public static final String RDF_rdfxml_disableShowDoctypeDeclaration = PREFIX + ".jena.rdfXml.disableShowDoctypeDeclaration.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>tab</c>.
+	 *
+	 * <p>
+	 * The number of spaces with which to indent XML child elements.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -518,16 +446,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_tab()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_tab(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_tab(int)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The number of spaces with which to indent XML child elements.
 	 */
 	public static final String RDF_rdfxml_tab = PREFIX + ".jena.rdfXml.tab.i";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>attributeQuoteChar</c>.
+	 *
+	 * <p>
+	 * The XML attribute quote character.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -541,16 +473,22 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_attributeQuoteChar()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_attributeQuoteChar(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_attributeQuoteChar(String)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The XML attribute quote character.
 	 */
 	public static final String RDF_rdfxml_attributeQuoteChar = PREFIX + ".jena.rdfXml.attributeQuoteChar.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>blockRules</c>.
+	 *
+	 * <p>
+	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
+	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
+	 * rules that will not be used.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -564,18 +502,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_blockRules()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#rdfxml_blockRules(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#rdfxml_blockRules(String)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
-	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
-	 * rules that will not be used.
 	 */
 	public static final String RDF_rdfxml_blockRules = PREFIX + ".jena.rdfXml.blockRules.s";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>minGap</c>.
+	 *
+	 * <p>
+	 * Minimum gap between items on a line.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -589,16 +529,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_minGap()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_minGap(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_minGap(int)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Minimum gap between items on a line.
 	 */
 	public static final String RDF_n3_minGap = PREFIX + ".jena.n3.minGap.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>disableObjectLists</c>.
+	 *
+	 * <p>
+	 * Don't print object lists as comma separated lists.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -612,16 +556,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableObjectLists()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_disableObjectLists()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_disableObjectLists()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Print object lists as comma separated lists.
 	 */
 	public static final String RDF_n3_disableObjectLists = PREFIX + ".jena.n3.disableObjectLists.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
+	 *
+	 * <p>
+	 * If the subject is shorter than this value, the first property may go on the same line.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -635,16 +583,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_subjectColumn()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_subjectColumn(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_subjectColumn(int)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If the subject is shorter than this value, the first property may go on the same line.
 	 */
 	public static final String RDF_n3_subjectColumn = PREFIX + ".jena.n3.subjectColumn.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>propertyColumn</c>.
+	 *
+	 * <p>
+	 * Width of the property column.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -658,16 +610,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_propertyColumn()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_propertyColumn(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_propertyColumn(int)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Width of the property column.
 	 */
 	public static final String RDF_n3_propertyColumn = PREFIX + ".jena.n3.propertyColumn.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>indentProperty</c>.
+	 *
+	 * <p>
+	 * Width to indent properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -681,16 +637,21 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_indentProperty()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_indentProperty(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_indentProperty(int)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Width to indent properties.
 	 */
 	public static final String RDF_n3_indentProperty = PREFIX + ".jena.n3.indentProperty.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>widePropertyLen</c>.
+	 *
+	 * <p>
+	 * Width of the property column.
+	 * Must be longer than <c>propertyColumn</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -704,17 +665,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_widePropertyLen()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_widePropertyLen(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_widePropertyLen(int)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Width of the property column.
-	 * Must be longer than <c>propertyColumn</c>.
 	 */
 	public static final String RDF_n3_widePropertyLen = PREFIX + ".jena.n3.widePropertyLen.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>disableAbbrevBaseUri</c>.
+	 *
+	 * <p>
+	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -728,16 +692,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableAbbrevBaseUri()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_disableAbbrevBaseUri()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_disableAbbrevBaseUri()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 */
 	public static final String RDF_n3_disableAbbrevBaseUri = PREFIX + ".jena.n3.disableAbbrevBaseUuri.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>disableUsePropertySymbols</c>.
+	 *
+	 * <p>
+	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -751,16 +719,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableUsePropertySymbols()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_disableUsePropertySymbols()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_disableUsePropertySymbols()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 */
 	public static final String RDF_n3_disableUsePropertySymbols = PREFIX + ".jena.n3.disableUsePropertySymbols.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+	 *
+	 * <p>
+	 * Disallow the use of <c>"""</c> to delimit long strings.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -774,16 +746,20 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableUseTripleQuotedStrings()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_disableUseTripleQuotedStrings()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_disableUseTripleQuotedStrings()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allow the use of <c>"""</c> to delimit long strings.
 	 */
 	public static final String RDF_n3_disableUseTripleQuotedStrings = PREFIX + ".jena.n3.disableUseTripleQuotedStrings.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>disableUseDoubles</c>.
+	 *
+	 * <p>
+	 * Disallow the use doubles as <c>123.456</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -797,11 +773,12 @@ public interface RdfCommon {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableUseDoubles()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3_disableUseDoubles()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3_disableUseDoubles()}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allow the use doubles as <c>123.456</c>.
 	 */
 	public static final String RDF_n3_disableUseDoubles = PREFIX + ".jena.n3.disableUseDoubles.b";
 
@@ -826,33 +803,15 @@ public interface RdfCommon {
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#collectionFormat(RdfCollectionFormat)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"BAG"</js> - RDF Bag container.
-	 * 	<li>
-	 * 		<js>"LIST"</js> - RDF List container.
-	 * 	<li>
-	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
-	 * 		lost.
-	 * </ul>
 	 */
 	public static final String RDF_collectionFormat = PREFIX + ".collectionFormat.s";
 
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * <p>
+	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
+	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -868,48 +827,10 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#looseCollections(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#looseCollections()}
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#looseCollections(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#looseCollections()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
-	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 *
-	 * <p>
-	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
-	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
-	 * when serialized as loose collections.
-	 *
-	 * <p>
-	 * This setting is typically only useful if the beans being parsed into do not have a bean property
-	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	WriterSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().looseCollections(<jk>true</jk>).build();
-	 * 	ReaderParser p = RdfParser.<jsm>create</jsm>().xml().looseCollections(<jk>true</jk>).build();
-	 *
-	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(l);
-	 *
-	 * 	<jc>// Parse back into a Java collection</jc>
-	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	MyBean[] b = createArrayOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(b);
-	 *
-	 * 	<jc>// Parse back into a bean array</jc>
-	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String RDF_looseCollections = PREFIX + ".looseCollections.b";
 }

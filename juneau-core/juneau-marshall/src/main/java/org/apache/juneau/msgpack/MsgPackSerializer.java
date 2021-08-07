@@ -22,6 +22,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to MessagePack.
+ * {@review}
  *
  * <h5 class='section'>Media types:</h5>
  *
@@ -41,6 +42,13 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}
@@ -59,15 +67,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 * 			<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String MSGPACK_addBeanTypes = PREFIX + ".addBeanTypes.b";
 

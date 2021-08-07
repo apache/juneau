@@ -23,6 +23,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -31,6 +32,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building XML parsers.
+ * {@review}
  */
 @FluentSetters
 public class XmlParserBuilder extends ReaderParserBuilder {
@@ -61,7 +63,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  XML event allocator.
+	 * XML event allocator.
 	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -79,7 +81,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  XML event allocator.
+	 * XML event allocator.
 	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -97,10 +99,33 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  Preserve root element during generalized parsing.
+	 * Preserve root element during generalized parsing.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
+	 * When enabled, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
+	 * is the root element name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parser with preserve-root-element.</jc>
+	 * 	ReaderParser <jv>parser1</jv> = XmlParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.preserveRootElement()
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser without preserve-root-element (the default behavior).</jc>
+	 * 	ReaderParser <jv>parser2</jv> = XmlParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	String <jv>xml</jv> = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
+	 *
+	 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
+	 * 	OMap <jv>myMap1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
+	 *
+	 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
+	 * 	OMap <jv>myMap2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class)</jk>;
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
@@ -114,10 +139,15 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  XML reporter.
+	 * XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Reporters are not copied to new parsers during a clone.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
@@ -132,7 +162,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  XML reporter.
+	 * XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
@@ -150,7 +180,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  XML resolver.
+	 * XML resolver.
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -168,7 +198,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  XML resolver.
+	 * XML resolver.
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -186,10 +216,13 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  Enable validation.
+	 * Enable validation.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>validating(<jk>true</jk>)</code>.
+	 * If <jk>true</jk>, XML document will be validated.
+	 *
+	 * <p>
+	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}

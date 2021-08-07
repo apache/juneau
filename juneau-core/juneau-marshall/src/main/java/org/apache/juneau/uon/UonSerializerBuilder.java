@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of UON serializers.
+ * {@review}
  */
 @FluentSetters
 public class UonSerializerBuilder extends WriterSerializerBuilder {
@@ -58,7 +59,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Encode non-valid URI characters.
+	 * Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -71,70 +72,23 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a non-encoding UON serializer.</jc>
-	 * 	UonSerializer s1 = UonSerializer.
+	 * 	UonSerializer <jv>serializer1</jv> = UonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create an encoding UON serializer.</jc>
-	 * 	UonSerializer s2 = UonSerializer.
+	 * 	UonSerializer <jv>serializer1</jv> = UonSerializer.
 	 * 		.<jsm>create</jsm>()
 	 * 		.encoding()
 	 * 		.build();
 	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
+	 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
 	 *
 	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
-	 * 	String uon1 = s1.serialize(m)
+	 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>myMap</jv>)
 	 *
 	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
-	 * 	String uon2 = s2.serialize(m)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public UonSerializerBuilder encoding(boolean value) {
-		return set(UON_encoding, value);
-	}
-
-	/**
-	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Encode non-valid URI characters.
-	 *
-	 * <p>
-	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
-	 * URL-encoding of non-valid URI characters.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a non-encoding UON serializer.</jc>
-	 * 	UonSerializer s1 = UonSerializer.
-	 * 		.<jsm>create</jsm>()
-	 * 		.build();
-	 *
-	 * 	<jc>// Create an encoding UON serializer.</jc>
-	 * 	UonSerializer s2 = UonSerializer.
-	 * 		.<jsm>create</jsm>()
-	 * 		.encoding()
-	 * 		.build();
-	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
-	 *
-	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
-	 * 	String uon1 = s1.serialize(m)
-	 *
-	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
-	 * 	String uon2 = s2.serialize(m)
+	 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -149,7 +103,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Format to use for query/form-data/header values.
+	 * Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
@@ -164,26 +118,26 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a normal UON serializer.</jc>
-	 * 	UonSerializer s1 = UonSerializer
+	 * 	UonSerializer <jv>serializer1</jv> = UonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a plain-text UON serializer.</jc>
-	 * 	UonSerializer s2 = UonSerializer
+	 * 	UonSerializer <jv>serializer2</jv> = UonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
 	 * 		.build();
 	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(
+	 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 * 	);
 	 *
 	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-	 * 	String uon1 = s1.serialize(m)
+	 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>myMap</jv>)
 	 *
 	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-	 * 	String uon2 = s2.serialize(m)
+	 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -201,7 +155,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Format to use for query/form-data/header values.
+	 * Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies plain-text for the format to use for URL GET parameter keys and values.
@@ -209,18 +163,18 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a plain-text UON serializer.</jc>
-	 * 	UonSerializer s = UonSerializer
+	 * 	UonSerializer <jv>serializer</jv> = UonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.paramFormatPlain()
 	 * 		.build();
 	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(
+	 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 * 	);
 	 *
 	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-	 * 	String uon = s.serialize(m)
+	 * 	String <jv>uon</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>)
 	 * </p>
 	 *
 	 * <ul class='seealso'>

@@ -22,6 +22,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses any valid JSON text into a POJO model.
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -115,6 +116,10 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	/**
 	 * Configuration property:  Validate end.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
+	 * the stream consists of only comments or whitespace.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}
@@ -133,30 +138,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonParserBuilder#validateEnd()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
-	 * the stream consists of only comments or whitespace.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.validateEnd()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>JSON_validateEnd</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
-	 * 	String in = <js>"{foo:'bar'}{baz:'qux'}"</js>;
-	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String JSON_validateEnd = PREFIX + ".validateEnd.b";
 

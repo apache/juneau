@@ -759,12 +759,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - UonSerializerBuilder */
-	public OpenApiSerializerBuilder encoding(boolean value) {
-		super.encoding(value);
-		return this;
-	}
-
-	@Override /* GENERATED - UonSerializerBuilder */
 	public OpenApiSerializerBuilder paramFormat(ParamFormat value) {
 		super.paramFormat(value);
 		return this;

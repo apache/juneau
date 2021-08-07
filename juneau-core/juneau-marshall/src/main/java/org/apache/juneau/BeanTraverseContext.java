@@ -18,6 +18,7 @@ import org.apache.juneau.collections.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
+ * {@review}
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -34,6 +35,9 @@ public abstract class BeanTraverseContext extends BeanContext {
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * When enabled, specifies that recursions should be checked for during traversal.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -53,45 +57,14 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#detectRecursions()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, specifies that recursions should be checked for during traversal.
-	 *
-	 * <p>
-	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
-	 * <br>In general, unchecked recursions cause stack-overflow-errors.
-	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_detectRecursions</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Throws a SerializeException</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
 	 */
 	public static final String BEANTRAVERSE_detectRecursions = PREFIX + ".detectRecursions.b";
 
 	/**
 	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -111,48 +84,14 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#ignoreRecursions()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 *
-	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <p class='bcode w800'>
-	 * 	{A:{B:{C:<jk>null</jk>}}}
-	 * </p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer ignores recursions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_ignoreRecursions</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Produces "{f:null}"</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
 	 */
 	public static final String BEANTRAVERSE_ignoreRecursions = PREFIX + ".ignoreRecursions.b";
 
 	/**
 	 * Configuration property:  Initial depth.
+	 *
+	 * <p>
+	 * The initial indentation level at the root.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -172,39 +111,15 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#initialDepth(int)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The initial indentation level at the root.
-	 *
-	 * <p>
-	 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()
-	 * 		.initialDepth(2)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_useWhitespace</jsf>)
-	 * 		.set(<jsf>BEANTRAVERSE_initialDepth</jsf>, 2)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
 	 */
 	public static final String BEANTRAVERSE_initialDepth = PREFIX + ".initialDepth.i";
 
 	/**
 	 * Configuration property:  Max traversal depth.
+	 *
+	 * <p>
+	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
+	 * If this depth is exceeded, an exception is thrown.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -224,32 +139,6 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#maxDepth(int)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
-	 *
-	 * <p>
-	 * If this depth is exceeded, an exception is thrown.
-	 *
-	 * <p>
-	 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that throws an exception if the depth reaches greater than 20.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.maxDepth(20)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_maxDepth</jsf>, 20)
-	 * 		.build();
-	 * </p>
 	 */
 	public static final String BEANTRAVERSE_maxDepth = PREFIX + ".maxDepth.i";
 

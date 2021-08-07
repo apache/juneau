@@ -29,6 +29,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of JSON Schema generators.
+ * {@review}
  */
 @FluentSetters
 public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
@@ -59,19 +60,31 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Add descriptions.
+	 * Add descriptions.
 	 *
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
-	 * <p>
 	 * The description is the result of calling {@link ClassMeta#getFullName()}.
+	 * The format is a comma-delimited list of any of the following values:
+	 *
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
+	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
+	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
+	 * 	<li class='jf'>{@link TypeCategory#MAP MAP}
+	 * 	<li class='jf'>{@link TypeCategory#STRING STRING}
+	 * 	<li class='jf'>{@link TypeCategory#NUMBER NUMBER}
+	 * 	<li class='jf'>{@link TypeCategory#BOOLEAN BOOLEAN}
+	 * 	<li class='jf'>{@link TypeCategory#ANY ANY}
+	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
@@ -81,7 +94,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Add examples.
+	 * Add examples.
 	 *
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
@@ -93,12 +106,27 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 	 * </ul>
 	 *
+	 * <p>
+	 * The format is a comma-delimited list of any of the following values:
+	 *
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
+	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
+	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
+	 * 	<li class='jf'>{@link TypeCategory#MAP MAP}
+	 * 	<li class='jf'>{@link TypeCategory#STRING STRING}
+	 * 	<li class='jf'>{@link TypeCategory#NUMBER NUMBER}
+	 * 	<li class='jf'>{@link TypeCategory#BOOLEAN BOOLEAN}
+	 * 	<li class='jf'>{@link TypeCategory#ANY ANY}
+	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
@@ -108,7 +136,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Allow nested descriptions.
+	 * Allow nested descriptions.
 	 *
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
@@ -125,7 +153,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Allow nested examples.
+	 * Allow nested examples.
 	 *
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
@@ -142,7 +170,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Schema definition mapper.
+	 * Schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
@@ -156,7 +184,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
@@ -166,13 +194,11 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Bean schema definition mapper.
+	 * Bean schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
-	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
-	 * <p>
 	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 *
 	 * <ul class='seealso'>
@@ -180,7 +206,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
@@ -190,7 +216,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Default schemas.
+	 * Default schemas.
 	 *
 	 * <p>
 	 * Allows you to override or provide custom schema information for particular class types.
@@ -213,7 +239,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Ignore types from schema definitions.
+	 * Ignore types from schema definitions.
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
@@ -223,10 +249,9 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 			properties={
-	 * 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
-	 * 			}
+	 * 	<ja>@JsonSchemaConfig</ja>(
+	 * 		ignoreTypes=<js>"Swagger,*.proto.*"</js>
+	 * 	)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * </p>
 	 *
@@ -240,7 +265,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaGenerator</l> configuration property:&emsp;</i>  Use bean definitions.
+	 * Use bean definitions.
 	 *
 	 * <p>
 	 * When enabled, schemas on beans will be serialized as the following:

@@ -28,6 +28,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Builder class for building instances of URL-Encoding parsers.
+ * {@review}
  */
 @FluentSetters
 public class UrlEncodingParserBuilder extends UonParserBuilder {
@@ -58,10 +59,39 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UrlEncodingParser</l> configuration property:&emsp;</i>  Serialize bean property collections/arrays as separate key/value pairs.
+	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
+	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
+	 *
+	 * <p>
+	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String[] f1;
+	 * 		<jk>public</jk> List&lt;String&gt; f2;
+	 * 	}
+	 *
+	 * 	UrlEncodingParser <jv>parser1</jv> = UrlEncodingParser.<jsf>DEFAULT</jsf>;
+	 * 	UrlEncodingParser <jv>parser2</jv> = UrlEncodingParser.<jsm>create</jsm>().expandedParams().build();
+	 *
+	 * 	MyBean <jv>myBean1</jv> = <jv>parser1</jv>.parse(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>);
+	 *
+	 * 	MyBean <jv>myBean2</jv> = <jv>parser2</jv>.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This option only applies to beans.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
+	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+	 * 		is added to it.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
@@ -559,12 +589,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - UonParserBuilder */
 	public UrlEncodingParserBuilder decoding() {
 		super.decoding();
-		return this;
-	}
-
-	@Override /* GENERATED - UonParserBuilder */
-	public UrlEncodingParserBuilder decoding(boolean value) {
-		super.decoding(value);
 		return this;
 	}
 

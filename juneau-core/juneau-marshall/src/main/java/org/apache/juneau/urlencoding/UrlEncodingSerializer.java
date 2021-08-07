@@ -23,6 +23,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
+ * {@review}
  *
  * <h5 class='section'>Media types:</h5>
  *
@@ -127,6 +128,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
+	 * <p>
+	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams URLENC_expandedParams}
@@ -145,43 +150,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#expandedParams()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
-	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
-	 *
-	 * <p>
-	 * This option only applies to beans.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A sample bean.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
-	 * 		<jk>public</jk> List&lt;String&gt; f2 = Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>});
-	 * 	}
-	 *
-	 * 	<jc>// Normal serializer.</jc>
-	 * 	WriterSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	 *
-	 * 	<jc>// Expanded-params serializer.</jc>
-	 * 	WriterSerializer s2 = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
-	 *
-	 *  <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String ss1 = s1.serialize(<jk>new</jk> A());
-	 *
-	 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>
-	 * </p>
-	 *
 	 */
 	public static final String URLENC_expandedParams = PREFIX + ".expandedParams.b";
 

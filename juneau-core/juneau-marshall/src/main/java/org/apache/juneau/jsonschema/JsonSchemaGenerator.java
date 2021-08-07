@@ -25,6 +25,7 @@ import org.apache.juneau.json.*;
 
 /**
  * Generates JSON-schema metadata about POJOs.
+ * {@review}
  */
 @ConfigurableContext
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
@@ -37,6 +38,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 	/**
 	 * Configuration property:  Add descriptions to types.
+	 *
+	 * <p>
+	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
+	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -56,31 +61,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#addDescriptionsTo(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
-	 * <p>
-	 * The description is the result of calling {@link ClassMeta#getFullName()}.
-	 * <p>
-	 * The format is a comma-delimited list of any of the following values:
-	 *
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
-	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
-	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
-	 * 	<li class='jf'>{@link TypeCategory#MAP MAP}
-	 * 	<li class='jf'>{@link TypeCategory#STRING STRING}
-	 * 	<li class='jf'>{@link TypeCategory#NUMBER NUMBER}
-	 * 	<li class='jf'>{@link TypeCategory#BOOLEAN BOOLEAN}
-	 * 	<li class='jf'>{@link TypeCategory#ANY ANY}
-	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
-	 * </ul>
 	 */
 	public static final String JSONSCHEMA_addDescriptionsTo = PREFIX + ".addDescriptionsTo.s";
 
 	/**
 	 * Configuration property:  Add examples.
+	 *
+	 * <p>
+	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -100,37 +88,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#addExamplesTo(String)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies which categories of types that examples should be automatically added to generated schemas.
-	 * <p>
-	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
-	 * from the following:
-	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
-	 * </ul>
-	 *
-	 * <p>
-	 * The format is a comma-delimited list of any of the following values:
-	 *
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
-	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
-	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
-	 * 	<li class='jf'>{@link TypeCategory#MAP MAP}
-	 * 	<li class='jf'>{@link TypeCategory#STRING STRING}
-	 * 	<li class='jf'>{@link TypeCategory#NUMBER NUMBER}
-	 * 	<li class='jf'>{@link TypeCategory#BOOLEAN BOOLEAN}
-	 * 	<li class='jf'>{@link TypeCategory#ANY ANY}
-	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
-	 * </ul>
 	 */
 	public static final String JSONSCHEMA_addExamplesTo = PREFIX + ".addExamplesTo.s";
 
 	/**
 	 * Configuration property:  Allow nested descriptions.
+	 *
+	 * <p>
+	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -150,15 +115,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 */
 	public static final String JSONSCHEMA_allowNestedDescriptions = PREFIX + ".allowNestedDescriptions.b";
 
 	/**
 	 * Configuration property:  Allow nested examples.
+	 *
+	 * <p>
+	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -178,15 +142,16 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedExamples()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies whether nested examples are allowed in schema definitions.
 	 */
 	public static final String JSONSCHEMA_allowNestedExamples = PREFIX + ".allowNestedExamples.b";
 
 	/**
 	 * Configuration property:  Bean schema definition mapper.
+	 *
+	 * <p>
+	 * Interface to use for converting Bean classes to definition IDs and URIs.
+	 * Used primarily for defining common definition sections for beans in Swagger JSON.
+	 * This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -205,19 +170,15 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#beanDefMapper(BeanDefMapper)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Interface to use for converting Bean classes to definition IDs and URIs.
-	 * <p>
-	 * Used primarily for defining common definition sections for beans in Swagger JSON.
-	 * <p>
-	 * This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
 	 */
 	public static final String JSONSCHEMA_beanDefMapper = PREFIX + ".beanDefMapper.o";
 
 	/**
 	 * Configuration property:  Ignore types from schema definitions.
+	 *
+	 * <p>
+	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
+	 * Swagger documentation.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -232,27 +193,25 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#ignoreTypes()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#ignoreTypes(String)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
-	 * Swagger documentation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
-	 * 	<ja>@Rest</ja>
-	 * 	<ja>@JsonSchemaConfig</ja>(
-	 * 		ignoreTypes=<js>"Swagger,*.proto.*"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * </p>
 	 */
 	public static final String JSONSCHEMA_ignoreTypes = PREFIX + ".ignoreTypes.s";
 
 	/**
 	 * Configuration property:  Use bean definitions.
+	 *
+	 * <p>
+	 * When enabled, schemas on beans will be serialized as the following:
+	 * <p class='bcode w800'>
+	 * 	{
+	 * 		type: <js>'object'</js>,
+	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+	 * 	}
+	 * </p>
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -271,21 +230,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#useBeanDefs()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, schemas on beans will be serialized as the following:
-	 * <p class='bcode w800'>
-	 * 	{
-	 * 		type: <js>'object'</js>,
-	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
-	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
 	 */
 	public static final String JSONSCHEMA_useBeanDefs = PREFIX + ".useBeanDefs.b";
 

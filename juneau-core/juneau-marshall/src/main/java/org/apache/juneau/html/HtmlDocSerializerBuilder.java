@@ -28,6 +28,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Builder class for building instances of HTML Doc serializers.
+ * {@review}
  */
 @FluentSetters
 public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
@@ -58,7 +59,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Aside section contents.
+	 * Aside section contents.
 	 *
 	 * <p>
 	 * Allows you to specify the contents of the aside section on the HTML page.
@@ -70,50 +71,50 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		aside={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.aside(
 	 * 			<js>"&lt;ul&gt;"</js>,
 	 * 			<js>"	&lt;li&gt;Item 1"</js>,
 	 * 			<js>"	&lt;li&gt;Item 2"</js>,
 	 * 			<js>"	&lt;li&gt;Item 3"</js>,
 	 * 			<js>"&lt;/ul&gt;"</js>
-	 * 		}
-	 * 	)
+	 * 		)
+	 * 		.build();
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder aside(String[] value) {
+	public HtmlDocSerializerBuilder aside(String...value) {
 		set(HTMLDOC_aside, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Float aside section contents.
+	 * Float aside section contents.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.asideFloat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.AsideFloat}
-	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.asideFloat</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDEFLOAT</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.AsideFloat#DEFAULT}
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#asideFloat()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#asideFloat(Float)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to position the aside contents of the page around the main contents.
 	 *
@@ -122,16 +123,17 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 *  <ja>@HtmlDocConfig</ja>(
-	 * 		aside={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.aside(
 	 * 			<js>"&lt;ul&gt;"</js>,
 	 * 			<js>"	&lt;li&gt;Item 1"</js>,
 	 * 			<js>"	&lt;li&gt;Item 2"</js>,
 	 * 			<js>"	&lt;li&gt;Item 3"</js>,
 	 * 			<js>"&lt;/ul&gt;"</js>
-	 * 		},
-	 * 		asideFloat=<js>"RIGHT"</js>
-	 * 	)
+	 * 		)
+	 * 		.asideFloat(<jsf>RIGHT</jsf>)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param value
@@ -139,13 +141,13 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder asideFloat(Float value) {
+	public HtmlDocSerializerBuilder asideFloat(AsideFloat value) {
 		set(HTMLDOC_asideFloat, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Footer section contents.
+	 * Footer section contents.
 	 *
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
@@ -155,11 +157,12 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		footer={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.footer(
 	 * 			<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
-	 * 		}
-	 * 	)
+	 * 		)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param value
@@ -167,24 +170,25 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder footer(String[] value) {
+	public HtmlDocSerializerBuilder footer(String...value) {
 		set(HTMLDOC_footer, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Additional head section content.
+	 * Additional head section content.
 	 *
 	 * <p>
 	 * Adds the specified HTML content to the head section of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		head={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.head(
 	 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
-	 * 		}
-	 * 	)
+	 * 		)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param value
@@ -192,13 +196,13 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder head(String[] value) {
+	public HtmlDocSerializerBuilder head(String...value) {
 		set(HTMLDOC_head, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Header section contents.
+	 * Header section contents.
 	 *
 	 * <p>
 	 * Allows you to override the contents of the header section on the HTML page.
@@ -206,11 +210,12 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		header={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(
 	 * 			<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
-	 * 		}
-	 * 	)
+	 * 		)
+	 * 		.build()
 	 * </p>
 	 *
 	 * @param value
@@ -218,13 +223,13 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder header(String[] value) {
+	public HtmlDocSerializerBuilder header(String...value) {
 		set(HTMLDOC_header, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Nav section contents.
+	 * Nav section contents.
 	 *
 	 * <p>
 	 * Allows you to override the contents of the nav section on the HTML page.
@@ -232,11 +237,12 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		nav={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.nav(
 	 * 			<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
-	 * 		}
-	 * 	)
+	 * 		)
+	 * 		.build()
 	 * </p>
 	 *
 	 * <p>
@@ -247,13 +253,13 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder nav(String[] value) {
+	public HtmlDocSerializerBuilder nav(String...value) {
 		set(HTMLDOC_nav, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Page navigation links.
+	 * Page navigation links.
 	 *
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
@@ -279,14 +285,14 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		navlinks={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.navlinks(
 	 * 			<js>"api: servlet:/api"</js>,
 	 * 			<js>"stats: servlet:/stats"</js>,
 	 * 			<js>"doc: doc"</js>
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
+	 * 		)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param value
@@ -294,35 +300,69 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder navlinks_replace(String[] value) {
+	public HtmlDocSerializerBuilder navlinks_replace(String...value) {
 		set(HTMLDOC_navlinks, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_navlinks} property.
+	 * Add to the {@link HtmlDocSerializer#HTMLDOC_navlinks} property.
+	 *
+	 * <p>
+	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
+	 *
+	 * <p>
+	 * This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
+	 *
+	 * <p>
+	 * The value is an array of strings with two possible values:
+	 * <ul>
+	 * 	<li>A key-value pair representing a hyperlink label and href:
+	 * 		<br><js>"google: http://google.com"</js>
+	 * 	<li>Arbitrary HTML.
+	 * </ul>
+	 *
+	 * <p>
+	 * Relative URLs are considered relative to the servlet path.
+	 * For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
+	 * URL is <js>"foo"</js>, the link becomes <js>"http://localhost/myContext/myServlet/foo"</js>.
+	 * Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
+	 * can also be used in addition to various other protocols specified by {@link UriResolver} such as
+	 * <js>"servlet:/..."</js>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.navlinks(
+	 * 			<js>"api: servlet:/api"</js>,
+	 * 			<js>"doc: doc"</js>
+	 * 		)
+	 * 		.build();
+	 * </p>
 	 *
 	 * @param value
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder navlinks(String[] value) {
+	public HtmlDocSerializerBuilder navlinks(String...value) {
 		set(HTMLDOC_navlinks_add, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  No-results message.
+	 * No-results message.
 	 *
 	 * <p>
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
-	 * 	)
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.noResultsMessage("&lt;b&gt;This interface is great!&lt;/b&gt;"</js>)
+	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
@@ -339,24 +379,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Prevent word wrap on page.
-	 *
-	 * <p>
-	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default ios <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder nowrap(boolean value) {
-		set(HTMLDOC_nowrap, value);
-		return this;
-	}
-
-	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Prevent word wrap on page.
+	 * Prevent word wrap on page.
 	 *
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
@@ -370,84 +393,58 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Javascript code.
+	 * Add to the {@link HtmlDocSerializer#HTMLDOC_script} property.
 	 *
 	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <p>
+	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		script={
-	 * 			<js>"alert('hello!');"</js>
-	 * 		}
-	 * 	)
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.script(<js>"alert('hello!');"</js>)
+	 * 		.build();
 	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder script_replace(String[] value) {
-		set(HTMLDOC_script, value);
-		return this;
-	}
-
-	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_script} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder script(String[] value) {
+	public HtmlDocSerializerBuilder script(String...value) {
 		set(HTMLDOC_script_add, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  CSS style code.
+	 * Add to the {@link HtmlDocSerializer#HTMLDOC_style} property.
 	 *
 	 * <p>
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
-	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		style={
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.style(
 	 * 			<js>"h3 { color: red; }"</js>,
 	 * 			<js>"h5 { font-weight: bold; }"</js>
-	 * 		}
-	 * 	)
+	 * 		)
+	 * 		.build();
 	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder style_replace(String[] value) {
-		set(HTMLDOC_style, value);
-		return this;
-	}
-
-	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_style} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder style(String[] value) {
+	public HtmlDocSerializerBuilder style(String...value) {
 		set(HTMLDOC_style_add, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Stylesheet import URLs.
+	 * Add to the {@link HtmlDocSerializer#HTMLDOC_stylesheet} property.
 	 *
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
@@ -456,30 +453,17 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 	 *
 	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder stylesheet_replace(String[] value) {
-		set(HTMLDOC_stylesheet, value);
-		return this;
-	}
-
-	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_stylesheet} property.
-	 *
-	 * @param value
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlDocSerializerBuilder stylesheet(String[] value) {
+	public HtmlDocSerializerBuilder stylesheet(String...value) {
 		set(HTMLDOC_stylesheet_add, value);
 		return this;
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  HTML document template.
+	 * HTML document template.
 	 *
 	 * <p>
 	 * Specifies the template to use for serializing the page.
@@ -490,9 +474,10 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocConfig</ja>(
-	 * 		template=MySpecialDocTemplate.<jk>class</jk>
-	 * 	)
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.template9MySpecialDocTemplate.<jk>class</jk>)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param value
@@ -506,13 +491,49 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  HTML Widgets.
+	 * HTML Widgets.
 	 *
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
 	 *
+	 * Widgets resolve the following variables:
+	 * <ul class='spaced-list'>
+	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
+	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.
+	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
+	 * 			 in the HTML page.
+	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.
+	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
+	 * 			 in the HTML page.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	 * and aside section of the page:
+	 *
+	 * <p class='bcode w800'>
+	 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.widgets(
+	 * 			MyWidget.<jk>class</jk>
+	 * 		)
+	 * 		.navlinks(
+	 * 			<js>"$W{MyWidget}"</js>
+	 * 		)
+	 * 		.aside(
+	 * 			<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 		)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc RestHtmlWidgets}
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
 	 * </ul>
 	 *
@@ -526,26 +547,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  HTML Widgets.
-	 *
-	 * <p>
-	 * Same as {@link #widgets(Class...)} but replaces any previous values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	@SuppressWarnings("unchecked")
-	public HtmlDocSerializerBuilder widgetsReplace(Class<? extends HtmlWidget>...values) {
-		return set(HTMLDOC_widgets, values);
-	}
-
-	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  HTML Widgets.
+	 * HTML Widgets.
 	 *
 	 * <p>
 	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
@@ -560,24 +562,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@FluentSetter
 	public HtmlDocSerializerBuilder widgets(HtmlWidget...values) {
 		return prependTo(HTMLDOC_widgets, values);
-	}
-
-	/**
-	 * <i><l>HtmlDocSerializer</l> configuration property:&emsp;</i>  HTML Widgets.
-	 *
-	 * <p>
-	 * Same as {@link #widgets(HtmlWidget...)} except allows you to overwrite the previous value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HtmlDocSerializerBuilder widgetsReplace(HtmlWidget...values) {
-		return set(HTMLDOC_widgets, values);
 	}
 
 	// <FluentSetters>

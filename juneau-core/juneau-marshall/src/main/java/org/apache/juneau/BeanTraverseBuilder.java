@@ -25,6 +25,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of bean traversals.
+ * {@review}
  */
 @FluentSetters
 public class BeanTraverseBuilder extends BeanContextBuilder {
@@ -50,7 +51,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
+	 * Automatically detect POJO recursions.
 	 *
 	 * <p>
 	 * When enabled, specifies that recursions should be checked for during traversal.
@@ -68,20 +69,20 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.detectRecursions()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
+	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> Object <jf>f</jf>;
 	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
+	 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+	 * 	<jv>serializer</jv>.<jf>f</jf> = <jv>serializer</jv>;
 	 *
 	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-	 * 	String json = s.serialize(a);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -96,14 +97,14 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
+	 * Ignore recursion errors.
 	 *
 	 * <p>
 	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 * 	the following when this setting is <jk>true</jk>...
 	 *
 	 * <p class='bcode w800'>
 	 * 	{A:{B:{C:<jk>null</jk>}}}
@@ -117,20 +118,20 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer ignores recursions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.ignoreRecursions()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
+	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> Object <jf>f</jf>;
 	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
+	 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+	 * 	<jv>myBean</jv>.<jf>f</jf> = <jv>myBean</jv>;
 	 *
 	 * 	<jc>// Produces "{f:null}"</jc>
-	 * 	String json = s.serialize(a);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -145,7 +146,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Initial depth.
+	 * Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
@@ -156,14 +157,14 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.ws()
 	 * 		.initialDepth(2)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -171,7 +172,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is <c>0</c>.
 	 * @return This object (for method chaining).
 	 */
@@ -181,7 +182,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Max traversal depth.
+	 * Max traversal depth.
 	 *
 	 * <p>
 	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
@@ -195,7 +196,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that throws an exception if the depth reaches greater than 20.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.maxDepth(20)
 	 * 		.build();
@@ -206,7 +207,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The new value for this property.
+	 * 	The new value for this setting.
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */

@@ -23,6 +23,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
+ * {@review}
  */
 @ConfigurableContext
 public abstract class WriterSerializer extends Serializer {
@@ -35,6 +36,9 @@ public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Configuration property:  File charset.
+	 *
+	 * <p>
+	 * The character set to use for writing <c>Files</c> to the file system.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -54,40 +58,14 @@ public abstract class WriterSerializer extends Serializer {
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The character set to use for writing <c>Files</c> to the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
-	 *
-	 * <p>
-	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_fileCharset</jsf>, <js>"UTF-8"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-	 * 	s.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), myBean);
-	 * </p>
 	 */
 	public static final String WSERIALIZER_fileCharset = PREFIX + ".fileCharset.s";
 
 	/**
 	 * Configuration property:  Maximum indentation.
+	 *
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -107,36 +85,14 @@ public abstract class WriterSerializer extends Serializer {
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#maxIndent(int)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Specifies the maximum indentation level in the serialized document.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()  <jc>// Enable whitespace</jc>
-	 * 		.maxIndent(20)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_maxIndent</jsf>, 20)
-	 * 		.build();
-	 * </p>
 	 */
 	public static final String WSERIALIZER_maxIndent = PREFIX + ".maxIndent.i";
 
 	/**
 	 * Configuration property:  Quote character.
+	 *
+	 * <p>
+	 * Specifies the character to use for quoting attributes and values.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -157,43 +113,14 @@ public abstract class WriterSerializer extends Serializer {
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#sq()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Specifies the character to use for quoting attributes and values.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that uses single quotes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sq()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a single property</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Produces {'foo':'bar'}</jc>
-	 * 	String json = s.toString(<jk>new</jk> MyBean());
-	 * </p>
 	 */
 	public static final String WSERIALIZER_quoteChar = PREFIX + ".quoteChar.s";
 
 	/**
 	 * Configuration property:  Output stream charset.
+	 *
+	 * <p>
+	 * The character set to use when writing to <c>OutputStreams</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -213,37 +140,14 @@ public abstract class WriterSerializer extends Serializer {
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#streamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * The character set to use when writing to <c>OutputStreams</c>.
-	 *
-	 * <p>
-	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_streamCharset</jsf>, <js>"UTF-8"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it to write to a UTF-8 encoded output stream.</jc>
-	 * 	s.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), myBean);
-	 * </p>
 	 */
 	public static final String WSERIALIZER_streamCharset = PREFIX + ".streamCharset.s";
 
 	/**
 	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * When enabled, whitespace is added to the output to improve readability.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -264,34 +168,6 @@ public abstract class WriterSerializer extends Serializer {
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#ws()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, whitespace is added to the output to improve readability.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a single property</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
 	 */
 	public static final String WSERIALIZER_useWhitespace = PREFIX + ".useWhitespace.b";
 

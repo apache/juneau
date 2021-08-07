@@ -23,6 +23,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Parses RDF into POJOs.
+ * {@review}
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
  *
@@ -58,6 +59,9 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	/**
 	 * Configuration property:  Trim whitespace from text elements.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}
@@ -73,31 +77,9 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#trimWhitespace(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#trimWhitespace()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create an RDF parser that trims whitespace.</jc>
-	 * 	ReaderParser p = RdfParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.xml()
-	 * 		.trimWhitespace()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = RdfParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.xml()
-	 * 		.set(<jsf>RDF_trimWhitespace</jsf>)
-	 * 		.build();
-	 * </p>
 	 */
 	public static final String RDF_trimWhitespace = PREFIX + ".trimWhitespace.b";
 

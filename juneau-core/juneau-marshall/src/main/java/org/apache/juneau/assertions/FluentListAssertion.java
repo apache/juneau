@@ -183,15 +183,57 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
 	}
 
+	/**
+	 * Returns the first entry from this list.
+	 *
+	 * @return A new list assertion.
+	 */
+	public FluentListAssertion<E,R> first() {
+		int TODO;
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	/**
+	 * Returns the last entry from this list.
+	 *
+	 * @return A new list assertion.
+	 */
+	public FluentListAssertion<E,R> last() {
+		int TODO;
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	/**
+	 * Returns the first X number of entries from this list.
+	 *
+	 * @param count The number of entries in the list to retrieve.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
 	public FluentListAssertion<E,R> first(int count) {
+		int TODO;
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
+	/**
+	 * Returns the first X number of entries from this list.
+	 *
+	 * @param count The number of entries in the list to retrieve.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
 	public FluentListAssertion<E,R> last(int count) {
+		int TODO;
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
+	/**
+	 * Returns a sublist of the entries in this list.
+	 *
+	 * @param start The start index (inclusive).
+	 * @param end The end index (exclusive).
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
 	public FluentListAssertion<E,R> sublist(int start, int end) {
+		int TODO;
 		throw new UnsupportedOperationException("Not implemented");
 	}
 

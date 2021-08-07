@@ -22,6 +22,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Serializes POJO models to JSON.
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -101,6 +102,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}
@@ -119,20 +128,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String JSON_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -152,38 +155,15 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#escapeSolidus()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 * The JSON specification allows for either format.
-	 * <br>However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
-	 * <xt>&lt;\/script&gt;</xt>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.simple()
-	 * 		.escapeSolidus()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.simple()
-	 * 		.set(<jsf>JSON_escapeSolidus</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
-	 * 	String json = s.serialize(OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
-	 * </p>
 	 */
 	public static final String JSON_escapeSolidus = PREFIX + ".escapeSolidus.b";
 
 	/**
 	 * Configuration property:  Simple JSON mode.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
+	 * <br>Otherwise, they are always quoted.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -204,71 +184,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#ssq()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * <br>Otherwise, they are always quoted.
-	 *
-	 * <p>
-	 * Attributes do not need to be quoted when they conform to the following:
-	 * <ol class='spaced-list'>
-	 * 	<li>They start with an ASCII character or <js>'_'</js>.
-	 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
-	 * 	<li>They are not one of the following reserved words:
-	 * 		<p class='bcode w800'>
-	 * 	arguments, break, case, catch, class, const, continue, debugger, default,
-	 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
-	 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
-	 * 	private, protected, public, return, static, super, switch, this, throw,
-	 * 	true, try, typeof, var, void, while, with, undefined, yield
-	 * 		</p>
-	 * </ol>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a JSON serializer in normal mode.</jc>
-	 * 	WriterSerializer s1 = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a JSON serializer in simple mode.</jc>
-	 * 	WriterSerializer s2 = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.simple()
-	 * 		.build();
-	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(
-	 * 		<js>"foo"</js>, <js>"x1"</js>,
-	 * 		<js>"_bar"</js>, <js>"x2"</js>,
-	 * 		<js>" baz "</js>, <js>"x3"</js>,
-	 * 		<js>"123"</js>, <js>"x4"</js>,
-	 * 		<js>"return"</js>, <js>"x5"</js>,
-	 * 		<js>""</js>, <js>"x6"</js>
-	 *  );
-	 *
-	 * 	<jc>// Produces:</jc>
-	 * 	<jc>// {</jc>
-	 * 	<jc>// 	"foo": "x1"</jc>
-	 * 	<jc>// 	"_bar": "x2"</jc>
-	 * 	<jc>// 	" baz ": "x3"</jc>
-	 * 	<jc>// 	"123": "x4"</jc>
-	 * 	<jc>// 	"return": "x5"</jc>
-	 * 	<jc>// 	"": "x6"</jc>
-	 * 	<jc>// }</jc>
-	 * 	String json1 = s1.serialize(m);
-	 *
-	 * 	<jc>// Produces:</jc>
-	 * 	<jc>// {</jc>
-	 * 	<jc>// 	foo: "x1"</jc>
-	 * 	<jc>// 	_bar: "x2"</jc>
-	 * 	<jc>// 	" baz ": "x3"</jc>
-	 * 	<jc>// 	"123": "x4"</jc>
-	 * 	<jc>// 	"return": "x5"</jc>
-	 * 	<jc>// 	"": "x6"</jc>
-	 * 	<jc>// }</jc>
-	 * 	String json2 = s2.serialize(m);
-	 * </p>
 	 */
 	public static final String JSON_simpleMode = PREFIX + ".simpleMode.b";
 

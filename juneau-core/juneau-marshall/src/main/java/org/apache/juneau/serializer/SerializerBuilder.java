@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of serializers.
+ * {@review}
  */
 @FluentSetters
 public class SerializerBuilder extends BeanTraverseBuilder {
@@ -52,7 +53,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -73,7 +74,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addBeanTypes()
 	 * 		.build();
@@ -83,10 +84,10 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
-	 * 	OMap map = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 * 	OMap <jv>myMap</jv> = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
-	 * 	String json = s.serialize(map);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMapp</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -101,7 +102,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add type attribute to root nodes.
+	 * Add type attribute to root nodes.
 	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
@@ -124,7 +125,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv>= JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addRootType()
 	 * 		.build();
@@ -136,7 +137,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Will contain:  {"_type":"mybean","foo":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -151,7 +152,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Don't trim null bean property values.
+	 * Don't trim null bean property values.
 	 *
 	 * <p>
 	 * When enabled, null bean values will be serialized to the output.
@@ -163,7 +164,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that serializes null properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.keepNullProperties()
 	 * 		.build();
@@ -174,7 +175,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Will contain "{foo:null}".</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -189,7 +190,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Serializer listener.
+	 * Serializer listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
@@ -204,29 +205,29 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onError(SerializerSession session, Throwable t, String msg) {
-	 * 			<jf>events</jf>.add(session.getLastLocation() + <js>","</js> + msg + <js>","</js> + t);
+	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onError(SerializerSession <jv>session</jv>, Throwable <jv>throwable</jv>, String <jv>msg</jv>) {
+	 * 			<jf>events</jf>.add(<jv>session</jv>.getLastLocation() + <js>","</js> + <jv>msg</jv> + <js>","</js> + <jv>throwable</jv>);
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer using our listener.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.listener(MySerializerListener.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a session object.</jc>
 	 * 	<jc>// Needed because listeners are created per-session.</jc>
-	 * 	<jk>try</jk> (WriterSerializerSession ss = s.createSession()) {
+	 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>.createSession()) {
 	 *
 	 * 		<jc>// Serialize a bean.</jc>
-	 * 		String json = ss.serialize(<jk>new</jk> MyBean());
+	 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 		<jc>// Get the listener.</jc>
-	 * 		MySerializerListener l = ss.getListener(MySerializerListener.<jk>class</jk>);
+	 * 		MySerializerListener <jv>listener</jv> = <jv>session</jv>.getListener(MySerializerListener.<jk>class</jk>);
 	 *
 	 * 		<jc>// Dump the results to the console.</jc>
-	 * 		SimpleJsonSerializer.<jsf>DEFAULT</jsf>.println(l.<jf>events</jf>);
+	 * 		SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
 	 * 	}
 	 * </p>
 	 *
@@ -244,7 +245,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort arrays and collections alphabetically.
+	 * Sort arrays and collections alphabetically.
 	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
@@ -255,16 +256,16 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortCollections()
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted array</jc>
-	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 * 	String[] <jv>myArray</jv> = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
 	 *
 	 * 	<jc>// Produces ["bar","baz","foo"]</jc>
-	 * 	String json = s.serialize(array);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myArray</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -279,7 +280,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort maps alphabetically.
+	 * Sort maps alphabetically.
 	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
@@ -290,16 +291,16 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.sortMaps()
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
-	 * 	OMap map = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 	 *
 	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
-	 * 	String json = s.serialize(map);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -314,7 +315,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty lists and arrays.
+	 * Trim empty lists and arrays.
 	 *
 	 * <p>
 	 * When enabled, empty lists and arrays will not be serialized.
@@ -331,7 +332,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimEmptyCollections()
 	 * 		.build();
@@ -342,7 +343,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -357,7 +358,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty maps.
+	 * Trim empty maps.
 	 *
 	 * <p>
 	 * When enabled, empty map values will not be serialized to the output.
@@ -372,7 +373,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that skips empty maps.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimEmptyMaps()
 	 * 		.build();
@@ -383,7 +384,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -398,7 +399,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim strings.
+	 * Trim strings.
 	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
@@ -406,16 +407,16 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimStrings()
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	OMap map = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
+	 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Produces "{foo:'bar'}"</jc>
-	 * 	String json = s.toString(map);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myMap</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -430,7 +431,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  URI context bean.
+	 * URI context bean.
 	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
@@ -438,27 +439,27 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Our URI contextual information.</jc>
-	 * 	String authority = <js>"http://localhost:10000"</js>;
-	 * 	String contextRoot = <js>"/myContext"</js>;
-	 * 	String servletPath = <js>"/myServlet"</js>;
-	 * 	String pathInfo = <js>"/foo"</js>;
+	 * 	String <jv>authority</jv> = <js>"http://localhost:10000"</js>;
+	 * 	String <jv>contextRoot</jv> = <js>"/myContext"</js>;
+	 * 	String <jv>servletPath</jv> = <js>"/myServlet"</js>;
+	 * 	String <jv>pathInfo</jv> = <js>"/foo"</js>;
 	 *
 	 * 	<jc>// Create a UriContext object.</jc>
-	 * 	UriContext uriContext = <jk>new</jk> UriContext(authority, contextRoot, servletPath, pathInfo);
+	 * 	UriContext <jv>uriContext</jv> = <jk>new</jk> UriContext(<jv>authority</jv>, <jv>contextRoot</jv>, <jv>servletPath</jv>, <jv>pathInfo</jv>);
 	 *
 	 * 	<jc>// Associate it with our serializer.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.uriContext(uriContext)
+	 * 		.uriContext(<jv>uriContext</jv>)
 	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
 	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
 	 * 		.build();
 	 *
 	 * 	<jc>// A relative URL</jc>
-	 * 	URL url = <jk>new</jk> URL(<js>"bar"</js>);
+	 * 	URL <jv>myUrl</jv> = <jk>new</jk> URL(<js>"bar"</js>);
 	 *
 	 * 	<jc>// Produces "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
-	 * 	String json = s.toString(url);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myUrl</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -475,7 +476,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  URI relativity.
+	 * URI relativity.
 	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
@@ -513,7 +514,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  URI resolution.
+	 * URI resolution.
 	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:

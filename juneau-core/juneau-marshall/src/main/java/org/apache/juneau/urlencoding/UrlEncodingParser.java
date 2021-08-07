@@ -23,6 +23,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Parses URL-encoded text into POJO models.
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -50,6 +51,9 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	/**
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
 	 *
+	 * <p>
+	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams URLENC_expandedParams}
@@ -66,41 +70,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingParserBuilder#expandedParams()}
-	 * 			<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams()}
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
-	 *
-	 * <p>
-	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
-	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1;
-	 * 		<jk>public</jk> List&lt;String&gt; f2;
-	 * 	}
-	 *
-	 * 	UrlEncodingParser p1 = UrlEncodingParser.<jsf>DEFAULT</jsf>;
-	 * 	UrlEncodingParser p2 = UrlEncodingParser.<jsm>create</jsm>().expandedParams().build();
-	 *
-	 * 	A a1 = p1.parse(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>);
-	 *
-	 * 	A a2 = p2.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <p>
-	 * This option only applies to beans.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
 	 * </ul>
 	 */
 	public static final String URLENC_expandedParams = PREFIX + ".expandedParams.b";

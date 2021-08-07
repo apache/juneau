@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Base class for all writer-based serializer builders.
+ * {@review}
  */
 @FluentSetters
 public class WriterSerializerBuilder extends SerializerBuilder {
@@ -52,7 +53,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i> File charset.
+	 * File charset.
 	 *
 	 * <p>
 	 * The character set to use for writing <c>Files</c> to the file system.
@@ -63,13 +64,13 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-	 * 	s.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), myBean);
+	 * 	<jv>serializer</jv>.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -87,7 +88,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Maximum indentation.
+	 *  Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -99,7 +100,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.ws()  <jc>// Enable whitespace</jc>
 	 * 		.maxIndent(20)
@@ -121,7 +122,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
+	 *  Quote character.
 	 *
 	 * <p>
 	 * Specifies the character to use for quoting attributes and values.
@@ -133,7 +134,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses single quotes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.quoteChar(<js>'\''</js>)
 	 * 		.build();
@@ -144,7 +145,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces {'foo':'bar'}</jc>
-	 * 	String json = s.toString(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -162,7 +163,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
+	 *  Quote character.
 	 *
 	 * <p>
 	 * Specifies to use single quotes for quoting attributes and values.
@@ -174,7 +175,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses single quotes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.sq()
 	 * 		.build();
@@ -185,7 +186,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces {'foo':'bar'}</jc>
-	 * 	String json = s.toString(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -200,7 +201,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i> Output stream charset.
+	 * Output stream charset.
 	 *
 	 * <p>
 	 * The character set to use when writing to <c>OutputStreams</c>.
@@ -211,13 +212,13 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to write to a UTF-8 encoded output stream.</jc>
-	 * 	s.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), myBean);
+	 * 	<jv>serializer</jv>.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -235,7 +236,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
+	 *  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -243,7 +244,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.useWhitespace()
 	 * 		.build();
@@ -254,7 +255,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -268,7 +269,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
+	 *  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -276,7 +277,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.ws()
 	 * 		.build();
@@ -287,7 +288,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>

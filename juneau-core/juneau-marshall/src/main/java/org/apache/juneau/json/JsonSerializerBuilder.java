@@ -28,6 +28,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of JSON serializers.
+ * {@review}
  */
 @FluentSetters
 public class JsonSerializerBuilder extends WriterSerializerBuilder {
@@ -59,10 +60,28 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
+	 * If enabled, solidus (e.g. slash) characters should be escaped.
+	 *
+	 * <p>
+	 * The JSON specification allows for either format.
+	 * <br>However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
+	 * <xt>&lt;\/script&gt;</xt>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.simple()
+	 * 		.escapeSolidus()
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
@@ -76,10 +95,71 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode.
+	 * Simple JSON mode.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
+	 * If enabled, JSON attribute names will only be quoted when necessary.
+	 * <br>Otherwise, they are always quoted.
+	 *
+	 * <p>
+	 * Attributes do not need to be quoted when they conform to the following:
+	 * <ol class='spaced-list'>
+	 * 	<li>They start with an ASCII character or <js>'_'</js>.
+	 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
+	 * 	<li>They are not one of the following reserved words:
+	 * 		<p class='bcode w800'>
+	 * 	arguments, break, case, catch, class, const, continue, debugger, default,
+	 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
+	 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
+	 * 	private, protected, public, return, static, super, switch, this, throw,
+	 * 	true, try, typeof, var, void, while, with, undefined, yield
+	 * 		</p>
+	 * </ol>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON serializer in normal mode.</jc>
+	 * 	WriterSerializer <jv>serializer1<jv> = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a JSON serializer in simple mode.</jc>
+	 * 	WriterSerializer <jv>serializer2<jv> = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.simple()
+	 * 		.build();
+	 *
+	 * 	OMap <jv>myMap<jv> = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"x1"</js>,
+	 * 		<js>"_bar"</js>, <js>"x2"</js>,
+	 * 		<js>" baz "</js>, <js>"x3"</js>,
+	 * 		<js>"123"</js>, <js>"x4"</js>,
+	 * 		<js>"return"</js>, <js>"x5"</js>,
+	 * 		<js>""</js>, <js>"x6"</js>
+	 *  );
+	 *
+	 * 	<jc>// Produces:</jc>
+	 * 	<jc>// {</jc>
+	 * 	<jc>// 	"foo": "x1"</jc>
+	 * 	<jc>// 	"_bar": "x2"</jc>
+	 * 	<jc>// 	" baz ": "x3"</jc>
+	 * 	<jc>// 	"123": "x4"</jc>
+	 * 	<jc>// 	"return": "x5"</jc>
+	 * 	<jc>// 	"": "x6"</jc>
+	 * 	<jc>// }</jc>
+	 * 	String <jv>json1<jv> = <jv>serializer1<jv>.serialize(<jv>myMap<jv>);
+	 *
+	 * 	<jc>// Produces:</jc>
+	 * 	<jc>// {</jc>
+	 * 	<jc>// 	foo: "x1"</jc>
+	 * 	<jc>// 	_bar: "x2"</jc>
+	 * 	<jc>// 	" baz ": "x3"</jc>
+	 * 	<jc>// 	"123": "x4"</jc>
+	 * 	<jc>// 	"return": "x5"</jc>
+	 * 	<jc>// 	"": "x6"</jc>
+	 * 	<jc>// }</jc>
+	 * 	String <jv>json2<jv> = <jv>serializer2<jv>.serialize(<jv>myMap<jv>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
@@ -93,7 +173,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode and single quote.
+	 * Simple JSON mode and single quote.
 	 *
 	 * <p>
 	 * Shortcut for calling <c>simple().sq()</c>.

@@ -31,6 +31,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Builder class for building instances of parsers.
+ * {@review}
  */
 @FluentSetters
 public class ParserBuilder extends BeanContextBuilder {
@@ -57,7 +58,7 @@ public class ParserBuilder extends BeanContextBuilder {
 
 
 	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Auto-close streams.
+	 * Auto-close streams.
 	 *
 	 * <p>
 	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
@@ -66,13 +67,13 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.autoCloseStreams()
 	 * 		.build();
 	 *
-	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
-	 * 	MyBean myBean = p.parse(r, MyBean.<jk>class</jk>);
+	 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
+	 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>myReader</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jsm>assertTrue</jsm>(r.isClosed());
 	 * </p>
@@ -89,7 +90,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Debug output lines.
+	 * Debug output lines.
 	 *
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
@@ -98,15 +99,15 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
 	 * 		.debugOuputLines(100)
 	 * 		.build();
 	 *
-	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
+	 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
 	 * 	<jk>try</jk> {
-	 * 		p.parse(r, Object.<jk>class</jk>);
+	 * 		<jv>parser</jv>.parse(<jv>myReader</jv>, Object.<jk>class</jk>);
 	 * 	} <jk>catch</jk> (ParseException e) {
 	 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
 	 * 	}
@@ -127,7 +128,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Parser listener.
+	 * Parser listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
@@ -142,29 +143,30 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class&lt;T&gt; beanClass, T bean, <jk>int</jk> line, <jk>int</jk> col) {
-	 * 			<jf>events</jf>.add(propertyName + <js>","</js> + line + <js>","</js> + col);
+	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onUnknownBeanProperty(ParserSession <jv>session</jv>, String <jv>propertyName</jv>, Class&lt;T&gt; <jv>beanClass</jv>, T <jv>bean</jv>) {
+	 * 			Position <jv>position</jv> = <jv>parser</jv>.getPosition();
+	 * 			<jf>events</jf>.add(<jv>propertyName</jv> + <js>","</js> + <jv>position</jv>.getLine() + <js>","</js> + <jv>position</jv>.getColumn());
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser using our listener.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.listener(MyParserListener.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a session object.</jc>
 	 * 	<jc>// Needed because listeners are created per-session.</jc>
-	 * 	<jk>try</jk> (ReaderParserSession s = p.createSession()) {
+	 * 	<jk>try</jk> (ReaderParserSession <jv>session</jv> = <jv>parser</jv>.createSession()) {
 	 *
 	 * 		<jc>// Parse some JSON object.</jc>
-	 * 		MyBean myBean = s.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
+	 * 		MyBean <jv>myBean</jv> = <jv>session</jv>.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
 	 *
 	 * 		<jc>// Get the listener.</jc>
-	 * 		MyParserListener l = s.getListener(MyParserListener.<jk>class</jk>);
+	 * 		MyParserListener <jv>listener</jv> = <jv>session</jv>.getListener(MyParserListener.<jk>class</jk>);
 	 *
 	 * 		<jc>// Dump the results to the console.</jc>
-	 * 		SimpleJsonSerializer.<jsf>DEFAULT</jsf>.println(l.<jf>events</jf>);
+	 * 		SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
 	 * 	}
 	 * </p>
 	 *
@@ -182,7 +184,7 @@ public class ParserBuilder extends BeanContextBuilder {
 
 
 	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
+	 * Strict mode.
 	 *
 	 * <p>
 	 * When enabled, strict mode for the parser is enabled.
@@ -218,15 +220,15 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.strict()
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
 	 * 	<jk>try</jk> {
-	 * 		String json = <js>"{unquotedAttr:'value'}"</js>;
-	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
+	 * 		String <jv>json</jv> = <js>"{unquotedAttr:'value'}"</js>;
+	 * 		<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 * 	} <jk>catch</jk> (ParseException e) {
 	 * 		<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
 	 * 	}
@@ -244,7 +246,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Trim parsed strings.
+	 * Trim parsed strings.
 	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
@@ -253,17 +255,17 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
-	 * 	ReaderParser p = JsonParser
+	 * 	ReaderParser <jv>parser</jv> = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimStrings()
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
-	 * 	String json = <js>"{' foo ':' bar '}"</js>;
-	 * 	Map&lt;String,String&gt; map = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	String <jv>json</jv> = <js>"{' foo ':' bar '}"</js>;
+	 * 	Map&lt;String,String&gt; <jv>myMap</jv> = <jv>parser</jv>.parse(<jv>json</jv>, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Make sure strings are parsed.</jc>
-	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>myMap</jv>.get(<js>"foo"</js>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -278,7 +280,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Unbuffered.
+	 * Unbuffered.
 	 *
 	 * <p>
 	 * When enabled, don't use internal buffering during parsing.
@@ -291,19 +293,19 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.
 	 * 		.<jsm>create</jsm>()
 	 * 		.unbuffered(<jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
 	 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
-	 * 	ReaderParserSession s = p.createSession();
+	 * 	ReaderParserSession <jv>session</jv> = <jv>parser</jv>.createSession();
 	 *
 	 * 	<jc>// Read input with multiple POJOs</jc>
-	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
-	 * 	MyBean myBean1 = s.parse(json, MyBean.<jk>class</jk>);
-	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
+	 * 	Reader <jv>json</jv> = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
+	 * 	MyBean <jv>myBean1</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>myBean2</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>

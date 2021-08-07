@@ -42,6 +42,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Base builder class for building instances of any context objects configured through property stores.
+ * {@review}
  */
 @FluentSetters
 public abstract class ContextBuilder {
@@ -184,7 +185,7 @@ public abstract class ContextBuilder {
 	 * 	<jk>public class</jk> MyClass {...}
 	 *
 	 * 	<jc>// Apply any settings found on the annotations.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.applyAnnotations(MyClass.<jk>class</jk>)
 	 * 		.build();
@@ -248,7 +249,7 @@ public abstract class ContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Apply any settings found on the annotations.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.applyAnnotations(MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>))
 	 * 		.build();
@@ -316,29 +317,25 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.debug()
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_debug</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
+	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> Object <jf>f</jf>;
 	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
+	 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+	 * 	<jv>myBean</jv>.<jf>f</jf> = <jv>myBean</jv>;
 	 *
 	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-	 * 	String json = s.serialize(a);
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
+	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#debug(Boolean)}
 	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
 	 * </ul>
 	 *
@@ -363,37 +360,32 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
 	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 	 * 		<ja>@Override</ja>
-	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
-	 * 			<jk>if</jk> (session.getLocale().equals(Locale.<jsf>UK</jsf>))
+	 * 		public String swap(BeanSession <jv>session</jv>, MyBean <jv>o</jv>) throws Exception {
+	 * 			<jk>if</jk> (<jv>session</jv>.getLocale().equals(Locale.<jsf>UK</jsf>))
 	 * 				<jk>return null</jk>;
-	 * 			<jk>return</jk> o.toString();
+	 * 			<jk>return</jk> <jv>o</jv>.toString();
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.locale(Locale.<jsf>UK</jsf>)
 	 * 		.pojoSwaps(MyBeanSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>CONTEXT_locale</jsf>, Locale.<jsf>UK</jsf>)
-	 * 		.addTo(<jsf>BEAN_pojoSwaps</jsf>, MyBeanSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Define on session-args instead.</jc>
-	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
-	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
+	 * 	SerializerSessionArgs <jv>sessionArgs</jv> = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>.createSession(<jv>sessionArgs</jv>)) {
 	 *
 	 * 		<jc>// Produces "null" if in the UK.</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
+	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#locale(Locale)}
 	 * 	<li class='jf'>{@link Context#CONTEXT_locale}
 	 * </ul>
 	 *
@@ -420,35 +412,31 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
 	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 	 * 		<ja>@Override</ja>
-	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
-	 * 			<jk>if</jk> (session.getMediaType().equals(<js>"application/json"</js>))
+	 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>o</jv>) throws Exception {
+	 * 			<jk>if</jk> (<jv>session</jv>.getMediaType().equals(<js>"application/json"</js>))
 	 * 				<jk>return null</jk>;
-	 * 			<jk>return</jk> o.toString();
+	 * 			<jk>return</jk> <jv>o</jv>.toString();
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.mediaType(MediaType.<jsf>JSON</jsf>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>CONTEXT_mediaType</jsf>, MediaType.<jsf>JSON</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Define on session-args instead.</jc>
-	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
-	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
+	 * 	SerializerSessionArgs <jv>sessionArgs</jv> = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>.createSession(<jv>sessionArgs</jv>)) {
 	 *
 	 * 		<jc>// Produces "null" since it's JSON.</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
+	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#mediaType(MediaType)}
 	 * 	<li class='jf'>{@link Context#CONTEXT_mediaType}
 	 * </ul>
 	 *
@@ -474,35 +462,31 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
 	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 	 * 		<ja>@Override</ja>
-	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
-	 * 			<jk>if</jk> (session.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
+	 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>o</jv>) throws Exception {
+	 * 			<jk>if</jk> (<jv>session</jv>.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
 	 * 				<jk>return null</jk>;
-	 * 			<jk>return</jk> o.toString();
+	 * 			<jk>return</jk> <jv>o</jv>.toString();
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer that uses GMT if the timezone is not specified in the session args.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.timeZone(TimeZone.<jsf>GMT</jsf>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>CONTEXT_timeZone</jsf>, TimeZone.<jsf>GMT</jsf>)
-	 * 		.build();
-	 *
 	 * 	<jc>// Define on session-args instead.</jc>
-	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
-	 * 	<jk>try</jk> (WriterSerializerSession ss = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(sessionArgs)) {
+	 * 	SerializerSessionArgs <jv>sessionArgs</jv> = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(<jv>sessionArgs</jv>)) {
 	 *
 	 * 		<jc>// Produces "null" since the time zone is GMT.</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
+	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#timeZone(TimeZone)}
 	 * 	<li class='jf'>{@link Context#CONTEXT_timeZone}
 	 * </ul>
 	 *
@@ -571,14 +555,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts maps and bean properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortMaps()
-	 * 		.sortProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic set() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_sortMaps</jsf>)
 	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
@@ -593,7 +570,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Clone an existing serializer and unset the sort settings.</jc>
-	 * 	s = s.<jsm>builder</jsm>()
+	 * 	<jv>serializer</jv> = <jv>serializer</jv>.<jsm>builder</jsm>()
 	 * 		.set(<jsf>BEAN_sortMaps</jsf>, <jk>null</jk>)
 	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>null</jk>)
 	 * 		.build();
@@ -696,14 +673,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts maps and bean properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortMaps()
-	 * 		.sortProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic set(Map) method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(
 	 * 			AMap.<jsm>of</jsm>(
@@ -751,14 +721,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortMaps()
-	 * 		.sortProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic add() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.add(
 	 * 			AMap.<jsm>of</jsm>(
@@ -814,13 +777,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that forces MyNotBean classes to be converted to strings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.notBeanClasses(MyNotBean.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic addTo() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_notBeanClasses</jsf>, MyNotBean.<jk>class</jk>)
 	 * 		.build();
@@ -867,13 +824,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that converts Temporal objects to Basic ISO date strings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.swaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic appendTo() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.appendTo(<jsf>BEAN_swaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
@@ -921,13 +872,7 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that converts Temporal objects to Basic ISO date strings.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.swaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic prependTo() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.prependTo(<jsf>BEAN_swaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
@@ -1043,13 +988,13 @@ public abstract class ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that specifies the concrete implementation class for an interface.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.swaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Clone the previous serializer but remove the swap.</jc>
-	 * 	s = s
+	 * 	<jv>serializer</jv> = <jv>serializer</jv>
 	 * 		.<jsm>builder</jsm>()
 	 * 		.removeFrom(<jsf>BEAN_swaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();

@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jena.annotation.Rdf;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -30,6 +31,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Builder class for building instances of RDF parsers.
+ * {@review}
  */
 @FluentSetters
 public class RdfParserBuilder extends ReaderParserBuilder {
@@ -60,7 +62,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -72,7 +74,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -84,7 +86,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>iri_rules</c>.
+	 * RDF/XML property: <c>iri_rules</c>.
 	 *
 	 * <p>
 	 * Set the engine for checking and resolving.
@@ -115,7 +117,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML ARP property: <c>error-mode</c>.
+	 * RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
@@ -132,6 +134,17 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	<li><js>"strict-fatal"</js>
 	 * </ul>
 	 *
+	 * <ul class='seealso'>
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+	 * </ul>
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
@@ -142,10 +155,15 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML ARP property: <c>error-mode</c>.
+	 * RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li>
+	 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -157,7 +175,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>xmlbase</c>.
+	 * RDF/XML property: <c>xmlbase</c>.
 	 *
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
@@ -172,23 +190,21 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>longId</c>.
+	 * RDF/XML property: <c>longId</c>.
 	 *
 	 * <p>
 	 * Whether to use long ID's for anon resources.
 	 * Short ID's are easier to read, but can run out of memory on very large models.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder rdfxml_longId(boolean value) {
-		return set(RDF_rdfxml_longId, value);
+	public RdfParserBuilder rdfxml_longId() {
+		return set(RDF_rdfxml_longId);
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>allowBadURIs</c>.
+	 * RDF/XML property: <c>allowBadURIs</c>.
 	 *
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
@@ -203,7 +219,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>relativeURIs</c>.
+	 * RDF/XML property: <c>relativeURIs</c>.
 	 *
 	 * <p>
 	 * What sort of relative URIs should be used.
@@ -240,7 +256,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>showXmlDeclaration</c>.
+	 * RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
 	 * <p>
 	 * Possible values:
@@ -265,7 +281,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+	 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <p>
 	 * If disabled, an XML doctype declaration isn't included in the output.
@@ -281,7 +297,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>tab</c>.
+	 * RDF/XML property: <c>tab</c>.
 	 *
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
@@ -296,7 +312,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>attributeQuoteChar</c>.
+	 * RDF/XML property: <c>attributeQuoteChar</c>.
 	 *
 	 * <p>
 	 * The XML attribute quote character.
@@ -311,7 +327,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>blockRules</c>.
+	 * RDF/XML property: <c>blockRules</c>.
 	 *
 	 * <p>
 	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
@@ -328,7 +344,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>minGap</c>.
+	 * N3/Turtle property: <c>minGap</c>.
 	 *
 	 * <p>
 	 * Minimum gap between items on a line.
@@ -343,7 +359,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableObjectLists</c>.
+	 * N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <p>
 	 * Don't print object lists as comma separated lists.
@@ -356,7 +372,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>subjectColumn</c>.
+	 * N3/Turtle property: <c>subjectColumn</c>.
 	 *
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
@@ -371,7 +387,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>propertyColumn</c>.
+	 * N3/Turtle property: <c>propertyColumn</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -386,7 +402,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>indentProperty</c>.
+	 * N3/Turtle property: <c>indentProperty</c>.
 	 *
 	 * <p>
 	 * Width to indent properties.
@@ -401,7 +417,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>widePropertyLen</c>.
+	 * N3/Turtle property: <c>widePropertyLen</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -417,7 +433,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+	 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
 	 *
 	 * <p>
 	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
@@ -430,7 +446,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUsePropertySymbols</c>.
+	 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <p>
 	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
@@ -443,7 +459,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+	 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <p>
 	 * Disallow the use of <c>"""</c> to delimit long strings.
@@ -456,7 +472,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseDoubles</c>.
+	 * N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <p>
 	 * Disallow the use of doubles as <c>123.456</c>.
@@ -469,7 +485,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * <p>
 	 * Possible values:
@@ -502,7 +518,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * <p>
 	 * Possible values:
@@ -532,7 +548,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
@@ -549,7 +565,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
@@ -566,7 +582,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Can be any of the following:
@@ -600,6 +616,10 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#ntriple()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#turtle()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#xml()}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -611,31 +631,51 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfParserBuilder looseCollections(boolean value) {
-		return set(RDF_looseCollections, value);
-	}
-
-	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  Collections should be serialized and parsed as loose collections.
+	 * <p>
+	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
+	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
+	 * when serialized as loose collections.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>looseCollection(<jk>true</jk>)</code>.
+	 * This setting is typically only useful if the beans being parsed into do not have a bean property
+	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	WriterSerializer <jv>serializer</jv> = RdfSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.xmlabbrev()
+	 * 		.looseCollections()
+	 * 		.build();
+	 *
+	 * 	ReaderParser <jv>parser</jv> = RdfParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.xml()
+	 * 		.looseCollections()
+	 * 		.build();
+	 *
+	 * 	List&lt;MyBean&gt; <jv>myList</jv> = createListOfMyBeans();
+	 *
+	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
+	 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+	 *
+	 * 	<jc>// Parse back into a Java collection</jc>
+	 * 	<jv>myList</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	MyBean[] <jv>myBeans</jv> = createArrayOfMyBeans();
+	 *
+	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
+	 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myBeans</jv>);
+	 *
+	 * 	<jc>// Parse back into a bean array</jc>
+	 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
@@ -649,7 +689,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>.
@@ -666,7 +706,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>.
@@ -683,30 +723,20 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  Trim whitespace from text elements.
+	 * Trim whitespace from text elements.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
+	 * When enabled, whitespace in text elements will be automatically trimmed.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfParserBuilder trimWhitespace(boolean value) {
-		return set(RDF_trimWhitespace, value);
-	}
-
-	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  Trim whitespace from text elements.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>trimWhitespace(<jk>true</jk>)</code>.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create an RDF parser that trims whitespace.</jc>
+	 * 	ReaderParser <jv>parser</jv> = RdfParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.xml()
+	 * 		.trimWhitespace()
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}

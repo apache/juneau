@@ -28,6 +28,7 @@ import org.apache.juneau.uon.*;
 
 /**
  * Builder class for building instances of URL-Encoding serializers.
+ * {@review}
  */
 @FluentSetters
 public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
@@ -58,10 +59,42 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UrlEncodingSerializer</l> configuration property:&emsp;</i>  Serialize bean property collections/arrays as separate key/value pairs.
+	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
+	 * By default, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br>When enabled, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
+	 *
+	 * <p>
+	 * This option only applies to beans.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
+	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+	 * 		is added to it.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A sample bean.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> String[] <jf>f1</jf> = {<js>"a"</js>,<js>"b"</js>};
+	 * 		<jk>public</jk> List&lt;String&gt; <jf>f2</jf> = Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>});
+	 * 	}
+	 *
+	 * 	<jc>// Normal serializer.</jc>
+	 * 	WriterSerializer <jv>serializer1</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Expanded-params serializer.</jc>
+	 * 	WriterSerializer <jv>serializer2</jv> = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
+	 *
+	 *  <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+	 * 	String <jv>out1</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> A());
+	 *
+	 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
+	 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A()); <jc>
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
@@ -649,12 +682,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - UonSerializerBuilder */
 	public UrlEncodingSerializerBuilder encoding() {
 		super.encoding();
-		return this;
-	}
-
-	@Override /* GENERATED - UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder encoding(boolean value) {
-		super.encoding(value);
 		return this;
 	}
 

@@ -24,6 +24,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Used to tailor how beans get interpreted by the framework.
+ * {@review}
  *
  * <p>
  * Can be used in the following locations:
@@ -51,6 +52,11 @@ public @interface Bean {
 	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 */
@@ -145,6 +151,8 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#findFluentSetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 */
@@ -440,6 +448,8 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
 	 * </ul>
 	 */

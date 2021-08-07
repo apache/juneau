@@ -26,6 +26,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Base class for all stream-based serializer builders.
+ * {@review}
  */
 @FluentSetters
 public class OutputStreamSerializerBuilder extends SerializerBuilder {
@@ -51,17 +52,16 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>OutputStreamSerializer</l> configuration property:&emsp;</i>  Binary output format.
+	 * <Binary output format.
 	 *
 	 * <p>
 	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
-	 * 	OutputStreamSerializer s = MsgPackSerializer
+	 * 	OutputStreamSerializer <jv>serializer</jv> = MsgPackSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.binaryFormat(<jsf>BASE64</jsf>)
 	 * 		.build();
@@ -70,7 +70,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * 	<jk>public class</jk> MyBean {...}
 	 *
 	 * 	<jc>// MessagePack will generate BASE64-encoded string.</jc>
-	 * 	String msgPack = s.serializeToString(<jk>new</jk> MyBean());
+	 * 	String <jv>msgPack</jv> = <jv>serializer</jv>.serializeToString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
 	 * <ul class='seealso'>

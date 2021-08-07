@@ -24,6 +24,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
+ * {@review}
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -45,6 +46,10 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
+	 * <p>
+	 * <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
+	 * before being passed to this parser.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_decoding UON_decoding}
@@ -60,33 +65,9 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#decoding(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#decoding()}
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
-	 * before being passed to this parser.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a decoding UON parser.</jc>
-	 * 	ReaderParser p = UonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.decoding()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = UonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>UON_decoding</jsf>)
-	 * 		.build();
-	 *
-	 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
-	 * 	String[] foo = p.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
-	 * </p>
 	 */
 	public static final String UON_decoding = PREFIX + ".decoding.b";
 

@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
+ * {@review}
  *
  * <p>
  * Can be used in the following locations:
@@ -51,6 +52,11 @@ public @interface Beanp {
 	 * The list of classes that make up the bean dictionary this bean property.
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary_replace(Object...)}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *
