@@ -40,7 +40,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanIgnoreAnnotation.Array.class)
-@ContextPropertiesApply(BeanIgnoreAnnotation.Apply.class)
+@ContextApply(BeanIgnoreAnnotation.Apply.class)
 public @interface BeanIgnore {
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.

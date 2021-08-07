@@ -165,28 +165,32 @@ public class AnnotationInfo<T extends Annotation> {
 		return om;
 	}
 
-	private Constructor<? extends ConfigApply<?,?>> configApplyConstructor;
+	private Constructor<? extends ContextApplier<?,?>>[] applyConstructors;
 
 	/**
-	 * If this annotation has a {@link ContextPropertiesApply} annotation, returns an instance of the specified {@link ConfigApply} class.
+	 * If this annotation has a {@link ContextApply} annotation, returns an instance of the specified {@link ContextApplier} class.
 	 *
-	 * @param vrs Variable resolver passed to the {@link ConfigApply} object.
-	 * @return A new {@link ConfigApply} object.  Never <jk>null</jk>.
+	 * @param vrs Variable resolver passed to the {@link ContextApplier} object.
+	 * @return A new {@link ContextApplier} object.  Never <jk>null</jk>.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public ConfigApply<Annotation,Object> getConfigApply(VarResolverSession vrs) throws ExecutableException {
+	public ContextApplier<Annotation,Object>[] getApplies(VarResolverSession vrs) throws ExecutableException {
 		try {
-			if (configApplyConstructor == null) {
-				ContextPropertiesApply cpa = a.annotationType().getAnnotation(ContextPropertiesApply.class);
+			if (applyConstructors == null) {
+				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
 				if (cpa == null)
-					configApplyConstructor = ConfigApply.NoOp.class.getConstructor(VarResolverSession.class);
-				else
-					configApplyConstructor = (Constructor<? extends ConfigApply<?,?>>)cpa.value().getConstructor(VarResolverSession.class);
-				if (configApplyConstructor == null)
-					throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());
+					applyConstructors = new Constructor[]{ ContextApplier.NoOp.class.getConstructor(VarResolverSession.class) };
+				else {
+					applyConstructors = new Constructor[cpa.value().length];
+					for (int i = 0; i < cpa.value().length; i++)
+						applyConstructors[i] = (Constructor<? extends ContextApplier<?,?>>) cpa.value()[i].getConstructor(VarResolverSession.class);
+				}
 			}
-			return (ConfigApply<Annotation,Object>) configApplyConstructor.newInstance(vrs);
+			ContextApplier<Annotation,Object>[] aa = new ContextApplier[applyConstructors.length];
+			for (int i = 0; i < aa.length; i++)
+				aa[i] = (ContextApplier<Annotation,Object>) applyConstructors[i].newInstance(vrs);
+			return aa;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}

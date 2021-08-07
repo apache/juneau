@@ -53,12 +53,12 @@ public class MethodInfoTest {
 	@Target({METHOD,TYPE})
 	@Retention(RUNTIME)
 	@Inherited
-	@ContextPropertiesApply(AConfigApply.class)
+	@ContextApply(AConfigApply.class)
 	public static @interface AConfig {
 		String value();
 	}
 
-	public static class AConfigApply extends ConfigApply<AConfig,ContextPropertiesBuilder> {
+	public static class AConfigApply extends ContextApplier<AConfig,ContextPropertiesBuilder> {
 		protected AConfigApply(VarResolverSession vr) {
 			super(AConfig.class, ContextPropertiesBuilder.class, vr);
 		}
@@ -295,11 +295,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationList(ContextApplyFilter.INSTANCE));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

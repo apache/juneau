@@ -18,17 +18,17 @@ import java.util.function.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Filter used to accept only annotations that themselves have the {@link ContextPropertiesApply} annotation.
+ * Filter used to accept only annotations that themselves have the {@link ContextApply} annotation.
  */
-public class ConfigAnnotationFilter implements Predicate<AnnotationInfo<?>> {
+public class ContextApplyFilter implements Predicate<AnnotationInfo<?>> {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final ConfigAnnotationFilter INSTANCE = new ConfigAnnotationFilter();
+	public static final ContextApplyFilter INSTANCE = new ContextApplyFilter();
 
 	@Override
 	public boolean test(AnnotationInfo<? extends Annotation> t) {
-		return t.hasAnnotation(ContextPropertiesApply.class);
+		return t.hasAnnotation(ContextApply.class);
 	}
 }

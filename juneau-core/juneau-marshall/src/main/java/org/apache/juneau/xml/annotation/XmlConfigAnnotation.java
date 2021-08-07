@@ -28,7 +28,7 @@ public class XmlConfigAnnotation {
 	/**
 	 * Applies {@link XmlConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<XmlConfig,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<XmlConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

@@ -403,7 +403,7 @@ public class ResponseAnnotation {
 	/**
 	 * Applies targeted {@link Response} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Response,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Response,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

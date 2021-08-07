@@ -181,7 +181,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				}
 			}
 
-			applyAnnotations(rci.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vr.createSession());
+			applyAnnotations(rci.getAnnotationList(ContextApplyFilter.INSTANCE), vr.createSession());
 
 		} catch (Exception e) {
 			throw new ServletException(e);

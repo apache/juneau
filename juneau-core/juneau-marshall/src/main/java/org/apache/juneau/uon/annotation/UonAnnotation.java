@@ -147,7 +147,7 @@ public class UonAnnotation {
 	/**
 	 * Applies targeted {@link Uon} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Uon,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Uon,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

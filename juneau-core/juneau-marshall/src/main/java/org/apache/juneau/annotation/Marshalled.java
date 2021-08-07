@@ -38,7 +38,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(MarshalledAnnotation.Array.class)
-@ContextPropertiesApply(MarshalledAnnotation.Apply.class)
+@ContextApply(MarshalledAnnotation.Apply.class)
 public @interface Marshalled {
 
 	/**

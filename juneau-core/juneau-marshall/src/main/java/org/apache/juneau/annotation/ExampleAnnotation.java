@@ -168,7 +168,7 @@ public class ExampleAnnotation {
 	/**
 	 * Applies targeted {@link Example} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Example,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Example,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

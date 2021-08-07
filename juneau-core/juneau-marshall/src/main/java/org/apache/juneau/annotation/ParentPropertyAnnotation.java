@@ -123,7 +123,7 @@ public class ParentPropertyAnnotation {
 	/**
 	 * Applies targeted {@link ParentProperty} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<ParentProperty,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<ParentProperty,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

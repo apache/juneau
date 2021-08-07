@@ -492,7 +492,7 @@ public class RestGetAnnotation {
 	/**
 	 * Applies {@link RestGet} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RestGet,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestGet,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

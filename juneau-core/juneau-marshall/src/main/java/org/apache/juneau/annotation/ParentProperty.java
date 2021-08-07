@@ -45,7 +45,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ParentPropertyAnnotation.Array.class)
-@ContextPropertiesApply(ParentPropertyAnnotation.Apply.class)
+@ContextApply(ParentPropertyAnnotation.Apply.class)
 public @interface ParentProperty {
 
 	/**

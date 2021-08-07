@@ -128,7 +128,7 @@ public abstract class ContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param al The list of all annotations annotated with {@link ContextPropertiesApply}.
+	 * @param al The list of all annotations annotated with {@link ContextApply}.
 	 * @param r The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
@@ -142,7 +142,7 @@ public abstract class ContextBuilder {
 	 * Applies any of the various <ja>@XConfig</ja> annotations on the specified class to this context.
 	 *
 	 * <p>
-	 * Any annotations found that themselves are annotated with {@link ContextPropertiesApply} will be resolved and
+	 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
 	 * applied as properties to this builder.  These annotations include:
 	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
@@ -195,7 +195,7 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
 		for (Class<?> c : fromClasses)
-			applyAnnotations(ClassInfo.of(c).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
+			applyAnnotations(ClassInfo.of(c).getAnnotationList(ContextApplyFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -203,7 +203,7 @@ public abstract class ContextBuilder {
 	 * Applies any of the various <ja>@XConfig</ja> annotations on the specified method to this context.
 	 *
 	 * <p>
-	 * Any annotations found that themselves are annotated with {@link ContextPropertiesApply} will be resolved and
+	 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
 	 * applied as properties to this builder.  These annotations include:
 	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
@@ -259,7 +259,7 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder applyAnnotations(Method...fromMethods) {
 		for (Method m : fromMethods)
-			applyAnnotations(MethodInfo.of(m).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
+			applyAnnotations(MethodInfo.of(m).getAnnotationList(ContextApplyFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

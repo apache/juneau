@@ -35,7 +35,7 @@ import org.apache.juneau.dto.swagger.*;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@ContextPropertiesApply(RestDeleteAnnotation.Apply.class)
+@ContextApply(RestDeleteAnnotation.Apply.class)
 @AnnotationGroup(RestOp.class)
 public @interface RestDelete {
 

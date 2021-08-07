@@ -1076,7 +1076,7 @@ public class FormDataAnnotation {
 	/**
 	 * Applies targeted {@link FormData} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<FormData,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<FormData,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

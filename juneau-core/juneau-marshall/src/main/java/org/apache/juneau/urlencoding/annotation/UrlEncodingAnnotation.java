@@ -171,7 +171,7 @@ public class UrlEncodingAnnotation {
 	/**
 	 * Applies targeted {@link UrlEncoding} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<UrlEncoding,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<UrlEncoding,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

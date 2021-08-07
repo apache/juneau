@@ -359,7 +359,7 @@ public class BodyAnnotation {
 	/**
 	 * Applies targeted {@link Body} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Body,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Body,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

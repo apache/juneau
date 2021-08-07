@@ -146,7 +146,7 @@ public class UriAnnotation {
 	/**
 	 * Applies targeted {@link Uri} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Uri,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Uri,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

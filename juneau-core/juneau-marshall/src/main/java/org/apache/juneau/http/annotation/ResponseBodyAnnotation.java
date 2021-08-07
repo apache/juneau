@@ -141,7 +141,7 @@ public class ResponseBodyAnnotation {
 	/**
 	 * Applies targeted {@link ResponseBody} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<ResponseBody,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<ResponseBody,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

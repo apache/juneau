@@ -58,12 +58,12 @@ public class ClassInfoTest {
 	@Target(TYPE)
 	@Retention(RUNTIME)
 	@Inherited
-	@ContextPropertiesApply(AConfigApply.class)
+	@ContextApply(AConfigApply.class)
 	static @interface AConfig {
 		int value();
 	}
 
-	public static class AConfigApply extends ConfigApply<AConfig,ContextPropertiesBuilder> {
+	public static class AConfigApply extends ContextApplier<AConfig,ContextPropertiesBuilder> {
 		protected AConfigApply(VarResolverSession vr) {
 			super(AConfig.class, ContextPropertiesBuilder.class, vr);
 		}
@@ -968,9 +968,9 @@ public class ClassInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(3)", gb5.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(3)", gb5.getAnnotationList(ContextApplyFilter.INSTANCE));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

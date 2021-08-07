@@ -147,7 +147,7 @@ public class SoapXmlAnnotation {
 	/**
 	 * Applies targeted {@link SoapXml} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<SoapXml,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<SoapXml,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

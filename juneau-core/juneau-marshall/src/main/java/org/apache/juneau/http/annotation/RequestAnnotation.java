@@ -177,7 +177,7 @@ public class RequestAnnotation {
 	/**
 	 * Applies targeted {@link Request} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Request,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Request,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

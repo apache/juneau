@@ -1024,7 +1024,7 @@ public class RestAnnotation {
 	/**
 	 * Applies {@link Rest} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Rest,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Rest,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

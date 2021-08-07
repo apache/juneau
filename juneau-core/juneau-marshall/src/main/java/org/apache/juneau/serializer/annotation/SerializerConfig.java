@@ -32,7 +32,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextPropertiesApply(SerializerConfigAnnotation.Apply.class)
+@ContextApply(SerializerConfigAnnotation.Apply.class)
 public @interface SerializerConfig {
 
 	/**

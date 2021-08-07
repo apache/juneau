@@ -131,7 +131,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ResponseHeaderAnnotation.Array.class)
-@ContextPropertiesApply(ResponseHeaderAnnotation.Apply.class)
+@ContextApply(ResponseHeaderAnnotation.Apply.class)
 public @interface ResponseHeader {
 
 	/**

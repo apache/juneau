@@ -577,7 +577,7 @@ public class RestPutAnnotation {
 	/**
 	 * Applies {@link RestPut} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RestPut,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestPut,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

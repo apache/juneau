@@ -141,7 +141,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(RequestAnnotation.Array.class)
-@ContextPropertiesApply(RequestAnnotation.Apply.class)
+@ContextApply(RequestAnnotation.Apply.class)
 public @interface Request {
 
 	/**

@@ -174,7 +174,7 @@ public class HtmlLinkAnnotation {
 	/**
 	 * Applies targeted {@link HtmlLink} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<HtmlLink,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<HtmlLink,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

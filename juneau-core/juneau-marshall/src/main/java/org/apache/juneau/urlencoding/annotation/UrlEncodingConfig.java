@@ -30,7 +30,7 @@ import org.apache.juneau.urlencoding.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextPropertiesApply(UrlEncodingConfigAnnotation.Apply.class)
+@ContextApply(UrlEncodingConfigAnnotation.Apply.class)
 public @interface UrlEncodingConfig {
 
 	/**

@@ -35,7 +35,7 @@ import org.apache.juneau.dto.swagger.*;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@ContextPropertiesApply(RestGetAnnotation.Apply.class)
+@ContextApply(RestGetAnnotation.Apply.class)
 @AnnotationGroup(RestOp.class)
 public @interface RestGet {
 

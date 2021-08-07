@@ -147,7 +147,7 @@ public class JsoAnnotation {
 	/**
 	 * Applies targeted {@link Jso} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Jso,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Jso,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

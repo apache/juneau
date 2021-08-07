@@ -27,7 +27,7 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<JsonConfig,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<JsonConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

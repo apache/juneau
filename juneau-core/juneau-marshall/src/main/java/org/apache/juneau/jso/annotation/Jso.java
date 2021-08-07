@@ -39,7 +39,7 @@ import org.apache.juneau.jso.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(JsoAnnotation.Array.class)
-@ContextPropertiesApply(JsoAnnotation.Apply.class)
+@ContextApply(JsoAnnotation.Apply.class)
 public @interface Jso {
 
 	/**

@@ -294,7 +294,7 @@ public class BeanpAnnotation {
 	/**
 	 * Applies targeted {@link Beanp} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Beanp,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Beanp,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

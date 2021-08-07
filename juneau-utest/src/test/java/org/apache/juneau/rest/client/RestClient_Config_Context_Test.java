@@ -144,7 +144,7 @@ public class RestClient_Config_Context_Test {
 		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
-		AnnotationList al = ClassInfo.of(A6c.class).getAnnotationList(ConfigAnnotationFilter.INSTANCE);
+		AnnotationList al = ClassInfo.of(A6c.class).getAnnotationList(ContextApplyFilter.INSTANCE);
 		VarResolverSession vr = VarResolver.DEFAULT.createSession();
 		client().applyAnnotations(al,vr).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 	}

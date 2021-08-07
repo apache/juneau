@@ -228,7 +228,7 @@ public class RdfAnnotation {
 	/**
 	 * Applies targeted {@link Rdf} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Rdf,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Rdf,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

@@ -26,11 +26,11 @@ import org.apache.juneau.*;
 @Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface ContextPropertiesApply {
+public @interface ContextApply {
 
 	/**
 	 * Identifies the class used to push values from an annotation into a property store.
 	 */
 	@SuppressWarnings("rawtypes")
-	public Class<? extends ConfigApply> value();
+	public Class<? extends ContextApplier>[] value();
 }

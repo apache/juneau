@@ -85,7 +85,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(PathAnnotation.Array.class)
-@ContextPropertiesApply(PathAnnotation.Apply.class)
+@ContextApply(PathAnnotation.Apply.class)
 public @interface Path {
 
 	/**

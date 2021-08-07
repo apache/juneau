@@ -1077,7 +1077,7 @@ public class HeaderAnnotation {
 	/**
 	 * Applies targeted {@link Header} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Header,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Header,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

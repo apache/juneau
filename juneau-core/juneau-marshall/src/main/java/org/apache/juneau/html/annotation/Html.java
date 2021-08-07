@@ -40,7 +40,7 @@ import org.apache.juneau.html.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(HtmlAnnotation.Array.class)
-@ContextPropertiesApply(HtmlAnnotation.Apply.class)
+@ContextApply(HtmlAnnotation.Apply.class)
 public @interface Html {
 
 	/**

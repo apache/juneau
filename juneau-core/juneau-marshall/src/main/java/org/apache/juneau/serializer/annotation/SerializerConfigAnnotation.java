@@ -31,7 +31,7 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<SerializerConfig,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<SerializerConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

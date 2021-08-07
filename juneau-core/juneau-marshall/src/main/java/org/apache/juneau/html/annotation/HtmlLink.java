@@ -46,7 +46,7 @@ import org.apache.juneau.html.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(HtmlLinkAnnotation.Array.class)
-@ContextPropertiesApply(HtmlLinkAnnotation.Apply.class)
+@ContextApply(HtmlLinkAnnotation.Apply.class)
 public @interface HtmlLink {
 
 	/**

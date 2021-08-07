@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(XmlAnnotation.Array.class)
-@ContextPropertiesApply(XmlAnnotation.Apply.class)
+@ContextApply(XmlAnnotation.Apply.class)
 public @interface Xml {
 
 	/**

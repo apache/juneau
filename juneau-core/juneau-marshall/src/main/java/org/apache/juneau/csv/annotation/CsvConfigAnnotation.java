@@ -24,7 +24,7 @@ public class CsvConfigAnnotation {
 	/**
 	 * Applies {@link CsvConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<CsvConfig,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<CsvConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

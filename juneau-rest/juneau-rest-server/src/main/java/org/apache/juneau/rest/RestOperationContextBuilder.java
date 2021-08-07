@@ -81,7 +81,7 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();
 
-			applyAnnotations(mi.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vrs);
+			applyAnnotations(mi.getAnnotationList(ContextApplyFilter.INSTANCE), vrs);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);

@@ -115,9 +115,9 @@ public class ContextPropertiesBuilder {
 		vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
-				ConfigApply ca = ai.getConfigApply(vr);
-				if (ca.canApply(this))
-					ca.apply(ai, this);
+				for (ContextApplier ca : ai.getApplies(vr))
+					if (ca.canApply(this))
+						ca.apply(ai, this);
 			} catch (ConfigException ex) {
 				throw ex;
 			} catch (Exception ex) {

@@ -227,7 +227,7 @@ public class SwapAnnotation {
 	/**
 	 * Applies targeted {@link Swap} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Swap,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Swap,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

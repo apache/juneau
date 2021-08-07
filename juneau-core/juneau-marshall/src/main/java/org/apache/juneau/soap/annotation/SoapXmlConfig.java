@@ -30,7 +30,7 @@ import org.apache.juneau.soap.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextPropertiesApply(SoapXmlConfigAnnotation.Apply.class)
+@ContextApply(SoapXmlConfigAnnotation.Apply.class)
 public @interface SoapXmlConfig {
 
 	/**

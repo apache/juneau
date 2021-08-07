@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextPropertiesApply(JsonSchemaConfigAnnotation.Apply.class)
+@ContextApply(JsonSchemaConfigAnnotation.Apply.class)
 public @interface JsonSchemaConfig {
 
 	/**

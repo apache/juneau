@@ -174,7 +174,7 @@ public class MarshalledAnnotation {
 	/**
 	 * Applies targeted {@link Marshalled} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Marshalled,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<Marshalled,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

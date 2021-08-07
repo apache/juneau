@@ -102,7 +102,7 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ResponseStatusAnnotation.Array.class)
-@ContextPropertiesApply(ResponseStatusAnnotation.Apply.class)
+@ContextApply(ResponseStatusAnnotation.Apply.class)
 public @interface ResponseStatus {
 
 	/**
