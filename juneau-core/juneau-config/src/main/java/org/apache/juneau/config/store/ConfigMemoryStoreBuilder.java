@@ -44,7 +44,7 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 
 	@Override /* ContextBuilder */
 	public ConfigMemoryStore build() {
-		return new ConfigMemoryStore(getContextProperties());
+		return new ConfigMemoryStore(this);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

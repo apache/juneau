@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 
@@ -29,12 +28,6 @@ import org.apache.juneau.collections.*;
  */
 @ConfigurableContext
 public class ConfigMemoryStore extends ConfigStore {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "ConfigMemoryStore";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -67,10 +60,10 @@ public class ConfigMemoryStore extends ConfigStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The settings for this content store.
+	 * @param builder The builder for this object.
 	 */
-	protected ConfigMemoryStore(ContextProperties cp) {
-		super(cp);
+	protected ConfigMemoryStore(ConfigMemoryStoreBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* ConfigStore */

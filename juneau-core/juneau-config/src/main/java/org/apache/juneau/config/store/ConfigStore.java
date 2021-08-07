@@ -35,12 +35,6 @@ import org.apache.juneau.config.internal.*;
 public abstract class ConfigStore extends Context implements Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "ConfigStore";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -50,10 +44,10 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The settings for this content store.
+	 * @param builder The builder for this object.
 	 */
-	protected ConfigStore(ContextProperties cp) {
-		super(cp, false);
+	protected ConfigStore(ConfigStoreBuilder builder) {
+		super(builder);
 	}
 
 	/**

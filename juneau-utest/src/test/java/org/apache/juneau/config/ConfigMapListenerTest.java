@@ -478,7 +478,7 @@ public class ConfigMapListenerTest {
 		contents.add("[S1]\nk1 = v1c");
 		contents.add("[S1]\nk1 = v1c");
 
-		ConfigMemoryStore s = new ConfigMemoryStore(null) {
+		ConfigMemoryStore s = new ConfigMemoryStore(ConfigMemoryStore.create()) {
 			@Override
 			public synchronized String read(String name) {
 				return contents.poll();
@@ -515,7 +515,7 @@ public class ConfigMapListenerTest {
 	@Test
 	public void testMergeWithConstantlyUpdatingFile() throws Exception {
 
-		ConfigMemoryStore s = new ConfigMemoryStore(null) {
+		ConfigMemoryStore s = new ConfigMemoryStore(ConfigMemoryStore.create()) {
 			char c = 'a';
 			@Override
 			public synchronized String read(String name) {

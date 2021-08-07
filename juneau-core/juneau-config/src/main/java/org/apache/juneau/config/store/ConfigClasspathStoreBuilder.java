@@ -44,7 +44,7 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 
 	@Override /* ContextBuilder */
 	public ConfigClasspathStore build() {
-		return new ConfigClasspathStore(getContextProperties());
+		return new ConfigClasspathStore(this);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

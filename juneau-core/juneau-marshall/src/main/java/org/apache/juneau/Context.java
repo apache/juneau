@@ -88,7 +88,7 @@ public abstract class Context {
 	final ContextProperties properties;
 	private final int identityCode;
 
-	private final boolean debug;
+	final boolean debug;
 
 	/**
 	 * Constructor for this class.
@@ -104,6 +104,17 @@ public abstract class Context {
 		cp = properties;
 		this.identityCode = allowReuse ? new HashCode().add(className(this)).add(cp).get() : System.identityHashCode(this);
 		debug = cp.getBoolean(CONTEXT_debug).orElse(false);
+	}
+
+	/**
+	 * Constructor for this class.
+	 *
+	 * @param builder The builder for this class.
+	 */
+	protected Context(ContextBuilder builder) {
+		debug = builder.debug;
+		identityCode = System.identityHashCode(this);
+		properties = ContextProperties.DEFAULT;
 	}
 
 	/**

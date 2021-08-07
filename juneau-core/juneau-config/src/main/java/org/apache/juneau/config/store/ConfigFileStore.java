@@ -24,7 +24,6 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -37,165 +36,6 @@ import org.apache.juneau.internal.*;
  */
 @ConfigurableContext
 public class ConfigFileStore extends ConfigStore {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "ConfigFileStore";
-
-	/**
-	 * Configuration property:  Local file system directory.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_directory FILESTORE_directory}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.directory.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.directory</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_DIRECTORY</c>
-	 * 	<li><b>Default:</b>  <js>"."</js>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#directory(String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#directory(File)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies the path of the directory containing the configuration files.
-	 */
-	public static final String FILESTORE_directory = PREFIX + ".directory.s";
-
-	/**
-	 * Configuration property:  Charset.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_charset FILESTORE_charset}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.charset.s"</js>
-	 * 	<li><b>Data type:</b>  {@link java.nio.charset.Charset}
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.charset</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_CHARSET</c>
-	 * 	<li><b>Default:</b>  {@link java.nio.charset.Charset#defaultCharset()}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#charset(String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#charset(Charset)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies the charset of external files.
-	 */
-	public static final String FILESTORE_charset = PREFIX + ".charset.s";
-
-	/**
-	 * Configuration property:  Use watcher.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_enableWatcher FILESTORE_enableWatcher}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.enableWatcher.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.enableWatcher</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_ENABLEWATCHER</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#enableWatcher()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Use a file system watcher for file system changes.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Calling {@link #close()} on this object closes the watcher.
-	 * </ul>
-	 */
-	public static final String FILESTORE_enableWatcher = PREFIX + ".enableWatcher.b";
-
-	/**
-	 * Configuration property:  Watcher sensitivity.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_watcherSensitivity FILESTORE_watcherSensitivity}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.watcherSensitivity.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.store.WatcherSensitivity}
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.watcherSensitivity</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_WATCHERSENSITIVITY</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.config.store.WatcherSensitivity#MEDIUM}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#watcherSensitivity(WatcherSensitivity)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#watcherSensitivity(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Determines how frequently the file system is polled for updates.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
-	 * </ul>
-	 */
-	public static final String FILESTORE_watcherSensitivity = PREFIX + ".watcherSensitivity.s";
-
-	/**
-	 * Configuration property:  Update-on-write.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_enableUpdateOnWrite FILESTORE_enableUpdateOnWrite}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.enableUpdateOnWrite.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.enableUpdateOnWrite</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_ENABLEUPDATEONWRITE</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#enableUpdateOnWrite()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, the {@link #update(String, String)} method will be called immediately following
-	 * calls to {@link #write(String, String, String)} when the contents are changing.
-	 * <br>This allows for more immediate responses to configuration changes on file systems that use
-	 * polling watchers.
-	 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
-	 */
-	public static final String FILESTORE_enableUpdateOnWrite = PREFIX + ".enableUpdateOnWrite.b";
-
-	/**
-	 * Configuration property:  File extensions.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_extensions FILESTORE_extensions}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.extensions</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_EXTENSIONS</c>
-	 * 	<li><b>Default:</b>  <js>"cfg"</js>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#extensions(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines what file extensions to search for when the config name does not have an extension.
-	 */
-	public static final String FILESTORE_extensions = PREFIX + ".extensions.s";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -223,32 +63,37 @@ public class ConfigFileStore extends ConfigStore {
 		return new ConfigFileStoreBuilder(this);
 	}
 
+	final String directory, extensions;
+	final Charset charset;
+	final boolean enableWatcher, updateOnWrite;
+	final WatcherSensitivity watcherSensitivity;
+
 	private final File dir;
-	private final Charset charset;
 	private final WatcherThread watcher;
-	private final boolean updateOnWrite;
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,String> nameCache = new ConcurrentHashMap<>();
-	private final String[] extensions;
+	private final String[] exts;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The settings for this content store.
+	 * @param builder The builder for this object.
 	 */
-	protected ConfigFileStore(ContextProperties cp) {
-		super(cp);
+	protected ConfigFileStore(ConfigFileStoreBuilder builder) {
+		super(builder);
+		directory = builder.directory;
+		extensions = builder.extensions;
+		charset = builder.charset;
+		enableWatcher = builder.enableWatcher;
+		updateOnWrite = builder.updateOnWrite;
+		watcherSensitivity = builder.watcherSensitivity;
 		try {
-			dir = new File(cp.getString(FILESTORE_directory).orElse(".")).getCanonicalFile();
+			dir = new File(directory).getCanonicalFile();
 			dir.mkdirs();
-			charset = cp.get(FILESTORE_charset, Charset.class).orElse(Charset.defaultCharset());
-			updateOnWrite = cp.getBoolean(FILESTORE_enableUpdateOnWrite).orElse(false);
-			extensions = cp.getCdl(FILESTORE_extensions).orElse(new String[]{"cfg"});
-			WatcherSensitivity ws = cp.get(FILESTORE_watcherSensitivity, WatcherSensitivity.class).orElse(WatcherSensitivity.MEDIUM);
-			watcher = cp.getBoolean(FILESTORE_enableWatcher).orElse(false) ? new WatcherThread(dir, ws) : null;
+			exts = StringUtils.split(extensions);
+			watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;
 			if (watcher != null)
 				watcher.start();
-
 		} catch (Exception e) {
 			throw runtimeException(e);
 		}
@@ -367,7 +212,7 @@ public class ConfigFileStore extends ConfigStore {
 
 			// Does name already have an extension?
 			if (n == null) {
-				for (String ext : extensions) {
+				for (String ext : exts) {
 					if (FileUtils.hasExtension(name, ext)) {
 						n = name;
 						break;
@@ -377,7 +222,7 @@ public class ConfigFileStore extends ConfigStore {
 
 			// Find file with the correct extension.
 			if (n == null) {
-				for (String ext : extensions) {
+				for (String ext : exts) {
 					if (FileUtils.exists(dir, name + '.' + ext)) {
 						n = name + '.' + ext;
 						break;
@@ -387,7 +232,7 @@ public class ConfigFileStore extends ConfigStore {
 
 			// If file not found, use the default which is the name with the first extension.
 			if (n == null)
-				n = extensions.length == 0 ? name : (name + "." + extensions[0]);
+				n = exts.length == 0 ? name : (name + "." + exts[0]);
 
 			nameCache.put(name, n);
 		}

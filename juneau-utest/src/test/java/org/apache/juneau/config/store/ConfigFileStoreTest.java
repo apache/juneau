@@ -125,7 +125,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testCharset() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset("UTF-8").build();
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 		assertEquals("foo", fs.read("X"));
@@ -133,7 +133,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testCharsetNoExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset("UTF-8").build();
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertEquals("foo", fs.read("X.cfg"));

@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -33,12 +32,6 @@ import org.apache.juneau.internal.*;
  */
 @ConfigurableContext
 public class ConfigClasspathStore extends ConfigStore {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "ConfigClasspathStore";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -71,10 +64,10 @@ public class ConfigClasspathStore extends ConfigStore {
 	/**
 	 * Constructor.
 	 *
-	 * @param cp The settings for this content store.
+	 * @param builder The builder for this object.
 	 */
-	protected ConfigClasspathStore(ContextProperties cp) {
-		super(cp);
+	protected ConfigClasspathStore(ConfigClasspathStoreBuilder builder) {
+		super(builder);
 	}
 
 	@Override /* ConfigStore */

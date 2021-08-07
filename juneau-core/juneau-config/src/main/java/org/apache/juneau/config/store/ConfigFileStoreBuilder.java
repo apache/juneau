@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.config.store.ConfigFileStore.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -30,11 +28,22 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 
+	String directory, extensions;
+	Charset charset;
+	boolean enableWatcher, updateOnWrite;
+	WatcherSensitivity watcherSensitivity;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	public ConfigFileStoreBuilder() {
 		super();
+		directory = env(String.class, "ConfigFileStore.directory", ".");
+		charset = env(Charset.class, "ConfigFileStore.charset", Charset.defaultCharset());
+		enableWatcher = env(Boolean.class, "ConfigFileStore.enableWatcher", false);
+		watcherSensitivity = env(WatcherSensitivity.class, "ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
+		updateOnWrite = env(Boolean.class, "ConfigFileStore.updateOnWrite", false);
+		extensions = env(String.class, "ConfigFileStore.extensions", "cfg");
 	}
 
 	/**
@@ -44,11 +53,18 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 */
 	public ConfigFileStoreBuilder(ConfigFileStore copyFrom) {
 		super(copyFrom);
+		directory = copyFrom.directory;
+		charset = copyFrom.charset;
+		enableWatcher = copyFrom.enableWatcher;
+		watcherSensitivity = copyFrom.watcherSensitivity;
+		updateOnWrite = copyFrom.updateOnWrite;
+		extensions = copyFrom.extensions;
+
 	}
 
 	@Override /* ContextBuilder */
 	public ConfigFileStore build() {
-		return new ConfigFileStore(getContextProperties());
+		return new ConfigFileStore(this);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -56,172 +72,161 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Local file system directory.
+	 * Local file system directory.
 	 *
 	 * <p>
 	 * Identifies the path of the directory containing the configuration files.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_directory}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>"."</js>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.directory"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+	 * 		<li><js>"."</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileStoreBuilder directory(String value) {
-		super.set(FILESTORE_directory, value);
+		directory = value;
 		return this;
 	}
 
 	/**
-	 * Configuration property:  Local file system directory.
+	 * Local file system directory.
 	 *
 	 * <p>
 	 * Identifies the path of the directory containing the configuration files.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_directory}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>"."</js>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.directory"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+	 * 		<li><js>"."</js>.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileStoreBuilder directory(File value) {
-		super.set(FILESTORE_directory, value);
+		directory = value.getAbsolutePath();
 		return this;
 	}
 
 	/**
-	 * Configuration property:  Charset.
+	 * Charset for external files.
 	 *
 	 * <p>
 	 * Identifies the charset of external files.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_charset}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>"."</js>.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigFileStoreBuilder charset(String value) {
-		super.set(FILESTORE_charset, value);
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Charset.
-	 *
-	 * <p>
-	 * Identifies the charset of external files.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_charset}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>"."</js>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.charset"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
+	 * 		<li>{@link Charset#defaultCharset()}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileStoreBuilder charset(Charset value) {
-		super.set(FILESTORE_charset, value);
+		charset = value;
 		return this;
 	}
 
 	/**
-	 * Configuration property:  Use watcher.
+	 * Use watcher.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
+	 * Use a file system watcher for file system changes.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_enableWatcher}
+	 * <ul class='notes'>
+	 * 	<li>Calling {@link ConfigFileStore#close()} closes the watcher.
 	 * </ul>
+	 *
+	 *	<p>
+	 * 	The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.enableWatcher"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_ENABLEWATCHER"
+	 * 		<li><jk>false</jk>.
+	 * 	</ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileStoreBuilder enableWatcher() {
-		super.set(FILESTORE_enableWatcher);
+		enableWatcher = true;
 		return this;
 	}
 
 	/**
-	 * Configuration property:  Watcher sensitivity.
+	 * Watcher sensitivity.
 	 *
 	 * <p>
 	 * Determines how frequently the file system is polled for updates.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_watcherSensitivity}
+	 * <ul class='notes'>
+	 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link WatcherSensitivity#MEDIUM}
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.watcherSensitivity"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
+	 * 		<li>{@link WatcherSensitivity#MEDIUM}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileStoreBuilder watcherSensitivity(WatcherSensitivity value) {
-		super.set(FILESTORE_watcherSensitivity, value);
+		watcherSensitivity = value;
 		return this;
 	}
 
 	/**
-	 * Configuration property:  Update-on-write.
+	 * Update-on-write.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
+	 * When enabled, the {@link ConfigFileStore#update(String, String)} method will be called immediately following
+	 * calls to {@link ConfigFileStore#write(String, String, String)} when the contents are changing.
+	 * <br>This allows for more immediate responses to configuration changes on file systems that use
+	 * polling watchers.
+	 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_enableUpdateOnWrite}
-	 * </ul>
+	 *	<p>
+	 * 	The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.updateOnWrite"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_UPDATEONWRITE"
+	 * 		<li><jk>false</jk>.
+	 * 	</ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public ConfigFileStoreBuilder enableUpdateOnWrite() {
-		super.set(FILESTORE_enableUpdateOnWrite);
+	public ConfigFileStoreBuilder updateOnWrite() {
+		updateOnWrite = true;
 		return this;
 	}
 
 	/**
-	 * Configuration property:  Watcher sensitivity.
-	 *
-	 * <p>
-	 * Determines how frequently the file system is polled for updates.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_watcherSensitivity}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link WatcherSensitivity#MEDIUM}
-	 * @return This object (for method chaining).
-	 */
-	public ConfigFileStoreBuilder watcherSensitivity(String value) {
-		super.set(FILESTORE_watcherSensitivity, value);
-		return this;
-	}
-
-	/**
-	 * Configuration property:  File extensions.
+	 * File extensions.
 	 *
 	 * <p>
 	 * Defines what file extensions to search for when the config name does not have an extension.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>"cfg"</js>.
+	 * 	The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"ConfigFileStore.extensions"
+	 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
+	 * 		<li><js>"cfg"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileStoreBuilder extensions(String value) {
-		super.set(FILESTORE_extensions, value);
+		extensions = value;
 		return this;
 	}
 

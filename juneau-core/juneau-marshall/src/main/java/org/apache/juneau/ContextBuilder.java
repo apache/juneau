@@ -13,9 +13,13 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.Context.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
@@ -48,12 +52,15 @@ public abstract class ContextBuilder {
 	/** Contains all the modifiable settings for the implementation class. */
 	private final ContextPropertiesBuilder cpb;
 
+	boolean debug;
+
 	/**
 	 * Constructor.
 	 * Default settings.
 	 */
 	public ContextBuilder() {
 		this.cpb = ContextProperties.create();
+		debug = env(Boolean.class, CONTEXT_debug, false);
 	}
 
 	/**
@@ -63,6 +70,7 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder(Context copyFrom) {
 		this.cpb = copyFrom == null ? ContextProperties.DEFAULT.copy() : copyFrom.properties.copy();
+		this.debug = copyFrom == null ? env(Boolean.class, CONTEXT_debug, false) : copyFrom.debug;
 	}
 
 	/**
@@ -860,6 +868,50 @@ public abstract class ContextBuilder {
 	public ContextBuilder removeFrom(String name, Object value) {
 		cpb.removeFrom(name, value);
 		return this;
+	}
+
+	/**
+	 * Looks up a default value from the environment.
+	 *
+	 * <p>
+	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
+	 * Then returns the default if it can't be found.
+	 *
+	 * @param c The value type.
+	 * @param name The property name.
+	 * @param def The default value if not found.
+	 * @return The default value.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected <T> T env(Class<T> c, String name, T def) {
+		String s = System.getProperty(name);
+		if (s == null)
+			s = System.getenv(envName(name));
+		if (s == null)
+			return def;
+		if (c.isEnum())
+			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
+		Function<String,T> f = (Function<String,T>)ENV_FUNCTIONS.get(c);
+		if (f == null)
+			throw runtimeException("Invalid env type: {0}", c);
+		return f.apply(s);
+	}
+
+	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
+	static {
+		ENV_FUNCTIONS.put(String.class, x -> x);
+		ENV_FUNCTIONS.put(Boolean.class, x -> Boolean.valueOf(x));
+		ENV_FUNCTIONS.put(Charset.class, x -> Charset.forName(x));
+	}
+
+	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
+	private static String envName(String name) {
+		String name2 = PROPERTY_TO_ENV.get(name);
+		if (name2 == null) {
+			name2 = name.toUpperCase().replace(".", "_");
+			PROPERTY_TO_ENV.put(name, name2);
+		}
+		return name2;
 	}
 
 	// <FluentSetters>
