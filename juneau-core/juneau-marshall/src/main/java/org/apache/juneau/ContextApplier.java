@@ -68,6 +68,15 @@ public abstract class ContextApplier<A extends Annotation, B> {
 	}
 
 	/**
+	 * Returns the builder class that this applier applies to.
+	 *
+	 * @return The builder class that this applier applies to.
+	 */
+	public Class<?> getBuilderClass() {
+		return cb;
+	}
+
+	/**
 	 * Returns the var resolver session for this apply.
 	 *
 	 * @return The var resolver session for this apply.
