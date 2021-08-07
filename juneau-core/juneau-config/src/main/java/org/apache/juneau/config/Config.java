@@ -26,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.encode.ConfigEncoder;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
@@ -39,6 +38,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Main configuration API class.
+ * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-config}
@@ -149,259 +149,20 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	static final String PREFIX = "Config";
-
-	/**
-	 * Configuration property:  Configuration name.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_name CONFIG_name}
-	 * 	<li><b>Name:</b>  <js>"Config.name.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>Config.name</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIG_NAME</c>
-	 * 	<li><b>Default:</b>  <js>"Configuration.cfg"</js>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#name(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the configuration name.
-	 * <br>This is typically the configuration file name, although
-	 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
-	 */
-	public static final String CONFIG_name = PREFIX + ".name.s";
-
-	/**
-	 * Configuration property:  Configuration store.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_store CONFIG_store}
-	 * 	<li><b>Name:</b>  <js>"Config.store.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.store.ConfigStore}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#DEFAULT}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#store(ConfigStore)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The configuration store used for retrieving and storing configurations.
-	 */
-	public static final String CONFIG_store = PREFIX + ".store.o";
-
-	/**
-	 * Configuration property:  POJO serializer.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_serializer CONFIG_serializer}
-	 * 	<li><b>Name:</b>  <js>"Config.serializer.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.serializer.WriterSerializer}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(WriterSerializer)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The serializer to use for serializing POJO values.
-	 */
-	public static final String CONFIG_serializer = PREFIX + ".serializer.o";
-
-	/**
-	 * Configuration property:  POJO parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_parser CONFIG_parser}
-	 * 	<li><b>Name:</b>  <js>"Config.parser.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.parser.ReaderParser}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.JsonParser#DEFAULT}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(ReaderParser)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The parser to use for parsing values to POJOs.
-	 */
-	public static final String CONFIG_parser = PREFIX + ".parser.o";
-
-	/**
-	 * Configuration property:  Value encoder.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_encoder CONFIG_encoder}
-	 * 	<li><b>Name:</b>  <js>"Config.encoder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.encode.ConfigEncoder}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.config.encode.ConfigXorEncoder#INSTANCE}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#encoder(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#encoder(ConfigEncoder)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The encoder to use for encoding encoded configuration values.
-	 */
-	public static final String CONFIG_encoder = PREFIX + ".encoder.o";
-
-	/**
-	 * Configuration property:  SVL variable resolver.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_varResolver CONFIG_varResolver}
-	 * 	<li><b>Name:</b>  <js>"Config.varResolver.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.svl.VarResolver}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.svl.VarResolver#DEFAULT}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#varResolver(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#varResolver(VarResolver)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The resolver to use for resolving SVL variables.
-	 */
-	public static final String CONFIG_varResolver = PREFIX + ".varResolver.o";
-
-	/**
-	 * Configuration property:  Binary value line length.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_binaryLineLength CONFIG_binaryLineLength}
-	 * 	<li><b>Name:</b>  <js>"Config.binaryLineLength.i"</js>
-	 * 	<li><b>Data type:</b>  <jk>int</jk>
-	 * 	<li><b>System property:</b>  <c>Config.binaryLineLength</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIG_BINARYLINELENGTH</c>
-	 * 	<li><b>Default:</b>  <c>-1</c>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#binaryLineLength(int)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When serializing binary values, lines will be split after this many characters.
-	 * <br>Use <c>-1</c> to represent no line splitting.
-	 */
-	public static final String CONFIG_binaryLineLength = PREFIX + ".binaryLineLength.i";
-
-	/**
-	 * Configuration property:  Binary value format.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_binaryFormat CONFIG_binaryFormat}
-	 * 	<li><b>Name:</b>  <js>"Config.binaryFormat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}
-	 * 	<li><b>System property:</b>  <c>Config.binaryFormat</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIG_BINARYFORMAT</c>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BinaryFormat#BASE64}
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#binaryFormat(BinaryFormat)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The format to use when persisting byte arrays.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li>{@link BinaryFormat#BASE64} - BASE64-encoded string.
-	 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
-	 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
-	 * </ul>
-	 */
-	public static final String CONFIG_binaryFormat = PREFIX + ".binaryFormat.s";
-
-	/**
-	 * Configuration property:  Multi-line values should always be on separate lines.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_multiLineValuesOnSeparateLines CONFIG_multiLineValuesOnSeparateLines}
-	 * 	<li><b>Name:</b>  <js>"Config.multiLineValuesOnSeparateLines.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Config.multiLineValuesOnSeparateLine</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIG_MULTILINEVALUESONSEPARATELINE</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#multiLineValuesOnSeparateLines()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, multi-line values will always be placed on a separate line from the key.
-	 */
-	public static final String CONFIG_multiLineValuesOnSeparateLines = PREFIX + ".multiLineValuesOnSeparateLines.b";
-
-	/**
-	 * Configuration property:  Read-only.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_readOnly CONFIG_readOnly}
-	 * 	<li><b>Name:</b>  <js>"Config.readOnly.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Config.readOnly</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIG_READONLY</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#readOnly()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
-	 */
-	public static final String CONFIG_readOnly = PREFIX + ".readOnly.b";
-
-	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final String name;
-	private final ConfigStore store;
-	private final WriterSerializer serializer;
-	private final ReaderParser parser;
-	private final ConfigEncoder encoder;
+	final String name;
+	final ConfigStore store;
+	final WriterSerializer serializer;
+	final ReaderParser parser;
+	final ConfigEncoder encoder;
+	final VarResolver varResolver;
+	final int binaryLineLength;
+	final BinaryFormat binaryFormat;
+	final boolean multiLineValuesOnSeparateLines, readOnly;
+
 	private final VarResolverSession varSession;
-	private final int binaryLineLength;
-	private final BinaryFormat binaryFormat;
-	private final boolean multiLineValuesOnSeparateLines, readOnly;
 	private final ConfigMap configMap;
 	private final BeanSession beanSession;
 	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
@@ -440,31 +201,31 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Constructor.
 	 *
-	 * @param cp
-	 * 	The property store containing all the settings for this object.
+	 * @param builder The builder for this object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Config(ContextProperties cp) throws IOException {
-		super(cp, true);
+	public Config(ConfigBuilder builder) throws IOException {
+		super(builder);
 
-		name = cp.getString(CONFIG_name).orElse("Configuration.cfg");
-		store = cp.getInstance(CONFIG_store, ConfigStore.class).orElse(ConfigFileStore.DEFAULT);
+		name = builder.name;
+		store = builder.store;
 		configMap = store.getMap(name);
 		configMap.register(this);
-		serializer = cp.getInstance(CONFIG_serializer, WriterSerializer.class).orElse(SimpleJsonSerializer.DEFAULT);
-		parser = cp.getInstance(CONFIG_parser, ReaderParser.class).orElse(JsonParser.DEFAULT);
+		serializer = builder.serializer;
+		parser = builder.parser;
 		beanSession = parser.createBeanSession();
-		encoder = cp.getInstance(CONFIG_encoder, ConfigEncoder.class).orElse(ConfigXorEncoder.INSTANCE);
-		varSession = cp.getInstance(CONFIG_varResolver, VarResolver.class).orElse(VarResolver.DEFAULT)
+		encoder = builder.encoder;
+		varResolver = builder.varResolver;
+		varSession = varResolver
 			.copy()
 			.vars(ConfigVar.class)
 			.bean(Config.class, this)
 			.build()
 			.createSession();
-		binaryLineLength = cp.getInteger(CONFIG_binaryLineLength).orElse(-1);
-		binaryFormat = cp.get(CONFIG_binaryFormat, BinaryFormat.class).orElse(BinaryFormat.BASE64);
-		multiLineValuesOnSeparateLines = getBoolean(CONFIG_multiLineValuesOnSeparateLines, false);
-		readOnly = getBoolean(CONFIG_readOnly, false);
+		binaryLineLength = builder.binaryLineLength;
+		binaryFormat = builder.binaryFormat;
+		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
+		readOnly = builder.readOnly;
 	}
 
 	Config(Config copyFrom, VarResolverSession varSession) {
@@ -476,6 +237,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		serializer = copyFrom.serializer;
 		parser = copyFrom.parser;
 		encoder = copyFrom.encoder;
+		varResolver = copyFrom.varResolver;
 		this.varSession = varSession;
 		binaryLineLength = copyFrom.binaryLineLength;
 		binaryFormat = copyFrom.binaryFormat;
@@ -1000,7 +762,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <p>
-	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link #CONFIG_binaryFormat} setting.
+	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link ConfigBuilder#binaryFormat(BinaryFormat)} setting.
 	 *
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.

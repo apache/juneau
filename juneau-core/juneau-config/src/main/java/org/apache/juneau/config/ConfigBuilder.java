@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.config.Config.*;
+import static org.apache.juneau.internal.ExceptionUtils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -29,6 +30,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder for creating instances of {@link Config Configs}.
+ * {@review}
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -43,11 +45,31 @@ import org.apache.juneau.svl.*;
 @FluentSetters
 public class ConfigBuilder extends ContextBuilder {
 
+	String name;
+	ConfigStore store;
+	WriterSerializer serializer;
+	ReaderParser parser;
+	ConfigEncoder encoder;
+	VarResolver varResolver;
+	int binaryLineLength;
+	BinaryFormat binaryFormat;
+	boolean multiLineValuesOnSeparateLines, readOnly;
+
 	/**
 	 * Constructor, default settings.
 	 */
 	public ConfigBuilder() {
 		super();
+		name = env("Config.name", "Configuration.cfg");
+		store = ConfigFileStore.DEFAULT;
+		serializer = SimpleJsonSerializer.DEFAULT;
+		parser = JsonParser.DEFAULT;
+		encoder = ConfigXorEncoder.INSTANCE;
+		varResolver = VarResolver.DEFAULT;
+		binaryLineLength = env("Config.binaryLineLength", -1);
+		binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
+		multiLineValuesOnSeparateLines = env("Config.multiLineValuesOnSeparateLines", false);
+		readOnly = env("Config.readOnly", false);
 	}
 
 	/**
@@ -57,11 +79,25 @@ public class ConfigBuilder extends ContextBuilder {
 	 */
 	public ConfigBuilder(Config copyFrom) {
 		super(copyFrom);
+		name = copyFrom.name;
+		store = copyFrom.store;
+		serializer = copyFrom.serializer;
+		parser = copyFrom.parser;
+		encoder = copyFrom.encoder;
+		varResolver = copyFrom.varResolver;
+		binaryLineLength = copyFrom.binaryLineLength;
+		binaryFormat = copyFrom.binaryFormat;
+		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
+		readOnly = copyFrom.readOnly;
 	}
 
 	@Override /* ContextBuilder */
 	public Config build() {
-		return build(Config.class);
+		try {
+			return new Config(this);
+		} catch (IOException e) {
+			throw runtimeException(e);
+		}
 	}
 
 
@@ -70,7 +106,7 @@ public class ConfigBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Configuration name.
+	 * Configuration name.
 	 *
 	 * <p>
 	 * Specifies the configuration name.
@@ -79,15 +115,21 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <js>"Configuration"</js>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"Config.name"
+	 * 		<li>Environment variable <js>"CONFIG_NAME"
+	 * 		<li><js>"Configuration.cfg"</js>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder name(String value) {
-		return set(CONFIG_name, value);
+		name = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Configuration store.
+	 * Configuration store.
 	 *
 	 * <p>
 	 * The configuration store used for retrieving and storing configurations.
@@ -98,11 +140,12 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder store(ConfigStore value) {
-		return set(CONFIG_store, value);
+		store = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Configuration store.
+	 * Configuration store.
 	 *
 	 * <p>
 	 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
@@ -110,41 +153,28 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder memStore() {
-		return set(CONFIG_store, ConfigMemoryStore.DEFAULT);
+		store = ConfigMemoryStore.DEFAULT;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO serializer.
+	 * POJO serializer.
 	 *
 	 * <p>
 	 * The serializer to use for serializing POJO values.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}.
+	 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder serializer(WriterSerializer value) {
-		return set(CONFIG_serializer, value);
+		serializer = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO serializer.
-	 *
-	 * <p>
-	 * The serializer to use for serializing POJO values.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigBuilder serializer(Class<? extends WriterSerializer> value) {
-		return set(CONFIG_serializer, value);
-	}
-
-	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO parser.
+	 * POJO parser.
 	 *
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
@@ -155,26 +185,12 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder parser(ReaderParser value) {
-		return set(CONFIG_parser, value);
+		parser = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO parser.
-	 *
-	 * <p>
-	 * The parser to use for parsing values to POJOs.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link JsonParser#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigBuilder parser(Class<? extends ReaderParser> value) {
-		return set(CONFIG_parser, value);
-	}
-
-	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Value encoder.
+	 * Value encoder.
 	 *
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
@@ -185,26 +201,12 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder encoder(ConfigEncoder value) {
-		return set(CONFIG_encoder, value);
+		encoder = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Value encoder.
-	 *
-	 * <p>
-	 * The encoder to use for encoding encoded configuration values.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link ConfigXorEncoder#INSTANCE}.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigBuilder encoder(Class<? extends ConfigEncoder> value) {
-		return set(CONFIG_encoder, value);
-	}
-
-	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  SVL variable resolver.
+	 * SVL variable resolver.
 	 *
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
@@ -215,26 +217,12 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder varResolver(VarResolver value) {
-		return set(CONFIG_varResolver, value);
+		varResolver = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  SVL variable resolver.
-	 *
-	 * <p>
-	 * The resolver to use for resolving SVL variables.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link VarResolver#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	public ConfigBuilder varResolver(Class<? extends VarResolver> value) {
-		return set(CONFIG_varResolver, value);
-	}
-
-	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Binary value line length.
+	 * Binary value line length.
 	 *
 	 * <p>
 	 * When serializing binary values, lines will be split after this many characters.
@@ -242,15 +230,21 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <c>-1</c>.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"Config.binaryLineLength"
+	 * 		<li>Environment variable <js>"CONFIG_BINARYLINELENGTH"
+	 * 		<li><c>-1</c>
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder binaryLineLength(int value) {
-		return set(CONFIG_binaryLineLength, value);
+		binaryLineLength = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Binary value format.
+	 * Binary value format.
 	 *
 	 * <p>
 	 * The format to use when persisting byte arrays.
@@ -265,35 +259,59 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link BinaryFormat#BASE64}.
+	 * 	<br>The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"Config.binaryFormat"
+	 * 		<li>Environment variable <js>"CONFIG_BINARYFORMAT"
+	 * 		<li>{@link BinaryFormat#BASE64}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder binaryFormat(BinaryFormat value) {
-		return set(CONFIG_binaryFormat, value);
+		binaryFormat = value;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Multi-line values on separate lines.
+	 * Multi-line values on separate lines.
 	 *
 	 * <p>
 	 * When enabled, multi-line values will always be placed on a separate line from the key.
 	 *
+	 * <p>
+	 * The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"Config.multiLineValuesOnSeparateLine"
+	 * 		<li>Environment variable <js>"CONFIG_MULTILINEVALUESONSEPARATELINE"
+	 * 		<li><jk>false</jk>
+	 * 	</ul>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder multiLineValuesOnSeparateLines() {
-		return set(CONFIG_multiLineValuesOnSeparateLines);
+		multiLineValuesOnSeparateLines = true;
+		return this;
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:&emsp;</i>  Beans on separate lines.
+	 * Read-only mode.
 	 *
 	 * <p>
 	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
 	 *
+	 * <p>
+	 * 	The default is the first value found:
+	 * 	<ul>
+	 * 		<li>System property <js>"Config.readOnly"
+	 * 		<li>Environment variable <js>"CONFIG_READONLY"
+	 * 		<li><jk>false</jk>
+	 * 	</ul>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder readOnly() {
-		return set(CONFIG_readOnly);
+		readOnly = true;
+		return this;
 	}
 
 	// <FluentSetters>

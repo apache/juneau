@@ -60,7 +60,7 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder() {
 		this.cpb = ContextProperties.create();
-		debug = env(Boolean.class, CONTEXT_debug, false);
+		debug = env("Context.debug", false);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder(Context copyFrom) {
 		this.cpb = copyFrom == null ? ContextProperties.DEFAULT.copy() : copyFrom.properties.copy();
-		this.debug = copyFrom == null ? env(Boolean.class, CONTEXT_debug, false) : copyFrom.debug;
+		this.debug = copyFrom == null ? env("Context.debug", false) : copyFrom.debug;
 	}
 
 	/**
@@ -877,18 +877,18 @@ public abstract class ContextBuilder {
 	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
 	 * Then returns the default if it can't be found.
 	 *
-	 * @param c The value type.
 	 * @param name The property name.
 	 * @param def The default value if not found.
 	 * @return The default value.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected <T> T env(Class<T> c, String name, T def) {
+	protected <T> T env(String name, T def) {
 		String s = System.getProperty(name);
 		if (s == null)
 			s = System.getenv(envName(name));
 		if (s == null)
 			return def;
+		Class<?> c = def.getClass();
 		if (c.isEnum())
 			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
 		Function<String,T> f = (Function<String,T>)ENV_FUNCTIONS.get(c);

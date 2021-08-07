@@ -23,6 +23,7 @@ import org.apache.juneau.config.internal.*;
 
 /**
  * Represents a storage location for configuration files.
+ * {@review}
  *
  * <p>
  * Content stores require two methods to be implemented:

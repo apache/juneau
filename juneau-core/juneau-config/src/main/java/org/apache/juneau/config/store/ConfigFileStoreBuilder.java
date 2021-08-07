@@ -24,6 +24,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link ConfigFileStore} objects.
+ * {@review}
  */
 @FluentSetters
 public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
@@ -38,12 +39,12 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 */
 	public ConfigFileStoreBuilder() {
 		super();
-		directory = env(String.class, "ConfigFileStore.directory", ".");
-		charset = env(Charset.class, "ConfigFileStore.charset", Charset.defaultCharset());
-		enableWatcher = env(Boolean.class, "ConfigFileStore.enableWatcher", false);
-		watcherSensitivity = env(WatcherSensitivity.class, "ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
-		updateOnWrite = env(Boolean.class, "ConfigFileStore.updateOnWrite", false);
-		extensions = env(String.class, "ConfigFileStore.extensions", "cfg");
+		directory = env("ConfigFileStore.directory", ".");
+		charset = env("ConfigFileStore.charset", Charset.defaultCharset());
+		enableWatcher = env("ConfigFileStore.enableWatcher", false);
+		watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
+		updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
+		extensions = env("ConfigFileStore.extensions", "cfg");
 	}
 
 	/**

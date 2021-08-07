@@ -23,6 +23,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Classpath-based storage location for configuration files.
+ * {@review}
  *
  * <p>
  * Looks inside the JVM classpath for configuration files.
