@@ -165,7 +165,7 @@ public class AnnotationInfo<T extends Annotation> {
 		return om;
 	}
 
-	private Constructor<? extends ConfigApply<?>> configApplyConstructor;
+	private Constructor<? extends ConfigApply<?,?>> configApplyConstructor;
 
 	/**
 	 * If this annotation has a {@link ContextPropertiesApply} annotation, returns an instance of the specified {@link ConfigApply} class.
@@ -175,18 +175,18 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public ConfigApply<Annotation> getConfigApply(VarResolverSession vrs) throws ExecutableException {
+	public ConfigApply<Annotation,Object> getConfigApply(VarResolverSession vrs) throws ExecutableException {
 		try {
 			if (configApplyConstructor == null) {
 				ContextPropertiesApply cpa = a.annotationType().getAnnotation(ContextPropertiesApply.class);
 				if (cpa == null)
 					configApplyConstructor = ConfigApply.NoOp.class.getConstructor(VarResolverSession.class);
 				else
-					configApplyConstructor = (Constructor<? extends ConfigApply<?>>)cpa.value().getConstructor(VarResolverSession.class);
+					configApplyConstructor = (Constructor<? extends ConfigApply<?,?>>)cpa.value().getConstructor(VarResolverSession.class);
 				if (configApplyConstructor == null)
 					throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());
 			}
-			return (ConfigApply<Annotation>) configApplyConstructor.newInstance(vrs);
+			return (ConfigApply<Annotation,Object>) configApplyConstructor.newInstance(vrs);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}

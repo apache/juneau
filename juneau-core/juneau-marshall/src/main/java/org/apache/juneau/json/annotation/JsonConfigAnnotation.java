@@ -27,7 +27,7 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<JsonConfig> {
+	public static class Apply extends ConfigApply<JsonConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -35,7 +35,7 @@ public class JsonConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(JsonConfig.class, vr);
+			super(JsonConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

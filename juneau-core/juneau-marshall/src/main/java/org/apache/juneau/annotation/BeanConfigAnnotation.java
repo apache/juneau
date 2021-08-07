@@ -30,7 +30,7 @@ public class BeanConfigAnnotation {
 	/**
 	 * Applies {@link BeanConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<BeanConfig> {
+	public static class Apply extends ConfigApply<BeanConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -38,7 +38,7 @@ public class BeanConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(BeanConfig.class, vr);
+			super(BeanConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

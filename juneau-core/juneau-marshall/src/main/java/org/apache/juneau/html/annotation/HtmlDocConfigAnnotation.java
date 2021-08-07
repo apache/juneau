@@ -32,7 +32,7 @@ public class HtmlDocConfigAnnotation {
 	/**
 	 * Applies {@link HtmlDocConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<HtmlDocConfig> {
+	public static class Apply extends ConfigApply<HtmlDocConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -40,7 +40,7 @@ public class HtmlDocConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(HtmlDocConfig.class, vr);
+			super(HtmlDocConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

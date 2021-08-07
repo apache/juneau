@@ -577,7 +577,7 @@ public class RestPutAnnotation {
 	/**
 	 * Applies {@link RestPut} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RestPut> {
+	public static class Apply extends ConfigApply<RestPut,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -585,7 +585,7 @@ public class RestPutAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestPut.class, vr);
+			super(RestPut.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

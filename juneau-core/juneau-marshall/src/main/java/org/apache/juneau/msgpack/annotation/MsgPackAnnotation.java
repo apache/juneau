@@ -147,7 +147,7 @@ public class MsgPackAnnotation {
 	/**
 	 * Applies targeted {@link MsgPack} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<MsgPack> {
+	public static class Apply extends ConfigApply<MsgPack,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -155,7 +155,7 @@ public class MsgPackAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(MsgPack.class, vr);
+			super(MsgPack.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

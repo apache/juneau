@@ -174,7 +174,7 @@ public class MarshalledAnnotation {
 	/**
 	 * Applies targeted {@link Marshalled} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Marshalled> {
+	public static class Apply extends ConfigApply<Marshalled,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -182,7 +182,7 @@ public class MarshalledAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Marshalled.class, vr);
+			super(Marshalled.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

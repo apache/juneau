@@ -123,7 +123,7 @@ public class ParentPropertyAnnotation {
 	/**
 	 * Applies targeted {@link ParentProperty} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<ParentProperty> {
+	public static class Apply extends ConfigApply<ParentProperty,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -131,7 +131,7 @@ public class ParentPropertyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(ParentProperty.class, vr);
+			super(ParentProperty.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

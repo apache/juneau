@@ -30,7 +30,7 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<ParserConfig> {
+	public static class Apply extends ConfigApply<ParserConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -38,7 +38,7 @@ public class ParserConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(ParserConfig.class, vr);
+			super(ParserConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

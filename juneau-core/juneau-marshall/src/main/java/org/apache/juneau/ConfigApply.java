@@ -27,31 +27,45 @@ import org.apache.juneau.svl.*;
 /**
  * Class used to add properties to a {@link ContextProperties} from an annotation (e.g. {@link BeanConfig}).
  *
- * @param <T> The annotation that this <c>ConfigApply</c> reads from.
+ * @param <A> The annotation that this <c>ConfigApply</c> reads from.
+ * @param <B> The builder class to apply the annotation to.
  */
-public abstract class ConfigApply<T extends Annotation> {
+public abstract class ConfigApply<A extends Annotation, B> {
 
 	private final VarResolverSession vr;
-	private final Class<T> c;
+	private final Class<A> ca;
+	private final Class<B> cb;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param c The annotation class.
+	 * @param annotationClass The annotation class.
+	 * @param builderClass The annotation class.
 	 * @param vr The string resolver to use for resolving strings.
 	 */
-	protected ConfigApply(Class<T> c, VarResolverSession vr) {
+	protected ConfigApply(Class<A> annotationClass, Class<B> builderClass, VarResolverSession vr) {
 		this.vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
-		this.c = c;
+		this.ca = annotationClass;
+		this.cb = builderClass;
 	}
 
 	/**
 	 * Apply the specified annotation to the specified property store builder.
 	 *
-	 * @param a The annotation.
-	 * @param cpb The property store builder.
+	 * @param annotationInfo The annotation.
+	 * @param builder The property store builder.
 	 */
-	public abstract void apply(AnnotationInfo<T> a, ContextPropertiesBuilder cpb);
+	public abstract void apply(AnnotationInfo<A> annotationInfo, B builder);
+
+	/**
+	 * Returns <jk>true</jk> if this apply can be appied to the specified builder.
+	 *
+	 * @param builder The builder to check.
+	 * @return <jk>true</jk> if this apply can be appied to the specified builder.
+	 */
+	public boolean canApply(Object builder) {
+		return cb.isInstance(builder);
+	}
 
 	/**
 	 * Returns the var resolver session for this apply.
@@ -126,7 +140,7 @@ public abstract class ConfigApply<T extends Annotation> {
 			for (String s2 : split(s, ';')) {
 				int i = s2.indexOf(':');
 				if (i == -1)
-					throw new ConfigException("Invalid syntax for key/value pair on annotation @{0}({1}): {2}", c.getSimpleName(), loc, s2);
+					throw new ConfigException("Invalid syntax for key/value pair on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, s2);
 				m.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 			}
 		}
@@ -156,7 +170,7 @@ public abstract class ConfigApply<T extends Annotation> {
 			in = string(in);
 			return in == null ? null : Integer.parseInt(in);
 		} catch (NumberFormatException e) {
-			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
+			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
 	}
 
@@ -172,7 +186,7 @@ public abstract class ConfigApply<T extends Annotation> {
 			in = string(in);
 			return in == null ? null : Visibility.valueOf(in);
 		} catch (IllegalArgumentException e) {
-			throw new ConfigException("Invalid syntax for visibility on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
+			throw new ConfigException("Invalid syntax for visibility on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
 	}
 
@@ -200,7 +214,7 @@ public abstract class ConfigApply<T extends Annotation> {
 				in = "{" + in + "}";
 			return OMap.ofJson(in);
 		} catch (Exception e) {
-			throw new ConfigException("Invalid syntax for Simple-JSON on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
+			throw new ConfigException("Invalid syntax for Simple-JSON on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
 	}
 
@@ -217,7 +231,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	/**
 	 * Represents a no-op configuration apply.
 	 */
-	public static class NoOp extends ConfigApply<Annotation> {
+	public static class NoOp extends ConfigApply<Annotation,Object> {
 
 		/**
 		 * Constructor.
@@ -225,10 +239,10 @@ public abstract class ConfigApply<T extends Annotation> {
 		 * @param r The string resolver to use for resolving strings.
 		 */
 		public NoOp(VarResolverSession r) {
-			super(Annotation.class, r);
+			super(Annotation.class, Object.class, r);
 		}
 
 		@Override /* ConfigApply */
-		public void apply(AnnotationInfo<Annotation> ai, ContextPropertiesBuilder b) {}
+		public void apply(AnnotationInfo<Annotation> ai, Object b) {}
 	}
 }

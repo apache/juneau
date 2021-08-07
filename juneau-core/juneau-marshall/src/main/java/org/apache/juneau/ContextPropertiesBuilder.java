@@ -16,7 +16,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -111,12 +110,14 @@ public class ContextPropertiesBuilder {
 	 * @param vr The string resolver used to resolve any variables in the annotations.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ContextPropertiesBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
 		vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
-				ai.getConfigApply(vr).apply((AnnotationInfo<Annotation>)ai, this);
+				ConfigApply ca = ai.getConfigApply(vr);
+				if (ca.canApply(this))
+					ca.apply(ai, this);
 			} catch (ConfigException ex) {
 				throw ex;
 			} catch (Exception ex) {

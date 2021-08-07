@@ -152,7 +152,7 @@ public class BeanIgnoreAnnotation {
 	/**
 	 * Applies targeted {@link BeanIgnore} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<BeanIgnore> {
+	public static class Apply extends ConfigApply<BeanIgnore,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -160,7 +160,7 @@ public class BeanIgnoreAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(BeanIgnore.class, vr);
+			super(BeanIgnore.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

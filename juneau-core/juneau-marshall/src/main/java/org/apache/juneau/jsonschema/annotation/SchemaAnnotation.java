@@ -1280,7 +1280,7 @@ public class SchemaAnnotation {
 	/**
 	 * Applies targeted {@link Schema} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Schema> {
+	public static class Apply extends ConfigApply<Schema,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -1288,7 +1288,7 @@ public class SchemaAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Schema.class, vr);
+			super(Schema.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

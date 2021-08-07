@@ -177,7 +177,7 @@ public class RequestAnnotation {
 	/**
 	 * Applies targeted {@link Request} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Request> {
+	public static class Apply extends ConfigApply<Request,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -185,7 +185,7 @@ public class RequestAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Request.class, vr);
+			super(Request.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

@@ -28,7 +28,7 @@ public class XmlConfigAnnotation {
 	/**
 	 * Applies {@link XmlConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<XmlConfig> {
+	public static class Apply extends ConfigApply<XmlConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -36,7 +36,7 @@ public class XmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(XmlConfig.class, vr);
+			super(XmlConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

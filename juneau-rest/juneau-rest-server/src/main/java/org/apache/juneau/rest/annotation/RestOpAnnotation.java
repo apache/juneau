@@ -594,7 +594,7 @@ public class RestOpAnnotation {
 	/**
 	 * Applies {@link RestOp} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RestOp> {
+	public static class Apply extends ConfigApply<RestOp,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -602,7 +602,7 @@ public class RestOpAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestOp.class, vr);
+			super(RestOp.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

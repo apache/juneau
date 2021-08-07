@@ -1076,7 +1076,7 @@ public class FormDataAnnotation {
 	/**
 	 * Applies targeted {@link FormData} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<FormData> {
+	public static class Apply extends ConfigApply<FormData,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -1084,7 +1084,7 @@ public class FormDataAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(FormData.class, vr);
+			super(FormData.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

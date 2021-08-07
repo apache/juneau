@@ -146,7 +146,7 @@ public class UriAnnotation {
 	/**
 	 * Applies targeted {@link Uri} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Uri> {
+	public static class Apply extends ConfigApply<Uri,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -154,7 +154,7 @@ public class UriAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Uri.class, vr);
+			super(Uri.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

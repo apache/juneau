@@ -25,7 +25,7 @@ public class UrlEncodingConfigAnnotation {
 	/**
 	 * Applies {@link UrlEncodingConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<UrlEncodingConfig> {
+	public static class Apply extends ConfigApply<UrlEncodingConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -33,7 +33,7 @@ public class UrlEncodingConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(UrlEncodingConfig.class, vr);
+			super(UrlEncodingConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

@@ -28,7 +28,7 @@ public class RdfConfigAnnotation {
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RdfConfig> {
+	public static class Apply extends ConfigApply<RdfConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -37,7 +37,7 @@ public class RdfConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RdfConfig.class, vr);
+			super(RdfConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

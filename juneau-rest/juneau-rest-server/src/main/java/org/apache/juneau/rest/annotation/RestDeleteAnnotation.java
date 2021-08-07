@@ -439,7 +439,7 @@ public class RestDeleteAnnotation {
 	/**
 	 * Applies {@link RestDelete} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RestDelete> {
+	public static class Apply extends ConfigApply<RestDelete,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -447,7 +447,7 @@ public class RestDeleteAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestDelete.class, vr);
+			super(RestDelete.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

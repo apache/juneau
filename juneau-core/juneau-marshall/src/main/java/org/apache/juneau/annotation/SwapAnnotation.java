@@ -227,7 +227,7 @@ public class SwapAnnotation {
 	/**
 	 * Applies targeted {@link Swap} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Swap> {
+	public static class Apply extends ConfigApply<Swap,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -235,7 +235,7 @@ public class SwapAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Swap.class, vr);
+			super(Swap.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

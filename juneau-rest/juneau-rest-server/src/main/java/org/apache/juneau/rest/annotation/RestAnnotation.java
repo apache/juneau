@@ -1024,7 +1024,7 @@ public class RestAnnotation {
 	/**
 	 * Applies {@link Rest} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Rest> {
+	public static class Apply extends ConfigApply<Rest,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -1032,7 +1032,7 @@ public class RestAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Rest.class, vr);
+			super(Rest.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

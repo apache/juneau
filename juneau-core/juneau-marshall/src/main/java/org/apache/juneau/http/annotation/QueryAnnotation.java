@@ -1076,7 +1076,7 @@ public class QueryAnnotation {
 	/**
 	 * Applies targeted {@link Query} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Query> {
+	public static class Apply extends ConfigApply<Query,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -1084,7 +1084,7 @@ public class QueryAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Query.class, vr);
+			super(Query.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

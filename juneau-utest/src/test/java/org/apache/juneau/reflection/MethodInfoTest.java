@@ -58,9 +58,9 @@ public class MethodInfoTest {
 		String value();
 	}
 
-	public static class AConfigApply extends ConfigApply<AConfig> {
-		protected AConfigApply(Class<AConfig> c, VarResolverSession vr) {
-			super(c, vr);
+	public static class AConfigApply extends ConfigApply<AConfig,ContextPropertiesBuilder> {
+		protected AConfigApply(VarResolverSession vr) {
+			super(AConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 		@Override
 		public void apply(AnnotationInfo<AConfig> ai, ContextPropertiesBuilder b) {

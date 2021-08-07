@@ -24,7 +24,7 @@ public class JsoConfigAnnotation {
 	/**
 	 * Applies {@link JsoConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<JsoConfig> {
+	public static class Apply extends ConfigApply<JsoConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -32,7 +32,7 @@ public class JsoConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(JsoConfig.class, vr);
+			super(JsoConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

@@ -123,7 +123,7 @@ public class NamePropertyAnnotation {
 	/**
 	 * Applies targeted {@link NameProperty} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<NameProperty> {
+	public static class Apply extends ConfigApply<NameProperty,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -131,7 +131,7 @@ public class NamePropertyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(NameProperty.class, vr);
+			super(NameProperty.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

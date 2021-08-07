@@ -26,7 +26,7 @@ public class SoapXmlConfigAnnotation {
 	/**
 	 * Applies {@link SoapXmlConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<SoapXmlConfig> {
+	public static class Apply extends ConfigApply<SoapXmlConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -34,7 +34,7 @@ public class SoapXmlConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(SoapXmlConfig.class, vr);
+			super(SoapXmlConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

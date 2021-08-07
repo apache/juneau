@@ -359,7 +359,7 @@ public class BodyAnnotation {
 	/**
 	 * Applies targeted {@link Body} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Body> {
+	public static class Apply extends ConfigApply<Body,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -367,7 +367,7 @@ public class BodyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Body.class, vr);
+			super(Body.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

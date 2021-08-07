@@ -147,7 +147,7 @@ public class PlainTextAnnotation {
 	/**
 	 * Applies targeted {@link PlainText} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<PlainText> {
+	public static class Apply extends ConfigApply<PlainText,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -155,7 +155,7 @@ public class PlainTextAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(PlainText.class, vr);
+			super(PlainText.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

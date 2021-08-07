@@ -977,7 +977,7 @@ public class ResponseHeaderAnnotation {
 	/**
 	 * Applies targeted {@link ResponseHeader} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<ResponseHeader> {
+	public static class Apply extends ConfigApply<ResponseHeader,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -985,7 +985,7 @@ public class ResponseHeaderAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(ResponseHeader.class, vr);
+			super(ResponseHeader.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

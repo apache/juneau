@@ -168,7 +168,7 @@ public class ExampleAnnotation {
 	/**
 	 * Applies targeted {@link Example} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Example> {
+	public static class Apply extends ConfigApply<Example,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -176,7 +176,7 @@ public class ExampleAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Example.class, vr);
+			super(Example.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

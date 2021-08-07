@@ -26,7 +26,7 @@ public class OpenApiConfigAnnotation {
 	/**
 	 * Applies {@link OpenApiConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<OpenApiConfig> {
+	public static class Apply extends ConfigApply<OpenApiConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -34,7 +34,7 @@ public class OpenApiConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(OpenApiConfig.class, vr);
+			super(OpenApiConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

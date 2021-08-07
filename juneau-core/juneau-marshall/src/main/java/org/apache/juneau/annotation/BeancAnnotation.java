@@ -138,7 +138,7 @@ public class BeancAnnotation {
 	/**
 	 * Applies targeted {@link Beanc} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Beanc> {
+	public static class Apply extends ConfigApply<Beanc,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -146,7 +146,7 @@ public class BeancAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Beanc.class, vr);
+			super(Beanc.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

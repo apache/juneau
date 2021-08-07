@@ -147,7 +147,7 @@ public class OpenApiAnnotation {
 	/**
 	 * Applies targeted {@link OpenApi} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<OpenApi> {
+	public static class Apply extends ConfigApply<OpenApi,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -155,7 +155,7 @@ public class OpenApiAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(OpenApi.class, vr);
+			super(OpenApi.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

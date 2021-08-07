@@ -492,7 +492,7 @@ public class RestGetAnnotation {
 	/**
 	 * Applies {@link RestGet} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<RestGet> {
+	public static class Apply extends ConfigApply<RestGet,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -500,7 +500,7 @@ public class RestGetAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestGet.class, vr);
+			super(RestGet.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

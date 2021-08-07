@@ -24,7 +24,7 @@ public class PlainTextConfigAnnotation {
 	/**
 	 * Applies {@link PlainTextConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<PlainTextConfig> {
+	public static class Apply extends ConfigApply<PlainTextConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -32,7 +32,7 @@ public class PlainTextConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(PlainTextConfig.class, vr);
+			super(PlainTextConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

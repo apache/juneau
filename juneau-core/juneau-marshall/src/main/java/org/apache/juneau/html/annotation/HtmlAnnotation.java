@@ -267,7 +267,7 @@ public class HtmlAnnotation {
 	/**
 	 * Applies targeted {@link Html} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Html> {
+	public static class Apply extends ConfigApply<Html,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -275,7 +275,7 @@ public class HtmlAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Html.class, vr);
+			super(Html.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

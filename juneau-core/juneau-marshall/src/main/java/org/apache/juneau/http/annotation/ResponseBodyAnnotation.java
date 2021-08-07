@@ -141,7 +141,7 @@ public class ResponseBodyAnnotation {
 	/**
 	 * Applies targeted {@link ResponseBody} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<ResponseBody> {
+	public static class Apply extends ConfigApply<ResponseBody,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -149,7 +149,7 @@ public class ResponseBodyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(ResponseBody.class, vr);
+			super(ResponseBody.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

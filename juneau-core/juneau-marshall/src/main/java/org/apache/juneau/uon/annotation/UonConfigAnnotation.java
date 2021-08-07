@@ -27,7 +27,7 @@ public class UonConfigAnnotation {
 	/**
 	 * Applies {@link UonConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<UonConfig> {
+	public static class Apply extends ConfigApply<UonConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -35,7 +35,7 @@ public class UonConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(UonConfig.class, vr);
+			super(UonConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

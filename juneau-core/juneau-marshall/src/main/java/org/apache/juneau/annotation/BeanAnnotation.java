@@ -491,7 +491,7 @@ public class BeanAnnotation {
 	/**
 	 * Applies targeted {@link Bean} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Bean> {
+	public static class Apply extends ConfigApply<Bean,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -499,7 +499,7 @@ public class BeanAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Bean.class, vr);
+			super(Bean.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

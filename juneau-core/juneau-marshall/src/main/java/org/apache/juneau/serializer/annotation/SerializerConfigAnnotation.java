@@ -31,7 +31,7 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<SerializerConfig> {
+	public static class Apply extends ConfigApply<SerializerConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -39,7 +39,7 @@ public class SerializerConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(SerializerConfig.class, vr);
+			super(SerializerConfig.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

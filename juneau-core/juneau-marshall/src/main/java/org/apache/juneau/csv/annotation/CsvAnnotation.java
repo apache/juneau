@@ -147,7 +147,7 @@ public class CsvAnnotation {
 	/**
 	 * Applies targeted {@link Csv} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Csv> {
+	public static class Apply extends ConfigApply<Csv,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -155,7 +155,7 @@ public class CsvAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Csv.class, vr);
+			super(Csv.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override

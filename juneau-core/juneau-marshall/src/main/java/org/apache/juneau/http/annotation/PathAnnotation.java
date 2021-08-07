@@ -987,7 +987,7 @@ public class PathAnnotation {
 	/**
 	 * Applies targeted {@link Path} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ConfigApply<Path> {
+	public static class Apply extends ConfigApply<Path,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.
@@ -995,7 +995,7 @@ public class PathAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(Path.class, vr);
+			super(Path.class, ContextPropertiesBuilder.class, vr);
 		}
 
 		@Override
