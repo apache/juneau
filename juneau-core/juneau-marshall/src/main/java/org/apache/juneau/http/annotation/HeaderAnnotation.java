@@ -1082,11 +1082,10 @@ public class HeaderAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<Header> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(Header.class, vr);
 		}
 
 		@Override

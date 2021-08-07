@@ -982,11 +982,10 @@ public class ResponseHeaderAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<ResponseHeader> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(ResponseHeader.class, vr);
 		}
 
 		@Override

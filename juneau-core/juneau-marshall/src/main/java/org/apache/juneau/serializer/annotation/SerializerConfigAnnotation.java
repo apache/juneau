@@ -36,11 +36,10 @@ public class SerializerConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<SerializerConfig> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(SerializerConfig.class, vr);
 		}
 
 		@Override

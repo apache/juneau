@@ -1081,11 +1081,10 @@ public class FormDataAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<FormData> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(FormData.class, vr);
 		}
 
 		@Override

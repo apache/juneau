@@ -272,11 +272,10 @@ public class HtmlAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<Html> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(Html.class, vr);
 		}
 
 		@Override

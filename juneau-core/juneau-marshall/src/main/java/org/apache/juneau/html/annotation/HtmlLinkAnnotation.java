@@ -179,11 +179,10 @@ public class HtmlLinkAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<HtmlLink> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(HtmlLink.class, vr);
 		}
 
 		@Override

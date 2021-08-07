@@ -35,11 +35,10 @@ public class ParserConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<ParserConfig> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(ParserConfig.class, vr);
 		}
 
 		@Override

@@ -33,11 +33,10 @@ public class XmlConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<XmlConfig> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(XmlConfig.class, vr);
 		}
 
 		@Override

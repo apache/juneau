@@ -180,14 +180,13 @@ public class AnnotationInfo<T extends Annotation> {
 			if (configApplyConstructor == null) {
 				ContextPropertiesApply cpa = a.annotationType().getAnnotation(ContextPropertiesApply.class);
 				if (cpa == null)
-					configApplyConstructor = ConfigApply.NoOp.class.getConstructor(Class.class, VarResolverSession.class);
+					configApplyConstructor = ConfigApply.NoOp.class.getConstructor(VarResolverSession.class);
 				else
-					configApplyConstructor = (Constructor<? extends ConfigApply<?>>)cpa.value().getConstructor(Class.class, VarResolverSession.class);
+					configApplyConstructor = (Constructor<? extends ConfigApply<?>>)cpa.value().getConstructor(VarResolverSession.class);
 				if (configApplyConstructor == null)
 					throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());
 			}
-			ClassInfo ci = getClassInfo();
-			return (ConfigApply<Annotation>) configApplyConstructor.newInstance(ci == null ? null : ci.inner(), vrs);
+			return (ConfigApply<Annotation>) configApplyConstructor.newInstance(vrs);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}

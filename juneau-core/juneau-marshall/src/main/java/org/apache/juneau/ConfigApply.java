@@ -222,11 +222,10 @@ public abstract class ConfigApply<T extends Annotation> {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param r The string resolver to use for resolving strings.
 		 */
-		public NoOp(Class<Annotation> c, VarResolverSession r) {
-			super(c, r);
+		public NoOp(VarResolverSession r) {
+			super(Annotation.class, r);
 		}
 
 		@Override /* ConfigApply */

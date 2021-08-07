@@ -31,11 +31,10 @@ public class OpenApiConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<OpenApiConfig> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(OpenApiConfig.class, vr);
 		}
 
 		@Override

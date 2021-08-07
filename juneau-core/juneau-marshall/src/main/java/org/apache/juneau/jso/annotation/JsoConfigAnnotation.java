@@ -29,11 +29,10 @@ public class JsoConfigAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<JsoConfig> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(JsoConfig.class, vr);
 		}
 
 		@Override

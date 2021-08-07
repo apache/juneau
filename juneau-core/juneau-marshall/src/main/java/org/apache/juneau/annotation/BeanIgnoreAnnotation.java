@@ -157,11 +157,10 @@ public class BeanIgnoreAnnotation {
 		/**
 		 * Constructor.
 		 *
-		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<BeanIgnore> c, VarResolverSession vr) {
-			super(c, vr);
+		public Apply(VarResolverSession vr) {
+			super(BeanIgnore.class, vr);
 		}
 
 		@Override
