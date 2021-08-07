@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema.annotation;
 
+import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import org.apache.juneau.*;
@@ -50,6 +51,10 @@ public class JsonSchemaConfigAnnotation {
 			cpb.setIf(a.beanDefMapper() != BeanDefMapper.Null.class, JSONSCHEMA_beanDefMapper, a.beanDefMapper());
 			cpb.setIfNotEmpty(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
 			cpb.setIfNotEmpty(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
+			cpb.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
+			cpb.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
+			cpb.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
+			cpb.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 		}
 	}
 }

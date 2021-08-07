@@ -50,7 +50,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#detectRecursions()}
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#detectRecursions()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#detectRecursions()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -77,7 +78,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreRecursions()}
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#ignoreRecursions()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#ignoreRecursions()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -104,7 +106,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#initialDepth()}
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#initialDepth()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#initialDepth()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -132,7 +135,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#maxDepth()}
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#maxDepth()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#maxDepth()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

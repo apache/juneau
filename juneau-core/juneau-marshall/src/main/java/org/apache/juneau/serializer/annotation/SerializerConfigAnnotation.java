@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer.annotation;
 
+import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
@@ -64,6 +65,10 @@ public class SerializerConfigAnnotation {
 			cpb.setIfNotEmpty(WSERIALIZER_quoteChar, character(a.quoteChar(), "quoteChar"));
 			cpb.setIfNotEmpty(WSERIALIZER_streamCharset, charset(a.streamCharset()));
 			cpb.setIfNotEmpty(WSERIALIZER_useWhitespace, bool(a.useWhitespace()));
+			cpb.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
+			cpb.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
+			cpb.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
+			cpb.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 		}
 
 		private Object charset(String in) {

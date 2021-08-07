@@ -13,7 +13,6 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.BeanTraverseContext.*;
 import static java.util.Arrays.*;
 
 import java.util.*;
@@ -82,10 +81,6 @@ public class BeanConfigAnnotation {
 			cpb.setIfNotEmpty(BEAN_useEnumNames, bool(a.useEnumNames()));
 			cpb.setIfNotEmpty(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
 			cpb.setIfNotEmpty(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));
-			cpb.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
-			cpb.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
-			cpb.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
-			cpb.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 		}
 
 		private Locale locale(String in) {

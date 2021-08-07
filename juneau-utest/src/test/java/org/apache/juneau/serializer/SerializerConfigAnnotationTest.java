@@ -58,7 +58,11 @@ public class SerializerConfigAnnotationTest {
 		addBeanTypes="$X{true}",
 		addRootType="$X{true}",
 		binaryFormat="$X{HEX}",
+		detectRecursions="$X{true}",
+		ignoreRecursions="$X{true}",
+		initialDepth="$X{1}",
 		listener=AA.class,
+		maxDepth="$X{1}",
 		maxIndent="$X{1}",
 		quoteChar="$X{'}",
 		sortCollections="$X{true}",
@@ -81,7 +85,11 @@ public class SerializerConfigAnnotationTest {
 		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
+		check("true", x.isDetectRecursions());
+		check("true", x.isIgnoreRecursions());
+		check("1", x.getInitialDepth());
 		check("AA", x.getListener());
+		check("1", x.getMaxDepth());
 		check("1", x.getMaxIndent());
 		check("'", x.getQuoteChar());
 		check("true", x.isSortCollections());
@@ -103,7 +111,11 @@ public class SerializerConfigAnnotationTest {
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());
+		check("true", x.isDetectRecursions());
+		check("true", x.isIgnoreRecursions());
+		check("1", x.getInitialDepth());
 		check("AA", x.getListener());
+		check("1", x.getMaxDepth());
 		check("true", x.isSortCollections());
 		check("true", x.isSortMaps());
 		check("true", x.isTrimEmptyCollections());

@@ -119,18 +119,14 @@ public class BeanConfigAnnotation_Test {
 		disableBeansRequireSomeProperties="$X{true}",
 		typePropertyName="$X{foo}",
 		debug="$X{true}",
-		detectRecursions="$X{true}",
 		disableIgnoreUnknownNullBeanProperties="$X{true}",
 		disableIgnoreMissingSetters="$X{true}",
 		disableInterfaceProxies="$X{true}",
 		findFluentSetters="$X{true}",
 		ignoreInvocationExceptionsOnGetters="$X{true}",
 		ignoreInvocationExceptionsOnSetters="$X{true}",
-		ignoreRecursions="$X{true}",
 		ignoreUnknownBeanProperties="$X{true}",
-		initialDepth="$X{1}",
 		locale="$X{en-US}",
-		maxDepth="$X{1}",
 		mediaType="$X{text/foo}",
 		notBeanClasses={A1.class,A2.class},
 		notBeanClasses_replace={A1.class,A2.class,A3.class},
@@ -150,7 +146,7 @@ public class BeanConfigAnnotation_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		AnnotationList al = a.getAnnotationList();
-		BeanTraverseSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
+		BeanSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 
 		check("PRIVATE", bc.getBeanClassVisibility());
 		check("PRIVATE", bc.getBeanConstructorVisibility());
@@ -164,17 +160,13 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isBeansRequireSomeProperties());
 		check("foo", bc.getBeanTypePropertyName());
 		check("true", bc.isDebug());
-		check("true", bc.isDetectRecursions());
 		check("true", bc.isFindFluentSetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
 		check("false", bc.isIgnoreMissingSetters());
-		check("true", bc.isIgnoreRecursions());
 		check("true", bc.isIgnoreUnknownBeanProperties());
 		check("false", bc.isIgnoreUnknownNullBeanProperties());
-		check("1", bc.getInitialDepth());
 		check("en_US", bc.getLocale());
-		check("1", bc.getMaxDepth());
 		check("application/json", bc.getMediaType());
 		check("A1,A2,A3", bc.getNotBeanClasses());
 		check("foo1,foo2,foo3", bc.getNotBeanPackagesNames());

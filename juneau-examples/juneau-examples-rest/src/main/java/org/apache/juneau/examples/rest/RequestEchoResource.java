@@ -23,6 +23,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.transforms.*;
 
 /**
@@ -67,12 +68,14 @@ import org.apache.juneau.transforms.*;
 	nowrap="false"
 )
 @BeanConfig(
-	maxDepth="5",
-	detectRecursions="true",
 	swaps={
 		// Add a special filter for Enumerations
 		EnumerationSwap.class
 	}
+)
+@SerializerConfig(
+	maxDepth="5",
+	detectRecursions="true"
 )
 @Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class)
 @Bean(on="HttpSession",interfaceClass=HttpSession.class)

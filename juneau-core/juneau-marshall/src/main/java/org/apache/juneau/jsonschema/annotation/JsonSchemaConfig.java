@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.parser.*;
 
 /**
  * Annotation for specifying config properties defined in {@link JsonSchemaGenerator}.
@@ -237,4 +238,121 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 */
 	String useBeanDefs() default "";
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// BeanTraverseContext
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * Specifies that recursions should be checked for during traversal.
+	 *
+	 * <p>
+	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+	 * <br>In general, unchecked recursions cause stack-overflow-errors.
+	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+	 *
+	 * <p>
+	 * The behavior when recursions are detected depends on the value for {@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}.
+	 *
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bcode w800'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
+	 * </ul>
+	 */
+	String detectRecursions() default "";
+
+	/**
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}.
+	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
+	 * </ul>
+	 */
+	String ignoreRecursions() default "";
+
+	/**
+	 * Configuration property:  Initial depth.
+	 *
+	 * <p>
+	 * The initial indentation level at the root.
+	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Format: integer
+	 *	<li>
+	 * 		Default value: <js>"0"</js>
+	 * 	<li>
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
+	 * </ul>
+	 */
+	String initialDepth() default "";
+
+	/**
+	 * Configuration property:  Max traversal depth.
+	 *
+	 * <p>
+	 * Abort traversal if specified depth is reached in the POJO tree.
+	 * <br>If this depth is exceeded, an exception is thrown.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Format: integer
+	 * 	<li>
+	 * 		Default value: <js>"100"</js>
+	 * 	<li>
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
+	 * </ul>
+	 */
+	String maxDepth() default "";
 }
