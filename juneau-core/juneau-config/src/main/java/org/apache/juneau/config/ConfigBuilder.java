@@ -20,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -348,18 +347,6 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public ConfigBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -398,12 +385,6 @@ public class ConfigBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder set(String name, Object value) {
 		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public ConfigBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

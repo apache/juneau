@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ClassUtils.*;
@@ -21,6 +22,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.text.*;
+import java.time.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
@@ -29,6 +31,7 @@ import java.util.logging.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -50,6 +53,9 @@ public class BeanSession extends Session {
 	private final BeanContext ctx;
 	private final HttpPartSchema schema;
 	private final Stack<StringBuilder> sbStack;
+	private final Locale locale;
+	private final TimeZone timeZone;
+	private final MediaType mediaType;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -65,6 +71,10 @@ public class BeanSession extends Session {
 		this.ctx = ctx;
 		schema = args.schema;
 		sbStack = args.unmodifiable ? null : new Stack<>();
+		SessionProperties sp = args.properties;
+		locale = sp.get(BEAN_locale, Locale.class).orElse(ctx.getDefaultLocale());
+		timeZone = sp.get(BEAN_timeZone, TimeZone.class).orElse(ctx.getDefaultTimeZone());
+		mediaType = sp.get(BEAN_mediaType, MediaType.class).orElse(ctx.getDefaultMediaType());
 	}
 
 	/**
@@ -1067,6 +1077,38 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Configuration property:  Locale.
+	 *
+	 * <p>
+	 * The locale is determined in the following order:
+	 * <ol>
+	 * 	<li><c>locale</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
+	 * 	<li>Locale returned by {@link Locale#getDefault()}.
+	 * </ol>
+	 *
+	 * @see BeanContext#BEAN_locale
+	 * @return The session locale.
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * Configuration property:  Media type.
+	 *
+	 * <p>
+	 * For example, <js>"application/json"</js>.
+	 *
+	 * @see BeanContext#BEAN_mediaType
+	 * @return The media type for this session, or <jk>null</jk> if not specified.
+	 */
+	public final MediaType getMediaType() {
+		return mediaType;
+	}
+
+	/**
 	 * Returns the type property name as defined by {@link BeanContext#BEAN_typePropertyName}.
 	 *
 	 * @param cm
@@ -1466,6 +1508,42 @@ public class BeanSession extends Session {
 	 */
 	public final PojoSwap<?,?>[] getSwaps() {
 		return ctx.getSwaps();
+	}
+
+	/**
+	 * Configuration property:  Time zone.
+	 *
+	 * <p>
+	 * The timezone is determined in the following order:
+	 * <ol>
+	 * 	<li><c>timeZone</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
+	 * </ol>
+	 *
+	 * @see BeanContext#BEAN_timeZone
+	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
+	 */
+	public final TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * Configuration property:  Time zone.
+	 *
+	 * <p>
+	 * The timezone is determined in the following order:
+	 * <ol>
+	 * 	<li><c>timeZone</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
+	 * </ol>
+	 *
+	 * @see BeanContext#BEAN_timeZone
+	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
+	 */
+	public final ZoneId getTimeZoneId() {
+		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
 	}
 
 	/**

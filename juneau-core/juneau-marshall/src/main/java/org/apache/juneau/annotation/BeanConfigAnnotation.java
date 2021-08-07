@@ -68,8 +68,8 @@ public class BeanConfigAnnotation {
 			cpb.setIfNotEmpty(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
 			cpb.setIfNotEmpty(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
 			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> cpb.prependTo(BEAN_annotations, x));
-			cpb.setIfNotEmpty(CONTEXT_locale, locale(a.locale()));
-			cpb.setIfNotEmpty(CONTEXT_mediaType, mediaType(a.mediaType()));
+			cpb.setIfNotEmpty(BEAN_locale, locale(a.locale()));
+			cpb.setIfNotEmpty(BEAN_mediaType, mediaType(a.mediaType()));
 			cpb.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses());
 			cpb.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses_replace());
 			cpb.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
@@ -78,7 +78,7 @@ public class BeanConfigAnnotation {
 			cpb.setIfNotEmpty(BEAN_sortProperties, bool(a.sortProperties()));
 			cpb.prependTo(BEAN_swaps, a.swaps());
 			cpb.setIfNotEmpty(BEAN_swaps, a.swaps_replace());
-			cpb.setIfNotEmpty(CONTEXT_timeZone, timeZone(a.timeZone()));
+			cpb.setIfNotEmpty(BEAN_timeZone, timeZone(a.timeZone()));
 			cpb.setIfNotEmpty(BEAN_useEnumNames, bool(a.useEnumNames()));
 			cpb.setIfNotEmpty(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
 			cpb.setIfNotEmpty(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));

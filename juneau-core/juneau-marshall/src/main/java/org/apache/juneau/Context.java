@@ -18,11 +18,9 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
@@ -86,108 +84,11 @@ public abstract class Context {
 	 */
 	public static final String CONTEXT_debug = PREFIX + ".debug.b";
 
-	/**
-	 * Configuration property:  Locale.
-	 *
-	 * <p>
-	 * Specifies the default locale for serializer and parser sessions when not specified via {@link SessionArgs#locale(Locale)}.
-	 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_locale CONTEXT_locale}
-	 * 	<li><b>Name:</b>  <js>"Context.locale.s"</js>
-	 * 	<li><b>Data type:</b>  {@link java.util.Locale}
-	 * 	<li><b>System property:</b>  <c>Context.locale</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_LOCALE</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link java.util.Locale#getDefault()})
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#locale(Locale)}
-	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#locale(Locale)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String CONTEXT_locale = PREFIX + ".locale.s";
-
-	/**
-	 * Configuration property:  Media type.
-	 *
-	 * <p>
-	 * Specifies the default media type for serializer and parser sessions when not specified via {@link SessionArgs#mediaType(MediaType)}.
-	 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
-	 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
-	 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
-	 * serializer or parser.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_mediaType CONTEXT_mediaType}
-	 * 	<li><b>Name:</b>  <js>"Context.mediaType.s"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.header.MediaType}
-	 * 	<li><b>System property:</b>  <c>Context.mediaType</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_MEDIATYPE</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#mediaType(MediaType)}
-	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#mediaType(MediaType)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String CONTEXT_mediaType = PREFIX + ".mediaType.s";
-
-	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * <p>
-	 * Specifies the default time zone for serializer and parser sessions when not specified via {@link SessionArgs#timeZone(TimeZone)}.
-	 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_timeZone CONTEXT_timeZone}
-	 * 	<li><b>Name:</b>  <js>"Context.timeZone.s"</js>
-	 * 	<li><b>Data type:</b>  {@link java.util.TimeZone}
-	 * 	<li><b>System property:</b>  <c>Context.timeZone</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_TIMEZONE</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#timeZone(TimeZone)}
-	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#timeZone(TimeZone)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String CONTEXT_timeZone = PREFIX + ".timeZone.s";
-
 
 	final ContextProperties properties;
 	private final int identityCode;
 
 	private final boolean debug;
-	private final Locale locale;
-	private final TimeZone timeZone;
-	private final MediaType mediaType;
 
 	/**
 	 * Constructor for this class.
@@ -203,9 +104,6 @@ public abstract class Context {
 		cp = properties;
 		this.identityCode = allowReuse ? new HashCode().add(className(this)).add(cp).get() : System.identityHashCode(this);
 		debug = cp.getBoolean(CONTEXT_debug).orElse(false);
-		locale = cp.getInstance(CONTEXT_locale, Locale.class).orElseGet(()->Locale.getDefault());
-		timeZone = cp.getInstance(CONTEXT_timeZone, TimeZone.class).orElse(null);
-		mediaType = cp.getInstance(CONTEXT_mediaType, MediaType.class).orElse(null);
 	}
 
 	/**
@@ -325,39 +223,6 @@ public abstract class Context {
 	 */
 	public boolean isDebug() {
 		return debug;
-	}
-
-	/**
-	 * Locale.
-	 *
-	 * @see #CONTEXT_locale
-	 * @return
-	 * 	The default locale for serializer and parser sessions.
-	 */
-	public final Locale getDefaultLocale() {
-		return locale;
-	}
-
-	/**
-	 * Media type.
-	 *
-	 * @see #CONTEXT_mediaType
-	 * @return
-	 * 	The default media type value for serializer and parser sessions.
-	 */
-	public final MediaType getDefaultMediaType() {
-		return mediaType;
-	}
-
-	/**
-	 * Time zone.
-	 *
-	 * @see #CONTEXT_timeZone
-	 * @return
-	 * 	The default timezone for serializer and parser sessions.
-	 */
-	public final TimeZone getDefaultTimeZone() {
-		return timeZone;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

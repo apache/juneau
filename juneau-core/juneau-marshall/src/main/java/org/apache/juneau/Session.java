@@ -16,11 +16,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.Context.*;
 
 import java.text.*;
-import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -38,9 +36,6 @@ public abstract class Session {
 
 	private final Context ctx;
 	private final boolean debug;
-	private final Locale locale;
-	private final TimeZone timeZone;
-	private final MediaType mediaType;
 	private final boolean unmodifiable;
 
 
@@ -59,9 +54,6 @@ public abstract class Session {
 			sp = sp.unmodifiable();
 		properties = sp;
 		debug = sp.get(CONTEXT_debug, Boolean.class).orElse(ctx.isDebug());
-		locale = sp.get(CONTEXT_locale, Locale.class).orElse(ctx.getDefaultLocale());
-		timeZone = sp.get(CONTEXT_timeZone, TimeZone.class).orElse(ctx.getDefaultTimeZone());
-		mediaType = sp.get(CONTEXT_mediaType, MediaType.class).orElse(ctx.getDefaultMediaType());
 	}
 
 	/**
@@ -184,74 +176,6 @@ public abstract class Session {
 	 */
 	public boolean isDebug() {
 		return debug;
-	}
-
-	/**
-	 * Configuration property:  Locale.
-	 *
-	 * <p>
-	 * The locale is determined in the following order:
-	 * <ol>
-	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link Context#CONTEXT_locale} entry in parameter passed in through constructor.
-	 * 	<li>{@link Context#CONTEXT_locale} setting on bean context.
-	 * 	<li>Locale returned by {@link Locale#getDefault()}.
-	 * </ol>
-	 *
-	 * @see Context#CONTEXT_locale
-	 * @return The session locale.
-	 */
-	public Locale getLocale() {
-		return locale;
-	}
-
-	/**
-	 * Configuration property:  Media type.
-	 *
-	 * <p>
-	 * For example, <js>"application/json"</js>.
-	 *
-	 * @see Context#CONTEXT_mediaType
-	 * @return The media type for this session, or <jk>null</jk> if not specified.
-	 */
-	public final MediaType getMediaType() {
-		return mediaType;
-	}
-
-	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link Context#CONTEXT_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link Context#CONTEXT_timeZone} setting on bean context.
-	 * </ol>
-	 *
-	 * @see Context#CONTEXT_timeZone
-	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
-	 */
-	public final TimeZone getTimeZone() {
-		return timeZone;
-	}
-
-	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link Context#CONTEXT_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link Context#CONTEXT_timeZone} setting on bean context.
-	 * </ol>
-	 *
-	 * @see Context#CONTEXT_timeZone
-	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
-	 */
-	public final ZoneId getTimeZoneId() {
-		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

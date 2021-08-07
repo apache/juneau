@@ -17,7 +17,6 @@ import static org.apache.juneau.Context.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -66,84 +65,6 @@ public class SessionArgs {
 	@FluentSetter
 	public SessionArgs debug(Boolean value) {
 		property(CONTEXT_debug, value);
-		return this;
-	}
-
-	/**
-	 * The session locale.
-	 *
-	 * <p>
-	 * Specifies the default locale for serializer and parser sessions.
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link Context#CONTEXT_locale}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#locale(Locale)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_locale}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public SessionArgs locale(Locale value) {
-		property(CONTEXT_locale, value);
-		return this;
-	}
-
-	/**
-	 * The session media type.
-	 *
-	 * <p>
-	 * Specifies the default media type value for serializer and parser sessions.
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link Context#CONTEXT_mediaType}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#mediaType(MediaType)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_mediaType}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public SessionArgs mediaType(MediaType value) {
-		property(CONTEXT_mediaType, value);
-		return this;
-	}
-
-	/**
-	 * The session timezone.
-	 *
-	 * <p>
-	 * Specifies the default timezone for serializer and parser sessions.
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link BeanContext#CONTEXT_timeZone}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#timeZone(TimeZone)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_timeZone}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public SessionArgs timeZone(TimeZone value) {
-		property(CONTEXT_timeZone, value);
 		return this;
 	}
 

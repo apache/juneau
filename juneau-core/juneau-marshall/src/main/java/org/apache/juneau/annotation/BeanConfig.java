@@ -644,9 +644,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#locale(Locale)}
-	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#locale(Locale)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_locale}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#locale(Locale)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
 	 * </ul>
 	 */
 	String locale() default "";
@@ -663,9 +663,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#mediaType(MediaType)}
-	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#mediaType(MediaType)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_mediaType}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
 	 * </ul>
 	 */
 	String mediaType() default "";
@@ -852,9 +852,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.ContextBuilder#timeZone(TimeZone)}
-	 * 	<li class='jm'>{@link org.apache.juneau.SessionArgs#timeZone(TimeZone)}
-	 * 	<li class='jf'>{@link Context#CONTEXT_timeZone}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
 	 * </ul>
 	 */
 	String timeZone() default "";

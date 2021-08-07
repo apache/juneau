@@ -16,7 +16,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -103,18 +102,6 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigMemoryStoreBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public ConfigMemoryStoreBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public ConfigMemoryStoreBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -153,12 +140,6 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigMemoryStoreBuilder set(String name, Object value) {
 		super.set(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public ConfigMemoryStoreBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 
