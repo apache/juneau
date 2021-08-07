@@ -39,11 +39,11 @@ public class OpenApiConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<OpenApiConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<OpenApiConfig> ai, ContextPropertiesBuilder b) {
 			OpenApiConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(OAPI_format, string(a.format()));
-			cpb.setIfNotEmpty(OAPI_collectionFormat, string(a.collectionFormat()));
+			b.setIfNotEmpty(OAPI_format, string(a.format()));
+			b.setIfNotEmpty(OAPI_collectionFormat, string(a.collectionFormat()));
 		}
 	}
 }

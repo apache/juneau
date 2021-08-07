@@ -238,13 +238,13 @@ public class XmlAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Xml> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Xml> ai, ContextPropertiesBuilder b) {
 			Xml a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

@@ -45,23 +45,23 @@ public class HtmlDocConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlDocConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<HtmlDocConfig> ai, ContextPropertiesBuilder b) {
 			HtmlDocConfig a = ai.getAnnotation();
 
-			cpb.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), cpb.peek(String[].class, HTMLDOC_aside)));
-			cpb.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
-			cpb.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), cpb.peek(String[].class, HTMLDOC_footer)));
-			cpb.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), cpb.peek(String[].class, HTMLDOC_head)));
-			cpb.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), cpb.peek(String[].class, HTMLDOC_header)));
-			cpb.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), cpb.peek(String[].class, HTMLDOC_nav)));
-			cpb.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), cpb.peek(String[].class, HTMLDOC_navlinks)));
-			cpb.setIfNotEmpty(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
-			cpb.setIfNotEmpty(HTMLDOC_nowrap, bool(a.nowrap()));
-			cpb.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), cpb.peek(String[].class, HTMLDOC_script)));
-			cpb.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), cpb.peek(String[].class, HTMLDOC_style)));
-			cpb.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), cpb.peek(String[].class, HTMLDOC_stylesheet)));
-			cpb.setIf(a.template() != HtmlDocTemplate.Null.class, HTMLDOC_template, a.template());
-			asList(a.widgets()).stream().forEach(x -> cpb.prependTo(HTMLDOC_widgets, x));
+			b.setIf(a.aside().length > 0, HTMLDOC_aside, resolveList(a.aside(), b.peek(String[].class, HTMLDOC_aside)));
+			b.setIf(! "DEFAULT".equalsIgnoreCase(a.asideFloat()), HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
+			b.setIf(a.footer().length > 0, HTMLDOC_footer, resolveList(a.footer(), b.peek(String[].class, HTMLDOC_footer)));
+			b.setIf(a.head().length > 0, HTMLDOC_head, resolveList(a.head(), b.peek(String[].class, HTMLDOC_head)));
+			b.setIf(a.header().length > 0, HTMLDOC_header, resolveList(a.header(), b.peek(String[].class, HTMLDOC_header)));
+			b.setIf(a.nav().length > 0, HTMLDOC_nav, resolveList(a.nav(), b.peek(String[].class, HTMLDOC_nav)));
+			b.setIf(a.navlinks().length > 0, HTMLDOC_navlinks, resolveLinks(a.navlinks(), b.peek(String[].class, HTMLDOC_navlinks)));
+			b.setIfNotEmpty(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
+			b.setIfNotEmpty(HTMLDOC_nowrap, bool(a.nowrap()));
+			b.setIf(a.script().length > 0, HTMLDOC_script, resolveList(a.script(), b.peek(String[].class, HTMLDOC_script)));
+			b.setIf(a.style().length > 0, HTMLDOC_style, resolveList(a.style(), b.peek(String[].class, HTMLDOC_style)));
+			b.setIf(a.stylesheet().length > 0, HTMLDOC_stylesheet, resolveList(a.stylesheet(), b.peek(String[].class, HTMLDOC_stylesheet)));
+			b.setIf(a.template() != HtmlDocTemplate.Null.class, HTMLDOC_template, a.template());
+			asList(a.widgets()).stream().forEach(x -> b.prependTo(HTMLDOC_widgets, x));
 		}
 
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");

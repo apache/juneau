@@ -37,7 +37,7 @@ public class PlainTextConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<PlainTextConfig> ai, ContextPropertiesBuilder b) {
 		}
 	}
 }

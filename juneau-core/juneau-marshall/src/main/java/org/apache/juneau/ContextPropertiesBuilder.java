@@ -116,7 +116,7 @@ public class ContextPropertiesBuilder {
 		vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
-				ai.getConfigApply(vr).apply((AnnotationInfo<Annotation>)ai, this, vr);
+				ai.getConfigApply(vr).apply((AnnotationInfo<Annotation>)ai, this);
 			} catch (ConfigException ex) {
 				throw ex;
 			} catch (Exception ex) {

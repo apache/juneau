@@ -50,10 +50,17 @@ public abstract class ConfigApply<T extends Annotation> {
 	 *
 	 * @param a The annotation.
 	 * @param cpb The property store builder.
-	 * @param vr The var resolver.  Should be the same as the one passed in through the constructor.
 	 */
-	public abstract void apply(AnnotationInfo<T> a, ContextPropertiesBuilder cpb, VarResolverSession vr);
+	public abstract void apply(AnnotationInfo<T> a, ContextPropertiesBuilder cpb);
 
+	/**
+	 * Returns the var resolver session for this apply.
+	 *
+	 * @return The var resolver session for this apply.
+	 */
+	protected VarResolverSession vr() {
+		return vr;
+	}
 
 	/**
 	 * Resolves the specified string.
@@ -223,6 +230,6 @@ public abstract class ConfigApply<T extends Annotation> {
 		}
 
 		@Override /* ConfigApply */
-		public void apply(AnnotationInfo<Annotation> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {}
+		public void apply(AnnotationInfo<Annotation> ai, ContextPropertiesBuilder b) {}
 	}
 }

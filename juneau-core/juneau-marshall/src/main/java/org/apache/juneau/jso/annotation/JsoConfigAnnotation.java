@@ -37,7 +37,7 @@ public class JsoConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsoConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<JsoConfig> ai, ContextPropertiesBuilder b) {
 		}
 	}
 }

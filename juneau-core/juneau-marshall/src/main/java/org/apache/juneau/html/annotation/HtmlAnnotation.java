@@ -280,13 +280,13 @@ public class HtmlAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Html> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Html> ai, ContextPropertiesBuilder b) {
 			Html a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

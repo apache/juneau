@@ -38,12 +38,12 @@ public class UrlEncodingConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncodingConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<UrlEncodingConfig> ai, ContextPropertiesBuilder b) {
 			UrlEncodingConfig a = ai.getAnnotation();
 
 			if (! a.expandedParams().isEmpty()) {
-				cpb.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
-				cpb.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));
+				b.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
+				b.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));
 			}
 		}
 	}

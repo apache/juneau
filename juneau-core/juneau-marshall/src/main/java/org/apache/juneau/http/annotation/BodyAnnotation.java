@@ -372,13 +372,13 @@ public class BodyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Body> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Body> ai, ContextPropertiesBuilder b) {
 			Body a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

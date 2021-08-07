@@ -160,13 +160,13 @@ public class UonAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uon> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Uon> ai, ContextPropertiesBuilder b) {
 			Uon a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

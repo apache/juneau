@@ -136,13 +136,13 @@ public class NamePropertyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<NameProperty> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<NameProperty> ai, ContextPropertiesBuilder b) {
 			NameProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

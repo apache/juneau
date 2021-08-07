@@ -37,7 +37,7 @@ public class CsvConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<CsvConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<CsvConfig> ai, ContextPropertiesBuilder b) {
 		}
 	}
 }

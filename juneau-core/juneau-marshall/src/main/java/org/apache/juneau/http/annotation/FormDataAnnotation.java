@@ -1089,13 +1089,13 @@ public class FormDataAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<FormData> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<FormData> ai, ContextPropertiesBuilder b) {
 			FormData a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

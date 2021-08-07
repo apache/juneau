@@ -39,10 +39,10 @@ public class MsgPackConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<MsgPackConfig> ai, ContextPropertiesBuilder b) {
 			MsgPackConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
+			b.setIfNotEmpty(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
 		}
 	}
 }

@@ -43,44 +43,44 @@ public class BeanConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<BeanConfig> ai, ContextPropertiesBuilder b) {
 			BeanConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
-			cpb.setIfNotEmpty(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
-			cpb.prependTo(BEAN_beanDictionary, a.dictionary());
-			cpb.setIfNotEmpty(BEAN_beanDictionary, a.dictionary_replace());
-			cpb.setIfNotEmpty(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
-			cpb.setIfNotEmpty(BEAN_beanMapPutReturnsOldValue, bool(a.beanMapPutReturnsOldValue()));
-			cpb.setIfNotEmpty(BEAN_beanMethodVisibility, visibility(a.beanMethodVisibility(), "beanMethodVisibility"));
-			cpb.setIfNotEmpty(BEAN_beansRequireDefaultConstructor, bool(a.beansRequireDefaultConstructor()));
-			cpb.setIfNotEmpty(BEAN_beansRequireSerializable, bool(a.beansRequireSerializable()));
-			cpb.setIfNotEmpty(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));
-			cpb.setIfNotEmpty(BEAN_disableBeansRequireSomeProperties, bool(a.disableBeansRequireSomeProperties()));
-			cpb.setIfNotEmpty(BEAN_typePropertyName, string(a.typePropertyName()));
-			cpb.setIfNotEmpty(CONTEXT_debug, bool(a.debug()));
-			cpb.setIfNotEmpty(BEAN_findFluentSetters, bool(a.findFluentSetters()));
-			cpb.setIfNotEmpty(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));
-			cpb.setIfNotEmpty(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
-			cpb.setIfNotEmpty(BEAN_disableIgnoreMissingSetters, bool(a.disableIgnoreMissingSetters()));
-			cpb.setIfNotEmpty(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
-			cpb.setIfNotEmpty(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
-			cpb.setIfNotEmpty(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
-			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> cpb.prependTo(BEAN_annotations, x));
-			cpb.setIfNotEmpty(BEAN_locale, locale(a.locale()));
-			cpb.setIfNotEmpty(BEAN_mediaType, mediaType(a.mediaType()));
-			cpb.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses());
-			cpb.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses_replace());
-			cpb.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
-			cpb.setIfNotEmpty(BEAN_notBeanPackages, stringList(a.notBeanPackages_replace()));
-			cpb.setIf(a.propertyNamer() != PropertyNamer.Null.class, BEAN_propertyNamer, a.propertyNamer());
-			cpb.setIfNotEmpty(BEAN_sortProperties, bool(a.sortProperties()));
-			cpb.prependTo(BEAN_swaps, a.swaps());
-			cpb.setIfNotEmpty(BEAN_swaps, a.swaps_replace());
-			cpb.setIfNotEmpty(BEAN_timeZone, timeZone(a.timeZone()));
-			cpb.setIfNotEmpty(BEAN_useEnumNames, bool(a.useEnumNames()));
-			cpb.setIfNotEmpty(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
-			cpb.setIfNotEmpty(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));
+			b.setIfNotEmpty(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
+			b.setIfNotEmpty(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
+			b.prependTo(BEAN_beanDictionary, a.dictionary());
+			b.setIfNotEmpty(BEAN_beanDictionary, a.dictionary_replace());
+			b.setIfNotEmpty(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
+			b.setIfNotEmpty(BEAN_beanMapPutReturnsOldValue, bool(a.beanMapPutReturnsOldValue()));
+			b.setIfNotEmpty(BEAN_beanMethodVisibility, visibility(a.beanMethodVisibility(), "beanMethodVisibility"));
+			b.setIfNotEmpty(BEAN_beansRequireDefaultConstructor, bool(a.beansRequireDefaultConstructor()));
+			b.setIfNotEmpty(BEAN_beansRequireSerializable, bool(a.beansRequireSerializable()));
+			b.setIfNotEmpty(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));
+			b.setIfNotEmpty(BEAN_disableBeansRequireSomeProperties, bool(a.disableBeansRequireSomeProperties()));
+			b.setIfNotEmpty(BEAN_typePropertyName, string(a.typePropertyName()));
+			b.setIfNotEmpty(CONTEXT_debug, bool(a.debug()));
+			b.setIfNotEmpty(BEAN_findFluentSetters, bool(a.findFluentSetters()));
+			b.setIfNotEmpty(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));
+			b.setIfNotEmpty(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
+			b.setIfNotEmpty(BEAN_disableIgnoreMissingSetters, bool(a.disableIgnoreMissingSetters()));
+			b.setIfNotEmpty(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
+			b.setIfNotEmpty(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
+			b.setIfNotEmpty(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
+			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.prependTo(BEAN_annotations, x));
+			b.setIfNotEmpty(BEAN_locale, locale(a.locale()));
+			b.setIfNotEmpty(BEAN_mediaType, mediaType(a.mediaType()));
+			b.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses());
+			b.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses_replace());
+			b.addTo(BEAN_notBeanPackages, stringList(a.notBeanPackages()));
+			b.setIfNotEmpty(BEAN_notBeanPackages, stringList(a.notBeanPackages_replace()));
+			b.setIf(a.propertyNamer() != PropertyNamer.Null.class, BEAN_propertyNamer, a.propertyNamer());
+			b.setIfNotEmpty(BEAN_sortProperties, bool(a.sortProperties()));
+			b.prependTo(BEAN_swaps, a.swaps());
+			b.setIfNotEmpty(BEAN_swaps, a.swaps_replace());
+			b.setIfNotEmpty(BEAN_timeZone, timeZone(a.timeZone()));
+			b.setIfNotEmpty(BEAN_useEnumNames, bool(a.useEnumNames()));
+			b.setIfNotEmpty(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
+			b.setIfNotEmpty(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));
 		}
 
 		private Locale locale(String in) {

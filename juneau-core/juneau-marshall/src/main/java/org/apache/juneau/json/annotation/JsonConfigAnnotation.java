@@ -40,13 +40,13 @@ public class JsonConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<JsonConfig> ai, ContextPropertiesBuilder b) {
 			JsonConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(JSON_addBeanTypes, bool(a.addBeanTypes()));
-			cpb.setIfNotEmpty(JSON_escapeSolidus, bool(a.escapeSolidus()));
-			cpb.setIfNotEmpty(JSON_simpleMode, bool(a.simpleMode()));
-			cpb.setIfNotEmpty(JSON_validateEnd, bool(a.validateEnd()));
+			b.setIfNotEmpty(JSON_addBeanTypes, bool(a.addBeanTypes()));
+			b.setIfNotEmpty(JSON_escapeSolidus, bool(a.escapeSolidus()));
+			b.setIfNotEmpty(JSON_simpleMode, bool(a.simpleMode()));
+			b.setIfNotEmpty(JSON_validateEnd, bool(a.validateEnd()));
 		}
 	}
 }

@@ -41,20 +41,20 @@ public class XmlConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<XmlConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<XmlConfig> ai, ContextPropertiesBuilder b) {
 			XmlConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(XML_addBeanTypes, bool(a.addBeanTypes()));
-			cpb.setIfNotEmpty(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
-			cpb.setIfNotEmpty(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
-			cpb.setIfNotEmpty(XML_defaultNamespace, string(a.defaultNamespace()));
-			cpb.setIfNotEmpty(XML_enableNamespaces, bool(a.enableNamespaces()));
-			cpb.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
-			cpb.setIf(a.eventAllocator() != XmlEventAllocator.Null.class, XML_eventAllocator, a.eventAllocator());
-			cpb.setIfNotEmpty(XML_preserveRootElement, bool(a.preserveRootElement()));
-			cpb.setIf(a.reporter() != XmlReporter.Null.class, XML_reporter, a.reporter());
-			cpb.setIf(a.resolver() != XmlResolver.Null.class, XML_resolver, a.resolver());
-			cpb.setIfNotEmpty(XML_validating, bool(a.validating()));
+			b.setIfNotEmpty(XML_addBeanTypes, bool(a.addBeanTypes()));
+			b.setIfNotEmpty(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
+			b.setIfNotEmpty(XML_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
+			b.setIfNotEmpty(XML_defaultNamespace, string(a.defaultNamespace()));
+			b.setIfNotEmpty(XML_enableNamespaces, bool(a.enableNamespaces()));
+			b.setIf(a.namespaces().length > 0, XML_namespaces, Namespace.createArray(stringList(a.namespaces())));
+			b.setIf(a.eventAllocator() != XmlEventAllocator.Null.class, XML_eventAllocator, a.eventAllocator());
+			b.setIfNotEmpty(XML_preserveRootElement, bool(a.preserveRootElement()));
+			b.setIf(a.reporter() != XmlReporter.Null.class, XML_reporter, a.reporter());
+			b.setIf(a.resolver() != XmlResolver.Null.class, XML_resolver, a.resolver());
+			b.setIfNotEmpty(XML_validating, bool(a.validating()));
 		}
 	}
 }

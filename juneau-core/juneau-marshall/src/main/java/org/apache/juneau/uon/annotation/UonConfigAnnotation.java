@@ -40,14 +40,14 @@ public class UonConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UonConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<UonConfig> ai, ContextPropertiesBuilder b) {
 			UonConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(UON_addBeanTypes, bool(a.addBeanTypes()));
-			cpb.setIfNotEmpty(UON_encoding, bool(a.encoding()));
-			cpb.setIfNotEmpty(UON_paramFormat, string(a.paramFormat()));
-			cpb.setIfNotEmpty(UON_decoding, bool(a.decoding()));
-			cpb.setIfNotEmpty(UON_validateEnd, bool(a.validateEnd()));
+			b.setIfNotEmpty(UON_addBeanTypes, bool(a.addBeanTypes()));
+			b.setIfNotEmpty(UON_encoding, bool(a.encoding()));
+			b.setIfNotEmpty(UON_paramFormat, string(a.paramFormat()));
+			b.setIfNotEmpty(UON_decoding, bool(a.decoding()));
+			b.setIfNotEmpty(UON_validateEnd, bool(a.validateEnd()));
 		}
 	}
 }

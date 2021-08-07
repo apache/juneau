@@ -136,13 +136,13 @@ public class ParentPropertyAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParentProperty> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ParentProperty> ai, ContextPropertiesBuilder b) {
 			ParentProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

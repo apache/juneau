@@ -990,13 +990,13 @@ public class ResponseHeaderAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseHeader> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ResponseHeader> ai, ContextPropertiesBuilder b) {
 			ResponseHeader a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

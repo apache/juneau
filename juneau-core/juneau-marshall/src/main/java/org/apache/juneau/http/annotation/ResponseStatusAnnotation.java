@@ -154,13 +154,13 @@ public class ResponseStatusAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseStatus> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ResponseStatus> ai, ContextPropertiesBuilder b) {
 			ResponseStatus a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

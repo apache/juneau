@@ -160,13 +160,13 @@ public class SoapXmlAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SoapXml> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<SoapXml> ai, ContextPropertiesBuilder b) {
 			SoapXml a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

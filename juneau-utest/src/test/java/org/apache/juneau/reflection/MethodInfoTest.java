@@ -63,7 +63,7 @@ public class MethodInfoTest {
 			super(c, vr);
 		}
 		@Override
-		public void apply(AnnotationInfo<AConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<AConfig> ai, ContextPropertiesBuilder b) {
 		}
 	}
 

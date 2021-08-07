@@ -590,35 +590,35 @@ public class RestPostAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestPost> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<RestPost> ai, ContextPropertiesBuilder b) {
 			RestPost a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(RESTOP_httpMethod, "post");
+			b.setIfNotEmpty(RESTOP_httpMethod, "post");
 
-			cpb.set(REST_serializers, merge(ConverterUtils.toType(cpb.peek(REST_serializers), Object[].class), a.serializers()));
-			cpb.set(REST_parsers, merge(ConverterUtils.toType(cpb.peek(REST_parsers), Object[].class), a.parsers()));
-			cpb.set(REST_encoders, merge(ConverterUtils.toType(cpb.peek(REST_encoders), Object[].class), a.encoders()));
-			cpb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
-			cpb.setIfNotEmpty(REST_produces, stringList(a.produces()));
-			cpb.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
-			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
-			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
-			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> cpb.appendTo(RESTOP_defaultFormData, x));
-			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
-			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
-			cpb.prependTo(REST_converters, a.converters());
-			cpb.prependTo(REST_guards, reverse(a.guards()));
-			cpb.prependTo(RESTOP_matchers, a.matchers());
-			cpb.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
-			cpb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			cpb.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
-			stringStream(a.path()).forEach(x -> cpb.prependTo(RESTOP_path, x));
-			cpb.setIfNotEmpty(RESTOP_path, a.value());
-			cdStream(a.rolesDeclared()).forEach(x -> cpb.addTo(REST_rolesDeclared, x));
-			cpb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-			cpb.setIfNotEmpty(RESTOP_debug, string(a.debug()));
+			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
+			b.set(REST_parsers, merge(ConverterUtils.toType(b.peek(REST_parsers), Object[].class), a.parsers()));
+			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
+			b.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
+			b.setIfNotEmpty(REST_produces, stringList(a.produces()));
+			b.setIfNotEmpty(REST_consumes, stringList(a.consumes()));
+			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestAttributes, x));
+			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> b.appendTo(RESTOP_defaultQuery, x));
+			stringStream(a.defaultFormData()).map(x -> basicPart(x)).forEach(x -> b.appendTo(RESTOP_defaultFormData, x));
+			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
+			b.appendToIfNotEmpty(REST_defaultRequestHeaders, contentType(string(a.defaultContentType())));
+			b.prependTo(REST_converters, a.converters());
+			b.prependTo(REST_guards, reverse(a.guards()));
+			b.prependTo(RESTOP_matchers, a.matchers());
+			b.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
+			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
+			b.setIfNotEmpty(REST_maxInput, string(a.maxInput()));
+			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
+			b.setIfNotEmpty(RESTOP_path, a.value());
+			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
+			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
+			b.setIfNotEmpty(RESTOP_debug, string(a.debug()));
 		}
 	}
 }

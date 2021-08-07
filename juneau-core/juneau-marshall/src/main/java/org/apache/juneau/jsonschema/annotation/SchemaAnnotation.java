@@ -1293,13 +1293,13 @@ public class SchemaAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Schema> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Schema> ai, ContextPropertiesBuilder b) {
 			Schema a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

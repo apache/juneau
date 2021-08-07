@@ -307,13 +307,13 @@ public class BeanpAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Beanp> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Beanp> ai, ContextPropertiesBuilder b) {
 			Beanp a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

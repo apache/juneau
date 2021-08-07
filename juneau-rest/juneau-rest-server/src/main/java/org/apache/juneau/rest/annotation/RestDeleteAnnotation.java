@@ -452,27 +452,27 @@ public class RestDeleteAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestDelete> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<RestDelete> ai, ContextPropertiesBuilder b) {
 			RestDelete a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(RESTOP_httpMethod, "delete");
+			b.setIfNotEmpty(RESTOP_httpMethod, "delete");
 
-			cpb.set(REST_encoders, merge(ConverterUtils.toType(cpb.peek(REST_encoders), Object[].class), a.encoders()));
-			cpb.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
-			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestHeaders, x));
-			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> cpb.appendTo(RESTOP_defaultResponseHeaders, x));
-			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> cpb.appendTo(RESTOP_defaultRequestAttributes, x));
-			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> cpb.appendTo(RESTOP_defaultQuery, x));
-			cpb.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
-			cpb.prependTo(REST_guards, reverse(a.guards()));
-			cpb.prependTo(RESTOP_matchers, a.matchers());
-			cpb.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
-			cpb.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
-			stringStream(a.path()).forEach(x -> cpb.prependTo(RESTOP_path, x));
-			cpb.setIfNotEmpty(RESTOP_path, a.value());
-			cdStream(a.rolesDeclared()).forEach(x -> cpb.addTo(REST_rolesDeclared, x));
-			cpb.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
-			cpb.setIfNotEmpty(RESTOP_debug, string(a.debug()));
+			b.set(REST_encoders, merge(ConverterUtils.toType(b.peek(REST_encoders), Object[].class), a.encoders()));
+			b.setIf(a.contextClass() != RestOperationContext.Null.class, RESTOP_contextClass, a.contextClass());
+			stringStream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestHeaders, x));
+			stringStream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.appendTo(RESTOP_defaultResponseHeaders, x));
+			stringStream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.appendTo(RESTOP_defaultRequestAttributes, x));
+			stringStream(a.defaultQuery()).map(x -> basicPart(x)).forEach(x -> b.appendTo(RESTOP_defaultQuery, x));
+			b.appendToIfNotEmpty(REST_defaultRequestHeaders, accept(string(a.defaultAccept())));
+			b.prependTo(REST_guards, reverse(a.guards()));
+			b.prependTo(RESTOP_matchers, a.matchers());
+			b.setIfNotEmpty(RESTOP_clientVersion, a.clientVersion());
+			b.setIfNotEmpty(REST_defaultCharset, string(a.defaultCharset()));
+			stringStream(a.path()).forEach(x -> b.prependTo(RESTOP_path, x));
+			b.setIfNotEmpty(RESTOP_path, a.value());
+			cdStream(a.rolesDeclared()).forEach(x -> b.addTo(REST_rolesDeclared, x));
+			b.addToIfNotEmpty(REST_roleGuard, string(a.roleGuard()));
+			b.setIfNotEmpty(RESTOP_debug, string(a.debug()));
 		}
 	}
 }

@@ -240,13 +240,13 @@ public class SwapAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Swap> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Swap> ai, ContextPropertiesBuilder b) {
 			Swap a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

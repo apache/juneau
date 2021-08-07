@@ -165,13 +165,13 @@ public class BeanIgnoreAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanIgnore> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<BeanIgnore> ai, ContextPropertiesBuilder b) {
 			BeanIgnore a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

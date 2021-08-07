@@ -41,20 +41,20 @@ public class JsonSchemaConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonSchemaConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<JsonSchemaConfig> ai, ContextPropertiesBuilder b) {
 			JsonSchemaConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
-			cpb.setIfNotEmpty(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
-			cpb.setIfNotEmpty(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
-			cpb.setIfNotEmpty(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
-			cpb.setIf(a.beanDefMapper() != BeanDefMapper.Null.class, JSONSCHEMA_beanDefMapper, a.beanDefMapper());
-			cpb.setIfNotEmpty(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
-			cpb.setIfNotEmpty(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
-			cpb.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
-			cpb.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
-			cpb.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
-			cpb.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
+			b.setIfNotEmpty(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
+			b.setIfNotEmpty(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
+			b.setIfNotEmpty(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
+			b.setIfNotEmpty(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
+			b.setIf(a.beanDefMapper() != BeanDefMapper.Null.class, JSONSCHEMA_beanDefMapper, a.beanDefMapper());
+			b.setIfNotEmpty(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
+			b.setIfNotEmpty(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
+			b.setIfNotEmpty(BEANTRAVERSE_detectRecursions, bool(a.detectRecursions()));
+			b.setIfNotEmpty(BEANTRAVERSE_ignoreRecursions, bool(a.ignoreRecursions()));
+			b.setIfNotEmpty(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
+			b.setIfNotEmpty(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 		}
 	}
 }

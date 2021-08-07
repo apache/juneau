@@ -241,13 +241,13 @@ public class RdfAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rdf> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<Rdf> ai, ContextPropertiesBuilder b) {
 			Rdf a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

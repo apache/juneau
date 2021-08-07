@@ -160,13 +160,13 @@ public class PlainTextAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainText> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<PlainText> ai, ContextPropertiesBuilder b) {
 			PlainText a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

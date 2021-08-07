@@ -184,13 +184,13 @@ public class UrlEncodingAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncoding> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<UrlEncoding> ai, ContextPropertiesBuilder b) {
 			UrlEncoding a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			cpb.prependTo(BEAN_annotations, copy(a, vr));
+			b.prependTo(BEAN_annotations, copy(a, vr()));
 		}
 	}
 

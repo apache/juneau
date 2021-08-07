@@ -43,18 +43,18 @@ public class ParserConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<ParserConfig> ai, ContextPropertiesBuilder b) {
 			ParserConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));
-			cpb.setIfNotEmpty(PARSER_debugOutputLines, integer(a.debugOutputLines(), "debugOutputLines"));
-			cpb.setIf(a.listener() != ParserListener.Null.class, PARSER_listener, a.listener());
-			cpb.setIfNotEmpty(PARSER_strict, bool(a.strict()));
-			cpb.setIfNotEmpty(PARSER_trimStrings, bool(a.trimStrings()));
-			cpb.setIfNotEmpty(PARSER_unbuffered, bool(a.unbuffered()));
-			cpb.setIfNotEmpty(ISPARSER_binaryFormat, string(a.binaryFormat()));
-			cpb.setIfNotEmpty(RPARSER_fileCharset, charset(a.fileCharset()));
-			cpb.setIfNotEmpty(RPARSER_streamCharset, charset(a.streamCharset()));
+			b.setIfNotEmpty(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));
+			b.setIfNotEmpty(PARSER_debugOutputLines, integer(a.debugOutputLines(), "debugOutputLines"));
+			b.setIf(a.listener() != ParserListener.Null.class, PARSER_listener, a.listener());
+			b.setIfNotEmpty(PARSER_strict, bool(a.strict()));
+			b.setIfNotEmpty(PARSER_trimStrings, bool(a.trimStrings()));
+			b.setIfNotEmpty(PARSER_unbuffered, bool(a.unbuffered()));
+			b.setIfNotEmpty(ISPARSER_binaryFormat, string(a.binaryFormat()));
+			b.setIfNotEmpty(RPARSER_fileCharset, charset(a.fileCharset()));
+			b.setIfNotEmpty(RPARSER_streamCharset, charset(a.streamCharset()));
 		}
 
 		private Object charset(String in) {

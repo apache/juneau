@@ -39,10 +39,10 @@ public class SoapXmlConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SoapXmlConfig> ai, ContextPropertiesBuilder cpb, VarResolverSession vr) {
+		public void apply(AnnotationInfo<SoapXmlConfig> ai, ContextPropertiesBuilder b) {
 			SoapXmlConfig a = ai.getAnnotation();
 
-			cpb.setIfNotEmpty(SOAPXML_SOAPAction, string(a.soapAction()));
+			b.setIfNotEmpty(SOAPXML_SOAPAction, string(a.soapAction()));
 		}
 	}
 }
