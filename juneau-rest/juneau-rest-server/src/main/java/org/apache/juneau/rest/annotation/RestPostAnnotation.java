@@ -575,9 +575,9 @@ public class RestPostAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestPost} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link RestPost} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends ContextApplier<RestPost,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestPost,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -585,11 +585,11 @@ public class RestPostAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestPost.class, ContextPropertiesBuilder.class, vr);
+			super(RestPost.class, RestOperationContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestPost> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<RestPost> ai, RestOperationContextBuilder b) {
 			RestPost a = ai.getAnnotation();
 
 			b.setIfNotEmpty(RESTOP_httpMethod, "post");

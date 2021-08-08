@@ -575,9 +575,9 @@ public class RestPutAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestPut} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link RestPut} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends ContextApplier<RestPut,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestPut,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -585,11 +585,11 @@ public class RestPutAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestPut.class, ContextPropertiesBuilder.class, vr);
+			super(RestPut.class, RestOperationContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestPut> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<RestPut> ai, RestOperationContextBuilder b) {
 			RestPut a = ai.getAnnotation();
 
 			b.setIfNotEmpty(RESTOP_httpMethod, "put");

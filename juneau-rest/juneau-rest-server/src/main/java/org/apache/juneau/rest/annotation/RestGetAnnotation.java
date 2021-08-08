@@ -490,9 +490,9 @@ public class RestGetAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestGet} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link RestGet} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends ContextApplier<RestGet,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestGet,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -500,11 +500,11 @@ public class RestGetAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestGet.class, ContextPropertiesBuilder.class, vr);
+			super(RestGet.class, RestOperationContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestGet> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<RestGet> ai, RestOperationContextBuilder b) {
 			RestGet a = ai.getAnnotation();
 
 			b.setIfNotEmpty(RESTOP_httpMethod, "get");

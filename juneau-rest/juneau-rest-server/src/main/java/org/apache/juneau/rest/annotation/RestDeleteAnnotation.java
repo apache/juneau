@@ -437,9 +437,9 @@ public class RestDeleteAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestDelete} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link RestDelete} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends ContextApplier<RestDelete,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestDelete,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -447,11 +447,11 @@ public class RestDeleteAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestDelete.class, ContextPropertiesBuilder.class, vr);
+			super(RestDelete.class, RestOperationContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestDelete> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<RestDelete> ai, RestOperationContextBuilder b) {
 			RestDelete a = ai.getAnnotation();
 
 			b.setIfNotEmpty(RESTOP_httpMethod, "delete");

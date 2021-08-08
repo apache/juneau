@@ -592,9 +592,9 @@ public class RestOpAnnotation {
 	}
 
 	/**
-	 * Applies {@link RestOp} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link RestOp} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends ContextApplier<RestOp,ContextPropertiesBuilder> {
+	public static class Apply extends ContextApplier<RestOp,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.
@@ -602,11 +602,11 @@ public class RestOpAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Apply(VarResolverSession vr) {
-			super(RestOp.class, ContextPropertiesBuilder.class, vr);
+			super(RestOp.class, RestOperationContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestOp> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<RestOp> ai, RestOperationContextBuilder b) {
 			RestOp a = ai.getAnnotation();
 
 			b.set(REST_serializers, merge(ConverterUtils.toType(b.peek(REST_serializers), Object[].class), a.serializers()));
