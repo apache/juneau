@@ -27,8 +27,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * A builder for {@link ContextProperties} objects.
@@ -100,30 +98,6 @@ public class ContextPropertiesBuilder {
 				else
 					g1.apply(g2);
 			}
-		return this;
-	}
-
-	/**
-	 * Applies the settings in the specified annotations to this property store.
-	 *
-	 * @param al The list of annotations to apply.
-	 * @param vr The string resolver used to resolve any variables in the annotations.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ContextPropertiesBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
-		vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
-		for (AnnotationInfo<?> ai : al.sort()) {
-			try {
-				for (ContextApplier ca : ai.getApplies(vr))
-					if (ca.canApply(this))
-						ca.apply(ai, this);
-			} catch (ConfigException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new ConfigException(ex, "Could not instantiate ConfigApply class {0}", ai);
-			}
-		}
 		return this;
 	}
 

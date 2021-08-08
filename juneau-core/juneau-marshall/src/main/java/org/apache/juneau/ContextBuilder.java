@@ -137,12 +137,27 @@ public abstract class ContextBuilder {
 	 * </p>
 	 *
 	 * @param al The list of all annotations annotated with {@link ContextApply}.
-	 * @param r The string resolver for resolving variables in annotation values.
+	 * @param vr The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FluentSetter
-	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		this.cpb.applyAnnotations(al, r);
+	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
+		for (AnnotationInfo<?> ai : al.sort()) {
+			try {
+				for (ContextApplier ca : ai.getApplies(vr))
+					if (ca.canApply(this))
+						ca.apply(ai, this);
+					else if (ca.canApply(cpb))
+						ca.apply(ai, cpb);
+					else
+						throw new ConfigException("Cannot apply annotation " + ca.getBuilderClass());
+			} catch (ConfigException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new ConfigException(ex, "Could not instantiate ConfigApply class {0}", ai);
+			}
+		}
 		return this;
 	}
 
@@ -867,6 +882,30 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder removeFrom(String name, Object value) {
 		cpb.removeFrom(name, value);
+		return this;
+	}
+
+	@SuppressWarnings("javadoc")
+	public ContextBuilder setIfNotEmpty(String name, Object value) {
+		cpb.setIfNotEmpty(name, value);
+		return this;
+	}
+
+	@SuppressWarnings("javadoc")
+	public ContextBuilder setIf(boolean b, String name, Object value) {
+		cpb.setIf(b, name, value);
+		return this;
+	}
+
+	@SuppressWarnings("javadoc")
+	public ContextBuilder appendToIfNotEmpty(String name, Object value) {
+		cpb.appendToIfNotEmpty(name, value);
+		return this;
+	}
+
+	@SuppressWarnings("javadoc")
+	public ContextBuilder addToIfNotEmpty(String name, Object value) {
+		cpb.addToIfNotEmpty(name, value);
 		return this;
 	}
 
