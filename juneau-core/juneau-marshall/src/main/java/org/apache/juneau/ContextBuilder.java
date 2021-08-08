@@ -870,6 +870,10 @@ public abstract class ContextBuilder {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Looks up a default value from the environment.
 	 *
@@ -912,6 +916,47 @@ public abstract class ContextBuilder {
 			PROPERTY_TO_ENV.put(name, name2);
 		}
 		return name2;
+	}
+
+	/**
+	 * Creates a list from an array of objects.
+	 *
+	 * @param objects The objects to create a list from.
+	 * @return A new list not backed by the array.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> list(T...objects) {
+		return new ArrayList<>(Arrays.asList(objects));
+	}
+
+	/**
+	 * Appends to an existing list.
+	 *
+	 * @param list The list to append to.
+	 * @param objects The objects to append.
+	 * @return The same list, or a new list if the list was <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> append(List<T> list, T...objects) {
+		if (list == null)
+			return list(objects);
+		list.addAll(Arrays.asList(objects));
+		return list;
+	}
+
+	/**
+	 * Prepends to an existing list.
+	 *
+	 * @param list The list to prepend to.
+	 * @param objects The objects to prepend.
+	 * @return The same list, or a new list if the list was <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> prepend(List<T> list, T...objects) {
+		if (list == null)
+			return list(objects);
+		list.addAll(0, Arrays.asList(objects));
+		return list;
 	}
 
 	// <FluentSetters>
