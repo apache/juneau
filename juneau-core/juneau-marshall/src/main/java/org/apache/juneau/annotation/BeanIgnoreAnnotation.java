@@ -152,7 +152,7 @@ public class BeanIgnoreAnnotation {
 	/**
 	 * Applies targeted {@link BeanIgnore} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<BeanIgnore,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<BeanIgnore,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

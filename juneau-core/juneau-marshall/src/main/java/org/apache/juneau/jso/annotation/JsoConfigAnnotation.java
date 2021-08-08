@@ -24,7 +24,7 @@ public class JsoConfigAnnotation {
 	/**
 	 * Applies {@link JsoConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<JsoConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<JsoConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

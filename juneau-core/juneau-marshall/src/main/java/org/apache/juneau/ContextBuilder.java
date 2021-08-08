@@ -145,7 +145,7 @@ public abstract class ContextBuilder {
 	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
-				for (ContextApplier ca : ai.getApplies(vr))
+				for (AnnotationApplier ca : ai.getApplies(vr))
 					if (ca.canApply(this))
 						ca.apply(ai, this);
 					else if (ca.canApply(cpb))

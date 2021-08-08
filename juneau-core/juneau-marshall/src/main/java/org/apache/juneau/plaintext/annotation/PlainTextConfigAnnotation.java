@@ -24,7 +24,7 @@ public class PlainTextConfigAnnotation {
 	/**
 	 * Applies {@link PlainTextConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<PlainTextConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<PlainTextConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

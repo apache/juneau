@@ -225,7 +225,7 @@ public class XmlAnnotation {
 	/**
 	 * Applies targeted {@link Xml} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Xml,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Xml,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

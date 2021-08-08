@@ -1280,7 +1280,7 @@ public class SchemaAnnotation {
 	/**
 	 * Applies targeted {@link Schema} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Schema,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Schema,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

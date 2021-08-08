@@ -267,7 +267,7 @@ public class HtmlAnnotation {
 	/**
 	 * Applies targeted {@link Html} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Html,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Html,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

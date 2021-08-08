@@ -30,7 +30,7 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<ParserConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<ParserConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

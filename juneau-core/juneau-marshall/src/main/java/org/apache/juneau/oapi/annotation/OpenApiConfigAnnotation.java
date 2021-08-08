@@ -26,7 +26,7 @@ public class OpenApiConfigAnnotation {
 	/**
 	 * Applies {@link OpenApiConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<OpenApiConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<OpenApiConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

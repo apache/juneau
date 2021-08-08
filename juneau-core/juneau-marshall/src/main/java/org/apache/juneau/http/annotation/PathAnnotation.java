@@ -987,7 +987,7 @@ public class PathAnnotation {
 	/**
 	 * Applies targeted {@link Path} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Path,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Path,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

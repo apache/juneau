@@ -141,7 +141,7 @@ public class ResponseStatusAnnotation {
 	/**
 	 * Applies targeted {@link ResponseStatus} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<ResponseStatus,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<ResponseStatus,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

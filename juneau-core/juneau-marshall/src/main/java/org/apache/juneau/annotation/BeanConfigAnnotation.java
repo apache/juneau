@@ -30,7 +30,7 @@ public class BeanConfigAnnotation {
 	/**
 	 * Applies {@link BeanConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<BeanConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<BeanConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

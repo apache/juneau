@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
  * @param <A> The annotation that this <c>ConfigApply</c> reads from.
  * @param <B> The builder class to apply the annotation to.
  */
-public abstract class ContextApplier<A extends Annotation, B> {
+public abstract class AnnotationApplier<A extends Annotation, B> {
 
 	private final VarResolverSession vr;
 	private final Class<A> ca;
@@ -43,7 +43,7 @@ public abstract class ContextApplier<A extends Annotation, B> {
 	 * @param builderClass The annotation class.
 	 * @param vr The string resolver to use for resolving strings.
 	 */
-	protected ContextApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession vr) {
+	protected AnnotationApplier(Class<A> annotationClass, Class<B> builderClass, VarResolverSession vr) {
 		this.vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		this.ca = annotationClass;
 		this.cb = builderClass;
@@ -240,7 +240,7 @@ public abstract class ContextApplier<A extends Annotation, B> {
 	/**
 	 * Represents a no-op configuration apply.
 	 */
-	public static class NoOp extends ContextApplier<Annotation,Object> {
+	public static class NoOp extends AnnotationApplier<Annotation,Object> {
 
 		/**
 		 * Constructor.

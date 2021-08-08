@@ -123,7 +123,7 @@ public class NamePropertyAnnotation {
 	/**
 	 * Applies targeted {@link NameProperty} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<NameProperty,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<NameProperty,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

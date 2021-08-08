@@ -977,7 +977,7 @@ public class ResponseHeaderAnnotation {
 	/**
 	 * Applies targeted {@link ResponseHeader} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<ResponseHeader,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<ResponseHeader,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

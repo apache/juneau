@@ -28,7 +28,7 @@ public class JsonSchemaConfigAnnotation {
 	/**
 	 * Applies {@link JsonSchemaConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<JsonSchemaConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<JsonSchemaConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

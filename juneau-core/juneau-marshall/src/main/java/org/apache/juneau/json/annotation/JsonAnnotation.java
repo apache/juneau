@@ -169,7 +169,7 @@ public class JsonAnnotation {
 	/**
 	 * Applies targeted {@link Json} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Json,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Json,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

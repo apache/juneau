@@ -439,7 +439,7 @@ public class RestDeleteAnnotation {
 	/**
 	 * Applies {@link RestDelete} annotations to a {@link RestOperationContextBuilder}.
 	 */
-	public static class Apply extends ContextApplier<RestDelete,RestOperationContextBuilder> {
+	public static class Apply extends AnnotationApplier<RestDelete,RestOperationContextBuilder> {
 
 		/**
 		 * Constructor.

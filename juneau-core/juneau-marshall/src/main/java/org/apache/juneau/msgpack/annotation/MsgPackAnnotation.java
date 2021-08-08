@@ -147,7 +147,7 @@ public class MsgPackAnnotation {
 	/**
 	 * Applies targeted {@link MsgPack} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<MsgPack,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<MsgPack,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

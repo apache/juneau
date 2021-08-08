@@ -147,7 +147,7 @@ public class PlainTextAnnotation {
 	/**
 	 * Applies targeted {@link PlainText} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<PlainText,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<PlainText,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

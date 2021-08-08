@@ -147,7 +147,7 @@ public class CsvAnnotation {
 	/**
 	 * Applies targeted {@link Csv} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Csv,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Csv,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

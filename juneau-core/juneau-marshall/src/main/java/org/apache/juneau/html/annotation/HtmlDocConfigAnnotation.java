@@ -32,7 +32,7 @@ public class HtmlDocConfigAnnotation {
 	/**
 	 * Applies {@link HtmlDocConfig} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<HtmlDocConfig,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<HtmlDocConfig,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

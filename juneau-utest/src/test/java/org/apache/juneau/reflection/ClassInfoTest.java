@@ -63,7 +63,7 @@ public class ClassInfoTest {
 		int value();
 	}
 
-	public static class AConfigApply extends ContextApplier<AConfig,ContextPropertiesBuilder> {
+	public static class AConfigApply extends AnnotationApplier<AConfig,ContextPropertiesBuilder> {
 		protected AConfigApply(VarResolverSession vr) {
 			super(AConfig.class, ContextPropertiesBuilder.class, vr);
 		}

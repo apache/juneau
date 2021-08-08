@@ -491,7 +491,7 @@ public class BeanAnnotation {
 	/**
 	 * Applies targeted {@link Bean} annotations to a {@link ContextPropertiesBuilder}.
 	 */
-	public static class Apply extends ContextApplier<Bean,ContextPropertiesBuilder> {
+	public static class Apply extends AnnotationApplier<Bean,ContextPropertiesBuilder> {
 
 		/**
 		 * Constructor.

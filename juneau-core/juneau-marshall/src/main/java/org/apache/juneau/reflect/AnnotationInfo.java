@@ -165,31 +165,31 @@ public class AnnotationInfo<T extends Annotation> {
 		return om;
 	}
 
-	private Constructor<? extends ContextApplier<?,?>>[] applyConstructors;
+	private Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
 
 	/**
-	 * If this annotation has a {@link ContextApply} annotation, returns an instance of the specified {@link ContextApplier} class.
+	 * If this annotation has a {@link ContextApply} annotation, returns an instance of the specified {@link AnnotationApplier} class.
 	 *
-	 * @param vrs Variable resolver passed to the {@link ContextApplier} object.
-	 * @return A new {@link ContextApplier} object.  Never <jk>null</jk>.
+	 * @param vrs Variable resolver passed to the {@link AnnotationApplier} object.
+	 * @return A new {@link AnnotationApplier} object.  Never <jk>null</jk>.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public ContextApplier<Annotation,Object>[] getApplies(VarResolverSession vrs) throws ExecutableException {
+	public AnnotationApplier<Annotation,Object>[] getApplies(VarResolverSession vrs) throws ExecutableException {
 		try {
 			if (applyConstructors == null) {
 				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
 				if (cpa == null)
-					applyConstructors = new Constructor[]{ ContextApplier.NoOp.class.getConstructor(VarResolverSession.class) };
+					applyConstructors = new Constructor[]{ AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class) };
 				else {
 					applyConstructors = new Constructor[cpa.value().length];
 					for (int i = 0; i < cpa.value().length; i++)
-						applyConstructors[i] = (Constructor<? extends ContextApplier<?,?>>) cpa.value()[i].getConstructor(VarResolverSession.class);
+						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>) cpa.value()[i].getConstructor(VarResolverSession.class);
 				}
 			}
-			ContextApplier<Annotation,Object>[] aa = new ContextApplier[applyConstructors.length];
+			AnnotationApplier<Annotation,Object>[] aa = new AnnotationApplier[applyConstructors.length];
 			for (int i = 0; i < aa.length; i++)
-				aa[i] = (ContextApplier<Annotation,Object>) applyConstructors[i].newInstance(vrs);
+				aa[i] = (AnnotationApplier<Annotation,Object>) applyConstructors[i].newInstance(vrs);
 			return aa;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
