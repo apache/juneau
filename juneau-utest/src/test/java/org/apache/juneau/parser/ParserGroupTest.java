@@ -76,11 +76,11 @@ public class ParserGroupTest {
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
 
-		gb = g.copy().append(P3.class, P4.class);
+		gb = ParserGroup.create().append(P1.class, P2.class).append(P3.class, P4.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
-		gb = g.copy().append(P5.class);
+		gb = ParserGroup.create().append(P1.class, P2.class).append(P3.class, P4.class).append(P5.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}

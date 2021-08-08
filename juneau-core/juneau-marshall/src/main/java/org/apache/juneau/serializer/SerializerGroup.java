@@ -95,16 +95,6 @@ public final class SerializerGroup extends BeanTraverseContext {
 	}
 
 	/**
-	 * Returns a builder that's a copy of the settings on this serializer group.
-	 *
-	 * @return A new {@link SerializerGroupBuilder} initialized to this group.
-	 */
-	@Override /* Context */
-	public SerializerGroupBuilder copy() {
-		return new SerializerGroupBuilder(this);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * @param cp

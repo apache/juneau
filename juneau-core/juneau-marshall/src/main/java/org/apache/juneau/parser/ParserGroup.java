@@ -101,16 +101,6 @@ public final class ParserGroup extends BeanContext {
 	}
 
 	/**
-	 * Returns a builder that's a copy of the settings on this parser group.
-	 *
-	 * @return A new {@link ParserGroupBuilder} initialized to this group.
-	 */
-	@Override /* Context */
-	public ParserGroupBuilder copy() {
-		return new ParserGroupBuilder(this);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * @param cp

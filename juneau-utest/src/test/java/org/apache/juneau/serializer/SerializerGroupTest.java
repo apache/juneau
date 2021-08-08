@@ -81,11 +81,11 @@ public class SerializerGroupTest {
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
 
-		gb = g.copy().append(SB3.class, SB4.class);
+		gb = SerializerGroup.create().append(SB1.class, SB2.class).append(SB3.class, SB4.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
-		gb = g.copy().append(SB5.class);
+		gb = SerializerGroup.create().append(SB1.class, SB2.class).append(SB3.class, SB4.class).append(SB5.class);
 		g = gb.build();
 		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}
