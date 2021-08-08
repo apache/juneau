@@ -188,10 +188,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			Class<? extends RestContext> c = getContextProperties().getClass(REST_contextClass, RestContext.class).orElse(getDefaultImplClass());
+			// Temporary.
+			Class<? extends RestContext> c = getContextProperties().getClass(REST_contextClass, RestContext.class).orElse(null);
+			if (c != null)
+				contextClass(c);
+
+			c = (Class<? extends RestContext>)getContextClass().orElse(getDefaultImplClass());
 			return BeanStore.of(beanStore, resource.get()).addBeans(RestContextBuilder.class, this).createBean(c);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -743,22 +749,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return set(REST_clientVersionHeader, value);
 	}
 
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST context class.
-	 *
-	 * <p>
-	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_contextClass}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
+	@Override
 	@FluentSetter
-	public RestContextBuilder contextClass(Class<? extends RestContext> value) {
-		return set(REST_contextClass, value);
+	public RestContextBuilder contextClass(Class<? extends Context> value) {
+		super.contextClass(value);
+		return this;
 	}
 
 	/**

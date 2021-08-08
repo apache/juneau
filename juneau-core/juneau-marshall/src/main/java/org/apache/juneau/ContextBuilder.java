@@ -53,6 +53,7 @@ public abstract class ContextBuilder {
 	private final ContextPropertiesBuilder cpb;
 
 	boolean debug;
+	Class<? extends Context> contextClass;
 
 	/**
 	 * Constructor.
@@ -81,6 +82,27 @@ public abstract class ContextBuilder {
 	 * 	<br>Subsequent calls to this method will create new instances (unless context object is cacheable).
 	 */
 	public abstract Context build();
+
+	/**
+	 * Associates a context class with this builder.
+	 *
+	 * @param value The context class that this builder should create.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ContextBuilder contextClass(Class<? extends Context> value) {
+		this.contextClass = value;
+		return this;
+	}
+
+	/**
+	 * Returns the context class that this builder should create.
+	 *
+	 * @return The context class if it was specified.
+	 */
+	public Optional<Class<?>> getContextClass() {
+		return Optional.ofNullable(contextClass);
+	}
 
 	/**
 	 * Copies the settings from the specified property store into this builder.

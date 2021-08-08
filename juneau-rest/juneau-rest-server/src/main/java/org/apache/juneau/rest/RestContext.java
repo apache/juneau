@@ -5493,7 +5493,7 @@ public class RestContext extends BeanContext {
 					RestOperationContext roc = RestOperationContext
 						.create(mi.inner(), this)
 						.beanStore(beanStore)
-						.implClass(properties.getClass(REST_restOperationContextClass, RestOperationContext.class).orElse(null))
+						.contextClass(properties.getClass(REST_restOperationContextClass, RestOperationContext.class).orElse(null))
 						.build();
 
 					String httpMethod = roc.getHttpMethod();
@@ -5507,7 +5507,7 @@ public class RestContext extends BeanContext {
 							.create(mi.inner(), this)
 							.dotAll()
 							.beanStore(rootBeanStore)
-							.implClass(RrpcRestOperationContext.class)
+							.contextClass(RrpcRestOperationContext.class)
 							.build();
 						x
 							.add("GET", roc2)

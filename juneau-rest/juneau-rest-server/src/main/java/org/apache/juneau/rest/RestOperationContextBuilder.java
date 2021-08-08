@@ -42,17 +42,17 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	Method restMethod;
 
 	private BeanStore beanStore;
-	private Class<? extends RestOperationContext> implClass;
 
+	@SuppressWarnings("unchecked")
 	@Override /* BeanContextBuilder */
 	public RestOperationContext build() {
 		try {
-			ContextProperties cp = getContextProperties();
+			// Temporary.
+			Class<? extends RestOperationContext> c = getContextProperties().getClass(RESTOP_contextClass, RestOperationContext.class).orElse(null);
+			if (c != null)
+				contextClass(c);
 
-			Class<? extends RestOperationContext> ic = implClass;
-			if (ic == null)
-				ic = cp.getClass(RESTOP_contextClass, RestOperationContext.class).orElse(getDefaultImplClass());
-
+			Class<? extends RestOperationContext> ic = (Class<? extends RestOperationContext>) getContextClass().orElse(getDefaultImplClass());
 			return BeanStore.of(beanStore).addBean(RestOperationContextBuilder.class, this).createBean(ic);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
@@ -60,9 +60,9 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Specifies the default implementation class if not specified via {@link #implClass(Class)}.
+	 * Specifies the default implementation class if not specified via {@link #contextClass(Class)}.
 	 *
-	 * @return The default implementation class if not specified via {@link #implClass(Class)}.
+	 * @return The default implementation class if not specified via {@link #contextClass(Class)}.
 	 */
 	protected Class<? extends RestOperationContext> getDefaultImplClass() {
 		return RestOperationContext.class;
@@ -95,29 +95,6 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 	 */
 	public RestOperationContextBuilder dotAll() {
 		set("RestOperationContext.dotAll.b", true);
-		return this;
-	}
-
-
-	/**
-	 * Specifies a {@link RestOperationContext} implementation subclass to use.
-	 *
-	 * <p>
-	 * When specified, the {@link #build()} method will create an instance of that class instead of the default {@link RestOperationContext}.
-	 *
-	 * <p>
-	 * The subclass must have a public constructor that takes in any of the following arguments:
-	 * <ul>
-	 * 	<li>{@link RestOperationContextBuilder} - This object.
-	 * 	<li>Any beans found in the specified {@link #beanStore(BeanStore) bean store}.
-	 * 	<li>Any {@link Optional} beans that may or may not be found in the specified {@link #beanStore(BeanStore) bean store}.
-	 * </ul>
-	 *
-	 * @param implClass The implementation class to build.
-	 * @return This object (for method chaining).
-	 */
-	public RestOperationContextBuilder implClass(Class<? extends RestOperationContext> implClass) {
-		this.implClass = implClass;
 		return this;
 	}
 
@@ -154,23 +131,11 @@ public class RestOperationContextBuilder extends BeanContextBuilder {
 		return set(RESTOP_clientVersion, value);
 	}
 
-	/**
-	 * <i><l>RestOperationContext</l> configuration property:&emsp;</i>  REST method context class.
-	 *
-	 * Allows you to extend the {@link RestOperationContext} class to modify how any of the methods are implemented.
-	 *
-	 * <p>
-	 * The subclass must provide the following:
-	 * <ul>
-	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestOperationContextBuilder}.
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
+	@Override
 	@FluentSetter
-	public RestOperationContextBuilder contextClass(Class<? extends RestOperationContext> value) {
-		return set(RESTOP_contextClass, value);
+	public RestOperationContextBuilder contextClass(Class<? extends Context> value) {
+		super.contextClass(value);
+		return this;
 	}
 
 	/**
