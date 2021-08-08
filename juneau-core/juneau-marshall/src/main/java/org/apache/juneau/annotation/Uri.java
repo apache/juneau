@@ -42,7 +42,7 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(UriAnnotation.Array.class)
-@ContextApply(UriAnnotation.Apply.class)
+@ContextApply(UriAnnotation.Applier.class)
 public @interface Uri {
 
 	/**

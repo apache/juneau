@@ -28,21 +28,21 @@ import org.apache.juneau.svl.*;
 public class BeanConfigAnnotation {
 
 	/**
-	 * Applies {@link BeanConfig} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies {@link BeanConfig} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<BeanConfig,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<BeanConfig,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(BeanConfig.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(BeanConfig.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanConfig> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<BeanConfig> ai, BeanContextBuilder b) {
 			BeanConfig a = ai.getAnnotation();
 
 			b.setIfNotEmpty(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));

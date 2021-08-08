@@ -401,21 +401,21 @@ public class ResponseAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Response} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Response} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Response,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Response,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Response.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Response.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Response> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Response> ai, BeanContextBuilder b) {
 			Response a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

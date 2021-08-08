@@ -975,21 +975,21 @@ public class ResponseHeaderAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link ResponseHeader} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link ResponseHeader} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<ResponseHeader,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<ResponseHeader,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(ResponseHeader.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(ResponseHeader.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ResponseHeader> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<ResponseHeader> ai, BeanContextBuilder b) {
 			ResponseHeader a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

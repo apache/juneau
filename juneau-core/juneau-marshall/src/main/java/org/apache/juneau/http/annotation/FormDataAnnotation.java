@@ -1074,21 +1074,21 @@ public class FormDataAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link FormData} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link FormData} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<FormData,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<FormData,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(FormData.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(FormData.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<FormData> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<FormData> ai, BeanContextBuilder b) {
 			FormData a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

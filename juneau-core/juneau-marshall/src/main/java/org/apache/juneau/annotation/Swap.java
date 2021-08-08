@@ -40,7 +40,7 @@ import org.apache.juneau.transform.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(SwapAnnotation.Array.class)
-@ContextApply(SwapAnnotation.Apply.class)
+@ContextApply(SwapAnnotation.Applier.class)
 public @interface Swap {
 
 	/**

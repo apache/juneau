@@ -121,21 +121,21 @@ public class ParentPropertyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link ParentProperty} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link ParentProperty} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<ParentProperty,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<ParentProperty,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(ParentProperty.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(ParentProperty.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParentProperty> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<ParentProperty> ai, BeanContextBuilder b) {
 			ParentProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))

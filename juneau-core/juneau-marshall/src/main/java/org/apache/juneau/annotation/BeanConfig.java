@@ -36,7 +36,7 @@ import org.apache.juneau.transform.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(BeanConfigAnnotation.Apply.class)
+@ContextApply(BeanConfigAnnotation.Applier.class)
 public @interface BeanConfig {
 
 	/**

@@ -53,7 +53,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ResponseAnnotation.Array.class)
-@ContextApply(ResponseAnnotation.Apply.class)
+@ContextApply(ResponseAnnotation.Applier.class)
 public @interface Response {
 
 	/**

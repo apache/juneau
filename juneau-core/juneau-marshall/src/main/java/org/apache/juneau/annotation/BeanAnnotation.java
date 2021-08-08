@@ -489,21 +489,21 @@ public class BeanAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Bean} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Bean} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Bean,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Bean,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Bean.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Bean.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Bean> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Bean> ai, BeanContextBuilder b) {
 			Bean a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

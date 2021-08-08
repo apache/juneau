@@ -172,21 +172,21 @@ public class MarshalledAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Marshalled} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Marshalled} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Marshalled,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Marshalled,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Marshalled.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Marshalled.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Marshalled> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Marshalled> ai, BeanContextBuilder b) {
 			Marshalled a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

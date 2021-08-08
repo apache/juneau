@@ -92,7 +92,7 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ResponseBodyAnnotation.Array.class)
-@ContextApply(ResponseBodyAnnotation.Apply.class)
+@ContextApply(ResponseBodyAnnotation.Applier.class)
 public @interface ResponseBody {
 	/**
 	 * Dynamically apply this annotation to the specified classes.

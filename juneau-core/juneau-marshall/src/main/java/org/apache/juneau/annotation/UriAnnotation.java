@@ -144,21 +144,21 @@ public class UriAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Uri} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Uri} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Uri,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Uri,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Uri.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Uri.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Uri> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Uri> ai, BeanContextBuilder b) {
 			Uri a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

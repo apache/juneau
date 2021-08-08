@@ -357,21 +357,21 @@ public class BodyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Body} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Body} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Body,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Body,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Body.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Body.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Body> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Body> ai, BeanContextBuilder b) {
 			Body a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

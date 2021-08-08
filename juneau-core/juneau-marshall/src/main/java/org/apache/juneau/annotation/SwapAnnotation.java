@@ -225,21 +225,21 @@ public class SwapAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Swap} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Swap} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Swap,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Swap,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Swap.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Swap.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Swap> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Swap> ai, BeanContextBuilder b) {
 			Swap a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

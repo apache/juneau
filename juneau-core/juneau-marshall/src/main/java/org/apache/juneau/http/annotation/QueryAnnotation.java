@@ -1074,21 +1074,21 @@ public class QueryAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Query} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Query} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Query,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<Query,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Query.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(Query.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Query> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Query> ai, BeanContextBuilder b) {
 			Query a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

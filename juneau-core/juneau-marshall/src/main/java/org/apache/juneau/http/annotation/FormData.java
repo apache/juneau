@@ -115,7 +115,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(FormDataAnnotation.Array.class)
-@ContextApply(FormDataAnnotation.Apply.class)
+@ContextApply(FormDataAnnotation.Applier.class)
 public @interface FormData {
 
 	/**

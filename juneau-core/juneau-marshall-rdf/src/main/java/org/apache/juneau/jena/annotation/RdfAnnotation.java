@@ -226,9 +226,9 @@ public class RdfAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link Rdf} annotations to a {@link RdfSerializerBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<Rdf,ContextPropertiesBuilder> {
+	public static class SerializerApplier extends AnnotationApplier<Rdf,RdfSerializerBuilder> {
 
 		/**
 		 * Constructor.
@@ -236,12 +236,38 @@ public class RdfAnnotation {
 		 * @param c The annotation class.
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(Rdf.class, ContextPropertiesBuilder.class, vr);
+		public SerializerApplier(VarResolverSession vr) {
+			super(Rdf.class, RdfSerializerBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rdf> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<Rdf> ai, RdfSerializerBuilder b) {
+			Rdf a = ai.getAnnotation();
+
+			if (isEmpty(a.on()) && isEmpty(a.onClass()))
+				return;
+
+			b.prependTo(BEAN_annotations, copy(a, vr()));
+		}
+	}
+
+	/**
+	 * Applies targeted {@link Rdf} annotations to a {@link RdfParserBuilder}.
+	 */
+	public static class ParserApplier extends AnnotationApplier<Rdf,RdfParserBuilder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param c The annotation class.
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApplier(VarResolverSession vr) {
+			super(Rdf.class, RdfParserBuilder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Rdf> ai, RdfParserBuilder b) {
 			Rdf a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))

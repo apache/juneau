@@ -96,7 +96,7 @@ import org.apache.juneau.oapi.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(QueryAnnotation.Array.class)
-@ContextApply(QueryAnnotation.Apply.class)
+@ContextApply(QueryAnnotation.Applier.class)
 public @interface Query {
 
 	/**

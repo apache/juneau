@@ -121,21 +121,21 @@ public class NamePropertyAnnotation {
 	}
 
 	/**
-	 * Applies targeted {@link NameProperty} annotations to a {@link ContextPropertiesBuilder}.
+	 * Applies targeted {@link NameProperty} annotations to a {@link BeanContextBuilder}.
 	 */
-	public static class Apply extends AnnotationApplier<NameProperty,ContextPropertiesBuilder> {
+	public static class Applier extends AnnotationApplier<NameProperty,BeanContextBuilder> {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(VarResolverSession vr) {
-			super(NameProperty.class, ContextPropertiesBuilder.class, vr);
+		public Applier(VarResolverSession vr) {
+			super(NameProperty.class, BeanContextBuilder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<NameProperty> ai, ContextPropertiesBuilder b) {
+		public void apply(AnnotationInfo<NameProperty> ai, BeanContextBuilder b) {
 			NameProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))

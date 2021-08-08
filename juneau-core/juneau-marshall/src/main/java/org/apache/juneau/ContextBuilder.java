@@ -150,8 +150,6 @@ public abstract class ContextBuilder {
 						ca.apply(ai, this);
 					else if (ca.canApply(cpb))
 						ca.apply(ai, cpb);
-					else
-						throw new ConfigException("Cannot apply annotation " + ca.getBuilderClass());
 			} catch (ConfigException ex) {
 				throw ex;
 			} catch (Exception ex) {
