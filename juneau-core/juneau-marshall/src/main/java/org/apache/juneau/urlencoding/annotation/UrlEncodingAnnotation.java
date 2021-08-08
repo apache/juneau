@@ -189,7 +189,7 @@ public class UrlEncodingAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(BEAN_annotations, copy(a, vr()));
+			b.prependTo(CONTEXT_annotations, copy(a, vr()));
 		}
 	}
 

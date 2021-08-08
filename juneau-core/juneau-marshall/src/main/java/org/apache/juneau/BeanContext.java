@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -31,8 +30,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
-import org.apache.juneau.utils.ReflectionMapBuilder;
 
 /**
  * Core class of the Juneau architecture.
@@ -155,30 +152,9 @@ import org.apache.juneau.utils.ReflectionMapBuilder;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 @ConfigurableContext
-public class BeanContext extends Context implements MetaProvider {
+public class BeanContext extends Context {
 
 	static final String PREFIX = "BeanContext";
-
-	/**
-	 * Configuration property:  Annotations.
-	 *
-	 * <p>
-	 * Defines annotations to apply to specific classes and methods.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_annotations BEAN_annotations}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.annotations.lo"</js>
-	 * 	<li><b>Description:</b>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c>
-	 * 	<li><b>Default:</b>  Empty list.
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#annotations(Annotation...)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String BEAN_annotations = PREFIX + ".annotations.lo";
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.
@@ -1085,7 +1061,6 @@ public class BeanContext extends Context implements MetaProvider {
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamer;
 	private final String typePropertyName;
-	private final ReflectionMap<Annotation> annotations;
 
 	private final Locale locale;
 	private final TimeZone timeZone;
@@ -1113,33 +1088,6 @@ public class BeanContext extends Context implements MetaProvider {
 			cp = ContextProperties.DEFAULT;
 
 		cp = cp.subset(new String[]{"Context","BeanContext"});
-
-		ReflectionMapBuilder<Annotation> rmb = ReflectionMap.create(Annotation.class);
-		for (Annotation a : cp.getList(BEAN_annotations, Annotation.class).orElse(emptyList())) {
-			try {
-				ClassInfo ci = ClassInfo.of(a.getClass());
-
-				MethodInfo mi = ci.getMethod("onClass");
-				if (mi != null) {
-					if (! mi.getReturnType().is(Class[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", a.getClass().getSimpleName());
-					for (Class<?> c : (Class<?>[])mi.accessible().invoke(a))
-						rmb.append(c.getName(), a);
-				}
-
-				mi = ci.getMethod("on");
-				if (mi != null) {
-					if (! mi.getReturnType().is(String[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", a.getClass().getSimpleName());
-					for (String s : (String[])mi.accessible().invoke(a))
-						rmb.append(s, a);
-				}
-
-			} catch (Exception e) {
-				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", className(a));
-			}
-		}
-		this.annotations = rmb.build();
 
 		beansRequireDefaultConstructor = cp.getBoolean(BEAN_beansRequireDefaultConstructor).orElse(false);
 		beansRequireSerializable = cp.getBoolean(BEAN_beansRequireSerializable).orElse(false);
@@ -1818,259 +1766,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 */
 	protected final BeanRegistry getBeanRegistry() {
 		return beanRegistry;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// MetaProvider methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final boolean DISABLE_ANNOTATION_CACHING = ! Boolean.getBoolean("juneau.disableAnnotationCaching");
-
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,List<Annotation>> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,List<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-
-	/**
-	 * Finds the specified annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c) {
-		if (a == null || c == null)
-			return emptyList();
-		List<Annotation> aa = classAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(c, a, l);
-			aa = l.unmodifiable();
-			classAnnotationCache.put(c, a, aa);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified declared annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
-		if (a == null || c == null)
-			return emptyList();
-		List<Annotation> aa = declaredClassAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getDeclaredAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(c, a, l);
-			aa = l.unmodifiable();
-			declaredClassAnnotationCache.put(c, a, aa);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified annotations on the specified method.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Method m) {
-		if (a == null || m == null)
-			return emptyList();
-		List<Annotation> aa = methodAnnotationCache.get(m, a);
-		if (aa == null) {
-			A[] x = m.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(m, a, l);
-			aa = l.unmodifiable();
-			methodAnnotationCache.put(m, a, aa);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified annotations on the specified method.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MethodInfo m) {
-		return getAnnotations(a, m == null ? null : m.inner());
-	}
-
-	/**
-	 * Finds the last specified annotations on the specified method.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, Method m) {
-		return last(getAnnotations(a, m));
-	}
-
-	/**
-	 * Finds the last specified annotations on the specified method.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, MethodInfo m) {
-		return last(getAnnotations(a, m));
-	}
-
-	/**
-	 * Finds the specified annotations on the specified field.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Field f) {
-		if (a == null || f == null)
-			return emptyList();
-		List<Annotation> aa = fieldAnnotationCache.get(f, a);
-		if (aa == null) {
-			A[] x = f.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotations.appendAll(f, a, l);
-			aa = l.unmodifiable();
-			fieldAnnotationCache.put(f, a, aa);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified annotations on the specified field.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, FieldInfo f) {
-		return getAnnotations(a, f == null ? null: f.inner());
-	}
-
-	/**
-	 * Finds the specified annotations on the specified constructor.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c) {
-		if (a == null || c == null)
-			return emptyList();
-		List<Annotation> aa = constructorAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getAnnotationsByType(a);
-			AList<Annotation> l = new AList(Arrays.asList(x));
-			annotations.appendAll(c, a, l);
-			aa = l.unmodifiable();
-			constructorAnnotationCache.put(c, a, l);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified annotations on the specified constructor.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ConstructorInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param c The class being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified class.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Class<?> c) {
-		return getAnnotations(a, c).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param c The class being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified class.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ClassInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param m The method being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified method.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Method m) {
-		return getAnnotations(a, m).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param m The method being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified method.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, MethodInfo m) {
-		return getAnnotations(a, m == null ? null : m.inner()).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param f The field being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified field.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, FieldInfo f) {
-		return getAnnotations(a, f == null ? null : f.inner()).size() > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
-	 *
-	 * @param a The annotation being checked for.
-	 * @param c The constructor being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ConstructorInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

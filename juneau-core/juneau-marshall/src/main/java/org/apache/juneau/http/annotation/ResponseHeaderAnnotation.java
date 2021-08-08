@@ -14,7 +14,6 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
@@ -995,7 +994,7 @@ public class ResponseHeaderAnnotation {
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			b.prependTo(BEAN_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

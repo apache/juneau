@@ -65,7 +65,7 @@ public class BeanConfigAnnotation {
 			b.setIfNotEmpty(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
 			b.setIfNotEmpty(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
 			b.setIfNotEmpty(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
-			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.prependTo(BEAN_annotations, x));
+			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.annotations(x));
 			b.setIfNotEmpty(BEAN_locale, locale(a.locale()));
 			b.setIfNotEmpty(BEAN_mediaType, mediaType(a.mediaType()));
 			b.setIfNotEmpty(BEAN_notBeanClasses, a.notBeanClasses());

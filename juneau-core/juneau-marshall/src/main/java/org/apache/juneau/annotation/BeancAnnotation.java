@@ -14,7 +14,6 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanContext.*;
 
 import java.lang.annotation.*;
 
@@ -156,7 +155,7 @@ public class BeancAnnotation {
 			if (isEmpty(a.on()))
 				return;
 
-			b.prependTo(BEAN_annotations, copy(a, vr()));
+			b.annotations(copy(a, vr()));
 		}
 	}
 

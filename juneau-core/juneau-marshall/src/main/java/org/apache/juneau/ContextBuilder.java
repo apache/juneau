@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.Context.*;
 import static org.apache.juneau.internal.ExceptionUtils.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -53,7 +54,7 @@ public abstract class ContextBuilder {
 	private final ContextPropertiesBuilder cpb;
 
 	boolean debug;
-	Class<? extends Context> contextClass;
+	Class<?> contextClass;
 
 	/**
 	 * Constructor.
@@ -65,6 +66,16 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Constructor.
+	 * Default settings.
+	 * @param contextClass The class being built.
+	 */
+	public ContextBuilder(Class<?> contextClass) {
+		this();
+		this.contextClass = contextClass;
+	}
+
+	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The bean to copy from.
@@ -72,6 +83,7 @@ public abstract class ContextBuilder {
 	public ContextBuilder(Context copyFrom) {
 		this.cpb = copyFrom == null ? ContextProperties.DEFAULT.copy() : copyFrom.properties.copy();
 		this.debug = copyFrom == null ? env("Context.debug", false) : copyFrom.debug;
+		this.contextClass = copyFrom == null ? null : copyFrom.getClass();
 	}
 
 	/**
@@ -81,7 +93,22 @@ public abstract class ContextBuilder {
 	 * 	The built object.
 	 * 	<br>Subsequent calls to this method will create new instances (unless context object is cacheable).
 	 */
-	public abstract Context build();
+	public Context build() {
+		if (contextClass == null)
+			throw runtimeException("Context class not specified.");
+		try {
+			ClassInfo ci = ClassInfo.of(contextClass);
+			ConstructorInfo cc = ci.getPublicConstructor(this);
+			if (cc != null)
+				return cc.invoke(this);
+			cc = ci.getPublicConstructor(cpb);
+			if (cc != null)
+				return cc.invoke(cpb);
+			throw runtimeException("Constructor not found for class {0}", contextClass);
+		} catch (ExecutableException e) {
+			throw runtimeException(e, "Error occurred trying to create context.");
+		}
+	}
 
 	/**
 	 * Associates a context class with this builder.
@@ -333,6 +360,184 @@ public abstract class ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Defines annotations to apply to specific classes and methods.
+	 *
+	 * <p>
+	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
+	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
+	 * do not have access to the code to do so.
+	 *
+	 * <p>
+	 * As a rule, any Juneau annotation with an <l>on()</l> method can be used with this setting.
+	 *
+	 * <p>
+	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Class with explicit annotation.</jc>
+	 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
+	 * 	<jk>public class</jk> A {...}
+	 *
+	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
+	 * 	<jk>public class</jk> B {...}
+	 *
+	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
+	 * 	<ja>@RestGet</ja>(...)
+	 * 	<ja>@Bean</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)
+	 * 	<jk>public void</jk> doFoo() {...}
+	 * </p>
+	 *
+	 * <p>
+	 * In general, the underlying framework uses this method when it finds dynamically applied annotations on
+	 * config annotations.  However, concrete implementations of annotations are also provided that can be passed
+	 * directly into builder classes like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a concrete @Bean annotation.</jc>
+	 * 	BeanAnnotation <jv>annotation</jv> = BeanAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>);
+	 *
+	 * 	<jc>// Apply it to a serializer.</jc>
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>annotation</jv>).build();
+	 *
+	 * 	<jc>// Serialize a bean with the dynamically applied annotation.</jc>
+	 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> B());
+	 * </p>
+	 *
+	 * <p>
+	 * The following is the list of annotations builders provided that can be constructed
+	 * and passed into the builder class:
+	 * <ul class='javatree'>
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
+	 * </ul>
+	 *
+	 * <p>
+	 * The syntax for the <l>on()</l> pattern match parameter depends on whether it applies to a class, method, field, or constructor.
+	 * The valid pattern matches are:
+	 * <ul class='spaced-list'>
+	 *  <li>Classes:
+	 * 		<ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified inner class:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
+	 * 					<li><js>"Inner1$Inner2"</js>
+	 * 					<li><js>"Inner2"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass.myMethod()"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myMethod"</js>
+	 * 				</ul>
+	 * 			<li>Simple with args:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myMethod(String,int)"</js>
+	 * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
+	 * 					<li><js>"MyClass.myMethod()"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myMethod"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
+	 * 					<li><js>"Inner1$Inner2.myMethod"</js>
+	 * 					<li><js>"Inner2.myMethod"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>Fields:
+	 * 		<ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myField"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myField"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2.myField"</js>
+	 * 					<li><js>"Inner1$Inner2.myField"</js>
+	 * 					<li><js>"Inner2.myField"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>Constructors:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass(String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass()"</js>
+	 * 				</ul>
+	 * 			<li>Simple with args:
+	 * 				<ul>
+	 * 					<li><js>"MyClass(String,int)"</js>
+	 * 					<li><js>"MyClass(java.lang.String,int)"</js>
+	 * 					<li><js>"MyClass()"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2()"</js>
+	 * 					<li><js>"Inner1$Inner2()"</js>
+	 * 					<li><js>"Inner2()"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link BeanConfig}
+	 * 	<li class='jf'>{@link BeanContext#CONTEXT_annotations}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The annotations to register with the context.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ContextBuilder annotations(Annotation...values) {
+		return prependTo(CONTEXT_annotations, values);
+	}
 
 	/**
 	 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
